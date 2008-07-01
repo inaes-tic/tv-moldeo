@@ -1,0 +1,66 @@
+<!-- BASE ajJXMLConfig DTD 22/06/2005-->
+<?xml version="1.0"?>
+<!DOCTYPE AJCONFIG [
+  <!ELEMENT AJCONFIG (DEFINITION,AJVERSION,AJCONFIGVERSION,UPDATE,CONFIGPARAMS)>
+  <!ELEMENT DEFINITION      (#PCDATA)>
+  <!ELEMENT AJVERSION    (#CDATA)>
+  <!ELEMENT AJCONFIGVERSION (#CDATA)>
+  <!ELEMENT UPDATE    (#CDATA)>
+  <!ELEMENT CONFIGPARAMS    (PARAM*,PRECONFIGS)>
+  <!ELEMENT PARAM    (VAL)*>
+  <!ELEMENT PARAM    (D)*>
+  <!ATTLIST AJCONFIG name CDATA "efecto.cfg" #REQUIRED>  
+  <!ATTLIST AJCONFIG class CDATA "EFECTO" #REQUIRED>
+    
+  <!ATTLIST DEFINITION 
+  name CDATA "nombrefecto" #REQUIRED
+  class CDATA "EFECTO" #REQUIRED>
+    
+  <!ATTLIST AJVERSION 
+  majorversion CDATA "3" #REQUIRED
+  minorversion CDATA "0" #REQUIRED>
+  
+  <!ATTLIST AJCONFIGVERSION
+  majorversion CDATA "3" #REQUIRED
+  minorversion CDATA "0" #REQUIRED>
+    
+  <!ATTLIST UPDATE 
+  day CDATA "1/1/2005" #REQUIRED
+  hour CDATA "00:00:00" #REQUIRED>
+      
+  <!ATTLIST PARAM
+  name CDATA "alpha" #REQUIRED
+  class (FLOAT|FLOAT_0_1|NATURAL|INTS|INT|INT16|INT32|INT64|UINT|UINT16|UINT32|UINT64|COLOR_RGB|COLOR_RGBA|MOV|IMG) "FLOAT_0_1" #REQUIRED>
+    
+]>
+
+<!--
+ejemplo:
+
+<AJCONFIG name="_videowall_uno.cfg" class="POSTEFECTO">
+	<DEFINITION name="VIDEOWALL" class="POSTEFECTO">
+		Aqui va el comentario relacionado a este archivo de configuracion
+	</DEFINITION>
+	<AJVERSION majorversion="3" minorversion="0">AJAY v3.0</AJVERSION>	
+	<AJCONFIGVERSION majorversion="3" minorversion="1">AJCONFIG v3.1</AJCONFIGVERSION>
+	<UPDATE day="21/05/2005" hour="12:20:00">21/05/2005 12:20:00</UPDATE>
+	<CONFIGPARAMS>
+		<PARAM name="alpha" class="FLOAT_0_1">
+			<VAL><D>1.0</D></VAL>
+			<VAL><D>0.5</D></VAL>
+		</PARAM>
+		<PARAM name="sync" class="FLOAT">
+			<VAL><D>0.5</D></VAL>
+			<VAL><D>1.0</D></VAL>
+			<VAL><D>2.0</D></VAL>
+		</PARAM>
+		<PARAM name="preconfig" class="INTS">
+			<VAL><D>0</D><D>0</D></VAL>
+			<VAL><D>0</D><D>1</D></VAL>
+			<VAL><D>1</D><D>1</D></VAL>			
+		</PARAM>
+	</CONFIGPARAMS>
+</AJCONFIG>
+
+
+-->
