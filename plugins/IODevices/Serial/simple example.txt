@@ -1,0 +1,111 @@
+Code should be pretty self-explaning, call openComPort() with "COM1" and "9600" as parameters, for example.
+
+
+
+comport.h
+
+#ifndef _COMPORT_H
+#define _COMPORT_H
+
+#include <windows.h>
+#include <string.h>
+
+BOOL  openComPort  (const char* port, const char* baudrate);
+
+void  closeComPort (void);
+
+DWORD sendData     (const char* data, DWORD size);
+
+DWORD receiveData  (char* data, DWORD size);
+
+#endif /* _COMPORT_H */
+
+
+
+
+comport.c
+
+#include "comport.h"
+
+static HANDLE _hCom;
+
+
+BOOL openComPort (const char* port, const char* baudrate)
+{
+  char buildStr[50];
+  DCB dcb;       
+  COMMTIMEOUTS timeouts = {0};
+             
+            
+  _hCom = CreateFile(port,
+                     GENERIC_READ | GENERIC_WRITE,
+                     0,
+                     0,
+                     OPEN_EXISTING,
+                     0,
+                     0);
+
+  if(_hCom == INVALID_HANDLE_VALUE)   
+  {
+    _hCom = NULL;
+    return FALSE;
+  }
+
+  /* set timeouts */
+  timeouts.ReadTotalTimeoutConstant    = 100;
+  timeouts.ReadTotalTimeoutMultiplier  = 0;
+  timeouts.WriteTotalTimeoutMultiplier = 0;
+  timeouts.WriteTotalTimeoutConstant   = 0;
+  if(SetCommTimeouts(_hCom, &timeouts) == FALSE)
+    return FALSE;
+
+  dcb.DCBlength = sizeof(DCB);
+  if(GetCommState(_hCom, &dcb) == FALSE)
+    return FALSE;
+
+  /* Simplified way of setting up the COM port using strings: */
+  buildStr[0] = '\0';
+  strcat(buildStr, "baud=");
+  strcat(buildStr, baudrate);
+  strcat(buildStr," parity=N data=8 stop=1");
+
+  /* (A more effective way is to setup the members of the DCB struct manually, 
+     then you don't need BuildCommDCB) */
+
+  BuildCommDCB(buildStr, &dcb);
+  return SetCommState(_hCom, &dcb);
+}  
+
+
+void closeComPort(void)
+{
+  CloseHandle(_hCom);
+}
+
+
+DWORD sendData (const char* data, DWORD size)
+{
+  DWORD numberOfBytesWritten;
+  
+  WriteFile(_hCom,
+            data,
+            size,
+            &numberOfBytesWritten,
+            0);
+
+  return numberOfBytesWritten;
+}
+
+
+DWORD receiveData (char* data, DWORD size)
+{
+  DWORD numberOfBytesRead;
+  
+  ReadFile(_hCom,
+           data,
+           size,
+           &numberOfBytesRead,
+           0);
+
+  return numberOfBytesRead;
+}

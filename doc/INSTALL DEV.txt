@@ -1,0 +1,57 @@
+1> Bajar e instalar CodeBlocks
+
+2> Bajar e instalar MinGW y MSYS 1.0  y MSYS-SDK: en c:\root
+	version vista: http://wiki.codeblocks.org/index.php?title=Installing_MinGW_with_Vista
+
+	bugs: http://forums.codeblocks.org/index.php/topic,4692.0.html
+
+3> Configurar CB con C:\root\mingw
+
+4>  Instalar el "pexports.exe" de http://www.emmestech.com/software/cygwin/pexports-0.43/moron1.html
+	
+	Luego:
+	
+	a) MSYS > pexports libstreamer-0.10.dll > libgstreamer-0.10.def
+
+	//si no se hace esto te tira error de sintaxis
+	b) (editar el libgstreamer-0.10.def y eliminar de la primera linea "-0.10.dll")
+
+
+	c) MSYS >dlltool --def libgstreamer-0.10.def --dllname libgstreamer-0.10.dll --output-lib libgstreamer-0.10.a
+
+5>  instalar el GTK GLADE de desarrollo gtk-dev-2.10.11-win32-1.exe
+
+	http://downloads.sourceforge.net/gladewin32/gtk-dev-2.10.11-win32-1.exe?modtime=1175125160&big_mirror=0
+	
+6> Freeimage.h:
+
+	#ifndef _MSC_VER
+	// define portable types for 32-bit / 64-bit OS
+	#include <inttypes.h>
+	#ifndef WINVER
+	typedef int32_t BOOL;
+	typedef uint8_t BYTE;
+	typedef uint16_t WORD;
+	typedef uint32_t DWORD;
+	typedef int32_t LONG;
+	#endif
+	#else
+	// MS is not C99 ISO compliant
+	typedef long BOOL;
+	typedef unsigned char BYTE;
+	typedef unsigned short WORD;
+	typedef unsigned long DWORD;
+	typedef long LONG;
+	#endif // _MSC_VER
+	
+7> LINKEO: descomprimir en externlibs. mingw externlibs.rar
+
+	freeimage/include/
+	SDL/lib
+	freetype/lib
+	muparser/lib
+	lua/lib
+	glew/lib/
+	opengl/lib/
+	
+8>
