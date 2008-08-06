@@ -165,7 +165,7 @@ void moEffectText::Draw( moTempo* tempogral, moEffectState* parentstate)
 
 
     //color
-    SetColor( m_Config[moR(TEXT_COLOR)][MO_SELECTED], m_Config[moR(TEXT_ALPHA)][MO_SELECTED] );
+    SetColor( m_Config[moR(TEXT_COLOR)][MO_SELECTED], m_Config[moR(TEXT_ALPHA)][MO_SELECTED], state );
 
 
 	moText Texto = m_Config[moR(TEXT_TEXT)][MO_SELECTED][0].Text();
