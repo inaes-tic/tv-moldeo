@@ -117,7 +117,7 @@ void moEffectImageFlow::Draw( moTempo* tempogral,moEffectState* parentstate)
 	glClear ( GL_DEPTH_BUFFER_BIT );
 	m_pResourceManager->GetGLMan()->SetOrthographicView(maxx, maxy);
 
-    SetColor( m_Config[moR(IMAGEFLOW_COLOR)][MO_SELECTED], m_Config[moR(IMAGEFLOW_ALPHA)][MO_SELECTED] );
+    SetColor( m_Config[moR(IMAGEFLOW_COLOR)][MO_SELECTED], m_Config[moR(IMAGEFLOW_ALPHA)][MO_SELECTED], state );
 
     SetBlending( (moBlendingModes) m_Config[moR(IMAGEFLOW_BLENDING)][MO_SELECTED][0].Int() );
 

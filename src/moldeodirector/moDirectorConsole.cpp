@@ -39,33 +39,34 @@ moDirectorConsole::GetObject( moMobDescriptor p_MobDesc ) {
     moMoldeoObject* pMOB = NULL;
 
     MOint idx = p_MobDesc.GetMobDefinition().GetMobIndex().GetValueIndex();
-    if (idx>-1) {
-        switch( p_MobDesc.GetMobDefinition().GetType() ) {
-            case MO_OBJECT_PREEFFECT:
-                pMOB = (moMoldeoObject*) m_EffectManager.PreEffects().Get(idx);
-                break;
-            case MO_OBJECT_EFFECT:
-                pMOB = (moMoldeoObject*) m_EffectManager.Effects().Get(idx);
-                break;
-            case MO_OBJECT_POSTEFFECT:
-                pMOB = (moMoldeoObject*) m_EffectManager.PostEffects().Get(idx);
-                break;
-            case MO_OBJECT_MASTEREFFECT:
-                pMOB = (moMoldeoObject*) m_EffectManager.MasterEffects().Get(idx);
-                break;
-            case MO_OBJECT_IODEVICE:
-                pMOB = (moMoldeoObject*) m_pIODeviceManager->IODevices().Get(idx);
-                break;
-            case MO_OBJECT_RESOURCE:
-                if (idx>-1) {
-                    pMOB = (moMoldeoObject*) m_pResourceManager->GetResource(idx);
-                } else {
-                    idx = m_pResourceManager->GetResourceId( p_MobDesc.GetMobDefinition().GetName() );
-                }
-                break;
+    switch( p_MobDesc.GetMobDefinition().GetType() ) {
+        case MO_OBJECT_PREEFFECT:
+            if (idx>-1) pMOB = (moMoldeoObject*) m_EffectManager.PreEffects().Get(idx);
+            break;
+        case MO_OBJECT_EFFECT:
+            if (idx>-1) pMOB = (moMoldeoObject*) m_EffectManager.Effects().Get(idx);
+            break;
+        case MO_OBJECT_POSTEFFECT:
+            if (idx>-1) pMOB = (moMoldeoObject*) m_EffectManager.PostEffects().Get(idx);
+            break;
+        case MO_OBJECT_MASTEREFFECT:
+            if (idx>-1) pMOB = (moMoldeoObject*) m_EffectManager.MasterEffects().Get(idx);
+            break;
+        case MO_OBJECT_IODEVICE:
+            if (idx>-1) pMOB = (moMoldeoObject*) m_pIODeviceManager->IODevices().Get(idx);
+            break;
+        case MO_OBJECT_RESOURCE:
+            if (idx>-1) {
+                pMOB = (moMoldeoObject*) m_pResourceManager->GetResource(idx);
+            } else {
+                idx = m_pResourceManager->GetResourceId( p_MobDesc.GetMobDefinition().GetName() );
+                pMOB = (moMoldeoObject*) m_pResourceManager->GetResource(idx);
+            }
+            break;
 
-        }
     }
+    if (!pMOB)
+        LogError( moText("moDirectorConsole::GetObject pMOB is NULL > idx = ") + IntToStr(idx));
     return pMOB;
 
 }
@@ -271,6 +272,9 @@ moMobDescriptors moDirectorConsole::GetMobDescriptors() {
 
     moResourceDescriptor moDirectorConsole::GetResourceDescriptor( moResourceDescriptor p_ResourceDescriptor ) {
 
+        MOint result;
+        moTexture* tex;
+
         if (!m_pResourceManager) {
             LogError(moText("Resource manager unavailable..."));
             return moResourceDescriptor();
@@ -281,10 +285,10 @@ moMobDescriptors moDirectorConsole::GetMobDescriptors() {
 
                 //moTextureDescriptor TexDescriptor( );
 
-                MOint result = m_pResourceManager->GetTextureMan()->GetTextureMOId( p_ResourceDescriptor.GetResourceDefinition().GetName(), false );
+                result = m_pResourceManager->GetTextureMan()->GetTextureMOId( p_ResourceDescriptor.GetResourceDefinition().GetName(), false );
 
                 if (result!=-1) {
-                    moTexture* tex = m_pResourceManager->GetTextureMan()->GetTexture( result );
+                    tex = m_pResourceManager->GetTextureMan()->GetTexture( result );
                     if (tex) {
 
                        	moText filename = m_pResourceManager->GetDataMan()->GetDataPath() + moSlash + (moText)tex->GetName();
@@ -426,9 +430,15 @@ moMobDescriptors moDirectorConsole::GetMobDescriptors() {
 
                     return this->EditMob( p_MobDesc );
 
-                } else LogError("Config file isn't loaded.");
-            } else LogError("Config object unavailable");
-        } else LogError("Object not founded.");
+                } else LogError("moDirectorConsole::OpenMob Config file isn't loaded.");
+            } else LogError("moDirectorConsole::OpenMob Config object unavailable");
+        } else LogError(moText("moDirectorConsole::OpenMob Object not founded. Name: ") +
+                        moText(p_MobDesc.GetMobDefinition().GetName()) +
+                        moText(" Config Name:") +
+                        moText(p_MobDesc.GetMobDefinition().GetConfigName()) +
+                        moText(" Type:") +
+                        moText( p_MobDesc.GetMobDefinition().GetTypeStr() )
+                        );
 
 		// todo: try to reload config file...
 
@@ -528,7 +538,7 @@ moMobDescriptors moDirectorConsole::GetMobDescriptors() {
                             pEffect->state.on = MO_ON;
                         }
                     } else {
-                        LogError( moText("Couldn't initialized effect" ) );
+                        LogError( moText("moDirectorConsole::NewMob Couldn't initialized effect" ) );
                     }
 
                     //pEffect->Draw( &state.tempo );
@@ -545,14 +555,14 @@ moMobDescriptors moDirectorConsole::GetMobDescriptors() {
                     ProjectUpdated( m_ProjectDescriptor );
 
                 } else {
-                    LogError( moText("Couldn't create default configuration") );
+                    LogError( moText("moDirectorConsole::NewMob Couldn't create default configuration") );
                 }
 
             } else {
-                LogError( moText("Config filename undefined" ) );
+                LogError( moText("moDirectorConsole::NewMob Config filename undefined" ) );
             }
         } else {
-            LogError( moText("Couldn't create effect" ) );
+            LogError( moText("moDirectorConsole::NewMob Couldn't create effect" ) );
         }
 
         return MO_DIRECTOR_STATUS_ERROR;
@@ -567,7 +577,7 @@ moMobDescriptors moDirectorConsole::GetMobDescriptors() {
         res = m_pDirectorCore->EditMob(p_MobDesc);
 
         if (res!=MO_DIRECTOR_STATUS_OK) {
-            LogError( moText("Couldn't edit ")+(moText)p_MobDesc.GetMobDefinition().GetConfigName());
+            LogError( moText("moDirectorConsole::EditMob Couldn't edit ")+(moText)p_MobDesc.GetMobDefinition().GetConfigName());
             return MO_DIRECTOR_STATUS_ERROR;
         }
 
@@ -899,6 +909,8 @@ moDirectorConsole::SetParameter( moParameterDescriptor  p_ParameterDesc ) {
         //aqui hay q tratar correctamente los errores...
 
         int idx;
+        moFont* pFont;
+
         //fija el valor dentro del config y chequea de actualizar el MOB
         moConfig* pConfig;
         moMoldeoObject* pObject;
@@ -978,7 +990,7 @@ moDirectorConsole::SetParameter( moParameterDescriptor  p_ParameterDesc ) {
                         break;
 
                     case MO_PARAM_FONT:
-                        moFont* pFont = m_pResourceManager->GetFontMan()->AddFont( Value.GetSubValue(0).Text() );
+                        pFont = m_pResourceManager->GetFontMan()->AddFont( Value.GetSubValue(0).Text() );
                         if (pFont)
                             Value.GetSubValue(0).SetFont( pFont );
                         break;
@@ -1235,21 +1247,21 @@ moDirectorConsole::GLSwapBuffers() {
 moDirectorStatus
 moDirectorConsole::SetView( int x, int y, int w, int h ) {
 
-    Log( moText("Changing View: ") + IntToStr(w) + moText("X") + IntToStr(h) );
+    Log( moText("moDirectorConsole::SetView Changing View: ") + IntToStr(w) + moText("X") + IntToStr(h) );
 
     if (Initialized()) {
-        Log( moText("WITH CONSOLE") );
+        Log( moText("moDirectorConsole::SetView WITH CONSOLE") );
         if (m_pResourceManager)
             if (m_pResourceManager->Initialized()) {
             		if (m_pResourceManager->GetRenderMan()) {
 						m_pResourceManager->GetRenderMan()->Finish();
 						m_pResourceManager->GetRenderMan()->Init( 0, w, h, w, h);
-						Log("Render Manager Resized");
+						Log("moDirectorConsole::SetView Render Manager Resized");
 					}
 
             }
     } else {
-        Log( moText("NO CONSOLE") );
+        Log( moText("moDirectorConsole::SetView NO CONSOLE") );
 
         glViewport( 0, 0, w, h );
 		glMatrixMode( GL_PROJECTION );
@@ -1274,7 +1286,7 @@ moDirectorStatus moDirectorConsole::ConsoleLoop() {
         moText plog;
         for(int i =0; i < MODebug2->Count(); i++ ) {
             plog = MODebug2->Pop();
-            if (plog.Trim()!=moText("")) Log(plog);
+            if (plog.Trim()!=moText("")) Log( plog );
         }
     } else {
 

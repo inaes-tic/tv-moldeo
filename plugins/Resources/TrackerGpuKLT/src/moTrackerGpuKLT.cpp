@@ -292,7 +292,7 @@ MOboolean moTrackerGpuKLT::Init()
     conf += moText(".cfg");
 	if (m_Config.LoadConfig(conf) != MO_CONFIG_OK ) {
 		moText text = "Couldn't load trackergpuklt config:" + conf;
-		MODebug->Push(text);
+		MODebug2->Error(text);
 		return false;
 	}
 
@@ -308,9 +308,9 @@ MOboolean moTrackerGpuKLT::Init()
 	m_SampleRate = m_Config.GetParam(m_Config.GetParamIndex("sample_rate")).GetValue().GetSubValue().Int();
 	num_frames = m_Config.GetParam(m_Config.GetParamIndex("num_frames")).GetValue().GetSubValue(0).Int();
 
-    printf("In moTrackerGpuKLT::Init ***********************************************\n");
+    MODebug2->Message( moText("In moTrackerGpuKLT::Init ***********************************************\n") );
 
-    printf("Initializing Tracker's System...\n");
+    MODebug2->Message( moText("Initializing Tracker's System...\n"));
 
 	//por cada camara inicializa un system:
 	nvalues = m_Config.GetValuesCount( trackersystems );
@@ -330,9 +330,11 @@ MO_TRACKER1D_SYSTEM_ON 2
 
 		if (pTSystem!=NULL) {
 			pTSystem->MODebug = MODebug;
+			pTSystem->MODebug2 = MODebug2;
 			pTSystem->SetName( m_Config.GetParam().GetValue().GetSubValue(MO_TRACKERGPUKLT_SYTEM_LABELNAME).Text() );
 			pTSystem->SetLive( m_Config.GetParam().GetValue().GetSubValue(MO_TRACKERGPUKLT_LIVE_SYSTEM).Text() );
 			pTSystem->SetActive( m_Config.GetParam().GetValue().GetSubValue(MO_TRACKERGPUKLT_SYSTEM_ON).Int() );
+			MODebug2->Message( moText(" Tracker system: Name:") + pTSystem->GetName() + moText(" mLive:") + pTSystem->GetLive() );
 		}
 
 		m_TrackerSystems.Add( pTSystem );
@@ -458,6 +460,8 @@ void moTrackerGpuKLT::Update(moEventList *Events)
 		//solo nos interesan los del LIVE IODevice
 		if(actual->deviceid == m_pResourceManager->GetVideoMan()->GetId() ) {
 
+            //MODebug2->Push( moText("new sample received") );
+
 			pSample = (moVideoSample*)actual->pointer;
 
 			pBucket = (moBucket*)pSample->m_pSampleBuffer;
@@ -469,10 +473,15 @@ void moTrackerGpuKLT::Update(moEventList *Events)
 				if ( pTS )
 					if (pTS->IsActive() ) {
 						if (!pTS->IsInit()) {
-
-							pTS->Init(num_feat, pSample,
+						    MOboolean res = false;
+							res = pTS->Init(num_feat, pSample,
 									  klt_shaders_dir, gpu_arch,
 									  min_dist, threshold_eigen);
+                            if (res) {
+                                MODebug2->Message( "moTrackerGpuKLT::Update TrackerGPUKltSystem initialized..." );
+                            } else {
+                                MODebug2->Error( "moTrackerGpuKLT::Update Error Couldn't initialized effect" );
+                            }
 						}
 
 						pTS->NewData( pSample );

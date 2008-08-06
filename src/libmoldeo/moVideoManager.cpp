@@ -533,7 +533,7 @@ moVideoBufferPath::Init( moResourceManager* pResources, moText videobufferpath )
 
 	m_VideoBufferPath = videobufferpath;
 
-	m_CompletePath = m_pResourceManager->GetDataMan()->GetDataPath() + moText("/") + (moText)m_VideoBufferPath;;
+	m_CompletePath = m_pResourceManager->GetDataMan()->GetDataPath() + moSlash + (moText)m_VideoBufferPath;;
 
 	m_pDirectory = m_pResourceManager->GetFileMan()->GetDirectory( m_CompletePath );
 
@@ -652,18 +652,18 @@ MOboolean moVideoManager::Init()
 	if (!m_pResourceManager) return false;
 
 	confignamecompleto = m_pResourceManager->GetDataMan()->GetDataPath();
-	confignamecompleto +=  moText("/") + (moText)GetConfigName();
+	confignamecompleto +=  (moText)GetConfigName();
     confignamecompleto +=  moText(".cfg");
 
 	if (m_Config.LoadConfig(confignamecompleto)!=MO_CONFIG_OK ) {
 		moText text = "Couldn't load videomanager config";
-		MODebug->Push(text);
-		cout << "Error moVideoManager :"<< confignamecompleto << " invalid" << endl;
+		MODebug2->Error(text + (moText)confignamecompleto );
 		return false;
 	}
 
-  printf("In moVideoManager::Init ***********************************************\n");
-  printf("Initializing Live...\n");
+  moText msg = "In moVideoManager::Init ***********************************************\n";
+  msg+= moText("Initializing Live...\n");
+  MODebug2->Message( msg );
 
 
   preferreddevices = m_Config.GetParamIndex("preferreddevices");//FIREWIRE, WEBCAMS, LIVEVIDEO[movie]
@@ -671,17 +671,21 @@ MOboolean moVideoManager::Init()
 	MOuint videoin = m_Config.GetParamIndex("videoin");
 
 	moText videoinname;
+
+	MODebug2->Message( "VideoManager:: Generating videoin textures" );
+
 	for(MOuint i=0; i<m_Config.GetValuesCount(videoin); i++ ) {
 		videoinname = m_Config.GetParam(videoin).GetValue(i).GetSubValue(0).Text();
 		if(videoinname!=moText("")) {
 			 int tid = m_pResourceManager->GetTextureMan()->AddTexture( MO_TYPE_TEXTURE, videoinname);
 			 if(tid>-1) Images.Add( m_pResourceManager->GetTextureMan()->GetTexture(tid));
+		 	MODebug2->Message( moText("VideoManager:: Added ") + moText(videoinname) );
 		}
 	}
-	//LOAD AUTORECONNECT PARAMETER...
+	/**	LOAD AUTORECONNECT PARAMETER...	*/
 	m_bAutoReconnect = (bool) m_Config.GetParam((MOint)autoreconnect).GetValue().GetSubValue().Int();
 
-	//LOAD PREFERRED DEVICES CONFIGURATION
+	/**        LOAD PREFERRED DEVICES CONFIGURATION	*/
 	pPreferredDevices = new moCaptureDevices();
 
 	nvalues = m_Config.GetValuesCount( preferreddevices );
@@ -724,7 +728,11 @@ MO_LIVE_BITCOUNT	4
 		for( MOuint i = 0; i < m_pLiveSystems->Count(); i++) {
 			moLiveSystemPtr pLS = m_pLiveSystems->Get(i);
 			if (pLS && pLS->GetCaptureDevice().IsPresent()) {
-				pLS->Init();
+				if (pLS->Init()) {
+				    MODebug2->Message( moText(pLS->GetCaptureDevice().GetName()) + " initialized");
+                } else {
+                    MODebug2->Error( moText(pLS->GetCaptureDevice().GetName()) + " not initialized");
+                }
 			}
 
 		}
@@ -982,6 +990,7 @@ void moVideoManager::Update(moEventList *Events)
 
 						//post to other moldeo objects
 						Events->Add( GetId(), i, -1, (unsigned char*)pSample);
+						//MODebug2->Push( moText("moVideoManager::Update Video Sample") );
 
 					}
 				}
@@ -999,7 +1008,7 @@ void moVideoManager::Update(moEventList *Events)
 
 		if (pVideoBufferPath && !pVideoBufferPath->LoadCompleted()) {
 			pVideoBufferPath->UpdateImages( 10 );
-			MODebug->Push( pVideoBufferPath->m_VideoBufferPath + moText(":") + IntToStr(pVideoBufferPath->m_ImagesProcessed));
+			MODebug2->Push( pVideoBufferPath->m_VideoBufferPath + moText(":") + IntToStr(pVideoBufferPath->m_ImagesProcessed));
 		}
 
 	}
@@ -1110,23 +1119,15 @@ moLiveSystem::Init() {
 
 	m_pBucketsPool = new moBucketsPool;
 
-	#ifdef WIN32
+	#ifdef MO_WIN32
         #ifdef MO_DIRECTSHOW
 		moDsGraph* pDsGraph;
-
 		pDsGraph = new moDsGraph();
 		m_pVideoGraph = (moVideoGraph*) pDsGraph;
-
-		if ( m_pVideoGraph ) {
-			if (m_pVideoGraph->InitGraph()) {
-				if( pDsGraph->BuildLiveGraph( m_pBucketsPool , m_CaptureDevice ) ) {
-					m_CaptureDevice.SetVideoFormat( pDsGraph->GetVideoFormat() );
-					pDsGraph->Play();
-					//printf("Device initialized.....\n");
-					m_pVideoSample = new moVideoSample( pDsGraph->GetVideoFormat(), NULL );
-				} else Finish();
-			} else Finish();
-		} else Finish();
+		#else
+		moGsGraph* pGsGraph;
+		pGsGraph = new moGsGraph();
+		m_pVideoGraph = (moVideoGraph*) pGsGraph;
 		#endif
 	#else
 		moGsGraph* pGsGraph;
@@ -1134,6 +1135,17 @@ moLiveSystem::Init() {
 		m_pVideoGraph = (moVideoGraph*) pGsGraph;
 		//ETC...
 	#endif
+
+    if ( m_pVideoGraph ) {
+        if (m_pVideoGraph->InitGraph()) {
+            if( m_pVideoGraph->BuildLiveGraph( m_pBucketsPool , m_CaptureDevice ) ) {
+                m_CaptureDevice.SetVideoFormat( m_pVideoGraph->GetVideoFormat() );
+                m_pVideoGraph->Play();
+                //printf("Device initialized.....\n");
+                m_pVideoSample = new moVideoSample( m_pVideoGraph->GetVideoFormat(), NULL );
+            } else Finish();
+        } else Finish();
+    } else Finish();
 
 
 
@@ -1260,7 +1272,9 @@ moLiveSystems::LoadLiveSystems( moCaptureDevices* p_pPreferredDevices ) {
 	m_pVideoFramework->SetPreferredDevices( p_pPreferredDevices );
 
 
-	//damos de alta los dispositivos disponibles
+	/**
+
+	*/
 	for( i = 0; i < (int)pCapDevs->Count(); i++) {
 		moLiveSystemPtr pLS = new moLiveSystem( pCapDevs->Get(i) );
 		if (pLS) {

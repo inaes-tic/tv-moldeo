@@ -156,7 +156,7 @@ moEffectMovie::Init() {
 
     }
 
-/*
+
 	m_MovieScriptFN = m_Config[moParamReference(MOVIE_SCRIPT)][MO_SELECTED][0].Text();
 	if ((moText)m_MovieScriptFN!=moText("")) {
 
@@ -178,7 +178,7 @@ moEffectMovie::Init() {
 
         }
 	}
-*/
+
 	m_bTrackerInit = false;
 	m_pTrackerData = NULL;
 	//m_pTrackerGpuData = NULL;
@@ -1029,6 +1029,7 @@ void moEffectMovie::VCRCommand( moEffectMovieVCRCommand p_Command, MOint p_iValu
 		case MO_MOVIE_VCR_STOP:
 			m_PlayState = MO_MOVIE_PLAYSTATE_STOPPED;
 			m_PlaySpeed = 0.0;
+			/*if (Sound) Sound->Stop();*/
 			/*if (Sound) Sound->Stop();*/
 			m_SoundSystem.Stop();
 			m_bPlayingSound = false;

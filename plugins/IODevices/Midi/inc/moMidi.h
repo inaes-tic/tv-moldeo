@@ -69,7 +69,7 @@ enum moEncoderType {
 	MOMIDI_FADER=2
 };
 
-class LIBMOLDEO_API moMidiData {
+class moMidiData {
 	public:
 
 		moEncoderType	m_Type;
@@ -79,10 +79,10 @@ class LIBMOLDEO_API moMidiData {
 
 };
 
-template class LIBMOLDEO_API moDynamicArray<moMidiData>;
+template class moDynamicArray<moMidiData>;
 typedef  moDynamicArray<moMidiData> moMidiDatas;
 
-class LIBMOLDEO_API moMidiDataCode {
+class moMidiDataCode {
 	public:
 		moText		strcode;
 		MOint		devcode;
@@ -90,21 +90,21 @@ class LIBMOLDEO_API moMidiDataCode {
 		moMidiData	mididata;
 
 };
-template class LIBMOLDEO_API moDynamicArray<moMidiDataCode>;
+template class moDynamicArray<moMidiDataCode>;
 typedef  moDynamicArray<moMidiDataCode> moMidiDataCodes;
 
 
-class LIBMOLDEO_API moMidiDevice : public moAbstract {
-	
-	public:	
+class moMidiDevice : public moAbstract {
+
+	public:
 
 		moMidiDevice();
 		virtual ~moMidiDevice();
 
-		void SetName( moText p_name) { 
+		void SetName( moText p_name) {
 			m_Name = p_name;
 		}
-		void SetActive( MOboolean p_active) { 
+		void SetActive( MOboolean p_active) {
 			m_bActive = p_active;
 		}
 
@@ -114,23 +114,23 @@ class LIBMOLDEO_API moMidiDevice : public moAbstract {
 
 		MOboolean			IsInit() {
 			return m_bInit;
-		}		
-		moText GetName() { 
-			return m_Name; 
 		}
-		
-		MOboolean IsActive() { 
-			return m_bActive; 
+		moText GetName() {
+			return m_Name;
+		}
+
+		MOboolean IsActive() {
+			return m_bActive;
 		}
 
 		void				NewData( moMidiData p_mididata );
-		moMidiData*			GetData();			
+		moMidiData*			GetData();
 		void Update(moEventList *Events);
 	//
 	#ifdef WIN32
 	static void CALLBACK midiCallback(HMIDIIN handle, UINT uMsg, DWORD dwInstance, DWORD dwParam1, DWORD dwParam2);
 	#else
-	#endif	
+	#endif
 	void PrintMidiInErrorMsg(unsigned long err);
 
 	//=============================================================================
@@ -157,17 +157,17 @@ class LIBMOLDEO_API moMidiDevice : public moAbstract {
 };
 
 
-typedef moMidiDevice* moMidiDevicePtr; 
+typedef moMidiDevice* moMidiDevicePtr;
 
-template class LIBMOLDEO_API moDynamicArray<moMidiDevicePtr>;
+template class moDynamicArray<moMidiDevicePtr>;
 typedef  moDynamicArray<moMidiDevicePtr> moMidiDevicePtrs;
 
-class LIBMOLDEO_API moMidi : public moIODevice
+class moMidi : public moIODevice
 {
 public:
     moMidi();
     ~moMidi();
-    
+
     void Update(moEventList*);
     MOboolean Init();
     MOswitch GetStatus(MOdevcode);
@@ -192,5 +192,23 @@ protected:
 	moMidiDataCodes			m_Codes;
 
 };
+
+
+class moMidiFactory : public moIODeviceFactory {
+
+    public:
+        moMidiFactory() {}
+        virtual ~moMidiFactory() {}
+        moIODevice* Create();
+        void Destroy(moIODevice* fx);
+
+};
+
+extern "C"
+{
+MO_PLG_API moIODeviceFactory* CreateIODeviceFactory();
+MO_PLG_API void DestroyIODeviceFactory();
+}
+
 
 #endif

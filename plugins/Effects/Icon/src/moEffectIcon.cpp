@@ -138,7 +138,7 @@ void moEffectIcon::Draw( moTempo* tempogral, moEffectState* parentstate )
                 m_Config[moR(ICON_SCALEY)].GetData()->Fun()->Eval(state.tempo.ang)*Sy,
                 m_Config[moR(ICON_SCALEZ)].GetData()->Fun()->Eval(state.tempo.ang)*Sz);
 
-    SetColor( m_Config[moR(ICON_COLOR)][MO_SELECTED], m_Config[moR(ICON_ALPHA)][MO_SELECTED] );
+    SetColor( m_Config[moR(ICON_COLOR)][MO_SELECTED], m_Config[moR(ICON_ALPHA)][MO_SELECTED], state );
 
     SetBlending( (moBlendingModes) m_Config[moR(ICON_BLENDING)][MO_SELECTED][0].Int() );
 

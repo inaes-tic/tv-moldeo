@@ -62,7 +62,10 @@ D1 (NTSC with square pixels) 	720 �540 	4:3 	388,800
 HDTV 720p 	1280 �720 	16:9 	921,600
 HDTV 1080p, 1080i 	1920 �1080 	16:9 	2,073,600
 */
-
+/// Resoluciones de video
+/**
+*   enumeración de resoluciones de video
+*/
 enum moVideoMode {
 	PAL_D1 = 414720, //720 x 576
 	NTSC_D1 = 345600, //720 x 480
@@ -89,6 +92,11 @@ enum moVideoMode {
 	MOVIDEOMODE_UNKNOWN
 };
 
+/// Formato de video
+/**
+*   estructura que define el ancho, alto, velocidad de reproducción
+*   tamaño de buffer, etc... de 1 cuadro de video
+*/
 class LIBMOLDEO_API moVideoFormat {
 
 	public:
@@ -144,20 +152,27 @@ class LIBMOLDEO_API moVideoFormat {
 
 };
 
+/// Muestra de video o cuadro
+/**
+*   Es literalmente el cuadro de video con un formato de video y sus datos.
+*/
 class LIBMOLDEO_API moVideoSample {
 
 	public:
 
+        /// Constructor
 		moVideoSample() {
 			m_pSampleBuffer = NULL;
 		}
 
+        /// Constructor de copia
 		moVideoSample& operator = ( moVideoSample& p_vs) {
 			m_VideoFormat = p_vs.m_VideoFormat;
 			m_pSampleBuffer = p_vs.m_pSampleBuffer;
 			return (*this);
 		}
 
+        /// Constructor con formato de video y el puntero al buffer de datos
 		moVideoSample( moVideoFormat p_videoformat, MOpointer p_buffer ) {
 
 			m_VideoFormat = p_videoformat;
@@ -165,20 +180,32 @@ class LIBMOLDEO_API moVideoSample {
 
 		}
 
+        /// Fija el formato de video y puntero al buffer de datos
+        /**
+        *   Atención: esta función no copia el buffer sino solamente
+        *   la referencia como puntero a un buffer ya existente.
+        *   @param p_videoformat    el formato de video
+        *   @param p_buffer    el puntero a los datos
+        */
 		void SetVideoSample( moVideoFormat p_videoformat, MOpointer p_buffer ) {
 			m_VideoFormat = p_videoformat;
 			m_pSampleBuffer = p_buffer;
 		}
 
-		moVideoFormat	m_VideoFormat;
-		void*			m_pSampleBuffer;
+		moVideoFormat	m_VideoFormat;///Formato de video de la muestra
+		void*			m_pSampleBuffer;///Puntero a los datos del cuadro
 
 };
 
-
+/// Definición de un dispositivo de video, generalmente uno de captura de video, o camara
+/**
+*   Un dispositivo de captura de video tiene 3 parametros, un nombre, una descricpión y una
+*   cadena  o código de caracteres que lo representa.
+*/
 class LIBMOLDEO_API moCaptureDevice {
 	public:
 
+		/// contructor
 		moCaptureDevice() {
 			m_Name = "";
 			m_Description = "";
@@ -186,6 +213,7 @@ class LIBMOLDEO_API moCaptureDevice {
 			m_bPresent = false;
 		}
 
+        /// contructor
 		moCaptureDevice( const moText &p_name, const moText &p_description, const moText &p_path ) {
 			m_Name = p_name;
 			m_Description = p_description;
@@ -193,52 +221,62 @@ class LIBMOLDEO_API moCaptureDevice {
 			m_bPresent = true;
 		}
 
-		//Copy constructor
+		///Copy constructor
 		moCaptureDevice( const moCaptureDevice &src ) {
 			*this = src;
 		}
 
+        /// Devuelve el nombre del dispositivo
 		moText GetName() {
 			return m_Name;
 		}
 
+        /// Devuelve la descripción del dispositivo
 		moText GetDescription() {
 			return m_Description;
 		}
 
+        /// Devuelve el camino al dispositivo
 		moText GetPath() {
 			return m_Path;
 		}
 
+        /// Devuelve el formato de video del dispositivo
 		moVideoFormat GetVideoFormat() {
 
 			return m_VideoFormat;
 
 		}
 
+        /// Devuelve el formato de video del dispositivo
 		void SetVideoFormat( const moVideoFormat &p_videoformat ) {
 
 			m_VideoFormat = p_videoformat;
 
 		}
 
+        /// Fija la presencia del dispositivo
 		void Present( bool p = true ) {
 			m_bPresent = p;
 		}
 
+        /// Señala y verifica si está presente el dispositivo
 		bool IsPresent() {
 			return m_bPresent;
 		}
 
+        /// Fija el nombre de código del dispositivo
 		void SetCodeName( const moText &p_codename ) {
 			m_CodeName = p_codename;
 		}
 
+        /// Devuelve el nombre de código del dispositivo
 		moText GetCodeName() {
 			return m_CodeName;
 		}
 
 
+        /// Operador de copia
 		moCaptureDevice &operator = (const moCaptureDevice &src)
 		{
 			m_bPresent = src.m_bPresent;
@@ -251,50 +289,107 @@ class LIBMOLDEO_API moCaptureDevice {
 			return *this;
 		}
 	private:
-		bool			m_bPresent;
-		moText			m_Name;
-		moText			m_Description;
-		moText			m_Path;
-		moVideoFormat	m_VideoFormat;
+		bool			m_bPresent;///Presencia del dispositivo
+		moText			m_Name;///Nombre del dispositivo
+		moText			m_Description;///Descripción del dispositivo
+		moText			m_Path;///Camino o clave del dispositivo
+		moVideoFormat	m_VideoFormat;///Formato video del dispositivo
 
-		moText			m_CodeName;
+		moText			m_CodeName;///Código del dispositivo
 
 };
 
-/*
-template class LIBMOLDEO_API moDynamicArray<moCaptureDevice>;
-typedef  moDynamicArray<moCaptureDevice> moCaptureDevices;
-*/
+
 moDeclareExportedDynamicArray(moCaptureDevice, moCaptureDevices)
 
+/// Plataforma de reproducción de video, actualmente GStreamer para todas las plataformas
+/**
+*   clase que define la interfaz virtual a la plataforma de manejo de video del sistema
+*   de esta clase derivan moDsFramework(obsoleta) y moGsFramework que son implementaciones
+*   de DirectShow y GStreamer respectivamente.
+*   @see moDsFramework (obsoleta)
+*   @see moGsFramework
+*/
 class LIBMOLDEO_API moVideoFramework : public moAbstract {
 
 	public:
 
 		moVideoFramework();
 		virtual ~moVideoFramework();
+
+		/// Fija los dispositivos predeterminados
+		/**
+		*   Guarda en m_PreferredDevices los nombres y formatos del dispositivo
+		*/
 		virtual void SetPreferredDevices( moCaptureDevices* p_pPreferredDevices );
-		virtual void SetPreferredFormat( moCaptureDevice &p_CaptureDevice );
+
+		/// Fija el formato de un dispositivo
+		/**
+		*   fija el formato con el formato de la referencia a un moCaptureDevice
+		*/
+        virtual void SetPreferredFormat( moCaptureDevice &p_CaptureDevice );
+
+		/// Acceso a los dispositivos de video preferidos
+		/**
+		*   devuelve una referencia a los dispositivos de video preferidos
+		*/
 		virtual moCaptureDevices*	GetPreferredDevices() {
 			return &m_PreferredDevices;
 		}
+
+		/// Acceso a los dispositivos de video disponibles
+		/**
+		*   devuelve una referencia a los dispositivos de video disponibles
+		*/
 		virtual moCaptureDevices*	GetCaptureDevices() {
 			return &m_CaptureDevices;
 		}
 
+		/// Carga los dispositivos de video disponibles
+		/**
+		*   devuelve una referencia a los dispositivos de video disponibles
+		*   esta función debe ser implementada en cada plataforma
+		*/
 		virtual moCaptureDevices* LoadCaptureDevices() = 0;
+
+		/// Actualiza los dispositivos de video disponibles
+		/**
+		*   devuelve una referencia a los dispositivos de video disponibles
+		*   esta función debe ser implementada en cada plataforma
+		*/
 		virtual moCaptureDevices* UpdateCaptureDevices() = 0;
+
+		/// Chequea si el dispositivos de video disponible está aún disponible
+		/**
+		*   En el indice i del arreglo de los dispositivos de video disponibles
+		*   confirma la disponibilidad de este.
+		*   Al implementar esta función se puede conectar y reconectar cámaras.
+		*   @return verdadero si está disponible, falso si no
+		*/
 		virtual bool	CheckCaptureDevice( int i ) = 0;
+
+        /// Limpia el arreglo de dispositivos de video
+		/**
+		*   Elimina del arreglo todos los dispositivos de video
+		*/
 		virtual void CleanCaptureDevices() {
 			m_CaptureDevices.Empty();
 		}
 
 	protected:
-		moCaptureDevices	m_CaptureDevices;
-		moCaptureDevices	m_PreferredDevices;
+		moCaptureDevices	m_CaptureDevices;///Dispositivos de video disponibles
+		moCaptureDevices	m_PreferredDevices;///Dispositivos de video preferidos
 
 };
 
+/// Grafo de reproducción de video
+/**
+*   clase que define la interfaz virtual con un recurso de video
+*   de esta clase derivan moDsGraph(obsoleta) y moGsGraph que son implementaciones
+*   de DirectShow y GStreamer respectivamente.
+*   @see moDsGraph
+*   @see moGsGraph
+*/
 class LIBMOLDEO_API moVideoGraph : public moAbstract {
 
 	public:
@@ -305,29 +400,101 @@ class LIBMOLDEO_API moVideoGraph : public moAbstract {
 //================================================
 //	INITIALIZATION AND FINALIZATION METHODS
 //================================================
+    /// Inicialización del grafo
+    /**
+    *   Inicializa los punteros y estructuras de la clase
+    *   @return verdadero si fue exitoso, falso sino
+    */
 	virtual bool InitGraph() = 0;
-	virtual bool FinishGraph() = 0;
+
+    /// Finalización del grafo
+    /**
+    *   Destruye los punteros y estructuras de la clase creadas dinámicamente en la función InitGraph
+    *   @return verdadero si fue exitoso, falso sino
+    */
+    virtual bool FinishGraph() = 0;
+    /// Grafo de captura de video
+    /**
+    *   genera un grafo para capturar una cámara, especificada por moCaptureDevice
+    *   @return verdadero si fue exitoso, falso sino
+    */
 	virtual bool BuildLiveGraph( moBucketsPool *pBucketsPool, moCaptureDevice p_capdev) = 0;
+
+    /// Grafo de reproducción de video en modo vivo, asyncronicamente reproducido en función del clock
+    /**
+    *   genera un grafo para reproducir un video en modo normal
+    *   @return verdadero si fue exitoso, falso sino
+    */
 	virtual bool BuildLiveVideoGraph( moText filename, moBucketsPool* pBucketsPool) = 0;
+
 	virtual bool BuildLiveQTVideoGraph( moText filename, moBucketsPool* pBucketsPool) = 0;
 
 //================================================
 //	CONTROL METHODS
 //================================================
+    /// Reproducir el video
+    /**
+    *   comando de play, reproduce el video o continua la reproducción
+    */
 	virtual void Play() = 0;
+
+    /// Detener la reproducción del video
+    /**
+    *   comando de stop, detiene la reproducción del video
+    */
 	virtual void Stop() = 0;
+
+    /// Pausa la reproducción del video
+    /**
+    *   comando de pause, interrumpe la reproducción del video
+    */
 	virtual void Pause() = 0;
+
+    /// Busca y posiciona
+    /**
+    *   comando de Seek, salta a la posición deseada y luego queda en pausa
+    *   @param  frame   esto es un frame...
+    */
 	virtual void Seek( MOuint frame ) = 0;
+
+    /// Está corriendo
+    /**
+    *   indicador que señala si el grafo se está reproduciendo
+    *   @return verdadero o falso
+    */
 	virtual bool IsRunning() = 0;
+
+    /// Está corriendo
+    /**
+    *   indicador que señala si el grafo se está reproduciendo
+    *   @return verdadero o falso
+    */
 	virtual MOulong	GetFramesLength() = 0;
+
+    /// Está corriendo
+    /**
+    *   indicador que señala si el grafo se está reproduciendo
+    *   @return verdadero o falso
+    */
 	virtual MObyte* GetFrameBuffer(MOlong *size) = 0;
 
-	moVideoMode		GetVideoMode();
-	moVideoFormat	GetVideoFormat();
+    /// Devuelve el modo de video
+    /**
+    *   indicador que señala el modo de video del video que se reproduce
+    *   @return moVideoMode el modo de video
+    */
+    moVideoMode		GetVideoMode();
+
+    /// Devuelve el formato de video
+    /**
+    *   indicador que señala el formato de video utilizado por esta entrada de video
+    *   @return moVideoFormat el formato de video
+    */
+    moVideoFormat	GetVideoFormat();
 
 	protected:
 
-	moVideoFormat		m_VideoFormat;
+	moVideoFormat		m_VideoFormat;///Formato de video
 
 
 };

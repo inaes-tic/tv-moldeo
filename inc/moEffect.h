@@ -125,9 +125,9 @@ public:
 
     //virtual void SetNombreConfig(moText texto);
 
-    void SetColor( moValue& color, moValue& alpha );
-    void SetBlending( moBlendingModes blending );
-    void SetPolygonMode( moPolygonModes polygonmode );
+    static void SetColor( moValue& color, moValue& alpha, moEffectState& pstate  );
+    static void SetBlending( moBlendingModes blending );
+    static void SetPolygonMode( moPolygonModes polygonmode );
 
 
 	void TurnOn();
@@ -142,7 +142,7 @@ public:
 		moEffectState		state;
 		moPresets			presets;
 		moMotion			mov;
-		moDeviceCodeList*	devicecode;//accion vs moDeviceCode, personalizable
+		moDeviceCodeList*	devicecode; //accion vs moDeviceCode, personalizable
 		MOint				ncodes;
 
 		MOint				isyncro;

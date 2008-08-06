@@ -58,18 +58,21 @@ public:
 	}
 
 
+    /// Anuncia un error
     /**
-    * Anuncia un error
-    *
+    *   Anuncia un error apilandolo en la lista de mensajes y escribiéndolo
+    *   al archivo de mensajes de errores y al de mensajes registrados...
     */
     void Error( moText p_text ) {
         cout << moText("MOL ERROR: ") << p_text << endl;
         moErr << moText("MOL ERROR: ") << p_text << endl;
+        moLog << moText("MOL ERROR: ") << p_text << endl;
         m_Debug.Push( moText("MOL ERROR: ") + (moText)p_text );
     }
 
+    /// Anuncia un mensaje al usuario además de guardarlo en el log de texto
     /**
-    * Anuncia un mensaje
+    * Pone el mensaje en la pila de mensajes, y escribe este al log de texto
     *
     */
     void Message( moText p_text ) {
@@ -78,9 +81,10 @@ public:
         m_Debug.Push( p_text );
     }
 
-    /// Escribe un mensaje en el archivo de registro
+    /// Escribe un mensaje en el archivo de registro (log)
     /**
-    *
+    *   El archivo log se llama comunmente moldeolog.txt y se encuentra en el raíz del archivo ejecutable
+    *   de Moldeo
     *
     */
     void Log( moText p_text ) {
@@ -88,8 +92,8 @@ public:
     }
 
     /**
-    *   Empuja dentro de la lista el texto establecido
-    *   @param p_text el texto del mensaje
+    *   Apila el mensaje dentro de la pila de mensajes
+    *   @param p_text el mensaje
     */
 	void Push( moText p_text ) {
 		m_Debug.Push( p_text );
@@ -114,11 +118,16 @@ private:
     */
     moTextHeap m_Debug;
 
-    /// Lista de mensajes
+    /// Cadena de salida de los mensajes de error
     /**
-    * para depurar
+    * la función Error dirige sus mensajes a esta salida
     */
     ofstream moErr;
+
+    /// Cadena de salida de los mensajes registrados
+    /**
+    * la función Message y Log dirigen sus mensajes a esta salida
+    */
     ofstream moLog;
 
 };

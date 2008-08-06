@@ -272,7 +272,7 @@ using namespace std;
 #define MO_FAIL			65535
 #define MO_UNDEFINED    -1
 
-#define MO_MAX_DEBUG	26
+#define MO_MAX_DEBUG	65535
 #define MO_MAX_TEXTURAS	512
 #define MO_MAX_MODELOS	256
 

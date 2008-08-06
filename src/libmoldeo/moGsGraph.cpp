@@ -34,350 +34,6 @@
 
 #ifdef MO_GSTREAMER
 
-
-//===========================================
-//
-//     Class: moGsFramewwork
-//
-//===========================================
-
-GMainLoop *moGsGraph::loop = g_main_loop_new (NULL, FALSE);
-
-moGsFramework::moGsFramework() {
-
-}
-
-
-moGsFramework::~moGsFramework() {
-
-
-
-}
-
-moCaptureDevices* moGsFramework::LoadCaptureDevices() {
-
-
-	return &m_CaptureDevices;
-
-}
-
-
-
-moCaptureDevices* moGsFramework::UpdateCaptureDevices() {
-
-
-	return &m_CaptureDevices;
-
-}
-
-
-bool
-moGsFramework::CheckCaptureDevice( int i ) {
-
-
-	return false;
-
-}
-
-//===========================================
-//
-//     Class: moGsGraph
-//
-//===========================================
-
-moGsGraph::moGsGraph() {
-
-    m_pGstBus = NULL;
-    m_pGstPipeline = NULL;
-
-    m_pFileSource = NULL;
-    m_pDecoderBin = NULL;
-
-    m_pTypeFind = NULL;
-    m_pCapsFilter = NULL;
-    m_pFakeSink = NULL;
-    m_pIdentity = NULL;
-
-    m_pBucketsPool = NULL;
-
-    m_pAudioConverter = NULL;
-
-}
-
-moGsGraph::~moGsGraph() {
-	//last try to release objects
-	FinishGraph();
-}
-
-
-/*
-  GstElementFactory *factory;
-  GstElement * element;
-
-  // init GStreamer
-  gst_init (&argc, &argv);
-
-  // create element, method #2
-  factory = gst_element_factory_find ("fakesrc");
-  if (!factory) {
-    g_print ("Failed to find factory of type 'fakesrc'\n");
-    return -1;
-  }
-  element = gst_element_factory_create (factory, "source");
-  if (!element) {
-    g_print ("Failed to create element, even though its factory exists!\n");
-    return -1;
-  }
-
-  gst_object_unref (GST_OBJECT (element));
-
-  return 0;
-
-*/
-
-	//INIT METHODS
-bool
-moGsGraph::InitGraph() {
-
-    //opner en el main de la consola...
-    //inicialización de la libreria gstreamer
-    guint major, minor, micro, nano;
-    GError *errores;
-
-    cout << "Initializing GStreamer" << endl;
-    //bool init_result = gst_init_check (NULL, NULL, &errores);
-    gst_init(NULL,NULL);
-    //gst_init(NULL, NULL);
-    //init_result = init_result && gst_controller_init(NULL,NULL);
-
-    gst_version (&major, &minor, &micro, &nano);
-    cout << "GStreamer version" << major << "." << minor << "." << minor << endl;
-    //char vers[10];
-    //sprintf( vers, "version: %i.%i.%i.%i",major,minor, micro, nano);
-
-    //if (init_result) MODebug->Push(moText("Initializing GStreamer:OK "));
-
-//analogo a FilterGraph, con dos parametros para dar de alta el elemento: playbin
-//playbin
-//player
-    cout << "creating pipeline" << endl;
-    m_pGstPipeline = gst_pipeline_new ("pipeline");
-
-    //buscar un tipo de filtro: factory = gst_element_factory_find ("fakesrc");
-    //generarlo: gst_element_factory_make ( factory, "player");
-    //o  gst_element_factory_make ("playbin", "player");
-    //tomar el valor de una propiedad: g_object_get (G_OBJECT (element), "name", &name, NULL);
-
-    cout << "creating bus interface" << endl;
-    m_pGstBus = gst_pipeline_get_bus (GST_PIPELINE (m_pGstPipeline));
-    gst_bus_add_watch (m_pGstBus, moGsGraph::bus_call, NULL);
-    gst_object_unref (m_pGstBus);
-    //fin inicialización
-
-
-/*
-    m_pGstPipeline = gst_element_factory_make ("playbin", "play");
-    g_object_set (G_OBJECT (m_pGstPipeline), "uri", "file:///home/fabri/plasma.mpg", NULL);
-
-    m_pGstBus = gst_pipeline_get_bus (GST_PIPELINE (m_pGstPipeline));
-    gst_bus_add_watch (m_pGstBus, bus_call, loop);
-    gst_object_unref (m_pGstBus);
-
-
-    CheckState( gst_element_set_state (m_pGstPipeline, GST_STATE_PAUSED), true );
-*/
-    /* now run */
-
-    //g_main_loop_run (moGsGraph::loop);
-    cout << "moGsGraph::Init result:" <<  ((m_pGstPipeline!=NULL) ? "success" : "failure") << endl;
-	return (m_pGstPipeline!=NULL);
-}
-
-
-bool
-moGsGraph::FinishGraph() {
-    //g_main_loop_quit (loop);
-    //gst_object_unref (GST_OBJECT (m_pGstPipeline));
-	return false;
-}
-
-
-//FILTER METHODS
-bool
-moGsGraph::SetCaptureDevice( moText deviceport, MOint idevice) {
-
-
-	return false;
-}
-
-
-bool
-moGsGraph::BuildLiveGraph( moBucketsPool *pBucketsPool, moCaptureDevice p_capdev) {
-
-
-	return false;
-}
-
-
-bool
-moGsGraph::BuildLiveDVGraph( moBucketsPool *pBucketsPool, MOint idevice) {
-
-	return true;
-}
-
-
-
-bool
-moGsGraph::BuildLiveWebcamGraph( moBucketsPool *pBucketsPool, MOint idevice) {
-
-
-	return true;
-}
-
-bool moGsGraph::BuildLiveQTVideoGraph( moText filename , moBucketsPool *pBucketsPool ) {
-
-	return BuildLiveVideoGraph( filename, pBucketsPool );
-
-}
-
-/*
-typedef struct {
-  GstMiniObject		 mini_object;
-
-  // pointer to data and its size
-  guint8		*data;
-  guint			 size;
-
-  // timestamp
-  GstClockTime		 timestamp;
-  GstClockTime		 duration;
-
-  // the media type of this buffer
-  GstCaps		*caps;
-
-  // media specific offset
-  guint64		 offset;
-  guint64		 offset_end;
-
-  guint8                *malloc_data;
-} GstBuffer;
-*/
-gboolean
-moGsGraph::cb_have_data (GstPad    *pad, GstBuffer *buffer, gpointer   u_data)
-{
-  moGsGraph* pGsGraph;
-
-    GstStructure* str;
-    str = gst_caps_get_structure (buffer->caps, 0);
-
-    const gchar *sstr;
-
-    sstr = gst_structure_to_string (str);
-
-    //cout << "new data: timestamp: " << buffer->timestamp << " duration:" << buffer->duration << " size:" << buffer->size << " caps:" << sstr << endl;
-
-
-    if (u_data!=0) {
-      pGsGraph = (moGsGraph*)u_data;
-      if (pGsGraph->m_VideoFormat.m_WaitForFormat)
-        pGsGraph->SetVideoFormat(buffer->caps, buffer);
-    } else return true;//siga intentando
-
-    int w = pGsGraph->GetVideoFormat().m_Width;
-    int h = pGsGraph->GetVideoFormat().m_Height;
-
-    //cout << "w:" << w << "h:" << h << endl;
-
-
-  if ( buffer->size>0 && buffer->size<=(h*w*4) ) {
-    //g_passing buffer to bucketpool
-    moBucket *pbucket=NULL;
-
-    if(!pGsGraph->m_pBucketsPool->IsFull()) {
-        pbucket = new moBucket();
-        if(pbucket!=NULL) {
-
-            pGsGraph->m_VideoFormat.m_BufferSize = buffer->size;
-            pGsGraph->m_VideoFormat.m_TimePerFrame = buffer->duration;
-            pbucket->SetBuffer( buffer->size,(MOubyte*)buffer->data );
-
-            if(!pGsGraph->m_pBucketsPool->AddBucket( pbucket )) {
-
-                //pGsGraph->MODebug->Push(moText("Bucket error"));
-            }
-            // else cout << "bucket passed!!" << buffer->size << "timestamp:" << buffer->timestamp << endl;
-        }
-    }
-
-  }
-
-
-  return TRUE;
-}
-
-
-void
-moGsGraph::cb_newpad (GstElement *decodebin, GstPad *pad, gboolean last, gpointer u_data)
-{
-  GstCaps *caps = NULL;
-  GstPad  *videopad = NULL;
-  GstPad  *audiopad = NULL;
-  GstPad  *audiopadinconverter = NULL;
-  GstPadLinkReturn padlink;
-  gchar* padname = NULL;
-  const gchar* strname = NULL;
-  GstStructure *str = NULL;
-  moGsGraph* pGsGraph;
-
-  if (gst_pad_is_linked(pad)) {
-      return;
-  }
-
-
-  if (u_data!=0) {
-      pGsGraph = (moGsGraph*)u_data;
-      /* check media type */
-      caps = gst_pad_get_caps (pad);
-      padname = gst_pad_get_name(pad);
-      if (padname) {
-        str = gst_caps_get_structure (caps, 0);
-
-        const gchar *sstr;
-
-        sstr = gst_structure_to_string (str);
-        //cout << "cb_newpad: new pad: " << padname << "caps:" << sstr << endl;
-
-        strname = gst_structure_get_name (str);
-
-          if (g_strrstr (strname, "audio")) {
-            pGsGraph->m_pAudioPad = pad;
-            //cout << "cb_newpad: audio pad created" << endl;
-            if (pGsGraph->m_pAudioConverter) {
-                audiopadinconverter = gst_element_get_pad ( pGsGraph->m_pAudioConverter, "sink");
-                gst_pad_link (pad, audiopadinconverter);
-            }
-          } else if (g_strrstr (strname, "video")) {
-            pGsGraph->m_pVideoPad = pad;
-
-            //cout << "cb_newpad: video pad created" << endl;
-            videopad = gst_element_get_pad ( pGsGraph->m_pColorSpace, "sink");
-            GstPad* srcRGB = gst_element_get_pad ( pGsGraph->m_pColorSpace, "src");
-            //bool res = gst_pad_set_caps( gst_element_get_pad ( pGsGraph->m_pColorSpace, "src"), gst_caps_new_simple ("video/x-raw-rgb","bpp", G_TYPE_INT, 24, NULL)  );
-            padlink = gst_pad_link( pad, videopad );
-
-            if (padlink==GST_PAD_LINK_OK) {
-                caps = gst_pad_get_caps( pad );
-                //pGsGraph->SetVideoFormat(caps);
-                gst_pad_add_buffer_probe ( srcRGB, G_CALLBACK (cb_have_data), pGsGraph);
-                //cout << "cb_newpad: linked pads..." << endl;
-            }
-          }
-      }
-
-  }
-
-}
-
 /* returns TRUE if there was an error or we caught a keyboard interrupt. */
 static gboolean
 event_loop (GstElement * pipeline, gboolean blocking, GstState target_state)
@@ -556,6 +212,501 @@ exit:
     return res;
   }
 }
+
+
+
+//===========================================
+//
+//     Class: moGsFramewwork
+//
+//===========================================
+
+GMainLoop *moGsGraph::loop = g_main_loop_new (NULL, FALSE);
+
+moGsFramework::moGsFramework() {
+   // m_pDevEnum = NULL;
+   // m_pEnum = NULL;
+}
+
+
+moGsFramework::~moGsFramework() {
+
+
+
+}
+
+moCaptureDevices* moGsFramework::LoadCaptureDevices() {
+
+    #ifdef MO_WIN32
+        m_CaptureDevices.Add( moCaptureDevice( moText("Microsoft DV Camera and VCR"), moText("DV IEEE 1394"), moText("-") ) );
+        m_CaptureDevices.Add( moCaptureDevice( moText("Laptop Integrated Webcam"), moText("webcam"), moText("-") ) );
+        //DIRECT SHOW TEST//
+        /*
+        HRESULT hr;
+
+        // Create the System Device Enumerator.
+        if(m_pDevEnum==NULL) {
+            HRESULT hr = CoCreateInstance(CLSID_SystemDeviceEnum, NULL,
+                CLSCTX_INPROC_SERVER, IID_ICreateDevEnum,
+                reinterpret_cast<void**>(&m_pDevEnum));
+
+            if(SUCCEEDED(hr) && m_pEnum==NULL)
+            {
+                // Create an enumerator for the video capture category.
+                hr = m_pDevEnum->CreateClassEnumerator(
+                    CLSID_VideoInputDeviceCategory,
+                    &m_pEnum, 0);
+            } else {
+                ShowError(hr);
+                return &m_CaptureDevices;
+            }
+        }
+        */
+    #else
+        m_CaptureDevices.Add( moCaptureDevice( moText("DV"), moText("DV IEEE 1394"), moText("") ) );
+    #endif
+
+	return &m_CaptureDevices;
+
+}
+
+
+
+moCaptureDevices* moGsFramework::UpdateCaptureDevices() {
+
+
+	return &m_CaptureDevices;
+
+}
+
+
+bool
+moGsFramework::CheckCaptureDevice( int i ) {
+
+
+	return false;
+
+}
+
+//===========================================
+//
+//     Class: moGsGraph
+//
+//===========================================
+
+moGsGraph::moGsGraph() {
+
+    m_pGstBus = NULL;
+    m_pGstPipeline = NULL;
+
+    m_pFileSource = NULL;
+    m_pDecoderBin = NULL;
+
+    m_pTypeFind = NULL;
+    m_pCapsFilter = NULL;
+    m_pFakeSink = NULL;
+    m_pIdentity = NULL;
+
+    m_pBucketsPool = NULL;
+
+    m_pAudioConverter = NULL;
+
+}
+
+moGsGraph::~moGsGraph() {
+	//last try to release objects
+	FinishGraph();
+}
+
+
+/*
+  GstElementFactory *factory;
+  GstElement * element;
+
+  // init GStreamer
+  gst_init (&argc, &argv);
+
+  // create element, method #2
+  factory = gst_element_factory_find ("fakesrc");
+  if (!factory) {
+    g_print ("Failed to find factory of type 'fakesrc'\n");
+    return -1;
+  }
+  element = gst_element_factory_create (factory, "source");
+  if (!element) {
+    g_print ("Failed to create element, even though its factory exists!\n");
+    return -1;
+  }
+
+  gst_object_unref (GST_OBJECT (element));
+
+  return 0;
+
+*/
+
+	//INIT METHODS
+bool
+moGsGraph::InitGraph() {
+
+    //opner en el main de la consola...
+    //inicialización de la libreria gstreamer
+    guint major, minor, micro, nano;
+    GError *errores;
+
+    cout << "Initializing GStreamer" << endl;
+    //bool init_result = gst_init_check (NULL, NULL, &errores);
+    gst_init(NULL,NULL);
+    //gst_init(NULL, NULL);
+    //init_result = init_result && gst_controller_init(NULL,NULL);
+
+    gst_version (&major, &minor, &micro, &nano);
+    cout << "GStreamer version" << major << "." << minor << "." << minor << endl;
+    //char vers[10];
+    //sprintf( vers, "version: %i.%i.%i.%i",major,minor, micro, nano);
+
+    //if (init_result) MODebug->Push(moText("Initializing GStreamer:OK "));
+
+//analogo a FilterGraph, con dos parametros para dar de alta el elemento: playbin
+//playbin
+//player
+    cout << "creating pipeline" << endl;
+    m_pGstPipeline = gst_pipeline_new ("pipeline");
+
+    //buscar un tipo de filtro: factory = gst_element_factory_find ("fakesrc");
+    //generarlo: gst_element_factory_make ( factory, "player");
+    //o  gst_element_factory_make ("playbin", "player");
+    //tomar el valor de una propiedad: g_object_get (G_OBJECT (element), "name", &name, NULL);
+
+    cout << "creating bus interface" << endl;
+    m_pGstBus = gst_pipeline_get_bus (GST_PIPELINE (m_pGstPipeline));
+    gst_bus_add_watch (m_pGstBus, moGsGraph::bus_call, NULL);
+    gst_object_unref (m_pGstBus);
+    //fin inicialización
+
+
+/*
+    m_pGstPipeline = gst_element_factory_make ("playbin", "play");
+    g_object_set (G_OBJECT (m_pGstPipeline), "uri", "file:///home/fabri/plasma.mpg", NULL);
+
+    m_pGstBus = gst_pipeline_get_bus (GST_PIPELINE (m_pGstPipeline));
+    gst_bus_add_watch (m_pGstBus, bus_call, loop);
+    gst_object_unref (m_pGstBus);
+
+
+    CheckState( gst_element_set_state (m_pGstPipeline, GST_STATE_PAUSED), true );
+*/
+    /* now run */
+
+    //g_main_loop_run (moGsGraph::loop);
+    cout << "moGsGraph::Init result:" <<  ((m_pGstPipeline!=NULL) ? "success" : "failure") << endl;
+	return (m_pGstPipeline!=NULL);
+}
+
+
+bool
+moGsGraph::FinishGraph() {
+    //g_main_loop_quit (loop);
+    //gst_object_unref (GST_OBJECT (m_pGstPipeline));
+	return false;
+}
+
+
+//FILTER METHODS
+bool
+moGsGraph::SetCaptureDevice( moText deviceport, MOint idevice) {
+
+
+	return false;
+}
+
+
+bool
+moGsGraph::BuildLiveGraph( moBucketsPool *pBucketsPool, moCaptureDevice p_capdev) {
+
+    return BuildLiveWebcamGraph(  pBucketsPool, p_capdev.GetName() );
+}
+
+
+bool
+moGsGraph::BuildLiveDVGraph( moBucketsPool *pBucketsPool, MOint idevice) {
+
+	return true;
+}
+
+
+
+bool
+moGsGraph::BuildLiveWebcamGraph( moBucketsPool *pBucketsPool, moText devicename ) {
+
+    m_pBucketsPool = pBucketsPool;
+    guint signal_id = 0;
+    bool link_result = false;
+    gchar* checkval;
+    bool res = false;
+
+
+    if (devicename.Length()>0)
+    {
+
+        #ifdef MO_WIN32
+        m_pFileSource = gst_element_factory_make ("dshowvideosrc", "source");
+        #else
+        if (devicename==moText("DV"))
+            m_pFileSource = gst_element_factory_make ("dv1394src", "source");
+        else
+            m_pFileSource = gst_element_factory_make ("v4l2src", "source");
+        #endif
+
+        if (m_pFileSource) {
+           #ifdef MO_WIN32
+            g_object_set (G_OBJECT (m_pFileSource), "device-name", (char*)devicename, NULL);
+           #else
+            if (devicename==moText("DV") )
+                g_object_set (G_OBJECT (m_pFileSource), "port", 0, NULL);
+            else
+                g_object_set (G_OBJECT (m_pFileSource), "device-name", (char*)devicename, NULL);
+           #endif
+           //g_object_get (G_OBJECT (m_pFileSource), "location", &checkval, NULL);
+           //GstElement *filter = gst_element_factory_make ("capsfilter", "filter");
+           //g_object_set (G_OBJECT (m_pFileSource), "pattern", GST_VIDEO_TEST_SRC_SNOW, NULL);
+           //res = gst_pad_set_caps( gst_element_get_pad( m_pFileSource, "src" ), NULL);
+
+
+           res = gst_bin_add (GST_BIN (m_pGstPipeline), m_pFileSource );
+
+           m_pColorSpace = gst_element_factory_make ("ffmpegcolorspace", "color");
+           if (m_pColorSpace) {
+                res = gst_bin_add (GST_BIN (m_pGstPipeline), m_pColorSpace );
+           }
+
+           m_pCapsFilter = gst_element_factory_make ("capsfilter", "filt");
+           if (m_pCapsFilter) {
+               g_object_set (G_OBJECT (m_pCapsFilter), "caps", gst_caps_new_simple ("video/x-raw-rgb",
+               "bpp", G_TYPE_INT, 24,
+               "depth", G_TYPE_INT, 24,
+               "red_mask",G_TYPE_INT, 255,
+               "green_mask",G_TYPE_INT, 65280,
+               "blue_mask",G_TYPE_INT, 16711680,
+               "endianness", G_TYPE_INT, 4321,
+               NULL), NULL);
+               //depth=(int)24, red_mask=(int)16711680, green_mask=(int)65280, blue_mask=(int)255, endianness=(int)4321
+               res = gst_bin_add (GST_BIN (m_pGstPipeline), m_pCapsFilter );
+           }
+           //RetreivePads( m_pFileSource );
+
+           m_pAudioConverter = gst_element_factory_make ("audioresample", "resample");
+
+           if (m_pAudioConverter) {
+                res = gst_bin_add (GST_BIN (m_pGstPipeline), m_pAudioConverter );
+           }
+
+
+            m_pDecoderBin = gst_element_factory_make ("decodebin", "decoder");
+            if (m_pDecoderBin) {
+                signal_id = g_signal_connect (m_pDecoderBin, "new-decoded-pad", G_CALLBACK (cb_newpad), (gpointer)this);
+                res = gst_bin_add (GST_BIN (m_pGstPipeline), m_pDecoderBin );
+
+                m_pFakeSink = gst_element_factory_make ("fakesink", "destout");
+                //RetreivePads( m_pFakeSink );
+                if (m_pFakeSink) {
+                     res = gst_bin_add (GST_BIN (m_pGstPipeline), m_pFakeSink );
+
+                    //link_result = gst_element_link_many ( m_pFileSource, m_pDecoderBin, m_pFakeSink, NULL );
+                    link_result = gst_element_link_many( m_pFileSource, m_pDecoderBin, NULL );
+                    if (link_result) {
+
+                        link_result = gst_element_link_many( m_pColorSpace, m_pCapsFilter, m_pFakeSink, NULL );
+
+                        if (link_result) {
+
+                            CheckState( gst_element_set_state (m_pGstPipeline, GST_STATE_PAUSED), false /*SYNCRUNASLI*/ );
+
+                            WaitForFormatDefinition( 600 );
+
+                            cout << "state gstreamer finish" << endl;
+
+                            return true;
+
+                        } else {
+                            cout << "moGsGraph::error: m_pColorSpace m_pCapsFilter m_pFakeSink linking failed" << endl;
+                            event_loop( m_pGstPipeline, false, GST_STATE_PAUSED);
+                        }
+                    } else {
+                        cout << "moGsGraph::error: filesrc and decodebin linkage failed" << endl;
+                        event_loop( m_pGstPipeline, false, GST_STATE_PAUSED);
+                    }
+
+                } else {
+                    printf("moGsGraph::error: fakesink construction failed\n");
+                    event_loop( m_pGstPipeline, false, GST_STATE_PAUSED);
+                }
+            } else {
+                cout << "moGsGraph::error: decodebin construction failed" << endl;
+                event_loop( m_pGstPipeline, false, GST_STATE_PAUSED);
+            }
+        } else {
+            cout << "moGsGraph::error: file source failed" << endl;
+            event_loop( m_pGstPipeline, false, GST_STATE_PAUSED);
+        }
+        return false;
+
+        /*
+        GstPad *pad;
+        pad = gst_element_get_pad (m_pDecoderBin, "src0");
+        gst_pad_add_buffer_probe (pad, G_CALLBACK (cb_have_data), NULL);
+        gst_object_unref (pad);
+        */
+
+
+    }
+
+	return true;
+}
+
+bool moGsGraph::BuildLiveQTVideoGraph( moText filename , moBucketsPool *pBucketsPool ) {
+
+	return BuildLiveVideoGraph( filename, pBucketsPool );
+
+}
+
+/*
+typedef struct {
+  GstMiniObject		 mini_object;
+
+  // pointer to data and its size
+  guint8		*data;
+  guint			 size;
+
+  // timestamp
+  GstClockTime		 timestamp;
+  GstClockTime		 duration;
+
+  // the media type of this buffer
+  GstCaps		*caps;
+
+  // media specific offset
+  guint64		 offset;
+  guint64		 offset_end;
+
+  guint8                *malloc_data;
+} GstBuffer;
+*/
+gboolean
+moGsGraph::cb_have_data (GstPad    *pad, GstBuffer *buffer, gpointer   u_data)
+{
+  moGsGraph* pGsGraph;
+
+    GstStructure* str;
+    str = gst_caps_get_structure (buffer->caps, 0);
+
+    const gchar *sstr;
+
+    sstr = gst_structure_to_string (str);
+
+    //cout << "new data: timestamp: " << buffer->timestamp << " duration:" << buffer->duration << " size:" << buffer->size << " caps:" << sstr << endl;
+
+
+    if (u_data!=0) {
+      pGsGraph = (moGsGraph*)u_data;
+      if (pGsGraph->m_VideoFormat.m_WaitForFormat)
+        pGsGraph->SetVideoFormat(buffer->caps, buffer);
+    } else return true;//siga intentando
+
+    int w = pGsGraph->GetVideoFormat().m_Width;
+    int h = pGsGraph->GetVideoFormat().m_Height;
+
+    //cout << "w:" << w << "h:" << h << endl;
+
+
+  if ( buffer->size>0 && buffer->size<=(h*w*4) ) {
+    //g_passing buffer to bucketpool
+    moBucket *pbucket=NULL;
+
+    if(!pGsGraph->m_pBucketsPool->IsFull()) {
+        pbucket = new moBucket();
+        if(pbucket!=NULL) {
+
+            pGsGraph->m_VideoFormat.m_BufferSize = buffer->size;
+            pGsGraph->m_VideoFormat.m_TimePerFrame = buffer->duration;
+            pbucket->SetBuffer( buffer->size,(MOubyte*)buffer->data );
+
+            if(!pGsGraph->m_pBucketsPool->AddBucket( pbucket )) {
+
+                //pGsGraph->MODebug->Push(moText("Bucket error"));
+            }
+            // else cout << "bucket passed!!" << buffer->size << "timestamp:" << buffer->timestamp << endl;
+        }
+    }
+
+  }
+
+
+  return TRUE;
+}
+
+
+void
+moGsGraph::cb_newpad (GstElement *decodebin, GstPad *pad, gboolean last, gpointer u_data)
+{
+  GstCaps *caps = NULL;
+  GstPad  *videopad = NULL;
+  GstPad  *audiopad = NULL;
+  GstPad  *audiopadinconverter = NULL;
+  GstPadLinkReturn padlink;
+  gchar* padname = NULL;
+  const gchar* strname = NULL;
+  GstStructure *str = NULL;
+  moGsGraph* pGsGraph;
+
+  if (gst_pad_is_linked(pad)) {
+      return;
+  }
+
+
+  if (u_data!=0) {
+      pGsGraph = (moGsGraph*)u_data;
+      /* check media type */
+      caps = gst_pad_get_caps (pad);
+      padname = gst_pad_get_name(pad);
+      if (padname) {
+        str = gst_caps_get_structure (caps, 0);
+
+        const gchar *sstr;
+
+        sstr = gst_structure_to_string (str);
+        //cout << "cb_newpad: new pad: " << padname << "caps:" << sstr << endl;
+
+        strname = gst_structure_get_name (str);
+
+          if (g_strrstr (strname, "audio")) {
+            pGsGraph->m_pAudioPad = pad;
+            //cout << "cb_newpad: audio pad created" << endl;
+            if (pGsGraph->m_pAudioConverter) {
+                audiopadinconverter = gst_element_get_pad ( pGsGraph->m_pAudioConverter, "sink");
+                gst_pad_link (pad, audiopadinconverter);
+            }
+          } else if (g_strrstr (strname, "video")) {
+            pGsGraph->m_pVideoPad = pad;
+
+            //cout << "cb_newpad: video pad created" << endl;
+            videopad = gst_element_get_pad ( pGsGraph->m_pColorSpace, "sink");
+            GstPad* srcRGB = gst_element_get_pad ( pGsGraph->m_pColorSpace, "src");
+            //bool res = gst_pad_set_caps( gst_element_get_pad ( pGsGraph->m_pColorSpace, "src"), gst_caps_new_simple ("video/x-raw-rgb","bpp", G_TYPE_INT, 24, NULL)  );
+            padlink = gst_pad_link( pad, videopad );
+
+            if (padlink==GST_PAD_LINK_OK) {
+                caps = gst_pad_get_caps( pad );
+                //pGsGraph->SetVideoFormat(caps);
+                gst_pad_add_buffer_probe ( srcRGB, G_CALLBACK (cb_have_data), pGsGraph);
+                //cout << "cb_newpad: linked pads..." << endl;
+            }
+          }
+      }
+
+  }
+
+}
+
 
 void
 moGsGraph::RetreivePads( GstElement* FilterElement) {
