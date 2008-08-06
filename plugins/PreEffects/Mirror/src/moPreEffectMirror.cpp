@@ -235,10 +235,10 @@ void moPreEffectMirror::Draw( moTempo* tempogral,moEffectState* parentstate)
 
     if ( pmode == moText("LINE") ) {
         glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-        SetColor( m_Config[moR(MIRROR_COLOR)][MO_SELECTED], m_Config[moR(MIRROR_ALPHA)][MO_SELECTED] );
+        SetColor( m_Config[moR(MIRROR_COLOR)][MO_SELECTED], m_Config[moR(MIRROR_ALPHA)][MO_SELECTED], state );
         glBindTexture(GL_TEXTURE_2D, 0);
     } else {
-        SetColor( m_Config[moR(MIRROR_COLOR)][MO_SELECTED], m_Config[moR(MIRROR_ALPHA)][MO_SELECTED] );
+        SetColor( m_Config[moR(MIRROR_COLOR)][MO_SELECTED], m_Config[moR(MIRROR_ALPHA)][MO_SELECTED], state );
         glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
         glBindTexture(GL_TEXTURE_2D, m_pResourceManager->GetRenderMan()->RenderTexGLId(MO_EFFECTS_TEX));
     }

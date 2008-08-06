@@ -25,7 +25,7 @@
 
   Authors:
   Fabricio Costa
-  Andr� Colubri
+  Andrés Colubri
 
 *******************************************************************************/
 
@@ -36,6 +36,34 @@
 #include <conio.h>
 #endif
 
+//========================
+//  Factory
+//========================
+
+moMidiFactory *m_MidiFactory = NULL;
+
+MO_PLG_API moIODeviceFactory* CreateIODeviceFactory(){
+	if (m_MidiFactory==NULL)
+		m_MidiFactory = new moMidiFactory();
+	return (moIODeviceFactory*) m_MidiFactory;
+}
+
+MO_PLG_API void DestroyIODeviceFactory(){
+	delete m_MidiFactory;
+	m_MidiFactory = NULL;
+}
+
+moIODevice*  moMidiFactory::Create() {
+	return new moMidi();
+}
+
+void moMidiFactory::Destroy(moIODevice* fx) {
+	delete fx;
+}
+
+//========================
+//  class
+//========================
 
 
 moMidiDevice::moMidiDevice() {
@@ -55,7 +83,7 @@ void moMidiDevice::PrintMidiInErrorMsg(unsigned long err)
 #ifdef WIN32
 #define BUFFERSIZE 200
 	char	buffer[BUFFERSIZE];
-	
+
 	if (!(err = midiInGetErrorText(err, &buffer[0], BUFFERSIZE)))
 	{
 		printf("%s\r\n", &buffer[0]);
@@ -94,12 +122,12 @@ void moMidiDevice::midiCallback(HMIDIIN handle, UINT uMsg, DWORD dwInstance, DWO
 			/* Display the time stamp, and the bytes. (Note: I always display 3 bytes even for
 			Midi messages that have less) */
 			sprintf(&buffer[0], "0x%08X 0x%02X 0x%02X 0x%02X\0", dwParam2, dwParam1 & 0x000000FF, (dwParam1>>8) & 0x000000FF, (dwParam1>>16) & 0x000000FF);
-			
+
 			_cputs(&buffer[0]);
 
-			
+
 			moMidiData		mididata;
-			
+
 			mididata.m_Type = MOMIDI_ROTARY;//????
 			mididata.m_Channel = (dwParam1 & 0x000000FF) - 175;//channel 1 = 0xB0
 			mididata.m_CC = (dwParam1>>8) & 0x000000FF;
@@ -235,7 +263,7 @@ moMidiDevice::Init( moText devicetext ) {
 		}
 	}
 
-	// Failed to get a device - possibly the index is larger than the number of devices 
+	// Failed to get a device - possibly the index is larger than the number of devices
 	if (result == FALSE) {
 		SetupDiDestroyDeviceInfoList (hardwareDeviceInfoSet);
 		return;// INVALID_HANDLE_VALUE;
@@ -253,7 +281,7 @@ moMidiDevice::Init( moText devicetext ) {
 	MIDIINCAPS     moc;
 	unsigned long   iNumDevs, i;
 
-	
+
 
 	/* Get the number of MIDI Out devices in this computer */
 	iNumDevs = midiInGetNumDevs();
@@ -278,23 +306,23 @@ moMidiDevice::Init( moText devicetext ) {
 	unsigned long result;
 	HMIDIOUT      outHandle;
 
-	// Open the MIDI Mapper	
+	// Open the MIDI Mapper
 	result = midiOutOpen(&outHandle, i, 0, 0, CALLBACK_WINDOW);
 	if (!result)
 	{
-		// Output the C note (ie, sound the note) 
+		// Output the C note (ie, sound the note)
 		midiOutShortMsg(outHandle, 0x00403C90);
 
-		// Output the E note 
+		// Output the E note
 		midiOutShortMsg(outHandle, 0x00404090);
 
-		// Output the G note 
+		// Output the G note
 		midiOutShortMsg(outHandle, 0x00404390);
 
 		// Here you should insert a delay so that you can hear the notes sounding
 		Sleep(1000);
 
-		// Now let's turn off those 3 notes 
+		// Now let's turn off those 3 notes
 		midiOutShortMsg(outHandle, 0x00003C90);
 		midiOutShortMsg(outHandle, 0x00004090);
 		midiOutShortMsg(outHandle, 0x00004390);
@@ -347,7 +375,7 @@ moMidiDevice::Init( moText devicetext ) {
 						// MIM_LONGDATA message to that callback. If we were to
 						// allow midiCallback() to midiInAddBuffer() again, we'd
 						// never get the driver to finish with our midiHdr
-						
+
 						SysXFlag |= 0x80;
 						printf("\r\nRecording stopped!\n");
 					}*/
@@ -400,7 +428,7 @@ moMidiDevice::Update(moEventList *Events) {
 
 	m_lock.Lock();
 	for( i=0; i < m_MidiDatas.Count(); i++ ) {
-		
+
 		mididata = m_MidiDatas.Get( i );
 
 		Events->Add( MO_IODEVICE_MIDI, (MOint)(mididata.m_Type), mididata.m_Channel, mididata.m_CC, mididata.m_Val );
@@ -419,7 +447,7 @@ moMidiDevice::Update(moEventList *Events) {
 //=============================================================================
 
 moMidi::moMidi() {
-	m_Name = "midi";
+	SetName("midi");
 }
 
 moMidi::~moMidi() {
@@ -428,14 +456,14 @@ moMidi::~moMidi() {
 
 MOboolean
 moMidi::Init() {
-	
+
 	moText conf;
 	MOint i;
 
 	// Loading config file.
     conf = "data/";
-    conf += m_Name;
-    conf += moText(".cfg");	
+    conf += GetName();
+    conf += moText(".cfg");
     m_Config.LoadConfig(conf);
 
 	mididevices = m_Config.GetParamIndex("mididevices");
@@ -447,33 +475,33 @@ moMidi::Init() {
 MO_MIDI_SYTEM_LABELNAME	0
 MO_MIDI_SYSTEM_ON 1
 	*/
-	for( int i = 0; i < nvalues; i++) {		
-		
+	for( int i = 0; i < nvalues; i++) {
+
 		m_Config.SetCurrentValueIndex( mididevices, i );
 
 		moMidiDevicePtr pDevice = NULL;
 		pDevice = new moMidiDevice();
-		
+
 		if (pDevice!=NULL) {
 			pDevice->MODebug = MODebug;
 			moText MidiDeviceCode = m_Config.GetParam().GetValue().GetSubValue(MO_MIDI_SYTEM_LABELNAME).Text();
 			if ( pDevice->Init( MidiDeviceCode ) ) {
 				pDevice->SetActive( m_Config.GetParam().GetValue().GetSubValue(MO_MIDI_SYSTEM_ON).Int() );
 			} else {
-				MODebug->Push( moText("Midi Device not found:") + MidiDeviceCode );
+				MODebug2->Error( moText("Midi Device not found:") + (moText)MidiDeviceCode );
 			}
 		}
 
 		m_MidiDevices.Add( pDevice );
 
 	}
-	
+
 
 
 	//levantamos los codes definidos
 	MOint coparam = m_Config.GetParamIndex("code");
 	m_Config.SetCurrentParamIndex(coparam);
-	MOint ncodes = m_Config.GetValuesCount(coparam);	
+	MOint ncodes = m_Config.GetValuesCount(coparam);
 
 	m_Config.FirstValue();
 
@@ -550,7 +578,7 @@ moMidi::GetCode(moText strcod) {
 
 MOpointer
 moMidi::GetPointer(MOdevcode devcode ) {
-	
+
 	return NULL;
 }
 
@@ -575,17 +603,17 @@ moMidi::Update(moEventList *Events) {
 
 
 	for( i = 0; i < m_MidiDevices.Count(); i++ ) {
-	
+
 		moMidiDevicePtr MidiDevPtr;
 		MidiDevPtr = m_MidiDevices.Get(i);
 
 		if (MidiDevPtr!=NULL) {
 			if (MidiDevPtr->IsInit()) {
 				MidiDevPtr->Update( Events );
-			}			
+			}
 		}
 
-	
+
 	}
 
 	//m_Codes
@@ -596,14 +624,14 @@ moMidi::Update(moEventList *Events) {
 	while(actual!=NULL) {
 		//solo nos interesan los del midi q nosotros mismos generamos, para destruirlos
 		if(actual->deviceid == MO_IODEVICE_MIDI) {
-			
+
 			moMidiDataCode pcode = m_Codes.Get( actual->reservedvalue1 );
 			tempval = actual->reservedvalue2;
 			//calculamos la diferencia y modificamos el valor del evento...
 			actual->reservedvalue2 = (tempval - pcode.mididata.m_Val) * 8;
 			//actual->reservedvalue2 = ( tempval - 64)*4;
 			//guardamos el valor actual para calcular la proxima
-			pcode.mididata.m_Val = tempval; 
+			pcode.mididata.m_Val = tempval;
 			m_Codes.Set( actual->reservedvalue1, pcode );
 
 			actual = actual->next;

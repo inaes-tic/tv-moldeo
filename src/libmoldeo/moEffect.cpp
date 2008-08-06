@@ -239,12 +239,12 @@ void moEffect::Interaction(moIODeviceManager *consolaes) {
 
 }
 
-void moEffect::SetColor( moValue& color, moValue& alpha ) {
-	glColor4f(  color[MO_RED].Fun()->Eval(state.tempo.ang) * state.tintr,
-                color[MO_GREEN].Fun()->Eval(state.tempo.ang) * state.tintg,
-                color[MO_BLUE].Fun()->Eval(state.tempo.ang) * state.tintb,
-				color[MO_ALPHA].Fun()->Eval(state.tempo.ang) *
-				alpha[0].GetData()->Fun()->Eval(state.tempo.ang) * state.alpha);
+void moEffect::SetColor( moValue& color, moValue& alpha, moEffectState& pstate ) {
+	glColor4f(  color[MO_RED].Fun()->Eval(pstate.tempo.ang) * pstate.tintr,
+                color[MO_GREEN].Fun()->Eval(pstate.tempo.ang) * pstate.tintg,
+                color[MO_BLUE].Fun()->Eval(pstate.tempo.ang) * pstate.tintb,
+				color[MO_ALPHA].Fun()->Eval(pstate.tempo.ang) *
+				alpha[0].GetData()->Fun()->Eval(pstate.tempo.ang) * pstate.alpha);
 
 }
 

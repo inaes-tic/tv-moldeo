@@ -59,6 +59,9 @@ moMoldeoObject::~moMoldeoObject() {
 
 MOboolean
 moMoldeoObject::Init() {
+
+    int idx;
+
 	if (m_pResourceManager!=NULL)
 		m_vm = m_pResourceManager->GetScriptMan()->GetVM();
 
@@ -68,13 +71,13 @@ moMoldeoObject::Init() {
 
 		moParam	&param( m_Config[p] );
 
-		MODebug2->Message( moText("Init param type ") + param.GetParamDefinition().GetTypeStr() + moText(" name: ") + param.GetParamDefinition().GetName() );
+		MODebug2->Log( moText("moMoldeoObject:: Init param type ") + param.GetParamDefinition().GetTypeStr() + moText(" name: ") + param.GetParamDefinition().GetName() );
 
 		for( MOuint v=0;v<param.GetValuesCount();v++) {
 
 			moValue& value( param.GetValue(v) );
 
-			MODebug2->Message( moText("+Init value #") + IntToStr(v) );
+			//MODebug2->Message( moText("+Init value #") + IntToStr(v) );
 
             //RESUELVE LAS FUNCIONES!!!!
             //esto debe hacerse antes de aplicar filtros y otros...
@@ -82,10 +85,10 @@ moMoldeoObject::Init() {
             for( MOuint ivb=0; ivb<value.GetSubValueCount(); ivb++) {
                 moValueBase& VB( value.GetSubValue( ivb ) );
                 if (VB.GetType() == MO_VALUE_FUNCTION ) {
-                    int idx = m_pResourceManager->GetMathMan()->AddFunction( VB.Text(), (MOboolean)false );
+                    idx = m_pResourceManager->GetMathMan()->AddFunction( VB.Text(), (MOboolean)false );
                     if (idx>-1) {
                         VB.SetFun( m_pResourceManager->GetMathMan()->GetFunction(idx) );
-                        MODebug2->Log( moText("function defined: ") + VB.Text() );
+                        //MODebug2->Message( moText("function defined: ") + VB.Text() );
                     } else {
                         MODebug2->Error(moText("function couldn't be defined: ") + VB.Text() );
                     }
@@ -105,7 +108,7 @@ moMoldeoObject::Init() {
                     case MO_PARAM_VIDEO:
                     case MO_PARAM_FILTER:
                         MODebug2->Log( moText("") );
-                        int idx = m_pResourceManager->GetTextureMan()->GetTextureMOId( valuebase.Text(), true);
+                        idx = m_pResourceManager->GetTextureMan()->GetTextureMOId( valuebase.Text(), true);
                         if (idx>-1) {
                             moTexture*  pTexture = m_pResourceManager->GetTextureMan()->GetTexture(idx);
                             valuebase.SetTexture( pTexture );

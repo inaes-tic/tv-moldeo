@@ -853,9 +853,7 @@ moTextHeap::~moTextHeap() {
 
 void
 moTextHeap::Push(moText T) {
-	int i;
-	if(n>=2) {for(i=(n-1);i>=1;i--) array[i] = array[i-1];}
-	if(n>=1) {array[0] = T;}
+	if ( n>=1 && (n-1-count)>=0 ) {array[n-1-count] = T;}
 	count++;
 }
 
@@ -864,9 +862,9 @@ moText
 moTextHeap::Pop() {
 	int i;
 	moText ret;
-	if(n>=1) {ret = array[0];}
-	if(n>=2) {for(i=0;i<(n-1);i++) array[i] = array[i+1];}
-	count--;
+	if(n>=1) {ret = array[n-1];}
+	if(n>=2) {for(i=(n-1);i>0;i--) array[i] = array[i-1];}
+	if (count>0) count--;
 	return ret;
 }
 
@@ -874,14 +872,14 @@ moTextHeap::Pop() {
 moText
 moTextHeap::Get(int x) {
 	if(x<n) return(array[x]);
-	else printf("error en ajtexts");
+	else printf("moTextHeap:: Error");
 	return moText("");
 }
 
 void
 moTextHeap::Set(int x,moText T) {
 	if(x<n)  { array[x] = T; }
-	else printf("error en ajtexts");
+	else printf("moTextHeap:: Error");
 }
 
 //===========================================

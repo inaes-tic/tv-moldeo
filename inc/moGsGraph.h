@@ -58,7 +58,10 @@ Example:
 
 #include <gst/gst.h>
 //#include <gst/controller/gstcontroller.h>
-
+#ifdef MO_WIN32
+    //#include "objbase.h"
+    //#include "dshow.h"
+#endif
 
 typedef enum {
   GST_VIDEO_TEST_SRC_SMPTE,
@@ -92,6 +95,11 @@ class LIBMOLDEO_API moGsFramework : public moVideoFramework {
 
 	private:
 
+	#ifdef MO_WIN32
+        //ICreateDevEnum *m_pDevEnum;
+		//IEnumMoniker *m_pEnum;
+	#endif
+
 };
 
 
@@ -114,7 +122,7 @@ public:
 //================================================
 	bool SetCaptureDevice( moText deviceport , MOint idevice /**/= 0);
 	bool BuildLiveDVGraph( moBucketsPool *pBucketsPool, MOint idevice = 0);
-	bool BuildLiveWebcamGraph( moBucketsPool *pBucketsPool, MOint idevice = 0);
+	bool BuildLiveWebcamGraph( moBucketsPool *pBucketsPool, moText devicename = moText("") );
 	bool BuildLiveVideoGraph( moText filename , moBucketsPool *pBucketsPool );
 	bool BuildLiveQTVideoGraph( moText filename , moBucketsPool *pBucketsPool );
 
@@ -157,6 +165,7 @@ private:
     moBucketsPool       *m_pBucketsPool;
 
 	moGsFramework*		m_pGsFramework;
+
 	moCaptureDevice     m_CaptureDevice;
 
     /** Bin's o Pipeline's (Filtergraph...)*/

@@ -318,6 +318,7 @@ void moTablet::Update(moEventList *Events)
     if (cPkts == 0)
 	{
 		// No events... setting pressure to zero.
+		/*
 		tabletcode = TABLET_PEN_PRESSURE;
         Pen[tabletcode].Change(0);
 		if (Pen[tabletcode].change)
@@ -327,6 +328,7 @@ void moTablet::Update(moEventList *Events)
 
 			MODebug2->Push( moText(" Tablet: ") + IntToStr(Pen[tabletcode].value) );
 		}
+		*/
 	}
 
 	for (i = 0; i < cPkts; i++)

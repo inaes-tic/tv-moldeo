@@ -271,12 +271,12 @@ moConsole::LoadIODevices() {
 			if(pdevice!=NULL) {
 				pdevice->SetResourceManager( m_pResourceManager );
 				pdevice->Init();
-			} else MODebug2->Push( moText("Couldn't load a device:") + moText(fxname));
+			} else MODebug2->Push( moText("moConsole:: Couldn't load a device:") + moText(fxname));
 		}
 		m_Config.NextValue();
 
     }
-	if (MODebug2) MODebug2->Push( moText("IODevices loaded.") );
+	if (MODebug2) MODebug2->Push( moText("moConsole:: IODevices loaded.") );
 }
 
 void moConsole::UnloadIODevices() {
@@ -304,8 +304,8 @@ moConsole::LoadMasterEffects() {
 	N = m_Config.GetValuesCount(mtfx);
 
 	if (MODebug2) {
-		MODebug2->Push( moText("Loading MasterEffects configs...") );
-		MODebug2->Push( moText(" Master Effects.") + IntToStr(N)  );
+		MODebug2->Push( moText("moConsole:: Loading MasterEffects configs...") );
+		MODebug2->Push( moText("moConsole:: Master Effects.") + IntToStr(N)  );
 	}
 
 	state.m_nMasterEffects = N;
@@ -331,7 +331,7 @@ moConsole::LoadMasterEffects() {
 		}
 	}
 
-	if (MODebug2) MODebug2->Push( moText("Master Effects loaded.") );
+	if (MODebug2) MODebug2->Push( moText("moConsole:: Master Effects loaded.") );
 
 }
 
@@ -397,7 +397,7 @@ moConsole::LoadPreEffects() {
 		}
 	}
 
-	if (MODebug2) MODebug2->Push(moText("Pre Effects loaded."));
+	if (MODebug2) MODebug2->Push(moText("moConsole:: Pre Effects loaded."));
 }
 
 void moConsole::UnloadPreEffects() {
@@ -424,8 +424,8 @@ moConsole::LoadEffects() {
 	N = m_Config.GetValuesCount(efx);
 
 	if (MODebug2) {
-		MODebug2->Push( moText("Loading Effects configs...") );
-		MODebug2->Push( moText("Effects.") + IntToStr(N)  );
+		MODebug2->Push( moText("moConsole:: Loading Effects configs...") );
+		MODebug2->Push( moText("moConsole:: Effects.") + IntToStr(N)  );
 	}
 
 	state.m_nEffects = N;
@@ -453,7 +453,7 @@ moConsole::LoadEffects() {
 		}
 	}
 
-	if (MODebug2) MODebug2->Push(moText("Effects loaded."));
+	if (MODebug2) MODebug2->Push(moText("moConsole:: Effects loaded."));
 }
 
 void moConsole::UnloadEffects() {
@@ -482,8 +482,8 @@ moConsole::LoadPostEffects() {
 	N = m_Config.GetValuesCount(ptfx);
 
 	if (MODebug2) {
-		MODebug2->Push( moText("Loading PostEffects configs...") );
-		MODebug2->Push( moText("Post Effects.") + IntToStr(N)  );
+		MODebug2->Push( moText("moConsole:: Loading PostEffects configs...") );
+		MODebug2->Push( moText("moConsole:: Post Effects.") + IntToStr(N)  );
 	}
 
 	state.m_nPostEffects = N;
@@ -508,7 +508,7 @@ moConsole::LoadPostEffects() {
 			m_Config.NextValue();
 		}
 	}
-	if (MODebug2) MODebug2->Push(moText("Post Effects loaded."));
+	if (MODebug2) MODebug2->Push(moText("moConsole:: Post Effects loaded."));
 }
 
 void moConsole::UnloadPostEffects() {
@@ -548,7 +548,7 @@ moConsole::LoadResources() {
 		if(rid>-1) presource = m_pResourceManager->GetResource(rid);
 
 		if (presource) {
-		    MODebug2->Message( moText("Already loaded plugin resource: ") + (moText)resname );
+		    MODebug2->Message( moText("moConsole:: Already loaded plugin resource: ") + (moText)resname );
 		} else {
 			//maybe a plugin
 			if (m_pResourceManager->NewResource(resname)) {
@@ -559,8 +559,8 @@ moConsole::LoadResources() {
 						presource->SetConfigName(cfname);
 						presource->SetLabelName(lblname);
 						if (presource->Init()) {
-						    MODebug2->Message( moText("Loaded plugin resource: ") + (moText)resname );
-                        }
+						    MODebug2->Message( moText("moConsole:: Loaded plugin resource: ") + (moText)resname );
+                        } else MODebug2->Error( moText("moConsole:: Error: Unloaded plugin resource: ") + (moText)resname );
 					}
 				}
 			}
@@ -713,7 +713,7 @@ moConsole::StartMasterEffects() {
 		if(p_effect!=NULL)
 			p_effect->state.on = MO_ON;
 	}
-	if (MODebug2) MODebug2->Push( moText("Effects masters encendidos.") );
+	if (MODebug2) MODebug2->Push( moText("moConsole:: Master effects on.") );
 
 }
 
@@ -721,7 +721,7 @@ void moConsole::StopMasterEffects() {
 
 	moEffect*	pEffect = NULL;
 
-    if (MODebug2) MODebug2->Push( moText("turning off MasterEffects.") );
+    if (MODebug2) MODebug2->Push( moText("moConsole:: turning off MasterEffects.") );
 
 	if(m_EffectManager.MasterEffects().Count()>0) {
 		pEffect = m_EffectManager.MasterEffects().Get(0);
@@ -741,7 +741,7 @@ void moConsole::StopMasterEffects() {
 		}
 	}
 
-	if (MODebug2) MODebug2->Push( moText("MasterEffects turned OFF.") );
+	if (MODebug2) MODebug2->Push( moText("moConsole:: MasterEffects turned OFF.") );
 
 }
 

@@ -424,7 +424,7 @@ MOboolean moTrackerKLT::Init()
 
 	if (m_Config.LoadConfig(configname) != MO_CONFIG_OK ) {
 		moText text = "Couldn't load trackerklt config:" + configname;
-		MODebug->Push(text);
+		MODebug2->Error( text );
 		return false;
 	}
 
@@ -432,9 +432,9 @@ MOboolean moTrackerKLT::Init()
 
 	trackersystems = m_Config.GetParamIndex("trackersystems");
 
-    printf("In moTrackerKLT::Init ***********************************************\n");
+    MODebug2->Message("In moTrackerKLT::Init ***********************************************\n");
 
-    printf("Initializing Tracker's System...\n");
+    MODebug2->Message("Initializing Tracker's System...\n");
 
 	//por cada camara inicializa un system:
 	nvalues = m_Config.GetValuesCount( trackersystems );

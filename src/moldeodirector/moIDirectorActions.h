@@ -447,7 +447,7 @@ class moTextureDescriptor : public moResourceDescriptor {
 class mo3dModelDescriptor : public moResourceDescriptor {
 
     public:
-        mo3dModelDescriptor( moText p_Name, moText p_TexFileName="", MOint p_ModelSize=0, mo3dModelType p_ModelType=0, moText p_ModelExtensionName="") {
+        mo3dModelDescriptor( moText p_Name, moText p_TexFileName="", MOint p_ModelSize=0, mo3dModelType p_ModelType=MO_MODEL_3DS, moText p_ModelExtensionName="") {
             m_ResourceDefinition = moResourceDefinition( MO_RESOURCETYPE_MODEL,
                               p_Name,
                               p_TexFileName,

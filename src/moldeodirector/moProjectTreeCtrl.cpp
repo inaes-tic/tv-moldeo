@@ -57,12 +57,12 @@ moProjectTreeCtrl::OnActivate(wxTreeEvent &event) {
 	if( itemid.IsOk() )
 		MobItemData = (moMobItemData*) GetItemData(itemid);
     else
-        m_pDirectorFrame->LogError("Item id is invalid");
+        m_pDirectorFrame->LogError("moProjectTreeCtrl::OnActivate Item id is invalid");
 
 	if(MobItemData!=NULL) {
 	    moMobDescriptor pMobDesc = MobItemData->GetMobDescriptor();
         m_pDirectorFrame->OpenMob( pMobDesc );
-	} else m_pDirectorFrame->LogError("No item data available");
+	} else m_pDirectorFrame->LogError("moProjectTreeCtrl::OnActivate No item data available");
 	return;
 
 }
