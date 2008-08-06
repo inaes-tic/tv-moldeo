@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="moldeoplayer" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="..\..\bin\mingw\moldeoplayerd" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="..\..\bin\mingw\" />
+				<Option object_output="wobjd\Debug\" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="`wx-config --cflags --debug=yes`" />
+				</Compiler>
+				<Linker>
+					<Add library="libmoldeod" />
+					<Add library="tinyxmld" />
+					<Add directory="..\..\contrib\src\tinyxml\Debug\" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="..\..\bin\mingw\moldeoplayer" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="..\..\bin\mingw\" />
+				<Option object_output="wobj\Release\" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="`wx-config --cflags --debug=no`" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="libmoldeo" />
+					<Add library="tinyxml" />
+					<Add directory="..\..\contrib\src\tinyxml\Release\" />
+				</Linker>
+			</Target>
+		</Build>
+		<VirtualTargets>
+			<Add alias="All" targets="Debug;Release;" />
+		</VirtualTargets>
+		<Compiler>
+			<Add option="-W" />
+			<Add option="-D__WXMSW__" />
+			<Add option="-DWXUSINGDLL" />
+			<Add directory=".\vdtc" />
+			<Add directory=".\treemultictrl" />
+			<Add directory="c:\root\local\include\wx-2.8" />
+			<Add directory="C:\root\local\lib\wx\include\msw-ansi-release-2.8" />
+			<Add directory="..\..\inc\" />
+			<Add directory="..\..\inc\openal" />
+			<Add directory="..\..\inc\3ds" />
+			<Add directory="..\..\..\..\externlibs\SDL\include" />
+			<Add directory="..\..\..\..\externlibs\SDL_net\include" />
+			<Add directory="..\..\..\..\externlibs\SDL_image\include" />
+			<Add directory="..\..\..\..\externlibs\muparser\include" />
+			<Add directory="..\..\..\..\externlibs\opengl\include" />
+			<Add directory="..\..\..\..\externlibs\cg\include" />
+			<Add directory="..\..\..\..\externlibs\lua\include" />
+			<Add directory="..\..\..\..\externlibs\glew\include" />
+			<Add directory="..\..\..\..\externlibs\openal\include" />
+			<Add directory="..\..\..\..\externlibs\freetype\include" />
+			<Add directory="..\..\..\..\externlibs\freeimage\include" />
+			<Add directory="C:\Archivos de programa\Archivos comunes\GStreamer\0.10\include" />
+			<Add directory="C:\Archivos de programa\Archivos comunes\GTK\2.0\include\glib-2.0" />
+			<Add directory="C:\Archivos de programa\Archivos comunes\GTK\2.0\lib\glib-2.0\include" />
+			<Add directory="C:\Archivos de programa\Archivos comunes\GTK\2.0\include\libxml2" />
+			<Add directory="C:\Archivos de programa\Archivos comunes\GTK\2.0\include" />
+			<Add directory="..\" />
+			<Add directory=".\" />
+		</Compiler>
+		<Linker>
+			<Add library="libSDL" />
+			<Add library="libSDLmain" />
+			<Add library="liblua" />
+			<Add library="cg" />
+			<Add library="cgGL" />
+			<Add library="OpenAL32" />
+			<Add library="EFX-Util" />
+			<Add library="FreeImage" />
+			<Add library="gstreamer-0.10" />
+			<Add library="glib-2.0" />
+			<Add library="gobject-2.0" />
+			<Add library="wx_base-2.8" />
+			<Add library="wx_msw_gl-2.8" />
+			<Add library="wx_msw_aui-2.8" />
+			<Add library="wx_msw_core-2.8" />
+			<Add library="wx_msw_adv-2.8" />
+			<Add library="glut32" />
+			<Add library="glut" />
+			<Add library="opengl32" />
+			<Add library="glu32" />
+			<Add library="glaux" />
+			<Add library="wx_msw_html-2.8" />
+			<Add directory="..\..\..\..\externlibs\tinyxml\lib" />
+			<Add directory="..\..\..\..\externlibs\SDL\lib" />
+			<Add directory="..\..\..\..\externlibs\glew\lib" />
+			<Add directory="..\..\..\..\externlibs\lua\lib" />
+			<Add directory="..\..\..\..\externlibs\muparser\lib" />
+			<Add directory="..\..\..\..\externlibs\freetype\lib" />
+			<Add directory="..\..\..\..\externlibs\cg\lib" />
+			<Add directory="..\..\..\..\externlibs\openal\libs\win32" />
+			<Add directory="..\..\..\..\externlibs\opengl\lib" />
+			<Add directory="..\..\..\..\externlibs\freeimage\lib" />
+			<Add directory="..\..\lib\mingw" />
+			<Add directory="C:\root\local\lib" />
+			<Add directory="C:\Archivos de programa\Archivos comunes\GTK\2.0\lib" />
+			<Add directory="C:\Archivos de programa\Archivos comunes\GStreamer\0.10\bin" />
+		</Linker>
+		<Unit filename="moDirectorConsole.cpp" />
+		<Unit filename="moDirectorConsole.h" />
+		<Unit filename="moDirectorCore.cpp" />
+		<Unit filename="moDirectorCore.h" />
+		<Unit filename="moDirectorFrame.cpp" />
+		<Unit filename="moDirectorFrame.h" />
+		<Unit filename="moDirectorIODeviceManager.cpp" />
+		<Unit filename="moDirectorIODeviceManager.h" />
+		<Unit filename="moDirectorStartFrame.cpp" />
+		<Unit filename="moDirectorStartFrame.h" />
+		<Unit filename="moDirectorTypes.h" />
+		<Unit filename="moGLCanvas.cpp" />
+		<Unit filename="moGLCanvas.h" />
+		<Unit filename="moIDirectorActions.cpp" />
+		<Unit filename="moIDirectorActions.h" />
+		<Unit filename="moPreviewFrame.cpp" />
+		<Unit filename="moPreviewFrame.h" />
+		<Unit filename="moPreviewWindow.cpp" />
+		<Unit filename="moPreviewWindow.h" />
+		<Unit filename="moldeoplayer.cpp" />
+		<Extensions>
+			<envvars />
+			<code_completion />
+			<lib_finder disable_auto="0">
+				<lib name="lua5.1" />
+				<lib name="muparser" />
+				<lib name="gstreamer-base-0.10" />
+				<lib name="freetype2" />
+				<lib name="gstreamer-0.10" />
+				<lib name="sdl" />
+			</lib_finder>
+			<debugger>
+				<search_path add="../../src/libmoldeo" />
+				<search_path add="../../" />
+			</debugger>
+			<wxsmith version="1">
+				<resources>
+					<wxPanel wxs="wxsmith/moPreviewWindow.wxs" src="moPreviewWindow.cpp" hdr="moPreviewWindow.h" name="moPreviewWindow" language="CPP" />
+					<wxFrame wxs="wxsmith/moPreviewFrame.wxs" src="moPreviewFrame.cpp" hdr="moPreviewFrame.h" name="moPreviewFrame" language="CPP" />
+					<wxDialog wxs="wxsmith/moPreviewDialog.wxs" src="moPreviewDialog.cpp" hdr="moPreviewDialog.h" name="moPreviewDialog" language="CPP" />
+				</resources>
+			</wxsmith>
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

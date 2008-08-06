@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxPanel" name="moPreviewWindow">
+		<size>401,336</size>
+		<fg>#FFFFFF</fg>
+		<bg>#000000</bg>
+		<pos_arg>1</pos_arg>
+		<size_arg>1</size_arg>
+		<object class="wxBitmapButton" name="ID_BITMAPBUTTONPLAY" variable="BitmapButtonPlay" member="yes">
+			<bitmap>D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\icons\play32.png</bitmap>
+			<default>1</default>
+			<pos>0,0</pos>
+			<size>32,32</size>
+		</object>
+		<object class="wxBitmapButton" name="ID_BITMAPBUTTONPAUSE" variable="BitmapButtonPause" member="yes">
+			<bitmap>D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\icons\pause32.png</bitmap>
+			<default>1</default>
+			<pos>32,0</pos>
+			<size>32,32</size>
+		</object>
+		<object class="wxBitmapButton" name="ID_BITMAPBUTTONFULLSCREEN" variable="ButtonFullSCreen" member="yes">
+			<bitmap>D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\icons\fullscreen32.png</bitmap>
+			<default>1</default>
+			<pos>96,0</pos>
+			<size>32,32</size>
+			<handler function="OnButtonFullSCreenClick" entry="EVT_BUTTON" />
+		</object>
+		<object class="wxBitmapButton" name="ID_BITMAPBUTTONSCREENSHOT" variable="BitmapButtonScreenshot" member="yes">
+			<bitmap>D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\icons\screenshot32.png</bitmap>
+			<default>1</default>
+			<pos>312,0</pos>
+			<size>32,32</size>
+		</object>
+		<object class="wxBitmapButton" name="ID_BITMAPBUTTONSAVEVIDEO" variable="BitmapButtonSaveVideo" member="yes">
+			<bitmap>D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\icons\savevideo32.png</bitmap>
+			<default>1</default>
+			<pos>344,0</pos>
+			<size>32,32</size>
+		</object>
+		<object class="wxBitmapButton" name="ID_BITMAPBUTTONSAVESESSION" variable="BitmapButtonSaveSession" member="yes">
+			<bitmap>D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\icons\savesession32.png</bitmap>
+			<pos>64,0</pos>
+			<size>32,32</size>
+		</object>
+		<object class="wxBitmapButton" name="ID_BITMAPBUTTONFOCUSOUTPUT" variable="BitmapButtonFocusOutput" member="yes">
+			<default>1</default>
+			<pos>136,5</pos>
+			<size>24,23</size>
+			<handler function="OnBitmapButtonFocusAndActivate" entry="EVT_BUTTON" />
+		</object>
+	</object>
+</wxsmith>
