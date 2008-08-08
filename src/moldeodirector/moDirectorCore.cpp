@@ -113,7 +113,7 @@ moDirectorCore::SetUserInterface( moDirectorFrame* p_pUserInterface ) {
 void
 moDirectorCore::SetPaths( moText p_installationpath ) {
 
-    m_ApplicationDescriptor = moApplicationDescriptor( p_installationpath, p_installationpath + moText("\\plugins") );
+    m_ApplicationDescriptor = moApplicationDescriptor( p_installationpath, p_installationpath + moText("/plugins") );
 
 }
 
@@ -196,11 +196,11 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
         //lo interesante sería que la definición de los plugins se complete a su vez
         //...
 
-        //pluginsfullpath + moText("\\preeffects");
+        //pluginsfullpath + moText("/preeffects");
         moDirectory DirEffects;
 
         //PREEFFECTS
-        DirEffects.Open( pluginsfullpath + moText("\\preeffects"), moText("/*.dll") );
+        DirEffects.Open( pluginsfullpath + moText("/preeffects"), moText("/*.dll") );
         if (DirEffects.Exists()) {
 
             moFile* pFile = NULL;
@@ -224,7 +224,7 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
 
 
         //EFFECTS
-        DirEffects.Open( pluginsfullpath + moText("\\effects"), moText("/*.dll") );
+        DirEffects.Open( pluginsfullpath + moText("/effects"), moText("/*.dll") );
         if (DirEffects.Exists()) {
 
             moFile* pFile = NULL;
@@ -248,7 +248,7 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
 
 
         //POSTEFFECTS
-        DirEffects.Open( pluginsfullpath + moText("\\posteffects"), moText("/*.dll") );
+        DirEffects.Open( pluginsfullpath + moText("/posteffects"), moText("/*.dll") );
         if (DirEffects.Exists()) {
 
             moFile* pFile = NULL;
@@ -271,7 +271,7 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
         } else LogError( moText("Effects directory doesn´t exists") );
 
         //IODEVICES
-        DirEffects.Open( pluginsfullpath + moText("\\iodevices"), moText("/*.dll") );
+        DirEffects.Open( pluginsfullpath + moText("/iodevices"), moText("/*.dll") );
         if (DirEffects.Exists()) {
 
             moFile* pFile = NULL;
@@ -294,7 +294,7 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
         } else LogError( moText("IODevices directory doesn´t exists") );
 
         //RESOURCES
-        DirEffects.Open( pluginsfullpath + moText("\\resources"), moText("/*.dll") );
+        DirEffects.Open( pluginsfullpath + moText("/resources"), moText("/*.dll") );
         if (DirEffects.Exists()) {
 
             moFile* pFile = NULL;
@@ -331,7 +331,7 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
 
         //copiar los archivos a  la carpeta
         wxString moldeopathinstall = moText2Wx( m_ApplicationDescriptor.GetInstallationFullPath() );
-        wxString templaterelpath( "\\data\\test\\" );
+        wxString templaterelpath( "/data/test/" );
 
         wxString templatepath  = moldeopathinstall + templaterelpath;
 
