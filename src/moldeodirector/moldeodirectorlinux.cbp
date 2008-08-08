@@ -76,6 +76,8 @@
 			<Add library="CgGL" />
 			<Add directory="../../lib/" />
 		</Linker>
+		<Unit filename="mo3dModelPanel.cpp" />
+		<Unit filename="mo3dModelPanel.h" />
 		<Unit filename="moColorMotion.cpp" />
 		<Unit filename="moColorMotion.h" />
 		<Unit filename="moDirectorChildConsole.cpp" />
@@ -120,8 +122,18 @@
 		<Unit filename="moPreviewWindow.h" />
 		<Unit filename="moProjectTreeCtrl.cpp" />
 		<Unit filename="moProjectTreeCtrl.h" />
+		<Unit filename="moShaderCtrl.cpp" />
+		<Unit filename="moShaderCtrl.h" />
+		<Unit filename="moShadersPanel.cpp" />
+		<Unit filename="moShadersPanel.h" />
+		<Unit filename="moTextureItemCtrl.cpp" />
+		<Unit filename="moTextureItemCtrl.h" />
+		<Unit filename="moTreeObjectsLayerCtrl.cpp" />
+		<Unit filename="moTreeObjectsLayerCtrl.h" />
 		<Unit filename="moValueCtrl.cpp" />
 		<Unit filename="moValueCtrl.h" />
+		<Unit filename="moWxLevelCtrl.cpp" />
+		<Unit filename="moWxLevelCtrl.h" />
 		<Unit filename="moldeodirector.cpp" />
 		<Unit filename="treemultictrl/TreeMultiItemBase.cpp" />
 		<Unit filename="treemultictrl/TreeMultiItemBase.h" />

@@ -36,7 +36,7 @@ moEffectLayerCtrl::moEffectLayerCtrl(wxWindow* parent,wxWindowID id,const wxPoin
 {
 	//(*Initialize(moEffectLayerCtrl)
 	wxStaticBitmap* StaticBitmap1;
-	
+
 	Create(parent, wxID_ANY, wxPoint(0,0), wxSize(168,71), 0, _T("wxID_ANY"));
 	SetMinSize(wxSize(-1,-1));
 	SetMaxSize(wxSize(-1,-1));
@@ -62,18 +62,18 @@ moEffectLayerCtrl::moEffectLayerCtrl(wxWindow* parent,wxWindowID id,const wxPoin
 	TextCtrlLabel = new wxStaticText(this, ID_STATICTEXTLABEL, _("label"), wxPoint(8,4), wxDefaultSize, 0, _T("ID_STATICTEXTLABEL"));
 	PanelLabelCtrls = new wxPanel(this, ID_PANELLABELCTRLS, wxPoint(55,24), wxSize(48,48), wxTAB_TRAVERSAL, _T("ID_PANELLABELCTRLS"));
 	PanelLabelCtrls->SetBackgroundColour(wxColour(0,0,0));
-	StaticBitmapCtrls = new wxStaticBitmap(PanelLabelCtrls, ID_STATICBITMAPCTRLS, wxBitmap(wxImage(_T("D:\\_data\\proyectos\\SINESTESIA\\OPENSVN\\trunk\\0.7\\doc\\icons\\layercontrols.png"))), wxPoint(0,0), wxDefaultSize, 0, _T("ID_STATICBITMAPCTRLS"));
+	StaticBitmapCtrls = new wxStaticBitmap(PanelLabelCtrls, ID_STATICBITMAPCTRLS, wxBitmap(wxImage(_T("../../doc/icons/layercontrols.png"))), wxPoint(0,0), wxDefaultSize, 0, _T("ID_STATICBITMAPCTRLS"));
 	PanelColors = new wxPanel(this, ID_PANELCOLORS, wxPoint(132,26), wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANELCOLORS"));
 	PanelColors->SetBackgroundColour(wxColour(0,0,0));
-	StaticBitmap1 = new wxStaticBitmap(PanelColors, ID_STATICBITMAP1, wxBitmap(wxImage(_T("D:\\_data\\proyectos\\SINESTESIA\\OPENSVN\\trunk\\0.7\\doc\\icons\\csvColors32.png"))), wxPoint(0,0), wxDefaultSize, 0, _T("ID_STATICBITMAP1"));
-	BitmapButtonVisibility = new wxBitmapButton(this, ID_BITMAPBUTTONVISIBILITY, wxBitmap(wxImage(_T("D:\\_data\\proyectos\\SINESTESIA\\OPENSVN\\trunk\\0.7\\doc\\icons\\visibility.png"))), wxPoint(100,26), wxSize(26,21), wxBU_AUTODRAW|wxNO_BORDER, wxDefaultValidator, _T("ID_BITMAPBUTTONVISIBILITY"));
-	BitmapButtonVisibility->SetBitmapDisabled(wxBitmap(wxImage(_T("D:\\_data\\proyectos\\SINESTESIA\\OPENSVN\\trunk\\0.7\\doc\\icons\\visibility.png"))));
-	BitmapButtonVisibility->SetBitmapSelected(wxBitmap(wxImage(_T("D:\\_data\\proyectos\\SINESTESIA\\OPENSVN\\trunk\\0.7\\doc\\icons\\visibility.png"))));
-	BitmapButtonVisibility->SetBitmapFocus(wxBitmap(wxImage(_T("D:\\_data\\proyectos\\SINESTESIA\\OPENSVN\\trunk\\0.7\\doc\\icons\\visibility.png"))));
+	StaticBitmap1 = new wxStaticBitmap(PanelColors, ID_STATICBITMAP1, wxBitmap(wxImage(_T("../../doc/icons/csvColors32.png"))), wxPoint(0,0), wxDefaultSize, 0, _T("ID_STATICBITMAP1"));
+	BitmapButtonVisibility = new wxBitmapButton(this, ID_BITMAPBUTTONVISIBILITY, wxBitmap(wxImage(_T("../../doc/icons/visibility.png"))), wxPoint(100,26), wxSize(26,21), wxBU_AUTODRAW|wxNO_BORDER, wxDefaultValidator, _T("ID_BITMAPBUTTONVISIBILITY"));
+	BitmapButtonVisibility->SetBitmapDisabled(wxBitmap(wxImage(_T("../../doc/icons/visibility.png"))));
+	BitmapButtonVisibility->SetBitmapSelected(wxBitmap(wxImage(_T("../../doc/icons/visibility.png"))));
+	BitmapButtonVisibility->SetBitmapFocus(wxBitmap(wxImage(_T("../../doc/icons/visibility.png"))));
 	BitmapButtonVisibility->SetDefault();
 	BitmapButtonDelete = new wxBitmapButton(this, ID_BITMAPBUTTONDELETE, wxBitmap(wxImage(_T("../../doc/icons/delete.png"))), wxPoint(88,4), wxSize(13,13), wxBU_AUTODRAW, wxDefaultValidator, _T("ID_BITMAPBUTTONDELETE"));
 	BitmapButtonDelete->SetDefault();
-	
+
 	Connect(ID_SLIDERALPHA,wxEVT_SCROLL_THUMBTRACK,(wxObjectEventFunction)&moEffectLayerCtrl::OnSliderAlphaCmdScroll);
 	Connect(ID_SLIDERALPHA,wxEVT_SCROLL_CHANGED,(wxObjectEventFunction)&moEffectLayerCtrl::OnSliderAlphaCmdScroll);
 	Connect(ID_SLIDERTINT,wxEVT_SCROLL_THUMBTRACK,(wxObjectEventFunction)&moEffectLayerCtrl::OnSliderTintCmdScrollThumbTrack);
