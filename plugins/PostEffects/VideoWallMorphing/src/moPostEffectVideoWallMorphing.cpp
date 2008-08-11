@@ -447,7 +447,9 @@ void moPostEffectVideoWallMorphing::Draw( moTempo* tempogral,moEffectState* pare
                 m_Config[moR(VIDEOWALLMORPHING_SCALEY)].GetData()->Fun()->Eval(state.tempo.ang),
                 m_Config[moR(VIDEOWALLMORPHING_SCALEZ)].GetData()->Fun()->Eval(state.tempo.ang));
 
-    SetColor( m_Config[moR(VIDEOWALLMORPHING_COLOR)][MO_SELECTED], m_Config[moR(VIDEOWALLMORPHING_ALPHA)][MO_SELECTED] );
+
+    // Agregado el parametro state.
+    SetColor( m_Config[moR(VIDEOWALLMORPHING_COLOR)][MO_SELECTED], m_Config[moR(VIDEOWALLMORPHING_ALPHA)][MO_SELECTED], state );
 
 	SetBlending( (moBlendingModes)m_Config[moR(VIDEOWALLMORPHING_BLENDING)].GetData()->Int() );
 
