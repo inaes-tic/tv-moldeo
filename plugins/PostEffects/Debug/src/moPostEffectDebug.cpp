@@ -277,7 +277,7 @@ moPostEffectDebug::Update( moEventList* p_EventList ) {
 
 
 GLvoid
-moPostEffectDebug::BuildFont(GLvoid)								// Build Our Font Display List
+moPostEffectDebug::BuildFont()								// Build Our Font Display List
 {
 	float	cx;											// Holds Our X Character Coord
 	float	cy;											// Holds Our Y Character Coord
@@ -336,7 +336,7 @@ moPostEffectDebug::glPrint(GLint x, GLint y, char *string, int set, float scx, f
 }
 
 GLvoid
-moPostEffectDebug::KillFont(GLvoid)									// Delete The Font From Memory
+moPostEffectDebug::KillFont()									// Delete The Font From Memory
 {
 	glDeleteLists(base,256);							// Delete All 256 Display Lists
 }
