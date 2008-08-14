@@ -2,7 +2,7 @@
 <CodeBlocks_workspace_file>
 	<Workspace title="moldeo">
 		<Project filename="../../contrib/src/tinyxml/tinyxml_lib.cbp" />
-		<Project filename="libmoldeo.cbp" />
+		<Project filename="libmoldeo.cbp" active="1" />
 		<Project filename="../../plugins/MasterEffects/Ligia/ligialinux.cbp" />
 		<Project filename="../../plugins/MasterEffects/Channel/channellinux.cbp" />
 		<Project filename="../../plugins/MasterEffects/MasterChannel/masterchannellinux.cbp" />
@@ -14,21 +14,18 @@
 		<Project filename="../../plugins/PreEffects/Erase/eraselinux.cbp" />
 		<Project filename="../../plugins/PostEffects/Debug/debuglinux.cbp" />
 		<Project filename="../../plugins/Effects/Icon/iconlinux.cbp" />
-		<Project filename="../../src/gmol/gmollinux.cbp" />
-		<Project filename="../../src/moldeodirector/moldeodirectorlinux.cbp" active="1">
-			<Depends filename="libmoldeo.cbp" />
-		</Project>
 		<Project filename="../../src/main/moldeo_linux_sdl.cbp" />
 		<Project filename="../../plugins/Effects/CubeMap/cubemaplinux.cbp" />
-		<Project filename="../../../../../../../../../../home/fabri/Desktop/0.7/plugins/Effects/Image/imagelinux.cbp" />
-		<Project filename="../../../../../../../../../../home/fabri/Desktop/0.7/plugins/Effects/Tunel/tunellinux.cbp" />
-		<Project filename="../../../../../../../../../../home/fabri/Desktop/0.7/plugins/Effects/Icon3D/icon3dlinux.cbp" />
-		<Project filename="../../../../../../../../../../home/fabri/Desktop/0.7/plugins/Effects/Plane/planelinux.cbp" />
-		<Project filename="../../../../../../../../../../home/fabri/Desktop/0.7/plugins/Effects/Painter/painterlinux.cbp" />
-		<Project filename="../../../../../../../../../../home/fabri/Desktop/0.7/plugins/Effects/ImageFlow/imageflowlinux.cbp" />
-		<Project filename="../../../../../../../../../../home/fabri/Desktop/0.7/plugins/PreEffects/Mirror/mirrorlinux.cbp" />
-		<Project filename="../../../../../../../../../../home/fabri/Desktop/0.7/plugins/PreEffects/MirrorG/mirrorglinux.cbp" />
-		<Project filename="../../../../../../../../../../home/fabri/Desktop/0.7/plugins/PostEffects/VideoWall/videowalllinux.cbp" />
-		<Project filename="../../../../../../../../../../home/fabri/Desktop/0.7/plugins/Effects/Movie/movielinux.cbp" />
+		<Project filename="../../plugins/Effects/Image/imagelinux.cbp" />
+		<Project filename="../../plugins/Effects/Tunel/tunellinux.cbp" />
+		<Project filename="../../plugins/Effects/Icon3D/icon3dlinux.cbp" />
+		<Project filename="../../plugins/Effects/Plane/planelinux.cbp" />
+		<Project filename="../../plugins/Effects/Painter/painterlinux.cbp" />
+		<Project filename="../../plugins/Effects/ImageFlow/imageflowlinux.cbp" />
+		<Project filename="../../plugins/PreEffects/Mirror/mirrorlinux.cbp" />
+		<Project filename="../../plugins/PreEffects/MirrorG/mirrorglinux.cbp" />
+		<Project filename="../../plugins/PostEffects/VideoWall/videowalllinux.cbp" />
+		<Project filename="../../plugins/Effects/Movie/movielinux.cbp" />
+		<Project filename="../../src/moldeodirector/moldeodirectorlinux.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>
