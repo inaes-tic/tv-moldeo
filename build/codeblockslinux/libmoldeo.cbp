@@ -208,6 +208,7 @@
 		<Unit filename="../../src/libmoldeo/moSoundManager.cpp" />
 		<Unit filename="../../src/libmoldeo/moTempo.cpp" />
 		<Unit filename="../../src/libmoldeo/moText.cpp" />
+		<Unit filename="../../src/libmoldeo/moTextFilterParam.cpp" />
 		<Unit filename="../../src/libmoldeo/moTexture.cpp" />
 		<Unit filename="../../src/libmoldeo/moTextureFilter.cpp" />
 		<Unit filename="../../src/libmoldeo/moTextureFilterIndex.cpp" />
