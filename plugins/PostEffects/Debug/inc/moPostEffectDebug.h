@@ -70,9 +70,9 @@ public:
 	void Update( moEventList* p_EventList );
     MOboolean Finish();
 
-    GLvoid BuildFont(GLvoid);
+    GLvoid BuildFont();
     GLvoid glPrint(GLint, GLint, char*, int, float, float); // Where The Printing Happens
-    GLvoid KillFont(GLvoid);
+    GLvoid KillFont();
 };
 
 class moPostEffectDebugFactory : public moPostEffectFactory
