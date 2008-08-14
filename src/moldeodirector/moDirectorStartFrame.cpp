@@ -45,7 +45,7 @@ moDirectorStartFrame::Init( moIDirectorActions* pActions ) {
 
    wxString pagesrc;
 
-   m_pHtmlWindow->LoadFile(wxFileName("../../doc/start.html"));
+   m_pHtmlWindow->LoadFile(wxFileName(wxT("../../doc/start.html")));
 
    //m_pHtmlWindow->ReadCustomization(wxConfig::Get());
 

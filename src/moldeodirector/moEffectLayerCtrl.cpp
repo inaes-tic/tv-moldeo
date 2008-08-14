@@ -218,7 +218,7 @@ void moEffectLayerCtrl::OnComboBoxPreConfigSelect(wxCommandEvent& event)
 
 void moEffectLayerCtrl::OnPanelVisibilityMouseMove(wxMouseEvent& event)
 {
-    wxMessageBox("hi there");
+    wxMessageBox(wxT("hi there"));
     SetCursor( wxCursor(wxCURSOR_HAND ));
 }
 

@@ -38,7 +38,7 @@ moColorMotion::moColorMotion(wxWindow* parent,wxWindowID id,const wxPoint& pos,c
 {
 	//(*Initialize(moColorMotion)
 	wxFlexGridSizer* FlexGridSizer1;
-	
+
 	Create(parent, wxID_ANY, wxDefaultPosition, wxSize(352,221), wxTAB_TRAVERSAL|wxCLIP_CHILDREN, _T("wxID_ANY"));
 	SetForegroundColour(wxColour(255,255,255));
 	SetBackgroundColour(wxColour(0,0,0));
@@ -77,7 +77,7 @@ moColorMotion::moColorMotion(wxWindow* parent,wxWindowID id,const wxPoint& pos,c
 	FlexGridSizer1->Add(Panel2, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	SetSizer(FlexGridSizer1);
 	FlexGridSizer1->SetSizeHints(this);
-	
+
 	Connect(ID_SLIDERRED,wxEVT_SCROLL_THUMBTRACK,(wxObjectEventFunction)&moColorMotion::OnSliderRedCmdScroll);
 	Connect(ID_SLIDERRED,wxEVT_SCROLL_CHANGED,(wxObjectEventFunction)&moColorMotion::OnSliderRedCmdScroll);
 	Connect(ID_SLIDERGREEN,wxEVT_SCROLL_THUMBTRACK,(wxObjectEventFunction)&moColorMotion::OnSliderGreenCmdScroll);
@@ -209,54 +209,54 @@ Cyclic Magenta
 */
         switch(event.GetSelection()) {
             case 0://Random colors
-                TextCtrlRed->SetValue( wxString(" 0.5 + 0.5*cos(4*t+pi/2) ") );
-                TextCtrlGreen->SetValue( wxString(" 0.5 + 0.5*sin(4*t+pi/3) ") );
-                TextCtrlBlue->SetValue( wxString(" 0.5 + 0.5*sin(4*t+3*pi)*cos(t) ") );
+                TextCtrlRed->SetValue( wxString(_T(" 0.5 + 0.5*cos(4*t+pi/2) ")) );
+                TextCtrlGreen->SetValue( wxString(_T(" 0.5 + 0.5*sin(4*t+pi/3) ")) );
+                TextCtrlBlue->SetValue( wxString(_T(" 0.5 + 0.5*sin(4*t+3*pi)*cos(t) ")) );
                 break;
             case 1://Cyclic conic
-                TextCtrlRed->SetValue( wxString(" 0.5 + 0.5*cos(4*t+pi/4) ") );
-                TextCtrlGreen->SetValue( wxString(" 0.5 + 0.5*sin(3*t+pi/3) ") );
-                TextCtrlBlue->SetValue( wxString(" 0.5 + 0.5*sin(4*t+3*pi)*cos(t) ") );
+                TextCtrlRed->SetValue( wxString(_T(" 0.5 + 0.5*cos(4*t+pi/4) ")) );
+                TextCtrlGreen->SetValue( wxString(_T(" 0.5 + 0.5*sin(3*t+pi/3) ")) );
+                TextCtrlBlue->SetValue( wxString(_T(" 0.5 + 0.5*sin(4*t+3*pi)*cos(t) ")) );
                 break;
             case 2://Cyclic cubic
-                TextCtrlRed->SetValue( wxString(" 0.5 + 0.5*cos(4*t+pi/2) ") );
-                TextCtrlGreen->SetValue( wxString(" 0.5 + 0.5*sin(2*t+pi/3) ") );
-                TextCtrlBlue->SetValue( wxString(" 0.5 + 0.5*sin(2*t+3*pi)*cos(t) ") );
+                TextCtrlRed->SetValue( wxString(_T(" 0.5 + 0.5*cos(4*t+pi/2) ")) );
+                TextCtrlGreen->SetValue( wxString(_T(" 0.5 + 0.5*sin(2*t+pi/3) ")) );
+                TextCtrlBlue->SetValue( wxString(_T(" 0.5 + 0.5*sin(2*t+3*pi)*cos(t) ")) );
                 break;
             case 3://Cyclic Grayscale
-                TextCtrlRed->SetValue( wxString(" 0.5 + 0.5*cos(4*t) ") );
-                TextCtrlGreen->SetValue( wxString(" 0.5 + 0.5*cos(4*t) ") );
-                TextCtrlBlue->SetValue( wxString(" 0.5 + 0.5*cos(4*t) ") );
+                TextCtrlRed->SetValue( wxString(_T(" 0.5 + 0.5*cos(4*t) ")) );
+                TextCtrlGreen->SetValue( wxString(_T(" 0.5 + 0.5*cos(4*t) ")) );
+                TextCtrlBlue->SetValue( wxString(_T(" 0.5 + 0.5*cos(4*t) ")) );
                 break;
             case 4://Cyclic Red
-                TextCtrlRed->SetValue( wxString("0.5 + 0.5*cos(4*t) ") );
-                TextCtrlGreen->SetValue( wxString("0.5") );
-                TextCtrlBlue->SetValue( wxString("0.5") );
+                TextCtrlRed->SetValue( wxString(_T("0.5 + 0.5*cos(4*t) ")) );
+                TextCtrlGreen->SetValue( wxString(_T("0.5")) );
+                TextCtrlBlue->SetValue( wxString(_T("0.5")) );
                 break;
             case 5://Cyclic Green
-                TextCtrlRed->SetValue( wxString("0.5") );
-                TextCtrlGreen->SetValue( wxString("0.5 + 0.5*cos(4*t) ") );
-                TextCtrlBlue->SetValue( wxString("0.5") );
+                TextCtrlRed->SetValue( wxString(_T("0.5")) );
+                TextCtrlGreen->SetValue( wxString(_T("0.5 + 0.5*cos(4*t) ")) );
+                TextCtrlBlue->SetValue( wxString(_T("0.5")) );
                 break;
             case 6://Cyclic Blue
-                TextCtrlRed->SetValue( wxString("0.5") );
-                TextCtrlGreen->SetValue( wxString("0.5") );
-                TextCtrlBlue->SetValue( wxString(" 0.5 + 0.5*cos(4*t) ") );
+                TextCtrlRed->SetValue( wxString(_T("0.5")) );
+                TextCtrlGreen->SetValue( wxString(_T("0.5")) );
+                TextCtrlBlue->SetValue( wxString(_T(" 0.5 + 0.5*cos(4*t) ")) );
                 break;
             case 7://Cyclic Yellow
-                TextCtrlRed->SetValue( wxString(" 0.5 + 0.5*cos(4*t) ") );
-                TextCtrlGreen->SetValue( wxString(" 0.5 + 0.5*cos(4*t) ") );
-                TextCtrlBlue->SetValue( wxString("0.5 ") );
+                TextCtrlRed->SetValue( wxString(_T(" 0.5 + 0.5*cos(4*t) ")) );
+                TextCtrlGreen->SetValue( wxString(_T(" 0.5 + 0.5*cos(4*t) ")) );
+                TextCtrlBlue->SetValue( wxString(_T("0.5 ")) );
                 break;
             case 8://Cyclic Cyan
-                TextCtrlRed->SetValue( wxString(" 0.5") );
-                TextCtrlGreen->SetValue( wxString(" 0.5 + 0.5*cos(4*t) ") );
-                TextCtrlBlue->SetValue( wxString(" 0.5 + 0.5*cos(4*t) ") );
+                TextCtrlRed->SetValue( wxString(_T(" 0.5")) );
+                TextCtrlGreen->SetValue( wxString(_T(" 0.5 + 0.5*cos(4*t) ")) );
+                TextCtrlBlue->SetValue( wxString(_T(" 0.5 + 0.5*cos(4*t) ")) );
                 break;
             case 9://Cyclic Magenta
-                TextCtrlRed->SetValue( wxString("0.5 + 0.5*cos(4*t)") );
-                TextCtrlGreen->SetValue( wxString("0.5") );
-                TextCtrlBlue->SetValue( wxString("0.5 + 0.5*cos(4*t)") );
+                TextCtrlRed->SetValue( wxString(_T("0.5 + 0.5*cos(4*t)")) );
+                TextCtrlGreen->SetValue( wxString(_T("0.5")) );
+                TextCtrlBlue->SetValue( wxString(_T("0.5 + 0.5*cos(4*t)")) );
                 break;
 
         }

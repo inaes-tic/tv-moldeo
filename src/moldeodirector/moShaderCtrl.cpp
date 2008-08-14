@@ -66,8 +66,8 @@ moShaderCtrl::Inspect( moValueDescriptor p_ValueDescriptor ) {
 
     if (m_ValueDescriptor.GetValue().GetSubValueCount()==1) {
 
-        TextCtrlShaderCfg->ChangeValue( "" );
-        TextCtrlDestination->ChangeValue( "" );
+        TextCtrlShaderCfg->ChangeValue( wxT("") );
+        TextCtrlDestination->ChangeValue( wxT("") );
 
     } else if (m_ValueDescriptor.GetValue().GetSubValueCount()>1) {
 
@@ -138,7 +138,7 @@ void moShaderCtrl::OnBitmapButtonShaderImportClick(wxCommandEvent& event)
 			wxString path = FileName.GetFullPath();
 			const char *cnamerelative = (char*)path.c_str();
 
-			TextCtrlShaderCfg->SetValue( cnamerelative );
+			TextCtrlShaderCfg->SetValue( path );
 
 		}
 

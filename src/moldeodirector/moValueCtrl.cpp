@@ -29,19 +29,19 @@ moValueCtrl::Init( moDirectorChildFrame* parent, moValueDescriptor p_valuedescri
 	MOint  ValueInt = 0;
 	int xpos = 0;
 
-    blendings[MO_BLENDING_TRANSPARENCY] = "Transparency";
-    blendings[MO_BLENDING_ADDITIVEALPHA] = "Additive w/alpha";
-    blendings[MO_BLENDING_MIXING] = "Mixing";
-    blendings[MO_BLENDING_MULTIPLY] = "Multiply";
-    blendings[MO_BLENDING_EXCLUSION] = "Exclusion";
-    blendings[MO_BLENDING_ADDITIVE] = "Additive color";
-    blendings[MO_BLENDING_OVERLAY] = "Overlay";
-    blendings[MO_BLENDING_SUBSTRACTIVE] = "Substractive";
-    blendings[MO_BLENDING_SATURATE] = "Saturate";
+    blendings[MO_BLENDING_TRANSPARENCY] = wxT("Transparency");
+    blendings[MO_BLENDING_ADDITIVEALPHA] = wxT("Additive w/alpha");
+    blendings[MO_BLENDING_MIXING] = wxT("Mixing");
+    blendings[MO_BLENDING_MULTIPLY] = wxT("Multiply");
+    blendings[MO_BLENDING_EXCLUSION] = wxT("Exclusion");
+    blendings[MO_BLENDING_ADDITIVE] = wxT("Additive color");
+    blendings[MO_BLENDING_OVERLAY] = wxT("Overlay");
+    blendings[MO_BLENDING_SUBSTRACTIVE] = wxT("Substractive");
+    blendings[MO_BLENDING_SATURATE] = wxT("Saturate");
 
-    polygonmodes[MO_POLYGONMODE_FILL] = "FILL";
-    polygonmodes[MO_POLYGONMODE_LINE] = "LINE";
-    polygonmodes[MO_POLYGONMODE_POINT] = "POINT";
+    polygonmodes[MO_POLYGONMODE_FILL] = wxT("FILL");
+    polygonmodes[MO_POLYGONMODE_LINE] = wxT("LINE");
+    polygonmodes[MO_POLYGONMODE_POINT] = wxT("POINT");
 
 
 	m_pDirectorChildFrame = parent;
@@ -421,7 +421,7 @@ moValueCtrl::OnTextUpdated( wxCommandEvent& event) {
                 break;
             case MO_PARAM_NUMERIC:
                 if (m_pTextCtrl) {
-                    int ii = atoi( m_pTextCtrl->GetValue() );
+                    int ii = atoi( (const char*)m_pTextCtrl->GetValue().c_str() );
                     rValue.GetSubValue(0).SetInt( ii );
                 }
                 break;

@@ -42,7 +42,7 @@ moWxLevelCtrl::OnPaint(wxPaintEvent& event) {
 
 void moWxLevelCtrl::SetRange( int min, int max ) {
     if ( min >= max ) {
-        wxMessageBox("moWxLevelCtrl error : min is inferior or equal to max");
+        wxMessageBox(wxT("moWxLevelCtrl error : min is inferior or equal to max"));
     }
 
     this->m_min = min;

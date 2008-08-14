@@ -56,9 +56,9 @@ void moTextureItemCtrl::Init( moTextureDescriptor pTextureDescriptor, const wxBi
 
     StaticBitmapThumb->SetBitmap( bitmap );
     StaticBitmapThumb->SetSize( 0, 0, 64, 64);
-    StaticTextName->SetLabel( wxString("Name: ")+ moText2Wx( pTextureDescriptor.GetResourceDefinition().GetName() ) );
-    StaticTextSize->SetLabel( wxString("Size: ") + moText2Wx( IntToStr(pTextureDescriptor.GetWidth())) +
-                              wxString(" X ") + moText2Wx( IntToStr(pTextureDescriptor.GetHeight())) );
+    StaticTextName->SetLabel( wxString(wxT("Name: "))+ moText2Wx( pTextureDescriptor.GetResourceDefinition().GetName() ) );
+    StaticTextSize->SetLabel( wxString(wxT("Size: ")) + moText2Wx( IntToStr(pTextureDescriptor.GetWidth())) +
+                              wxString(wxT(" X ")) + moText2Wx( IntToStr(pTextureDescriptor.GetHeight())) );
 
 
 

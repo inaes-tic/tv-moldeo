@@ -60,7 +60,7 @@ moShadersPanel::InitShadersTree() {
     if (m_ParamDescriptor.GetParamDefinition().GetType() == MO_PARAM_FILTER ) {
 
         m_pTreeFiltersCtrl->DeleteAllItems();
-        m_pTreeFiltersCtrl->AddRoot( "filters" );
+        m_pTreeFiltersCtrl->AddRoot( wxT("filters") );
 
         m_ValueDescriptors.Empty();
 

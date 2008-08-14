@@ -105,7 +105,7 @@ void moFunctionPanel::OnFunctionTextCtrlText(wxCommandEvent& event)
     switch(m_ValueDescriptor.GetParamDescriptor().GetParamDefinition().GetType()) {
 
         case MO_PARAM_NUMERIC:
-            ii = atoi( FunctionTextCtrl->GetValue() );
+            ii = atoi( (const char*)FunctionTextCtrl->GetValue().c_str() );
             m_ValueDescriptor.GetValue().GetSubValue(0).SetInt(ii);
             break;
 

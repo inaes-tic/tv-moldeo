@@ -40,7 +40,7 @@ moNewEffectDialog::moNewEffectDialog(wxWindow* parent,wxWindowID id,const wxPoin
 	Choice1->Append(_("Post-Effects"));
 	TreeCtrl = new wxTreeCtrl(this, ID_TREECTRL, wxPoint(16,152), wxSize(320,152), wxTR_DEFAULT_STYLE, wxDefaultValidator, _T("ID_TREECTRL"));
 	StaticTextConfigFilename = new wxStaticText(this, ID_STATICTEXT3, _("Config file name"), wxPoint(16,64), wxDefaultSize, 0, _T("ID_STATICTEXT3"));
-	
+
 	Connect(ID_LABELNAMECTRL,wxEVT_COMMAND_TEXT_UPDATED,(wxObjectEventFunction)&moNewEffectDialog::OnLabelNameCtrlText);
 	Connect(ID_FILENAMECTRL,wxEVT_COMMAND_TEXT_UPDATED,(wxObjectEventFunction)&moNewEffectDialog::OnConfigFilenameCtrlText);
 	Connect(ID_OKBUTTON,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&moNewEffectDialog::OnOkButtonClick);
@@ -69,13 +69,13 @@ moNewEffectDialog::Init( moDirectorFrame*  pFrame ) {
 
         moPluginDefinitions & rPlugins( m_AppDescriptor.GetPluginDefinitions() );
 
-        wxTreeItemId rootid = TreeCtrl->AddRoot( "Moldeo Objects - MOB" );
+        wxTreeItemId rootid = TreeCtrl->AddRoot( wxT("Moldeo Objects - MOB")) ;
 
-        wxTreeItemId preid = TreeCtrl->AppendItem( rootid, "preeffects");
-        wxTreeItemId eid = TreeCtrl->AppendItem( rootid, "effects");
-        wxTreeItemId postid = TreeCtrl->AppendItem( rootid, "posteffects");
-        wxTreeItemId ioid = TreeCtrl->AppendItem( rootid, "iodevices");
-        wxTreeItemId resid = TreeCtrl->AppendItem( rootid, "resources");
+        wxTreeItemId preid = TreeCtrl->AppendItem( rootid, wxT("preeffects"));
+        wxTreeItemId eid = TreeCtrl->AppendItem( rootid, wxT("effects"));
+        wxTreeItemId postid = TreeCtrl->AppendItem( rootid, wxT("posteffects"));
+        wxTreeItemId ioid = TreeCtrl->AppendItem( rootid, wxT("iodevices"));
+        wxTreeItemId resid = TreeCtrl->AppendItem( rootid, wxT("resources"));
 
         for(int i = 0; i<rPlugins.Count(); i++) {
 
@@ -131,9 +131,9 @@ void moNewEffectDialog::OnLabelNameCtrlText(wxCommandEvent& event)
 
 bool moNewEffectDialog::CheckData() {
 
-    if (LabelNameCtrl->GetValue()!="") {
+    if (LabelNameCtrl->GetValue()!=wxT("")) {
 
-        if (ConfigFilenameCtrl->GetValue()!="") {
+        if (ConfigFilenameCtrl->GetValue()!=wxT("")) {
 
             wxTreeItemId idsel = TreeCtrl->GetSelection();
             if ( idsel.IsOk() ) {
