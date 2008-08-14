@@ -27,7 +27,7 @@ moFilesbook::OnPageChange( wxNotebookEvent &event ) {
 	wxWindow* fpage;
 	fpage = GetPage( event.GetSelection() );
 
-    if (fpage->GetName()!="Start page") {
+    if (fpage->GetName()!=wxT("Start page")) {
 
         moDirectorChildFrame* fChild = (moDirectorChildFrame*)fpage;
 

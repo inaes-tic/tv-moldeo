@@ -87,7 +87,7 @@ bool moDirectorApp::OnInit()
 
     cout << "Director Frame..." << endl;
     m_pDirectorFrame = new moDirectorFrame(_T("Moldeo Director"));
-    m_pDirectorFrame->SetIcon( wxIcon( wxIconLocation("../../doc/icons/Moldeo32.ico") ) );
+    m_pDirectorFrame->SetIcon( wxIcon( wxIconLocation(wxT("../../doc/icons/Moldeo32.ico")) ) );
     m_pDirectorFrame->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
     m_pDirectorFrame->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
     cout << "m_pDirectorFrame:" << (m_pDirectorFrame!=NULL) << endl;

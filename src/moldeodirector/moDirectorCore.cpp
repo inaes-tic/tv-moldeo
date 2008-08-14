@@ -331,7 +331,7 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
 
         //copiar los archivos a  la carpeta
         wxString moldeopathinstall = moText2Wx( m_ApplicationDescriptor.GetInstallationFullPath() );
-        wxString templaterelpath( "/data/test/" );
+        wxString templaterelpath( _T("/data/test/") );
 
         wxString templatepath  = moldeopathinstall + templaterelpath;
 

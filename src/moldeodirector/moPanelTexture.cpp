@@ -244,7 +244,7 @@ void moPanelTexture::OnButtonImportClick(wxCommandEvent& event)
 			const char *cnamerelative = (char*)path.c_str();
 
 			//ProjectDescriptor.Set( moText((char*)cfilepath), moText((char*)cfilename) );
-			TextCtrlMedia->SetValue( cnamerelative );
+			TextCtrlMedia->SetValue( path );
 
 		    m_pTexturesTreeCtrl->UpdateDescriptors();
 

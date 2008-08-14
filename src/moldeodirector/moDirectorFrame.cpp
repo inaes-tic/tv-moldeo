@@ -480,7 +480,7 @@ moDirectorFrame::Init() {
 
     if (m_pStartFrame) {
         //m_pStartFrame->Activate();
-        m_pFilesBook->AddPage( (wxWindow*) m_pStartFrame, "Welcome to Moldeo Director");
+        m_pFilesBook->AddPage( (wxWindow*) m_pStartFrame, _T("Welcome to Moldeo Director"));
 
         //m_pFilesBook->AddPage( (wxWindow*) new wxScrolledWindow( this, wxID_ANY), "Welcome to Moldeo Director Dialog");
         //m_pFilesBook->AddPage((wxWindow*)new wxDialog(this,wxID_ANY,"Dialog"), "Welcome to Moldeo Director Dialog");
@@ -594,7 +594,7 @@ moDirectorFrame::OnOpenProject(wxCommandEvent& event) {
 	moDirectorStatus	mStatus;
 
 	//open browser window
-	if ( event.GetString()=="" ) {
+	if ( event.GetString()==_T("") ) {
 
         pFileDialog = new wxFileDialog( this );
 
@@ -610,7 +610,7 @@ moDirectorFrame::OnOpenProject(wxCommandEvent& event) {
                 #ifdef MO_WIN32
                     path+= "\\";
                 #else
-                    path+= "/";
+                    path+= _T("/");
                 #endif
                 wxString name = FileName.GetFullName();
                 const char *cfilepath = (char*)path.c_str();
@@ -634,7 +634,7 @@ moDirectorFrame::OnOpenProject(wxCommandEvent& event) {
         #ifdef MO_WIN32
             path+= "\\";
         #else
-            path+= "/";
+            path+= _T("/");
         #endif
         wxString name = FileName.GetFullName();
         const char *cfilepath = (char*)path.c_str();
@@ -682,7 +682,7 @@ moDirectorFrame::OpenMob( moMobDescriptor p_MobDescriptor ) {
     moDirectorChildFrame* pChild = NULL;
 
     for( size_t i=0; i<m_pFilesBook->GetPageCount(); i++ ) {
-        if (m_pFilesBook->GetPage(i)->GetName()=="child frame" ) {
+        if (m_pFilesBook->GetPage(i)->GetName()==_T("child frame") ) {
             pChild =(moDirectorChildFrame*)m_pFilesBook->GetPage(i);
             if (pChild) {
                 if( pChild->IsMob( p_MobDescriptor ) ) {
@@ -723,7 +723,7 @@ moDirectorFrame::OnSaveMob( wxCommandEvent& event ) {
     moDirectorChildFrame* pChild = NULL;
 
     int i = m_pFilesBook->GetSelection();
-    if (m_pFilesBook->GetPage(i)->GetName()=="child frame" ) {
+    if (m_pFilesBook->GetPage(i)->GetName()==_T("child frame") ) {
         pChild =(moDirectorChildFrame*)m_pFilesBook->GetPage(i);
         if (pChild) {
             pChild->Save();
@@ -738,7 +738,7 @@ moDirectorFrame::OnCloseMob( wxCommandEvent& event ) {
     moDirectorChildFrame* pChild = NULL;
 
     int i = m_pFilesBook->GetSelection();
-    if (m_pFilesBook->GetPage(i)->GetName() == "child frame" ) {
+    if (m_pFilesBook->GetPage(i)->GetName() == _T("child frame") ) {
         pChild =(moDirectorChildFrame*)m_pFilesBook->GetPage(i);
         if (pChild) {
             if ( pChild->Close() ) {
@@ -772,7 +772,7 @@ moDirectorFrame::CloseAll() {
 
     //int i = m_pFilesBook->GetSelection();
     for( size_t i=0; i<m_pFilesBook->GetPageCount(); i++ ) {
-        if (m_pFilesBook->GetPage(i)->GetName()=="child frame" ) {
+        if (m_pFilesBook->GetPage(i)->GetName()==_T("child frame") ) {
             pChild =(moDirectorChildFrame*)m_pFilesBook->GetPage(i);
             if (pChild) {
                 if (pChild->Close()) {
@@ -794,7 +794,7 @@ moDirectorFrame::SaveAll() {
 
     //int i = m_pFilesBook->GetSelection();
     for( size_t i=0; i<m_pFilesBook->GetPageCount(); i++ ) {
-        if (m_pFilesBook->GetPage(i)->GetName()=="child frame" ) {
+        if (m_pFilesBook->GetPage(i)->GetName()==_T("child frame") ) {
             pChild =(moDirectorChildFrame*)m_pFilesBook->GetPage(i);
             if (pChild) {
                 pChild->Save();
@@ -987,7 +987,7 @@ moDirectorFrame::EditMob( moMobDescriptor p_MobDescriptor ) {
     moDirectorChildConsole* pDirectorChildConsole = NULL;
 
     for( size_t i=0; i<m_pFilesBook->GetPageCount(); i++ ) {
-        if (m_pFilesBook->GetPage(i)->GetName()=="child frame" ) {
+        if (m_pFilesBook->GetPage(i)->GetName()==_T("child frame") ) {
             pChild =(moDirectorChildFrame*)m_pFilesBook->GetPage(i);
             if (pChild) {
                 if( pChild->IsMob( p_MobDescriptor ) ) {
@@ -1021,7 +1021,7 @@ moDirectorFrame::CloseMob( moMobDescriptor p_MobDesc ) {
 		moDirectorChildFrame* pChild;
 
 		for( size_t i=0; i<m_pFilesBook->GetPageCount(); i++ ) {
-            if (m_pFilesBook->GetPage(i)->GetName()=="child frame" ) {
+            if (m_pFilesBook->GetPage(i)->GetName()==_T("child frame") ) {
                 pChild =(moDirectorChildFrame*)m_pFilesBook->GetPage(i);
                 if (pChild) {
                     if( pChild->IsMob( p_MobDesc ) ) {
@@ -1094,13 +1094,13 @@ moDirectorFrame::ProjectUpdated( moProjectDescriptor p_ProjectDescriptor ) {
 
 		m_pLayers2->DeleteAllItems();
 
-		m_preeffectsid = m_pLayers->AddRoot( wxT("Layer 0 [pre]"), wxT("pre-effects"), (wxWindow*)new wxStaticText(m_pLayers, wxID_ANY,"- 0") );
-		m_effectsid = m_pLayers->AddRoot( wxT("Layer 1 [effects]"), wxT("effects"), (wxWindow*)new wxStaticText(m_pLayers, wxID_ANY,"- 1") );
-		m_posteffectsid = m_pLayers->AddRoot( wxT("Layer 2 [post]"), wxT("post-effects"), (wxWindow*)new wxStaticText(m_pLayers, wxID_ANY,"- 3") );
+		m_preeffectsid = m_pLayers->AddRoot( wxT("Layer 0 [pre]"), wxT("pre-effects"), (wxWindow*)new wxStaticText(m_pLayers, wxID_ANY,wxT("- 0")) );
+		m_effectsid = m_pLayers->AddRoot( wxT("Layer 1 [effects]"), wxT("effects"), (wxWindow*)new wxStaticText(m_pLayers, wxID_ANY,wxT("- 1")) );
+		m_posteffectsid = m_pLayers->AddRoot( wxT("Layer 2 [post]"), wxT("post-effects"), (wxWindow*)new wxStaticText(m_pLayers, wxID_ANY,wxT("- 3")) );
 
-		m_preeffectsid2 = m_pLayers2->AddRoot( wxT("timeline"), wxT("pre-effects"),  (wxWindow*)new wxStaticText(m_pLayers, wxID_ANY,"- 0"));
-		m_effectsid2 = m_pLayers2->AddRoot( wxT("timeline"), wxT("effects"), (wxWindow*)new wxStaticText(m_pLayers, wxID_ANY,"- 1") );
-		m_posteffectsid2 = m_pLayers2->AddRoot( wxT("timeline"), wxT("post-effects"),  (wxWindow*)new wxStaticText(m_pLayers, wxID_ANY,"- 2") );
+		m_preeffectsid2 = m_pLayers2->AddRoot( wxT("timeline"), wxT("pre-effects"),  (wxWindow*)new wxStaticText(m_pLayers, wxID_ANY,wxT("- 0")));
+		m_effectsid2 = m_pLayers2->AddRoot( wxT("timeline"), wxT("effects"), (wxWindow*)new wxStaticText(m_pLayers, wxID_ANY,wxT("- 1")) );
+		m_posteffectsid2 = m_pLayers2->AddRoot( wxT("timeline"), wxT("post-effects"),  (wxWindow*)new wxStaticText(m_pLayers, wxID_ANY,wxT("- 2")) );
 	}
 
 	//intento de borrar unicamente los layers correspondientes...al final resolvimos borrar todo...mejor..
@@ -1201,7 +1201,7 @@ moDirectorFrame::ParameterUpdated( moParameterDescriptor p_ParameterDesc ) {
     moMobDescriptor MobDesc = p_ParameterDesc.GetMobDescriptor();
 
     for( size_t i=0; i<m_pFilesBook->GetPageCount(); i++ ) {
-            if (m_pFilesBook->GetPage(i)->GetName()=="child frame" ) {
+            if (m_pFilesBook->GetPage(i)->GetName()==_T("child frame") ) {
                 pChild =(moDirectorChildFrame*)m_pFilesBook->GetPage(i);
                 if (pChild) {
                     if( pChild->IsMob( MobDesc ) ) {
@@ -1224,7 +1224,7 @@ moDirectorFrame::EditParameter( moParameterDescriptor p_ParameterDesc ) {
     moMobDescriptor MobDesc = p_ParameterDesc.GetMobDescriptor();
 
     for( size_t i=0; i<m_pFilesBook->GetPageCount(); i++ ) {
-			if (m_pFilesBook->GetPage(i)->GetName()=="child frame" ) {
+			if (m_pFilesBook->GetPage(i)->GetName()==_T("child frame") ) {
                 pChild =(moDirectorChildFrame*)m_pFilesBook->GetPage(i);
                 if (pChild) {
                     if( pChild->IsMob( MobDesc ) ) {
@@ -1247,7 +1247,7 @@ moDirectorFrame::EditValue( moValueDescriptor p_ValueDesc ) {
     moMobDescriptor MobDesc = ParamDesc.GetMobDescriptor();
 
     for( size_t i=0; i<m_pFilesBook->GetPageCount(); i++ ) {
-        if (m_pFilesBook->GetPage(i)->GetName()=="child frame" ) {
+        if (m_pFilesBook->GetPage(i)->GetName()==_T("child frame") ) {
 			pChild =(moDirectorChildFrame*)m_pFilesBook->GetPage(i);
 			if (pChild) {
                 if( pChild->IsMob( MobDesc ) ) {
@@ -1272,7 +1272,7 @@ moDirectorFrame::ValueUpdated( moValueDescriptor p_ValueDesc ) {
     moMobDescriptor MobDesc = ParamDesc.GetMobDescriptor();
 
     for( size_t i=0; i<m_pFilesBook->GetPageCount(); i++ ) {
-        if (m_pFilesBook->GetPage(i)->GetName()=="child frame" ) {
+        if (m_pFilesBook->GetPage(i)->GetName()==_T("child frame") ) {
 			pChild =(moDirectorChildFrame*)m_pFilesBook->GetPage(i);
 			if (pChild) {
                 if( pChild->IsMob( MobDesc ) ) {
