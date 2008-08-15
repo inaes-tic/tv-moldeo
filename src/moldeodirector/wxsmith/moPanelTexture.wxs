@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxPanel" name="moPanelTexture">
+		<size>402,285</size>
+		<bg>#000000</bg>
+		<id_arg>0</id_arg>
+		<style>wxTAB_TRAVERSAL|wxCLIP_CHILDREN</style>
+		<object class="wxFlexGridSizer" variable="FlexGridSizer1" member="no">
+			<cols>1</cols>
+			<rows>2</rows>
+			<growablecols>0</growablecols>
+			<growablerows>1</growablerows>
+			<object class="sizeritem">
+				<object class="wxPanel" name="ID_PANEL4" variable="Panel4" member="yes">
+					<pos>120,8</pos>
+					<size>264,80</size>
+					<bg>#000000</bg>
+					<object class="wxStaticBox" name="ID_STATICBOX1" variable="StaticBox1" member="yes">
+						<label>Description</label>
+						<pos>8,16</pos>
+						<size>352,104</size>
+						<fg>#FFFFFF</fg>
+					</object>
+					<object class="wxPanel" name="ID_PANELFILTER" variable="PanelFilter" member="yes">
+						<pos>48,48</pos>
+						<size>296,24</size>
+					</object>
+					<object class="wxStaticText" name="ID_STATICTEXT6" variable="StaticText2" member="yes">
+						<label>Level of filter %</label>
+						<pos>152,24</pos>
+						<fg>#FFFFFF</fg>
+					</object>
+					<object class="wxStaticText" name="ID_STATICTEXT7" variable="StaticText3" member="yes">
+						<label>Filter</label>
+						<pos>16,56</pos>
+						<fg>#FFFFFF</fg>
+					</object>
+					<object class="wxStaticText" name="ID_STATICTEXT1" variable="StaticText1" member="yes">
+						<label>File</label>
+						<pos>16,88</pos>
+						<fg>#FFFFFF</fg>
+					</object>
+					<object class="wxTextCtrl" name="ID_TEXTCTRLMEDIA" variable="TextCtrlMedia" member="yes">
+						<pos>48,88</pos>
+						<size>232,21</size>
+						<handler function="OnTextCtrlMediaText" entry="EVT_TEXT" />
+					</object>
+					<object class="wxButton" name="ID_BUTTONIMPORT" variable="ButtonImport" member="yes">
+						<label>Import</label>
+						<pos>288,88</pos>
+						<size>56,23</size>
+						<fg>#FFFFFF</fg>
+						<bg>#000000</bg>
+						<style>wxSIMPLE_BORDER|wxNO_BORDER</style>
+						<handler function="OnButtonImportClick" entry="EVT_BUTTON" />
+					</object>
+					<object class="wxStaticText" name="ID_STATICTEXT3" variable="StaticTextFiltered" member="yes">
+						<label>Destination texture</label>
+						<pos>248,24</pos>
+						<fg>#FFFFFF</fg>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+				<border>5</border>
+				<option>1</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxFlexGridSizer" variable="FlexGridSizer2" member="no">
+					<cols>2</cols>
+					<rows>1</rows>
+					<growablecols>1</growablecols>
+					<growablerows>0</growablerows>
+					<object class="sizeritem">
+						<object class="wxPanel" name="ID_PANEL5" variable="Panel5" member="yes">
+							<pos>16,144</pos>
+							<size>180,208</size>
+							<bg>#000000</bg>
+							<object class="wxPanel" name="ID_PANELPreview" variable="PanelPreview" member="yes">
+								<pos>0,0</pos>
+								<size>144,96</size>
+								<bg>#000000</bg>
+								<object class="wxStaticBitmap" name="ID_STATICBITMAPTHUMB" variable="StaticBitmapThumbnail" member="yes">
+									<bitmap>D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\icons\imageempty.png</bitmap>
+									<pos>0,0</pos>
+									<size>128,80</size>
+								</object>
+							</object>
+							<object class="wxStaticText" name="ID_STATICTEXT2" variable="StaticTextType" member="yes">
+								<label>Type</label>
+								<pos>0,104</pos>
+								<fg>#FFFFFF</fg>
+							</object>
+							<object class="wxStaticText" name="ID_STATICTEXTSIZE" variable="StaticTextSize" member="yes">
+								<label>Size</label>
+								<pos>0,128</pos>
+								<fg>#FFFFFF</fg>
+							</object>
+							<object class="wxBitmapButton" name="ID_BITMAPBUTTON1" variable="BitmapButton1" member="yes">
+								<pos>104,176</pos>
+								<size>40,23</size>
+								<handler function="OnBitmapButton1Click" entry="EVT_BUTTON" />
+							</object>
+						</object>
+						<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxTreeCtrl" name="ID_TREECTRL1" variable="TreeCtrlImages" member="yes">
+							<size>224,208</size>
+							<bg>#FFFFFF</bg>
+						</object>
+						<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+				<option>1</option>
+			</object>
+		</object>
+	</object>
+</wxsmith>

@@ -1,0 +1,42 @@
+1) Instalar MinGW y minsys
+2) Instalar codeblocks 8.02 (sin mingw)
+http://wiki.codeblocks.org/index.php?title=Installing_MinGW_with_Vista
+3) Instalar gstreamer y paquete de desarrollo:
+http://gstreamer.freedesktop.org/pkg/windows/releases/gstreamer/gstreamer-0.10.17.win32dev.zip
+(Ponerlo en C:\Program files\Common files\GStreamer\0.10)
+4) Crear los .def y .a de los siguientes dlls
+usando pexports y dlltool:
+http://cygwin.com/cygwin-ug-net/dll.html
+http://www.emmestech.com/moron_guides/moron1.html (link para bajar pexports al final de la pagina)
+
+
+4.1 pexports libgstreamer-0.10.dll | sed 's/^_//' > libgstreamer-0.10.def
+4.2 (editar el libgstreamer-0.10.def y eliminar de la primera linea "-0.10.dll")
+4.3 dlltool --def libgstreamer-0.10.def --dllname libgstreamer-0.10.dll --output-
+lib libgstreamer-0.10.a
+
+5) Instalar gtk+ win32 devel & runtime:
+http://sourceforge.net/project/showfiles.php?group_id=98754
+
+6) Modificar FreeImage.h de la siguiente manera:
+#ifndef _MSC_VER
+// define portable types for 32-bit / 64-bit OS
+#include <inttypes.h>
+#ifndef WINVER
+typedef int32_t BOOL;
+typedef uint8_t BYTE;
+typedef uint16_t WORD;
+typedef uint32_t DWORD;
+typedef int32_t LONG;
+#endif
+#else
+// MS is not C99 ISO compliant
+typedef long BOOL;
+typedef unsigned char BYTE;
+typedef unsigned short WORD;
+typedef unsigned long DWORD;
+typedef long LONG;
+#endif // _MSC_VER
+
+7) Agregar en Settings-compiler-defines
+GST_DISABLE_GST_DEBUG
