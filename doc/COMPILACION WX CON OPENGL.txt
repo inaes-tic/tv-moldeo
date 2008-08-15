@@ -1,0 +1,20 @@
+1) Bajar las fuentes de wxWidgets para GTK:
+http://www.wxwidgets.org/downloads/#latest_stable
+Por ejemplo, para la 2.8.8
+http://prdownloads.sourceforge.net/wxwindows/wxGTK-2.8.8.tar.gz
+
+2) Descomprimir, crear carpeta dentro del raiz de la distribucion, por ejemplo:
+> mkdir buildgl
+> cd buildgl
+> ../configure --with-opengl
+> make
+> make install
+> ldconfig
+
+Tambien compilar una version de debug:
+> mkdir buildgldb
+> cd buildgldb
+> ../configure --with-opengl --enable-debug
+> make
+> make install
+> ldconfig
