@@ -233,6 +233,24 @@ typedef enum {
         g_hwnd = info.window;;
         #else
         g_hwnd = NULL;
+
+        if ( info.subsystem == SDL_SYSWM_X11 ) {
+            Window u1; int u2; unsigned int u3;
+            Display *display;
+            Window window;
+
+            info.info.x11.lock_func();
+            display = info.info.x11.display;
+            window = info.info.x11.window;
+
+            XGetGeometry(display, window, &u1, &u2, &u2,
+                         (unsigned int *)width,
+                         (unsigned int *)height, &u3, &u3);
+
+            info.info.x11.unlock_func();
+
+            g_hwnd  = (void*)display;
+        }
         #endif
 
     }
