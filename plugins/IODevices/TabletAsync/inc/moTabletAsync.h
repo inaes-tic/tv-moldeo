@@ -27,6 +27,12 @@
   Fabricio Costa
   Andrés Colubri
 
+  Linux version uses code from the wacom expresskeys project:
+  http://freshmeat.net/projects/wacomexpresskeys
+
+  Some sample code from the Linux Wacom Project website:
+  http://linuxwacom.sourceforge.net/index.php/quantumtest
+
 *******************************************************************************/
 
 //////////////////////////////////////////////////////////////////////
@@ -113,21 +119,38 @@
 
 //TABLET: setup required here
 //
-#include "wintab.h"
-//
-//    define what packet data is required here.  A PACKET structure
-//    will be created by pktdef.h  Only the required information
-//    will be returned in each packet, so some of the members will
-//    not be available, depending on your choices here.  Change your code as appropriate.
-//    For multiple packet types refer to the WinTab API reference.
-//
-//#define PACKETDATA	(PK_Z | PK_NORMAL_PRESSURE | PK_ORIENTATION | PK_TANGENT_PRESSURE)
-//#define PACKETDATA	(PK_Z | PK_NORMAL_PRESSURE)
-//#define PACKETDATA	(PK_X | PK_Y | PK_BUTTONS | PK_NORMAL_PRESSURE | PK_ORIENTATION | PK_CURSOR)
-//#define PACKETDATA	(PK_Z | PK_NORMAL_PRESSURE | PK_ORIENTATION | PK_CURSOR)
-#define PACKETDATA	(PK_X | PK_Y | PK_Z |PK_BUTTONS | PK_NORMAL_PRESSURE | PK_ORIENTATION | PK_CURSOR)
-#define PACKETMODE      0
-#include "pktdef.h"
+
+#ifdef MO_WIN32
+
+    #include "wintab.h"
+    //
+    //    define what packet data is required here.  A PACKET structure
+    //    will be created by pktdef.h  Only the required information
+    //    will be returned in each packet, so some of the members will
+    //    not be available, depending on your choices here.  Change your code as appropriate.
+    //    For multiple packet types refer to the WinTab API reference.
+    //
+    //#define PACKETDATA	(PK_Z | PK_NORMAL_PRESSURE | PK_ORIENTATION | PK_TANGENT_PRESSURE)
+    //#define PACKETDATA	(PK_Z | PK_NORMAL_PRESSURE)
+    //#define PACKETDATA	(PK_X | PK_Y | PK_BUTTONS | PK_NORMAL_PRESSURE | PK_ORIENTATION | PK_CURSOR)
+    //#define PACKETDATA	(PK_Z | PK_NORMAL_PRESSURE | PK_ORIENTATION | PK_CURSOR)
+    #define PACKETDATA	(PK_X | PK_Y | PK_Z |PK_BUTTONS | PK_NORMAL_PRESSURE | PK_ORIENTATION | PK_CURSOR)
+    #define PACKETMODE      0
+    #include "pktdef.h"
+
+
+#else
+
+    #include <X11/Xlib.h>
+    #include <X11/Xutil.h>
+    #include <X11/extensions/XInput.h>
+    #include <X11/extensions/XTest.h>
+
+
+    #define NON_VALID -1
+    #define MAXBUFFER 180
+
+#endif
 
 #define FIX_DOUBLE(x)   ((double)(INT(x))+((double)FRAC(x)/65536))	// converts FIX32 to double
 
@@ -210,14 +233,21 @@ class moTabletListener : public moThread, public moAbstract {
         moTabletListener() {}
         virtual ~moTabletListener() {}
 
+        #ifdef MO_WIN32
         void SetTablet( HCTX p_TabletHandle) {
             m_TabletHandle = p_TabletHandle;
         }
+        #else
+        void SetTablet( Display* p_TabletHandle) {
+            m_TabletHandle = p_TabletHandle;
+        }
+        #endif
 
         moDataMessages& GetMessages() {
             return Messages;
         }
 
+        #ifdef MO_WIN32
         virtual int ThreadUserFunction() {
 
             // Checking the queue size with
@@ -307,6 +337,104 @@ class moTabletListener : public moThread, public moAbstract {
             }
 
         }
+        #else
+        virtual int ThreadUserFunction() {
+            while( 1==1 ) {
+                    m_Semaphore.Lock();
+                    m_Semaphore.Unlock();
+            }
+
+
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Endless launchpad loop as each event we've registered for comes in:
+ +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/*
+void use_events()
+{
+	XEvent Event;
+	XDeviceButtonEvent* button = NULL;
+	XDeviceMotionEvent* motion = NULL;
+
+	void* record_address = NULL;
+	void* base_address = NULL;
+
+// Set the stylus PressCurve histories to a default string, and a program name:
+	snprintf(curvebuffer, CURVEMAX, "0 0 100 100");
+	snprintf(namebuffer, MAXBUFFER, "dummy");
+
+	while(1) {
+
+// The Event.type checks here are a bit excessive, but left in place to ensure
+// complete control. It is so easy to register for other events and forget...
+		if ((is_sty1 || is_sty2)
+		&& (Event.type == button_press_type
+		|| Event.type == proximity_in_type)) {
+			if (record_address != NULL) {
+				base_address = record_address;
+				record_address = find_focus(record_address,
+									Event);
+				if (name_change) {
+					do_stylus(base_address, record_address);
+				}
+			}
+		} else if ((button)
+			&& (Event.type == button_press_type
+			||  Event.type == button_release_type)) {
+			if (record_address != NULL) {
+				base_address = record_address;
+				record_address = find_focus(record_address,
+									Event);
+				do_button(base_address, record_address, button,
+									Event);
+			}
+
+		} else if (motion) {
+			if (record_address != NULL) {
+				base_address = record_address;
+				record_address = find_focus(record_address,
+									Event);
+				do_motion(base_address, record_address, motion,
+									Event);
+			}
+		}
+
+		is_bee = 0;
+		is_i3 = 0;
+		is_i3s = 0;
+		is_g4 = 0;
+		is_g4b = 0;
+		is_nop = 0;
+		is_pad = 0;
+		is_sty1 = 0;
+		is_sty2 = 0;
+
+		id_pad = NULL;
+		id_sty1 = NULL;
+		id_sty2 = NULL;
+
+		button = NULL;
+		motion = NULL;
+
+		XNextEvent(display, &Event);
+
+		if (Event.type == proximity_in_type
+		|| Event.type == button_press_type
+		|| Event.type == button_release_type) {
+			button = (XDeviceButtonEvent*) &Event;
+		} else if (Event.type == motion_type) {
+			motion = (XDeviceMotionEvent*) &Event;
+		}
+
+		if (button || motion) {
+			record_address = match_id(button, motion);
+		}
+	}
+
+}
+*/
+        }
+        #endif
+
 
         void Update( moOutlets* pOutlets ) {
             //block message
@@ -342,9 +470,14 @@ class moTabletListener : public moThread, public moAbstract {
     protected:
         moDataMessages        Messages;
         moLock                m_Semaphore;
+        #ifdef MO_WIN32
         HCTX                  m_TabletHandle;
         UINT                  m_cMaxPkts; // maximum number of packets in the queue.
         PACKET*               m_lpPkts;           // packet buffer
+        #else
+        Display*              m_TabletHandle;
+        #endif
+
 
 };
 
@@ -379,6 +512,7 @@ private:
 	//MOuint channel0virtual[5];
 	//MOuint masterchannelvirtual[5];
 
+    #ifdef MO_WIN32
 	//TABLET: members available throughout class
 	LOGCONTEXT      lcMine;           // The context of the tablet
 
@@ -394,12 +528,24 @@ private:
 	LONG            t_pkZNew;
 
 	//	tablet specific functions
-	HCTX InitTablet(HWND hWnd);
-	BOOL IsTabletInstalled();
-	moText GetTabletName();
+	HCTX InitTablet(MO_HANDLE hWnd);
+	BOOL IsTabletInstalled(MO_HANDLE hWnd);
 
 	UINT            m_cMaxPkts; // maximum number of packets in the queue.
 	PACKET* m_lpPkts;           // packet buffer
+    #else
+
+    XDeviceInfo*    xdevice_list; // The large structure emanating from XListInputDevices.
+
+    Display* t_hTablet;
+    int      t_hScreen;
+
+    Display* InitTablet(MO_HANDLE hWnd);
+	bool IsTabletInstalled(MO_HANDLE hWnd);
+    #endif
+
+
+	moText GetTabletName();
 
 	//	adjustments used in example
 	double t_dblAltAdjust;		// Tablet Altitude zero adjust
