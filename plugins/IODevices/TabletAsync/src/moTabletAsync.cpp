@@ -138,6 +138,7 @@ MOboolean moTablet::Init()
 		}
 	}
 */
+    #ifdef MO_WIN32
 	//TABLET: Graphics Tablet
 	t_hTablet = NULL;		// Tablet context handle, required.
 	t_prsNew = 0;
@@ -156,31 +157,34 @@ MOboolean moTablet::Init()
 	t_dblAltAdjust = 1;		// Tablet Altitude zero adjust
 	t_dblAltFactor = 1;		// Tablet Altitude factor
 	t_dblAziFactor = 1;		// Table Azimuth factor
+	#else
+	#endif
 
-	if (IsTabletInstalled())
-	{
-		MO_HANDLE hWnd = m_pResourceManager->GetGuiMan()->GetOpWindowHandle();
+    MO_HANDLE hWnd = m_pResourceManager->GetGuiMan()->GetOpWindowHandle();
+    if (hWnd != NULL) {
+        if (IsTabletInstalled(hWnd))
+        {
+            // Getting tablet context.
+            t_hTablet = InitTablet(hWnd);
+            MODebug2->Push( moText("Tablet installed with name = ") + GetTabletName() );
+            m_Listener.SetTablet( t_hTablet );
 
-		// Getting tablet context.
-		if (hWnd != NULL) t_hTablet = InitTablet(hWnd);
-		else
-		{
-			MODebug2->Push("Cannot get window handle.");
-			exit(0);
-			return false;
-		}
-		MODebug2->Push( moText("Tablet installed with name = ") + GetTabletName() );
+            m_Listener.CreateThread();
 
-        m_Listener.SetTablet( t_hTablet );
-        m_Listener.CreateThread();
-
-        //for( i = 0; i < ncodes; i++) Codes[i].CreateValuesArray(m_cMaxPkts);
-	}
-	else
-	{
-		MODebug2->Push("Tablet not detected.");
+            //for( i = 0; i < ncodes; i++) Codes[i].CreateValuesArray(m_cMaxPkts);
+        }
+        else
+        {
+            MODebug2->Push("Tablet not detected.");
+            return false;
+        }
+    }
+	else {
+		MODebug2->Push("Cannot get window handle.");
+		exit(0);
 		return false;
 	}
+
 
 	return true;
 }
@@ -196,10 +200,13 @@ MOboolean moTablet::Finish()
 	ncodes = 0;
 */
     m_Listener.KillThread();
+    #ifdef MO_WIN32
 	if (t_hTablet)
 	{
 	    WTClose(t_hTablet);
 	}
+    #else
+    #endif
 	return true;
 }
 
@@ -288,7 +295,13 @@ MOint moTablet::getTabletCod(moText s)
 
 void moTablet::Update(moEventList *Events)
 {
+
+    #ifdef MO_WIN32
 	if (!t_hTablet) return;
+	#else
+	return;
+    #endif
+
 
     MOuint i;
 
@@ -498,6 +511,7 @@ void moTablet::Update(moEventList *Events)
 	*/
 }
 
+#ifdef MO_WIN32
 HCTX moTablet::InitTablet(HWND hWnd)
 {
 	//TABLET: get current settings as a starting point for this context of the tablet.
@@ -513,7 +527,7 @@ HCTX moTablet::InitTablet(HWND hWnd)
 	return WTOpen(hWnd, &lcMine, TRUE);
 }
 
-BOOL moTablet::IsTabletInstalled()
+BOOL moTablet::IsTabletInstalled(MO_HANDLE hWnd)
 {
 	struct	tagAXIS TpOri[3];	// The capabilities of tilt (required)
 	double	dblTpvar;				// A temp for converting fix to double (for example)
@@ -558,12 +572,506 @@ BOOL moTablet::IsTabletInstalled()
 	}	//end does tablet exists
 	return bReturn;
 }
+#else
+
+Display* moTablet::InitTablet(MO_HANDLE hWnd) {
+
+    Display* display = (Display*)hWnd;
+
+    t_hScreen = DefaultScreen(display);
+
+    //get_device_info()
+    int nr_devices;
+    xdevice_list = XListInputDevices(display, &nr_devices);
+
+
+
+    for (int number = 0; number < nr_devices; number++)
+        printf("WACOM DEVICE: %s\n", xdevice_list[number].name);
+
+
+
+
+    return display;
+}
+
+bool moTablet::IsTabletInstalled(MO_HANDLE hWnd) {
+
+    struct stat sts;
+    if ((stat ("/dev/input/wacom", &sts)) == -1 && errno == ENOENT)
+    {
+        return false;
+    }
+    return true;
+
+}
+
+
+
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Find all extension-devices containing the strings 'pad'/'stylus'. If the
+ user has specified which pad/stylus(es) to use on the command line, we
+ ignore all others:
+ +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+/*
+void moTabletListener::get_device_info()
+{
+
+
+
+	const char* user_dummy = "not_specified";
+	if ((user_pad) || (user_stylus1)) {
+		if (user_pad) {
+			pad_string = user_pad;
+		} else {
+			pad_string = user_dummy;
+		}
+		if (user_stylus1) {
+			stylus_string = user_stylus1;
+		} else {
+			stylus_string = user_dummy;
+		}
+	}
+
+
+	xdevice_list = XListInputDevices(display, &nr_devices);
+
+	for(i = 0; i < nr_devices; i++) {
+		if (xdevice_list[i].use == IsXExtensionDevice) {
+			len = strlen(xdevice_list[i].name);
+			snprintf(read_buffer, MAXBUFFER, "%s", xdevice_list[i]
+									.name);
+			if (check_name(read_buffer, write_buffer, len)) {
+				found = 0;
+				if (user_pad) {
+					if (strcmp(read_buffer, pad_string)
+									== 0) {
+						found = 1;
+					}
+				} else if (strstr(write_buffer, pad_string)) {
+					found = 1;
+				}
+				if ((strstr(write_buffer, pad_string))
+								&& (found)) {
+					follow_pad(xdevice_list, i);
+				}
+				if (user_stylus1) {
+					if (strcmp(read_buffer, stylus_string)
+									== 0) {
+						found = 1;
+					}
+				} else if (strstr(write_buffer,
+							stylus_string)) {
+					found = 1;
+				}
+				if ((strstr(write_buffer, stylus_string))
+								&& (found)) {
+					follow_stylus(xdevice_list, i);
+					if (user_stylus2) {
+						stylus_string = user_stylus2;
+					}
+				}
+			}
+		}
+	}
+
+}
+*/
+
+
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Open a stylus-device and start collecting data:
+ +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/*
+static void follow_stylus(XDeviceInfo* xdevice_list, int number)
+{
+	int i;
+	int model;
+
+	XValuatorInfoPtr valuator;
+	XAnyClassPtr anyclass;
+
+	if ((tmp_device = XOpenDevice(display, xdevice_list[number].id))) {
+		if (register_events(stylus_string)) {
+			model = identify_device(xdevice_list[number].name);
+			stylus_num = count_stylus(model);
+			if ((pad_num < model * MAXPAD + MAXPAD)
+			&& (stylus_num < MAXSTYLUS)) {
+				stylus_xdevice[stylus_num][pad_num]= tmp_device;
+				stylus_id[stylus_num][pad_num] =
+							&tmp_device->device_id;
+				stylus_name[stylus_num][pad_num] =
+						xdevice_list[number].name;
+				anyclass = (XAnyClassPtr)
+					(xdevice_list[number].inputclassinfo);
+				for (i = 0; i < xdevice_list[number]
+							.num_classes; i++) {
+					if (anyclass->class == ValuatorClass) {
+						valuator =
+						(XValuatorInfoPtr)anyclass;
+						stylus_mode[stylus_num][pad_num]
+							= &valuator->mode;
+					}
+					anyclass = (XAnyClassPtr)
+					((char*)anyclass + anyclass->length);
+				}
+			} else {
+				XFree(tmp_device);
+			}
+		}
+	}
+
+}
+*/
+
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Start looking for supported event types. The scope should be the root window
+ (ie everywhere). We're interested in motion events and proximity in/out for
+ the touch strips, and button press/release for the pad buttons. For the
+ styli we ask about button press and proximity in. Having found the info
+ we ask the X server to keep us continuously notified about these events:
+ +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/*
+static int register_events(const char* name)
+{
+	int i;
+	int count = 0;
+
+	XInputClassInfo* ip;
+	Window root_win;
+
+	root_win = RootWindow(display, screen);
+
+	if (name == pad_string) {
+		XEventClass event_list[5];
+		if (tmp_device->num_classes > 0) {
+			for (ip = tmp_device->classes,
+				i = 0; i < tmp_device->num_classes; ip++, i++) {
+				switch (ip->input_class) {
+
+				case ButtonClass:
+				DeviceButtonPress(tmp_device,
+					button_press_type, event_list[count]);
+				count++;
+				DeviceButtonRelease(tmp_device,
+					button_release_type, event_list[count]);
+				count++;
+				break;
+
+				case ValuatorClass:
+				DeviceMotionNotify(tmp_device,
+					motion_type, event_list[count]);
+				count++;
+				ProximityIn(tmp_device,
+					proximity_in_type, event_list[count]);
+				count++;
+				ProximityOut(tmp_device,
+					proximity_out_type, event_list[count]);
+				count++;
+				break;
+
+				default:
+				break;
+				}
+			}
+		}
+		if (XSelectExtensionEvent(display, root_win,
+					event_list, count)) {
+			return 0;
+		}
+		return count;
+	}
+
+	if (name == stylus_string) {
+		XEventClass event_list[2];
+		if (tmp_device->num_classes > 0) {
+			for (ip = tmp_device->classes,
+				i = 0; i < tmp_device->num_classes; ip++, i++) {
+				switch (ip->input_class) {
+
+				case ButtonClass:
+				DeviceButtonPress(tmp_device,
+					button_press_type, event_list[count]);
+				count++;
+				break;
+
+				case ValuatorClass:
+				ProximityIn(tmp_device,
+					proximity_in_type, event_list[count]);
+				count++;
+				break;
+
+				default:
+				break;
+				}
+			}
+		}
+		if (XSelectExtensionEvent(display, root_win,
+					event_list, count)) {
+			return 0;
+		}
+		return count;
+	}
+	return 0;
+}
+*/
+
+
+#endif
 
 moText moTablet::GetTabletName()
 {
+    moText strName = moText("");
+
+    #ifdef MO_WIN32
 	char	chrWName[50];			// String to hold window name
 	WTInfo(WTI_DEVICES, DVC_NAME, chrWName);
-	moText strName = chrWName;
+	strName = chrWName;
+	#else
+
+    /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     This code uses the "popen" command which creates a pipe, forks and
+     invokes a shell where xsetwacom can be run. First action is to ensure that
+     version 0.0.7 or greater of xsetwacom is present (ie linuxwacom-0.7.5-2
+     where the option GetTabletID was introduced). Thereafter we match the tablet
+     decimal number string against known tablet numbers. A full table can be
+     found in src/xdrv/wcmUSB.c of the linuxwacom sources (Hex numbers).
+     +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+	int ok_xsetwacom = 0;
+
+    // volito
+    const char* volito = "96";          /* 0x60 */
+
+    // volito2
+    const char* volito2_pp = "97";      /* 0x61 */
+	const char* volito2_4x5 = "98";     /* 0x62 */
+	const char* volito2_2x3 = "99";     /* 0x63 */
+	const char* volito2_pp2 = "100";    /* 0x64 */
+
+    // cintiqPartner
+	const char* cintiqpartner = "3";    /* 0x03 */
+
+	// cintiq
+    const char* cintiq_pl400 = "48";    /* 0x30 */
+    const char* cintiq_pl500 = "49";    /* 0x31 */
+    const char* cintiq_pl600 = "50";    /* 0x32 */
+    const char* cintiq_pl600sx = "51";  /* 0x33 */
+    const char* cintiq_pl550 = "52";    /* 0x34 */
+    const char* cintiq_pl800 = "53";    /* 0x35 */
+    const char* cintiq_pl700 = "55";    /* 0x37 */
+    const char* cintiq_pl510 = "56";    /* 0x38 */
+    const char* cintiq_pl710 = "57";    /* 0x39 */
+    const char* cintiq_pl720 = "192";   /* 0xC0 */
+    const char* cintiq_dtf521 = "196";  /* 0xC4 */
+
+    // cintiqV5
+	const char* cintiq_21ux = "63";     /* 0x3F */
+	const char* cintiq_20wsx = "197";   /* 0xC5 */
+	const char* cintiq_12wx = "198";    /* 0xC6 */
+
+    // intuos1
+	const char* i1_4x5 = "32";          /* 0x20 */
+	const char* i1_6x8 = "33";          /* 0x21 */
+	const char* i1_9x12 = "34";         /* 0x22 */
+	const char* i1_12x12 = "35";        /* 0x23 */
+	const char* i1_12x18 = "36";        /* 0x24 */
+
+    // intuos2
+	const char* i2_4x5 = "65";          /* 0x41 */
+	const char* i2_6x8 = "66";          /* 0x42 */
+	const char* i2_9x12 = "67";         /* 0x43 */
+	const char* i2_12x12 = "68";        /* 0x44 */
+	const char* i2_12x18 = "69";        /* 0x45 */
+	const char* i2_6x8b = "71";          /* 0x47 */
+
+    // intuos3
+	const char* i3_6x8 = "177";     /* 0xB1 */
+	const char* i3_9x12 = "178";    /* 0xB2 */
+	const char* i3_12x12 = "179";   /* 0xB3 */
+	const char* i3_12x19 = "180";   /* 0xB4 */
+	const char* i3_6x11 = "181";    /* 0xB5 */
+	const char* i3s_4x5 = "176";    /* 0xB0 */
+	const char* i3s_4x6 = "183";    /* 0xB7 */
+
+    // penpartner
+	const char* ppartner = "0";     /* 0x00 */
+
+	// graphire1
+	const char* g1 = "16";          /* 0x10 */
+
+    // graphire2
+	const char* g2_4x5 = "17";      /* 0x11 */
+	const char* g2_5x7 = "18";      /* 0x12 */
+
+    // graphire3
+	const char* g3_4x5 = "19";      /* 0x13 */
+	const char* g3_6x8 = "20";      /* 0x14 */
+
+    // graphire4
+	const char* g4_4x5 = "21";      /* 0x15 */
+	const char* g4_6x8 = "22";      /* 0x16 */
+	const char* g4b_6x8 = "129";    /* 0x81 */
+
+    // bamboo
+    const char* bamboo = "101";     /* 0x65 */
+    const char* bamboo1 = "105";    /* 0x69 */
+
+    // bambooFun
+    const char* bamboofun_4x5 = "23"; /* 0x17 */
+    const char* bamboofun_6x8 = "24"; /* 0x18 */
+
+    // Minimum xsetwacom version we can use is 0.0.7
+	const int min_xsetwacom = 7;
+
+	char read_buffer[MAXBUFFER];
+	char write_buffer[MAXBUFFER];
+
+	int i;
+	int j = 0;
+	int len = 0;
+	int ok_value = 0;
+
+	FILE* execfp = NULL;
+	read_buffer[0] = '\0';
+
+	if ((execfp = popen("xsetwacom -V", "r")) != NULL) {
+		fgets(read_buffer, MAXBUFFER, execfp);
+		if (((pclose(execfp)) != NON_VALID)
+		&& (isdigit(read_buffer[0]))) {
+			len = strcspn(read_buffer, " \t\n");
+			for (i = 0; i < len; i++) {
+				if (isdigit(read_buffer[i])) {
+					write_buffer[j] = read_buffer[i];
+					j++;
+				}
+			}
+			write_buffer[j] = '\0';
+			if ((atoi(write_buffer)) >= min_xsetwacom) {
+				ok_xsetwacom = 1;
+			}
+		}
+	}
+
+    // linuxwacom-0.7.7-3 changed GetTabletID to plain TabletID. Later, support
+    // for both strings were introduced. We follow the same pattern here, defaulting
+    // to the new way, should the old format disappear in a linuxwacom future:
+	if (ok_xsetwacom) {
+		read_buffer[0] = '\0';
+		snprintf(write_buffer,MAXBUFFER, "xsetwacom get %s TabletID",
+								"stylus");
+		if ((execfp = popen(write_buffer, "r")) != NULL) {
+			fgets(read_buffer, MAXBUFFER, execfp);
+			if (((pclose(execfp)) != NON_VALID)
+			&& (isdigit(read_buffer[0]))) {
+				ok_value = 1;
+			} else {
+				read_buffer[0] = '\0';
+				snprintf(write_buffer,MAXBUFFER,
+				"xsetwacom get %s GetTabletID", "stylus");
+				if ((execfp = popen(write_buffer, "r"))
+								!= NULL) {
+					fgets(read_buffer, MAXBUFFER, execfp);
+					if (((pclose(execfp)) != NON_VALID)
+					&& (isdigit(read_buffer[0]))) {
+						ok_value = 1;
+					}
+				}
+			}
+		}
+
+		if (ok_value) {
+			len = strcspn(read_buffer, " \t\n");
+
+			if (((strncmp(read_buffer, volito, len)) == 0)) {
+				strName = moText("volito");
+			}
+			else if (((strncmp(read_buffer, volito2_pp, len)) == 0)
+				|| ((strncmp(read_buffer, volito2_4x5, len)) == 0)
+				|| ((strncmp(read_buffer, volito2_2x3, len)) == 0)
+				|| ((strncmp(read_buffer, volito2_pp2, len)) == 0)) {
+				strName = moText("volito2");
+			}
+			else if (((strncmp(read_buffer, cintiqpartner, len)) == 0)) {
+				strName = moText("cintiqpartner");
+			}
+			else if (((strncmp(read_buffer, cintiq_pl400, len)) == 0)
+				|| ((strncmp(read_buffer, cintiq_pl500, len)) == 0)
+				|| ((strncmp(read_buffer, cintiq_pl600, len)) == 0)
+				|| ((strncmp(read_buffer, cintiq_pl600sx, len)) == 0)
+				|| ((strncmp(read_buffer, cintiq_pl550, len)) == 0)
+				|| ((strncmp(read_buffer, cintiq_pl800, len)) == 0)
+				|| ((strncmp(read_buffer, cintiq_pl700, len)) == 0)
+                || ((strncmp(read_buffer, cintiq_pl510, len)) == 0)
+				|| ((strncmp(read_buffer, cintiq_pl710, len)) == 0)
+				|| ((strncmp(read_buffer, cintiq_pl720, len)) == 0)
+				|| ((strncmp(read_buffer, cintiq_dtf521, len)) == 0))	{
+				strName = moText("cintiq");
+			}
+			else if (((strncmp(read_buffer, cintiq_21ux, len)) == 0)
+			  || ((strncmp(read_buffer, cintiq_20wsx, len)) == 0)
+			  || ((strncmp(read_buffer, cintiq_12wx, len)) == 0)) {
+				strName = moText("cintiqV5");
+            }
+			else if (((strncmp(read_buffer, i1_4x5, len)) == 0)
+			  || ((strncmp(read_buffer, i1_6x8, len)) == 0)
+			  || ((strncmp(read_buffer, i1_9x12, len)) == 0)
+              || ((strncmp(read_buffer, i1_12x12, len)) == 0)
+			  || ((strncmp(read_buffer, i1_12x18, len)) == 0)) {
+				strName = moText("intuos1");
+			}
+			else if (((strncmp(read_buffer, i2_4x5, len)) == 0)
+			  || ((strncmp(read_buffer, i2_6x8, len)) == 0)
+			  || ((strncmp(read_buffer, i2_9x12, len)) == 0)
+              || ((strncmp(read_buffer, i2_12x12, len)) == 0)
+			  || ((strncmp(read_buffer, i2_12x18, len)) == 0)
+			  || ((strncmp(read_buffer, i2_6x8b, len)) == 0)) {
+				strName = moText("intuos2");
+			}
+			else if (((strncmp(read_buffer, i3_6x8, len)) == 0)
+				|| ((strncmp(read_buffer, i3_9x12, len)) == 0)
+				|| ((strncmp(read_buffer, i3_12x12, len)) == 0)
+				|| ((strncmp(read_buffer, i3_12x19, len)) == 0)
+				|| ((strncmp(read_buffer, i3_6x11, len)) == 0)
+				|| ((strncmp(read_buffer, i3s_4x5, len)) == 0)
+				|| ((strncmp(read_buffer, i3s_4x6, len)) == 0))	{
+				strName = moText("intuos3");
+			}
+			else if (((strncmp(read_buffer, ppartner, len)) == 0)) {
+				strName = moText("penpartner");
+			}
+			else if (((strncmp(read_buffer, g1, len)) == 0)) {
+				strName = moText("graphire1");
+			}
+			else if (((strncmp(read_buffer, g2_4x5, len)) == 0)
+				|| ((strncmp(read_buffer, g2_5x7, len)) == 0)) {
+				strName = moText("graphire2");
+			}
+			else if (((strncmp(read_buffer, g3_4x5, len)) == 0)
+				|| ((strncmp(read_buffer, g3_6x8, len)) == 0)) {
+				strName = moText("graphire3");
+			}
+			else if (((strncmp(read_buffer, g4_4x5, len)) == 0)
+				|| ((strncmp(read_buffer, g4_6x8, len)) == 0)
+				|| ((strncmp(read_buffer, g4b_6x8, len)) == 0)) {
+				strName = moText("graphire4");
+			}
+			else if (((strncmp(read_buffer, bamboo, len)) == 0)
+				|| ((strncmp(read_buffer, bamboo1, len)) == 0)) {
+				strName = moText("bamboo");
+			}
+			else if (((strncmp(read_buffer, bamboofun_4x5, len)) == 0)
+				|| ((strncmp(read_buffer, bamboofun_6x8, len)) == 0)) {
+				strName = moText("bamboofun");
+			}
+			else strName = "unrecognized_tablet_model";
+		}
+	}
+	else strName = "unrecognized_tablet_model";
+
+	#endif
+
 	return strName;
 }
 
