@@ -580,17 +580,7 @@ Display* moTablet::InitTablet(MO_HANDLE hWnd) {
 
     t_hScreen = DefaultScreen(display);
 
-    //get_device_info()
-    int nr_devices;
-    xdevice_list = XListInputDevices(display, &nr_devices);
-
-
-
-    for (int number = 0; number < nr_devices; number++)
-        printf("WACOM DEVICE: %s\n", xdevice_list[number].name);
-
-
-
+    GetDeviceInfo(display);
 
     return display;
 }
@@ -606,124 +596,82 @@ bool moTablet::IsTabletInstalled(MO_HANDLE hWnd) {
 
 }
 
-
-
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- Find all extension-devices containing the strings 'pad'/'stylus'. If the
- user has specified which pad/stylus(es) to use on the command line, we
- ignore all others:
+ Find all extension-devices containing the strings 'eraser'/'stylus'.
  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-
-/*
-void moTabletListener::get_device_info()
+void moTablet::GetDeviceInfo(Display* display)
 {
+	int i;
+	int len;
+	int found;
+	int nr_devices;
 
+	char read_buffer[MAXBUFFER];
+	char write_buffer[MAXBUFFER];
 
-
-	const char* user_dummy = "not_specified";
-	if ((user_pad) || (user_stylus1)) {
-		if (user_pad) {
-			pad_string = user_pad;
-		} else {
-			pad_string = user_dummy;
-		}
-		if (user_stylus1) {
-			stylus_string = user_stylus1;
-		} else {
-			stylus_string = user_dummy;
-		}
-	}
-
-
-	xdevice_list = XListInputDevices(display, &nr_devices);
+	t_XDeviceList = XListInputDevices(display, &nr_devices);
 
 	for(i = 0; i < nr_devices; i++) {
-		if (xdevice_list[i].use == IsXExtensionDevice) {
-			len = strlen(xdevice_list[i].name);
-			snprintf(read_buffer, MAXBUFFER, "%s", xdevice_list[i]
-									.name);
-			if (check_name(read_buffer, write_buffer, len)) {
+		if (t_XDeviceList[i].use == IsXExtensionDevice) {
+			len = strlen(t_XDeviceList[i].name);
+			snprintf(read_buffer, MAXBUFFER, "%s", t_XDeviceList[i].name);
+			if (CheckDeviceName(read_buffer, write_buffer, len)) {
 				found = 0;
-				if (user_pad) {
-					if (strcmp(read_buffer, pad_string)
-									== 0) {
-						found = 1;
-					}
-				} else if (strstr(write_buffer, pad_string)) {
+
+
+				if (strstr(write_buffer, "stylus")) {
 					found = 1;
 				}
-				if ((strstr(write_buffer, pad_string))
-								&& (found)) {
-					follow_pad(xdevice_list, i);
+				if ((strstr(write_buffer, "stylus")) && (found)) {
+					FollowStylus(display, i);
 				}
-				if (user_stylus1) {
-					if (strcmp(read_buffer, stylus_string)
-									== 0) {
-						found = 1;
-					}
-				} else if (strstr(write_buffer,
-							stylus_string)) {
+
+
+/*
+				if (strstr(write_buffer, "eraser")) {
 					found = 1;
 				}
-				if ((strstr(write_buffer, stylus_string))
-								&& (found)) {
-					follow_stylus(xdevice_list, i);
-					if (user_stylus2) {
-						stylus_string = user_stylus2;
-					}
+				if ((strstr(write_buffer, "eraser")) && (found)) {
+					FollowEraser(xdevice_list, i);
 				}
+*/
+
 			}
 		}
 	}
 
 }
-*/
-
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  Open a stylus-device and start collecting data:
  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-/*
-static void follow_stylus(XDeviceInfo* xdevice_list, int number)
+void moTablet::FollowStylus(Display* display, int number)
 {
 	int i;
-	int model;
 
 	XValuatorInfoPtr valuator;
 	XAnyClassPtr anyclass;
 
-	if ((tmp_device = XOpenDevice(display, xdevice_list[number].id))) {
-		if (register_events(stylus_string)) {
-			model = identify_device(xdevice_list[number].name);
-			stylus_num = count_stylus(model);
-			if ((pad_num < model * MAXPAD + MAXPAD)
-			&& (stylus_num < MAXSTYLUS)) {
-				stylus_xdevice[stylus_num][pad_num]= tmp_device;
-				stylus_id[stylus_num][pad_num] =
-							&tmp_device->device_id;
-				stylus_name[stylus_num][pad_num] =
-						xdevice_list[number].name;
-				anyclass = (XAnyClassPtr)
-					(xdevice_list[number].inputclassinfo);
-				for (i = 0; i < xdevice_list[number]
-							.num_classes; i++) {
-					if (anyclass->class == ValuatorClass) {
-						valuator =
-						(XValuatorInfoPtr)anyclass;
-						stylus_mode[stylus_num][pad_num]
-							= &valuator->mode;
+	if ((tmp_device = XOpenDevice(display, t_XDeviceList[number].id))) {
+		if (RegisterEvents(display, "stylus")) {
+
+				stylus_xdevice = tmp_device;
+				stylus_id = &tmp_device->device_id;
+				stylus_name = t_XDeviceList[number].name;
+
+				anyclass = (XAnyClassPtr)(t_XDeviceList[number].inputclassinfo);
+				for (i = 0; i < t_XDeviceList[number].num_classes; i++) {
+					if (anyclass->c_class == ValuatorClass) {
+						valuator = (XValuatorInfoPtr)anyclass;
+						stylus_mode = &valuator->mode;
 					}
-					anyclass = (XAnyClassPtr)
-					((char*)anyclass + anyclass->length);
+					anyclass = (XAnyClassPtr)((char*)anyclass + anyclass->length);
 				}
-			} else {
-				XFree(tmp_device);
-			}
+
 		}
 	}
 
 }
-*/
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  Start looking for supported event types. The scope should be the root window
@@ -732,8 +680,7 @@ static void follow_stylus(XDeviceInfo* xdevice_list, int number)
  styli we ask about button press and proximity in. Having found the info
  we ask the X server to keep us continuously notified about these events:
  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-/*
-static int register_events(const char* name)
+int moTablet::RegisterEvents(Display* display, const char* name)
 {
 	int i;
 	int count = 0;
@@ -741,49 +688,9 @@ static int register_events(const char* name)
 	XInputClassInfo* ip;
 	Window root_win;
 
-	root_win = RootWindow(display, screen);
+	root_win = RootWindow(display, t_hScreen);
 
-	if (name == pad_string) {
-		XEventClass event_list[5];
-		if (tmp_device->num_classes > 0) {
-			for (ip = tmp_device->classes,
-				i = 0; i < tmp_device->num_classes; ip++, i++) {
-				switch (ip->input_class) {
-
-				case ButtonClass:
-				DeviceButtonPress(tmp_device,
-					button_press_type, event_list[count]);
-				count++;
-				DeviceButtonRelease(tmp_device,
-					button_release_type, event_list[count]);
-				count++;
-				break;
-
-				case ValuatorClass:
-				DeviceMotionNotify(tmp_device,
-					motion_type, event_list[count]);
-				count++;
-				ProximityIn(tmp_device,
-					proximity_in_type, event_list[count]);
-				count++;
-				ProximityOut(tmp_device,
-					proximity_out_type, event_list[count]);
-				count++;
-				break;
-
-				default:
-				break;
-				}
-			}
-		}
-		if (XSelectExtensionEvent(display, root_win,
-					event_list, count)) {
-			return 0;
-		}
-		return count;
-	}
-
-	if (name == stylus_string) {
+	if (name == "stylus") {
 		XEventClass event_list[2];
 		if (tmp_device->num_classes > 0) {
 			for (ip = tmp_device->classes,
@@ -791,12 +698,14 @@ static int register_events(const char* name)
 				switch (ip->input_class) {
 
 				case ButtonClass:
+				printf("Registering device button press event LOCO\n");
 				DeviceButtonPress(tmp_device,
 					button_press_type, event_list[count]);
 				count++;
 				break;
 
 				case ValuatorClass:
+				printf("Registering proximity in event LOCO\n");
 				ProximityIn(tmp_device,
 					proximity_in_type, event_list[count]);
 				count++;
@@ -815,8 +724,29 @@ static int register_events(const char* name)
 	}
 	return 0;
 }
-*/
 
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ First processing of an extension-device's name-string:
+ +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+int moTablet::CheckDeviceName(char* read_buffer, char* write_buffer, int len)
+{
+	int i;
+
+	if (len >= MAXBUFFER) {
+		len = MAXBUFFER - 1;
+	}
+
+	for (i = 0; i < len; i++) {
+		write_buffer[i] = tolower(read_buffer[i]);
+	}
+	write_buffer[i] = '\0';
+
+	if (strstr(write_buffer, "stylus") !=NULL) {
+		return 1;
+	}
+	return 0;
+
+}
 
 #endif
 

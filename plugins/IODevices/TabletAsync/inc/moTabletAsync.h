@@ -146,7 +146,6 @@
     #include <X11/extensions/XInput.h>
     #include <X11/extensions/XTest.h>
 
-
     #define NON_VALID -1
     #define MAXBUFFER 180
 
@@ -535,13 +534,31 @@ private:
 	PACKET* m_lpPkts;           // packet buffer
     #else
 
-    XDeviceInfo*    xdevice_list; // The large structure emanating from XListInputDevices.
+    XDeviceInfo*    t_XDeviceList; // The large structure emanating from XListInputDevices.
 
     Display* t_hTablet;
     int      t_hScreen;
 
+    XDevice* tmp_device;
+    XDevice* stylus_xdevice;
+    XID* stylus_id;
+    const char* stylus_name;
+    unsigned char* stylus_mode;
+
+    int button_press_type;
+    int button_release_type;
+    int motion_type;
+    int proximity_in_type;
+    int proximity_out_type;
+
+
     Display* InitTablet(MO_HANDLE hWnd);
 	bool IsTabletInstalled(MO_HANDLE hWnd);
+
+    void GetDeviceInfo(Display* display);
+    void FollowStylus(Display* display, int number);
+    int RegisterEvents(Display* display, const char* name);
+    int CheckDeviceName(char* read_buffer, char* write_buffer, int len);
     #endif
 
 
