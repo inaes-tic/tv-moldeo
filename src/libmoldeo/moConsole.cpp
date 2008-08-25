@@ -59,7 +59,8 @@ void moConsole::InitResources( moResourceManager *pResourceManager,
 						MOint p_render_to_texture_mode,
 						MOint p_screen_width, MOint p_screen_height,
 						MOint p_render_width, MOint p_render_height,
-                        MO_HANDLE p_OpWindowHandle) {
+                        MO_HANDLE p_OpWindowHandle,
+                        MO_DISPLAY p_Display) {
 
 	if (pResourceManager==NULL) {
 		SetResourceManager( new moResourceManager());
@@ -74,7 +75,8 @@ void moConsole::InitResources( moResourceManager *pResourceManager,
 					p_render_to_texture_mode,
 					p_screen_width, p_screen_height,
 					p_render_width, p_render_height,
-					p_OpWindowHandle);
+					p_OpWindowHandle,
+					p_Display);
 	}
 }
 
@@ -96,7 +98,8 @@ MOboolean moConsole::Init( moText p_datapath,
 					  MOint p_render_to_texture_mode,
 					  MOint p_screen_width, MOint p_screen_height,
 					  MOint p_render_width, MOint p_render_height,
-                      MO_HANDLE p_OpWindowHandle)
+                      MO_HANDLE p_OpWindowHandle,
+                      MO_DISPLAY p_Display)
 {
 
 	moText text;
@@ -155,7 +158,8 @@ MOboolean moConsole::Init( moText p_datapath,
 					p_render_to_texture_mode,
 					p_screen_width, p_screen_height,
 					p_render_width, p_render_height,
-					p_OpWindowHandle);
+					p_OpWindowHandle,
+					p_Display);
 	LoadResources();
 	LoadIODevices();
 	LoadPreEffects();

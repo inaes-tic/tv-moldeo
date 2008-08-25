@@ -64,6 +64,7 @@
     #define NOGDI
     #define MO_GSTREAMER
     #define MO_HANDLE HWND
+    #define MO_DISPLAY void*
   #endif
 #endif
 
@@ -139,7 +140,10 @@ using namespace std;
 /*LINUX*/
 #ifdef MO_LINUX
 
-    #define MO_HANDLE void*
+    #include <X11/X.h>
+
+    #define MO_HANDLE Window
+    #define MO_DISPLAY Display*
 
 	#include <SDL/SDL.h>
 	#include <SDL/SDL_thread.h>
@@ -181,6 +185,7 @@ using namespace std;
   #ifdef _MSC_VER
 
     #define MO_HANDLE HWND
+    #define MO_DISPLAY void*
 
     #define MO_USING_VC
     // Microsoft Visual C++ specific pragmas.  MSVC6 is version 12.00, MSVC7.0 is

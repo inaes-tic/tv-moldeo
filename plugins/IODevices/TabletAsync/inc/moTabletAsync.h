@@ -149,6 +149,33 @@
     #define NON_VALID -1
     #define MAXBUFFER 180
 
+
+	enum
+	{
+		INPUTEVENT_KEY_PRESS,
+		INPUTEVENT_KEY_RELEASE,
+		INPUTEVENT_FOCUS_IN,
+		INPUTEVENT_FOCUS_OUT,
+		INPUTEVENT_BTN_PRESS,
+		INPUTEVENT_BTN_RELEASE,
+		INPUTEVENT_PROXIMITY_IN,
+		INPUTEVENT_PROXIMITY_OUT,
+		INPUTEVENT_MOTION_NOTIFY,
+		INPUTEVENT_DEVICE_STATE_NOTIFY,
+		INPUTEVENT_DEVICE_MAPPING_NOTIFY,
+		INPUTEVENT_CHANGE_DEVICE_NOTIFY,
+		INPUTEVENT_DEVICE_POINTER_MOTION_HINT,
+		INPUTEVENT_DEVICE_BUTTON_MOTION,
+		INPUTEVENT_DEVICE_BUTTON1_MOTION,
+		INPUTEVENT_DEVICE_BUTTON2_MOTION,
+		INPUTEVENT_DEVICE_BUTTON3_MOTION,
+		INPUTEVENT_DEVICE_BUTTON4_MOTION,
+		INPUTEVENT_DEVICE_BUTTON5_MOTION,
+
+		INPUTEVENT_MAX
+	};
+
+
 #endif
 
 #define FIX_DOUBLE(x)   ((double)(INT(x))+((double)FRAC(x)/65536))	// converts FIX32 to double
@@ -246,226 +273,11 @@ class moTabletListener : public moThread, public moAbstract {
             return Messages;
         }
 
-        #ifdef MO_WIN32
-        virtual int ThreadUserFunction() {
-
-            // Checking the queue size with
-            // int WTQueueSizeGet(hCtx), where
-            // This function returns the number of packets the context's queue can hold.
-            // Parameter	Type/Description
-            // hCtx	HCTX  Identifies the context whose queue size is being returned.
-            m_cMaxPkts = WTQueueSizeGet( m_TabletHandle );
-            MODebug2->Push( moText("Tablet queue size = ") + IntToStr( m_cMaxPkts ) );
-
-            // Creating packet buffer.
-            m_lpPkts = new PACKET[m_cMaxPkts];
-
-            UINT cPkts;
-            PACKET* pTPacket;     // the current packet
-
-            while( 1==1 ) {
-                // Polling the packets in the queue with
-                // int WTPacketsGet(hCtx, cMaxPkts, lpPkts), where
-                // Parameter	Type/Description
-                // hCtx	HCTX  Identifies the context whose packets are being returned.
-                // cMaxPkts	int  Specifies the maximum number of packets to return.
-                // lpPkts	LPVOID  Points to a buffer to receive the event packets.
-                // Return Value	The return value is the number of packets copied in the buffer.
-                cPkts = WTPacketsGet( m_TabletHandle, m_cMaxPkts, m_lpPkts);
-
-                //MODebug2->Push(moText("Tablet Listener cpackets: ") + IntToStr(cPkts) );
-                for (int i = 0; i < cPkts; i++)
-                {
-                    pTPacket = &m_lpPkts[i];
-
-                    moDataMessage message;
-
-                    moData  data;
-/*
-		HCTX			pkContext;
-		UINT			pkStatus;
-		DWORD			pkTime;
-		WTPKT			pkChanged;
-		UINT			pkSerialNumber;
-		UINT			pkCursor;
-		DWORD			pkButtons;
-		LONG			pkX;
-		LONG			pkY;
-		LONG			pkZ;
-
-		int			pkNormalPressure;
-		UINT		pkNormalPressure;
-		int			pkTangentPressure;
-		UINT		pkTangentPressure;
-		ORIENTATION		pkOrientation;
-		ROTATION		pkRotation;
-		UINT			pkFKeys;
-		TILT			pkTilt;
-*/
-/*
-                    t_pkXNew = pkt->pkX;
-                    t_pkYNew = pkt->pkY;
-                    t_pkZNew = pkt->pkZ;
-                    t_curNew = pkt->pkCursor;
-                    t_prsNew = pkt->pkNormalPressure;
-                    t_ortNew = pkt->pkOrientation;
-                    */
-
-                    data = moData( (int)pTPacket->pkX );
-                    message.Add( data );
-                    data = moData( (int)pTPacket->pkY );
-                    message.Add( data );
-                    data = moData( (int)pTPacket->pkZ );
-                    message.Add( data );
-                    data = moData( (int)pTPacket->pkCursor );
-                    message.Add( data );
-                    data = moData( (int)pTPacket->pkNormalPressure );
-                    message.Add( data );
-                    data = moData( (int)pTPacket->pkButtons );
-                    message.Add( data );
-                    /*
-                    data = moData( (int)pTPacket->pkOrientation );
-                    message.Add( data );
-                    */
-                    m_Semaphore.Lock();
-                    Messages.Add( message );
-                    m_Semaphore.Unlock();
-
-                }
-
-            }
-
-        }
-        #else
-        virtual int ThreadUserFunction() {
-            while( 1==1 ) {
-                    m_Semaphore.Lock();
-                    m_Semaphore.Unlock();
-            }
-
-
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- Endless launchpad loop as each event we've registered for comes in:
- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-/*
-void use_events()
-{
-	XEvent Event;
-	XDeviceButtonEvent* button = NULL;
-	XDeviceMotionEvent* motion = NULL;
-
-	void* record_address = NULL;
-	void* base_address = NULL;
-
-// Set the stylus PressCurve histories to a default string, and a program name:
-	snprintf(curvebuffer, CURVEMAX, "0 0 100 100");
-	snprintf(namebuffer, MAXBUFFER, "dummy");
-
-	while(1) {
-
-// The Event.type checks here are a bit excessive, but left in place to ensure
-// complete control. It is so easy to register for other events and forget...
-		if ((is_sty1 || is_sty2)
-		&& (Event.type == button_press_type
-		|| Event.type == proximity_in_type)) {
-			if (record_address != NULL) {
-				base_address = record_address;
-				record_address = find_focus(record_address,
-									Event);
-				if (name_change) {
-					do_stylus(base_address, record_address);
-				}
-			}
-		} else if ((button)
-			&& (Event.type == button_press_type
-			||  Event.type == button_release_type)) {
-			if (record_address != NULL) {
-				base_address = record_address;
-				record_address = find_focus(record_address,
-									Event);
-				do_button(base_address, record_address, button,
-									Event);
-			}
-
-		} else if (motion) {
-			if (record_address != NULL) {
-				base_address = record_address;
-				record_address = find_focus(record_address,
-									Event);
-				do_motion(base_address, record_address, motion,
-									Event);
-			}
-		}
-
-		is_bee = 0;
-		is_i3 = 0;
-		is_i3s = 0;
-		is_g4 = 0;
-		is_g4b = 0;
-		is_nop = 0;
-		is_pad = 0;
-		is_sty1 = 0;
-		is_sty2 = 0;
-
-		id_pad = NULL;
-		id_sty1 = NULL;
-		id_sty2 = NULL;
-
-		button = NULL;
-		motion = NULL;
-
-		XNextEvent(display, &Event);
-
-		if (Event.type == proximity_in_type
-		|| Event.type == button_press_type
-		|| Event.type == button_release_type) {
-			button = (XDeviceButtonEvent*) &Event;
-		} else if (Event.type == motion_type) {
-			motion = (XDeviceMotionEvent*) &Event;
-		}
-
-		if (button || motion) {
-			record_address = match_id(button, motion);
-		}
-	}
-
-}
-*/
-        }
+        virtual int ThreadUserFunction();
+        void Update( moOutlets* pOutlets );
+        #ifdef MO_LINUX
+        int RegisterEvents(Display* display, Window window, XDevice* device, const char* name);
         #endif
-
-
-        void Update( moOutlets* pOutlets ) {
-            //block message
-            m_Semaphore.Lock();
-
-            moOutlet* poutlet = NULL;
-
-           poutlet = pOutlets->Get(0);
-
-            if (poutlet) {
-                for( int j=0; j<Messages.Count();j++) {
-
-                    moDataMessage& message( Messages.Get(j) );
-                    //sumamos a los mensajes....
-                    poutlet->AddMessage( message );
-
-                    poutlet->Update();
-
-                }
-                if (poutlet->GetType()==MO_DATA_MESSAGES)
-                    poutlet->GetData()->SetMessages( &poutlet->GetMessages() );
-                if (poutlet->GetType()==MO_DATA_MESSAGE)
-                    poutlet->GetData()->SetMessage( &poutlet->GetMessages().Get( poutlet->GetMessages().Count() - 1 ) );
-            }
-
-            Messages.Empty();
-
-            m_Semaphore.Unlock();
-        }
-
-
-
     protected:
         moDataMessages        Messages;
         moLock                m_Semaphore;
@@ -475,9 +287,8 @@ void use_events()
         PACKET*               m_lpPkts;           // packet buffer
         #else
         Display*              m_TabletHandle;
+        int                   gnInputEvent[INPUTEVENT_MAX];
         #endif
-
-
 };
 
 
@@ -527,8 +338,8 @@ private:
 	LONG            t_pkZNew;
 
 	//	tablet specific functions
-	HCTX InitTablet(MO_HANDLE hWnd);
-	BOOL IsTabletInstalled(MO_HANDLE hWnd);
+	HCTX InitTablet(MO_HANDLE hWnd, MO_DISPLAY pDisp);
+	BOOL IsTabletInstalled();
 
 	UINT            m_cMaxPkts; // maximum number of packets in the queue.
 	PACKET* m_lpPkts;           // packet buffer
@@ -537,7 +348,6 @@ private:
     XDeviceInfo*    t_XDeviceList; // The large structure emanating from XListInputDevices.
 
     Display* t_hTablet;
-    int      t_hScreen;
 
     XDevice* tmp_device;
     XDevice* stylus_xdevice;
@@ -545,19 +355,11 @@ private:
     const char* stylus_name;
     unsigned char* stylus_mode;
 
-    int button_press_type;
-    int button_release_type;
-    int motion_type;
-    int proximity_in_type;
-    int proximity_out_type;
+    Display* InitTablet(MO_HANDLE hWnd, MO_DISPLAY pDisp);
+	bool IsTabletInstalled();
 
-
-    Display* InitTablet(MO_HANDLE hWnd);
-	bool IsTabletInstalled(MO_HANDLE hWnd);
-
-    void GetDeviceInfo(Display* display);
-    void FollowStylus(Display* display, int number);
-    int RegisterEvents(Display* display, const char* name);
+    void GetDeviceInfo(Display* display, Window window);
+    void FollowStylus(Display* display, Window window, int number);
     int CheckDeviceName(char* read_buffer, char* write_buffer, int len);
     #endif
 
