@@ -11,8 +11,8 @@
 
 #include "../../Build/vcres/resource.h"
 
-static HWND g_hwnd;
-
+static MO_HANDLE g_hwnd;
+static MO_DISPLAY g_hdisp;
 
 LRESULT CALLBACK graywinWindowProc(
   HWND hwnd,
@@ -99,12 +99,13 @@ int init_win32_window(HINSTANCE hInst, int width, int height) {
 #ifdef MO_LINUX
 
 static MO_HANDLE g_hwnd;
+static MO_DISPLAY g_hdisp;
 
 #endif
 
 int main(int argc, char *argv[])
 {
-	//SDL_Surface *screen;
+	//SDL_Surfac/home/andres/devel/moldeo/svn/trunk/0.7/data/test/tablet.cfge *screen;
 	SDL_SysWMinfo info;
 	Uint32 videoflags;
 	Uint16 screen_width, screen_height;
@@ -230,26 +231,32 @@ typedef enum {
     if (SDL_GetWMInfo(&info)) {
 
         #ifdef MO_WIN32
-        g_hwnd = info.window;;
+        g_hwnd = info.window;
+        g_hdisp = NULL;
         #else
         g_hwnd = NULL;
+        g_hdisp = NULL;
+
 
         if ( info.subsystem == SDL_SYSWM_X11 ) {
-            Window u1; int u2; unsigned int u3;
-            Display *display;
+            //Window u1; int u2; unsigned int u3;
+            Display* display;
             Window window;
 
             info.info.x11.lock_func();
             display = info.info.x11.display;
             window = info.info.x11.window;
 
+/*
             XGetGeometry(display, window, &u1, &u2, &u2,
                          (unsigned int *)width,
                          (unsigned int *)height, &u3, &u3);
-
+*/
             info.info.x11.unlock_func();
 
-            g_hwnd  = (void*)display;
+            g_hwnd = window;
+            g_hdisp = display;
+
         }
         #endif
 
@@ -261,7 +268,7 @@ typedef enum {
 		                render_to_fbo,
 		                screen_width, screen_height,
 						render_width, render_height,
-						(MO_HANDLE)g_hwnd ) ) {
+						(MO_HANDLE)g_hwnd ), (MO_DISPLAY)g_hdisp ) {
 
 		while(!MoldeoSession->Interaction()) {
 			MoldeoSession->Update();
