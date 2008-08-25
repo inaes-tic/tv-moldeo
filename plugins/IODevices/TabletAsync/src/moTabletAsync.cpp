@@ -62,6 +62,259 @@ void moTabletFactory::Destroy(moIODevice* fx) {
 }
 
 //========================
+//  moTabletListener
+//========================
+
+int moTabletListener::ThreadUserFunction() {
+        #ifdef MO_WIN32
+
+            // Checking the queue size with
+            // int WTQueueSizeGet(hCtx), where
+            // This function returns the number of packets the context's queue can hold.
+            // Parameter	Type/Description
+            // hCtx	HCTX  Identifies the context whose queue size is being returned.
+            m_cMaxPkts = WTQueueSizeGet( m_TabletHandle );
+            MODebug2->Push( moText("Tablet queue size = ") + IntToStr( m_cMaxPkts ) );
+
+            // Creating packet buffer.
+            m_lpPkts = new PACKET[m_cMaxPkts];
+
+            UINT cPkts;
+            PACKET* pTPacket;     // the current packet
+
+            while( 1==1 ) {
+                // Polling the packets in the queue with
+                // int WTPacketsGet(hCtx, cMaxPkts, lpPkts), where
+                // Parameter	Type/Description
+                // hCtx	HCTX  Identifies the context whose packets are being returned.
+                // cMaxPkts	int  Specifies the maximum number of packets to return.
+                // lpPkts	LPVOID  Points to a buffer to receive the event packets.
+                // Return Value	The return value is the number of packets copied in the buffer.
+                cPkts = WTPacketsGet( m_TabletHandle, m_cMaxPkts, m_lpPkts);
+
+                //MODebug2->Push(moText("Tablet Listener cpackets: ") + IntToStr(cPkts) );
+                for (int i = 0; i < cPkts; i++)
+                {
+                    pTPacket = &m_lpPkts[i];
+
+                    moDataMessage message;
+
+                    moData  data;
+/*
+		HCTX			pkContext;
+		UINT			pkStatus;
+		DWORD			pkTime;
+		WTPKT			pkChanged;
+		UINT			pkSerialNumber;
+		UINT			pkCursor;
+		DWORD			pkButtons;
+		LONG			pkX;
+		LONG			pkY;
+		LONG			pkZ;
+
+		int			pkNormalPressure;
+		UINT		pkNormalPressure;
+		int			pkTangentPressure;
+		UINT		pkTangentPressure;
+		ORIENTATION		pkOrientation;
+		ROTATION		pkRotation;
+		UINT			pkFKeys;
+		TILT			pkTilt;
+*/
+/*
+                    t_pkXNew = pkt->pkX;
+                    t_pkYNew = pkt->pkY;
+                    t_pkZNew = pkt->pkZ;
+                    t_curNew = pkt->pkCursor;
+                    t_prsNew = pkt->pkNormalPressure;
+                    t_ortNew = pkt->pkOrientation;
+                    */
+
+                    data = moData( (int)pTPacket->pkX );
+                    message.Add( data );
+                    data = moData( (int)pTPacket->pkY );
+                    message.Add( data );
+                    data = moData( (int)pTPacket->pkZ );
+                    message.Add( data );
+                    data = moData( (int)pTPacket->pkCursor );
+                    message.Add( data );
+                    data = moData( (int)pTPacket->pkNormalPressure );
+                    message.Add( data );
+                    data = moData( (int)pTPacket->pkButtons );
+                    message.Add( data );
+                    /*
+                    data = moData( (int)pTPacket->pkOrientation );
+                    message.Add( data );
+                    */
+                    m_Semaphore.Lock();
+                    Messages.Add( message );
+                    m_Semaphore.Unlock();
+
+                }
+
+            }
+
+
+#else
+
+/*
+            XEvent event;
+            XAnyEvent* pAny;
+
+            while (1)
+            {
+                XNextEvent(m_TabletHandle,&event);
+                pAny = (XAnyEvent*)&event;
+                //printf("event: type=%s\n",GetEventName(pAny->type));
+
+            }
+*/
+
+#endif
+}
+
+void moTabletListener::Update( moOutlets* pOutlets )
+{
+            //block message
+            m_Semaphore.Lock();
+
+            moOutlet* poutlet = NULL;
+
+           poutlet = pOutlets->Get(0);
+
+            if (poutlet) {
+                for( int j=0; j<Messages.Count();j++) {
+
+                    moDataMessage& message( Messages.Get(j) );
+                    //sumamos a los mensajes....
+                    poutlet->AddMessage( message );
+
+                    poutlet->Update();
+
+                }
+                if (poutlet->GetType()==MO_DATA_MESSAGES)
+                    poutlet->GetData()->SetMessages( &poutlet->GetMessages() );
+                if (poutlet->GetType()==MO_DATA_MESSAGE)
+                    poutlet->GetData()->SetMessage( &poutlet->GetMessages().Get( poutlet->GetMessages().Count() - 1 ) );
+            }
+
+            Messages.Empty();
+
+            m_Semaphore.Unlock();
+}
+
+#ifdef MO_LINUX
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Start looking for supported event types. The scope should is the passed window.
+ We're interested in motion events and proximity in/out for the touch strips,
+ and button press/release for the pad buttons. For the styli we ask about button
+ press and proximity in. Having found the info we ask the X server to keep us
+ continuously notified about these events:
+ +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+int moTabletListener::RegisterEvents(Display* display, Window window, XDevice* device, const char* name)
+{
+	int i;
+	int count = 0;
+
+	XInputClassInfo* ip;
+
+    printf("En RegisterEvents, LOCO\n");
+
+	if (name == "stylus") {
+
+		XEventClass event_list[32];
+		XEventClass cls;
+
+		if (device->num_classes > 0) {
+			for (ip = device->classes,
+				i = 0; i < device->num_classes; ip++, i++) {
+				switch (ip->input_class) {
+
+
+                case ButtonClass:
+				printf("WACOM TABLET: Registering device button press event.\n");
+                /* button events */
+                DeviceButtonPress(device, gnInputEvent[INPUTEVENT_BTN_PRESS], cls);
+                if (cls) event_list[count++] = cls;
+                DeviceButtonRelease(device, gnInputEvent[INPUTEVENT_BTN_RELEASE],cls);
+                if (cls) event_list[count++] = cls;
+
+                /* button motion */
+                DeviceButtonMotion(device,
+                        gnInputEvent[INPUTEVENT_DEVICE_BUTTON_MOTION],cls);
+                if (cls) event_list[count++] = cls;
+                DeviceButton1Motion(device,
+                        gnInputEvent[INPUTEVENT_DEVICE_BUTTON1_MOTION],cls);
+                if (cls) event_list[count++] = cls;
+                DeviceButton2Motion(device,
+                        gnInputEvent[INPUTEVENT_DEVICE_BUTTON2_MOTION],cls);
+                if (cls) event_list[count++] = cls;
+                DeviceButton3Motion(device,
+                        gnInputEvent[INPUTEVENT_DEVICE_BUTTON3_MOTION],cls);
+                if (cls) event_list[count++] = cls;
+                DeviceButton4Motion(device,
+                        gnInputEvent[INPUTEVENT_DEVICE_BUTTON4_MOTION],cls);
+                if (cls) event_list[count++] = cls;
+                DeviceButton5Motion(device,
+                        gnInputEvent[INPUTEVENT_DEVICE_BUTTON5_MOTION],cls);
+                if (cls) event_list[count++] = cls;
+
+                /* key events */
+                DeviceKeyPress(device, gnInputEvent[INPUTEVENT_KEY_PRESS], cls);
+                if (cls) event_list[count++] = cls;
+                DeviceKeyRelease(device, gnInputEvent[INPUTEVENT_KEY_RELEASE], cls);
+                if (cls) event_list[count++] = cls;
+
+                /* focus events */
+                DeviceFocusIn(device,gnInputEvent[INPUTEVENT_FOCUS_IN],cls);
+                if (cls) event_list[count++] = cls;
+                DeviceFocusOut(device,gnInputEvent[INPUTEVENT_FOCUS_OUT],cls);
+                if (cls) event_list[count++] = cls;
+				break;
+
+				case ValuatorClass:
+				printf("WACOM TABLET: Registering proximity in event.\n");
+                /* proximity events */
+                ProximityIn(device,gnInputEvent[INPUTEVENT_PROXIMITY_IN],cls);
+                if (cls) event_list[count++] = cls;
+                ProximityOut(device,gnInputEvent[INPUTEVENT_PROXIMITY_OUT],cls);
+                if (cls) event_list[count++] = cls;
+
+                /* motion events */
+                DeviceMotionNotify(device,gnInputEvent[INPUTEVENT_MOTION_NOTIFY],cls);
+                if (cls) event_list[count++] = cls;
+
+                /* device state */
+                DeviceStateNotify(device,gnInputEvent[INPUTEVENT_DEVICE_STATE_NOTIFY],cls);
+                if (cls) event_list[count++] = cls;
+                DeviceMappingNotify(device,
+                        gnInputEvent[INPUTEVENT_DEVICE_MAPPING_NOTIFY],cls);
+                if (cls) event_list[count++] = cls;
+                ChangeDeviceNotify(device,gnInputEvent[INPUTEVENT_CHANGE_DEVICE_NOTIFY],cls);
+                if (cls) event_list[count++] = cls;
+
+                /* this cuts the motion data down - not sure if this is useful */
+                DevicePointerMotionHint(device,
+                        gnInputEvent[INPUTEVENT_DEVICE_POINTER_MOTION_HINT],cls);
+                if (cls) event_list[count++] = cls;
+				break;
+
+				default:
+				break;
+				}
+			}
+		}
+		if (XSelectExtensionEvent(display, window,
+					event_list, count)) {
+			return 0;
+		}
+		return count;
+	}
+	return 0;
+}
+#endif
+
+//========================
 //  Tablet
 //========================
 
@@ -161,11 +414,13 @@ MOboolean moTablet::Init()
 	#endif
 
     MO_HANDLE hWnd = m_pResourceManager->GetGuiMan()->GetOpWindowHandle();
+    MO_DISPLAY pDisp = m_pResourceManager->GetGuiMan()->GetDisplay();
     if (hWnd != NULL) {
-        if (IsTabletInstalled(hWnd))
+        if (IsTabletInstalled())
         {
             // Getting tablet context.
-            t_hTablet = InitTablet(hWnd);
+
+            t_hTablet = InitTablet(hWnd, pDisp);
             MODebug2->Push( moText("Tablet installed with name = ") + GetTabletName() );
             m_Listener.SetTablet( t_hTablet );
 
@@ -512,7 +767,7 @@ void moTablet::Update(moEventList *Events)
 }
 
 #ifdef MO_WIN32
-HCTX moTablet::InitTablet(HWND hWnd)
+HCTX moTablet::InitTablet(MO_HANDLE hWnd, MO_DISPLAY pDisp)
 {
 	//TABLET: get current settings as a starting point for this context of the tablet.
 	//WTInfo(WTI_DEFCONTEXT, 0, &lcMine);	// default settings may be different to current settings
@@ -527,7 +782,7 @@ HCTX moTablet::InitTablet(HWND hWnd)
 	return WTOpen(hWnd, &lcMine, TRUE);
 }
 
-BOOL moTablet::IsTabletInstalled(MO_HANDLE hWnd)
+BOOL moTablet::IsTabletInstalled()
 {
 	struct	tagAXIS TpOri[3];	// The capabilities of tilt (required)
 	double	dblTpvar;				// A temp for converting fix to double (for example)
@@ -574,18 +829,12 @@ BOOL moTablet::IsTabletInstalled(MO_HANDLE hWnd)
 }
 #else
 
-Display* moTablet::InitTablet(MO_HANDLE hWnd) {
-
-    Display* display = (Display*)hWnd;
-
-    t_hScreen = DefaultScreen(display);
-
-    GetDeviceInfo(display);
-
-    return display;
+Display* moTablet::InitTablet(MO_HANDLE hWnd, MO_DISPLAY pDisp) {
+    GetDeviceInfo(pDisp, hWnd);
+    return pDisp;
 }
 
-bool moTablet::IsTabletInstalled(MO_HANDLE hWnd) {
+bool moTablet::IsTabletInstalled() {
 
     struct stat sts;
     if ((stat ("/dev/input/wacom", &sts)) == -1 && errno == ENOENT)
@@ -599,7 +848,7 @@ bool moTablet::IsTabletInstalled(MO_HANDLE hWnd) {
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  Find all extension-devices containing the strings 'eraser'/'stylus'.
  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-void moTablet::GetDeviceInfo(Display* display)
+void moTablet::GetDeviceInfo(Display* display, Window window)
 {
 	int i;
 	int len;
@@ -612,7 +861,8 @@ void moTablet::GetDeviceInfo(Display* display)
 	t_XDeviceList = XListInputDevices(display, &nr_devices);
 
 	for(i = 0; i < nr_devices; i++) {
-		if (t_XDeviceList[i].use == IsXExtensionDevice) {
+		if (t_XDeviceList[i].use == IsXExtensionDevice ||
+            t_XDeviceList[i].use == IsXExtensionPointer) {
 			len = strlen(t_XDeviceList[i].name);
 			snprintf(read_buffer, MAXBUFFER, "%s", t_XDeviceList[i].name);
 			if (CheckDeviceName(read_buffer, write_buffer, len)) {
@@ -623,7 +873,7 @@ void moTablet::GetDeviceInfo(Display* display)
 					found = 1;
 				}
 				if ((strstr(write_buffer, "stylus")) && (found)) {
-					FollowStylus(display, i);
+					FollowStylus(display, window, i);
 				}
 
 
@@ -645,7 +895,7 @@ void moTablet::GetDeviceInfo(Display* display)
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  Open a stylus-device and start collecting data:
  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-void moTablet::FollowStylus(Display* display, int number)
+void moTablet::FollowStylus(Display* display, Window window, int number)
 {
 	int i;
 
@@ -653,7 +903,7 @@ void moTablet::FollowStylus(Display* display, int number)
 	XAnyClassPtr anyclass;
 
 	if ((tmp_device = XOpenDevice(display, t_XDeviceList[number].id))) {
-		if (RegisterEvents(display, "stylus")) {
+		if (m_Listener.RegisterEvents(display, window, tmp_device, "stylus")) {
 
 				stylus_xdevice = tmp_device;
 				stylus_id = &tmp_device->device_id;
@@ -671,58 +921,6 @@ void moTablet::FollowStylus(Display* display, int number)
 		}
 	}
 
-}
-
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- Start looking for supported event types. The scope should be the root window
- (ie everywhere). We're interested in motion events and proximity in/out for
- the touch strips, and button press/release for the pad buttons. For the
- styli we ask about button press and proximity in. Having found the info
- we ask the X server to keep us continuously notified about these events:
- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-int moTablet::RegisterEvents(Display* display, const char* name)
-{
-	int i;
-	int count = 0;
-
-	XInputClassInfo* ip;
-	Window root_win;
-
-	root_win = RootWindow(display, t_hScreen);
-
-	if (name == "stylus") {
-		XEventClass event_list[2];
-		if (tmp_device->num_classes > 0) {
-			for (ip = tmp_device->classes,
-				i = 0; i < tmp_device->num_classes; ip++, i++) {
-				switch (ip->input_class) {
-
-				case ButtonClass:
-				printf("Registering device button press event LOCO\n");
-				DeviceButtonPress(tmp_device,
-					button_press_type, event_list[count]);
-				count++;
-				break;
-
-				case ValuatorClass:
-				printf("Registering proximity in event LOCO\n");
-				ProximityIn(tmp_device,
-					proximity_in_type, event_list[count]);
-				count++;
-				break;
-
-				default:
-				break;
-				}
-			}
-		}
-		if (XSelectExtensionEvent(display, root_win,
-					event_list, count)) {
-			return 0;
-		}
-		return count;
-	}
-	return 0;
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

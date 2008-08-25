@@ -211,7 +211,8 @@ class LIBMOLDEO_API moResourceManager : public moAbstract {
 									MOint p_screen_height,
 									MOint p_render_width,
 									MOint p_render_height,
-									MO_HANDLE p_OpWindowHandle = 0 );
+									MO_HANDLE p_OpWindowHandle = 0,
+									MO_DISPLAY p_Display  = NULL );
         /**
          * Finalizador
          */

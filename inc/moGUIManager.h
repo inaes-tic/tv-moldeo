@@ -137,7 +137,7 @@ class LIBMOLDEO_API moGUIManager : public moResource {
 		moGUIManager();
 		virtual ~moGUIManager();
 		virtual MOboolean Init();
-		virtual MOboolean Init( MO_HANDLE p_OpHandle );
+		virtual MOboolean Init( MO_HANDLE p_OpHandle, MO_DISPLAY p_Display );
 		virtual MOboolean Finish();
 
 
@@ -154,8 +154,10 @@ class LIBMOLDEO_API moGUIManager : public moResource {
 		//void	DisplayText( MOfloat x, MOfloat y, moText ptext );
 		//void	DisplayText( MOfloat x, MOfloat y, moText ptext );
 
+        void    SetDisplay( MO_DISPLAY p_Display );
         void    SetOpWindowHandle( MO_HANDLE p_OpHandle );
         void    SetVisWindowHandle( MO_HANDLE p_VisHandle );
+        MO_DISPLAY GetDisplay();
         MO_HANDLE GetOpWindowHandle();
         MO_HANDLE GetVisWindowHandle();
 /*
@@ -166,6 +168,7 @@ class LIBMOLDEO_API moGUIManager : public moResource {
 	/*
 		HWND hOpWnd;
 		HWND hVisWnd;*/
+		MO_DISPLAY  m_Display;
 		MO_HANDLE   m_OpHandle;
 		MO_HANDLE   m_VisHandle;
 

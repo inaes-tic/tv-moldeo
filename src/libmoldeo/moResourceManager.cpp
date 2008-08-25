@@ -211,7 +211,8 @@ moResourceManager::Init( const moText& p_datapath,
 						MOint p_screen_height,
 						MOint p_render_width,
 						MOint p_render_height,
-						MO_HANDLE p_OpWindowHandle) {
+						MO_HANDLE p_OpWindowHandle,
+						MO_DISPLAY p_Display) {
 
 	if ( GetResourceByType( MO_RESOURCETYPE_DEBUG ) == NULL )
 		AddResource( new moDebugManager() );
@@ -335,7 +336,7 @@ moResourceManager::Init( const moText& p_datapath,
 	if (MOFontMan) MOFontMan->Init();
 
 	MOGuiMan = (moGUIManager*)  GetResourceByType( MO_RESOURCETYPE_GUI );
-	if (MOGuiMan) MOGuiMan->Init( p_OpWindowHandle );
+	if (MOGuiMan) MOGuiMan->Init( p_OpWindowHandle, p_Display );
 
 	MOSoundMan = (moSoundManager*)  GetResourceByType( MO_RESOURCETYPE_SOUND );
 	if (MOSoundMan) MOSoundMan->Init();

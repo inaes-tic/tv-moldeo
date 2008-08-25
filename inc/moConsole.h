@@ -153,7 +153,8 @@ class LIBMOLDEO_API moConsole : public moMoldeoObject {
 		               MOint p_render_to_texture_mode = MO_RENDER_TO_TEXTURE_FBSCREEN,
 					   MOint p_screen_width = MO_DEF_SCREEN_WIDTH, MOint p_screen_height = MO_DEF_SCREEN_HEIGHT,
 					   MOint p_render_width = MO_DEF_RENDER_WIDTH, MOint p_render_height = MO_DEF_RENDER_HEIGHT,
-					   MO_HANDLE p_OpWindowHandle  = 0 );
+					   MO_HANDLE p_OpWindowHandle  = 0,
+					   MO_DISPLAY p_Display  = NULL );
 
 
         /// Procesa los eventos de los dispositivos de entrada/salida
@@ -208,7 +209,8 @@ class LIBMOLDEO_API moConsole : public moMoldeoObject {
 		               MOint p_render_to_texture_mode = MO_RENDER_TO_TEXTURE_FBSCREEN,
 					   MOint p_screen_width = MO_DEF_SCREEN_WIDTH, MOint p_screen_height = MO_DEF_SCREEN_HEIGHT,
 					   MOint p_render_width = MO_DEF_RENDER_WIDTH, MOint p_render_height = MO_DEF_RENDER_HEIGHT,
-                       MO_HANDLE p_OpWindowHandle = 0);
+                       MO_HANDLE p_OpWindowHandle = 0,
+                       MO_DISPLAY p_Display  = NULL);
 
 
         /// asignación del administrador de dispositivos
