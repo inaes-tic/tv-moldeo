@@ -113,6 +113,12 @@ moGLCanvas::GetHandle() {
     return (MO_HANDLE)wxWindow::GetHandle();
 }
 
+
+MO_DISPLAY
+moGLCanvas::GetDisplay() {
+    return (MO_DISPLAY)(Display*)wxGetDisplay(); //default display;
+}
+
 void moGLCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
     /* must always be here */

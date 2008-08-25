@@ -80,6 +80,7 @@ public:
 	moDirectorStatus ConsoleLoop();
 	void ViewSwapBuffers();
 	MO_HANDLE GetHandle();
+	MO_DISPLAY GetDisplay();
 	moDirectorStatus SetView( int x, int y, int w, int h );
 
 	moDirectorStatus Play();

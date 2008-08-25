@@ -506,6 +506,15 @@ moDirectorFrame::GetHandle() {
 }
 
 
+
+MO_DISPLAY
+moDirectorFrame::GetDisplay() {
+    if (m_pGLCanvas)
+        return m_pGLCanvas->GetDisplay();
+    return NULL;
+
+}
+
 moDirectorStatus
 moDirectorFrame::ProjectUpdated( moProjectDescriptor p_ProjectDescriptor ) {
 

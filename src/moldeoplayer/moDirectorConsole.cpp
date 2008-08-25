@@ -131,7 +131,8 @@ moDirectorConsole::OpenProject( moProjectDescriptor p_projectdescriptor )  {//lo
               0,400,300,400,300,
               /*MO_DEF_SCREEN_WIDTH, MO_DEF_SCREEN_HEIGHT,
               MO_DEF_RENDER_WIDTH, MO_DEF_RENDER_HEIGHT,*/
-              GetHandle())) {
+              GetHandle(),
+              GetDisplay())) {
         m_ProjectDescriptor = this->GetProject();
 
         //ahora actualizarmos el GUI
@@ -272,6 +273,8 @@ moMobDescriptors moDirectorConsole::GetMobDescriptors() {
 
     moResourceDescriptor moDirectorConsole::GetResourceDescriptor( moResourceDescriptor p_ResourceDescriptor ) {
 
+        MOint result;
+
         if (!m_pResourceManager) {
             LogError(moText("Resource manager unavailable..."));
             return moResourceDescriptor();
@@ -282,7 +285,7 @@ moMobDescriptors moDirectorConsole::GetMobDescriptors() {
 
                 //moTextureDescriptor TexDescriptor( );
 
-                MOint result = m_pResourceManager->GetTextureMan()->GetTextureMOId( p_ResourceDescriptor.GetResourceDefinition().GetName(), false );
+                result = m_pResourceManager->GetTextureMan()->GetTextureMOId( p_ResourceDescriptor.GetResourceDefinition().GetName(), false );
 
                 if (result!=-1) {
                     moTexture* tex = m_pResourceManager->GetTextureMan()->GetTexture( result );
@@ -906,6 +909,7 @@ moDirectorConsole::SetParameter( moParameterDescriptor  p_ParameterDesc ) {
         //aqui hay q tratar correctamente los errores...
 
         int idx;
+        moFont* pFont;
         //fija el valor dentro del config y chequea de actualizar el MOB
         moConfig* pConfig;
         moMoldeoObject* pObject;
@@ -985,7 +989,7 @@ moDirectorConsole::SetParameter( moParameterDescriptor  p_ParameterDesc ) {
                         break;
 
                     case MO_PARAM_FONT:
-                        moFont* pFont = m_pResourceManager->GetFontMan()->AddFont( Value.GetSubValue(0).Text() );
+                        pFont = m_pResourceManager->GetFontMan()->AddFont( Value.GetSubValue(0).Text() );
                         if (pFont)
                             Value.GetSubValue(0).SetFont( pFont );
                         break;

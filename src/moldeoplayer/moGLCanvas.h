@@ -89,6 +89,7 @@ public:
 
     void ViewSwapBuffers();
     MO_HANDLE   GetHandle();
+    MO_DISPLAY  GetDisplay();
 
 private:
 
