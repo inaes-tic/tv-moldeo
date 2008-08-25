@@ -447,7 +447,7 @@ class moTextureDescriptor : public moResourceDescriptor {
 class mo3dModelDescriptor : public moResourceDescriptor {
 
     public:
-        mo3dModelDescriptor( moText p_Name, moText p_TexFileName="", MOint p_ModelSize=0, mo3dModelType p_ModelType=0, moText p_ModelExtensionName="") {
+        mo3dModelDescriptor( moText p_Name, moText p_TexFileName="", MOint p_ModelSize=0, mo3dModelType p_ModelType=MO_MODEL_X3D, moText p_ModelExtensionName="") {
             m_ResourceDefinition = moResourceDefinition( MO_RESOURCETYPE_MODEL,
                               p_Name,
                               p_TexFileName,
@@ -681,7 +681,7 @@ moDeclareDynamicArray( moValueDescriptor, moValueDescriptors )
 
 #define MO_ACTIONHANDLER_VOID(F)  if (m_pNextActionHandler) m_pNextActionHandler->F;
 #define MO_ACTIONHANDLER_HANDLE(F)  m_pNextActionHandler == NULL ? NULL : m_pNextActionHandler->F;
-
+#define MO_ACTIONHANDLER_DISPLAY(F)  m_pNextActionHandler == NULL ? NULL : m_pNextActionHandler->F;
 
 
 class moIDirectorActions {
@@ -713,6 +713,7 @@ public:
 	virtual moDirectorStatus SetView( int x, int y, int w, int h ) { return MO_ACTIONHANDLER(SetView(x,y,w,h)); }
 	virtual void ViewSwapBuffers() { MO_ACTIONHANDLER_VOID(ViewSwapBuffers()); }
 	virtual MO_HANDLE GetHandle() { MO_ACTIONHANDLER_HANDLE(GetHandle()); }
+	virtual MO_DISPLAY GetDisplay() { MO_ACTIONHANDLER_DISPLAY(GetDisplay()); }
 
     /**
     *   Hace foco sobre la ventana

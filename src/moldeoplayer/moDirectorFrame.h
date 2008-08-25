@@ -101,6 +101,7 @@ public:
     moDirectorStatus ProjectPreview();
     void ViewSwapBuffers();
     MO_HANDLE   GetHandle();
+    MO_DISPLAY GetDisplay();
 
 	moDirectorStatus FocusOutput();
 

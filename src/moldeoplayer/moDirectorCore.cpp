@@ -130,6 +130,9 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
         return m_pUserInterface->GetHandle();
     }
 
+    MO_DISPLAY moDirectorCore::GetDisplay() {
+        return m_pUserInterface->GetDisplay();
+    }
 
 	moDirectorStatus moDirectorCore::FullScreen( bool force) {
         return m_pUserInterface->FullScreen(force);
@@ -179,7 +182,7 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
         moDirectory DirEffects;
 
         //PREEFFECTS
-        DirEffects.Open( pluginsfullpath + moText("\\preeffects"), moText("/*.dll") );
+        DirEffects.Open( pluginsfullpath + moText("/preeffects"), moText("/*.dll") );
         if (DirEffects.Exists()) {
 
             moFile* pFile = NULL;
@@ -203,7 +206,7 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
 
 
         //EFFECTS
-        DirEffects.Open( pluginsfullpath + moText("\\effects"), moText("/*.dll") );
+        DirEffects.Open( pluginsfullpath + moText("/effects"), moText("/*.dll") );
         if (DirEffects.Exists()) {
 
             moFile* pFile = NULL;
@@ -227,7 +230,7 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
 
 
         //POSTEFFECTS
-        DirEffects.Open( pluginsfullpath + moText("\\posteffects"), moText("/*.dll") );
+        DirEffects.Open( pluginsfullpath + moText("/posteffects"), moText("/*.dll") );
         if (DirEffects.Exists()) {
 
             moFile* pFile = NULL;
@@ -250,7 +253,7 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
         } else LogError( moText("Effects directory doesn´t exists") );
 
         //IODEVICES
-        DirEffects.Open( pluginsfullpath + moText("\\iodevices"), moText("/*.dll") );
+        DirEffects.Open( pluginsfullpath + moText("/iodevices"), moText("/*.dll") );
         if (DirEffects.Exists()) {
 
             moFile* pFile = NULL;
@@ -273,7 +276,7 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
         } else LogError( moText("IODevices directory doesn´t exists") );
 
         //RESOURCES
-        DirEffects.Open( pluginsfullpath + moText("\\resources"), moText("/*.dll") );
+        DirEffects.Open( pluginsfullpath + moText("/resources"), moText("/*.dll") );
         if (DirEffects.Exists()) {
 
             moFile* pFile = NULL;
