@@ -110,7 +110,12 @@ void moGLCanvas::ViewSwapBuffers() {
 
 MO_HANDLE
 moGLCanvas::GetHandle() {
+    #ifdef MO_WIN32
     return (MO_HANDLE)wxWindow::GetHandle();
+    #else
+    GdkWindow *window = ((GtkWidget*)wxWindow::GetHandle())->window;
+    return (MO_HANDLE)GDK_WINDOW_XID(window);
+    #endif
 }
 
 

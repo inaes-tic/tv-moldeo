@@ -141,10 +141,11 @@
 
 #else
 
+
     #include <X11/Xlib.h>
     #include <X11/Xutil.h>
     #include <X11/extensions/XInput.h>
-    #include <X11/extensions/XTest.h>
+
 
     #define NON_VALID -1
     #define MAXBUFFER 180
@@ -174,7 +175,6 @@
 
 		INPUTEVENT_MAX
 	};
-
 
 #endif
 
