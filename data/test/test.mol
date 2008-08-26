@@ -4,7 +4,7 @@
     <UPDATE />
     <CONFIGPARAMS>
         <PARAM name="devices" type="TEXT">
-		
+<!--		
             <VAL>
                 <D type="TXT">keyboard</D>
                 <D type="TXT">keyboard</D>
@@ -19,7 +19,7 @@
                 <D type="NUM">0</D>
                 <D type="NUM">1</D>
             </VAL>
-
+-->
             <VAL>
                 <D type="TXT">tabletasync</D>
                 <D type="TXT">tabletasync</D>
@@ -27,7 +27,7 @@
                 <D type="NUM">0</D>
                 <D type="NUM">1</D>
             </VAL>
-
+<!--
             <VAL>
                 <D type="TXT">mixer</D>
                 <D type="TXT">mixer</D>
@@ -35,7 +35,7 @@
                 <D type="NUM">0</D>
                 <D type="NUM">1</D>
             </VAL>
-		
+-->		
         </PARAM>
         <PARAM name="preeffect" type="TEXT">
             <VAL>
@@ -65,6 +65,7 @@
             </VAL>
         </PARAM>
         <PARAM name="mastereffect" type="TEXT">
+<!--
             <VAL>
                 <D type="TXT">channel</D>
                 <D type="TXT">channel0</D>
@@ -100,7 +101,7 @@
                 <D type="NUM">0</D>
                 <D type="NUM">1</D>
             </VAL>
-			
+-->			
         </PARAM>
         <PARAM name="resources" type="TEXT">
         </PARAM>
