@@ -157,7 +157,7 @@ int moTabletListener::ThreadUserFunction() {
 
 #else
 
-/*
+
             XEvent event;
             XAnyEvent* pAny;
 
@@ -167,8 +167,56 @@ int moTabletListener::ThreadUserFunction() {
                 pAny = (XAnyEvent*)&event;
                 //printf("event: type=%s\n",GetEventName(pAny->type));
 
+		if (pAny->type == gnInputEvent[INPUTEVENT_PROXIMITY_IN])
+			printf("Proximity In\n");
+		else if (pAny->type == gnInputEvent[INPUTEVENT_PROXIMITY_OUT])
+			printf("Proximity Out\n");
+		else if (pAny->type == gnInputEvent[INPUTEVENT_FOCUS_IN])
+			printf("Focus In\n");
+		else if (pAny->type == gnInputEvent[INPUTEVENT_FOCUS_OUT])
+			printf("Focus Out\n");
+		else if (pAny->type == gnInputEvent[INPUTEVENT_MOTION_NOTIFY])
+		{
+			XDeviceMotionEvent* pMove = (XDeviceMotionEvent*)pAny;
+			int v = (pMove->axis_data[4]&0xffff0000) |
+					((pMove->axis_data[5]&0xffff0000)>>16);
+
+			printf("Motion: x=%+6d y=%+6d p=%4d tx=%+4d ty=%+4d "
+				"w=%+5d ID: %4d Serial: %11d \n",
+					pMove->axis_data[0],
+					pMove->axis_data[1],
+					pMove->axis_data[2],
+					(short)(pMove->axis_data[3]&0xffff),
+					(short)(pMove->axis_data[4]&0xffff),
+					(short)(pMove->axis_data[5]&0xffff),
+					(pMove->axis_data[3]&0xffff0000)>>16,
+					v);
+
+		}
+		else if ((pAny->type == gnInputEvent[INPUTEVENT_BTN_PRESS]) ||
+				(pAny->type == gnInputEvent[INPUTEVENT_BTN_RELEASE]))
+		{
+			XDeviceButtonEvent* pBtn = (XDeviceButtonEvent*)pAny;
+			printf("Button: %d %s\n",pBtn->button,
+					pAny->type == gnInputEvent[INPUTEVENT_BTN_PRESS] ?
+						"DOWN" : "UP");
+		}
+		else if ((pAny->type == gnInputEvent[INPUTEVENT_KEY_PRESS]) ||
+				(pAny->type == gnInputEvent[INPUTEVENT_KEY_RELEASE]))
+		{
+			XDeviceKeyEvent* pKey = (XDeviceKeyEvent*)pAny;
+			printf("Key: %d %s\n", pKey->keycode - 7,
+			       (pAny->type == gnInputEvent[INPUTEVENT_KEY_PRESS]) ?
+			       "DOWN" : "UP");
+		}
+		else
+		{
+			printf("Event: UNKNOWN\n");
+		}
+
+
             }
-*/
+
 
 #endif
 }
@@ -218,7 +266,11 @@ int moTabletListener::RegisterEvents(Display* display, Window window, XDevice* d
 
 	XInputClassInfo* ip;
 
-    printf("En RegisterEvents, LOCO\n");
+    printf("En RegisterEvents, WACOM TABLET\n");
+    printf("La ventana es %i\n", window);
+
+    int screen = DefaultScreen(display);
+    Window root_win = RootWindow(display, screen);
 
 	if (name == "stylus") {
 
@@ -233,7 +285,7 @@ int moTabletListener::RegisterEvents(Display* display, Window window, XDevice* d
 
                 case ButtonClass:
 				printf("WACOM TABLET: Registering device button press event.\n");
-				/*
+
                 // button events
                 DeviceButtonPress(device, gnInputEvent[INPUTEVENT_BTN_PRESS], cls);
                 if (cls) event_list[count++] = cls;
@@ -271,12 +323,12 @@ int moTabletListener::RegisterEvents(Display* display, Window window, XDevice* d
                 if (cls) event_list[count++] = cls;
                 DeviceFocusOut(device,gnInputEvent[INPUTEVENT_FOCUS_OUT],cls);
                 if (cls) event_list[count++] = cls;
-                */
+
 				break;
 
 				case ValuatorClass:
 				printf("WACOM TABLET: Registering proximity in event.\n");
-/*
+
                 // proximity events
                 ProximityIn(device,gnInputEvent[INPUTEVENT_PROXIMITY_IN],cls);
                 if (cls) event_list[count++] = cls;
@@ -300,7 +352,7 @@ int moTabletListener::RegisterEvents(Display* display, Window window, XDevice* d
                 DevicePointerMotionHint(device,
                         gnInputEvent[INPUTEVENT_DEVICE_POINTER_MOTION_HINT],cls);
                 if (cls) event_list[count++] = cls;
-*/
+
 				break;
 
 				default:
@@ -308,8 +360,14 @@ int moTabletListener::RegisterEvents(Display* display, Window window, XDevice* d
 				}
 			}
 		}
+		printf("Numero de eventos a registrar: %i\n", count);
+//      Con esto el programa no se cae.
+//		if (XSelectExtensionEvent(display, root_win,
+//					event_list, count)) {
+//      Con esto el programa se cae.
 		if (XSelectExtensionEvent(display, window,
 					event_list, count)) {
+            printf("Numero de eventos registrados: %i\n", count);
 			return 0;
 		}
 		return count;
@@ -1169,6 +1227,7 @@ moText moTablet::GetTabletName()
 				|| ((strncmp(read_buffer, i3s_4x5, len)) == 0)
 				|| ((strncmp(read_buffer, i3s_4x6, len)) == 0))	{
 				strName = moText("intuos3");
+				printf("La tableta es INTUOS3\n");
 			}
 			else if (((strncmp(read_buffer, ppartner, len)) == 0)) {
 				strName = moText("penpartner");
