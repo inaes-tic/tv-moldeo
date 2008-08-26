@@ -233,13 +233,14 @@ int moTabletListener::RegisterEvents(Display* display, Window window, XDevice* d
 
                 case ButtonClass:
 				printf("WACOM TABLET: Registering device button press event.\n");
-                /* button events */
+				/*
+                // button events
                 DeviceButtonPress(device, gnInputEvent[INPUTEVENT_BTN_PRESS], cls);
                 if (cls) event_list[count++] = cls;
                 DeviceButtonRelease(device, gnInputEvent[INPUTEVENT_BTN_RELEASE],cls);
                 if (cls) event_list[count++] = cls;
 
-                /* button motion */
+                // button motion
                 DeviceButtonMotion(device,
                         gnInputEvent[INPUTEVENT_DEVICE_BUTTON_MOTION],cls);
                 if (cls) event_list[count++] = cls;
@@ -259,32 +260,34 @@ int moTabletListener::RegisterEvents(Display* display, Window window, XDevice* d
                         gnInputEvent[INPUTEVENT_DEVICE_BUTTON5_MOTION],cls);
                 if (cls) event_list[count++] = cls;
 
-                /* key events */
+                // key events
                 DeviceKeyPress(device, gnInputEvent[INPUTEVENT_KEY_PRESS], cls);
                 if (cls) event_list[count++] = cls;
                 DeviceKeyRelease(device, gnInputEvent[INPUTEVENT_KEY_RELEASE], cls);
                 if (cls) event_list[count++] = cls;
 
-                /* focus events */
+                // focus events
                 DeviceFocusIn(device,gnInputEvent[INPUTEVENT_FOCUS_IN],cls);
                 if (cls) event_list[count++] = cls;
                 DeviceFocusOut(device,gnInputEvent[INPUTEVENT_FOCUS_OUT],cls);
                 if (cls) event_list[count++] = cls;
+                */
 				break;
 
 				case ValuatorClass:
 				printf("WACOM TABLET: Registering proximity in event.\n");
-                /* proximity events */
+/*
+                // proximity events
                 ProximityIn(device,gnInputEvent[INPUTEVENT_PROXIMITY_IN],cls);
                 if (cls) event_list[count++] = cls;
                 ProximityOut(device,gnInputEvent[INPUTEVENT_PROXIMITY_OUT],cls);
                 if (cls) event_list[count++] = cls;
 
-                /* motion events */
+                // motion events
                 DeviceMotionNotify(device,gnInputEvent[INPUTEVENT_MOTION_NOTIFY],cls);
                 if (cls) event_list[count++] = cls;
 
-                /* device state */
+                // device state
                 DeviceStateNotify(device,gnInputEvent[INPUTEVENT_DEVICE_STATE_NOTIFY],cls);
                 if (cls) event_list[count++] = cls;
                 DeviceMappingNotify(device,
@@ -293,10 +296,11 @@ int moTabletListener::RegisterEvents(Display* display, Window window, XDevice* d
                 ChangeDeviceNotify(device,gnInputEvent[INPUTEVENT_CHANGE_DEVICE_NOTIFY],cls);
                 if (cls) event_list[count++] = cls;
 
-                /* this cuts the motion data down - not sure if this is useful */
+                // this cuts the motion data down - not sure if this is useful
                 DevicePointerMotionHint(device,
                         gnInputEvent[INPUTEVENT_DEVICE_POINTER_MOTION_HINT],cls);
                 if (cls) event_list[count++] = cls;
+*/
 				break;
 
 				default:

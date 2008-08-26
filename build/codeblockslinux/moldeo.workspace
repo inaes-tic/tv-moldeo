@@ -26,8 +26,8 @@
 		<Project filename="../../plugins/PreEffects/MirrorG/mirrorglinux.cbp" />
 		<Project filename="../../plugins/PostEffects/VideoWall/videowalllinux.cbp" />
 		<Project filename="../../plugins/Effects/Movie/movielinux.cbp" />
-		<Project filename="../../src/moldeodirector/moldeodirectorlinux.cbp" active="1" />
+		<Project filename="../../src/moldeodirector/moldeodirectorlinux.cbp" />
 		<Project filename="../../plugins/IODevices/TabletAsync/tabletasynclinux.cbp" />
-		<Project filename="../../src/moldeoplayer/moldeoplayerlinux.cbp" />
+		<Project filename="../../src/moldeoplayer/moldeoplayerlinux.cbp" active="1" />
 	</Workspace>
 </CodeBlocks_workspace_file>
