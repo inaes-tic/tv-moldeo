@@ -16,6 +16,11 @@
 				<Compiler>
 					<Add option="-g" />
 					<Add option="`wx-config --cflags --debug=yes`" />
+					<Add directory="/usr/include/gtk-2.0" />
+					<Add directory="/usr/include/cairo" />
+					<Add directory="/usr/include/pango-1.0" />
+					<Add directory="/usr/lib/gtk-2.0/include" />
+					<Add directory="/usr/include/atk-1.0" />
 				</Compiler>
 				<Linker>
 					<Add option="`wx-config --libs --debug=yes`" />
@@ -38,6 +43,11 @@
 				<Compiler>
 					<Add option="-O2" />
 					<Add option="`wx-config --cflags --debug=no`" />
+					<Add directory="/usr/include/gtk-2.0" />
+					<Add directory="/usr/include/cairo" />
+					<Add directory="/usr/include/pango-1.0" />
+					<Add directory="/usr/lib/gtk-2.0/include" />
+					<Add directory="/usr/include/atk-1.0" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
