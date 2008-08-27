@@ -52,6 +52,11 @@
     #include "wx/wx.h"
 #endif
 
+#ifdef MO_LINUX
+    // Includes necesarios para acceder GtkWidget y GDK_WINDOW_XID.
+    #include <gtk/gtk.h>
+    #include <gdk/gdkx.h>
+#endif
 
 // ----------------------------------------------------------------------------
 // resources
