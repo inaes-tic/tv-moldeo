@@ -211,7 +211,7 @@ int moTabletListener::ThreadUserFunction() {
 		}
 		else
 		{
-			printf("Event: UNKNOWN\n");
+			//printf("Event: UNKNOWN\n");
 		}
 
 
@@ -259,38 +259,25 @@ void moTabletListener::Update( moOutlets* pOutlets )
  press and proximity in. Having found the info we ask the X server to keep us
  continuously notified about these events:
  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-int moTabletListener::RegisterEvents(Display* display, Window window, XDevice* device, const char* name)
+void moTabletListener::RegisterEvents(Display* display, Window window, XDevice* device, const char* name)
 {
+
 	int i;
 	int count = 0;
+    XEventClass event_list[32];
+	XEventClass cls;
 
-	XInputClassInfo* ip;
 
     printf("En RegisterEvents, WACOM TABLET\n");
     printf("La ventana es %i\n", window);
 
-    int screen = DefaultScreen(display);
-    Window root_win = RootWindow(display, screen);
-
-	if (name == "stylus") {
-
-		XEventClass event_list[32];
-		XEventClass cls;
-
-		if (device->num_classes > 0) {
-			for (ip = device->classes,
-				i = 0; i < device->num_classes; ip++, i++) {
-				switch (ip->input_class) {
-
-
-                case ButtonClass:
-				printf("WACOM TABLET: Registering device button press event.\n");
 
                 // button events
                 DeviceButtonPress(device, gnInputEvent[INPUTEVENT_BTN_PRESS], cls);
                 if (cls) event_list[count++] = cls;
                 DeviceButtonRelease(device, gnInputEvent[INPUTEVENT_BTN_RELEASE],cls);
                 if (cls) event_list[count++] = cls;
+
 
                 // button motion
                 DeviceButtonMotion(device,
@@ -324,12 +311,8 @@ int moTabletListener::RegisterEvents(Display* display, Window window, XDevice* d
                 DeviceFocusOut(device,gnInputEvent[INPUTEVENT_FOCUS_OUT],cls);
                 if (cls) event_list[count++] = cls;
 
-				break;
 
-				case ValuatorClass:
-				printf("WACOM TABLET: Registering proximity in event.\n");
-
-                // proximity events
+// proximity events
                 ProximityIn(device,gnInputEvent[INPUTEVENT_PROXIMITY_IN],cls);
                 if (cls) event_list[count++] = cls;
                 ProximityOut(device,gnInputEvent[INPUTEVENT_PROXIMITY_OUT],cls);
@@ -353,27 +336,28 @@ int moTabletListener::RegisterEvents(Display* display, Window window, XDevice* d
                         gnInputEvent[INPUTEVENT_DEVICE_POINTER_MOTION_HINT],cls);
                 if (cls) event_list[count++] = cls;
 
-				break;
+    printf("Numero de eventos a registrar: %i\n", count);
 
-				default:
-				break;
-				}
-			}
-		}
-		printf("Numero de eventos a registrar: %i\n", count);
-//      Con esto el programa no se cae.
-//		if (XSelectExtensionEvent(display, root_win,
-//					event_list, count)) {
-//      Con esto el programa se cae.
-		if (XSelectExtensionEvent(display, window,
-					event_list, count)) {
-            printf("Numero de eventos registrados: %i\n", count);
-			return 0;
-		}
-		return count;
-	}
-	return 0;
+
+
+       XSelectExtensionEvent(display, window, event_list, count);
+
+
+
+/*
+    XGrabDevice(display, device, window,
+			0, // no owner events
+			count, event_list, // events
+			GrabModeAsync, // don't queue, give me whatever you got
+			GrabModeAsync, // same
+			CurrentTime);
+*/
 }
+
+void moTabletListener::UnregisterEvents(Display* display, XDevice* device) {
+    //XUngrabDevice(display, device, CurrentTime);
+}
+
 #endif
 
 //========================
@@ -523,6 +507,15 @@ MOboolean moTablet::Finish()
 	    WTClose(t_hTablet);
 	}
     #else
+    m_Listener.UnregisterEvents(t_hTablet, t_XStylusDevice);
+    //m_Listener.UnregisterEvents(t_hTablet, t_XEraserDevice);
+
+    XFree(t_XStylusDevice);
+    //XFree(t_XEraserDevice);
+    if (t_XDeviceList)
+    {
+		XFreeDeviceList(t_XDeviceList);
+    }
     #endif
 	return true;
 }
@@ -892,7 +885,19 @@ BOOL moTablet::IsTabletInstalled()
 #else
 
 Display* moTablet::InitTablet(MO_HANDLE hWnd, MO_DISPLAY pDisp) {
-    GetDeviceInfo(pDisp, hWnd);
+
+    t_XStylusDevice = NULL;
+    t_XEraserDevice = NULL;
+
+    GetTabletDevices(pDisp, hWnd);
+
+    //if (t_XStylusDevice != NULL)
+    m_Listener.RegisterEvents(pDisp, hWnd, t_XStylusDevice, "stylus");
+
+
+    //if (t_XEraserDevice != NULL)
+    //    m_Listener.RegisterEvents(pDisp, hWnd, t_XEraserDevice, "eraser");
+
     return pDisp;
 }
 
@@ -910,76 +915,41 @@ bool moTablet::IsTabletInstalled() {
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  Find all extension-devices containing the strings 'eraser'/'stylus'.
  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-void moTablet::GetDeviceInfo(Display* display, Window window)
+void moTablet::GetTabletDevices(Display* display, Window window)
 {
 	int i;
 	int len;
-	int found;
 	int nr_devices;
+	XAnyClassPtr  pClass;
 
 	char read_buffer[MAXBUFFER];
 	char write_buffer[MAXBUFFER];
 
 	t_XDeviceList = XListInputDevices(display, &nr_devices);
 
+    printf("Getting TABLET devices...\n");
 	for(i = 0; i < nr_devices; i++) {
-		if (t_XDeviceList[i].use == IsXExtensionDevice ||
-            t_XDeviceList[i].use == IsXExtensionPointer) {
+        if ((t_XDeviceList[i].use == IsXExtensionDevice) ||
+            (t_XDeviceList[i].use == IsXExtensionPointer)) {
 			len = strlen(t_XDeviceList[i].name);
 			snprintf(read_buffer, MAXBUFFER, "%s", t_XDeviceList[i].name);
 			if (CheckDeviceName(read_buffer, write_buffer, len)) {
-				found = 0;
+				pClass = NULL;
 
+				if ((strstr(write_buffer, "stylus"))) {
+                    printf("FOUND STYLUS\n");
+                    t_XStylusDevice = XOpenDevice(display, t_XDeviceList[i].id);
 
-				if (strstr(write_buffer, "stylus")) {
-					found = 1;
 				}
-				if ((strstr(write_buffer, "stylus")) && (found)) {
-					FollowStylus(display, window, i);
-				}
-
 
 /*
-				if (strstr(write_buffer, "eraser")) {
-					found = 1;
-				}
-				if ((strstr(write_buffer, "eraser")) && (found)) {
-					FollowEraser(xdevice_list, i);
+				if ((strstr(write_buffer, "eraser"))) {
+                 t_XEraserDevice = XOpenDevice(display, t_XDeviceList[i].id);
+
 				}
 */
 
 			}
-		}
-	}
-
-}
-
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- Open a stylus-device and start collecting data:
- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-void moTablet::FollowStylus(Display* display, Window window, int number)
-{
-	int i;
-
-	XValuatorInfoPtr valuator;
-	XAnyClassPtr anyclass;
-
-	if ((tmp_device = XOpenDevice(display, t_XDeviceList[number].id))) {
-		if (m_Listener.RegisterEvents(display, window, tmp_device, "stylus")) {
-
-				stylus_xdevice = tmp_device;
-				stylus_id = &tmp_device->device_id;
-				stylus_name = t_XDeviceList[number].name;
-
-				anyclass = (XAnyClassPtr)(t_XDeviceList[number].inputclassinfo);
-				for (i = 0; i < t_XDeviceList[number].num_classes; i++) {
-					if (anyclass->c_class == ValuatorClass) {
-						valuator = (XValuatorInfoPtr)anyclass;
-						stylus_mode = &valuator->mode;
-					}
-					anyclass = (XAnyClassPtr)((char*)anyclass + anyclass->length);
-				}
-
 		}
 	}
 

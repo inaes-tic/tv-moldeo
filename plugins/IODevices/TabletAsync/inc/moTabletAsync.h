@@ -276,7 +276,8 @@ class moTabletListener : public moThread, public moAbstract {
         virtual int ThreadUserFunction();
         void Update( moOutlets* pOutlets );
         #ifdef MO_LINUX
-        int RegisterEvents(Display* display, Window window, XDevice* device, const char* name);
+        void RegisterEvents(Display* display, Window window, XDevice* device, const char* name);
+        void UnregisterEvents(Display* display, XDevice* device);
         #endif
     protected:
         moDataMessages        Messages;
@@ -349,17 +350,14 @@ private:
 
     Display* t_hTablet;
 
-    XDevice* tmp_device;
-    XDevice* stylus_xdevice;
-    XID* stylus_id;
-    const char* stylus_name;
-    unsigned char* stylus_mode;
+    XDevice* t_XStylusDevice;
+    XDevice* t_XEraserDevice;
 
     Display* InitTablet(MO_HANDLE hWnd, MO_DISPLAY pDisp);
 	bool IsTabletInstalled();
 
-    void GetDeviceInfo(Display* display, Window window);
-    void FollowStylus(Display* display, Window window, int number);
+    void GetTabletDevices(Display* display, Window window);
+  //  void FollowStylus(Display* display, Window window, int number);
     int CheckDeviceName(char* read_buffer, char* write_buffer, int len);
     #endif
 
