@@ -56,14 +56,17 @@ enum moFileType {
 
 #ifdef MO_WIN32
     #define moSlash moText("/")
+    #define moThm moText("/.thm")
 #endif
 
 #ifdef MO_LINUX
     #define moSlash moText("/")
+    #define moThm moText("/.thm")
 #endif
 
 #ifdef MO_MACOSX
     #define moSlash moText("/")
+    #define moThm moText("/.thm")
 #endif
 
 
@@ -221,9 +224,9 @@ class LIBMOLDEO_API moFileManager : public moResource
 		MOboolean		Open ( moText p_Path,  MOboolean bWaitForDownload = false );
 		moDirectory*	GetDirectory( moText p_Path );
 
-
-		MOboolean       CopyFile( moFile FileSrc, moFile FileDst );
-		MOboolean       MoveFile( moFile FileSrc, moFile FileDst );
+        static bool       CreateDirectory( moDirectory Dir );
+		static bool       CopyFile( moFile FileSrc, moFile FileDst );
+		static bool       MoveFile( moFile FileSrc, moFile FileDst );
 
 		static moText          GetExePath();
 		static moText          GetWorkPath();
