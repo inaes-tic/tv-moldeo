@@ -95,11 +95,10 @@ moEffectManager::NewEffect( moText p_resname, moText p_configname, moText p_labe
 	if (peffect) {
 		peffect->SetConfigName( p_configname );
 		peffect->SetLabelName( p_labelname );
+        peffect->GetMobDefinition().GetMobIndex().SetParamIndex(p_paramindex);
+        peffect->GetMobDefinition().GetMobIndex().SetValueIndex(p_valueindex);
 		m_AllEffects.Add((moEffect*) peffect);
 	}
-
-    peffect->GetMobDefinition().GetMobIndex().SetParamIndex(p_paramindex);
-    peffect->GetMobDefinition().GetMobIndex().SetValueIndex(p_valueindex);
 
 	return (peffect);
 }

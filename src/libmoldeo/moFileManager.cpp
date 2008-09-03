@@ -587,6 +587,16 @@ moFileManager::GetWorkPath() {
 }
 
 bool
+moFileManager::CreateDirectory( moDirectory Dir ) {
+    #ifdef MO_WIN32
+        mkdir( Dir.GetCompletePath() );
+    #else
+        //mkdir( Dir.GetCompletePath() );
+    #endif
+}
+
+
+bool
 moFileManager::FileExists( moText filename ) {
         moFile file( filename );
         return file.Exists();
