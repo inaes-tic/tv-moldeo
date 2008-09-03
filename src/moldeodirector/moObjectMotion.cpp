@@ -97,7 +97,7 @@ moObjectMotion::moObjectMotion(wxWindow* parent,wxWindowID id,const wxPoint& pos
 	StaticBitmap1 = new wxStaticBitmap(PanelTranslateCoords, ID_STATICBITMAP1, wxBitmap(wxImage(_T("../../doc/icons/translate.png"))), wxPoint(0,0), wxDefaultSize, 0, _T("ID_STATICBITMAP1"));
 	TextCtrlSz = new wxTextCtrl(Panel2, ID_TEXTCTRLSZ, wxEmptyString, wxPoint(112,164), wxSize(144,14), 0, wxDefaultValidator, _T("ID_TEXTCTRLSZ"));
 	PanelScalesTxt = new wxPanel(Panel2, ID_PANEL7, wxPoint(8,256), wxSize(44,44), wxTAB_TRAVERSAL, _T("ID_PANEL7"));
-	StaticBitmap5 = new wxStaticBitmap(PanelScalesTxt, ID_STATICBITMAP5, wxBitmap(wxImage(_T("..\\..\\doc\\icons\\rotate.png"))), wxPoint(0,0), wxDefaultSize, 0, _T("ID_STATICBITMAP5"));
+	StaticBitmap5 = new wxStaticBitmap(PanelScalesTxt, ID_STATICBITMAP5, wxBitmap(wxImage(_T("../../doc/icons/rotate.png"))), wxPoint(0,0), wxDefaultSize, 0, _T("ID_STATICBITMAP5"));
 	TextCtrlSy = new wxTextCtrl(Panel2, ID_TEXTCTRLSY, wxEmptyString, wxPoint(112,148), wxSize(144,14), 0, wxDefaultValidator, _T("ID_TEXTCTRLSY"));
 	PanelScales = new wxPanel(Panel2, ID_PANEL4, wxPoint(8,132), wxSize(44,44), wxTAB_TRAVERSAL, _T("ID_PANEL4"));
 	StaticBitmap3 = new wxStaticBitmap(PanelScales, ID_STATICBITMAP3, wxBitmap(wxImage(_T("../../doc/icons/scale.png"))), wxPoint(0,0), wxDefaultSize, 0, _T("ID_STATICBITMAP3"));
