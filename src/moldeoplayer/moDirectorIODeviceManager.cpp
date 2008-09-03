@@ -82,7 +82,7 @@ WXK_BACK    = 8
     WXK_F24
     WXK_NUMLOCK
 
-    WXK_SCROLL 
+    WXK_SCROLL
     WXK_PAGEUP,
     WXK_PAGEDOWN,
 
@@ -159,12 +159,12 @@ button 	The mouse button index(SDL_BUTTON_LEFT, SDL_BUTTON_MIDDLE, SDL_BUTTON_RI
 state 	SDL_PRESSED or SDL_RELEASED
 x, y 	The X/Y coordinates of the mouse at press/release time
 */
-void 
+void
 moDirectorIODeviceManager::OnMouseEvent( wxMouseEvent &event) {
 
 	//translates wxMouseEvents to SDL mouse events type(internal events of Moldeo are based on SDL )
-	//accumulate mouse events( to pass to event list later )	
-	
+	//accumulate mouse events( to pass to event list later )
+    //MODebug2->Push( IntToStr(event.GetEventType() ) );
 	//MOTION
 	if( event.Moving() || event.Dragging() ) {
 		GetEvents()->Add( MO_IODEVICE_MOUSE, SDL_MOUSEMOTION, event.m_x - m_MouseX/*rel*/, event.m_y - m_MouseY/*rel*/, event.m_x, event.m_y);
@@ -192,13 +192,13 @@ moDirectorIODeviceManager::OnMouseEvent( wxMouseEvent &event) {
 	}
 	if( event.RightUp() ) {
 		GetEvents()->Add(MO_IODEVICE_MOUSE,SDL_MOUSEBUTTONUP, SDL_BUTTON_RIGHT , event.m_x, event.m_y);
-	}	
+	}
 }
 /*
 type 	SDL_KEYDOWN or SDL_KEYUP
 state 	SDL_PRESSED or SDL_RELEASED
 keysym 	Contains key press information in a SDL_keysym structure
-		
+
 		scancode 	Hardware specific scancode
 		sym 	SDL virtual keysym
 		mod 	Current key modifiers
@@ -226,11 +226,11 @@ void moDirectorIODeviceManager::OnKeyDown( wxKeyEvent &event ) {
 	SDLKey sym = SDLK_UNKNOWN;
 	SDLMod mod = KMOD_NONE;
 
-	if(event.ShiftDown()) 
-		mod =(SDLMod)((int)mod | KMOD_SHIFT );	
-	if(event.ControlDown()) 
+	if(event.ShiftDown())
+		mod =(SDLMod)((int)mod | KMOD_SHIFT );
+	if(event.ControlDown())
 		mod =(SDLMod)((int)mod | KMOD_CTRL );
-	
+
 	//event.key.keysym.sym
 	if( event.GetKeyCode() == WXK_SHIFT ) {
 		sym = SDLK_LSHIFT;
@@ -240,11 +240,11 @@ void moDirectorIODeviceManager::OnKeyDown( wxKeyEvent &event ) {
 		sym = SDLK_RCTRL;
 		GetEvents()->Add( MO_IODEVICE_KEYBOARD, SDL_KEYDOWN, sym , mod ,0,0);
 	} else
-	if((int)(SDLK_BACKSPACE)  <= event.GetKeyCode() && event.GetKeyCode() <=(int)(SDLK_DELETE) ) {		
-		if( 65<=event.GetKeyCode() && event.GetKeyCode()<=90) { 
-			sym = SDLKey((int)event.GetKeyCode() + 32); 
-		} else { 
-			sym =(SDLKey)(int)event.GetKeyCode(); 
+	if((int)(SDLK_BACKSPACE)  <= event.GetKeyCode() && event.GetKeyCode() <=(int)(SDLK_DELETE) ) {
+		if( 65<=event.GetKeyCode() && event.GetKeyCode()<=90) {
+			sym = SDLKey((int)event.GetKeyCode() + 32);
+		} else {
+			sym =(SDLKey)(int)event.GetKeyCode();
 		}
 		GetEvents()->Add( MO_IODEVICE_KEYBOARD, SDL_KEYDOWN, sym , mod ,0,0);
 	} else
@@ -297,7 +297,7 @@ void moDirectorIODeviceManager::OnKeyDown( wxKeyEvent &event ) {
 			sym = SDLK_LEFT;
 			GetEvents()->Add( MO_IODEVICE_KEYBOARD, SDL_KEYDOWN, sym , mod ,0,0);
 			break;
-		case WXK_UP:		
+		case WXK_UP:
 			sym = SDLK_UP;
 			GetEvents()->Add( MO_IODEVICE_KEYBOARD, SDL_KEYDOWN, sym , mod ,0,0);
 			break;
@@ -323,10 +323,10 @@ void moDirectorIODeviceManager::OnKeyUp( wxKeyEvent &event ) {
 
 	SDLKey sym = SDLK_UNKNOWN;
 	SDLMod mod = KMOD_NONE;
-	
-	if(event.ShiftDown()) 
-		mod =(SDLMod)((int)mod | KMOD_SHIFT );	
-	if(event.ControlDown()) 
+
+	if(event.ShiftDown())
+		mod =(SDLMod)((int)mod | KMOD_SHIFT );
+	if(event.ControlDown())
 		mod =(SDLMod)((int)mod | KMOD_CTRL );
 
 	//event.key.keysym.sym
@@ -338,11 +338,11 @@ void moDirectorIODeviceManager::OnKeyUp( wxKeyEvent &event ) {
 		sym = SDLK_RCTRL;
 		GetEvents()->Add( MO_IODEVICE_KEYBOARD, SDL_KEYUP, sym , mod ,0,0);
 	} else
-	if((int)(SDLK_BACKSPACE)  <= event.GetKeyCode() && event.GetKeyCode() <=(int)(SDLK_DELETE) ) {		
-		if( 65<=event.GetKeyCode() && event.GetKeyCode()<=90) { 
-			sym = SDLKey((int)event.GetKeyCode() + 32); 
-		} else { 
-			sym =(SDLKey)(int)event.GetKeyCode(); 
+	if((int)(SDLK_BACKSPACE)  <= event.GetKeyCode() && event.GetKeyCode() <=(int)(SDLK_DELETE) ) {
+		if( 65<=event.GetKeyCode() && event.GetKeyCode()<=90) {
+			sym = SDLKey((int)event.GetKeyCode() + 32);
+		} else {
+			sym =(SDLKey)(int)event.GetKeyCode();
 		}
 		GetEvents()->Add( MO_IODEVICE_KEYBOARD, SDL_KEYUP, sym , mod ,0,0);
 	} else
@@ -415,7 +415,7 @@ void moDirectorIODeviceManager::OnKeyUp( wxKeyEvent &event ) {
 		default:
 			break;
 	}
-	
+
 
 }
 
@@ -444,7 +444,7 @@ moDirectorIODeviceManager::PollEvents() {
 					GetEvents()->Add(MO_IODEVICE_MOUSE,SDL_MOUSEBUTTONUP, event.button.button, event.button.x, event.button.y);
 					break;
 				case SDL_KEYDOWN:
-					// Ignore ALT-TAB for windows 
+					// Ignore ALT-TAB for windows
 					if((event.key.keysym.sym == SDLK_LALT) ||
 						(event.key.keysym.sym == SDLK_RALT) ||
 						(event.key.keysym.sym == SDLK_TAB)) {

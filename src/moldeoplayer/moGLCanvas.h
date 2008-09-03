@@ -38,6 +38,7 @@
 #include "moIDirectorActions.h"
 #include "moDirectorConsole.h"
 
+
 class moGLCanvas: public wxGLCanvas, public moIDirectorActions
 {
 public:
