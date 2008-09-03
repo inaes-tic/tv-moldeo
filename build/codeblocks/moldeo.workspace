@@ -15,7 +15,9 @@
 		<Project filename="..\..\plugins\PostEffects\Debug\debug.cbp" />
 		<Project filename="..\..\plugins\PreEffects\Erase\erase.cbp" />
 		<Project filename="..\..\plugins\Effects\Movie\movie.cbp" />
-		<Project filename="..\..\src\moldeodirector\moldeodirector.cbp" active="1" />
+		<Project filename="..\..\src\moldeodirector\moldeodirector.cbp" active="1">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
 		<Project filename="..\..\src\main\moldeo_mingw_sdl.cbp" />
 		<Project filename="..\..\plugins\Effects\CubeMap\cubemap.cbp" />
 		<Project filename="..\..\plugins\Effects\Icon3D\icon3d.cbp" />
