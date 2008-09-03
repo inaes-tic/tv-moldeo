@@ -13,6 +13,7 @@
 #include <wx/combobox.h>
 //*)
 
+#include "moWxLevelCtrl.h"
 
 class moColorMotion: public wxPanel, public moIDirectorActions
 {
@@ -41,6 +42,11 @@ class moColorMotion: public wxPanel, public moIDirectorActions
 		wxSlider* SliderRed;
 		//*)
 
+		moWxLevelCtrl* m_pLevelRedCtrl;
+		moWxLevelCtrl* m_pLevelGreenCtrl;
+		moWxLevelCtrl* m_pLevelBlueCtrl;
+		moWxLevelCtrl* m_pLevelAlphaCtrl;
+
 	protected:
 
 		//(*Identifiers(moColorMotion)
@@ -62,6 +68,11 @@ class moColorMotion: public wxPanel, public moIDirectorActions
 		static const long ID_PANEL2;
 		//*)
 
+        static const long ID_LEVELRED;
+		static const long ID_LEVELGREEN;
+		static const long ID_LEVELBLUE;
+		static const long ID_LEVELALPHA;
+
 	private:
 
 		//(*Handlers(moColorMotion)
@@ -76,6 +87,13 @@ class moColorMotion: public wxPanel, public moIDirectorActions
 		void OnButtonPickColorClick(wxCommandEvent& event);
 		void OnComboBoxMotionColorPresetsSelect(wxCommandEvent& event);
 		//*)
+
+        void OnLevelRed(wxCommandEvent& event);
+        void OnLevelGreen(wxCommandEvent& event);
+        void OnLevelBlue(wxCommandEvent& event);
+        void OnLevelAlpha(wxCommandEvent& event);
+
+        void OnMouseEvent( wxMouseEvent& event );
 
         moValueDescriptor   m_ValueDescriptor;
 

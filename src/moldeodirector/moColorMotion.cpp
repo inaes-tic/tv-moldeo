@@ -29,9 +29,15 @@ const long moColorMotion::ID_COMBOBOXCOLORPRESETS = wxNewId();
 const long moColorMotion::ID_PANEL2 = wxNewId();
 //*)
 
+const long moColorMotion::ID_LEVELRED = wxNewId();
+const long moColorMotion::ID_LEVELGREEN = wxNewId();
+const long moColorMotion::ID_LEVELBLUE = wxNewId();
+const long moColorMotion::ID_LEVELALPHA = wxNewId();
+
 BEGIN_EVENT_TABLE(moColorMotion,wxPanel)
 	//(*EventTable(moColorMotion)
 	//*)
+	EVT_MOUSE_EVENTS( moColorMotion::OnMouseEvent )
 END_EVENT_TABLE()
 
 moColorMotion::moColorMotion(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
@@ -78,7 +84,7 @@ moColorMotion::moColorMotion(wxWindow* parent,wxWindowID id,const wxPoint& pos,c
 	SetSizer(FlexGridSizer1);
 	FlexGridSizer1->SetSizeHints(this);
 
-	Connect(ID_SLIDERRED,wxEVT_SCROLL_THUMBTRACK,(wxObjectEventFunction)&moColorMotion::OnSliderRedCmdScroll);
+	//Connect(ID_SLIDERRED,wxEVT_SCROLL_THUMBTRACK,(wxObjectEventFunction)&moColorMotion::OnSliderRedCmdScroll);
 	Connect(ID_SLIDERRED,wxEVT_SCROLL_CHANGED,(wxObjectEventFunction)&moColorMotion::OnSliderRedCmdScroll);
 	Connect(ID_SLIDERGREEN,wxEVT_SCROLL_THUMBTRACK,(wxObjectEventFunction)&moColorMotion::OnSliderGreenCmdScroll);
 	Connect(ID_SLIDERGREEN,wxEVT_SCROLL_CHANGED,(wxObjectEventFunction)&moColorMotion::OnSliderGreenCmdScroll);
@@ -93,12 +99,41 @@ moColorMotion::moColorMotion(wxWindow* parent,wxWindowID id,const wxPoint& pos,c
 	Connect(ID_TEXTCTRLALPHA,wxEVT_COMMAND_TEXT_UPDATED,(wxObjectEventFunction)&moColorMotion::OnTextCtrlAlphaText);
 	Connect(ID_COMBOBOXCOLORPRESETS,wxEVT_COMMAND_COMBOBOX_SELECTED,(wxObjectEventFunction)&moColorMotion::OnComboBoxMotionColorPresetsSelect);
 	//*)
+
+	m_pLevelRedCtrl =  new moWxLevelCtrl(Panel2, moColorMotion::ID_LEVELRED, SliderRed->GetPosition(), SliderRed->GetSize() , 0, wxDefaultValidator, _T("ID_LEVELRED") );
+    Connect(moColorMotion::ID_LEVELRED, MO_EVT_DIRECTOR_LEVEL, (wxObjectEventFunction)&moColorMotion::OnLevelRed );
+	if (SliderRed) SliderRed->Destroy();
+
+	m_pLevelGreenCtrl =  new moWxLevelCtrl(Panel2, moColorMotion::ID_LEVELGREEN, SliderGreen->GetPosition(), SliderGreen->GetSize() , 0, wxDefaultValidator, _T("ID_LEVELGREEN") );
+    Connect(moColorMotion::ID_LEVELGREEN, MO_EVT_DIRECTOR_LEVEL, (wxObjectEventFunction)&moColorMotion::OnLevelGreen );
+	if (SliderGreen) SliderGreen->Destroy();
+
+	m_pLevelBlueCtrl =  new moWxLevelCtrl(Panel2, moColorMotion::ID_LEVELBLUE, SliderBlue->GetPosition(), SliderBlue->GetSize() , 0, wxDefaultValidator, _T("ID_LEVELBLUE") );
+    Connect(moColorMotion::ID_LEVELBLUE, MO_EVT_DIRECTOR_LEVEL, (wxObjectEventFunction)&moColorMotion::OnLevelBlue );
+	if (SliderBlue) SliderBlue->Destroy();
+
+	m_pLevelAlphaCtrl =  new moWxLevelCtrl(Panel2, moColorMotion::ID_LEVELALPHA, SliderAlpha->GetPosition(), SliderAlpha->GetSize() , 0, wxDefaultValidator, _T("ID_LEVELALPHA") );
+    Connect( moColorMotion::ID_LEVELALPHA, MO_EVT_DIRECTOR_LEVEL, (wxObjectEventFunction)&moColorMotion::OnLevelAlpha );
+	if (SliderAlpha) SliderAlpha->Destroy();
+
 }
 
 moColorMotion::~moColorMotion()
 {
 	//(*Destroy(moColorMotion)
 	//*)
+}
+
+void moColorMotion::OnMouseEvent( wxMouseEvent& event ) {
+    Log(  moText("mouse") );
+    if ( event.Button(wxMOUSE_BTN_LEFT) || event.ButtonDown() ) {
+
+        GetParent()->ProcessEvent(event);
+
+        //OpenMob( m_MobDescriptor );
+    }
+    event.Skip();
+
 }
 
 void moColorMotion::Inspect( moValueDescriptor p_ValueDescriptor ) {
@@ -113,10 +148,40 @@ void moColorMotion::Inspect( moValueDescriptor p_ValueDescriptor ) {
         TextCtrlBlue->SetValue( (wxChar*)(char*)m_ValueDescriptor.GetValue().GetSubValue(2).Text());
         TextCtrlAlpha->SetValue( (wxChar*)(char*)m_ValueDescriptor.GetValue().GetSubValue(3).Text());
 
+        moValue& pValue( m_ValueDescriptor.GetValue() );
+
+        m_pLevelRedCtrl->ChangeValue( atoi( pValue[0].Text() ) );
+        m_pLevelGreenCtrl->ChangeValue( atoi( pValue[1].Text() )  );
+        m_pLevelBlueCtrl->ChangeValue( atoi( pValue[2].Text() )  );
+        m_pLevelAlphaCtrl->ChangeValue( atoi( pValue[3].Text() )  );
+
     }
 
 }
 
+void moColorMotion::OnLevelRed(wxCommandEvent& event) {
+    Log(  FloatToStr( (float) event.GetInt() / 100.0 ) );
+    TextCtrlRed->SetValue( (wxChar*)(char*) FloatToStr( (float) event.GetInt() / 100.0 ) );
+
+}
+
+void moColorMotion::OnLevelGreen(wxCommandEvent& event) {
+    Log(  FloatToStr( (float) event.GetInt() / 100.0 ) );
+    TextCtrlGreen->SetValue( (wxChar*)(char*) FloatToStr( (float) event.GetInt() / 100.0 ) );
+
+}
+
+void moColorMotion::OnLevelBlue(wxCommandEvent& event) {
+    Log(  FloatToStr( (float) event.GetInt() / 100.0 ) );
+    TextCtrlBlue->SetValue( (wxChar*)(char*) FloatToStr( (float) event.GetInt() / 100.0 ) );
+
+}
+
+void moColorMotion::OnLevelAlpha(wxCommandEvent& event) {
+    Log(  FloatToStr( (float) event.GetInt() / 100.0 ) );
+    TextCtrlAlpha->SetValue( (wxChar*)(char*) FloatToStr( (float) event.GetInt() / 100.0 ) );
+
+}
 
 void moColorMotion::OnTextCtrlRedText(wxCommandEvent& event)
 {
