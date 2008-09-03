@@ -66,6 +66,7 @@ void moWxLevelCtrl::SetValue( int value ) {
     event.SetEventObject( this );
     //ProcessCommand( event );
     ProcessEvent(event );
+    //wxMessageBox("Set value: hi event");
 }
 
 
@@ -106,6 +107,8 @@ int moWxLevelCtrl::SlideValue( int pointerxposition ) {
 }
 
 void moWxLevelCtrl::OnMouseEvent( wxMouseEvent & event ) {
+
+    //wxMessageBox("moWxLevelCtrl::Mouse event");
 
     if ( event.Entering() ) {
         //SHINE!!!
