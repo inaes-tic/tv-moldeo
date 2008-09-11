@@ -44,7 +44,7 @@ moColorMotion::moColorMotion(wxWindow* parent,wxWindowID id,const wxPoint& pos,c
 {
 	//(*Initialize(moColorMotion)
 	wxFlexGridSizer* FlexGridSizer1;
-
+	
 	Create(parent, wxID_ANY, wxDefaultPosition, wxSize(352,221), wxTAB_TRAVERSAL|wxCLIP_CHILDREN, _T("wxID_ANY"));
 	SetForegroundColour(wxColour(255,255,255));
 	SetBackgroundColour(wxColour(0,0,0));
@@ -83,8 +83,8 @@ moColorMotion::moColorMotion(wxWindow* parent,wxWindowID id,const wxPoint& pos,c
 	FlexGridSizer1->Add(Panel2, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	SetSizer(FlexGridSizer1);
 	FlexGridSizer1->SetSizeHints(this);
-
-	//Connect(ID_SLIDERRED,wxEVT_SCROLL_THUMBTRACK,(wxObjectEventFunction)&moColorMotion::OnSliderRedCmdScroll);
+	
+	Connect(ID_SLIDERRED,wxEVT_SCROLL_THUMBTRACK,(wxObjectEventFunction)&moColorMotion::OnSliderRedCmdScroll);
 	Connect(ID_SLIDERRED,wxEVT_SCROLL_CHANGED,(wxObjectEventFunction)&moColorMotion::OnSliderRedCmdScroll);
 	Connect(ID_SLIDERGREEN,wxEVT_SCROLL_THUMBTRACK,(wxObjectEventFunction)&moColorMotion::OnSliderGreenCmdScroll);
 	Connect(ID_SLIDERGREEN,wxEVT_SCROLL_CHANGED,(wxObjectEventFunction)&moColorMotion::OnSliderGreenCmdScroll);

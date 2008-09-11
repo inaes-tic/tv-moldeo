@@ -34,7 +34,7 @@ moNewProject::moNewProject(wxWindow* parent,wxWindowID id)
 	ProjectNameTextCtrl = new wxTextCtrl(this, ID_NAMETEXTCTRL, wxEmptyString, wxPoint(8,96), wxSize(168,21), 0, wxDefaultValidator, _T("ID_NAMETEXTCTRL"));
 	OkButton = new wxButton(this, ID_NEWPROJECT_OK, _("OK"), wxPoint(184,144), wxDefaultSize, 0, wxDefaultValidator, _T("ID_NEWPROJECT_OK"));
 	CancelButton = new wxButton(this, ID_NEWPROJECT_CANCEL, _("Cancel"), wxPoint(272,144), wxDefaultSize, 0, wxDefaultValidator, _T("ID_NEWPROJECT_CANCEL"));
-
+	
 	Connect(ID_DIRTEXTCTRL,wxEVT_COMMAND_TEXT_UPDATED,(wxObjectEventFunction)&moNewProject::OnDirTextCtrlText);
 	Connect(ID_NEWPROJECT_BROWSE,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&moNewProject::OnBrowseClick);
 	Connect(ID_NAMETEXTCTRL,wxEVT_COMMAND_TEXT_UPDATED,(wxObjectEventFunction)&moNewProject::OnProjectNameTextCtrlText);
