@@ -651,15 +651,17 @@ MOboolean moVideoManager::Init()
     // Loading config file.
 	if (!m_pResourceManager) return false;
 
-	confignamecompleto = m_pResourceManager->GetDataMan()->GetDataPath();
-	confignamecompleto +=  (moText)GetConfigName();
-    confignamecompleto +=  moText(".cfg");
+	if (!(GetConfigName()==moText(""))) {
 
-	if (m_Config.LoadConfig(confignamecompleto)!=MO_CONFIG_OK ) {
-		moText text = "Couldn't load videomanager config";
-		MODebug2->Error(text + (moText)confignamecompleto );
-		return false;
-	}
+        confignamecompleto = m_pResourceManager->GetDataMan()->GetDataPath();
+        confignamecompleto +=  (moText)GetConfigName();
+        confignamecompleto +=  moText(".cfg");
+
+        if (m_Config.LoadConfig(confignamecompleto)!=MO_CONFIG_OK ) {
+            moText text = "Couldn't load videomanager config";
+            MODebug2->Error(text + (moText)confignamecompleto );
+            return false;
+        }
 
   moText msg = "In moVideoManager::Init ***********************************************\n";
   msg+= moText("Initializing Live...\n");
@@ -828,6 +830,13 @@ MO_LIVE_BITCOUNT	4
 	}
 
 	delete pPreferredDevices;
+
+	} else {
+
+        //create values from default
+
+    }
+
 
 	m_bLoading = true;
 	m_bInitialized = true;

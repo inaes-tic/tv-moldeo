@@ -221,8 +221,8 @@ typedef enum {
         }
 
 	/*Empieza la Lola!!*/
-	SDL_ShowCursor(0);
-	SDL_WM_GrabInput(SDL_GRAB_ON);
+	//SDL_ShowCursor(0);
+	//SDL_WM_GrabInput(SDL_GRAB_ON);
 
     #ifdef MO_DIRECTSHOW
 	    CoInitialize(NULL);
@@ -268,7 +268,7 @@ typedef enum {
 		                render_to_fbo,
 		                screen_width, screen_height,
 						render_width, render_height,
-						(MO_HANDLE)g_hwnd ), (MO_DISPLAY)g_hdisp ) {
+						(MO_HANDLE)g_hwnd , (MO_DISPLAY)g_hdisp )) {
 
 		while(!MoldeoSession->Interaction()) {
 			MoldeoSession->Update();

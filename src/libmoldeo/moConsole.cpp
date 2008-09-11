@@ -62,6 +62,7 @@ void moConsole::InitResources( moResourceManager *pResourceManager,
                         MO_HANDLE p_OpWindowHandle,
                         MO_DISPLAY p_Display) {
 
+
 	if (pResourceManager==NULL) {
 		SetResourceManager( new moResourceManager());
 	} else {
@@ -113,6 +114,8 @@ MOboolean moConsole::Init( moText p_datapath,
 	srand( time(NULL) );
 
 	//if no IODeviceManager defined by the user, use default
+	if (MODebug2) MODebug2->Message(moText("moConsole:: Initializing IODevice's Manager."));
+
 	if( p_pIODeviceManager == NULL ) {
 		m_bIODeviceManagerDefault = true;
 		m_pIODeviceManager = new moIODeviceManager();
@@ -123,6 +126,7 @@ MOboolean moConsole::Init( moText p_datapath,
 		m_pIODeviceManager = p_pIODeviceManager;
 	}
 
+    if (MODebug2) MODebug2->Message(moText("moConsole:: Initializing Effects Manager."));
 	m_EffectManager.Init();
 
 	//Inicializando Estado de la Consola
@@ -132,13 +136,20 @@ MOboolean moConsole::Init( moText p_datapath,
 	//   CARGAMOS EL ARCHIVO DE CONFIGURACION
 	//==========================================================================
 
+    if (MODebug2) MODebug2->Message(moText("moConsole:: Opening Console Config Project (.mol).")  + (moText)p_consoleconfig);
+
 	verif = m_Config.LoadConfig( p_consoleconfig ) ;//este parametro debe pasarse desde fuera
 	if(verif != MO_CONFIG_OK) {
-	    cout << " .mol file invalid, check XML syntax..."  << endl;
+
+        if (MODebug2) MODebug2->Error(moText("moConsole::  .mol file invalid, check XML syntax..."));
+
 	    Finish();
 		//then
 		return false;
 	} else SetConfigName(p_consoleconfig);
+
+    if (MODebug2) MODebug2->Message(moText("moConsole:: mol project opening....success "));
+
 
 	moDefineParamIndex( CONSOLE_DEVICES, moText("devices") );
 	moDefineParamIndex( CONSOLE_EFFECT, moText("effect") );
@@ -152,6 +163,7 @@ MOboolean moConsole::Init( moText p_datapath,
 
 	// Verificar que el nro de version sea correcto //
     //...
+    if (MODebug2) MODebug2->Message(moText("moConsole:: Initializing Resource Manager."));
 	InitResources(  p_pResourceManager,
 					p_datapath,
 					m_Config,
@@ -275,12 +287,12 @@ moConsole::LoadIODevices() {
 			if(pdevice!=NULL) {
 				pdevice->SetResourceManager( m_pResourceManager );
 				pdevice->Init();
-			} else MODebug2->Push( moText("moConsole:: Couldn't load a device:") + moText(fxname));
+			} else MODebug2->Error( moText("moConsole:: Couldn't load a device:") + moText(fxname));
 		}
 		m_Config.NextValue();
 
     }
-	if (MODebug2) MODebug2->Push( moText("moConsole:: IODevices loaded.") );
+	if (MODebug2) MODebug2->Message( moText("moConsole:: IODevices loaded.") );
 }
 
 void moConsole::UnloadIODevices() {
@@ -308,8 +320,8 @@ moConsole::LoadMasterEffects() {
 	N = m_Config.GetValuesCount(mtfx);
 
 	if (MODebug2) {
-		MODebug2->Push( moText("moConsole:: Loading MasterEffects configs...") );
-		MODebug2->Push( moText("moConsole:: Master Effects.") + IntToStr(N)  );
+		MODebug2->Message( moText("moConsole:: Loading MasterEffects configs...") );
+		MODebug2->Message( moText("moConsole:: Master Effects.") + IntToStr(N)  );
 	}
 
 	state.m_nMasterEffects = N;
@@ -330,12 +342,12 @@ moConsole::LoadMasterEffects() {
 							pmastereffect->Init();
 							//pmastereffect->state.on = MO_ON;
 				}
-			}
+			} else MODebug2->Error( moText("moConsole:: Couldn't load Master Effect:") + moText(fxname));
 			m_Config.NextValue();
 		}
 	}
 
-	if (MODebug2) MODebug2->Push( moText("moConsole:: Master Effects loaded.") );
+	if (MODebug2) MODebug2->Message( moText("moConsole:: Master Effects loaded.") );
 
 }
 
@@ -364,8 +376,8 @@ moConsole::LoadPreEffects() {
 	N = m_Config.GetValuesCount(prfx);
 
 	if (MODebug2) {
-		MODebug2->Push( moText("Loading PreEffects configs...") );
-		MODebug2->Push( moText(" Pre-Effects.") + IntToStr(N) );
+		MODebug2->Message( moText("Loading PreEffects configs...") );
+		MODebug2->Message( moText(" Pre-Effects.") + IntToStr(N) );
 	}
 
 	state.m_nPreEffects = N;
@@ -384,7 +396,6 @@ moConsole::LoadPreEffects() {
 				ppreeffect->SetResourceManager( m_pResourceManager );
 				if ( ppreeffect->GetName() == moText("erase") ) {
 					iborrado = i;
-					printf("erase");
 					if (ppreeffect->Init()) {
 						MOint pre,on;
 						MOint paramindex, valueindex;
@@ -396,19 +407,18 @@ moConsole::LoadPreEffects() {
 						if (on>0) ppreeffect->state.on = true;
 					}
 				}
-			}
-			m_Config.NextValue();
+            } else MODebug2->Error( moText("moConsole:: Couldn't load Pre Effect:") + moText(fxname));			m_Config.NextValue();
 		}
 	}
 
-	if (MODebug2) MODebug2->Push(moText("moConsole:: Pre Effects loaded."));
+	if (MODebug2) MODebug2->Message(moText("moConsole:: Pre Effects loaded."));
 }
 
 void moConsole::UnloadPreEffects() {
 
-    for(MOuint i=0; i < m_EffectManager.PreEffects().Count(); i++) {
-		if( m_EffectManager.PreEffects().Get(i) != NULL ) {
-			m_EffectManager.RemoveEffect( i, MO_OBJECT_PREEFFECT );
+    while(m_EffectManager.PreEffects().Count()>0) {
+		if( m_EffectManager.PreEffects().Get(0) != NULL ) {
+			m_EffectManager.RemoveEffect( 0, MO_OBJECT_PREEFFECT );
 		}
 	}
 }
@@ -428,8 +438,8 @@ moConsole::LoadEffects() {
 	N = m_Config.GetValuesCount(efx);
 
 	if (MODebug2) {
-		MODebug2->Push( moText("moConsole:: Loading Effects configs...") );
-		MODebug2->Push( moText("moConsole:: Effects.") + IntToStr(N)  );
+		MODebug2->Message( moText("moConsole:: Loading Effects configs...") );
+		MODebug2->Message( moText("moConsole:: Effects.") + IntToStr(N)  );
 	}
 
 	state.m_nEffects = N;
@@ -457,16 +467,16 @@ moConsole::LoadEffects() {
 		}
 	}
 
-	if (MODebug2) MODebug2->Push(moText("moConsole:: Effects loaded."));
+	if (MODebug2) MODebug2->Message(moText("moConsole:: Effects loaded."));
 }
 
 void moConsole::UnloadEffects() {
 
-    for(MOuint i=0; i < m_EffectManager.Effects().Count(); i++) {
-		if( m_EffectManager.Effects().Get(i) != NULL ) {
-			m_EffectManager.RemoveEffect( i, MO_OBJECT_EFFECT );
+	while(m_EffectManager.Effects().Count()>0) {
+		if( m_EffectManager.Effects().Get(0) != NULL ) {
+			m_EffectManager.RemoveEffect( 0, MO_OBJECT_EFFECT );
 		}
-	}
+    }
 
 }
 
@@ -486,8 +496,8 @@ moConsole::LoadPostEffects() {
 	N = m_Config.GetValuesCount(ptfx);
 
 	if (MODebug2) {
-		MODebug2->Push( moText("moConsole:: Loading PostEffects configs...") );
-		MODebug2->Push( moText("moConsole:: Post Effects.") + IntToStr(N)  );
+		MODebug2->Message( moText("moConsole:: Loading PostEffects configs...") );
+		MODebug2->Message( moText("moConsole:: Post Effects.") + IntToStr(N)  );
 	}
 
 	state.m_nPostEffects = N;
@@ -508,18 +518,18 @@ moConsole::LoadPostEffects() {
 						posteffect->Init();
 						posteffect->state.on = MO_ON;
 				}
-			}
+			} else MODebug2->Error( moText("moConsole:: Couldn't load Post Effect:") + moText(fxname));
 			m_Config.NextValue();
 		}
 	}
-	if (MODebug2) MODebug2->Push(moText("moConsole:: Post Effects loaded."));
+	if (MODebug2) MODebug2->Message(moText("moConsole:: Post Effects loaded."));
 }
 
 void moConsole::UnloadPostEffects() {
 
-    for(MOuint i=0; i < m_EffectManager.PostEffects().Count(); i++) {
-		if( m_EffectManager.PostEffects().Get(i) != NULL ) {
-			m_EffectManager.RemoveEffect( i, MO_OBJECT_POSTEFFECT );
+    while(m_EffectManager.PostEffects().Count()>0) {
+		if( m_EffectManager.PostEffects().Get(0) != NULL ) {
+			m_EffectManager.RemoveEffect( 0, MO_OBJECT_POSTEFFECT );
 		}
 	}
 }
@@ -583,6 +593,8 @@ moConsole::LoadResources() {
 		}
 
 	}
+
+    if (MODebug2) MODebug2->Message(moText("moConsole:: Resources Plugin loaded."));
 
 }
 
