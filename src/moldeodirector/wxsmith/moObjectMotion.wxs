@@ -174,35 +174,35 @@
 						<pos>112,56</pos>
 						<size>144,64</size>
 						<object class="wxBitmapButton" name="ID_BITMAPBUTTONPOSCIRCULAR" variable="BitmapButtonPosCircular" member="yes">
-							<bitmap>D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\icons\motioncircular.png</bitmap>
+							<bitmap>../../doc/icons/motioncircular.png</bitmap>
 							<default>1</default>
 							<pos>0,0</pos>
 							<size>32,32</size>
 							<handler function="OnButton1Click" entry="EVT_BUTTON" />
 						</object>
 						<object class="wxBitmapButton" name="ID_BITMAPBUTTONPOSHOR" variable="BitmapButtonPosHor" member="yes">
-							<bitmap>D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\icons\motionhorizontal.png</bitmap>
+							<bitmap>../../doc/icons/motionhorizontal.png</bitmap>
 							<default>1</default>
 							<pos>32,0</pos>
 							<size>32,32</size>
 							<handler function="OnBitmapButton3Click" entry="EVT_BUTTON" />
 						</object>
 						<object class="wxBitmapButton" name="ID_BITMAPBUTTONPOSVERT" variable="BitmapButtonPosVer" member="yes">
-							<bitmap>D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\icons\motionvertical.png</bitmap>
+							<bitmap>../../doc/icons/motionvertical.png</bitmap>
 							<default>1</default>
 							<pos>64,0</pos>
 							<size>32,32</size>
 							<handler function="OnBitmapButton4Click" entry="EVT_BUTTON" />
 						</object>
 						<object class="wxBitmapButton" name="ID_BITMAPBUTTON8" variable="BitmapButton8" member="yes">
-							<bitmap>D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\icons\motiondiagonal.png</bitmap>
+							<bitmap>../../doc/icons/motiondiagonal.png</bitmap>
 							<default>1</default>
 							<pos>96,0</pos>
 							<size>32,32</size>
 							<handler function="OnBitmapButton2Click" entry="EVT_BUTTON" />
 						</object>
 						<object class="wxBitmapButton" name="ID_BITMAPBUTTONPOSRAND" variable="BitmapButtonPosRand" member="yes">
-							<bitmap>D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\icons\motionrandom.png</bitmap>
+							<bitmap>../../doc/icons/motionrandom.png</bitmap>
 							<default>1</default>
 							<pos>0,32</pos>
 							<size>32,32</size>
@@ -213,35 +213,35 @@
 						<pos>112,304</pos>
 						<size>144,64</size>
 						<object class="wxBitmapButton" name="ID_BITMAPBUTTONROTCIRCULAR" variable="BitmapButtonRotCircular" member="yes">
-							<bitmap>D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\icons\motioncircular.png</bitmap>
+							<bitmap>../../doc/icons/motioncircular.png</bitmap>
 							<default>1</default>
 							<pos>0,0</pos>
 							<size>32,32</size>
 							<handler function="OnBitmapButtonRotCircularClick" entry="EVT_BUTTON" />
 						</object>
 						<object class="wxBitmapButton" name="ID_BITMAPBUTTONROTHOR" variable="BitmapButtonRotHor" member="yes">
-							<bitmap>D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\icons\motionhorizontal.png</bitmap>
+							<bitmap>../../doc/icons/motionhorizontal.png</bitmap>
 							<default>1</default>
 							<pos>32,0</pos>
 							<size>32,32</size>
 							<handler function="OnBitmapButton3Click" entry="EVT_BUTTON" />
 						</object>
 						<object class="wxBitmapButton" name="ID_BITMAPBUTTONROTVER" variable="BitmapButtonRotVer" member="yes">
-							<bitmap>D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\icons\motionvertical.png</bitmap>
+							<bitmap>../../doc/icons/motionvertical.png</bitmap>
 							<default>1</default>
 							<pos>64,0</pos>
 							<size>32,32</size>
 							<handler function="OnBitmapButton4Click" entry="EVT_BUTTON" />
 						</object>
 						<object class="wxBitmapButton" name="ID_BITMAPBUTTONROTDIAG" variable="BitmapButtonRotDiag" member="yes">
-							<bitmap>D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\icons\motiondiagonal.png</bitmap>
+							<bitmap>../../doc/icons/motiondiagonal.png</bitmap>
 							<default>1</default>
 							<pos>96,0</pos>
 							<size>32,32</size>
 							<handler function="OnBitmapButton2Click" entry="EVT_BUTTON" />
 						</object>
 						<object class="wxBitmapButton" name="ID_BITMAPBUTTONROTRAND" variable="BitmapButtonRotRand" member="yes">
-							<bitmap>D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\icons\motionrandom.png</bitmap>
+							<bitmap>../../doc/icons/motionrandom.png</bitmap>
 							<default>1</default>
 							<pos>0,32</pos>
 							<size>32,32</size>
@@ -252,35 +252,35 @@
 						<pos>112,180</pos>
 						<size>144,64</size>
 						<object class="wxBitmapButton" name="ID_BITMAPBUTTONSCACIRCULAR" variable="BitmapButtonScaCircular" member="yes">
-							<bitmap>D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\icons\motioncircular.png</bitmap>
+							<bitmap>../../doc/icons/motioncircular.png</bitmap>
 							<default>1</default>
 							<pos>0,0</pos>
 							<size>32,32</size>
 							<handler function="OnBitmapButtonScaCircularClick" entry="EVT_BUTTON" />
 						</object>
 						<object class="wxBitmapButton" name="ID_BITMAPBUTTONSCAHOR" variable="BitmapButtonScaHor" member="yes">
-							<bitmap>D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\icons\motionhorizontal.png</bitmap>
+							<bitmap>../../doc/icons/motionhorizontal.png</bitmap>
 							<default>1</default>
 							<pos>32,0</pos>
 							<size>32,32</size>
 							<handler function="OnBitmapButton3Click" entry="EVT_BUTTON" />
 						</object>
 						<object class="wxBitmapButton" name="ID_BITMAPBUTTONSCAVER" variable="BitmapButtonScaVer" member="yes">
-							<bitmap>D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\icons\motionvertical.png</bitmap>
+							<bitmap>../../doc/icons/motionvertical.png</bitmap>
 							<default>1</default>
 							<pos>64,0</pos>
 							<size>32,32</size>
 							<handler function="OnBitmapButton4Click" entry="EVT_BUTTON" />
 						</object>
 						<object class="wxBitmapButton" name="ID_BITMAPBUTTONSCADIAG" variable="BitmapButtonScaDiag" member="yes">
-							<bitmap>D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\icons\motiondiagonal.png</bitmap>
+							<bitmap>../../doc/icons/motiondiagonal.png</bitmap>
 							<default>1</default>
 							<pos>96,0</pos>
 							<size>32,32</size>
 							<handler function="OnBitmapButton2Click" entry="EVT_BUTTON" />
 						</object>
 						<object class="wxBitmapButton" name="ID_BITMAPBUTTONSCARAND" variable="BitmapButtonScaRand" member="yes">
-							<bitmap>D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\icons\motionrandom.png</bitmap>
+							<bitmap>../../doc/icons/motionrandom.png</bitmap>
 							<default>1</default>
 							<pos>0,32</pos>
 							<size>32,32</size>

@@ -60,7 +60,7 @@
 			<size>48,48</size>
 			<bg>#000000</bg>
 			<object class="wxStaticBitmap" name="ID_STATICBITMAPCTRLS" variable="StaticBitmapCtrls" member="yes">
-				<bitmap>D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\icons\layercontrols.png</bitmap>
+				<bitmap>../../doc/icons/layercontrols.png</bitmap>
 				<pos>0,0</pos>
 			</object>
 		</object>
@@ -68,15 +68,15 @@
 			<pos>132,26</pos>
 			<bg>#000000</bg>
 			<object class="wxStaticBitmap" name="ID_STATICBITMAP1" variable="StaticBitmap1" member="no">
-				<bitmap>D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\icons\csvColors32.png</bitmap>
+				<bitmap>../../doc/icons/csvColors32.png</bitmap>
 				<pos>0,0</pos>
 			</object>
 		</object>
 		<object class="wxBitmapButton" name="ID_BITMAPBUTTONVISIBILITY" variable="BitmapButtonVisibility" member="yes">
-			<bitmap>D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\icons\visibility.png</bitmap>
-			<disabled>D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\icons\visibility.png</disabled>
-			<selected>D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\icons\visibility.png</selected>
-			<focus>D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\icons\visibility.png</focus>
+			<bitmap>../../doc/icons/visibility.png</bitmap>
+			<disabled>../../doc/icons/visibility.png</disabled>
+			<selected>../../doc/icons/visibility.png</selected>
+			<focus>../../doc/icons/visibility.png</focus>
 			<default>1</default>
 			<pos>100,26</pos>
 			<size>26,21</size>
