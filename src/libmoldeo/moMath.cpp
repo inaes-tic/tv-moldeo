@@ -37,7 +37,7 @@
 
 #include "moMath.h"
 
-#ifdef MO_USING_VC
+#ifndef MO_USING_VC
 
 template<> const MOfloat moMath<MOfloat>::EPSILON = FLT_EPSILON;
 template<> const MOfloat moMath<MOfloat>::ZERO_TOLERANCE = 1e-06f;

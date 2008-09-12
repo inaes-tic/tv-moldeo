@@ -203,7 +203,7 @@ MOboolean moEffectText::Finish()
 
 
 GLvoid
-moEffectText::BuildFont(GLvoid)								// Build Our Font Display List
+moEffectText::BuildFont(void)								// Build Our Font Display List
 {
 	float	cx;											// Holds Our X Character Coord
 	float	cy;											// Holds Our Y Character Coord
@@ -268,7 +268,7 @@ moEffectText::glPrint( GLint x, GLint y, char *string, int set, float scx, float
 }
 
 GLvoid
-moEffectText::KillFont(GLvoid)									// Delete The Font From Memory
+moEffectText::KillFont()									// Delete The Font From Memory
 {
 	glDeleteLists( m_GLBaseList, 256);							// Delete All 256 Display Lists
 

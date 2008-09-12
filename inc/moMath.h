@@ -841,7 +841,7 @@ typedef moMath<double> moMathd;
 template class LIBMOLDEO_API moMath<float>;
 typedef moMath<float> moMathf;
 
-#ifndef MO_USING_VC
+#ifdef MO_USING_VC
 	template<> const MOfloat moMath<MOfloat>::EPSILON = FLT_EPSILON;
 	template<> const MOfloat moMath<MOfloat>::ZERO_TOLERANCE = 1e-06f;
 	template<> const MOfloat moMath<MOfloat>::MAX_REAL = FLT_MAX;

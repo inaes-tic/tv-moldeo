@@ -86,9 +86,9 @@ class moEffectText : public moEffect
         moTexture*  m_pFont;
 
         //esto lo podriamos poner en el FontManager....
-        GLvoid BuildFont(GLvoid);
+        GLvoid BuildFont(void);
         GLvoid glPrint(GLint x, GLint y, char *string, int set, float scx, float scy, float rt);
-        GLvoid KillFont(GLvoid);
+        GLvoid KillFont(void);
 };
 
 class moEffectTextFactory : public moEffectFactory
