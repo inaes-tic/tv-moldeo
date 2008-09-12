@@ -32,7 +32,7 @@
 					<Add library="libglaux" />
 				</Linker>
 				<ExtraCommands>
-					<Add after="c:\root\bin\cp.exe ../../lib/mingw/libmoldeod.dll ../../bin/mingw/" />
+					<Add after="cp.exe ../../lib/mingw/libmoldeod.dll ../../bin/mingw/" />
 					<Mode after="always" />
 				</ExtraCommands>
 			</Target>
@@ -60,7 +60,7 @@
 					<Add library="libglaux" />
 				</Linker>
 				<ExtraCommands>
-					<Add after="c:\root\bin\cp.exe ../../lib/mingw/libmoldeo.dll ../../bin/mingw/" />
+					<Add after="cp.exe ../../lib/mingw/libmoldeo.dll ../../bin/mingw/" />
 					<Mode after="always" />
 				</ExtraCommands>
 			</Target>
