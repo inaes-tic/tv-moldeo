@@ -48,7 +48,10 @@ int moCHeader::claveSolSostenidos[12] = {
 void
 moCHeader::HeaderToY( moCNote *p_CNote, float h, float yPent, float& y, bool &sostenido)  {
 
-
+    int inty;
+    int restoctav;
+    float basey;
+    float divoctav;
 
     // 1 octava son
     float yoctava = 7.0; //radios de nota
@@ -59,12 +62,12 @@ moCHeader::HeaderToY( moCNote *p_CNote, float h, float yPent, float& y, bool &so
 
         case 3:
             // entre 55 y 89, empezando por el sol
-            int inty = p_CNote->m_note - 55;
+            inty = p_CNote->m_note - 55;
 
-            int restoctav = inty % 12; //resto
-            float divoctav = floor( inty / (float)12 ); //cuantas octavas???
+            restoctav = inty % 12; //resto
+            divoctav = floor( inty / (float)12 ); //cuantas octavas???
 
-            float basey = yPent - 5.0 * dy;
+            basey = yPent - 5.0 * dy;
 
             basey+= (float)yoctava * (float)divoctav * dy;
             basey+= (float) moCHeader::claveSol[ restoctav ] * dy;
