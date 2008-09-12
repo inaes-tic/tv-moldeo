@@ -30,6 +30,8 @@
 *******************************************************************************/
 
 #include "moTexture.h"
+#include "FreeImage.h"
+
 
 #include "moArray.cpp"
 moDefineDynamicArray(moTextureArray)

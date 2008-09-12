@@ -72,11 +72,10 @@
 			<Add directory="..\..\..\..\..\externlibs\SDL\include" />
 			<Add directory="..\..\..\..\..\externlibs\SDL_image\include" />
 			<Add directory="..\..\..\..\..\externlibs\SDL_net\include" />
-			<Add directory="C:\Archivos de programa\Archivos comunes\GStreamer\0.10\include" />
-			<Add directory="C:\Archivos de programa\Archivos comunes\GTK\2.0\include\glib-2.0" />
-			<Add directory="C:\Archivos de programa\Archivos comunes\GTK\2.0\lib\glib-2.0\include" />
-			<Add directory="C:\Archivos de programa\Archivos comunes\GTK\2.0\include\libxml2" />
-			<Add directory="C:\Archivos de programa\Archivos comunes\GTK\2.0\include" />
+			<Add directory="..\..\..\..\..\externlibs\gstreamer\include" />
+
+			<Add directory="..\..\..\..\..\externlibs\gstreamer\include\glib-2.0" />
+			<Add directory="..\..\..\..\..\externlibs\gstreamer\lib\glib-2.0\include" />
 		</Compiler>
 		<Linker>
 			<Add library="libSDL" />

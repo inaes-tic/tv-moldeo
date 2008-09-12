@@ -8,8 +8,8 @@
 		<Build>
 			<Target title="Debug">
 				<Option output="..\..\bin\mingw\moldeodirectord" prefix_auto="1" extension_auto="1" />
-				<Option working_dir="..\..\bin\mingw\" />
-				<Option object_output="wobjd\Debug\" />
+				<Option working_dir="..\..\bin\mingw" />
+				<Option object_output="wobjd\Debug" />
 				<Option type="0" />
 				<Option compiler="gcc" />
 				<Option projectLinkerOptionsRelation="2" />
@@ -20,13 +20,13 @@
 				<Linker>
 					<Add library="libmoldeod" />
 					<Add library="tinyxmld" />
-					<Add directory="..\..\contrib\src\tinyxml\Debug\" />
+					<Add directory="..\..\contrib\src\tinyxml\Debug" />
 				</Linker>
 			</Target>
 			<Target title="Release">
 				<Option output="..\..\bin\mingw\moldeodirector" prefix_auto="1" extension_auto="1" />
-				<Option working_dir="..\..\bin\mingw\" />
-				<Option object_output="wobj\Release\" />
+				<Option working_dir="..\..\bin\mingw" />
+				<Option object_output="wobj\Release" />
 				<Option type="0" />
 				<Option compiler="gcc" />
 				<Option projectLinkerOptionsRelation="2" />
@@ -38,7 +38,7 @@
 					<Add option="-s" />
 					<Add library="libmoldeo" />
 					<Add library="tinyxml" />
-					<Add directory="..\..\contrib\src\tinyxml\Release\" />
+					<Add directory="..\..\contrib\src\tinyxml\Release" />
 				</Linker>
 			</Target>
 		</Build>
@@ -51,9 +51,7 @@
 			<Add option="-DWXUSINGDLL" />
 			<Add directory=".\vdtc" />
 			<Add directory=".\treemultictrl" />
-			<Add directory="c:\root\local\include\wx-2.8" />
-			<Add directory="C:\root\local\lib\wx\include\msw-ansi-release-2.8" />
-			<Add directory="..\..\inc\" />
+			<Add directory="..\..\inc" />
 			<Add directory="..\..\inc\openal" />
 			<Add directory="..\..\inc\3ds" />
 			<Add directory="..\..\..\..\externlibs\SDL\include" />
@@ -67,13 +65,13 @@
 			<Add directory="..\..\..\..\externlibs\openal\include" />
 			<Add directory="..\..\..\..\externlibs\freetype\include" />
 			<Add directory="..\..\..\..\externlibs\freeimage\include" />
-			<Add directory="C:\Archivos de programa\Archivos comunes\GStreamer\0.10\include" />
-			<Add directory="C:\Archivos de programa\Archivos comunes\GTK\2.0\include\glib-2.0" />
-			<Add directory="C:\Archivos de programa\Archivos comunes\GTK\2.0\lib\glib-2.0\include" />
-			<Add directory="C:\Archivos de programa\Archivos comunes\GTK\2.0\include\libxml2" />
-			<Add directory="C:\Archivos de programa\Archivos comunes\GTK\2.0\include" />
-			<Add directory="..\" />
-			<Add directory=".\" />
+			<Add directory="..\..\..\..\externlibs\wxWidgets\lib\mingw_lib\wx\include\msw-ansi-release-2.8" />
+			<Add directory="..\..\..\..\externlibs\wxwidgets\include" />
+			<Add directory="..\..\..\..\externlibs\gstreamer\include" />
+			<Add directory="..\..\..\..\externlibs\gstreamer\include\glib-2.0" />
+			<Add directory="..\..\..\..\externlibs\gstreamer\lib\glib-2.0\include" />
+			<Add directory=".." />
+			<Add directory="." />
 		</Compiler>
 		<Linker>
 			<Add library="libSDL" />
@@ -98,6 +96,7 @@
 			<Add library="glu32" />
 			<Add library="glaux" />
 			<Add library="wx_msw_html-2.8" />
+			<Add directory="..\..\..\..\externlibs\gstreamer\lib\glib-2.0\include" />
 			<Add directory="..\..\..\..\externlibs\tinyxml\lib" />
 			<Add directory="..\..\..\..\externlibs\SDL\lib" />
 			<Add directory="..\..\..\..\externlibs\glew\lib" />
@@ -108,10 +107,9 @@
 			<Add directory="..\..\..\..\externlibs\openal\libs\win32" />
 			<Add directory="..\..\..\..\externlibs\opengl\lib" />
 			<Add directory="..\..\..\..\externlibs\freeimage\lib" />
+			<Add directory="..\..\..\..\externlibs\gstreamer\lib" />
+			<Add directory="..\..\..\..\externlibs\wxwidgets\lib\mingw_lib" />
 			<Add directory="..\..\lib\mingw" />
-			<Add directory="C:\root\local\lib" />
-			<Add directory="C:\Archivos de programa\Archivos comunes\GTK\2.0\lib" />
-			<Add directory="C:\Archivos de programa\Archivos comunes\GStreamer\0.10\bin" />
 		</Linker>
 		<Unit filename="mo3dModelPanel.cpp" />
 		<Unit filename="mo3dModelPanel.h" />
