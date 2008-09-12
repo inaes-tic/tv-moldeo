@@ -472,8 +472,8 @@ moMidi::Init() {
 	m_Config.SetCurrentParamIndex( mididevices );
 
 	/*
-MO_MIDI_SYTEM_LABELNAME	0
-MO_MIDI_SYSTEM_ON 1
+        MO_MIDI_SYTEM_LABELNAME	0
+        MO_MIDI_SYSTEM_ON 1
 	*/
 	for( int i = 0; i < nvalues; i++) {
 

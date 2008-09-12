@@ -47,7 +47,7 @@
 			<Add alias="All" targets="release;debug;" />
 		</VirtualTargets>
 		<Compiler>
-			<Add directory="..\..\inc\" />
+			<Add directory="..\..\inc" />
 			<Add directory="..\..\inc\openal" />
 			<Add directory="..\..\inc\3ds" />
 			<Add directory="..\..\..\..\externlibs\SDL\include" />
@@ -61,11 +61,9 @@
 			<Add directory="..\..\..\..\externlibs\openal\include" />
 			<Add directory="..\..\..\..\externlibs\freetype\include" />
 			<Add directory="..\..\..\..\externlibs\freeimage\include" />
-			<Add directory="C:\Archivos de programa\Archivos comunes\GStreamer\0.10\include" />
-			<Add directory="C:\Archivos de programa\Archivos comunes\GTK\2.0\include\glib-2.0" />
-			<Add directory="C:\Archivos de programa\Archivos comunes\GTK\2.0\lib\glib-2.0\include" />
-			<Add directory="C:\Archivos de programa\Archivos comunes\GTK\2.0\include\libxml2" />
-			<Add directory="C:\Archivos de programa\Archivos comunes\GTK\2.0\include" />
+			<Add directory="..\..\..\..\externlibs\gstreamer\include" />
+			<Add directory="..\..\..\..\externlibs\gstreamer\include\glib-2.0" />
+			<Add directory="..\..\..\..\externlibs\gstreamer\lib\glib-2.0\include" />
 		</Compiler>
 		<Linker>
 			<Add library="mingw32" />

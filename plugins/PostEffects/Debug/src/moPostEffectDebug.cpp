@@ -95,6 +95,8 @@ moPostEffectDebug::Init()
 	fps_mean = 0;
 	fps_count = 0;
 
+	MODebug2->Message(moText("debug inited"));
+
 	return true;
 }
 
@@ -156,33 +158,11 @@ void moPostEffectDebug::Draw( moTempo* tempogral,moEffectState* parentstate)
 	//glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
 
+    for(int g=560;g>=80 /*&& MODebug2->Count()>0*/;g-=20) {
+        //glPrint(0,g,MODebug2->Pop(),0,1.0,1.0);
+        glPrint(0,g,moText("test"),0,1.0,1.0);
 
-
-	glPrint(0,560,MODebug->Get(24),0,1.0,1.0);
-	glPrint(0,540,MODebug->Get(23),0,1.0,1.0);
-	glPrint(0,520,MODebug->Get(22),0,1.0,1.0);
-	glPrint(0,500,MODebug->Get(21),0,1.0,1.0);
-	glPrint(0,480,MODebug->Get(20),0,1.0,1.0);
-	glPrint(0,460,MODebug->Get(19),0,1.0,1.0);
-	glPrint(0,440,MODebug->Get(18),0,1.0,1.0);
-	glPrint(0,420,MODebug->Get(17),0,1.0,1.0);
-	glPrint(0,400,MODebug->Get(16),0,1.0,1.0);
-	glPrint(0,380,MODebug->Get(15),0,1.0,1.0);
-	glPrint(0,360,MODebug->Get(14),0,1.0,1.0);
-	glPrint(0,340,MODebug->Get(13),0,1.0,1.0);
-	glPrint(0,320,MODebug->Get(12),0,1.0,1.0);
-	glPrint(0,300,MODebug->Get(11),0,1.0,1.0);
-	glPrint(0,280,MODebug->Get(10),0,1.0,1.0);
-	glPrint(0,260,MODebug->Get(9),0,1.0,1.0);
-	glPrint(0,240,MODebug->Get(8),0,1.0,1.0);
-	glPrint(0,220,MODebug->Get(7),0,1.0,1.0);
-	glPrint(0,200,MODebug->Get(6),0,1.0,1.0);
-	glPrint(0,180,MODebug->Get(5),0,1.0,1.0);
-	glPrint(0,160,MODebug->Get(4),0,1.0,1.0);
-	glPrint(0,140,MODebug->Get(3),0,1.0,1.0);
-	glPrint(0,120,MODebug->Get(2),0,1.0,1.0);
-	glPrint(0,100,MODebug->Get(1),0,1.0,1.0);
-	glPrint(0,80,MODebug->Get(0),0,1.0,1.0);
+    }
 
 
 	/*

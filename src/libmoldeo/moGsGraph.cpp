@@ -353,14 +353,14 @@ moGsGraph::InitGraph() {
     guint major, minor, micro, nano;
     GError *errores;
 
-    MODebug2->Error( moText("Initializing GStreamer"));
+    MODebug2->Message( moText("Initializing GStreamer"));
     //bool init_result = gst_init_check (NULL, NULL, &errores);
     gst_init(NULL,NULL);
     //gst_init(NULL, NULL);
     //init_result = init_result && gst_controller_init(NULL,NULL);
 
     gst_version (&major, &minor, &micro, &nano);
-    MODebug2->Error( moText("GStreamer version") + IntToStr(major) + moText(".") + IntToStr(minor) + moText(".") + IntToStr(minor));
+    MODebug2->Message( moText("GStreamer version") + IntToStr(major) + moText(".") + IntToStr(minor) + moText(".") + IntToStr(minor));
     //char vers[10];
     //sprintf( vers, "version: %i.%i.%i.%i",major,minor, micro, nano);
 
@@ -369,7 +369,7 @@ moGsGraph::InitGraph() {
 //analogo a FilterGraph, con dos parametros para dar de alta el elemento: playbin
 //playbin
 //player
-    MODebug2->Error( moText("creating pipeline"));
+    MODebug2->Message( moText("creating pipeline"));
     m_pGstPipeline = gst_pipeline_new ("pipeline");
 
     //buscar un tipo de filtro: factory = gst_element_factory_find ("fakesrc");
@@ -377,7 +377,7 @@ moGsGraph::InitGraph() {
     //o  gst_element_factory_make ("playbin", "player");
     //tomar el valor de una propiedad: g_object_get (G_OBJECT (element), "name", &name, NULL);
 
-    MODebug2->Error( moText("creating bus interface"));
+    MODebug2->Message( moText("creating bus interface"));
     m_pGstBus = gst_pipeline_get_bus (GST_PIPELINE (m_pGstPipeline));
     //gst_bus_add_watch (m_pGstBus, moGsGraph::bus_call, NULL);
     gst_object_unref (m_pGstBus);
@@ -398,7 +398,7 @@ moGsGraph::InitGraph() {
     /* now run */
 
     //g_main_loop_run (moGsGraph::loop);
-    MODebug2->Error( moText("moGsGraph::Init result:") + moText(((m_pGstPipeline!=NULL) ? "success" : "failure")) );
+    MODebug2->Message( moText("moGsGraph::Init result:") + moText(((m_pGstPipeline!=NULL) ? "success" : "failure")) );
 	return (m_pGstPipeline!=NULL);
 }
 

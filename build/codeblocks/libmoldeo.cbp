@@ -85,11 +85,9 @@
 			<Add directory="..\..\..\..\externlibs\SDL\include" />
 			<Add directory="..\..\..\..\externlibs\SDL_net\include" />
 			<Add directory="..\..\..\..\externlibs\SDL_image\include" />
-			<Add directory="C:\Archivos de programa\Archivos comunes\GStreamer\0.10\include" />
-			<Add directory="C:\Archivos de programa\Archivos comunes\GTK\2.0\include\glib-2.0" />
-			<Add directory="C:\Archivos de programa\Archivos comunes\GTK\2.0\lib\glib-2.0\include" />
-			<Add directory="C:\Archivos de programa\Archivos comunes\GTK\2.0\include\libxml2" />
-			<Add directory="C:\Archivos de programa\Archivos comunes\GTK\2.0\include" />
+			<Add directory="..\..\..\..\externlibs\gstreamer\include" />
+			<Add directory="..\..\..\..\externlibs\gstreamer\include\glib-2.0" />
+			<Add directory="..\..\..\..\externlibs\gstreamer\lib\glib-2.0\include" />
 		</Compiler>
 		<Linker>
 			<Add library="libSDL" />
@@ -113,9 +111,7 @@
 			<Add directory="..\..\..\..\externlibs\openal\libs\win32" />
 			<Add directory="..\..\..\..\externlibs\opengl\lib" />
 			<Add directory="..\..\..\..\externlibs\freeimage\lib" />
-			<Add directory="C:\root\local\lib\" />
-			<Add directory="C:\Archivos de programa\Archivos comunes\GTK\2.0\lib" />
-			<Add directory="C:\Archivos de programa\Archivos comunes\GStreamer\0.10\bin" />
+			<Add directory="..\..\..\..\externlibs\gstreamer\lib" />
 		</Linker>
 		<Unit filename="..\..\inc\3ds\3ds.h" />
 		<Unit filename="..\..\inc\mo3dModelManager.h" />
