@@ -820,9 +820,9 @@ void moEffectPainter::moveParticles()
 	glBindTexture(fptexTarget, m_pResourceManager->GetTextureMan()->GetGLId(texfpVel));
 	glBegin(GL_POINTS);
 		for (i = 0; i < boxWidth; i++)
-			for (j = 1; j <= boxHeight; j++)
+			for (j = 0; j < boxHeight; j++)
 			{
-				glMultiTexCoord2f(GL_TEXTURE0, float(i) / boxWidth, float(j - 1) / boxHeight);
+				glMultiTexCoord2f(GL_TEXTURE0, float(i) / boxWidth, float(j) / boxHeight);
 				glMultiTexCoord2f(GL_TEXTURE1, random(-1.0, 1.0), random(-1.0, 1.0));
 				glVertex2f(i, j);
 			}
@@ -886,7 +886,7 @@ void moEffectPainter::colorParticles()
 				glMultiTexCoord2f(GL_TEXTURE1, u, v);
 				glMultiTexCoord2f(GL_TEXTURE2, float(i) / boxWidth, float(j) / boxHeight);
 				glMultiTexCoord2f(GL_TEXTURE3, float(i) / boxWidth, float(j) / boxHeight);
-				glVertex2f(i, j + 1);
+				glVertex2f(i, j);
 			}
 	glEnd();
 	glBindTexture(fptexTarget, 0);
