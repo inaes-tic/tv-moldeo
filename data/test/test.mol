@@ -4,7 +4,7 @@
     <UPDATE />
     <CONFIGPARAMS>
         <PARAM name="devices" type="TEXT">
-<!--		
+
             <VAL>
                 <D type="TXT">keyboard</D>
                 <D type="TXT">keyboard</D>
@@ -16,18 +16,20 @@
                 <D type="TXT">mouse</D>
                 <D type="TXT">mouse</D>
                 <D type="TXT">mouse</D>
+                <D type="NUM">0</D>
+                <D type="NUM">1</D>
+            </VAL>
+
+<!--
+            <VAL>
+                <D type="TXT">tabletasync</D>
+                <D type="TXT">tabletasync</D>
+                <D type="TXT">tabletasync</D>
                 <D type="NUM">0</D>
                 <D type="NUM">1</D>
             </VAL>
 -->
-            <VAL>
-                <D type="TXT">tabletasync</D>
-                <D type="TXT">tabletasync</D>
-                <D type="TXT">tabletasync</D>
-                <D type="NUM">0</D>
-                <D type="NUM">1</D>
-            </VAL>
-<!--
+
             <VAL>
                 <D type="TXT">mixer</D>
                 <D type="TXT">mixer</D>
@@ -35,7 +37,7 @@
                 <D type="NUM">0</D>
                 <D type="NUM">1</D>
             </VAL>
--->		
+		
         </PARAM>
         <PARAM name="preeffect" type="TEXT">
             <VAL>
@@ -46,15 +48,33 @@
                 <D type="NUM">1</D>
             </VAL>
         </PARAM>
+
         <PARAM name="effect" type="TEXT">
             <VAL>
                 <D type="TXT">icon</D>
                 <D type="TXT">icon</D>
-                <D type="TXT">ICON</D>
+                <D type="TXT">icon</D>
+                <D type="NUM">0</D>
+                <D type="NUM">1</D>
+            </VAL>
+
+            <VAL>
+                <D type="TXT">image</D>
+                <D type="TXT">imagetest</D>
+                <D type="TXT">image</D>
+                <D type="NUM">0</D>
+                <D type="NUM">1</D>
+            </VAL>
+
+            <VAL>
+                <D type="TXT">painter</D>
+                <D type="TXT">painter</D>
+                <D type="TXT">painter</D>
                 <D type="NUM">0</D>
                 <D type="NUM">1</D>
             </VAL>
         </PARAM>
+
         <PARAM name="posteffect" type="TEXT">
             <VAL>
                 <D type="TXT">debug</D>
