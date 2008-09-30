@@ -57,9 +57,12 @@
 			<Add alias="All" targets="debug;release;" />
 		</VirtualTargets>
 		<Compiler>
+			<Add option="-DV3DLIB_ENABLE_GPGPU" />
+			<Add option="-DV3DLIB_GPGPU_ENABLE_CG" />
 			<Add directory=".\inc" />
 			<Add directory="..\..\..\inc" />
 			<Add directory="..\..\..\inc\openal" />
+			<Add directory=".\src\gpuklt" />
 			<Add directory=".\src\gpuklt\GL" />
 			<Add directory="..\..\..\..\..\externlibs\cg\include" />
 			<Add directory="..\..\..\..\..\externlibs\glew\include" />
@@ -74,7 +77,6 @@
 			<Add directory="..\..\..\..\..\externlibs\SDL_image\include" />
 			<Add directory="..\..\..\..\..\externlibs\SDL_net\include" />
 			<Add directory="..\..\..\..\..\externlibs\gstreamer\include" />
-
 			<Add directory="..\..\..\..\..\externlibs\gstreamer\include\glib-2.0" />
 			<Add directory="..\..\..\..\..\externlibs\gstreamer\lib\glib-2.0\include" />
 		</Compiler>
@@ -87,6 +89,9 @@
 			<Add library="OpenAL32" />
 			<Add library="EFX-Util" />
 			<Add library="FreeImage" />
+			<Add library="cv" />
+			<Add library="highgui" />
+			<Add library="cxcore" />
 			<Add directory="..\..\..\..\..\externlibs\tinyxml\lib" />
 			<Add directory="..\..\..\..\..\externlibs\SDL\lib" />
 			<Add directory="..\..\..\..\..\externlibs\glew\lib" />
@@ -98,6 +103,7 @@
 			<Add directory="..\..\..\..\..\externlibs\opengl\lib" />
 			<Add directory="..\..\..\..\..\externlibs\freeimage\lib" />
 			<Add directory="..\..\..\lib\mingw" />
+			<Add directory=".\lib" />
 		</Linker>
 		<Unit filename="inc\moTrackerGpuKLT2.h" />
 		<Unit filename="src\gpuklt\GL\klt_for_video.cpp" />
