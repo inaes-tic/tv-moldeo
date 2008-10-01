@@ -74,6 +74,7 @@
 					<object class="wxTextCtrl" name="ID_TEXTCTRLRX" variable="TextCtrlRx" member="yes">
 						<pos>112,256</pos>
 						<size>144,14</size>
+						<style>wxSIMPLE_BORDER</style>
 						<handler function="OnTextCtrlRxText" entry="EVT_TEXT" />
 					</object>
 					<object class="wxSlider" name="ID_SLIDERRX" variable="SliderRx" member="yes">
@@ -81,7 +82,6 @@
 						<max>180</max>
 						<pos>48,256</pos>
 						<size>64,16</size>
-						<handler function="OnSliderRxCmdScroll1" entry="EVT_COMMAND_SCROLL" />
 						<handler function="OnSliderRxCmdScrollThumbTrack" entry="EVT_COMMAND_SCROLL_THUMBTRACK" />
 						<handler function="OnSliderRxCmdScrollThumbTrack" entry="EVT_COMMAND_SCROLL_CHANGED" />
 					</object>
@@ -96,6 +96,7 @@
 					<object class="wxTextCtrl" name="ID_TEXTCTRLRY" variable="TextCtrlRy" member="yes">
 						<pos>112,272</pos>
 						<size>144,14</size>
+						<style>wxSIMPLE_BORDER</style>
 						<handler function="OnTextCtrlRyText" entry="EVT_TEXT" />
 					</object>
 					<object class="wxSlider" name="ID_SLIDERSX" variable="SliderSx" member="yes">
@@ -137,6 +138,7 @@
 					<object class="wxTextCtrl" name="ID_TEXTCTRLSZ" variable="TextCtrlSz" member="yes">
 						<pos>112,164</pos>
 						<size>144,14</size>
+						<style>wxSIMPLE_BORDER</style>
 						<handler function="OnTextCtrlSzText" entry="EVT_TEXT" />
 					</object>
 					<object class="wxPanel" name="ID_PANEL7" variable="PanelScalesTxt" member="yes">
@@ -150,6 +152,7 @@
 					<object class="wxTextCtrl" name="ID_TEXTCTRLSY" variable="TextCtrlSy" member="yes">
 						<pos>112,148</pos>
 						<size>144,14</size>
+						<style>wxSIMPLE_BORDER</style>
 						<handler function="OnTextCtrlSyText" entry="EVT_TEXT" />
 					</object>
 					<object class="wxPanel" name="ID_PANEL4" variable="PanelScales" member="yes">
@@ -163,11 +166,13 @@
 					<object class="wxTextCtrl" name="ID_TEXTCTRLSX" variable="TextCtrlSx" member="yes">
 						<pos>112,132</pos>
 						<size>144,14</size>
+						<style>wxSIMPLE_BORDER</style>
 						<handler function="OnTextCtrlSxText" entry="EVT_TEXT" />
 					</object>
 					<object class="wxTextCtrl" name="ID_TEXTCTRLRZ" variable="TextCtrlRz" member="yes">
 						<pos>112,288</pos>
 						<size>144,14</size>
+						<style>wxSIMPLE_BORDER</style>
 						<handler function="OnTextCtrlRzText" entry="EVT_TEXT" />
 					</object>
 					<object class="wxPanel" name="ID_PANEL1" variable="Panel1" member="yes">

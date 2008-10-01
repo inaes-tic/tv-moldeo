@@ -456,15 +456,23 @@ moText  moTexture::CreateThumbnail( moText p_bufferformat, int w, int h, moText 
 //    FIMEMORY* hmem = NULL;
 
     if ( newfilename==moText("") ) {
-        //thumbnailfilename = (moText)m_pDataMan->GetDataPath() + moThm + moSlash + (moText)m_name + moText(".thm");
+
+        //old version
+        //moThm
+        thumbnailfilename = (moText)m_pDataMan->GetDataPath() + moSlash + (moText)m_name + moText(".thm");
+
+        /*
+        // new version:
         moFile SrcFile( m_name );
         moDirectory Dir( (moText)m_pDataMan->GetDataPath() + moThm );
         if (  ! Dir.Exists() ) {
 
         }
-
         thumbnailfilename = (moText)m_pDataMan->GetDataPath() + moSlash + (moText)m_name + moText(".thm");
         //thumbnailfilename = (moText)m_pDataMan->GetDataPath() + moThm + moSlash + SrcFile.GetFileName() + moText(".thm");
+        */
+
+
     } else {
         thumbnailfilename = newfilename;
     }

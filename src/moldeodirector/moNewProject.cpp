@@ -61,10 +61,10 @@ void moNewProject::OnOkClick(wxCommandEvent& event)
     moText tbasepath = (char*)path.c_str();
     moText tprojectname = (char*)name.c_str();
 
-    moText datapath = (moText)tbasepath + moText("\\") + (moText)tprojectname + moText("\\");
+    moText datapath = (moText)tbasepath + moSlash + (moText)tprojectname + moSlash;
 
-    if ( !wxDirExists( DirTextCtrl->GetValue() + wxString(wxT("\\")) + ProjectNameTextCtrl->GetValue() ) ) {
-        wxFileName::Mkdir( DirTextCtrl->GetValue() + wxString(wxT("\\")) + ProjectNameTextCtrl->GetValue() );
+    if ( !wxDirExists( DirTextCtrl->GetValue() + wxString(wxT("/")) + ProjectNameTextCtrl->GetValue() ) ) {
+        wxFileName::Mkdir( DirTextCtrl->GetValue() + wxString(wxT("/")) + ProjectNameTextCtrl->GetValue() );
     }
 
     moText configname = (moText)tprojectname + moText(".mol");
