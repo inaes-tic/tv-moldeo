@@ -56,12 +56,16 @@ Example:
 
 #ifdef MO_GSTREAMER
 
-#include <gst/gst.h>
-//#include <gst/controller/gstcontroller.h>
-#ifdef MO_WIN32
-    //#include "objbase.h"
-    //#include "dshow.h"
-#endif
+
+typedef void moGstElement;
+typedef void moGstPad;
+typedef void moGstBus;
+typedef void moGstBuffer;
+typedef void moGstCaps;
+typedef void moGstMessage;
+typedef void* moGPointer;
+typedef bool moGBoolean;
+typedef int moGstStateChangeReturn;
 
 typedef enum {
   GST_VIDEO_TEST_SRC_SMPTE,
@@ -144,7 +148,7 @@ public:
 //================================================
 //	MISC METHODS
 //================================================
-    void SetVideoFormat( GstCaps* caps, GstBuffer* buffer = NULL );
+    void SetVideoFormat( moGstCaps* caps, moGstBuffer* buffer = NULL );
 	/*
 	bool ShowError( HRESULT hr );
 	void SetVideoFormat( AM_MEDIA_TYPE* mt );
@@ -154,11 +158,11 @@ public:
 	void CheckMediaType( IPin* p_Pin );
 	void ShowConfigureDialog(IBaseFilter *pFilter);
 	*/
-    static gboolean bus_call (GstBus *bus, GstMessage *msg, gpointer user_data);
-    static gboolean cb_have_data (GstPad    *pad, GstBuffer *buffer, gpointer   u_data);
-    static void cb_newpad (GstElement *decodebin, GstPad     *pad, gboolean    last, gpointer    u_data);
-    bool CheckState( GstStateChangeReturn state_change_result, bool waitforsync = false);
-    void RetreivePads( GstElement* FilterElement);
+    static moGBoolean bus_call (moGstBus *bus, moGstMessage *msg, moGPointer user_data);
+    static moGBoolean cb_have_data (moGstPad    *pad, moGstBuffer *buffer, moGPointer   u_data);
+    static void cb_newpad (moGstElement *decodebin, moGstPad     *pad, moGBoolean    last, moGPointer    u_data);
+    bool CheckState( moGstStateChangeReturn state_change_result, bool waitforsync = false);
+    void RetreivePads( moGstElement* FilterElement);
     void WaitForFormatDefinition( MOulong timeout );
 private:
 
@@ -169,36 +173,35 @@ private:
 	moCaptureDevice     m_CaptureDevice;
 
     /** Bin's o Pipeline's (Filtergraph...)*/
-    GstElement          *m_pGstPipeline; /**análogo a ifiltergraph, oh si*/
+    moGstElement          *m_pGstPipeline; /**análogo a ifiltergraph, oh si*/
 
     /** Elements (filters) */
-    GstElement          *m_pFileSource;/** "filesrc" */
-    GstElement          *m_pColorSpace;/** "ffmpegcolorspace" */
-    GstElement          *m_pCapsFilter; /** "capsfilter" */
-    GstElement          *m_pTypeFind; /** "typefind" */
-    GstElement          *m_pIdentity; /** "identity" */
+    moGstElement          *m_pFileSource;/** "filesrc" */
+    moGstElement          *m_pColorSpace;/** "ffmpegcolorspace" */
+    moGstElement          *m_pCapsFilter; /** "capsfilter" */
+    moGstElement          *m_pTypeFind; /** "typefind" */
+    moGstElement          *m_pIdentity; /** "identity" */
 
-    GstElement          *m_pDecoderBin;/** "decodebin" */
-    GstElement          *m_pFakeSink; /** "fakesink" */
-    GstElement          *m_pVideoTestSrc;/** "videotestsrc" */
+    moGstElement          *m_pDecoderBin;/** "decodebin" */
+    moGstElement          *m_pFakeSink; /** "fakesink" */
+    moGstElement          *m_pVideoTestSrc;/** "videotestsrc" */
 
     /**audio elements*/
-    GstElement   *m_pAudioConverter;
+    moGstElement   *m_pAudioConverter;
     //GstElement  *m_pAudioConverter;
 
     /**Pad's o Pines */
-    GstPad              *m_pVideoPad;/** audio pad last out */
-    GstPad              *m_pAudioPad;/** video pad last out*/
+    moGstPad              *m_pVideoPad;/** audio pad last out */
+    moGstPad              *m_pAudioPad;/** video pad last out*/
 
 
 
     /** Control Bus */
-    GstBus              *m_pGstBus;/** bus, analogo a IMediaControl...*/
-    GError              m_GError;
+    moGstBus              *m_pGstBus;/** bus, analogo a IMediaControl...*/
+
 
     MOulong             m_Duration;
     MOulong             m_FramesLength;
-    static GMainLoop    *loop;
 
 
 };

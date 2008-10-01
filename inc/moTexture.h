@@ -39,7 +39,7 @@
 #include "moVideoGraph.h"
 #include "moGsGraph.h"
 #include "moDsGraph.h"
-#include "FreeImage.h"
+
 
 
 typedef enum moTextureType {

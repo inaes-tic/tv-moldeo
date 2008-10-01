@@ -197,10 +197,6 @@ class LIBMOLDEO_API moDirectory : public moAbstract {
 		moFileArray	m_Files;
 };
 
-/*
-template class LIBMOLDEO_API moDynamicArray<moDirectory*>;
-typedef moDynamicArray<moDirectory*> moDirectoryArray;
-*/
 moDeclareExportedDynamicArray( moDirectory*, moDirectoryArray )
 
 /**
@@ -225,8 +221,7 @@ class LIBMOLDEO_API moFileManager : public moResource
 		moDirectory*	GetDirectory( moText p_Path );
 
         static bool       CreateDirectory( moDirectory Dir );
-		static bool       CopyFile( moFile FileSrc, moFile FileDst );
-		static bool       MoveFile( moFile FileSrc, moFile FileDst );
+        static bool       CopyFile( moText FileSrc, moText FileDst );
 
 		static moText          GetExePath();
 		static moText          GetWorkPath();

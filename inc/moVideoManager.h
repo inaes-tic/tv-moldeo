@@ -222,7 +222,7 @@ class LIBMOLDEO_API moVideoFrame : public moAbstract {
 		virtual MOboolean Finish();
 
 		MOint		options;
-		FIMEMORY	*hmem;
+        FIMEMORY	*hmem;
 		FREE_IMAGE_FORMAT fif;
 		FIBITMAP *m_pImage;
 
