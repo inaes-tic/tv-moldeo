@@ -40,7 +40,7 @@ moNewEffectDialog::moNewEffectDialog(wxWindow* parent,wxWindowID id,const wxPoin
 	Choice1->Append(_("Post-Effects"));
 	TreeCtrl = new wxTreeCtrl(this, ID_TREECTRL, wxPoint(16,152), wxSize(320,152), wxTR_DEFAULT_STYLE, wxDefaultValidator, _T("ID_TREECTRL"));
 	StaticTextConfigFilename = new wxStaticText(this, ID_STATICTEXT3, _("Config file name"), wxPoint(16,64), wxDefaultSize, 0, _T("ID_STATICTEXT3"));
-
+	
 	Connect(ID_LABELNAMECTRL,wxEVT_COMMAND_TEXT_UPDATED,(wxObjectEventFunction)&moNewEffectDialog::OnLabelNameCtrlText);
 	Connect(ID_FILENAMECTRL,wxEVT_COMMAND_TEXT_UPDATED,(wxObjectEventFunction)&moNewEffectDialog::OnConfigFilenameCtrlText);
 	Connect(ID_OKBUTTON,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&moNewEffectDialog::OnOkButtonClick);

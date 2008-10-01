@@ -40,7 +40,7 @@ moPanelTexture::moPanelTexture(wxWindow* parent,wxWindowID id,const wxPoint& pos
 	//(*Initialize(moPanelTexture)
 	wxFlexGridSizer* FlexGridSizer2;
 	wxFlexGridSizer* FlexGridSizer1;
-	
+
 	Create(parent, wxID_ANY, wxDefaultPosition, wxSize(402,285), wxTAB_TRAVERSAL|wxCLIP_CHILDREN, _T("wxID_ANY"));
 	SetBackgroundColour(wxColour(0,0,0));
 	FlexGridSizer1 = new wxFlexGridSizer(2, 1, 0, 0);
@@ -84,7 +84,7 @@ moPanelTexture::moPanelTexture(wxWindow* parent,wxWindowID id,const wxPoint& pos
 	FlexGridSizer1->Add(FlexGridSizer2, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
 	SetSizer(FlexGridSizer1);
 	FlexGridSizer1->SetSizeHints(this);
-	
+
 	Connect(ID_TEXTCTRLMEDIA,wxEVT_COMMAND_TEXT_UPDATED,(wxObjectEventFunction)&moPanelTexture::OnTextCtrlMediaText);
 	Connect(ID_BUTTONIMPORT,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&moPanelTexture::OnButtonImportClick);
 	Connect(ID_BITMAPBUTTON1,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&moPanelTexture::OnBitmapButton1Click);
@@ -225,6 +225,7 @@ void moPanelTexture::OnButtonImportClick(wxCommandEvent& event)
     moProjectDescriptor ProjectDescriptor;
     ProjectDescriptor = m_ValueDescriptor.GetParamDescriptor().GetMobDescriptor().GetProjectDescriptor();
 
+    //making absolute path is mandatory (in linux) for passing directory to the open file dialog
     wxString relativepath = (wxChar*)(char*)ProjectDescriptor.GetConfigPath();
     wxFileName absname = wxFileName::DirName( relativepath );
     absname.MakeAbsolute();
@@ -237,22 +238,40 @@ void moPanelTexture::OnButtonImportClick(wxCommandEvent& event)
 
 	    pFileDialog->SetDirectory( absolutepath );
 
-		pFileDialog->SetWildcard(wxT("Image files (*.jpg;*.tga;*.png;*.avi;*.mov;*.mpg)|*.jpg;*.png;*.tga;*.avi;*.mov;*.mpg|All files (*.*)|*.*"));
+        //beware, for the extensions capitalized in linux!!
+		pFileDialog->SetWildcard(wxT("Image files (*.jpg;*.tga;*.png;*.avi;*.mov;*.mpg)|*.jpg;*.png;*.tga;*.avi;*.mov;*.mpg;*.JPG;*.PNG;*.TGA;*.AVI;*.MOV;*.MPG|All files (*.*)|*.*"));
 
 		if( pFileDialog->ShowModal() == wxID_OK ) {
 
 			wxFileName	FileName( pFileDialog->GetPath() );
 
-			FileName.MakeRelativeTo( relativepath );
+			if (FileName.MakeRelativeTo( relativepath )) {
 
-			wxString path = FileName.GetFullPath();
-			const char *cnamerelative = (char*)path.c_str();
+                wxString path = FileName.GetFullPath();
+                const char *cnamerelative = (char*)path.c_str();
 
-			//ProjectDescriptor.Set( moText((char*)cfilepath), moText((char*)cfilename) );
-			TextCtrlMedia->SetValue( path );
+                //ProjectDescriptor.Set( moText((char*)cfilepath), moText((char*)cfilename) );
+                TextCtrlMedia->SetValue( path );
 
-		    m_pTexturesTreeCtrl->UpdateDescriptors();
+                m_pTexturesTreeCtrl->UpdateDescriptors();
+			} else {
+                //ask if you want to import it ( copying it to local folder )
+                moText filename_dest = moWx2Text( absname.GetPath() ) + moSlash + moWx2Text( FileName.GetFullName() );
+                moText filename_src = moWx2Text( FileName.GetFullPath() );
+                if (moFileManager::CopyFile( filename_src, filename_dest )) {
 
+                    wxFileName	FileName2( moText2Wx( filename_dest ) );
+                    if (FileName2.MakeRelativeTo( relativepath )) {
+                        wxString path = FileName2.GetFullPath();
+                        TextCtrlMedia->SetValue( path );
+                        m_pTexturesTreeCtrl->UpdateDescriptors();
+                    }
+
+                } else {
+                    ErrorMessage( moText("Copy error") );
+                }
+
+            }
 
 		}
 

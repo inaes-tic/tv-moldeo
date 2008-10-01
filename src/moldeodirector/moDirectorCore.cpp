@@ -330,8 +330,10 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
 	moDirectorStatus moDirectorCore::NewProject( moProjectDescriptor p_projectdescriptor ) {
 
         //copiar los archivos a  la carpeta
+
+        /*
         wxString moldeopathinstall = moText2Wx( m_ApplicationDescriptor.GetInstallationFullPath() );
-        wxString templaterelpath( _T("/data/test/") );
+        wxString templaterelpath( _T("../../data/") );
 
         wxString templatepath  = moldeopathinstall + templaterelpath;
 
@@ -339,9 +341,10 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
 
         if ( !directory.Exists() )
         {
-            ErrorMessage(moText("Error: el directorio no se pudo abrir"));
+            ErrorMessage(moText("Error: el directorio no se pudo abrir > ") + moWx2Text(templatepath) );
             return MO_DIRECTOR_STATUS_ERROR;
         } else {
+            */
 
             Log( moText("Creating project:") + p_projectdescriptor.GetFullConfigName() );
 
@@ -349,7 +352,7 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
             return m_pDirectorConsole->NewProject(p_projectdescriptor);
 
 
-        }
+        //}
 
 
 

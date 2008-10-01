@@ -65,7 +65,7 @@ moObjectMotion::moObjectMotion(wxWindow* parent,wxWindowID id,const wxPoint& pos
 {
 	//(*Initialize(moObjectMotion)
 	wxFlexGridSizer* FlexGridSizer1;
-
+	
 	Create(parent, wxID_ANY, wxDefaultPosition, wxSize(240,298), wxTAB_TRAVERSAL, _T("wxID_ANY"));
 	SetBackgroundColour(wxColour(0,0,0));
 	FlexGridSizer1 = new wxFlexGridSizer(0, 3, 0, 0);
@@ -81,10 +81,10 @@ moObjectMotion::moObjectMotion(wxWindow* parent,wxWindowID id,const wxPoint& pos
 	SliderRz = new wxSlider(Panel2, ID_SLIDERRZ, 0, -180, 180, wxPoint(48,288), wxSize(64,16), 0, wxDefaultValidator, _T("ID_SLIDERRZ"));
 	SliderSz = new wxSlider(Panel2, ID_SLIDERSZ, 0, -100, 100, wxPoint(48,164), wxSize(64,16), 0, wxDefaultValidator, _T("ID_SLIDERSZ"));
 	SliderSy = new wxSlider(Panel2, ID_SLIDERSY, 0, -100, 100, wxPoint(48,148), wxSize(64,16), 0, wxDefaultValidator, _T("ID_SLIDERSY"));
-	TextCtrlRx = new wxTextCtrl(Panel2, ID_TEXTCTRLRX, wxEmptyString, wxPoint(112,256), wxSize(144,14), 0, wxDefaultValidator, _T("ID_TEXTCTRLRX"));
+	TextCtrlRx = new wxTextCtrl(Panel2, ID_TEXTCTRLRX, wxEmptyString, wxPoint(112,256), wxSize(144,14), wxSIMPLE_BORDER, wxDefaultValidator, _T("ID_TEXTCTRLRX"));
 	SliderRx = new wxSlider(Panel2, ID_SLIDERRX, 0, -180, 180, wxPoint(48,256), wxSize(64,16), 0, wxDefaultValidator, _T("ID_SLIDERRX"));
 	SliderRy = new wxSlider(Panel2, ID_SLIDERRY, 0, -180, 180, wxPoint(48,272), wxSize(64,16), 0, wxDefaultValidator, _T("ID_SLIDERRY"));
-	TextCtrlRy = new wxTextCtrl(Panel2, ID_TEXTCTRLRY, wxEmptyString, wxPoint(112,272), wxSize(144,14), 0, wxDefaultValidator, _T("ID_TEXTCTRLRY"));
+	TextCtrlRy = new wxTextCtrl(Panel2, ID_TEXTCTRLRY, wxEmptyString, wxPoint(112,272), wxSize(144,14), wxSIMPLE_BORDER, wxDefaultValidator, _T("ID_TEXTCTRLRY"));
 	SliderSx = new wxSlider(Panel2, ID_SLIDERSX, 0, -100, 100, wxPoint(48,132), wxSize(64,16), 0, wxDefaultValidator, _T("ID_SLIDERSX"));
 	Panel4 = new wxPanel(Panel2, ID_PANEL6, wxPoint(8,56), wxSize(104,64), wxTAB_TRAVERSAL, _T("ID_PANEL6"));
 	Panel4->SetBackgroundColour(wxColour(255,255,255));
@@ -95,14 +95,14 @@ moObjectMotion::moObjectMotion(wxWindow* parent,wxWindowID id,const wxPoint& pos
 	PanelPosition->SetBackgroundColour(wxColour(255,255,255));
 	PanelTranslateCoords = new wxPanel(Panel2, ID_PANEL5, wxPoint(8,8), wxSize(44,44), wxTAB_TRAVERSAL, _T("ID_PANEL5"));
 	StaticBitmap1 = new wxStaticBitmap(PanelTranslateCoords, ID_STATICBITMAP1, wxBitmap(wxImage(_T("../../doc/icons/translate.png"))), wxPoint(0,0), wxDefaultSize, 0, _T("ID_STATICBITMAP1"));
-	TextCtrlSz = new wxTextCtrl(Panel2, ID_TEXTCTRLSZ, wxEmptyString, wxPoint(112,164), wxSize(144,14), 0, wxDefaultValidator, _T("ID_TEXTCTRLSZ"));
+	TextCtrlSz = new wxTextCtrl(Panel2, ID_TEXTCTRLSZ, wxEmptyString, wxPoint(112,164), wxSize(144,14), wxSIMPLE_BORDER, wxDefaultValidator, _T("ID_TEXTCTRLSZ"));
 	PanelScalesTxt = new wxPanel(Panel2, ID_PANEL7, wxPoint(8,256), wxSize(44,44), wxTAB_TRAVERSAL, _T("ID_PANEL7"));
-	StaticBitmap5 = new wxStaticBitmap(PanelScalesTxt, ID_STATICBITMAP5, wxBitmap(wxImage(_T("../../doc/icons/rotate.png"))), wxPoint(0,0), wxDefaultSize, 0, _T("ID_STATICBITMAP5"));
-	TextCtrlSy = new wxTextCtrl(Panel2, ID_TEXTCTRLSY, wxEmptyString, wxPoint(112,148), wxSize(144,14), 0, wxDefaultValidator, _T("ID_TEXTCTRLSY"));
+	StaticBitmap5 = new wxStaticBitmap(PanelScalesTxt, ID_STATICBITMAP5, wxBitmap(wxImage(_T("..\\..\\doc\\icons\\rotate.png"))), wxPoint(0,0), wxDefaultSize, 0, _T("ID_STATICBITMAP5"));
+	TextCtrlSy = new wxTextCtrl(Panel2, ID_TEXTCTRLSY, wxEmptyString, wxPoint(112,148), wxSize(144,14), wxSIMPLE_BORDER, wxDefaultValidator, _T("ID_TEXTCTRLSY"));
 	PanelScales = new wxPanel(Panel2, ID_PANEL4, wxPoint(8,132), wxSize(44,44), wxTAB_TRAVERSAL, _T("ID_PANEL4"));
 	StaticBitmap3 = new wxStaticBitmap(PanelScales, ID_STATICBITMAP3, wxBitmap(wxImage(_T("../../doc/icons/scale.png"))), wxPoint(0,0), wxDefaultSize, 0, _T("ID_STATICBITMAP3"));
-	TextCtrlSx = new wxTextCtrl(Panel2, ID_TEXTCTRLSX, wxEmptyString, wxPoint(112,132), wxSize(144,14), 0, wxDefaultValidator, _T("ID_TEXTCTRLSX"));
-	TextCtrlRz = new wxTextCtrl(Panel2, ID_TEXTCTRLRZ, wxEmptyString, wxPoint(112,288), wxSize(144,14), 0, wxDefaultValidator, _T("ID_TEXTCTRLRZ"));
+	TextCtrlSx = new wxTextCtrl(Panel2, ID_TEXTCTRLSX, wxEmptyString, wxPoint(112,132), wxSize(144,14), wxSIMPLE_BORDER, wxDefaultValidator, _T("ID_TEXTCTRLSX"));
+	TextCtrlRz = new wxTextCtrl(Panel2, ID_TEXTCTRLRZ, wxEmptyString, wxPoint(112,288), wxSize(144,14), wxSIMPLE_BORDER, wxDefaultValidator, _T("ID_TEXTCTRLRZ"));
 	Panel1 = new wxPanel(Panel2, ID_PANEL1, wxPoint(112,56), wxSize(144,64), wxTAB_TRAVERSAL, _T("ID_PANEL1"));
 	BitmapButtonPosCircular = new wxBitmapButton(Panel1, ID_BITMAPBUTTONPOSCIRCULAR, wxBitmap(wxImage(_T("../../doc/icons/motioncircular.png"))), wxPoint(0,0), wxSize(32,32), wxBU_AUTODRAW, wxDefaultValidator, _T("ID_BITMAPBUTTONPOSCIRCULAR"));
 	BitmapButtonPosCircular->SetDefault();
@@ -139,7 +139,7 @@ moObjectMotion::moObjectMotion(wxWindow* parent,wxWindowID id,const wxPoint& pos
 	FlexGridSizer1->Add(Panel2, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	SetSizer(FlexGridSizer1);
 	FlexGridSizer1->SetSizeHints(this);
-
+	
 	Connect(ID_SLIDERTX,wxEVT_SCROLL_THUMBTRACK,(wxObjectEventFunction)&moObjectMotion::OnSliderTxCmdScrollThumbTrack);
 	Connect(ID_SLIDERTX,wxEVT_SCROLL_CHANGED,(wxObjectEventFunction)&moObjectMotion::OnSliderTxCmdScrollThumbTrack);
 	Connect(ID_SLIDERTZ,wxEVT_SCROLL_THUMBTRACK,(wxObjectEventFunction)&moObjectMotion::OnSliderTzCmdScrollThumbTrack);
