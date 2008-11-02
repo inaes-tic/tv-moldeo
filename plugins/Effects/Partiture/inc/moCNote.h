@@ -28,14 +28,14 @@ class moCNote  {
 
         /** Drawing function for CNote
         *
-        * @param    x   position for note relative to pentagram
+        * @param    x   position for note relative to middle pentagram position
         * @param    w   width of pentagram
         * @param    h   height of pentagram
-        * @param    yPent   y position of pentagram
-        * @param    hPent   height of pentagram
+        * @param    interline   interline of notes
         */
-        void Draw( float x, float w, float h, float yPent, float hPent, moEffectState& state );
-        void DrawTrail( moCNote* pCNoteAnterior, float x, float w, float h, float yPent, float hPent, moEffectState& state );
+        void Draw( float note_delay_x, float w_track, float h_track, float interline, moEffectState& state );
+        void DrawTrail( moCNote* pCNoteAnterior, float note_delay_x, float w_track, float h_track, float interline, moEffectState& state );
+        void DrawTriangle( float note_delay_x, float w_track, float h_track, float inter_line, float triangle_length, moEffectState& state );
 
 
         /**
@@ -163,6 +163,8 @@ class moCNote  {
         float m_x;
 
         moFont* m_pFont;
+
+        bool    m_grouphead;
 
 };
 

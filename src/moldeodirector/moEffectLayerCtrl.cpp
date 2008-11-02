@@ -2,22 +2,20 @@
 
 //(*InternalHeaders(moEffectLayerCtrl)
 #include <wx/bitmap.h>
+#include <wx/font.h>
 #include <wx/intl.h>
 #include <wx/image.h>
 #include <wx/string.h>
 //*)
 
+#include <wx/dcbuffer.h>
+
 //(*IdInit(moEffectLayerCtrl)
+const long moEffectLayerCtrl::ID_TEXTCTRL1 = wxNewId();
 const long moEffectLayerCtrl::ID_SLIDERALPHA = wxNewId();
 const long moEffectLayerCtrl::ID_SLIDERTINT = wxNewId();
 const long moEffectLayerCtrl::ID_SLIDERTEMPO = wxNewId();
-const long moEffectLayerCtrl::ID_COMBOBOXPRE = wxNewId();
 const long moEffectLayerCtrl::ID_CHECKBOXONOFF = wxNewId();
-const long moEffectLayerCtrl::ID_STATICTEXTLABEL = wxNewId();
-const long moEffectLayerCtrl::ID_STATICBITMAPCTRLS = wxNewId();
-const long moEffectLayerCtrl::ID_PANELLABELCTRLS = wxNewId();
-const long moEffectLayerCtrl::ID_STATICBITMAP1 = wxNewId();
-const long moEffectLayerCtrl::ID_PANELCOLORS = wxNewId();
 const long moEffectLayerCtrl::ID_BITMAPBUTTONVISIBILITY = wxNewId();
 const long moEffectLayerCtrl::ID_BITMAPBUTTONDELETE = wxNewId();
 //*)
@@ -35,68 +33,49 @@ END_EVENT_TABLE()
 moEffectLayerCtrl::moEffectLayerCtrl(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
 	//(*Initialize(moEffectLayerCtrl)
-	wxStaticBitmap* StaticBitmap1;
-
-	Create(parent, wxID_ANY, wxPoint(0,0), wxSize(168,71), 0, _T("wxID_ANY"));
+	Create(parent, wxID_ANY, wxPoint(0,0), wxSize(265,40), 0, _T("wxID_ANY"));
 	SetMinSize(wxSize(-1,-1));
 	SetMaxSize(wxSize(-1,-1));
 	SetForegroundColour(wxColour(255,255,255));
-	SetBackgroundColour(wxColour(0,0,0));
-	SliderAlpha = new wxSlider(this, ID_SLIDERALPHA, 0, 0, 100, wxPoint(0,28), wxSize(56,9), 0, wxDefaultValidator, _T("ID_SLIDERALPHA"));
-	SliderTint = new wxSlider(this, ID_SLIDERTINT, 0, 0, 100, wxPoint(0,42), wxSize(56,9), 0, wxDefaultValidator, _T("ID_SLIDERTINT"));
-	SliderTempo = new wxSlider(this, ID_SLIDERTEMPO, 0, 0, 100, wxPoint(0,54), wxSize(56,9), 0, wxDefaultValidator, _T("ID_SLIDERTEMPO"));
-	ComboBoxPreConfig = new wxComboBox(this, ID_COMBOBOXPRE, wxEmptyString, wxPoint(112,0), wxSize(56,21), 0, 0, 0, wxDefaultValidator, _T("ID_COMBOBOXPRE"));
-	ComboBoxPreConfig->SetSelection( ComboBoxPreConfig->Append(_("Pre 0")) );
-	ComboBoxPreConfig->Append(_("Pre 1"));
-	ComboBoxPreConfig->Append(_("Pre 2"));
-	ComboBoxPreConfig->Append(_("Pre 3"));
-	ComboBoxPreConfig->Append(_("Pre 4"));
-	ComboBoxPreConfig->Append(_("Pre 5"));
-	ComboBoxPreConfig->Append(_("Pre 6"));
-	ComboBoxPreConfig->Append(_("Pre 7"));
-	ComboBoxPreConfig->Append(_("Pre 8"));
-	ComboBoxPreConfig->Append(_("Pre 9"));
-	ComboBoxPreConfig->Append(_("Pre 10"));
-	CheckBoxOnOff = new wxCheckBox(this, ID_CHECKBOXONOFF, wxEmptyString, wxPoint(108,48), wxSize(16,21), 0, wxDefaultValidator, _T("ID_CHECKBOXONOFF"));
+	SetBackgroundColour(wxColour(50,50,50));
+	TextCtrlLabel = new wxTextCtrl(this, ID_TEXTCTRL1, _("Text"), wxPoint(0,7), wxSize(96,7), wxNO_BORDER|wxTRANSPARENT_WINDOW, wxDefaultValidator, _T("ID_TEXTCTRL1"));
+	TextCtrlLabel->SetForegroundColour(wxColour(255,255,255));
+	TextCtrlLabel->SetBackgroundColour(wxColour(60,60,60));
+	wxFont TextCtrlLabelFont(6,wxSWISS,wxFONTSTYLE_NORMAL,wxBOLD,false,_T("Terminal"),wxFONTENCODING_DEFAULT);
+	TextCtrlLabel->SetFont(TextCtrlLabelFont);
+	TextCtrlLabel->SetEditable( false );
+	m_pLevelAlphaCtrl = new moWxLevelCtrl(this, ID_SLIDERALPHA, 0, 0, 100, wxPoint(0,24), wxSize(56,9), 0, wxDefaultValidator, _T("ID_SLIDERALPHA"));
+	Connect(ID_SLIDERALPHA, MO_EVT_DIRECTOR_LEVEL, (wxObjectEventFunction)&moEffectLayerCtrl::OnLevelAlpha );
+	m_pLevelTintCtrl = new moWxLevelCtrl(this, ID_SLIDERTINT, 0, 0, 100, wxPoint(65,24), wxSize(56,9), 0, wxDefaultValidator, _T("ID_SLIDERTINT"));
+	Connect(ID_SLIDERTINT, MO_EVT_DIRECTOR_LEVEL, (wxObjectEventFunction)&moEffectLayerCtrl::OnLevelTint );
+	m_pLevelSpeedCtrl = new moWxLevelCtrl(this, ID_SLIDERTEMPO, 0, 0, 100, wxPoint(128,24), wxSize(56,9), 0, wxDefaultValidator, _T("ID_SLIDERTEMPO"));
+	Connect(ID_SLIDERTEMPO, MO_EVT_DIRECTOR_LEVEL, (wxObjectEventFunction)&moEffectLayerCtrl::OnLevelSpeed );
+	CheckBoxOnOff = new wxCheckBox(this, ID_CHECKBOXONOFF, wxEmptyString, wxPoint(224,6), wxSize(16,21), 0, wxDefaultValidator, _T("ID_CHECKBOXONOFF"));
 	CheckBoxOnOff->SetValue(false);
-	TextCtrlLabel = new wxStaticText(this, ID_STATICTEXTLABEL, _("label"), wxPoint(8,4), wxDefaultSize, 0, _T("ID_STATICTEXTLABEL"));
-	PanelLabelCtrls = new wxPanel(this, ID_PANELLABELCTRLS, wxPoint(55,24), wxSize(48,48), wxTAB_TRAVERSAL, _T("ID_PANELLABELCTRLS"));
-	PanelLabelCtrls->SetBackgroundColour(wxColour(0,0,0));
-	StaticBitmapCtrls = new wxStaticBitmap(PanelLabelCtrls, ID_STATICBITMAPCTRLS, wxBitmap(wxImage(_T("../../doc/icons/layercontrols.png"))), wxPoint(0,0), wxDefaultSize, 0, _T("ID_STATICBITMAPCTRLS"));
-	PanelColors = new wxPanel(this, ID_PANELCOLORS, wxPoint(132,26), wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANELCOLORS"));
-	PanelColors->SetBackgroundColour(wxColour(0,0,0));
-	StaticBitmap1 = new wxStaticBitmap(PanelColors, ID_STATICBITMAP1, wxBitmap(wxImage(_T("../../doc/icons/csvColors32.png"))), wxPoint(0,0), wxDefaultSize, 0, _T("ID_STATICBITMAP1"));
-	BitmapButtonVisibility = new wxBitmapButton(this, ID_BITMAPBUTTONVISIBILITY, wxBitmap(wxImage(_T("../../doc/icons/visibility.png"))), wxPoint(100,26), wxSize(26,21), wxBU_AUTODRAW|wxNO_BORDER, wxDefaultValidator, _T("ID_BITMAPBUTTONVISIBILITY"));
+	BitmapButtonVisibility = new wxBitmapButton(this, ID_BITMAPBUTTONVISIBILITY, wxBitmap(wxImage(_T("../../doc/icons/visibility.png"))), wxPoint(192,6), wxSize(26,21), wxBU_AUTODRAW|wxNO_BORDER, wxDefaultValidator, _T("ID_BITMAPBUTTONVISIBILITY"));
 	BitmapButtonVisibility->SetBitmapDisabled(wxBitmap(wxImage(_T("../../doc/icons/visibility.png"))));
 	BitmapButtonVisibility->SetBitmapSelected(wxBitmap(wxImage(_T("../../doc/icons/visibility.png"))));
 	BitmapButtonVisibility->SetBitmapFocus(wxBitmap(wxImage(_T("../../doc/icons/visibility.png"))));
 	BitmapButtonVisibility->SetDefault();
-	BitmapButtonDelete = new wxBitmapButton(this, ID_BITMAPBUTTONDELETE, wxBitmap(wxImage(_T("../../doc/icons/delete.png"))), wxPoint(88,4), wxSize(13,13), wxBU_AUTODRAW, wxDefaultValidator, _T("ID_BITMAPBUTTONDELETE"));
+	BitmapButtonDelete = new wxBitmapButton(this, ID_BITMAPBUTTONDELETE, wxBitmap(wxImage(_T("../../doc/icons/delete.png"))), wxPoint(240,12), wxSize(13,13), wxBU_AUTODRAW, wxDefaultValidator, _T("ID_BITMAPBUTTONDELETE"));
 	BitmapButtonDelete->SetDefault();
 
-	Connect(ID_SLIDERALPHA,wxEVT_SCROLL_THUMBTRACK,(wxObjectEventFunction)&moEffectLayerCtrl::OnSliderAlphaCmdScroll);
-	Connect(ID_SLIDERALPHA,wxEVT_SCROLL_CHANGED,(wxObjectEventFunction)&moEffectLayerCtrl::OnSliderAlphaCmdScroll);
-	Connect(ID_SLIDERTINT,wxEVT_SCROLL_THUMBTRACK,(wxObjectEventFunction)&moEffectLayerCtrl::OnSliderTintCmdScrollThumbTrack);
-	Connect(ID_SLIDERTINT,wxEVT_SCROLL_CHANGED,(wxObjectEventFunction)&moEffectLayerCtrl::OnSliderTintCmdScrollThumbTrack);
-	Connect(ID_SLIDERTEMPO,wxEVT_SCROLL_THUMBTRACK,(wxObjectEventFunction)&moEffectLayerCtrl::OnSliderTempoCmdScroll);
-	Connect(ID_SLIDERTEMPO,wxEVT_SCROLL_CHANGED,(wxObjectEventFunction)&moEffectLayerCtrl::OnSliderTempoCmdScroll);
-	Connect(ID_COMBOBOXPRE,wxEVT_COMMAND_COMBOBOX_SELECTED,(wxObjectEventFunction)&moEffectLayerCtrl::OnComboBoxPreConfigSelect);
 	Connect(ID_CHECKBOXONOFF,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&moEffectLayerCtrl::OnCheckBoxOnOffClick);
 	Connect(ID_BITMAPBUTTONVISIBILITY,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&moEffectLayerCtrl::OnBitmapButtonVisibilityClick);
 	Connect(ID_BITMAPBUTTONDELETE,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&moEffectLayerCtrl::OnBitmapButtonDeleteClick);
 	//*)
 
-	m_pLevelAlphaCtrl =  new moWxLevelCtrl(this, ID_LEVELALPHA, SliderAlpha->GetPosition(), SliderAlpha->GetSize(), 0, wxDefaultValidator, _T("ID_LEVELALPHA") );
-    Connect(ID_LEVELALPHA, MO_EVT_DIRECTOR_LEVEL, (wxObjectEventFunction)&moEffectLayerCtrl::OnLevelAlpha );
-	if (SliderAlpha) SliderAlpha->Destroy();
+	//m_pLevelAlphaCtrl =  new moWxLevelCtrl(this, ID_LEVELALPHA, SliderAlpha->GetPosition(), SliderAlpha->GetSize(), 0, wxDefaultValidator, _T("ID_LEVELALPHA") );
+    //Connect(ID_LEVELALPHA, MO_EVT_DIRECTOR_LEVEL, (wxObjectEventFunction)&moEffectLayerCtrl::OnLevelAlpha );
+	//if (SliderAlpha) SliderAlpha->Destroy();
 
-	m_pLevelTintCtrl =  new moWxLevelCtrl(this, ID_LEVELTINT, SliderTint->GetPosition(), SliderTint->GetSize(), 0, wxDefaultValidator, _T("ID_LEVELTINT") );
-    Connect(ID_LEVELTINT, MO_EVT_DIRECTOR_LEVEL, (wxObjectEventFunction)&moEffectLayerCtrl::OnLevelTint );
-	if (SliderTint) SliderTint->Destroy();
+	//m_pLevelTintCtrl =  new moWxLevelCtrl(this, ID_LEVELTINT, SliderTint->GetPosition(), SliderTint->GetSize(), 0, wxDefaultValidator, _T("ID_LEVELTINT") );
+    //Connect(ID_LEVELTINT, MO_EVT_DIRECTOR_LEVEL, (wxObjectEventFunction)&moEffectLayerCtrl::OnLevelTint );
+	//if (SliderTint) SliderTint->Destroy();
 
-	m_pLevelSpeedCtrl =  new moWxLevelCtrl(this, ID_LEVELSPEED, SliderTempo->GetPosition(), SliderTempo->GetSize(), 0, wxDefaultValidator, _T("ID_LEVELSPEED") );
-    Connect(ID_LEVELSPEED, MO_EVT_DIRECTOR_LEVEL, (wxObjectEventFunction)&moEffectLayerCtrl::OnLevelSpeed );
-	if (SliderTempo) SliderTempo->Destroy();
+	//m_pLevelSpeedCtrl =  new moWxLevelCtrl(this, ID_LEVELSPEED, SliderTempo->GetPosition(), SliderTempo->GetSize(), 0, wxDefaultValidator, _T("ID_LEVELSPEED") );
+    //Connect(ID_LEVELSPEED, MO_EVT_DIRECTOR_LEVEL, (wxObjectEventFunction)&moEffectLayerCtrl::OnLevelSpeed );
+	//if (SliderTempo) SliderTempo->Destroy();
 
 
 }
@@ -118,8 +97,8 @@ void moEffectLayerCtrl::Set( moMobDescriptor p_MobDesc ) {
 
     TextCtrlLabel->SetLabel((wxChar*)(char*) m_MobDescriptor.GetMobDefinition().GetLabelName());
     //TextCtrlLabel->SetEditable(false);
-    TextCtrlLabel->SetForegroundColour( wxColour(255,255,255) );
-	TextCtrlLabel->SetBackgroundColour( wxColour(0,0,0) );
+    //TextCtrlLabel->SetForegroundColour( wxColour(255,255,255) );
+	//TextCtrlLabel->SetBackgroundColour( wxColour(0,0,0) );
 /*
     TextCtrlConfigName->SetValue((wxChar*)(char*) m_MobDescriptor.GetMobDefinition().GetConfigName());
     TextCtrlConfigName->SetEditable(false);
@@ -147,21 +126,6 @@ void moEffectLayerCtrl::Set( moMobDescriptor p_MobDesc ) {
 }
 
 
-void moEffectLayerCtrl::OnSliderAlphaCmdScroll(wxScrollEvent& event)
-{
-
-}
-
-void moEffectLayerCtrl::OnSliderTempoCmdScroll(wxScrollEvent& event)
-{
-
-}
-
-void moEffectLayerCtrl::OnSliderTintCmdScrollThumbTrack(wxScrollEvent& event)
-{
-
-}
-
 void moEffectLayerCtrl::OnCheckBoxOnOffClick(wxCommandEvent& event)
 {
     moMobState MobState = m_MobDescriptor.GetState();
@@ -182,7 +146,8 @@ void moEffectLayerCtrl::OnLevelAlpha(wxCommandEvent& event) {
 
     m_MobDescriptor.SetState(MobState);
 
-    SetMob( m_MobDescriptor );
+    moItemLayerCtrl* h = (moItemLayerCtrl*)this;
+    h->SetMob( m_MobDescriptor );
 
 }
 
@@ -195,7 +160,8 @@ void moEffectLayerCtrl::OnLevelTint(wxCommandEvent& event) {
 
     m_MobDescriptor.SetState(MobState);
 
-    SetMob( m_MobDescriptor );
+    moItemLayerCtrl* h = (moItemLayerCtrl*)this;
+    h->SetMob( m_MobDescriptor );
 
 }
 
@@ -207,7 +173,8 @@ void moEffectLayerCtrl::OnLevelSpeed(wxCommandEvent& event) {
 
     m_MobDescriptor.SetState(MobState);
 
-    SetMob( m_MobDescriptor );
+    moItemLayerCtrl* h = (moItemLayerCtrl*)this;
+    h->SetMob( m_MobDescriptor );
 
 }
 
@@ -275,6 +242,7 @@ void moEffectLayerCtrl::OnBitmapButtonDeleteClick(wxCommandEvent& event)
 }
 
 
+
 BEGIN_EVENT_TABLE(moEffectLayerTimelineCtrl,wxPanel)
     EVT_PAINT( moEffectLayerTimelineCtrl::OnPaint )
     EVT_MOUSE_EVENTS( moEffectLayerTimelineCtrl::OnMouseEvent )
@@ -283,10 +251,10 @@ END_EVENT_TABLE()
 moEffectLayerTimelineCtrl::moEffectLayerTimelineCtrl(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
 
-    Create(parent, wxID_ANY, wxPoint(0,0), wxSize(800,71), wxNO_BORDER, _T("wxID_ANY"));
-    SetBackgroundColour( wxColour(200,200,200));
+    Create(parent, wxID_ANY, wxPoint(0,0), wxSize(800,40), wxNO_BORDER, _T("wxID_ANY"));
+    SetBackgroundColour( wxColour(0,9,117));
 
-    m_BackgroundImage = wxImage( 800, 71, true ); //to black
+    m_BackgroundImage = wxImage( 800, 40, true ); //to black
 
     m_BackgroundName = moText("");
 
@@ -301,13 +269,13 @@ moEffectLayerTimelineCtrl::~moEffectLayerTimelineCtrl()
 
 void moEffectLayerTimelineCtrl::OnPaint( wxPaintEvent& event ) {
 
-    wxPaintDC dc(this);
+    wxBufferedPaintDC dc(this);
 
     int w,h;
 
     GetSize(&w,&h);
 
-    wxBrush BackBrush( wxColour(120,120,120), wxSOLID );
+    wxBrush BackBrush( wxColour(70,70,70), wxSOLID );
 
     //draw background bitmap
     if (m_BackgroundImage.IsOk()) {
@@ -317,7 +285,7 @@ void moEffectLayerTimelineCtrl::OnPaint( wxPaintEvent& event ) {
     }
 
     dc.SetBrush( BackBrush );
-    dc.SetPen( wxPen( wxColour(170,170,170), 1, wxSOLID) );
+    dc.SetPen( wxPen( wxColour(75,75,75), 1, wxSOLID) );
 
     //background
     dc.DrawRectangle( 0, 0, GetSize().x, GetSize().y );
@@ -330,8 +298,8 @@ void moEffectLayerTimelineCtrl::OnPaint( wxPaintEvent& event ) {
     //dc.DrawRectangle( 0, 0, SlidePosition(), GetSize().y );
 
     //ticks:
-    dc.SetBrush( wxBrush( wxColour(120,120,120), wxSOLID ) );
-    dc.SetPen( wxPen( wxColour(170,170,170), 1, wxSOLID) );
+    dc.SetBrush( BackBrush );
+    dc.SetPen( wxPen( wxColour(75,75,75), 1, wxSOLID) );
 
     int linedelta = m_MobDescriptor.GetState().GetEffectState().tempo.delta;
 
@@ -395,3 +363,123 @@ moEffectLayerTimelineCtrl::MobUpdated( moMobDescriptor p_MobDesc ) {
 
 }
 
+
+
+/*
+BEGIN_EVENT_TABLE( moTreeObjectLayerCtrl, wxPanel)
+        EVT_MOUSE_EVENTS( moTreeObjectLayerCtrl::OnMouseEvent )
+END_EVENT_TABLE()
+*/
+void moItemLayerCtrl::Set( moMobDescriptor   p_MobDescriptor ) {
+
+    m_MobDescriptor = p_MobDescriptor;
+
+}
+
+moMobDescriptor&
+moItemLayerCtrl::Get() {
+
+    return m_MobDescriptor;
+
+}
+/*
+void moTreeObjectLayerCtrl::OnMouseEvent( wxMouseEvent& event ) {
+
+    if ( event.Button(wxMOUSE_BTN_LEFT) || event.ButtonDown() ) {
+
+        GetParent()->ProcessEvent(event);
+    }
+    event.Skip();
+
+}
+*/
+//=========================================
+
+BEGIN_EVENT_TABLE( moItemLayerWindow, wxSplitterWindow )
+
+END_EVENT_TABLE()
+
+
+moItemLayerWindow::moItemLayerWindow( wxWindow *parent, wxWindowID id,
+                const wxPoint& pos,
+                const wxSize& size,
+                long style,
+                const wxString& name ) : wxSplitterWindow(parent, id, pos, size, style, name) {
+
+                    ///Controladores y selectores... en un panel con un sizer
+                    wxFlexGridSizer *topsizer = new wxFlexGridSizer( 1, 2, 0, 0 );
+                    topsizer->SetFlexibleDirection(wxBOTH);
+                    topsizer->AddGrowableRow(0);
+                    topsizer->AddGrowableCol(0);
+                    m_pFXControllersContainer = new wxPanel( this, wxID_ANY,  wxPoint(0,0), wxSize(265,45) );
+
+                    m_pFXSelectors = new wxPanel( m_pFXControllersContainer, wxID_ANY,  wxPoint(0,0), wxSize(45,45) );
+                    m_pFXSelectors->SetBackgroundColour(wxColour(90,90,90) );
+                    m_pFXControllers = new moEffectLayerCtrl( m_pFXControllersContainer, wxID_ANY, wxPoint(0,0), wxSize(220,45) );
+
+                    topsizer->Add( m_pFXControllers, 1, wxALL, 0 );
+                    //topsizer->SetItemMinSize( m_pFXControllers, 45, 45 );
+
+                    topsizer->Add( m_pFXSelectors, 1, wxALL | wxEXPAND | wxFIXED_MINSIZE , 0 );
+                    topsizer->SetItemMinSize( m_pFXSelectors, 45, 45 );
+
+                    m_pFXControllersContainer->SetSizer( topsizer );      // use the sizer for layout
+
+                    topsizer->Layout();
+
+                    ///El timeline, una ventana que contiene al timeline
+                    m_pWindow = new wxWindow( this, wxID_ANY, wxPoint(0,0), wxSize(2000,45) );
+                    m_pTimeline = new moEffectLayerTimelineCtrl( m_pWindow, wxID_ANY, wxPoint(0,0), wxSize(2000,45));
+
+                    ///subdividimos Controles y Timeline
+                    this->SplitVertically( m_pFXControllersContainer, m_pWindow );
+                    this->SetSashPosition( 265, true );
+                    this->SetSashSize(1);
+                    this->SetForegroundColour( wxColour(152,152,152) );
+                    this->SetBackgroundColour( wxColour(52,52,52) );
+
+                }
+
+
+void
+moItemLayerWindow::SetScrollPosition( int position ) {
+
+    m_pTimeline->SetSize( -position, 0, wxDefaultCoord, wxDefaultCoord, wxSIZE_USE_EXISTING );
+
+}
+
+
+void moItemLayerWindow::Set( moMobDescriptor p_MobDesc ) {
+
+    m_MobDescriptor = p_MobDesc;
+
+    if (m_pFXControllers) {
+        m_pFXControllers->SetNextActionHandler(this);
+        m_pFXControllers->Set(p_MobDesc);
+    }
+
+}
+
+moDirectorStatus
+moItemLayerWindow::ValueUpdated( moValueDescriptor p_ValueDesc ) {
+
+
+    return m_pFXControllers->ValueUpdated( p_ValueDesc );
+
+}
+
+
+moDirectorStatus
+moItemLayerWindow::MobUpdated( moMobDescriptor p_MobDesc ) {
+
+
+    return m_pFXControllers->MobUpdated( p_MobDesc );
+
+}
+
+
+
+
+void moEffectLayerCtrl::OnPaint(wxPaintEvent& event)
+{
+}

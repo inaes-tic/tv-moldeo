@@ -207,9 +207,9 @@ class LIBMOLDEO_API moCaptureDevice {
 
 		/// contructor
 		moCaptureDevice() {
-			m_Name = "";
-			m_Description = "";
-			m_Path  = "";
+			m_Name = moText("");
+			m_Description = moText("");
+			m_Path  = moText("");
 			m_bPresent = false;
 		}
 

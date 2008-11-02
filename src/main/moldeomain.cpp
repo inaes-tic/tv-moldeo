@@ -73,8 +73,8 @@ int init_win32_window(HINSTANCE hInst, int width, int height) {
       WS_OVERLAPPEDWINDOW,
       0,
       0,
-      abs(rect.left) + rect.right,
-      abs(rect.top) + rect.bottom,
+      abs((int)rect.left) + rect.right,
+      abs((int)rect.top) + rect.bottom,
       NULL,
       LoadMenu(hInst, MAKEINTRESOURCE(IDR_MENU)),
       hInst,
@@ -221,7 +221,7 @@ typedef enum {
         }
 
 	/*Empieza la Lola!!*/
-	//SDL_ShowCursor(0);
+	SDL_ShowCursor(0);
 	//SDL_WM_GrabInput(SDL_GRAB_ON);
 
     #ifdef MO_DIRECTSHOW

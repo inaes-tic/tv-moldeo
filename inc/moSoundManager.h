@@ -60,13 +60,13 @@ enum moSoundType {
 };
 
 struct LIBMOLDEO_API moSoundParam {
-		WORD    wFormatTag;
-		WORD    nChannels;
-		DWORD   nSamplesPerSec;
-		DWORD   nAvgBytesPerSec;
-		WORD    nBlockAlign;
-		WORD    wBitsPerSample;
-		WORD    cbSize;
+		moWord    wFormatTag;
+		moWord    nChannels;
+		moDWord   nSamplesPerSec;
+		moDWord   nAvgBytesPerSec;
+		moWord    nBlockAlign;
+		moWord    wBitsPerSample;
+		moWord    cbSize;
 };
 
 const moSoundParam MODefSoundParams =

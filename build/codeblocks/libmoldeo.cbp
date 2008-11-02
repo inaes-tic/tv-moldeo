@@ -72,6 +72,7 @@
 			<Add directory="..\..\inc" />
 			<Add directory="..\..\inc\3ds" />
 			<Add directory="..\..\inc\openal" />
+			<Add directory="..\..\..\..\externlibs\boost\include\1_36_0" />
 			<Add directory="..\..\..\..\externlibs\cg\include" />
 			<Add directory="..\..\..\..\externlibs\glew\include" />
 			<Add directory="..\..\..\..\externlibs\opengl\include" />
@@ -88,6 +89,7 @@
 			<Add directory="..\..\..\..\externlibs\gstreamer\include" />
 			<Add directory="..\..\..\..\externlibs\gstreamer\include\glib-2.0" />
 			<Add directory="..\..\..\..\externlibs\gstreamer\lib\glib-2.0\include" />
+			<Add directory="..\..\..\..\externlibs\FTGL\include" />
 		</Compiler>
 		<Linker>
 			<Add library="libSDL" />
@@ -95,23 +97,41 @@
 			<Add library="liblua" />
 			<Add library="cg" />
 			<Add library="cgGL" />
+			<Add library="ftgl" />
 			<Add library="OpenAL32" />
 			<Add library="EFX-Util" />
 			<Add library="FreeImage" />
 			<Add library="gstreamer-0.10" />
 			<Add library="glib-2.0" />
 			<Add library="gobject-2.0" />
+			<Add library="boost_system-mt" />
+			<Add library="boost_filesystem-mt" />
+			<Add library="wsock32" />
+			<Add library="winmm" />
+			<Add library="ws2_32" />
+			<Add library="wst" />
+			<Add library="wtsapi32" />
+			<Add library="wininet" />
+			<Add library="stdc++" />
+			<Add library="strmiids" />
+			<Add library="mswsock" />
+			<Add library="netapi32" />
+			<Add library="gcc" />
+			<Add library="user32" />
+			<Add library="uuid" />
 			<Add directory="..\..\..\..\externlibs\tinyxml\lib" />
 			<Add directory="..\..\..\..\externlibs\SDL\lib" />
 			<Add directory="..\..\..\..\externlibs\glew\lib" />
 			<Add directory="..\..\..\..\externlibs\lua\lib" />
 			<Add directory="..\..\..\..\externlibs\muparser\lib" />
 			<Add directory="..\..\..\..\externlibs\freetype\lib" />
+			<Add directory="..\..\..\..\externlibs\FTGL\lib" />
 			<Add directory="..\..\..\..\externlibs\cg\lib" />
 			<Add directory="..\..\..\..\externlibs\openal\libs\win32" />
 			<Add directory="..\..\..\..\externlibs\opengl\lib" />
 			<Add directory="..\..\..\..\externlibs\freeimage\lib" />
 			<Add directory="..\..\..\..\externlibs\gstreamer\lib" />
+			<Add directory="..\..\..\..\externlibs\boost\lib\1_36_0" />
 		</Linker>
 		<Unit filename="..\..\inc\3ds\3ds.h" />
 		<Unit filename="..\..\inc\mo3dModelManager.h" />

@@ -238,7 +238,7 @@ moGsFramework::~moGsFramework() {
 moCaptureDevices* moGsFramework::LoadCaptureDevices() {
 
     #ifdef MO_WIN32
-        m_CaptureDevices.Add( moCaptureDevice( moText("Microsoft DV Camera and VCR"), moText("DV IEEE 1394"), moText("-") ) );
+        //m_CaptureDevices.Add( moCaptureDevice( moText("Microsoft DV Camera and VCR"), moText("DV IEEE 1394"), moText("-") ) );
         m_CaptureDevices.Add( moCaptureDevice( moText("Laptop Integrated Webcam"), moText("webcam"), moText("-") ) );
         //DIRECT SHOW TEST//
         /*
@@ -351,7 +351,7 @@ moGsGraph::InitGraph() {
     //opner en el main de la consola...
     //inicialización de la libreria gstreamer
     guint major, minor, micro, nano;
-    GError *errores;
+    //GError *errores;
 
     MODebug2->Message( moText("Initializing GStreamer"));
     //bool init_result = gst_init_check (NULL, NULL, &errores);
@@ -441,7 +441,7 @@ moGsGraph::BuildLiveWebcamGraph( moBucketsPool *pBucketsPool, moText devicename 
     m_pBucketsPool = pBucketsPool;
     guint signal_id = 0;
     bool link_result = false;
-    gchar* checkval;
+    //gchar* checkval;
     bool res = false;
 
 
@@ -619,7 +619,7 @@ moGsGraph::cb_have_data (moGstPad    *pad, moGstBuffer *buffer, moGPointer   u_d
     //cout << "w:" << w << "h:" << h << endl;
 
 
-  if ( Gbuffer->size>0 && Gbuffer->size<=(h*w*4) ) {
+  if ( Gbuffer->size>0 && (int)Gbuffer->size<=(h*w*4) ) {
     //g_passing buffer to bucketpool
     moBucket *pbucket=NULL;
 
@@ -651,7 +651,7 @@ moGsGraph::cb_newpad ( moGstElement *decodebin, moGstPad *pad, moGBoolean last, 
 {
   GstCaps *caps = NULL;
   GstPad  *videopad = NULL;
-  GstPad  *audiopad = NULL;
+//  GstPad  *audiopad = NULL;
   GstPad  *audiopadinconverter = NULL;
   GstPadLinkReturn padlink;
   gchar* padname = NULL;
@@ -684,7 +684,8 @@ moGsGraph::cb_newpad ( moGstElement *decodebin, moGstPad *pad, moGBoolean last, 
 
           if (g_strrstr (strname, "audio")) {
             pGsGraph->m_pAudioPad = Gpad;
-            MODebug2->Push(moText("cb_newpad: audio pad created"));
+
+            //MODebug2->Push(moText("moGsGraph::cb_newpad: audio pad created"));
 
             if (pGsGraph->m_pAudioConverter) {
                 audiopadinconverter = gst_element_get_pad ( (GstElement*) pGsGraph->m_pAudioConverter, "sink");
@@ -694,7 +695,8 @@ moGsGraph::cb_newpad ( moGstElement *decodebin, moGstPad *pad, moGBoolean last, 
           } else if (g_strrstr (strname, "video")) {
             pGsGraph->m_pVideoPad = Gpad;
 
-            MODebug2->Push(moText("cb_newpad: video pad created"));
+            //MODebug2->Push(moText("moGsGraph::cb_newpad: video pad created"));
+
             videopad = gst_element_get_pad ( (GstElement*)pGsGraph->m_pColorSpace, "sink");
             GstPad* srcRGB = gst_element_get_pad ( (GstElement*)pGsGraph->m_pColorSpace, "src");
             //bool res = gst_pad_set_caps( gst_element_get_pad ( pGsGraph->m_pColorSpace, "src"), gst_caps_new_simple ("video/x-raw-rgb","bpp", G_TYPE_INT, 24, NULL)  );
@@ -802,7 +804,7 @@ bool moGsGraph::BuildLiveSound( moText filename  ) {
 
     guint signal_id = 0;
     bool link_result = false;
-    gchar* checkval;
+//    gchar* checkval;
     bool res = false;
 
     MODebug2->Push( moText("Building live sound:") + (moText)filename);
@@ -878,7 +880,7 @@ bool moGsGraph::BuildLiveSound( moText filename  ) {
 
     }
 
-
+    return false;
 }
 
 bool moGsGraph::BuildLiveVideoGraph( moText filename , moBucketsPool *pBucketsPool ) {
@@ -886,7 +888,7 @@ bool moGsGraph::BuildLiveVideoGraph( moText filename , moBucketsPool *pBucketsPo
     m_pBucketsPool = pBucketsPool;
     guint signal_id = 0;
     bool link_result = false;
-    gchar* checkval;
+//    gchar* checkval;
     bool res = false;
 
 

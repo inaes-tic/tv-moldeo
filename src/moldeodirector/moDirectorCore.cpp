@@ -199,28 +199,42 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
         //pluginsfullpath + moText("/preeffects");
         moDirectory DirEffects;
 
+        rPluginDefs.Empty();
+
+        bool bDebug = true;
+        moText PluginName;
+
         //PREEFFECTS
         DirEffects.Open( pluginsfullpath + moText("/preeffects"), moText("/*.dll") );
         if (DirEffects.Exists()) {
 
             moFile* pFile = NULL;
+            moText FileNameEnd;
 
             pFile = DirEffects.FindFirst();
-            moText FileNameEnd;
 
             if (pFile!=NULL)
                 Log( moText("File founded") );
 
             while(pFile!=NULL) {
+
                 FileNameEnd = pFile->GetFileName();
-                FileNameEnd.Right(1);
-                if ( pFile->GetExtension()==moText("dll") && FileNameEnd!=moText("d") ) {
-                    rPluginDefs.Add( moPluginDefinition( pFile->GetFileName(), pFile->GetCompletePath(), MO_OBJECT_PREEFFECT ) );
+                PluginName = pFile->GetFileName();
+                FileNameEnd.Right(2);
+                bDebug = ( FileNameEnd==moText("_d") );
+                #ifndef MO_WIN32
+                PluginName.Right( PluginName.Length() - 3 );
+                #endif
+                if (bDebug) PluginName.Left( PluginName.Length() - 3 );
+
+
+                if ( ( pFile->GetExtension()==moText(".dll") || pFile->GetExtension()==moText(".so") ) && !bDebug ) {
+                    rPluginDefs.Add( moPluginDefinition( PluginName, pFile->GetCompletePath(), MO_OBJECT_PREEFFECT ) );
                 }
                 Log( pFile->GetFileName() );
                 pFile = DirEffects.FindNext();
             }
-        } else LogError( moText("PreEffects directory doesn´t exists") );
+        } else LogError( moText("PreEffects directory doesn´t exists:")+(moText)pluginsfullpath + moText("/preeffects") );
 
 
         //EFFECTS
@@ -231,20 +245,28 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
 
             pFile = DirEffects.FindFirst();
             moText FileNameEnd;
+            moText FileNameStart;
 
             if (pFile!=NULL)
                 Log( moText("File founded") );
 
             while(pFile!=NULL) {
                 FileNameEnd = pFile->GetFileName();
-                FileNameEnd.Right(1);
-                if ( pFile->GetExtension()==moText("dll") && FileNameEnd!=moText("d") ) {
-                    rPluginDefs.Add( moPluginDefinition( pFile->GetFileName(), pFile->GetCompletePath(), MO_OBJECT_EFFECT ) );
+                PluginName = pFile->GetFileName();
+                FileNameEnd.Right(2);
+                bDebug = ( FileNameEnd==moText("_d") );
+                #ifndef MO_WIN32
+                PluginName.Right( PluginName.Length() - 3 );
+                #endif
+                if (bDebug) PluginName.Left( PluginName.Length() - 3 );
+
+                if ( ( pFile->GetExtension()==moText(".dll") || pFile->GetExtension()==moText(".so") ) && bDebug ) {
+                    rPluginDefs.Add( moPluginDefinition( PluginName, pFile->GetCompletePath(), MO_OBJECT_EFFECT ) );
                 }
                 Log( pFile->GetFileName() );
                 pFile = DirEffects.FindNext();
             }
-        } else LogError( moText("Effects directory doesn´t exists") );
+        } else LogError( moText("Effects directory doesn´t exists")+DirEffects.GetCompletePath() );
 
 
         //POSTEFFECTS
@@ -255,20 +277,28 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
 
             pFile = DirEffects.FindFirst();
             moText FileNameEnd;
+            moText FileNameStart;
 
             if (pFile!=NULL)
                 Log( moText("File founded") );
 
             while(pFile!=NULL) {
                 FileNameEnd = pFile->GetFileName();
-                FileNameEnd.Right(1);
-                if ( pFile->GetExtension()==moText("dll") && FileNameEnd!=moText("d") ) {
-                    rPluginDefs.Add( moPluginDefinition( pFile->GetFileName(), pFile->GetCompletePath(), MO_OBJECT_POSTEFFECT ) );
+                PluginName = pFile->GetFileName();
+                FileNameEnd.Right(2);
+                bDebug = ( FileNameEnd==moText("_d") );
+                #ifndef MO_WIN32
+                PluginName.Right( PluginName.Length() - 3 );
+                #endif
+                if (bDebug) PluginName.Left( PluginName.Length() - 3 );
+
+                if ( ( pFile->GetExtension()==moText(".dll") || pFile->GetExtension()==moText(".so") ) && !bDebug ) {
+                    rPluginDefs.Add( moPluginDefinition( PluginName , pFile->GetCompletePath(), MO_OBJECT_POSTEFFECT ) );
                 }
                 Log( pFile->GetFileName() );
                 pFile = DirEffects.FindNext();
             }
-        } else LogError( moText("Effects directory doesn´t exists") );
+        } else LogError( moText("Effects directory doesn´t exists")+DirEffects.GetCompletePath() );
 
         //IODEVICES
         DirEffects.Open( pluginsfullpath + moText("/iodevices"), moText("/*.dll") );
@@ -278,20 +308,28 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
 
             pFile = DirEffects.FindFirst();
             moText FileNameEnd;
+            moText FileNameStart;
 
             if (pFile!=NULL)
                 Log( moText("File founded") );
 
             while(pFile!=NULL) {
                 FileNameEnd = pFile->GetFileName();
-                FileNameEnd.Right(1);
-                if ( pFile->GetExtension()==moText("dll") && FileNameEnd!=moText("d") ) {
-                    rPluginDefs.Add( moPluginDefinition( pFile->GetFileName(), pFile->GetCompletePath(), MO_OBJECT_IODEVICE ) );
+                PluginName = pFile->GetFileName();
+                FileNameEnd.Right(2);
+                bDebug = ( FileNameEnd==moText("_d") );
+                #ifndef MO_WIN32
+                PluginName.Right( PluginName.Length() - 3 );
+                #endif
+                if (bDebug) PluginName.Left( PluginName.Length() - 3 );
+
+                if ( ( pFile->GetExtension()==moText(".dll") || pFile->GetExtension()==moText(".so") ) && !bDebug) {
+                    rPluginDefs.Add( moPluginDefinition( PluginName, pFile->GetCompletePath(), MO_OBJECT_IODEVICE ) );
                 }
                 Log( pFile->GetFileName() );
                 pFile = DirEffects.FindNext();
             }
-        } else LogError( moText("IODevices directory doesn´t exists") );
+        } else LogError( moText("IODevices directory doesn´t exists")+DirEffects.GetCompletePath() );
 
         //RESOURCES
         DirEffects.Open( pluginsfullpath + moText("/resources"), moText("/*.dll") );
@@ -301,20 +339,29 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
 
             pFile = DirEffects.FindFirst();
             moText FileNameEnd;
+            moText FileNameStart;
 
             if (pFile!=NULL)
                 Log( moText("File founded") );
 
             while(pFile!=NULL) {
+
                 FileNameEnd = pFile->GetFileName();
-                FileNameEnd.Right(1);
-                if ( pFile->GetExtension()==moText("dll") && FileNameEnd!=moText("d") ) {
-                    rPluginDefs.Add( moPluginDefinition( pFile->GetFileName(), pFile->GetCompletePath(), MO_OBJECT_RESOURCE ) );
+                PluginName = pFile->GetFileName();
+                FileNameEnd.Right(2);
+                bDebug = ( FileNameEnd==moText("_d") );
+                #ifndef MO_WIN32
+                PluginName.Right( PluginName.Length() - 3 );
+                #endif
+                if (bDebug) PluginName.Left( PluginName.Length() - 3 );
+
+                if ( ( pFile->GetExtension()==moText("dll") || pFile->GetExtension()==moText("so") ) && !bDebug) {
+                    rPluginDefs.Add( moPluginDefinition( PluginName, pFile->GetCompletePath(), MO_OBJECT_RESOURCE ) );
                 }
                 Log( pFile->GetFileName() );
                 pFile = DirEffects.FindNext();
             }
-        } else LogError( moText("Resources directory doesn´t exists") );
+        } else LogError( moText("Resources directory doesn´t exists")+DirEffects.GetCompletePath() );
 
 
         moApplicationDescriptor pAppDes;
@@ -475,6 +522,7 @@ moDirectorStatus moDirectorCore::EditMob( moMobDescriptor p_MobDescriptor ) {
 
 	moDirectorStatus moDirectorCore::SetMob( moMobDescriptor p_MobDesc ) {
 
+        #ifdef _DEBUG
    		moText fxname = p_MobDesc.GetMobDefinition().GetLabelName();
 		moText mobstext = moText(" alpha =>") + (moText)FloatToStr( p_MobDesc.GetState().GetEffectState().alpha );
 		mobstext+= moText(" tint =>") + (moText)FloatToStr( p_MobDesc.GetState().GetEffectState().tint );
@@ -486,7 +534,7 @@ moDirectorStatus moDirectorCore::EditMob( moMobDescriptor p_MobDescriptor ) {
 		mobstext+= moText("tempo.ang =>") + (moText)FloatToStr( p_MobDesc.GetState().GetEffectState().tempo.delta );
 
 		Log( moText("For MOB: ") + (moText)fxname + moText(" setting state ::") + (moText)mobstext );
-
+        #endif
 	    return m_pDirectorConsole->SetMob( p_MobDesc );
     }
 
@@ -559,7 +607,7 @@ moDirectorStatus moDirectorCore::EditMob( moMobDescriptor p_MobDescriptor ) {
 		//agregar cambios a la lista de UNDO's
 		moText paramname = p_ValueDesc.GetParamDescriptor().GetParamDefinition().GetName();
 		moText valuestext = "";
-		for( int i=0; i<p_ValueDesc.GetValue().GetSubValueCount(); i++ ) {
+		for( int i=0; i<(int)p_ValueDesc.GetValue().GetSubValueCount(); i++ ) {
 		    valuestext+= moText("[")+(moText)+IntToStr(i)+moText("]") + (moText)p_ValueDesc.GetValue().GetSubValue(i).ToText();
         }
 
@@ -572,12 +620,27 @@ moDirectorStatus moDirectorCore::EditMob( moMobDescriptor p_MobDescriptor ) {
         return m_pDirectorConsole->DeleteValue( p_ValueDesc );
     }
 	moDirectorStatus moDirectorCore::ValueUpdated( moValueDescriptor p_ValueDesc ) {
+
+	    /*
+	    if ( ! p_ValueDesc.GetValueDefinition().IsValid() ) {
+	        LogError( moText("moDirectorCore::ValueUpdated() ValueDefinition is invalid ") );
+        } else {
+            if ( ! p_ValueDesc.GetParamDescriptor().GetParamDefinition().IsValid() ) {
+                LogError( moText("moDirectorCore::ValueUpdated() ParamDefinition is invalid ") );
+            } else {
+                if ( ! p_ValueDesc.GetParamDescriptor().GetMobDescriptor().GetMobDefinition().IsValid() ) {
+                    LogError( moText("moDirectorCore::ValueUpdated() MobDefinition is invalid ") );
+                }
+            }
+        }
+        */
+
 	    moDirectorStatus res = m_pUserInterface->ValueUpdated( p_ValueDesc );
 	    if (res!=MO_DIRECTOR_STATUS_OK) {
 	        moText moberror = p_ValueDesc.GetParamDescriptor().GetMobDescriptor().GetMobDefinition().GetLabelName();
 	        moText paramerror = p_ValueDesc.GetParamDescriptor().GetParamDefinition().GetName();
 	        moText valueerror = p_ValueDesc.GetValue().GetSubValue(0).ToText();
-            LogError(   moText("Couldn't set the value: mob: ") +
+            LogError(   moText("moDirectorCore::ValueUpdated() Couldn't set the value: mob: ") +
                         (moText) moberror +
                         moText(" param: ") +
                         (moText) paramerror +

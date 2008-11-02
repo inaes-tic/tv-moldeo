@@ -69,6 +69,8 @@ class moTextArray;
  * Operaciones y funciones para la manipulación de cadenas de caracteres.
  */
 
+#ifdef USE_MOTEXT0
+
 class LIBMOLDEO_API moText0
 {
 public:
@@ -144,12 +146,13 @@ private:
     // Estos metodos son el motor de la clase. Contienen toda la logica
     // de como se maneja moText0. Todos los metodos publicos las usan.
 public:
-    void    txtcopy( const char* txt, uint pos /**/= 0, uint com /**/= 0, uint fin /**/= MO_TXT_COMPLETE);        // copy c-strings(reserva la memoria y pone los nulls al final)
-	void    txtcopy( const short* txt, uint pos /**/= 0, uint com /**/= 0, uint fin /**/= MO_TXT_COMPLETE);        // copy c-strings(reserva la memoria y pone los nulls al final)
+    void    txtcopy( const char* txt, uint pos = 0, uint com = 0, uint fin = MO_TXT_COMPLETE);        // copy c-strings(reserva la memoria y pone los nulls al final)
+	void    txtcopy( const short* txt, uint pos = 0, uint com = 0, uint fin = MO_TXT_COMPLETE);        // copy c-strings(reserva la memoria y pone los nulls al final)
 private:
     txtcval txtcomp( const char* txt, uint com1 = 0, uint com2 = 0);
     uint    txtfind( const char* txt, txtpert pert = MO_TXT_BELONG, uint com = 0, int dir = 1);
 };
+#endif
 
 /*
 //====================================================================================
@@ -261,7 +264,13 @@ public:
 };
 */
 
+#ifndef USE_MOTEXT0
+typedef std::string moText;
+#endif
+
+#ifdef USE_MOTEXT0
 typedef moText0 moText;
+#endif
 
 //====================================================================================
 //  class: moTextHeap

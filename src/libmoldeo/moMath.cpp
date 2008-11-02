@@ -73,7 +73,8 @@ template <>
 float moMath<MOfloat>::FastInvSqrt (MOfloat fValue)
 {
     MOfloat fHalf = 0.5f*fValue;
-    int i  = *(int*)&fValue;
+    int i;
+    i = *(int*)&fValue;
     i = 0x5f3759df - (i >> 1);
     fValue = *(MOfloat*)&i;
     fValue = fValue*(1.5f - fHalf*fValue*fValue);

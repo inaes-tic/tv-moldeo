@@ -293,7 +293,7 @@ moMidiDevice::Init( moText devicetext ) {
 		if (!midiInGetDevCaps(i, &moc, sizeof(MIDIINCAPS)))
 		{
 			/* Display its Device ID and name */
-			printf("Device ID #%u: %s\r\n", i, moc.szPname);
+			MODebug2->Message( moText("Device ID #") + IntToStr(i) + moText(":") + moText(moc.szPname));
 			if ( !stricmp(moc.szPname, devicetext) ) {
 				m_DeviceId = i;
 				break;
@@ -431,6 +431,8 @@ moMidiDevice::Update(moEventList *Events) {
 
 		mididata = m_MidiDatas.Get( i );
 
+		MODebug2->Push(moText("MIDI Data CC:") + IntToStr(mididata.m_CC) + moText(" val:") + IntToStr(mididata.m_Val) );
+
 		Events->Add( MO_IODEVICE_MIDI, (MOint)(mididata.m_Type), mididata.m_Channel, mididata.m_CC, mididata.m_Val );
 
 	}
@@ -461,12 +463,20 @@ moMidi::Init() {
 	MOint i;
 
 	// Loading config file.
-    conf = "data/";
-    conf += GetName();
+	//levantamos el config del keyboard
+	conf = m_pResourceManager->GetDataMan()->GetDataPath()+moText("/");
+    conf += GetConfigName();
     conf += moText(".cfg");
-    m_Config.LoadConfig(conf);
+	if (m_Config.LoadConfig(conf) != MO_CONFIG_OK ) {
+		moText text = "Couldn't load midi config";
+		MODebug2->Push(text);
+		return false;
+	}
 
-	mididevices = m_Config.GetParamIndex("mididevices");
+	moDefineParamIndex( MIDI_DEVICE, moText("mididevice") );
+
+
+	mididevices = m_Config.GetParamIndex("mididevice");
 
 	MOint nvalues = m_Config.GetValuesCount( mididevices );
 	m_Config.SetCurrentParamIndex( mididevices );
@@ -488,7 +498,7 @@ moMidi::Init() {
 			if ( pDevice->Init( MidiDeviceCode ) ) {
 				pDevice->SetActive( m_Config.GetParam().GetValue().GetSubValue(MO_MIDI_SYSTEM_ON).Int() );
 			} else {
-				MODebug2->Error( moText("Midi Device not found:") + (moText)MidiDeviceCode );
+				MODebug2->Error( moText("Midi Device not found: ") + (moText)MidiDeviceCode );
 			}
 		}
 
@@ -641,6 +651,14 @@ moMidi::Update(moEventList *Events) {
 
 }
 
+moConfigDefinition *
+moMidi::GetDefinition( moConfigDefinition *p_configdefinition ) {
+
+	//default: alpha, color, syncro
+	p_configdefinition = moIODevice::GetDefinition( p_configdefinition );
+	p_configdefinition->Add( moText("mididevice"), MO_PARAM_TEXT, MIDI_DEVICE, moValue( "BCR2000[02]", "TXT") );
+	return p_configdefinition;
+}
 
 
 MOboolean

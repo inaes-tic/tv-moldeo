@@ -83,7 +83,7 @@ class moTextFilterParam;
 */
 
 enum moDataType {
-	MO_DATA_UNDEFINED,
+	MO_DATA_UNDEFINED=-1,
 	MO_DATA_NUMBER,
 	MO_DATA_NUMBER_CHAR,
 	MO_DATA_NUMBER_INT,
@@ -149,6 +149,8 @@ class LIBMOLDEO_API moData {
 
 		moData& operator = ( const moData& data);
 		void Copy( const moData& data );
+
+		bool        IsValid();
 
 		void		SetFloat( MOfloat pfloat );
 		void		SetDouble( MOdouble pdouble );
@@ -255,7 +257,8 @@ enum moValueType {
 	MO_VALUE_TXT,//any type of text, single or multiline
 	MO_VALUE_LNK,//link to a file, text is interpreted as relative, absolute link to a file
 	MO_VALUE_FUNCTION,//function parameter value, with lots of attributes....
-	MO_VALUE_XML//text, xml formatted...
+	MO_VALUE_XML,//text, xml formatted...
+	MO_VALUE_UNDEFINED
 };
 
 
@@ -304,6 +307,8 @@ class LIBMOLDEO_API moValueDefinition
 
 		moText      GetAttribute();
 		void        SetAttribute( moText p_attribute );
+
+		bool        IsValid();
 
 	private:
 		moValueType		m_Type;
@@ -425,6 +430,9 @@ class LIBMOLDEO_API moValue
 		moValue();
 		moValue( const moValue &src);
 		moValue( const moText &strvalue, const moText &type );
+		moValue( const moText &strvalue, const moText &type, const moText &strvalue2, const moText &type2 );
+		moValue( const moText &strvalue, const moText &type, const moText &strvalue2, const moText &type2, const moText &strvalue3, const moText &type3 );
+		moValue( const moText &strvalue, const moText &type, const moText &strvalue2, const moText &type2, const moText &strvalue3, const moText &type3, const moText &strvalue4, const moText &type4 );
 		void AddSubValue(const  moText &strvalue, const moText &type );
 		void AddSubValue(const  moValueBase &valuebase);
 		void RemoveSubValue( MOint p_indexsubvalue );

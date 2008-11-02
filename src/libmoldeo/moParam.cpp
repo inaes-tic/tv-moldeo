@@ -41,7 +41,9 @@ moDefineDynamicArray(moParams)
 //================================================================
 
 moParamDefinition::moParamDefinition() {
-
+    m_Name = moText("");
+    m_Index = -1;
+    m_Type = MO_PARAM_UNDEFINED;
 }
 
 moParamDefinition::moParamDefinition(const moParamDefinition &src) {
@@ -52,6 +54,11 @@ moParamDefinition::moParamDefinition( moText& p_name, moParamType& p_type ) {
 		m_Name = p_name;
 		m_Type = p_type;
 		m_Index = -1;
+}
+
+bool
+moParamDefinition::IsValid() {
+    return (m_Type!=MO_PARAM_UNDEFINED);
 }
 /*
 MO_PARAM_ALPHA,			//value type: NUM or FUNCTION
@@ -158,6 +165,9 @@ moParamDefinition::moParamDefinition( moText& p_name, moText& p_type ) {
 		} else
 		if ( p_type == moText("OUTLET") ) {
 			m_Type = MO_PARAM_OUTLET;
+		} else
+		if ( p_type == moText("UNDEFINED") ) {
+			m_Type = MO_PARAM_UNDEFINED;
 		}
 
 		m_Index = -1;
@@ -179,6 +189,9 @@ moParamDefinition &moParamDefinition::operator = (const moParamDefinition &src)
 moText
 moParamDefinition::GetTypeStr() {
     switch(m_Type) {
+        case MO_PARAM_UNDEFINED:
+            return moText("UNDEFINED");
+            break;
         case MO_PARAM_ALPHA:
             return moText("ALPHA");
             break;
@@ -335,7 +348,7 @@ void moParam::SetDefaultValue() {
         moValue xvalue;
         moValueBase valuebase;
 
-        switch( m_ParamDefinition.GetType() ) {
+        switch( (int)m_ParamDefinition.GetType() ) {
             case MO_PARAM_COLOR:
                 valuebase.SetText( "1.0" );
                 valuebase.SetType( MO_VALUE_FUNCTION );

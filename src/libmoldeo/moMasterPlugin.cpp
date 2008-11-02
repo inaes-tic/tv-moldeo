@@ -198,17 +198,17 @@ LIBMOLDEO_API moMasterEffect* moNewMasterEffect(moText effect_name, moMasterPlug
     if(!stricmp(effect_name, "nil")) return NULL;
 
     #if defined(_WIN32)
-    complete_name = "plugins/mastereffects/" + effect_name;
+    complete_name = moText("plugins/mastereffects/") + (moText)effect_name;
 		#ifdef _DEBUG
-		complete_name+= "d";
+		complete_name+= moText("_d");
 		#endif
-    complete_name += ".dll";
+    complete_name += moText(".dll");
     #else
-    complete_name = "plugins/mastereffects/lib" + effect_name;
+    complete_name = moText("plugins/mastereffects/lib") + (moText)effect_name;
 		#ifdef _DEBUG
-		complete_name+= "d";
+		complete_name+= moText("_d");
 		#endif
-    complete_name += ".so";
+    complete_name += moText(".so");
     #endif
 
     // Indice del plugin que se utilizara para crear a este efecto.
@@ -249,17 +249,16 @@ LIBMOLDEO_API void moDeleteMasterEffect(moMasterEffect *mastereffect, moMasterPl
     #if defined(_WIN32)
     complete_name = moText("plugins/mastereffects/") + moText(mastereffect->GetName());
 		#ifdef _DEBUG
-		complete_name+= "d";
+		complete_name+= moText("_d");
 		#endif
-    complete_name += ".dll";
+    complete_name += moText(".dll");
     #else
     complete_name = moText("plugins/mastereffects/lib") + moText(mastereffect->GetName());
 		#ifdef _DEBUG
-		complete_name+= "d";
+		complete_name+= moText("_d");
 		#endif
-    complete_name += ".so";
+    complete_name += moText(".so");
     #endif
-		printf("completename:%s\n", (char*)complete_name);
 
     // Indice del plugin que se utilizara para crear a este efecto.
     int plg_index = -1;

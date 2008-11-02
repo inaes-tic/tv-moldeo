@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_workspace_file>
+	<Workspace title="Moldeo">
+		<Project filename="..\..\plugins\MasterEffects\Ligia\ligia.cbp" />
+		<Project filename="..\..\plugins\MasterEffects\Channel\channel.cbp" />
+		<Project filename="..\..\plugins\MasterEffects\MasterChannel\masterchannel.cbp" />
+		<Project filename="..\..\plugins\MasterEffects\Panel\panel.cbp" />
+		<Project filename="..\..\plugins\MasterEffects\PresetPanel\presetpanel.cbp" />
+	</Workspace>
+</CodeBlocks_workspace_file>

@@ -704,10 +704,8 @@ moConsole::StartMasterEffects() {
 	moEffect*	p_effect = NULL;
 	MOuint i;
 
-    text = "Turning on MasterEffects...";
+    text = moText("Turning on MasterEffects...");
 	if (MODebug2) MODebug2->Push(text);
-	printf(text);
-
 
 	//==========================================================================
 	//PRENDEMOS LOS EFFECTS MAESTROS y ...LARGAMOS
@@ -782,8 +780,6 @@ moConsole::Draw() {
 	moRenderManager* RenderMan = m_pResourceManager->GetRenderMan();
 
 	if (RenderMan==NULL) return;
-
-	savename = "c:\\moldeo_session";
 
 	MOswitch borrar = MO_ACTIVATED;
     MOboolean pre_effect_on = false;

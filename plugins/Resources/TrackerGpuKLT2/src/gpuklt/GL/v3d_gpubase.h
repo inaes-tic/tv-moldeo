@@ -21,6 +21,9 @@ with GPU-KLT. If not, see <http://www.gnu.org/licenses/>.
 #ifndef V3D_GPUBASE_H
 #define V3D_GPUBASE_H
 
+#include "stdlib.h"
+#include "string.h"
+
 # if defined(V3DLIB_ENABLE_GPGPU)
 
 #include <vector>
@@ -228,7 +231,7 @@ namespace V3D_GPU
 
    struct ProgramBase
    {
-         ProgramBase(char const * shaderName) 
+         ProgramBase(char const * shaderName)
             : _shaderName(shaderName)
          { }
 
@@ -263,7 +266,7 @@ namespace V3D_GPU
 #  if defined(V3DLIB_GPGPU_ENABLE_CG)
    struct Cg_ProgramBase
    {
-         Cg_ProgramBase() 
+         Cg_ProgramBase()
             : _source(), _program(0)
          { }
 

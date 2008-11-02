@@ -25,7 +25,7 @@
 
   Authors:
   Fabricio Costa
-  Andrés Colubri
+  AndrÃ©s Colubri
 
 *******************************************************************************/
 
@@ -110,8 +110,8 @@ moMixer::Init() {
     conf += GetConfigName();
     conf += moText(".cfg");
 	if (m_Config.LoadConfig(conf) != MO_CONFIG_OK ) {
-		text = "Couldn't load mixer config";
-		MODebug->Push(text);
+		text = moText("Couldn't load mixer config");
+		MODebug2->Error(text);
 		return false;
 	}
 
@@ -136,20 +136,17 @@ moMixer::Init() {
 		Codes[i].value = MO_FALSE;
 
 		if(Codes[i].mixercode==-1) {
-            text = "ERROR(keydo):\n no se encuentra el code de la key del code: ";
+            text = moText("(keydo): no se encuentra el code de la key del code: ");
             text += Codes[i].strcod;
-            text += moText("\n");
-			printf(text);
-			exit(0);
-		} else {
+            MODebug2->Error(text);
+    } else {
 #ifdef MO_DEBUG
-            text = "strcod: ";
+            text = moText("strcod: ");
             text += Codes[i].strcod;
             text += moText(" ");
-			printf(text);
-			printf("cod: %i ",Codes[i].devcode);
-			printf("type: %i ",Codes[i].type);
-			printf("cod interno: %i\n",Codes[i].mixercode);
+            MODebug2->Log( moText("cod: ") + IntToStr(Codes[i].devcode) +
+                           moText("type: ") + IntToStr(Codes[i].type) +
+                           moText("cod interno: ") + IntToStr(Codes[i].mixercode));
 #endif
 			//nada mas
 		}

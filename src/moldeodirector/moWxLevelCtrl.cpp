@@ -1,4 +1,5 @@
 #include "moWxLevelCtrl.h"
+#include <wx/dcbuffer.h>
 
 BEGIN_EVENT_TABLE( moWxLevelCtrl, wxControl )
     EVT_PAINT( moWxLevelCtrl::OnPaint )
@@ -7,12 +8,13 @@ BEGIN_EVENT_TABLE( moWxLevelCtrl, wxControl )
     EVT_MOUSE_CAPTURE_CHANGED( moWxLevelCtrl::OnCaptureChangedEvent )
 END_EVENT_TABLE()
 
-moWxLevelCtrl::moWxLevelCtrl( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxValidator& validator, const wxString& name  ) :
-wxControl( parent, id,  pos, size, style | wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE, validator, name ) {
-    m_min = 0;
-    m_max = 100;
-    m_value = 50;
+moWxLevelCtrl::moWxLevelCtrl( wxWindow* parent, wxWindowID id, const int value, const int minvalue, const int maxvalue, const wxPoint& pos, const wxSize& size, long style, const wxValidator& validator, const wxString& name  ) :
+wxControl( parent, id,  pos, size, style | wxNO_BORDER, validator, name ) {
+    m_min = minvalue;
+    m_max = maxvalue;
+    m_value = value;
     m_bStartDragging = false;
+    SetBackgroundStyle(wxBG_STYLE_CUSTOM );
 
 }
 
@@ -24,18 +26,33 @@ moWxLevelCtrl::~moWxLevelCtrl() {
 void
 moWxLevelCtrl::OnPaint(wxPaintEvent& event) {
 
-    wxPaintDC dc(this);
+    wxBufferedPaintDC dc(this);
 
-    dc.SetBrush( wxBrush( wxColour(120,120,120), wxSOLID) );
-    dc.SetPen( wxPen( wxColour(140,140,140), 1, wxSOLID) );
+    dc.SetBrush( wxBrush( wxColour(80,80,80), wxSOLID ) );
+    dc.SetPen( wxPen( wxColour(255,255,255), 1, wxSOLID ) );
 
-    //background
+    ///background
     dc.DrawRectangle( 0, 0, GetSize().x, GetSize().y );
 
-    //gauge
-    dc.SetBrush( wxBrush( wxColour(220,220,220), wxSOLID) );
+    ///gauge
+    dc.SetBrush( wxBrush( wxColour(0,200,50), wxSOLID) );
     dc.SetPen( wxPen( wxColour(140,140,140), 1, wxTRANSPARENT ) );
-    dc.DrawRectangle( 0, 0, SlidePosition(), GetSize().y );
+    //dc.DrawRectangle( 1, 1, SlidePosition()-2, GetSize().y-2 );
+    wxRect Rgauge( 1, 1, SlidePosition()-2, GetSize().y-2 );
+    dc.GradientFillLinear( Rgauge, wxColour(0,50,0), wxColour(0,200,0) );
+
+    ///ticks
+    dc.SetBrush( wxBrush( wxColour(128,128,128), wxSOLID ) );
+    dc.SetPen( wxPen( wxColour(255,255,255), 1, wxSOLID ) );
+    int nticks = 5;
+    int dticks = (GetSize().x / nticks );
+    int ysize;
+
+    for(int i =0; i<nticks; i++ ) {
+        ( i % 3 ) == 0 ? ysize = GetSize().y / 2 : ysize = GetSize().y / 3;
+        dc.DrawLine( i*dticks, ysize, i*dticks, GetSize().y );
+    }
+
 
 }
 
@@ -64,9 +81,9 @@ void moWxLevelCtrl::SetValue( int value ) {
     wxCommandEvent event( MO_EVT_DIRECTOR_LEVEL, m_windowId );
     event.SetInt( GetValue() );
     event.SetEventObject( this );
-    //ProcessCommand( event );
+
     ProcessEvent(event );
-    //wxMessageBox("Set value: hi event");
+
 }
 
 

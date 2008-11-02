@@ -118,11 +118,14 @@ MOboolean moEffectPartiture::Init() {
 	g_ViewMode = GL_TRIANGLES;
 
     m_pFont = NULL;
+    m_pFont = m_pResourceManager->GetFontMan()->GetFont(0);
 
     for( int ii=0; ii<PARTITURE_MAXTRACKS ; ii++ ) {
 
         CTracks[ii].Init( GetConfig() );
-        CTracks[ii].SetMode( DYNAMIC_MODE, 300 );
+        CTracks[ii].SetMode( DYNAMIC_MODE, 400 );
+        CTracks[ii].SetFont(m_pFont);
+        CTracks[ii].m_number = ii;
 
     }
 
@@ -139,7 +142,9 @@ void moEffectPartiture::Draw( moTempo* tempogral,moEffectState* parentstate)
     glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
 	glPushMatrix();										// Store The Projection Matrix
 	glLoadIdentity();									// Reset The Projection Matrix
-	m_pResourceManager->GetGLMan()->SetPerspectiveView( m_pResourceManager->GetRenderMan()->ScreenWidth(), m_pResourceManager->GetRenderMan()->ScreenHeight() );
+	int wid = m_pResourceManager->GetRenderMan()->ScreenWidth();
+	int he = m_pResourceManager->GetRenderMan()->ScreenHeight();
+	m_pResourceManager->GetGLMan()->SetPerspectiveView( wid, he );
 
     glMatrixMode(GL_PROJECTION);
 
@@ -160,14 +165,11 @@ void moEffectPartiture::Draw( moTempo* tempogral,moEffectState* parentstate)
 
 	glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
 
-    float hPent, yPent;
-
-    hPent = (float) m_pResourceManager->GetRenderMan()->ScreenHeight() / 8.0;
-    yPent = (float) m_pResourceManager->GetRenderMan()->ScreenHeight() / 4.0 - (float) hPent ;
-
     MOulong scrolltime = m_Config[moR(PARTITURE_SCROLLTIME)][MO_SELECTED][0].Int();
 
-    for(int t=0; t<2; t++) {
+    //iteramos por track
+    int maxttracks = 1;
+    for(int t=0; t<maxttracks; t++) {
 
         glMatrixMode(GL_MODELVIEW); // Select The Modelview Matrix
         glPushMatrix(); // Store The Modelview Matrix
@@ -185,12 +187,12 @@ void moEffectPartiture::Draw( moTempo* tempogral,moEffectState* parentstate)
 
         //Dibujamos las notas.....
 
-        CTracks[t].Draw( 0,
-                    yPent+t*hPent*2.5,
-                    m_pResourceManager->GetRenderMan()->ScreenWidth(),
-                    hPent,
-                    state,
-                    scrolltime );
+        //CTracks[t].SetPosition( 0, yPent+t*hPent*2.5 );
+        //CTracks[t].SetSize( m_pResourceManager->GetRenderMan()->ScreenWidth(), hPent);
+        CTracks[t].SetPosition( 0, 0 );
+        CTracks[t].SetSize( 162, 100 );
+        CTracks[t].SetScrollTime( scrolltime );
+        CTracks[t].Draw( state );
 
     }
 
@@ -232,7 +234,7 @@ void moEffectPartiture::Update( moEventList* p_EventList ) {
 
         moDataMessages* pMsgs = pMessages->GetData()->Messages();
 
-        MODebug2->Push( moText("Partiture: message received:") + IntToStr( pMsgs->Count()) );
+        //MODebug2->Push( moText("Partiture: message received:") + IntToStr( pMsgs->Count()) );
 
         for( int i=0; i<pMsgs->Count(); i++ ) {
 
@@ -250,11 +252,11 @@ void moEffectPartiture::Update( moEventList* p_EventList ) {
             //check the first one:
                 //if they are less than then:
             //...........
-            int maxnotes = 200;
+            //int maxnotes = 200;
 
-            /*
+
             //borra las notas si llegamos al limite de 200
-            if ( tracks[track].Count() > maxnotes ) {
+           /* if ( tracks[track].Count() > maxnotes ) {
                     moCNote* pCNote = tracks[track].Get(0);
                     if (pCNote) {
                         tracks[track].Remove(0);
@@ -277,17 +279,20 @@ void moEffectPartiture::Update( moEventList* p_EventList ) {
 
             //1.0: right top most
             moCNote* pCNote = new moCNote( 1.0, timecode, track, header, note, velocity, dynamic, modulator, tiempo );
+            pCNote->m_pFont = m_pFont;
 
             if ( 0<=track && track<PARTITURE_MAXTRACKS) {
                 if (pCNote) {
                     CTracks[track].AddNote( pCNote );
+/*
                     MODebug2->Push( moText("Header:") + IntToStr( pCNote->m_header) +
-                    moText("Track:") + IntToStr( pCNote->m_track) +
-                    moText("Note:") + IntToStr( pCNote->m_note) +
-                    moText("Velocity:") + IntToStr( pCNote->m_velocity) +
-                    moText("Dynamic:") + moText( pCNote->m_dynamic) +
-                    moText("Modulator:") + IntToStr( pCNote->m_modulador) +
-                    moText("Tiempo:") + IntToStr( pCNote->m_tiempo) );
+                                    moText("Track:") + IntToStr( pCNote->m_track) +
+                                    moText("Note:") + IntToStr( pCNote->m_note) +
+                                    moText("Velocity:") + IntToStr( pCNote->m_velocity) +
+                                    moText("Dynamic:") + moText( pCNote->m_dynamic) +
+                                    moText("Modulator:") + IntToStr( pCNote->m_modulador) +
+                                    moText("Tiempo:") + IntToStr( pCNote->m_tiempo) );
+*/
                 }
             }
 
@@ -362,7 +367,7 @@ moEffectPartiture::GetDefinition( moConfigDefinition *p_configdefinition ) {
 
 	//default: alpha, color, syncro
 	p_configdefinition = moEffect::GetDefinition( p_configdefinition );
-	p_configdefinition->Add( moText("texture"), MO_PARAM_TEXTURE, PARTITURE_TEXTURE );
+	p_configdefinition->Add( moText("texture"), MO_PARAM_TEXTURE, PARTITURE_TEXTURE, moValue( "partiture.jpg", "TXT") );
     p_configdefinition->Add( moText("font"), MO_PARAM_FONT, PARTITURE_FONT, moValue( "fonts/arial.ttf", "TXT") );
 	p_configdefinition->Add( moText("scrolltime"), MO_PARAM_NUMERIC, PARTITURE_SCROLLTIME, moValue("4000","NUM") );
 	p_configdefinition->Add( moText("specular"), MO_PARAM_COLOR, PARTITURE_SPECULAR );
@@ -370,7 +375,7 @@ moEffectPartiture::GetDefinition( moConfigDefinition *p_configdefinition ) {
 	p_configdefinition->Add( moText("ambient"), MO_PARAM_COLOR, PARTITURE_AMBIENT );
 	p_configdefinition->Add( moText("pentagramaback"), MO_PARAM_COLOR, PARTITURE_PENTAGRAMABACK );
     p_configdefinition->Add( moText("pentagramafront"), MO_PARAM_COLOR, PARTITURE_PENTAGRAMAFRONT );
-    p_configdefinition->Add( moText("pentagramatexture"), MO_PARAM_TEXTURE, PARTITURE_PENTAGRAMATEXTURE );
+    p_configdefinition->Add( moText("pentagramatexture"), MO_PARAM_TEXTURE, PARTITURE_PENTAGRAMATEXTURE, moValue( "partiture.jpg", "TXT") );
 
 	p_configdefinition->Add( moText("translatex"), MO_PARAM_TRANSLATEX, PARTITURE_TRANSLATEX );
 	p_configdefinition->Add( moText("translatey"), MO_PARAM_TRANSLATEY, PARTITURE_TRANSLATEY );
@@ -384,12 +389,12 @@ moEffectPartiture::GetDefinition( moConfigDefinition *p_configdefinition ) {
 	p_configdefinition->Add( moText("scaley"), MO_PARAM_SCALEY, PARTITURE_SCALEY );
 	p_configdefinition->Add( moText("scalez"), MO_PARAM_SCALEZ, PARTITURE_SCALEZ );
 
-	p_configdefinition->Add( moText("eyex"), MO_PARAM_FUNCTION, PARTITURE_EYEX );
-	p_configdefinition->Add( moText("eyey"), MO_PARAM_FUNCTION, PARTITURE_EYEY );
-	p_configdefinition->Add( moText("eyez"), MO_PARAM_FUNCTION, PARTITURE_EYEZ );
-	p_configdefinition->Add( moText("viewx"), MO_PARAM_FUNCTION, PARTITURE_VIEWX );
-	p_configdefinition->Add( moText("viewy"), MO_PARAM_FUNCTION, PARTITURE_VIEWY );
-	p_configdefinition->Add( moText("viewz"), MO_PARAM_FUNCTION, PARTITURE_VIEWZ );
+	p_configdefinition->Add( moText("eyex"), MO_PARAM_FUNCTION, PARTITURE_EYEX, moValue( "1.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("eyey"), MO_PARAM_FUNCTION, PARTITURE_EYEY, moValue( "1.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("eyez"), MO_PARAM_FUNCTION, PARTITURE_EYEZ, moValue( "1.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("viewx"), MO_PARAM_FUNCTION, PARTITURE_VIEWX, moValue( "0.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("viewy"), MO_PARAM_FUNCTION, PARTITURE_VIEWY, moValue( "0.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("viewz"), MO_PARAM_FUNCTION, PARTITURE_VIEWZ, moValue( "0.0", "FUNCTION").Ref() );
 	p_configdefinition->Add( moText("lightx"), MO_PARAM_FUNCTION, PARTITURE_LIGHTX );
 	p_configdefinition->Add( moText("lighty"), MO_PARAM_FUNCTION, PARTITURE_LIGHTY );
 	p_configdefinition->Add( moText("lightz"), MO_PARAM_FUNCTION, PARTITURE_LIGHTZ );

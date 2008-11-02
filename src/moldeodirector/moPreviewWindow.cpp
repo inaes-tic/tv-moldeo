@@ -14,7 +14,6 @@ const long moPreviewWindow::ID_BITMAPBUTTONFULLSCREEN = wxNewId();
 const long moPreviewWindow::ID_BITMAPBUTTONSCREENSHOT = wxNewId();
 const long moPreviewWindow::ID_BITMAPBUTTONSAVEVIDEO = wxNewId();
 const long moPreviewWindow::ID_BITMAPBUTTONSAVESESSION = wxNewId();
-const long moPreviewWindow::ID_BITMAPBUTTONFOCUSOUTPUT = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(moPreviewWindow,wxPanel)
@@ -40,11 +39,9 @@ moPreviewWindow::moPreviewWindow(wxWindow* parent,wxWindowID id,const wxPoint& p
 	BitmapButtonSaveVideo = new wxBitmapButton(this, ID_BITMAPBUTTONSAVEVIDEO, wxBitmap(wxImage(_T("../../doc/icons/savevideo32.png"))), wxPoint(344,0), wxSize(32,32), wxBU_AUTODRAW, wxDefaultValidator, _T("ID_BITMAPBUTTONSAVEVIDEO"));
 	BitmapButtonSaveVideo->SetDefault();
 	BitmapButtonSaveSession = new wxBitmapButton(this, ID_BITMAPBUTTONSAVESESSION, wxBitmap(wxImage(_T("../../doc/icons/savesession32.png"))), wxPoint(64,0), wxSize(32,32), wxBU_AUTODRAW, wxDefaultValidator, _T("ID_BITMAPBUTTONSAVESESSION"));
-	BitmapButtonFocusOutput = new wxBitmapButton(this, ID_BITMAPBUTTONFOCUSOUTPUT, wxNullBitmap, wxPoint(136,5), wxSize(24,23), wxBU_AUTODRAW, wxDefaultValidator, _T("ID_BITMAPBUTTONFOCUSOUTPUT"));
-	BitmapButtonFocusOutput->SetDefault();
 
 	Connect(ID_BITMAPBUTTONFULLSCREEN,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&moPreviewWindow::OnButtonFullSCreenClick);
-	Connect(ID_BITMAPBUTTONFOCUSOUTPUT,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&moPreviewWindow::OnBitmapButtonFocusAndActivate);
+	Connect(ID_BITMAPBUTTONSCREENSHOT,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&moPreviewWindow::OnBitmapButtonFocusAndActivate);
 	//*)
 	m_pGLCanvas = NULL;
 }

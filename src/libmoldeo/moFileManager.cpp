@@ -35,6 +35,10 @@
 moDefineDynamicArray(moFileArray)
 moDefineDynamicArray(moDirectoryArray)
 
+#include <boost/filesystem.hpp>
+
+namespace bfs=boost::filesystem;
+
 //===========================================
 //
 //				moDirectory
@@ -43,7 +47,7 @@ moDefineDynamicArray(moDirectoryArray)
 
 moDirectory::moDirectory() {
 	m_pFileManager = NULL;
-	m_CompletePath = "";
+	m_CompletePath = moText("");
 	m_bExists = false;
 	m_bRemote = false;
 	m_FileIndex = 0;
@@ -51,29 +55,112 @@ moDirectory::moDirectory() {
 
 moDirectory::moDirectory( moText p_CompletePath, moFileManager* p_pFileManager ) {
 	m_pFileManager = p_pFileManager;
-	m_CompletePath = "";
+	m_CompletePath = p_CompletePath;
 	m_bExists = false;
 	m_bRemote = false;
 	m_FileIndex = 0;
-	Open(p_CompletePath);
+	Open(m_CompletePath);
 }
 
 moDirectory::~moDirectory() {
 	Finish();
 }
 
+/*
+
+
+    bool find_file( const path & dir_path,         // in this directory,
+                    const std::string & file_name, // search for this name,
+                    path & path_found )            // placing path here if found
+    {
+      if ( !exists( dir_path ) ) return false;
+      directory_iterator end_itr; // default construction yields past-the-end
+      for ( directory_iterator itr( dir_path );
+            itr != end_itr;
+            ++itr )
+      {
+        if ( is_directory(itr->status()) )
+        {
+          if ( find_file( itr->path(), file_name, path_found ) ) return true;
+        }
+        else if ( itr->path().leaf() == file_name ) // see below
+        {
+          path_found = itr->path();
+          return true;
+        }
+      }
+      return false;
+    }
+
+
+
+*/
+
 MOboolean
 moDirectory::Open( moText p_CompletePath, moText p_Search  ) {
 
-#ifdef MO_WIN32
-	struct _finddata_t fileInfo;
-	intptr_t fPtr;
-	char attribs[8];
-	char timeBuff[32];
 	char *path;
-	moText CompletePathSearch = (moText)p_CompletePath + (moText)p_Search;
-	path = CompletePathSearch;
 
+    m_CompletePath = p_CompletePath;
+	path = m_CompletePath;
+
+	moText CompletePathSearch = (moText)p_CompletePath + (moText)p_Search;
+
+	for( int i=0; i<(int)m_Files.Count(); i++) {
+            moFile* pFile = m_Files[i];
+            if  (pFile)
+                delete pFile;
+            m_Files[i] = NULL;
+
+    }
+    m_Files.Empty();
+
+    m_bExists = false;
+//    void show_files( const path & directory, bool recurse_into_subdirs = true )
+//    {
+      if( bfs::exists( path ) )
+      {
+          m_bExists = true;
+
+         bfs::directory_iterator end ;
+        for(  bfs::directory_iterator iter(path) ; iter != end ; ++iter )
+          if (  bfs::is_directory( *iter ) )
+          {
+            //cout << iter->native_directory_string() << " (directory)\n" ;
+            //if( recurse_into_subdirs ) show_files(*iter) ;
+          } else {
+            //cout << iter->native_file_string() << " (file)\n" ;
+            moText pFileName( iter->path().file_string().c_str() );
+
+            moText pCompletePathFilename;
+
+            //pCompletePathFilename = m_CompletePath + moText("/") + moText(pFileName);
+            pCompletePathFilename = pFileName;
+
+            moFile*	pFile = NULL;
+            if (m_pFileManager)
+                pFile = m_pFileManager->GetFile( pCompletePathFilename );
+            else
+                pFile = new moFile( pCompletePathFilename );
+            if (pFile) {
+                m_Files.Add(pFile);
+            }
+
+            #ifdef _DEBUG
+            MODebug2->Message( moText("moFileManager:: file:") + (moText)pCompletePathFilename);
+            #endif
+            //printf("%-32s %s %9.ld %s",fileInfo.name, attribs, fileInfo.size , timeBuff);
+
+          }
+
+      }
+
+      return m_bExists;
+//    }
+
+
+
+/*
 	printf(" checking path : %s\n",path);
 	for( int i=0; i<m_Files.Count(); i++) {
             moFile* pFile = m_Files[i];
@@ -118,7 +205,7 @@ moDirectory::Open( moText p_CompletePath, moText p_Search  ) {
     //http://developer.novell.com/wiki/index.php/Programming_to_the_Linux_Filesystem
 
     //typedef bool         (*file_match_function)    ( const string&, const string& );
-    /*
+
     void findMatch( const string& pattern, const string& path, file_match_function match )
 {
     DIR* d = opendir( path.c_str() );
@@ -158,10 +245,9 @@ moDirectory::Open( moText p_CompletePath, moText p_Search  ) {
     {
         findMatch( pattern, *ci, match );
     }
-    */
-#endif
 
-	return true;
+#endif
+*/
 }
 
 
@@ -180,7 +266,7 @@ moDirectory::Init( moFileManager *p_FileManager ) {
 MOboolean
 moDirectory::Finish() {
 
-	for( int i=0; i<m_Files.Count(); i++) {
+	for( int i=0; i<(int)m_Files.Count(); i++) {
             moFile* pFile = m_Files[i];
             if  (pFile)
                 delete pFile;
@@ -193,6 +279,7 @@ moDirectory::Finish() {
 
 MOboolean
 moDirectory::Exists() {
+    m_bExists = bfs::exists((char*)m_CompletePath);
 	return m_bExists;
 }
 
@@ -303,11 +390,11 @@ moDirectory::GetFiles() {
 
 moFile::moFile() {
 
-	m_Path = "";
-	m_FileName = "";
-	m_CompletePath = "";
-	m_Extension = "";
-	m_Protocol = "";
+	m_Path = moText("");
+	m_FileName = moText("");
+	m_CompletePath = moText("");
+	m_Extension = moText("");
+	m_Protocol =moText( "");
 
 	m_bRemote = false;
 	m_pBucketsPool = NULL;
@@ -316,54 +403,7 @@ moFile::moFile() {
 
 moFile::moFile( moText p_CompletePath ) {//could be: http://.... or ftp://... or c:\... or ...
 
-	//check if http. ftp or other...set remote
-	m_CompletePath = p_CompletePath;
-	moText Left7 = p_CompletePath;
-	Left7.Left(7);
-	moText Left6 = p_CompletePath;
-	Left6.Left(6);
-
-	if (Left7==moText("http://") ||
-		Left7==moText("HTTP://")) {
-		m_Protocol = moText("http://");
-		m_FileType = MO_FILETYPE_HTTP;
-		m_bRemote = true;
-		m_bExists = false;
-	} else if (Left6==moText("ftp://") ||
-		Left6==moText("FTP://")) {
-		m_Protocol = moText("ftp://");
-		m_FileType = MO_FILETYPE_FTP;
-		m_bRemote = true;
-		m_bExists = false;
-	} else {
-	    moTextArray FileNameA;
-		m_Protocol = moText("file:///");
-		//moText m_Drive = m_CompletePath.Scan(":");
-		m_Extension = m_CompletePath;
-		m_Extension.Right( 3 );
-
-        #ifdef MO_WIN32
-        m_Dirs = m_CompletePath.Explode("\\/");
-        #else
-        m_Dirs = m_CompletePath.Explode("\\/");
-        #endif
-        if ( m_Dirs.Count() > 0 ) {
-            m_Drive = m_Dirs[0];
-            m_FileName = m_Dirs[m_Dirs.Count()-1];
-            FileNameA = m_FileName.Explode(".");
-            m_FileName = FileNameA[0];
-        }
-
-		m_FileType = MO_FILETYPE_LOCAL;
-		m_bRemote = false;
-		FILE *fp = NULL;
-		fp = fopen(m_CompletePath, "r");
-		if (fp!=NULL) {
-			m_bExists = true;
-			fclose(fp);
-		} else m_bExists = false;
-	}
-
+    SetCompletePath( p_CompletePath );
 }
 
 moFile::~moFile() {
@@ -394,6 +434,7 @@ moFile::Finish() {
 
 MOboolean
 moFile::Exists() {
+    m_bExists = bfs::exists((char*)m_CompletePath);
 	return m_bExists;
 }
 
@@ -439,7 +480,53 @@ moFile::GetFileName() {
 
 void
 moFile::SetCompletePath( moText p_completepath ) {
+
+	//check if http. ftp or other...set remote
 	m_CompletePath = p_completepath;
+
+	moText Left7 = m_CompletePath;
+	Left7.Left(7);
+	moText Left6 = m_CompletePath;
+	Left6.Left(6);
+
+	if (Left7==moText("http://") ||
+		Left7==moText("HTTP://")) {
+		m_Protocol = moText("http://");
+		m_FileType = MO_FILETYPE_HTTP;
+		m_bRemote = true;
+		m_bExists = false;
+	} else if (Left6==moText("ftp://") ||
+		Left6==moText("FTP://")) {
+		m_Protocol = moText("ftp://");
+		m_FileType = MO_FILETYPE_FTP;
+		m_bRemote = true;
+		m_bExists = false;
+	} else {
+	    moTextArray FileNameA;
+		m_Protocol = moText("file:///");
+		//moText m_Drive = m_CompletePath.Scan(":");
+
+		std::string str;
+		str = bfs::extension( (char*)m_CompletePath );
+
+		m_Extension = str.c_str();
+
+        m_Dirs = m_CompletePath.Explode(moText("\\/"));
+
+        if ( m_Dirs.Count() > 0 ) {
+            m_Drive = m_Dirs[0];
+            m_FileName = m_Dirs[m_Dirs.Count()-1];
+            FileNameA = m_FileName.Explode(moText("."));
+            m_FileName = FileNameA[0];
+        }
+
+		m_FileType = MO_FILETYPE_LOCAL;
+		m_bRemote = false;
+
+		m_bExists = bfs::exists((char*)m_CompletePath);
+
+	}
+
 }
 
 moText
@@ -588,11 +675,14 @@ moFileManager::GetWorkPath() {
 
 bool
 moFileManager::CreateDirectory( moDirectory Dir ) {
-    #ifdef MO_WIN32
-        mkdir( Dir.GetCompletePath() );
-    #else
-        //mkdir( Dir.GetCompletePath() );
-    #endif
+
+    std::string dirname;
+
+    dirname = Dir.GetCompletePath();
+
+    bfs::create_directory( dirname );
+
+    return Dir.Exists();
 }
 
 
@@ -608,9 +698,12 @@ moFileManager::DirectoryExists( moText dirname ) {
         return directory.Exists();
 }
 
+
+
 bool
 moFileManager::CopyFile( moText FileSrc, moText FileDst ) {
 
+/*
 	ifstream initialFile(FileSrc, ios::in|ios::binary);
 	ofstream outputFile(FileDst, ios::out|ios::binary);
 	//defines the size of the buffer
@@ -646,6 +739,19 @@ moFileManager::CopyFile( moText FileSrc, moText FileDst ) {
 
 	initialFile.close();
 	outputFile.close();
+*/
+    std::string name, new_name;
+
+    name = FileSrc;
+    new_name = FileDst;
+
+    try {
+        bfs::copy_file(name, new_name);
+    }
+    catch( const std::exception & ex ) {
+        MODebug2->Error( ex.what() );
+    }
+
 
 	return 1;
 

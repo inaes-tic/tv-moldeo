@@ -100,7 +100,7 @@ using namespace std;
 //#define USE_QUICKTIME
 //#define USE_SDLIMAGE
 #define USE_FREEIMAGE
-
+#define USE_MOTEXT0
 
 /*OS DEFINITIONS*/
 
@@ -174,7 +174,8 @@ using namespace std;
     # endif
 
     #define moint64 __int64
-
+    typedef __int16_t moWord;
+    typedef __int32_t moDWord;
 
 #endif
 
@@ -255,7 +256,13 @@ using namespace std;
     # endif
 
     #define moint64 __int64
+    typedef __int16 moWord;
+    typedef __int32 moDWord;
+
+    #define assert(X) {}
 #endif
+
+
 
 /*CONSTANTS DEFINITIONS*/
 
@@ -289,6 +296,8 @@ using namespace std;
 #define MOulong         unsigned long
 #define MOlonglong      moint64
 #define MOulonglong     unsigned moint64
+#define MOword          moWord
+#define MOdword         moDWord
 #define MOchar          char
 #define MOuchar         unsigned char
 #define MOubyte			unsigned char
@@ -299,6 +308,7 @@ using namespace std;
 #define MOdouble        GLdouble
 #define MOtexture       GLuint
 #define MOefectoid		GLuint
+
 
 #define MOpointer		MOubyte*
 

@@ -37,6 +37,8 @@
 moDefineDynamicArray( moTextArray )
 
 
+#ifdef USE_MOTEXT0
+
 //===========================================
 //
 //				moText0
@@ -418,13 +420,15 @@ unsigned short* moText0::Short() {
 
 moText0& moText0::Left( uint cant)
 {
-    txtcopy( text, 0, 0, cant);
+    if (cant<length)
+      txtcopy( text, 0, 0, cant);
     return *this;
 }
 
 moText0& moText0::Right( uint cant)
 {
-    txtcopy( text, 0, length-cant, MO_TXT_COMPLETE);
+    if ((length-cant)>0)
+      txtcopy( text, 0, length-cant, MO_TXT_COMPLETE);
     return *this;
 }
 
@@ -626,11 +630,11 @@ moText0::Replace( const moText0& target, const moText0& replacement ) {
 
         toreplace = -1;
 
-        for(j =0; j<target.Length(); j++ ) {
+        for(j =0; j<(int)target.Length(); j++ ) {
 
             if ( target.text[j] == mRight.text[i+j] ) {
                 cmp = true;
-                if ((j+1)==target.Length()) {
+                if ((j+1)==(int)target.Length()) {
                     toreplace = i;
                 }
             } else {
@@ -663,7 +667,7 @@ moText0::ReplaceChar( const char* target, const char* replacement ) {
     moText tt = (char*)target;
     moText tr = (char*)replacement;
     if ( tt.Length()==1 && tr.Length()==1 )
-        for( int i=0; i<Length(); i++) {
+        for( int i=0; i<(int)Length(); i++) {
             char c = target[0];
             if (text[i]==c) {
                 text[i] = replacement[0];
@@ -671,6 +675,8 @@ moText0::ReplaceChar( const char* target, const char* replacement ) {
         }
 
 }
+
+#endif
 
 /*
 //===========================================
@@ -888,7 +894,9 @@ moTextHeap::Set(int x,moText T) {
 //
 //===========================================
 
-LIBMOLDEO_API moText IntToStr(int a)
+#ifdef USE_MOTEXT0
+
+LIBMOLDEO_API moText0 IntToStr(int a)
 {
     char buffer[100];
     snprintf(buffer, 100, "%i", a); // Memory-safe version of sprintf.
@@ -922,3 +930,5 @@ LIBMOLDEO_API moText0 FloatToStr(double a, int n)
 
     return str;
 }
+
+#endif

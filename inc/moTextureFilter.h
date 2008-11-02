@@ -161,7 +161,7 @@ public:
 		m_renderman = NULL;
 		m_shader = NULL;
 		m_DefParams = NULL;
-        m_TextureFilterLabelName = "";
+        m_TextureFilterLabelName = moText("");
 	}
     /**
      * El destructor por defecto de la clase.

@@ -69,21 +69,21 @@ moEffect::PreInit() {
 	confignamecompleto +=  moText("/") + moText( GetConfigName() );
     confignamecompleto +=  moText(".cfg");
 
-	//MODebug->Push("*****Inicializando efecto*****");//debug
-        texto = "*****Initializing  ";
+	//MODebug2->Push("*****Inicializando efecto*****");//debug
+        texto = moText("*****Initializing  ");
         texto += GetName();
-        texto += "******";
+        texto += moText("******");
 
-	MODebug->Push(texto);//debug
+	MODebug2->Push(texto);//debug
 	if(state.fulldebug==MO_ACTIVATED) {
-            texto = "Loading config:";
-            MODebug->Push(texto);//debug
+            texto = moText("Loading config:");
+            MODebug2->Push(texto);//debug
         }
-	if(state.fulldebug==MO_ACTIVATED) MODebug->Push(confignamecompleto);//debug
+	if(state.fulldebug==MO_ACTIVATED) MODebug2->Push(confignamecompleto);//debug
 
 	if(m_Config.LoadConfig(confignamecompleto) != MO_CONFIG_OK ) {
-        MODebug->Push(moText("ERROR: Config file not found."));
-		cout << "ERROR: Config file invalid or not found: " << confignamecompleto << endl;
+        MODebug2->Push(moText("Config file not found."));
+		MODebug2->Error(moText("Config file invalid or not found: ")+ (moText)confignamecompleto);
 		return false;//bad
 	}
 
@@ -91,12 +91,12 @@ moEffect::PreInit() {
 
     isyncro = m_Config.GetParamIndex("syncro");
 	iphase = m_Config.GetParamIndex("phase");
-	if(isyncro==MO_PARAM_NOT_FOUND) MODebug->Push(moText("ERROR: syncro parameter missing."));
-	if(iphase==MO_PARAM_NOT_FOUND) MODebug->Push(moText("ERROR: phase parameter missing."));
+	if(isyncro==MO_PARAM_NOT_FOUND) MODebug2->Error(moText("syncro parameter missing."));
+	if(iphase==MO_PARAM_NOT_FOUND) MODebug2->Error(moText("phase parameter missing."));
 
-	if(state.fulldebug==MO_ACTIVATED) MODebug->Push(moText("Initializing state"));//debug
+	if(state.fulldebug==MO_ACTIVATED) MODebug2->Push(moText("Initializing state"));//debug
 
-	if(state.fulldebug==MO_ACTIVATED) MODebug->Push(moText("Setting preconfigs..."));//debug
+	if(state.fulldebug==MO_ACTIVATED) MODebug2->Push(moText("Setting preconfigs..."));//debug
 
 	//devicecode es llenado por la moConsole(por defecto)
 	//si en el nombrefecto.cfg encontramos el parametro ":acciones" entonces tomamos las acciones
@@ -135,7 +135,7 @@ void moEffect::PreDraw( moTempo *tempogral,moEffectState* parentstate) {
 		state.tempo = *tempogral;
 		state.tempo.syncro = syncrotmp;
 		state.tempo.getTempo();
-		//if(state.fulldebug==MO_ACTIVATED) MODebug->Push("SYNCRO: " + FloatToStr(state.tempo.syncro,3));
+		//if(state.fulldebug==MO_ACTIVATED) MODebug2->Push("SYNCRO: " + FloatToStr(state.tempo.syncro,3));
     }
 
 	if(iphase != MO_PARAM_NOT_FOUND) {
@@ -169,7 +169,7 @@ moEffect::LoadCodes(moIODeviceManager *consolaesarray) {
 	MOint coddisp,accioncod;
 	moText strcod;
 
-	if(state.fulldebug==MO_ACTIVATED) MODebug->Push(moText("Cargando codigos de dispositivo especificos..."));
+	if(state.fulldebug==MO_ACTIVATED) MODebug2->Push(moText("Cargando codigos de dispositivo especificos..."));
 
 	nroparam = m_Config.GetParamIndex("codes");
 	if(nroparam==MO_PARAM_NOT_FOUND) return;//se va, no hay codigos
@@ -179,13 +179,12 @@ moEffect::LoadCodes(moIODeviceManager *consolaesarray) {
 	devicecode = new moDeviceCodeList [ncodes];
 
 #ifdef MO_DEBUG
-        texto = "\nCargando codigos efecto ";
+        texto = moText("Cargando codigos efecto ");
         texto += GetName();
         texto += moText(" ncodes: ");
         texto += IntToStr(ncodes);
-        texto += "\n";
 	//printf(texto);
-	printf("\nCargando cod fx:%i\n",ncodes);
+	MODebug2->Log(moText("Cargando cod fx:")+IntToStr(ncodes));
 #endif
 	if(ncodes>0)
 	for( i = 0; i < (MOuint)ncodes; i++) {
@@ -201,35 +200,32 @@ moEffect::LoadCodes(moIODeviceManager *consolaesarray) {
 
 			if((accioncod>=0) &&(accioncod<ncodes)) {
 				if(coddisp==-1) {
-                                        texto = "\nERROR ";
-                                        texto += GetName();
-                                        texto += ".cfg:\nno se encontró en ningun dispositivo el codigo de dispositivo correspondiente a: ";
-                                        texto += strcod;
-					printf(texto);
-					//exit(0);
+                    texto += GetName();
+                    texto += moText(".cfg:\nno se encontró en ningun dispositivo el codigo de dispositivo correspondiente a: ");
+                    texto += strcod;
+					MODebug2->Error(texto);
 				} else {
 					devicecode[accioncod].Add(j,coddisp); //agregar un cod disp a la lista
 #ifdef MO_DEBUG
-					texto = "accioncod: ";
+					texto = moText("accioncod: ");
 					texto += IntToStr(accioncod);
-					texto += " strcod: ";
+					texto += moText(" strcod: ");
 					texto += strcod;
-					texto += " dispositivo: ";
+					texto += moText(" dispositivo: ");
 					texto += IntToStr(j);
-					texto += " codisp: ";
+					texto += moText(" codisp: ");
 					texto += IntToStr(coddisp);
-					texto += "\n";
-					printf(texto);
+					MODebug2->Log(texto);
 #endif
 				}
 			} else {
-				printf("error: codigo de la accion fuera de rango\n");
+				MODebug2->Error("error: codigo de la accion fuera de rango");
 			}
 
 		}
 	}
 
-	if(state.fulldebug==MO_ACTIVATED) MODebug->Push(moText("Codes loaded."));
+	if(state.fulldebug==MO_ACTIVATED) MODebug2->Push(moText("Codes loaded."));
 }
 
 

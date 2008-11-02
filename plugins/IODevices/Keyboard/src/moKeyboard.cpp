@@ -114,8 +114,8 @@ moKeyboard::Init() {
     conf += GetConfigName();
     conf += moText(".cfg");
 	if (m_Config.LoadConfig(conf) != MO_CONFIG_OK ) {
-		text = "Couldn't load keyboard config";
-		MODebug->Push(text);
+		text = moText("Couldn't load keyboard config");
+		MODebug2->Error(text);
 		return false;
 	}
 
@@ -129,7 +129,7 @@ moKeyboard::Init() {
 
 	m_Config.FirstValue();
 
-	printf("\nKEYBOARD: ncodes:%i\n",ncodes);
+	MODebug2->Log( moText("KEYBOARD: ncodes:") + IntToStr(ncodes) );
 
 	for( i = 0; i < ncodes; i++) {
 		Codes[i].strcod = m_Config.GetParam().GetValue().GetSubValue(MO_KEYBOARD_CFG_STRCOD).Text();
@@ -141,20 +141,20 @@ moKeyboard::Init() {
 
 
 		if(Codes[i].key==-1) {
-                        text = "ERROR(keyboard):\n no se encuentra el code de la key del code: ";
-                        text +=  Codes[i].strcod;
-                        text +=  moText("\n");
-			printf(text);
-			exit(0);
+            text = moText("(keyboard):\n no se encuentra el code de la key del code: ");
+            text +=  Codes[i].strcod;
+            text +=  moText("\n");
+			MODebug2->Error(text);
 		} else {
 #ifdef MO_DEBUG
-            text = "strcod: ";
+            text = moText("strcod: ");
             text += Codes[i].strcod;
             text += moText(" ");
-			printf(text);
-			printf("cod: %i ",Codes[i].devcode);
-			printf("type: %i ",Codes[i].type);
-			printf("cod interno: %i\n",Codes[i].key);
+			MODebug2->Message(text);
+			MODebug2->Message(moText("cod: ")+ IntToStr(Codes[i].devcode) );
+			MODebug2->Message(moText("type: ")+ IntToStr(Codes[i].type) );
+			MODebug2->Message(moText("type: ")+ IntToStr(Codes[i].type) );
+
 #endif
 			//nada mas
 		}
@@ -200,11 +200,9 @@ moKeyboard::Init() {
 
 
 			if(panelvirtual[tid]==-1) {
-							text = "ERROR(panelvirtual):\n couldn't find devicecode of string code: ";
-							text += cvstr;
-							text += moText("\n");
-				printf(text);
-				MODebug->Push(text);
+                text = moText("(panelvirtual):\n couldn't find devicecode of string code: ");
+                text += cvstr;
+				MODebug2->Error(text);
 			}
 			m_Config.NextValue();
 		}
@@ -238,11 +236,9 @@ moKeyboard::Init() {
 
 
       if(channel0virtual[tid]==-1) {
-                          text = "ERROR(channel0virtual):\n no se encuentra el code de la key del code: ";
-                          text += cvstr;
-                          text += moText("\n");
-        printf(text);
-        MODebug->Push(text);
+            text = moText("(channel0virtual):\n no se encuentra el code de la key del code: ");
+            text += cvstr;
+            MODebug2->Error(text);
       }
       m_Config.NextValue();
     }
@@ -275,11 +271,9 @@ moKeyboard::Init() {
 
 
       if(masterchannelvirtual[tid]==-1) {
-                          text = "ERROR(masterchannelvirtual):\n no se encuentra el code de la key del code: ";
-                          text += cvstr;
-                          text += moText("\n");
-        printf(text);
-        MODebug->Push(text);
+            text = moText("(masterchannelvirtual):\n no se encuentra el code de la key del code: ");
+            text += cvstr;
+            MODebug2->Error(text);
       }
       m_Config.NextValue();
     }

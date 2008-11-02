@@ -10,7 +10,7 @@
 
 #define MO_3DMODEL_ERROR NULL
 
-typedef enum mo3dModelType {
+typedef enum {
 
   MO_MODEL_X3D = 0,
   MO_MODEL_3DS = 1,
@@ -18,13 +18,13 @@ typedef enum mo3dModelType {
   MO_MODEL_MD2 = 3,
   MO_MODEL_MD3 = 4
 
-};
+} mo3dModelType;
 
-typedef struct mo3dModelParam {
+typedef struct {
 
     MOuint  nObjects;
 
-};
+} mo3dModelParam;
 
 
 //===========  3D  ================//
@@ -136,6 +136,7 @@ class LIBMOLDEO_API mo3DModel : public moAbstract {
         virtual MOboolean Init();
         virtual MOboolean Init( mo3dModel* p_pModel ) {
             m_pModel = p_pModel;
+            return true;
         }
         virtual MOboolean Finish();
 

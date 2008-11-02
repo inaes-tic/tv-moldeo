@@ -38,8 +38,8 @@
 //===========================================
 
 moDataSessionConfig::moDataSessionConfig() {
-	m_DataPath = "";
-	m_ConsoleConfigName = "";
+	m_DataPath = moText("");
+	m_ConsoleConfigName = moText("");
 }
 
 moDataSessionConfig::moDataSessionConfig( moText p_datapath, moText p_consoleconfig ) {

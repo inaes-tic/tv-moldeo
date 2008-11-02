@@ -57,17 +57,17 @@ public:
     {
         moText uname;
 
-        uname = "par_flt1";
+        uname = moText("par_flt1");
         m_par_flt1 = p_glsl->GetUniformID(uname);
-        uname = "par_flt2";
+        uname = moText("par_flt2");
         m_par_flt2 = p_glsl->GetUniformID(uname);
-        uname = "par_flt3";
+        uname = moText("par_flt3");
         m_par_flt3 = p_glsl->GetUniformID(uname);
-        uname = "par_mat2";
+        uname = moText("par_mat2");
         m_par_mat2 = p_glsl->GetUniformID(uname);
-        uname = "par_mat3";
+        uname = moText("par_mat3");
         m_par_mat3 = p_glsl->GetUniformID(uname);
-        uname = "par_mat4";
+        uname = moText("par_mat4");
         m_par_mat4 = p_glsl->GetUniformID(uname);
     }
 

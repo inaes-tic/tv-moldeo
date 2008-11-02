@@ -299,7 +299,7 @@ int moConfig::SaveConfig( moText p_filename ) {
         TiXmlElement* CONFIGPARAMS = new TiXmlElement( "CONFIGPARAMS" );
         if (CONFIGPARAMS) {
 
-            for( int p = 0; p< m_Params.Count(); p++ ) {
+            for( int p = 0; p< (int)m_Params.Count(); p++ ) {
 
                 //proximo parámetro
                 moParam& xparam( m_Params.Get(p) );
@@ -311,14 +311,14 @@ int moConfig::SaveConfig( moText p_filename ) {
                     PARAM->SetAttribute( "name" , definition.GetName() );
                     PARAM->SetAttribute( "type" , definition.GetTypeStr() );
 
-                    for( int  v = 0; v< xparam.GetValuesCount(); v++ ) {
+                    for( int  v = 0; v< (int)xparam.GetValuesCount(); v++ ) {
 
                         //proximo valor
                         moValue &xvalue( xparam.GetValue(v) );
 
                         TiXmlElement* VALUE = new TiXmlElement("VAL");
                         if (VALUE) {
-                            for( int s = 0; s< xvalue.GetSubValueCount(); s++ ) {
+                            for( int s = 0; s< (int)xvalue.GetSubValueCount(); s++ ) {
 
                                 //proximo subvalor
                                 moValueBase& xvaluedata( xvalue.GetSubValue(s) );
@@ -358,14 +358,14 @@ int moConfig::SaveConfig( moText p_filename ) {
         TiXmlElement* PRECONFIGS = new TiXmlElement( "PRECONFIGS" );
         if (PRECONFIGS) {
 
-            for( int pc=0; pc< m_PreConfigs.Count(); pc++) {
+            for( int pc=0; pc< (int)m_PreConfigs.Count(); pc++) {
 
                 moPreConfig& xPreConfig( m_PreConfigs.Get(pc) );
 
                 TiXmlElement* PRECONFIG = new TiXmlElement("PRE");
                 if (PRECONFIG) {
 
-                    for( int pv=0; pv< xPreConfig.m_ValueIndexes.Count(); pv++) {
+                    for( int pv=0; pv< (int)xPreConfig.m_ValueIndexes.Count(); pv++) {
 
                         moValueIndex xValueIndex = xPreConfig[pv];
 
@@ -414,7 +414,7 @@ moConfig::CreateDefault( moText p_fullconfigfilename ) {
         this->UnloadConfig();
 
 
-        for(int i=0; i<pParamDefinitions->Count() ; i++) {
+        for(int i=0; i<(int)pParamDefinitions->Count() ; i++) {
 
             moParamDefinition pParamDefinition = pParamDefinitions->Get(i);
 

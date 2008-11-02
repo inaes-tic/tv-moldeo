@@ -32,7 +32,7 @@
 #include <iostream>
 #include <iomanip>
 #include <ctime>
-
+#include "string.h"
 
 namespace osc{
 
@@ -40,11 +40,16 @@ namespace osc{
 std::ostream& operator<<( std::ostream & os,
         const ReceivedMessageArgument& arg )
 {
+    size_t len;
+    const char *timeString;
+    std::time_t t;
+    char *s;
+
     switch( arg.TypeTag() ){
         case TRUE_TYPE_TAG:
             os << "bool:true";
             break;
-                
+
         case FALSE_TYPE_TAG:
             os << "bool:false";
             break;
@@ -76,7 +81,7 @@ std::ostream& operator<<( std::ostream & os,
         case RGBA_COLOR_TYPE_TAG:
             {
                 uint32 color = arg.AsRgbaColorUnchecked();
-                
+
                 os << "RGBA:0x"
                         << std::hex << std::setfill('0')
                         << std::setw(2) << (int)((color>>24) & 0xFF)
@@ -101,30 +106,28 @@ std::ostream& operator<<( std::ostream & os,
                 os.unsetf(std::ios::basefield);
             }
             break;
-				
+
         case INT64_TYPE_TAG:
             os << "int64:" << arg.AsInt64Unchecked();
             break;
 
         case TIME_TAG_TYPE_TAG:
-            {
                 os << "OSC-timetag:" << arg.AsTimeTagUnchecked();
 
-                std::time_t t =
-                        (unsigned long)( arg.AsTimeTagUnchecked() >> 32 );
+                t = (unsigned long)( arg.AsTimeTagUnchecked() >> 32 );
 
                 // strip trailing newline from string returned by ctime
-                const char *timeString = std::ctime( &t );
-                size_t len = strlen( timeString );
-                char *s = new char[ len + 1 ];
+                timeString = std::ctime( &t );
+                len = strlen( timeString );
+                s = new char[ len + 1 ];
                 strcpy( s, timeString );
                 if( len )
                     s[ len - 1 ] = '\0';
-                    
+
                 os << " " << s;
-            }
+
             break;
-                
+
         case DOUBLE_TYPE_TAG:
             os << "double:" << arg.AsDoubleUnchecked();
             break;
@@ -132,8 +135,8 @@ std::ostream& operator<<( std::ostream & os,
         case STRING_TYPE_TAG:
             os << "OSC-string:`" << arg.AsStringUnchecked() << "'";
             break;
-                
-        case SYMBOL_TYPE_TAG: 
+
+        case SYMBOL_TYPE_TAG:
             os << "OSC-string (symbol):`" << arg.AsSymbolUnchecked() << "'";
             break;
 
@@ -200,7 +203,7 @@ std::ostream& operator<<( std::ostream & os, const ReceivedBundle& b )
     os << " )\n";
 
     ++indent;
-    
+
     for( ReceivedBundle::const_iterator i = b.ElementsBegin();
             i != b.ElementsEnd(); ++i ){
         if( i->IsBundle() ){

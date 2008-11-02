@@ -20,31 +20,6 @@
 #include <wx/button.h>
 //*)
 
-class moTexturesTreeCtrl : public wxTreeMultiCtrl, public moIDirectorActions {
-
-    public:
-        moTexturesTreeCtrl( wxWindow* window, wxWindowID id);
-        virtual ~moTexturesTreeCtrl();
-
-
-        void InitDescriptors();
-        void UpdateDescriptors();
-
-
-    public:
-
-        wxTreeMultiItem imgid;
-        wxTreeMultiItem videosid;
-        wxTreeMultiItem othersid;
-        wxBitmap EmptyBitmap;
-
-        wxImageList         m_ImageList;
-        moResourceDescriptors    m_ResourceDescriptors;
-
-    DECLARE_EVENT_TABLE()
-
-};
-
 class moPanelTexture: public wxPanel, public moIDirectorActions
 {
 	public:
@@ -117,7 +92,7 @@ class moPanelTexture: public wxPanel, public moIDirectorActions
 		//*)
 
         moShaderCtrl*       m_pShaderCtrl;
-        moTexturesTreeCtrl* m_pTexturesTreeCtrl;
+        //moTexturesTreeCtrl* m_pTexturesTreeCtrl;
 
         void LoadImage();
 

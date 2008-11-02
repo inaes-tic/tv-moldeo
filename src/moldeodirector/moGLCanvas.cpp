@@ -71,10 +71,13 @@ moGLCanvas::Init( moIDirectorActions* pActionsHandler) {
 
 void
 moGLCanvas::Activate( wxEvtHandler* p_pHandler ) {
-    Log("GL Canvas Activate");
+    Log("GL Canvas Activating...");
+
     if (p_pHandler) {
         m_pHandler = p_pHandler;
         m_active = true;
+        SetFocus();
+        Log("...Activated");
     }
 
 }
@@ -291,7 +294,7 @@ void moGLCanvas::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
 
 void moGLCanvas::OnMouse( wxMouseEvent& event )
 {
-
+    //Log("glcanvas :: mouse");
     //if( event.Dragging() || event.Moving() )
     if(m_active)
         if(m_pHandler) {
@@ -303,7 +306,7 @@ void moGLCanvas::OnMouse( wxMouseEvent& event )
 }
 
 void moGLCanvas::OnKeyDown( wxKeyEvent &event ) {
-
+    //Log("glcanvas :: kdown");
 if(m_active)
     if(m_pHandler)		{
         m_pHandler->ProcessEvent(event);
@@ -312,6 +315,7 @@ if(m_active)
 }
 
 void moGLCanvas::OnKeyUp( wxKeyEvent &event ) {
+    //Log("glcanvas :: kup");
 if(m_active)
     if(m_pHandler)		{
         m_pHandler->ProcessEvent(event);

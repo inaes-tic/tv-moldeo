@@ -35,7 +35,7 @@
 #include "moText.h"
 
 #if defined(_WIN32)
-  #include <windows.h> 
+  #include <windows.h>
   typedef HINSTANCE MOpluginHandle;
   #define MO_PLG_API __declspec(dllexport)
   #define MO_PLG_ENTRY __stdcall

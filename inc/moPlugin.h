@@ -45,8 +45,8 @@ class LIBMOLDEO_API moPluginDefinition {
   public:
 
     moPluginDefinition() {
-          m_Name = "";
-          m_FullPath = "";
+          m_Name = moText("");
+          m_FullPath = moText("");
           m_MoldeoObjectType = MO_OBJECT_UNDEFINED;
     }
 

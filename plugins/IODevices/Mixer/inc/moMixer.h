@@ -42,7 +42,7 @@
 
 class moMixerButton {
 public:
-	MOboolean pushed; 
+	MOboolean pushed;
 	MOint pushedmod;
 	MOboolean released;
 	MOint releasedmod;
@@ -72,7 +72,7 @@ public:
 		pushed = MO_TRUE;
 		pushedmod =  mod;
 		released = MO_FALSE;
-		releasedmod = 0;//indefinido	
+		releasedmod = 0;//indefinido
 		pressedmod = 0;
 	}
 
@@ -81,7 +81,7 @@ public:
 		releasedmod = mod;
 		//se soltó pero nunca se pulsó(es un error) o no coincide el mapa de keys especiales
 		if((pushed == MO_FALSE) ||(releasedmod!=pushedmod)) {
-			Init();			
+			Init();
 			return MO_FALSE;
 		} else {
 			pressed = pressed + 1;
@@ -134,7 +134,7 @@ public:
 
 	void Set(MOint r) {
 		if(r!=0) {
-			led = r;			
+			led = r;
 		}
 	}
 };
@@ -145,12 +145,12 @@ public:
 	moText text;
 
 	moMixerText() {
-		text = "";
+		text = moText("");
 		n = 0;
 	}
 
 	MOboolean Init() {
-		text = "";
+		text = moText("");
 		n = 0;
 		return true;
 	}
@@ -175,22 +175,22 @@ public:
 };
 
 class moMixer : public moIODevice {
-public:	
+public:
     moMixer();
     virtual ~moMixer();
 	virtual MOboolean		Init();
 	virtual MOboolean		Finish();
-    
-    void			Update(moEventList*);	
+
+    void			Update(moEventList*);
     MOswitch		GetStatus( MOdevcode);
     MOswitch		SetStatus( MOdevcode,MOswitch);
 	MOint			GetValue( MOdevcode);
-	char*			getText( MOdevcode);	
-    MOdevcode    GetCode( moText);   
-	
+	char*			getText( MOdevcode);
+    MOdevcode    GetCode( moText);
+
 
 private:
-	MOint	getMixerCode(moText);    
+	MOint	getMixerCode(moText);
 	moConfig config;
 
 	//el indice esta definido en el archivo de configuracion()
@@ -213,7 +213,7 @@ private:
 /*
 	//MOUSE
 	MOswitch EventsMouse[16];
-	MOswitch ButtonsMouse[16];	
+	MOswitch ButtonsMouse[16];
 	MOint MouseMotionX,MouseMotionY;//entre-255 y 255
 	MOfloat MouseDefinition;
 */

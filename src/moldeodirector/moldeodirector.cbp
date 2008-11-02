@@ -15,11 +15,25 @@
 				<Option projectLinkerOptionsRelation="2" />
 				<Compiler>
 					<Add option="-g" />
-					<Add option="`wx-config --cflags --debug=yes`" />
+					<Add option="`wx-config --cflags --debug=no`" />
 				</Compiler>
 				<Linker>
 					<Add library="libmoldeod" />
 					<Add library="tinyxmld" />
+					<Add library="wxart2d_msw_general-2.8" />
+					<Add library="wxart2d_msw_xmlparse-2.8" />
+					<Add library="wxart2d_msw_curves-2.8" />
+					<Add library="wxart2d_msw_docview-2.8" />
+					<Add library="wxart2d_msw_aggdrawer-2.8" />
+					<Add library="wxart2d_msw_editor-2.8" />
+					<Add library="wxart2d_msw_canvas-2.8" />
+					<Add library="wxart2d_msw_canextobj-2.8" />
+					<Add library="wxart2d_msw_artbase-2.8" />
+					<Add library="wxart2d_msw_gdsio-2.8" />
+					<Add library="wxart2d_msw_svgio-2.8" />
+					<Add library="aggd" />
+					<Add library="kboold" />
+					<Add library="freetyped" />
 					<Add directory="..\..\contrib\src\tinyxml\Debug" />
 				</Linker>
 			</Target>
@@ -38,6 +52,77 @@
 					<Add option="-s" />
 					<Add library="libmoldeo" />
 					<Add library="tinyxml" />
+					<Add library="wxart2d_msw_general-2.8" />
+					<Add library="wxart2d_msw_xmlparse-2.8" />
+					<Add library="wxart2d_msw_curves-2.8" />
+					<Add library="wxart2d_msw_docview-2.8" />
+					<Add library="wxart2d_msw_aggdrawer-2.8" />
+					<Add library="wxart2d_msw_editor-2.8" />
+					<Add library="wxart2d_msw_canvas-2.8" />
+					<Add library="wxart2d_msw_canextobj-2.8" />
+					<Add library="wxart2d_msw_artbase-2.8" />
+					<Add library="wxart2d_msw_gdsio-2.8" />
+					<Add library="wxart2d_msw_svgio-2.8" />
+					<Add library="agg" />
+					<Add library="kbool" />
+					<Add library="freetype" />
+					<Add directory="..\..\contrib\src\tinyxml\Release" />
+				</Linker>
+			</Target>
+			<Target title="Debug WXStatic ">
+				<Option output="..\..\bin\mingw\moldeodirectord" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="..\..\bin\mingw" />
+				<Option object_output="wobjd\Debug" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="`wx-config --cflags --debug=yes`" />
+				</Compiler>
+				<Linker>
+					<Add library="libmoldeo" />
+					<Add library="tinyxml" />
+					<Add library="wx_base-2.8" />
+					<Add library="wx_base_net-2.8" />
+					<Add library="wx_base_xml-2.8" />
+					<Add library="wx_msw_gl-2.8" />
+					<Add library="wx_msw_aui-2.8" />
+					<Add library="wx_msw_qa-2.8" />
+					<Add library="wx_msw_core-2.8" />
+					<Add library="wx_msw_adv-2.8" />
+					<Add library="wx_msw_richtext-2.8" />
+					<Add library="wx_msw_html-2.8" />
+					<Add library="wx_msw_xrc-2.8" />
+					<Add directory="..\..\contrib\src\tinyxml\Debug" />
+				</Linker>
+			</Target>
+			<Target title="Release WXStatic">
+				<Option output="..\..\bin\mingw\moldeodirector" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="..\..\bin\mingw" />
+				<Option object_output="wobj\Release" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="`wx-config --cflags --debug=no`" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="libmoldeod" />
+					<Add library="tinyxmld" />
+					<Add library="wx_base-2.8" />
+					<Add library="wx_base_net-2.8" />
+					<Add library="wx_base_xml-2.8" />
+					<Add library="wx_msw_gl-2.8" />
+					<Add library="wx_msw_aui-2.8" />
+					<Add library="wx_msw_qa-2.8" />
+					<Add library="wx_msw_core-2.8" />
+					<Add library="wx_msw_adv-2.8" />
+					<Add library="wx_msw_richtext-2.8" />
+					<Add library="wx_msw_html-2.8" />
+					<Add library="wx_msw_xrc-2.8" />
 					<Add directory="..\..\contrib\src\tinyxml\Release" />
 				</Linker>
 			</Target>
@@ -48,7 +133,10 @@
 		<Compiler>
 			<Add option="-W" />
 			<Add option="-D__WXMSW__" />
-			<Add option="-DWXUSINGDLL" />
+			<Add option="-DwxUSE_SYSTEM_OPTIONS" />
+			<Add option="-DMO_WXART2D" />
+			<Add directory="." />
+			<Add directory=".." />
 			<Add directory=".\vdtc" />
 			<Add directory=".\treemultictrl" />
 			<Add directory="..\..\inc" />
@@ -65,13 +153,18 @@
 			<Add directory="..\..\..\..\externlibs\openal\include" />
 			<Add directory="..\..\..\..\externlibs\freetype\include" />
 			<Add directory="..\..\..\..\externlibs\freeimage\include" />
-			<Add directory="..\..\..\..\externlibs\wxWidgets\lib\mingw_lib\wx\include\msw-ansi-release-2.8" />
 			<Add directory="..\..\..\..\externlibs\wxwidgets\include" />
+			<Add directory="..\..\..\..\externlibs\wxwidgets\contrib\include" />
 			<Add directory="..\..\..\..\externlibs\gstreamer\include" />
 			<Add directory="..\..\..\..\externlibs\gstreamer\include\glib-2.0" />
 			<Add directory="..\..\..\..\externlibs\gstreamer\lib\glib-2.0\include" />
-			<Add directory=".." />
-			<Add directory="." />
+			<Add directory="..\..\..\..\externlibs\wxWidgets\lib\mingw_lib\wx\include\msw-ansi-release-static-2.8" />
+			<Add directory="..\..\..\..\externlibs\wxArt2D\include" />
+			<Add directory="..\..\..\..\externlibs\wxArt2D\include\thirdparty" />
+			<Add directory="..\..\..\..\externlibs\wxArt2D\modules" />
+			<Add directory="..\..\..\..\externlibs\wxWidgets\src\expat\lib" />
+			<Add directory="..\..\..\..\externlibs\wxArt2D\thirdparty\agg2\include" />
+			<Add directory="..\..\..\..\externlibs\wxArt2D\thirdparty\kbool\include" />
 		</Compiler>
 		<Linker>
 			<Add library="libSDL" />
@@ -81,21 +174,34 @@
 			<Add library="cgGL" />
 			<Add library="OpenAL32" />
 			<Add library="EFX-Util" />
-			<Add library="FreeImage" />
-			<Add library="gstreamer-0.10" />
-			<Add library="glib-2.0" />
-			<Add library="gobject-2.0" />
-			<Add library="wx_base-2.8" />
+			<Add library="wx_msw-2.8" />
 			<Add library="wx_msw_gl-2.8" />
-			<Add library="wx_msw_aui-2.8" />
-			<Add library="wx_msw_core-2.8" />
-			<Add library="wx_msw_adv-2.8" />
+			<Add library="wxregex-2.8" />
+			<Add library="wxexpat-2.8" />
+			<Add library="wxtiff-2.8" />
+			<Add library="wxjpeg-2.8" />
+			<Add library="wxpng-2.8" />
+			<Add library="wxzlib-2.8" />
+			<Add library="wx_msw_svg-2.8" />
+			<Add library="wx_msw_ogl-2.8" />
+			<Add library="rpcrt4" />
+			<Add library="oleaut32" />
+			<Add library="ole32" />
+			<Add library="uuid" />
+			<Add library="winspool" />
+			<Add library="winmm" />
+			<Add library="shell32" />
+			<Add library="comctl32" />
+			<Add library="comdlg32" />
+			<Add library="ctl3d32" />
+			<Add library="advapi32" />
+			<Add library="wsock32" />
+			<Add library="opengl32" />
 			<Add library="glut32" />
 			<Add library="glut" />
-			<Add library="opengl32" />
 			<Add library="glu32" />
 			<Add library="glaux" />
-			<Add library="wx_msw_html-2.8" />
+			<Add library="gdi32" />
 			<Add directory="..\..\..\..\externlibs\gstreamer\lib\glib-2.0\include" />
 			<Add directory="..\..\..\..\externlibs\tinyxml\lib" />
 			<Add directory="..\..\..\..\externlibs\SDL\lib" />
@@ -110,11 +216,14 @@
 			<Add directory="..\..\..\..\externlibs\gstreamer\lib" />
 			<Add directory="..\..\..\..\externlibs\wxwidgets\lib\mingw_lib" />
 			<Add directory="..\..\lib\mingw" />
+			<Add directory="..\..\..\..\externlibs\wxArt2D\lib" />
 		</Linker>
 		<Unit filename="mo3dModelPanel.cpp" />
 		<Unit filename="mo3dModelPanel.h" />
 		<Unit filename="moColorMotion.cpp" />
 		<Unit filename="moColorMotion.h" />
+		<Unit filename="moConnectionsWindow.cpp" />
+		<Unit filename="moConnectionsWindow.h" />
 		<Unit filename="moDirectorChildConsole.cpp" />
 		<Unit filename="moDirectorChildConsole.h" />
 		<Unit filename="moDirectorChildFrame.cpp" />
@@ -165,13 +274,18 @@
 		<Unit filename="moShadersPanel.h" />
 		<Unit filename="moTextureItemCtrl.cpp" />
 		<Unit filename="moTextureItemCtrl.h" />
+		<Unit filename="moTimelineRuler.cpp" />
+		<Unit filename="moTimelineRuler.h" />
 		<Unit filename="moTreeObjectsLayerCtrl.cpp" />
 		<Unit filename="moTreeObjectsLayerCtrl.h" />
 		<Unit filename="moValueCtrl.cpp" />
 		<Unit filename="moValueCtrl.h" />
+		<Unit filename="moWxConnectorsObjectCtrl.cpp" />
+		<Unit filename="moWxConnectorsObjectCtrl.h" />
 		<Unit filename="moWxLevelCtrl.cpp" />
 		<Unit filename="moWxLevelCtrl.h" />
 		<Unit filename="moldeodirector.cpp" />
+		<Unit filename="moldeodirector.h" />
 		<Unit filename="treemultictrl\TreeMultiItemBase.cpp" />
 		<Unit filename="treemultictrl\TreeMultiItemBase.h" />
 		<Unit filename="treemultictrl\TreeMultiItemNode.cpp" />
@@ -217,6 +331,7 @@
 					<wxPanel wxs="wxsmith/moShadersPanel.wxs" src="moShadersPanel.cpp" hdr="moShadersPanel.h" name="moShadersPanel" language="CPP" />
 					<wxPanel wxs="wxsmith/mo3dModelPanel.wxs" src="mo3dModelPanel.cpp" hdr="mo3dModelPanel.h" name="mo3dModelPanel" language="CPP" />
 					<wxPanel wxs="wxsmith/moFontPanel.wxs" src="moFontPanel.cpp" hdr="moFontPanel.h" name="moFontPanel" language="CPP" />
+					<wxPanel wxs="wxsmith/moConnectionsWindow.wxs" src="moConnectionsWindow.cpp" hdr="moConnectionsWindow.h" name="moConnectionsWindow" language="CPP" />
 				</resources>
 			</wxsmith>
 		</Extensions>

@@ -102,8 +102,8 @@ moMouse::Init() {
     conf += GetConfigName();
     conf += moText(".cfg");
 	if (m_Config.LoadConfig(conf) != MO_CONFIG_OK ) {
-		text = "Couldn't load mouse config";
-		MODebug->Push(text);
+		text = moText("Couldn't load mouse config");
+		MODebug2->Error(text);
 		return false;
 	}
 
@@ -114,7 +114,12 @@ moMouse::Init() {
 	Codes = new moMouseCode [ncodes];
 
 	//ahora traduzco la info
-	printf("\nMOUSE: ncodes:%i\n",ncodes);
+    #ifdef _DEBUG
+        text = moText("(MOUSE) : ncodes: ") + IntToStr(ncodes);
+        MODebug2->Log(text);
+    #endif
+
+
 
 	for( i = 0; i < ncodes; i++) {
 		m_Config.SetCurrentValueIndex(coparam,i);
@@ -125,10 +130,9 @@ moMouse::Init() {
 		Codes[i].state = MO_FALSE;//inicializamos en vacio
 
 		if(Codes[i].mousecod==-1) {
-            text = "ERROR(mouse):\n no se encuentra el code: ";
-            text +=  Codes[i].strcod;
-            text += moText( "\n");
-			MODebug->Push(text);
+            text = moText("(mouse) : no se encuentra el code: ");
+            text += Codes[i].strcod;
+			MODebug2->Error(text);
 			return false;
 		}
 	}
@@ -166,16 +170,15 @@ moMouse::Init() {
 
 
 			if(channel0virtual[i]==-1) {
-				text = "ERROR(channel0 virtual):\n no se encuentra el code de la key del code: ";
+				text = moText("(channel0 virtual): no se encuentra el code de la key del code: ");
 				text += cvstr;
-				text += moText("\n");
-				MODebug->Push(text);
+				MODebug2->Error(text);
 				return false;
 			}
 		}
 	} else {
 		text = moText("Error: ") + (m_pResourceManager->GetDataMan()->GetDataPath()+moText("/mixer.cfg"))+moText("NOT FOUND");
-		MODebug->Push(text);
+		MODebug2->Error(text);
 		return false;
 	}
 
@@ -185,7 +188,7 @@ moMouse::Init() {
 	m_Config.SetCurrentParamIndex(coparam);
 	nvirtualcodes = m_Config.GetValuesCount(coparam);
 
-	printf("channel master virtual: nvirtualcodes:%i\n",nvirtualcodes);
+	//printf("channel master virtual: nvirtualcodes:%i\n",nvirtualcodes);
 
 	for( i = 0; i < nvirtualcodes; i++) {
 
@@ -203,10 +206,9 @@ moMouse::Init() {
 
 
 		if(masterchannelvirtual[i]==-1) {
-            text = "ERROR(channel master virtual):\n no se encuentra el code de la key del code: ";
+            text = moText("(channel master virtual): no se encuentra el code de la key del code: ");
             text += cvstr;
-            text += moText("\n");
-			MODebug->Push(text);
+			MODebug2->Error(text);
 			return false;
 		}
 	}
@@ -498,3 +500,6 @@ moMouse::Finish() {
 	ncodes = 0;
 	return true;
 }
+
+
+

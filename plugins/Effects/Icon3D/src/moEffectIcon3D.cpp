@@ -125,6 +125,7 @@ void moEffectIcon3D::Draw( moTempo* tempogral,moEffectState* parentstate)
     glPushMatrix();                                     // Store The Modelview Matrix
 	glLoadIdentity();									// Reset The View
 
+
 /*
     // Cambiar la proyeccion para una vista ortogonal //
 	//glEnable(GL_DEPTH_TEST);							// Enables Depth Testing

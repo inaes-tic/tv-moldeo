@@ -132,7 +132,7 @@ void name::Insert(int x, const T &value) {\
         arrayaux = new T [n+1];\
 \
         for( i=0,j=0 ; i < (n+1) ; i++,j++ ) {		\
-            (i==x) ? arrayaux[j--] = value : arrayaux[i] = array[j];\
+            ((int)i==x) ? arrayaux[j--] = value : arrayaux[i] = array[j];\
         }\
         arrayaux[n] = value;\
         n++;\

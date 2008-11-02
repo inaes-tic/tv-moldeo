@@ -340,10 +340,10 @@ moSound* moSoundManager::GetSound( moText p_name) {
 	id = GetSoundId( p_name);
 
 	if(id == MO_SOUNDERROR) {
-                text = "\nERROR DE SONIDO, no se encontro un id para ";
+                text = moText("\nERROR DE SONIDO, no se encontro un id para ");
                 text += p_name;
                 text +=  moText("\n");
-		printf(text);
+		MODebug2->Error(text);
 		return(NULL);
 	}  //error
 	else {

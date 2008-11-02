@@ -38,7 +38,6 @@
 #include "moResourceManager.h"
 #include "moBuckets.h"
 #include "moParam.h"
-#include "moOGLFT.h"
 
 /**
 * Los distintos tipos de accesos a los archivos soportados por el moFileManager

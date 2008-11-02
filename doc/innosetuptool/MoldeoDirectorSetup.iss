@@ -4,7 +4,7 @@
 #define MyAppName "Moldeo Director"
 #define MyAppVerName "Moldeo Director 0.7"
 #define MyAppPublisher "Moldeo"
-#define MyAppURL "http://www.moldeo.com.ar/"
+#define MyAppURL "http://www.moldeo.org/"
 #define MyAppExeName "moldeodirector.exe"
 
 [Setup]
@@ -20,10 +20,10 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\Moldeo
 DefaultGroupName=Moldeo
-LicenseFile=D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\bin\mingw\moldeo license.txt
-OutputDir=D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\installers
+LicenseFile=..\..\bin\mingw\moldeo license.txt
+OutputDir=..\..\doc\installers
 OutputBaseFilename=Moldeo Director 0.7 Setup
-SetupIconFile=D:\_data\proyectos\SINESTESIA\OPENSVN\trunk\0.7\doc\icons\Moldeo32.ico
+SetupIconFile=..\..\doc\icons\Moldeo32.ico
 Compression=lzma
 SolidCompression=yes
 
@@ -63,17 +63,6 @@ Source: ..\..\bin\mingw\moldeo_mingw_sdl.exe; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\moldeodirector.exe; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\muparser.dll; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\SDL.dll; DestDir: {app}\bin\mingw
-Source: ..\..\bin\mingw\wxbase28_gcc_custom.dll; DestDir: {app}\bin\mingw
-Source: ..\..\bin\mingw\wxbase28_net_gcc_custom.dll; DestDir: {app}\bin\mingw
-Source: ..\..\bin\mingw\wxbase28_xml_gcc_custom.dll; DestDir: {app}\bin\mingw
-Source: ..\..\bin\mingw\wxmsw28_adv_gcc_custom.dll; DestDir: {app}\bin\mingw
-Source: ..\..\bin\mingw\wxmsw28_aui_gcc_custom.dll; DestDir: {app}\bin\mingw
-Source: ..\..\bin\mingw\wxmsw28_core_gcc_custom.dll; DestDir: {app}\bin\mingw
-Source: ..\..\bin\mingw\wxmsw28_gl_gcc_custom.dll; DestDir: {app}\bin\mingw
-Source: ..\..\bin\mingw\wxmsw28_html_gcc_custom.dll; DestDir: {app}\bin\mingw
-Source: ..\..\bin\mingw\wxmsw28_qa_gcc_custom.dll; DestDir: {app}\bin\mingw
-Source: ..\..\bin\mingw\wxmsw28_richtext_gcc_custom.dll; DestDir: {app}\bin\mingw
-Source: ..\..\bin\mingw\wxmsw28_xrc_gcc_custom.dll; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\FreeImage.dll; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\glew_shared.dll; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\libmoldeo.dll; DestDir: {app}\bin\mingw
@@ -119,7 +108,6 @@ Source: ..\..\data\test\fuentes\texto00.png; DestDir: {app}\data\test\fuentes
 Source: ..\..\bin\mingw\plugins\effects\plane.dll; DestDir: {app}\bin\mingw\plugins\effects
 Source: ..\..\bin\mingw\plugins\effects\tunel.dll; DestDir: {app}\bin\mingw\plugins\effects
 Source: ..\..\bin\mingw\plugins\effects\cubemap.dll; DestDir: {app}\bin\mingw\plugins\effects
-Source: ..\..\bin\mingw\plugins\effects\democube.dll; DestDir: {app}\bin\mingw\plugins\effects
 Source: ..\..\bin\mingw\plugins\effects\icon3d.dll; DestDir: {app}\bin\mingw\plugins\effects
 Source: ..\..\bin\mingw\plugins\effects\icon.dll; DestDir: {app}\bin\mingw\plugins\effects
 Source: ..\..\bin\mingw\plugins\effects\image.dll; DestDir: {app}\bin\mingw\plugins\effects
@@ -209,18 +197,11 @@ Source: ..\..\bin\mingw\plugins\preeffects\mirrorg.dll; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\plugins\preeffects\mirror.dll; DestDir: {app}\bin\mingw\plugins\preeffects
 Source: ..\..\bin\mingw\cgGL.dll; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\cg.dll; DestDir: {app}\bin\mingw
-Source: ..\installers\gstreamer-0.10.17.exe; DestDir: {app}\doc\installers; Tasks: ; Languages: 
-Source: ..\installers\gst-ffmpeg-0.10.2.exe; DestDir: {app}\doc\installers
-Source: ..\installers\gst-plugins-bad-0.10.6.exe; DestDir: {app}\doc\installers
-Source: ..\installers\gst-plugins-base-0.10.17.exe; DestDir: {app}\doc\installers
-Source: ..\installers\gst-plugins-good-0.10.7.exe; DestDir: {app}\doc\installers
-Source: ..\installers\gst-plugins-ugly-0.10.7.exe; DestDir: {app}\doc\installers
+Source: ..\installers\GStreamerOABuild-20080911.exe; DestDir: {app}\doc\installers; Tasks: ; Languages: 
 Source: ..\..\bin\mingw\glut32.dll; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\OpenAL32.dll; DestDir: {app}\bin\mingw
-Source: ..\installers\gtk-2.12.9-win32-2.exe; DestDir: {app}\doc\installers
 Source: ..\..\data\test\video\video2.avi; DestDir: {app}\data\test\video
 Source: ..\..\data\test\video\video1.avi; DestDir: {app}\data\test\video
-Source: ..\..\bin\mingw\plugins\effects\democube.dll; DestDir: {app}\bin\mingw\plugins\effects
 Source: ..\..\data\test\brushes\brush1.tga; DestDir: {app}\data\test\brushes
 Source: ..\..\data\test\brushes\brush2.tga; DestDir: {app}\data\test\brushes
 Source: ..\..\data\test\brushes\brush3.tga; DestDir: {app}\data\test\brushes
@@ -256,6 +237,59 @@ Source: ..\icons\motionrandom.png; DestDir: {app}\doc\icons
 Source: ..\icons\motionvertical.png; DestDir: {app}\doc\icons
 Source: ..\icons\select.png; DestDir: {app}\doc\icons
 Source: ..\..\bin\mingw\globals.bat; DestDir: {app}\bin\mingw
+Source: ..\icons\on.jpg; DestDir: {app}\doc\icons
+Source: ..\icons\onoffall32.bmp; DestDir: {app}\doc\icons
+Source: ..\icons\onoffall.jpg; DestDir: {app}\doc\icons
+Source: ..\icons\onofficon32.bmp; DestDir: {app}\doc\icons
+Source: ..\icons\onofficon.jpg; DestDir: {app}\doc\icons
+Source: ..\icons\pause32.bmp; DestDir: {app}\doc\icons
+Source: ..\icons\pause32.png; DestDir: {app}\doc\icons
+Source: ..\icons\pause.jpg; DestDir: {app}\doc\icons
+Source: ..\icons\pickcolor.png; DestDir: {app}\doc\icons
+Source: ..\icons\play32.bmp; DestDir: {app}\doc\icons
+Source: ..\icons\play32.png; DestDir: {app}\doc\icons
+Source: ..\icons\play32dis.bmp; DestDir: {app}\doc\icons
+Source: ..\icons\play.jpg; DestDir: {app}\doc\icons
+Source: ..\icons\rewind.jpg; DestDir: {app}\doc\icons
+Source: ..\icons\rotate.png; DestDir: {app}\doc\icons
+Source: ..\icons\savesession32.png; DestDir: {app}\doc\icons
+Source: ..\icons\savevideo32.png; DestDir: {app}\doc\icons
+Source: ..\icons\scale.png; DestDir: {app}\doc\icons
+Source: ..\icons\screenshot32.png; DestDir: {app}\doc\icons
+Source: ..\icons\select.png; DestDir: {app}\doc\icons
+Source: ..\icons\set.png; DestDir: {app}\doc\icons
+Source: ..\icons\skip.jpg; DestDir: {app}\doc\icons
+Source: ..\icons\stop.jpg; DestDir: {app}\doc\icons
+Source: ..\icons\translate.png; DestDir: {app}\doc\icons
+Source: ..\icons\visibility.png; DestDir: {app}\doc\icons
+Source: ..\icons\visibilitynone.png; DestDir: {app}\doc\icons
+Source: ..\icons\volume.jpg; DestDir: {app}\doc\icons
+Source: ..\icons\add.png; DestDir: {app}\doc\icons
+Source: ..\icons\colors.png; DestDir: {app}\doc\icons
+Source: ..\icons\csvColors32.png; DestDir: {app}\doc\icons
+Source: ..\icons\csvColors64.png; DestDir: {app}\doc\icons
+Source: ..\icons\csvColors256.png; DestDir: {app}\doc\icons
+Source: ..\icons\delete.png; DestDir: {app}\doc\icons
+Source: ..\icons\ff.jpg; DestDir: {app}\doc\icons
+Source: ..\icons\fullscreen32.bmp; DestDir: {app}\doc\icons
+Source: ..\icons\fullscreen32.png; DestDir: {app}\doc\icons
+Source: ..\icons\functiontest.png; DestDir: {app}\doc\icons
+Source: ..\icons\help.jpg; DestDir: {app}\doc\icons
+Source: ..\icons\imageempty.png; DestDir: {app}\doc\icons
+Source: ..\icons\import.png; DestDir: {app}\doc\icons
+Source: ..\icons\information.jpg; DestDir: {app}\doc\icons
+Source: ..\icons\inspect.png; DestDir: {app}\doc\icons
+Source: ..\icons\layercontrols.png; DestDir: {app}\doc\icons
+Source: ..\icons\Moldeo32.ico; DestDir: {app}\doc\icons
+Source: ..\icons\more.png; DestDir: {app}\doc\icons
+Source: ..\icons\motioncircular.png; DestDir: {app}\doc\icons
+Source: ..\icons\motiondiagonal.png; DestDir: {app}\doc\icons
+Source: ..\icons\motionhorizontal.png; DestDir: {app}\doc\icons
+Source: ..\icons\motionrandom.png; DestDir: {app}\doc\icons
+Source: ..\icons\motionvertical.png; DestDir: {app}\doc\icons
+Source: ..\icons\off32.bmp; DestDir: {app}\doc\icons
+Source: ..\icons\off.jpg; DestDir: {app}\doc\icons
+Source: ..\icons\on32.bmp; DestDir: {app}\doc\icons
 
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\bin\mingw\{#MyAppExeName}; WorkingDir: {app}\bin\mingw\; IconFilename: {app}\doc\icons\Moldeo32.ico; Comment: Moldeo Director 0.7 GUI for Realtime Animated Images Composition; IconIndex: 0
@@ -266,13 +300,7 @@ Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}; Filen
 
 [Run]
 Filename: {app}\bin\mingw\globals.bat; WorkingDir: {app}\bin\mingw
-Filename: {app}\doc\installers\gtk-2.12.9-win32-2.exe; Flags: postinstall
-Filename: {app}\doc\installers\gstreamer-0.10.17.exe; Flags: postinstall
-Filename: {app}\doc\installers\gst-plugins-ugly-0.10.7.exe; Flags: postinstall
-Filename: {app}\doc\installers\gst-plugins-good-0.10.7.exe; Flags: postinstall
-Filename: {app}\doc\installers\gst-plugins-base-0.10.17.exe; Flags: postinstall
-Filename: {app}\doc\installers\gst-plugins-bad-0.10.6.exe; Flags: postinstall
-Filename: {app}\doc\installers\gst-ffmpeg-0.10.2.exe; Flags: postinstall
+Filename: {app}\doc\installers\GStreamerOABuild-20080911.exe; Flags: postinstall
 Filename: {app}\bin\mingw\{#MyAppExeName}; Description: {cm:LaunchProgram,{#MyAppName}}; Flags: nowait postinstall skipifsilent; Tasks: ; Languages: 
 
 [Dirs]
@@ -306,3 +334,4 @@ Name: {app}\doc\installers
 Name: {app}\data\test\brushes
 [Registry]
 Root: HKLM; Subkey: SOFTWARE\Microsoft\Windows\CurrentVersion\Moldeo\bin\mingw\moldeodirector.exe; ValueType: string; ValueName: ; ValueData: {app}\moldeodirector.exe; Flags: uninsdeletekey
+Root: HKLM; Subkey: SYSTEM\CurrentControlSet\Control\Session Manager\Environment; ValueType: string; ValueName: WXART2D; ValueData: "C:\wxArt2D;D:\_data\programacion\wxWidgets\wxArt2d\wxArt2D"

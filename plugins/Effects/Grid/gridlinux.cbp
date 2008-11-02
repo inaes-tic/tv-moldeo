@@ -7,7 +7,7 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="../../../bin/linux/plugins/effects/libgridd.so" prefix_auto="0" extension_auto="0" />
+				<Option output="../../../bin/linux/plugins/effects/libgrid_d.so" prefix_auto="0" extension_auto="0" />
 				<Option working_dir="../../../bin/linux/" />
 				<Option object_output=".objsd" />
 				<Option deps_output=".depsd" />
@@ -20,7 +20,7 @@
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output="../../../bin/linux/plugins/effects/libgrid.so" prefix_auto="0" extension_auto="0" />
+				<Option output="../../../bin/linux/plugins/effects/libgri_d.so" prefix_auto="0" extension_auto="0" />
 				<Option working_dir="../../../bin/linux/" />
 				<Option type="3" />
 				<Option compiler="gcc" />

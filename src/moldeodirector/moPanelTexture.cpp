@@ -91,7 +91,7 @@ moPanelTexture::moPanelTexture(wxWindow* parent,wxWindowID id,const wxPoint& pos
 	//*)
 
     m_pShaderCtrl = NULL;
-    m_pTexturesTreeCtrl = NULL;
+    //m_pTexturesTreeCtrl = NULL;
 
     if (PanelFilter) {
         m_pShaderCtrl = new moShaderCtrl( Panel4, ID_SHADERCTRL, PanelFilter->GetPosition(), PanelFilter->GetSize() );
@@ -99,7 +99,7 @@ moPanelTexture::moPanelTexture(wxWindow* parent,wxWindowID id,const wxPoint& pos
             m_pShaderCtrl->SetNextActionHandler( (moIDirectorActions*) this );
             PanelFilter->Destroy();
         }
-
+/*
         if (TreeCtrlImages) {
             m_pTexturesTreeCtrl = new moTexturesTreeCtrl( this, ID_TEXTURESTREECTRL );
             m_pTexturesTreeCtrl->SetSize( TreeCtrlImages->GetPosition().x, TreeCtrlImages->GetPosition().y,
@@ -108,6 +108,7 @@ moPanelTexture::moPanelTexture(wxWindow* parent,wxWindowID id,const wxPoint& pos
             TreeCtrlImages->Destroy();
             FlexGridSizer2->Add(m_pTexturesTreeCtrl, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
         }
+        */
         TextCtrlMedia->Enable(false);
         m_pShaderCtrl->Enable(false);
     }
@@ -122,10 +123,10 @@ moPanelTexture::~moPanelTexture()
 
 void
 moPanelTexture::InitTexturesTree() {
-
+/*
     if (m_pTexturesTreeCtrl)
         m_pTexturesTreeCtrl->InitDescriptors();
-
+*/
 }
 
 void moPanelTexture::LoadImage() {
@@ -135,29 +136,47 @@ void moPanelTexture::LoadImage() {
 
         moText tname = m_ValueDescriptor.GetValue().GetSubValue(0).Text();
 
-        moTextureDescriptor pTextDescriptor( tname );
+        if (tname.Length()>0) {
 
-        //ask to create thumbnail if necesarry
-        pTextDescriptor.CreateThumbnail();
+          moTextureDescriptor pTextDescriptor( tname );
 
-        pTextDescriptor = GetResourceDescriptor( pTextDescriptor );
+          //ask to create thumbnail if necesarry
+          pTextDescriptor.CreateThumbnail();
 
-        tname = pTextDescriptor.GetResourceDefinition().GetFileName();
+          pTextDescriptor = GetResourceDescriptor( pTextDescriptor );
 
-        moText extension = tname;
-        extension.Right(3);
-        if (extension!=moText("tga")) {
-            wxFileName mFileName( moText2Wx(tname) );
+          if ( pTextDescriptor.GetResourceDefinition().GetType() != MO_RESOURCETYPE_UNDEFINED ) {
 
-            wxBitmap NewBitmap;
+            tname = pTextDescriptor.GetResourceDefinition().GetFileName();
 
-            if ( mFileName.FileExists() ) {
-                NewBitmap = wxBitmap(wxImage( moText2Wx(tname) ).Rescale( 128, 80 ));
-            } else {
-                NewBitmap = wxBitmap(wxImage(_T("../../doc/icons/imageempty.png")).Rescale(128,80) );
+            if (tname.Length()>0) {
+
+              moText extension = tname;
+              extension.Right(3);
+
+              if (extension!=moText("tga")) {
+                  wxFileName mFileName( moText2Wx(tname) );
+
+                  wxBitmap NewBitmap;
+
+                  if ( mFileName.FileExists() ) {
+                      NewBitmap = wxBitmap(wxImage( moText2Wx(tname) ).Rescale( 128, 80 ));
+                  } else {
+                      NewBitmap = wxBitmap(wxImage(_T("../../doc/icons/imageempty.png")).Rescale(128,80) );
+                  }
+
+                  StaticBitmapThumbnail->SetBitmap( NewBitmap );
+              }
             }
 
-            StaticBitmapThumbnail->SetBitmap( NewBitmap );
+          } else {
+            Log("PanelTexture:: Resource undefined ");
+            #ifdef MO_DEBUG
+              LogError("Resource not found or Empty string");
+            #endif
+          }
+        } else {
+          LogError("PanelTexture::Empty string");
         }
     }
 
@@ -252,8 +271,9 @@ void moPanelTexture::OnButtonImportClick(wxCommandEvent& event)
 
                 //ProjectDescriptor.Set( moText((char*)cfilepath), moText((char*)cfilename) );
                 TextCtrlMedia->SetValue( path );
+                //m_pShaderCtrl->Inspect(m_ValueDescriptor);
 
-                m_pTexturesTreeCtrl->UpdateDescriptors();
+                //m_pTexturesTreeCtrl->UpdateDescriptors();
 			} else {
                 //ask if you want to import it ( copying it to local folder )
                 moText filename_dest = moWx2Text( absname.GetPath() ) + moSlash + moWx2Text( FileName.GetFullName() );
@@ -264,7 +284,7 @@ void moPanelTexture::OnButtonImportClick(wxCommandEvent& event)
                     if (FileName2.MakeRelativeTo( relativepath )) {
                         wxString path = FileName2.GetFullPath();
                         TextCtrlMedia->SetValue( path );
-                        m_pTexturesTreeCtrl->UpdateDescriptors();
+                        //m_pTexturesTreeCtrl->UpdateDescriptors();
                     }
 
                 } else {
@@ -295,193 +315,7 @@ void moPanelTexture::OnTextCtrlMediaText(wxCommandEvent& event)
 
 }
 
-
-
-BEGIN_EVENT_TABLE( moTexturesTreeCtrl, wxTreeMultiCtrl )
-//
-END_EVENT_TABLE()
-
-moTexturesTreeCtrl::moTexturesTreeCtrl( wxWindow* window, wxWindowID id) :
-wxTreeMultiCtrl( window, id ) {
-    SetSpacingY(0);
-
-    EmptyBitmap = wxBitmap(wxImage(_T("../../doc/icons/imageempty.png")).Rescale(64,64) );
-    SetForegroundColour( wxColour(255,255,255) );
-    SetBackgroundColour( wxColour(0,0,0) );
-}
-
-moTexturesTreeCtrl::~moTexturesTreeCtrl() {
-
-}
-
-void moTexturesTreeCtrl::InitDescriptors() {
-
-    this->DeleteAllItems();
-
-    imgid = this->AddRoot( _T("Images"), _T("images"), NULL );
-    videosid = this->AddRoot( _T("Videos"), _T("videos"), NULL );
-    othersid = this->AddRoot( _T("Others"), _T("others"), NULL );
-
-    m_ResourceDescriptors.Empty();
-
-    m_ResourceDescriptors = GetResourceDescriptors( MO_RESOURCETYPE_TEXTURE );
-
-    moTextureDescriptor pTextureDescriptor("empty");
-
-    wxTreeMultiItem selid;
-
-    for( int i =0; i<m_ResourceDescriptors.Count() ; i++) {
-
-        pTextureDescriptor = m_ResourceDescriptors[i];
-
-        switch(pTextureDescriptor.GetType()) {
-            case MO_TYPE_MOVIE:
-                pTextureDescriptor.CreateThumbnail();
-                pTextureDescriptor = GetResourceDescriptor(pTextureDescriptor);
-                selid = videosid;
-                break;
-
-            case MO_TYPE_TEXTURE:
-                selid = imgid;
-                pTextureDescriptor.CreateThumbnail();
-                pTextureDescriptor = GetResourceDescriptor(pTextureDescriptor);
-                if ( ! pTextureDescriptor.IsBuildedFromFile() ) {
-                   selid =  othersid;
-                }
-                break;
-
-            case MO_TYPE_TEXTURE_MULTIPLE:
-            case MO_TYPE_VIDEOBUFFER:
-            case MO_TYPE_CIRCULARVIDEOBUFFER:
-                selid = videosid;
-                break;
-        }
-
-        wxFileName mFileName( moText2Wx(pTextureDescriptor.GetResourceDefinition().GetFileName()) );
-
-        moText extension = pTextureDescriptor.GetResourceDefinition().GetFileName();
-        extension.Right(3);
-
-
-        wxBitmap NewBitmap;
-
-        if (extension==moText("tga")) {
-
-            NewBitmap = EmptyBitmap;
-        } else {
-            if ( mFileName.FileExists() ) {
-                NewBitmap = wxBitmap(wxImage( moText2Wx(pTextureDescriptor.GetResourceDefinition().GetFileName()) ).Rescale( 64, 64 ));
-            } else {
-                NewBitmap = EmptyBitmap;
-            }
-        }
-
-        //m_ImageList.Add( NewBitmap );
-
-        moTextureItemCtrl* pItemCtrl = new moTextureItemCtrl( this, wxID_ANY );
-
-        if (pItemCtrl) {
-            pItemCtrl->Init( pTextureDescriptor, NewBitmap  );
-            this->AppendWindow( selid, pItemCtrl, _T("texture") );
-        }
-
-
-    }
-
-}
-
-void moTexturesTreeCtrl::UpdateDescriptors() {
-
-    //recorrer de nuevo los existentes, para poder agregar el resto...
-    moResourceDescriptors new_ResourceDescriptors;
-
-    new_ResourceDescriptors = GetResourceDescriptors( MO_RESOURCETYPE_TEXTURE );
-
-    moTextureDescriptor NewOne("empty");
-    moTextureDescriptor OldOne("empty");
-
-    wxTreeMultiItem selid;
-
-    for( int i =0; i < new_ResourceDescriptors.Count() ; i++) {
-
-        bool m_bInsertNewOne = false;
-        bool m_bAddNewOne= false;
-
-        NewOne = new_ResourceDescriptors[i];
-        if ( i < m_ResourceDescriptors.Count() ) {
-            OldOne = m_ResourceDescriptors[i];
-            m_bInsertNewOne =  !( NewOne.GetResourceDefinition().GetName() == OldOne.GetResourceDefinition().GetName() );
-        } else {
-            m_bAddNewOne = true;
-        }
-
-
-        if (m_bInsertNewOne || m_bAddNewOne) {
-
-            //try to add the image...
-            moTextureDescriptor& pTextureDescriptor(NewOne);
-
-            switch(pTextureDescriptor.GetType()) {
-                case MO_TYPE_MOVIE:
-                    pTextureDescriptor.CreateThumbnail();
-                    pTextureDescriptor = GetResourceDescriptor(pTextureDescriptor);
-                    selid = videosid;
-                    NewOne = pTextureDescriptor;
-                    break;
-
-                case MO_TYPE_TEXTURE:
-                    selid = imgid;
-                    pTextureDescriptor.CreateThumbnail();
-                    pTextureDescriptor = GetResourceDescriptor(pTextureDescriptor);
-                    if ( ! pTextureDescriptor.IsBuildedFromFile() ) {
-                       selid =  othersid;
-                    }
-                    NewOne = pTextureDescriptor;
-                    break;
-
-                case MO_TYPE_TEXTURE_MULTIPLE:
-                case MO_TYPE_VIDEOBUFFER:
-                case MO_TYPE_CIRCULARVIDEOBUFFER:
-                    selid = videosid;
-                    NewOne = pTextureDescriptor;
-                    break;
-                default:
-                    NewOne = pTextureDescriptor;
-                    break;
-            }
-
-            if (m_bInsertNewOne) m_ResourceDescriptors.Insert( i, NewOne );
-            if (m_bAddNewOne) m_ResourceDescriptors.Add( NewOne );
-
-            wxFileName mFileName( moText2Wx(NewOne.GetResourceDefinition().GetFileName()) );
-
-            wxBitmap NewBitmap;
-
-            if ( mFileName.FileExists() ) {
-                NewBitmap = wxBitmap(wxImage( moText2Wx(NewOne.GetResourceDefinition().GetFileName()) ).Rescale( 64, 64 ));
-            } else {
-                NewBitmap = EmptyBitmap;
-            }
-
-            moTextureItemCtrl* pItemCtrl = new moTextureItemCtrl( this, wxID_ANY );
-
-            if (pItemCtrl) {
-                pItemCtrl->Init( NewOne, NewBitmap  );
-                wxTreeMultiItem newitem = this->AppendWindow( selid, pItemCtrl, _T("texture") );
-                this->Refresh();
-                m_ResourceDescriptors[i].SetItemIndex( newitem.IsOk() );
-
-            }
-        }
-
-    }
-
-
-
-}
-
-
 void moPanelTexture::OnBitmapButton1Click(wxCommandEvent& event)
 {
-    m_pTexturesTreeCtrl->InitDescriptors();
+    //m_pTexturesTreeCtrl->InitDescriptors();
 }

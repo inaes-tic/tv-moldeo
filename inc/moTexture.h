@@ -40,16 +40,16 @@
 #include "moGsGraph.h"
 #include "moDsGraph.h"
 
+typedef void moBitmap;
+typedef int moBitmapFormat;
+typedef void moMemory;
 
-
-typedef enum moTextureType {
+typedef enum  {
         MO_TYPE_TEXTURE,
         MO_TYPE_TEXTURE_MULTIPLE,
         MO_TYPE_MOVIE,
         MO_TYPE_VIDEOBUFFER,
-        MO_TYPE_CIRCULARVIDEOBUFFER
-        /*MO_TYPE_PROCEDURAL,
-        MO_TYPE_3D*/ };
+        MO_TYPE_CIRCULARVIDEOBUFFER} moTextureType;
 
 class moFBO;
 class moTexture;

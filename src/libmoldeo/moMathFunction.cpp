@@ -59,8 +59,8 @@ double* AddParserVariableFunction(const char *p_pVarName, void *p_pUserData)
 
 moMathFunction::moMathFunction()
 {
-    m_Expression = "";
-	m_EmptyName = "";
+    m_Expression = moText("");
+	m_EmptyName = moText("");
 }
 
 moMathFunction::~moMathFunction()
