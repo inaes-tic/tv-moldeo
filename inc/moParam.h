@@ -67,7 +67,8 @@ enum moParamType {
 	MO_PARAM_FILTER,        //value type: TXT or LNK
 	MO_PARAM_COMPOSE,        //any composition of types
 	MO_PARAM_INLET,			//value type: TXT or LNK
-	MO_PARAM_OUTLET			//value type: TXT or LNK
+	MO_PARAM_OUTLET,			//value type: TXT or LNK
+	MO_PARAM_UNDEFINED = -1
 };
 
 class LIBMOLDEO_API moParamReference {
@@ -118,6 +119,9 @@ class LIBMOLDEO_API moParamDefinition
 		virtual ~moParamDefinition();
 
 		moParamDefinition &operator = (const moParamDefinition &src);
+
+		bool   IsValid();
+
 		moText GetName() {
 			return m_Name;
 		}

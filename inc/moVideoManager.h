@@ -35,8 +35,6 @@
 #include "moGsGraph.h"
 #include "moDsGraph.h"
 
-#include "FreeImage.h"
-
 #include "moFBO.h"
 #include "moTexture.h"
 #include "moVideoGraph.h"
@@ -218,13 +216,16 @@ class LIBMOLDEO_API moVideoFrame : public moAbstract {
 		virtual ~moVideoFrame();
 
 		virtual MOboolean Init();
-		virtual MOboolean Init( moText bufferformat, FIBITMAP* pImageResult );
+		virtual MOboolean Init( moText bufferformat, moBitmap* pImageResult );
 		virtual MOboolean Finish();
 
+
 		MOint		options;
-        FIMEMORY	*hmem;
-		FREE_IMAGE_FORMAT fif;
-		FIBITMAP *m_pImage;
+
+        moMemory	*hmem;
+		moBitmapFormat fif;
+		//FIBITMAP *m_pImage;
+
 
 		MOlong m_FrameSize;
 
@@ -234,10 +235,7 @@ class LIBMOLDEO_API moVideoFrame : public moAbstract {
 };
 
 typedef moVideoFrame* moVideoFramePtr;
-/*
-template class LIBMOLDEO_API moDynamicArray<moVideoFramePtr>;
-typedef  moDynamicArray<moVideoFramePtr> moVideoFrames;
-*/
+
 moDeclareExportedDynamicArray(moVideoFramePtr,moVideoFrames)
 
 class LIBMOLDEO_API moVideoBuffer : public moTextureAnimated {
@@ -252,7 +250,7 @@ class LIBMOLDEO_API moVideoBuffer : public moTextureAnimated {
 
 		virtual void GetFrame( MOuint p_i );
 
-		MOboolean LoadImage( FIBITMAP* pImage , MOuint indeximage );
+		MOboolean LoadImage( moBitmap* pImage , MOuint indeximage );
 
 		MOint GetXSource() { return m_XSource; }
 		MOint GetYSource() { return m_YSource; }
@@ -277,10 +275,7 @@ class LIBMOLDEO_API moVideoBuffer : public moTextureAnimated {
 };
 
 typedef moVideoBuffer* moVideoBufferPtr;
-/*
-template class LIBMOLDEO_API moDynamicArray<moVideoBufferPtr>;
-typedef  moDynamicArray<moVideoBufferPtr> moVideoBuffers;
-*/
+
 moDeclareExportedDynamicArray(moVideoBufferPtr,moVideoBuffers)
 
 class LIBMOLDEO_API moCircularVideoBuffer : public moTextureAnimated {
@@ -326,10 +321,7 @@ class LIBMOLDEO_API moCircularVideoBuffer : public moTextureAnimated {
 };
 
 typedef moCircularVideoBuffer* moCircularVideoBufferPtr;
-/*
-template class LIBMOLDEO_API moDynamicArray<moCircularVideoBufferPtr>;
-typedef  moDynamicArray<moCircularVideoBufferPtr> moCircularVideoBuffers;
-*/
+
 moDeclareExportedDynamicArray(moCircularVideoBufferPtr,moCircularVideoBuffers)
 
 class moDirectory;
@@ -363,10 +355,7 @@ class LIBMOLDEO_API moVideoBufferPath : public moAbstract {
 };
 
 typedef moVideoBufferPath* moVideoBufferPathPtr;
-/*
-template class LIBMOLDEO_API moDynamicArray<moVideoBufferPathPtr>;
-typedef  moDynamicArray<moVideoBufferPathPtr> moVideoBufferPaths;
-*/
+
 moDeclareExportedDynamicArray(moVideoBufferPathPtr,moVideoBufferPaths)
 
 //could be: Video, Camera, or VideoLoop...

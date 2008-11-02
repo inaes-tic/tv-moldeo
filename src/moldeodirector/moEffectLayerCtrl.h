@@ -4,22 +4,43 @@
 #include "moDirectorTypes.h"
 
 //(*Headers(moEffectLayerCtrl)
-#include <wx/stattext.h>
+#include <wx/textctrl.h>
 #include <wx/checkbox.h>
 #include <wx/slider.h>
 #include <wx/panel.h>
 #include <wx/bmpbuttn.h>
-#include <wx/statbmp.h>
-#include <wx/combobox.h>
 //*)
 
 #include "moIDirectorActions.h"
-#include "moTreeObjectsLayerCtrl.h"
-
 #include "moWxLevelCtrl.h"
 
+class moItemLayerCtrl : public moIDirectorActions {
 
-class moEffectLayerCtrl: public moTreeObjectLayerCtrl
+    public:
+
+        moItemLayerCtrl() {}
+        virtual ~moItemLayerCtrl() {}
+
+        virtual void Set( moMobDescriptor   p_MobDescriptor );
+        virtual moMobDescriptor& Get();
+
+    public:
+        //===============================
+        // INTERFACE DIRECTOR ACTIONS
+        //===============================
+
+        virtual moDirectorStatus    ValueUpdated( moValueDescriptor p_ValueDesc ) = 0;
+        virtual moDirectorStatus    MobUpdated( moMobDescriptor p_MobDesc ) = 0;
+
+    protected:
+        moMobDescriptor m_MobDescriptor;
+
+        //void OnMouseEvent( wxMouseEvent& event );
+
+        //DECLARE_EVENT_TABLE()
+};
+
+class moEffectLayerCtrl: public wxPanel, public moItemLayerCtrl
 {
 	public:
 
@@ -29,22 +50,18 @@ class moEffectLayerCtrl: public moTreeObjectLayerCtrl
 		virtual void Set( moMobDescriptor p_MobDesc );
 
 		//(*Declarations(moEffectLayerCtrl)
-		wxStaticBitmap* StaticBitmapCtrls;
-		wxStaticText* TextCtrlLabel;
-		wxPanel* PanelColors;
-		wxSlider* SliderTempo;
 		wxCheckBox* CheckBoxOnOff;
+		moWxLevelCtrl* m_pLevelAlphaCtrl;
 		wxBitmapButton* BitmapButtonVisibility;
-		wxSlider* SliderTint;
-		wxSlider* SliderAlpha;
-		wxComboBox* ComboBoxPreConfig;
+		wxTextCtrl* TextCtrlLabel;
+		moWxLevelCtrl* m_pLevelSpeedCtrl;
+		moWxLevelCtrl* m_pLevelTintCtrl;
 		wxBitmapButton* BitmapButtonDelete;
-		wxPanel* PanelLabelCtrls;
 		//*)
 
-		moWxLevelCtrl* m_pLevelAlphaCtrl;
-		moWxLevelCtrl* m_pLevelTintCtrl;
-		moWxLevelCtrl* m_pLevelSpeedCtrl;
+		//moWxLevelCtrl* m_pLevelAlphaCtrl;
+		//moWxLevelCtrl* m_pLevelTintCtrl;
+		//moWxLevelCtrl* m_pLevelSpeedCtrl;
 
     public:
         //===============================
@@ -57,16 +74,11 @@ class moEffectLayerCtrl: public moTreeObjectLayerCtrl
 	protected:
 
 		//(*Identifiers(moEffectLayerCtrl)
+		static const long ID_TEXTCTRL1;
 		static const long ID_SLIDERALPHA;
 		static const long ID_SLIDERTINT;
 		static const long ID_SLIDERTEMPO;
-		static const long ID_COMBOBOXPRE;
 		static const long ID_CHECKBOXONOFF;
-		static const long ID_STATICTEXTLABEL;
-		static const long ID_STATICBITMAPCTRLS;
-		static const long ID_PANELLABELCTRLS;
-		static const long ID_STATICBITMAP1;
-		static const long ID_PANELCOLORS;
 		static const long ID_BITMAPBUTTONVISIBILITY;
 		static const long ID_BITMAPBUTTONDELETE;
 		//*)
@@ -79,14 +91,12 @@ class moEffectLayerCtrl: public moTreeObjectLayerCtrl
 
 		//(*Handlers(moEffectLayerCtrl)
 		void OnOnOffButtonToggle(wxCommandEvent& event);
-		void OnSliderAlphaCmdScroll(wxScrollEvent& event);
-		void OnSliderTempoCmdScroll(wxScrollEvent& event);
 		void OnCheckBoxOnOffClick(wxCommandEvent& event);
-		void OnSliderTintCmdScrollThumbTrack(wxScrollEvent& event);
 		void OnComboBoxPreConfigSelect(wxCommandEvent& event);
 		void OnPanelVisibilityMouseMove(wxMouseEvent& event);
 		void OnBitmapButtonVisibilityClick(wxCommandEvent& event);
 		void OnBitmapButtonDeleteClick(wxCommandEvent& event);
+		void OnPaint(wxPaintEvent& event);
 		//*)
 
 		void OnLevelAlpha(wxCommandEvent& event);
@@ -99,7 +109,7 @@ class moEffectLayerCtrl: public moTreeObjectLayerCtrl
 };
 
 
-class moEffectLayerTimelineCtrl : public moTreeObjectLayerCtrl {
+class moEffectLayerTimelineCtrl : public moItemLayerCtrl, public wxPanel {
 
     public:
 		moEffectLayerTimelineCtrl(wxWindow* parent,wxWindowID id=wxID_ANY,const wxPoint& pos=wxDefaultPosition,const wxSize& size=wxDefaultSize);
@@ -128,5 +138,40 @@ class moEffectLayerTimelineCtrl : public moTreeObjectLayerCtrl {
 
 template class moDynamicArray<moEffectLayerCtrl*>;
 typedef  moDynamicArray<moEffectLayerCtrl*> moEffectLayerCtrls;
+
+
+
+class moItemLayerWindow: public moItemLayerCtrl, public wxSplitterWindow
+{
+	public:
+
+		moItemLayerWindow(wxWindow *parent, wxWindowID id,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        long style = wxNO_BORDER,
+                        const wxString& name = "LayerPanel" );
+		virtual ~moItemLayerWindow() {
+        }
+
+        moEffectLayerCtrl*  m_pFXControllers;
+
+        wxPanel*            m_pFXControllersContainer;
+        wxPanel*            m_pFXSelectors;
+
+        wxWindow*   m_pWindow;
+        moEffectLayerTimelineCtrl* m_pTimeline;
+
+
+        virtual void Set( moMobDescriptor p_MobDesc );
+
+        moDirectorStatus    ValueUpdated( moValueDescriptor p_ValueDesc );
+        moDirectorStatus    MobUpdated( moMobDescriptor p_MobDesc );
+
+        void    SetScrollPosition( int position );
+
+
+    DECLARE_EVENT_TABLE()
+};
+
 
 #endif

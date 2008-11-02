@@ -65,7 +65,7 @@ moObjectMotion::moObjectMotion(wxWindow* parent,wxWindowID id,const wxPoint& pos
 {
 	//(*Initialize(moObjectMotion)
 	wxFlexGridSizer* FlexGridSizer1;
-	
+
 	Create(parent, wxID_ANY, wxDefaultPosition, wxSize(240,298), wxTAB_TRAVERSAL, _T("wxID_ANY"));
 	SetBackgroundColour(wxColour(0,0,0));
 	FlexGridSizer1 = new wxFlexGridSizer(0, 3, 0, 0);
@@ -97,7 +97,7 @@ moObjectMotion::moObjectMotion(wxWindow* parent,wxWindowID id,const wxPoint& pos
 	StaticBitmap1 = new wxStaticBitmap(PanelTranslateCoords, ID_STATICBITMAP1, wxBitmap(wxImage(_T("../../doc/icons/translate.png"))), wxPoint(0,0), wxDefaultSize, 0, _T("ID_STATICBITMAP1"));
 	TextCtrlSz = new wxTextCtrl(Panel2, ID_TEXTCTRLSZ, wxEmptyString, wxPoint(112,164), wxSize(144,14), wxSIMPLE_BORDER, wxDefaultValidator, _T("ID_TEXTCTRLSZ"));
 	PanelScalesTxt = new wxPanel(Panel2, ID_PANEL7, wxPoint(8,256), wxSize(44,44), wxTAB_TRAVERSAL, _T("ID_PANEL7"));
-	StaticBitmap5 = new wxStaticBitmap(PanelScalesTxt, ID_STATICBITMAP5, wxBitmap(wxImage(_T("..\\..\\doc\\icons\\rotate.png"))), wxPoint(0,0), wxDefaultSize, 0, _T("ID_STATICBITMAP5"));
+	StaticBitmap5 = new wxStaticBitmap(PanelScalesTxt, ID_STATICBITMAP5, wxBitmap(wxImage(_T("../../doc/icons/rotate.png"))), wxPoint(0,0), wxDefaultSize, 0, _T("ID_STATICBITMAP5"));
 	TextCtrlSy = new wxTextCtrl(Panel2, ID_TEXTCTRLSY, wxEmptyString, wxPoint(112,148), wxSize(144,14), wxSIMPLE_BORDER, wxDefaultValidator, _T("ID_TEXTCTRLSY"));
 	PanelScales = new wxPanel(Panel2, ID_PANEL4, wxPoint(8,132), wxSize(44,44), wxTAB_TRAVERSAL, _T("ID_PANEL4"));
 	StaticBitmap3 = new wxStaticBitmap(PanelScales, ID_STATICBITMAP3, wxBitmap(wxImage(_T("../../doc/icons/scale.png"))), wxPoint(0,0), wxDefaultSize, 0, _T("ID_STATICBITMAP3"));
@@ -139,7 +139,7 @@ moObjectMotion::moObjectMotion(wxWindow* parent,wxWindowID id,const wxPoint& pos
 	FlexGridSizer1->Add(Panel2, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	SetSizer(FlexGridSizer1);
 	FlexGridSizer1->SetSizeHints(this);
-	
+
 	Connect(ID_SLIDERTX,wxEVT_SCROLL_THUMBTRACK,(wxObjectEventFunction)&moObjectMotion::OnSliderTxCmdScrollThumbTrack);
 	Connect(ID_SLIDERTX,wxEVT_SCROLL_CHANGED,(wxObjectEventFunction)&moObjectMotion::OnSliderTxCmdScrollThumbTrack);
 	Connect(ID_SLIDERTZ,wxEVT_SCROLL_THUMBTRACK,(wxObjectEventFunction)&moObjectMotion::OnSliderTzCmdScrollThumbTrack);
@@ -199,7 +199,7 @@ void moObjectMotion::Inspect( moValueDescriptor  p_ValueDescriptor) {
     moParameterDescriptors mParameterDescriptors = GetParameterDescriptors( m_MobDescriptor );
 
     //itera para conseguir los otros parámetros...
-    for( int i = 0; i < mParameterDescriptors.Count(); i++) {
+    for( int i = 0; i < (int)mParameterDescriptors.Count(); i++) {
 
         moParameterDescriptor pParamDescriptor = mParameterDescriptors[i];
 
@@ -209,7 +209,7 @@ void moObjectMotion::Inspect( moValueDescriptor  p_ValueDescriptor) {
 
         moValueDescriptor mValueDesc( pParamDescriptor,ValueIndex);
 
-        switch( pParamDescriptor.GetParamDefinition().GetType() ) {
+        switch( (int)pParamDescriptor.GetParamDefinition().GetType() ) {
 
             case MO_PARAM_TRANSLATEX:
                 m_ValueDescriptorTx = GetValue( mValueDesc );

@@ -29,6 +29,15 @@ moValueCtrl::Init( moDirectorChildFrame* parent, moValueDescriptor p_valuedescri
 	MOint  ValueInt = 0;
 	int xpos = 0;
 
+    fonttypes[MO_FONT_OUTLINE] = wxT("Outline");
+    fonttypes[MO_FONT_TRANSLUCENT] = wxT("Translucent");
+    fonttypes[MO_FONT_TRANSLUCENTTEXTURE] = wxT("Translucent texture");
+    fonttypes[MO_FONT_GRAYSCALE] = wxT("Grayscale");
+    fonttypes[MO_FONT_MONOCHROME] = wxT("Monochrome");
+    fonttypes[MO_FONT_SOLID] = wxT("Solid");
+    fonttypes[MO_FONT_FILLED] = wxT("Filled");
+    fonttypes[MO_FONT_GLBUILD] = wxT("GLBuild");
+
     blendings[MO_BLENDING_TRANSPARENCY] = wxT("Transparency");
     blendings[MO_BLENDING_ADDITIVEALPHA] = wxT("Additive w/alpha");
     blendings[MO_BLENDING_MIXING] = wxT("Mixing");
@@ -103,17 +112,26 @@ moValueCtrl::Init( moDirectorChildFrame* parent, moValueDescriptor p_valuedescri
             break;
         case MO_PARAM_FONT:
             ValueStr =(wxChar*)(char*) pValue.GetSubValue(0).Text();
-			m_pTextCtrl = new wxTextCtrl( this, -1, ValueStr,wxPoint(20,0),wxSize(150,20));
-			xpos+=m_pTextCtrl->GetSize().x;
+            m_pTextCtrl = new wxTextCtrl( this, -1, ValueStr,wxPoint(xpos,0),wxSize(70,20));
+            xpos+=m_pTextCtrl->GetSize().x;
+
+            ValueInt = pValue.GetSubValue(1).Int();
+            m_pFontTypeCtrl = new wxComboBox( this, -1, fonttypes[ValueInt], wxPoint(xpos,0), wxSize(80,20), MO_FONT_TYPES, fonttypes, wxCB_READONLY);
+            xpos+=m_pFontTypeCtrl->GetSize().x;
+
+            ValueStr =(wxChar*)(char*) pValue.GetSubValue(2).ToText();
+            m_pTextCtrlR = new wxTextCtrl( this, -1, ValueStr,wxPoint(xpos,0),wxSize(70,20));
+            xpos+=m_pTextCtrlR->GetSize().x;
             break;
 		case MO_PARAM_TEXTURE:
 		case MO_PARAM_VIDEO:
             if (pValue.GetSubValueCount()==1) {
+                ///NO FILTERS
                 ValueStr =(wxChar*)(char*) pValue.GetSubValue(0).Text();
                 m_pTextCtrl = new wxTextCtrl( this, -1, ValueStr,wxPoint(xpos,0),wxSize(150,20));
                 xpos+=m_pTextCtrl->GetSize().x;
             } else if (pValue.GetSubValueCount()>1) {
-
+                /// SHADER FILTER
                 ValueStr =(wxChar*)(char*) pValue.GetSubValue(0).Text();
                 m_pTextCtrl = new wxTextCtrl( this, -1, ValueStr,wxPoint(xpos,0),wxSize(70,20));
                 xpos+=m_pTextCtrl->GetSize().x;
@@ -223,34 +241,43 @@ moValueCtrl::Set( moValueDescriptor p_valuedescriptor ) {
 			if (m_pTextCtrl) m_pTextCtrl->ChangeValue( ValueStr );
 			//Connect(
 			break;
-        case MO_PARAM_NUMERIC:
-            ValueInt = pValue.GetSubValue(0).Int();
-            ValueStr = moText2Wx( IntToStr(ValueInt) );
-            if (m_pTextCtrl) m_pTextCtrl->ChangeValue( ValueStr );
-            break;
-        case MO_PARAM_BLENDING:
-            ValueInt = pValue.GetSubValue(0).Int();
-            if ( 0<=ValueInt && ValueInt<MO_BLENDINGS && m_pBlendingCtrl)
-                m_pBlendingCtrl->SetValue( blendings[ValueInt] );
-            break;
-        case MO_PARAM_POLYGONMODE:
-            ValueInt = pValue.GetSubValue(0).Int();
-            if ( 0<=ValueInt && ValueInt<MO_POLYGONMODES && m_pPolygonModeCtrl)
-                m_pPolygonModeCtrl->SetValue( polygonmodes[ValueInt] );
-            break;
-        case MO_PARAM_FONT:
-            ValueStr =(wxChar*)(char*) pValue.GetSubValue(0).Text();
-			if (m_pTextCtrl) m_pTextCtrl->ChangeValue( ValueStr );
-            break;
-        case MO_PARAM_TEXTURE:
-		case MO_PARAM_VIDEO:
+    case MO_PARAM_NUMERIC:
+        ValueInt = pValue.GetSubValue(0).Int();
+        ValueStr = moText2Wx( IntToStr(ValueInt) );
+        if (m_pTextCtrl) m_pTextCtrl->ChangeValue( ValueStr );
+        break;
+    case MO_PARAM_BLENDING:
+        ValueInt = pValue.GetSubValue(0).Int();
+        if ( 0<=ValueInt && ValueInt<MO_BLENDINGS && m_pBlendingCtrl)
+            m_pBlendingCtrl->SetValue( blendings[ValueInt] );
+        break;
+    case MO_PARAM_POLYGONMODE:
+        ValueInt = pValue.GetSubValue(0).Int();
+        if ( 0<=ValueInt && ValueInt<MO_POLYGONMODES && m_pPolygonModeCtrl)
+            m_pPolygonModeCtrl->SetValue( polygonmodes[ValueInt] );
+        break;
+    case MO_PARAM_FONT:
+        ValueStr =(wxChar*)(char*) pValue.GetSubValue(0).Text();
+        if (m_pTextCtrl) m_pTextCtrl->ChangeValue( ValueStr );
+
+        ValueInt = pValue.GetSubValue(1).Int();
+        if ( 0<=ValueInt && ValueInt<MO_FONT_TYPES && m_pFontTypeCtrl)
+          m_pFontTypeCtrl->SetValue( fonttypes[ValueInt] );
+
+        ValueStr =(wxChar*)(char*) pValue.GetSubValue(2).Text();
+        if (m_pTextCtrlR) m_pTextCtrlR->ChangeValue( ValueStr );
+        break;
+    case MO_PARAM_TEXTURE:
+    case MO_PARAM_VIDEO:
             if (pValue.GetSubValueCount()==1) {
+                ///NO FILTERS, ONLY VIDEO OR TEXTURE
                 ValueStr =(wxChar*)(char*) pValue.GetSubValue(0).Text();
                 if (m_pTextCtrl) m_pTextCtrl->ChangeValue( ValueStr );
                 if (m_pTextCtrlR) { m_pTextCtrlR->Destroy(); m_pTextCtrlR = NULL; }
                 if (m_pTextCtrlG) { m_pTextCtrlG->Destroy(); m_pTextCtrlG = NULL; }
                 if (m_pTextCtrlB) { m_pTextCtrlB->Destroy(); m_pTextCtrlB = NULL; }
             } else if (pValue.GetSubValueCount()>1) {
+                ///FILTER OR (MULTIPLE IMAGES???)
                 m_bInit = false;
 
                 if (m_pTextCtrlR) {
@@ -470,7 +497,21 @@ moValueCtrl::OnTextUpdated( wxCommandEvent& event) {
             case MO_PARAM_FONT:
                 if (rValue.GetSubValueCount()>0) {
                     if (m_pTextCtrl) rValue.GetSubValue(0).SetText( moText((char*)(wxChar*)m_pTextCtrl->GetValue().c_str() ) );
-
+                    if (m_pFontTypeCtrl) {
+                        int i,isel = 0;
+                        wxString valuestr = m_pFontTypeCtrl->GetValue();
+                        for(i=0; i<MO_FONT_TYPES; i++) {
+                            if (fonttypes[i]==valuestr) {
+                                isel = i;
+                                break;
+                            }
+                        }
+                        rValue.GetSubValue(0).SetInt( isel );
+                    }
+                    if (m_pTextCtrlR) {
+                        int ii = atoi( (const char*)m_pTextCtrlR->GetValue().c_str() );
+                        rValue.GetSubValue(2).SetInt( ii );
+                    }
                 }
                 break;
             case MO_PARAM_COLOR:
@@ -528,6 +569,20 @@ moValueCtrl::OnComboUpdated( wxCommandEvent& event) {
                         }
                     }
                     rValue.GetSubValue(0).SetInt( isel );
+                }
+            case MO_PARAM_FONT:
+                if (m_pFontTypeCtrl) {
+                    int i,isel = 0;
+                    wxString valuestr = m_pFontTypeCtrl->GetValue();
+                    for(i=0; i<MO_FONT_TYPES; i++) {
+                        if (fonttypes[i]==valuestr) {
+                            isel = i;
+                            break;
+                        }
+                    }
+                    if (rValue.GetSubValueCount()==3)
+                        rValue.GetSubValue(1).SetInt( isel );
+                    else moIDirectorActions::ErrorMessage("moValueCtrl::OnComboUpdated: value count incorrect updating combo FontType");
                 }
                 break;
         };

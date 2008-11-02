@@ -36,7 +36,6 @@
 #include "moAbstract.h"
 #include "moText.h"
 #include "moParam.h"
-#include "moOGLFT.h"
 #include "moLuaBase.h"
 #include "moLunaClasses.h"
 

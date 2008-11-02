@@ -2,75 +2,49 @@
 <wxsmith>
 	<object class="wxPanel" name="moEffectLayerCtrl">
 		<pos>0,0</pos>
-		<size>168,71</size>
+		<size>265,40</size>
 		<fg>#FFFFFF</fg>
-		<bg>#000000</bg>
+		<bg>#323232</bg>
 		<minsize>-1,-1</minsize>
 		<maxsize>-1,-1</maxsize>
 		<id_arg>0</id_arg>
 		<style>0</style>
-		<object class="wxSlider" name="ID_SLIDERALPHA" variable="SliderAlpha" member="yes">
-			<pos>0,28</pos>
-			<size>56,9</size>
-			<handler function="OnSliderAlphaCmdScroll" entry="EVT_COMMAND_SCROLL_THUMBTRACK" />
-			<handler function="OnSliderAlphaCmdScroll" entry="EVT_COMMAND_SCROLL_CHANGED" />
+		<object class="wxTextCtrl" name="ID_TEXTCTRL1" variable="TextCtrlLabel" member="yes">
+			<value>Text</value>
+			<pos>0,7</pos>
+			<size>96,7</size>
+			<fg>#FFFFFF</fg>
+			<bg>#00093C</bg>
+			<font>
+				<size>6</size>
+				<style>normal</style>
+				<weight>bold</weight>
+				<underlined>0</underlined>
+				<family>swiss</family>
+				<face>Terminal</face>
+			</font>
+			<extra_code>TextCtrlLabel-&gt;SetEditable( false );</extra_code>
+			<style>wxNO_BORDER|wxTRANSPARENT_WINDOW</style>
 		</object>
-		<object class="wxSlider" name="ID_SLIDERTINT" variable="SliderTint" member="yes">
-			<pos>0,42</pos>
+		<object class="wxSlider" name="ID_SLIDERALPHA" subclass="moWxLevelCtrl" variable="m_pLevelAlphaCtrl" member="yes">
+			<pos>0,24</pos>
 			<size>56,9</size>
-			<handler function="OnSliderTintCmdScrollThumbTrack" entry="EVT_COMMAND_SCROLL_THUMBTRACK" />
-			<handler function="OnSliderTintCmdScrollThumbTrack" entry="EVT_COMMAND_SCROLL_CHANGED" />
+			<extra_code>Connect(ID__SLIDERALPHA, MO__EVT__DIRECTOR__LEVEL, (wxObjectEventFunction)&amp;moEffectLayerCtrl::OnLevelAlpha );</extra_code>
 		</object>
-		<object class="wxSlider" name="ID_SLIDERTEMPO" variable="SliderTempo" member="yes">
-			<pos>0,54</pos>
+		<object class="wxSlider" name="ID_SLIDERTINT" subclass="moWxLevelCtrl" variable="m_pLevelTintCtrl" member="yes">
+			<pos>65,24</pos>
 			<size>56,9</size>
-			<handler function="OnSliderTempoCmdScroll" entry="EVT_COMMAND_SCROLL_THUMBTRACK" />
-			<handler function="OnSliderTempoCmdScroll" entry="EVT_COMMAND_SCROLL_CHANGED" />
+			<extra_code>Connect(ID__SLIDERTINT, MO__EVT__DIRECTOR__LEVEL, (wxObjectEventFunction)&amp;moEffectLayerCtrl::OnLevelTint );</extra_code>
 		</object>
-		<object class="wxComboBox" name="ID_COMBOBOXPRE" variable="ComboBoxPreConfig" member="yes">
-			<content>
-				<item>Pre 0</item>
-				<item>Pre 1</item>
-				<item>Pre 2</item>
-				<item>Pre 3</item>
-				<item>Pre 4</item>
-				<item>Pre 5</item>
-				<item>Pre 6</item>
-				<item>Pre 7</item>
-				<item>Pre 8</item>
-				<item>Pre 9</item>
-				<item>Pre 10</item>
-			</content>
-			<selection>0</selection>
-			<pos>112,0</pos>
-			<size>56,21</size>
-			<handler function="OnComboBoxPreConfigSelect" entry="EVT_COMBOBOX" />
+		<object class="wxSlider" name="ID_SLIDERTEMPO" subclass="moWxLevelCtrl" variable="m_pLevelSpeedCtrl" member="yes">
+			<pos>128,24</pos>
+			<size>56,9</size>
+			<extra_code>Connect(ID__SLIDERTEMPO, MO__EVT__DIRECTOR__LEVEL, (wxObjectEventFunction)&amp;moEffectLayerCtrl::OnLevelSpeed );</extra_code>
 		</object>
 		<object class="wxCheckBox" name="ID_CHECKBOXONOFF" variable="CheckBoxOnOff" member="yes">
-			<pos>108,48</pos>
+			<pos>224,6</pos>
 			<size>16,21</size>
 			<handler function="OnCheckBoxOnOffClick" entry="EVT_CHECKBOX" />
-		</object>
-		<object class="wxStaticText" name="ID_STATICTEXTLABEL" variable="TextCtrlLabel" member="yes">
-			<label>label</label>
-			<pos>8,4</pos>
-		</object>
-		<object class="wxPanel" name="ID_PANELLABELCTRLS" variable="PanelLabelCtrls" member="yes">
-			<pos>55,24</pos>
-			<size>48,48</size>
-			<bg>#000000</bg>
-			<object class="wxStaticBitmap" name="ID_STATICBITMAPCTRLS" variable="StaticBitmapCtrls" member="yes">
-				<bitmap>../../doc/icons/layercontrols.png</bitmap>
-				<pos>0,0</pos>
-			</object>
-		</object>
-		<object class="wxPanel" name="ID_PANELCOLORS" variable="PanelColors" member="yes">
-			<pos>132,26</pos>
-			<bg>#000000</bg>
-			<object class="wxStaticBitmap" name="ID_STATICBITMAP1" variable="StaticBitmap1" member="no">
-				<bitmap>../../doc/icons/csvColors32.png</bitmap>
-				<pos>0,0</pos>
-			</object>
 		</object>
 		<object class="wxBitmapButton" name="ID_BITMAPBUTTONVISIBILITY" variable="BitmapButtonVisibility" member="yes">
 			<bitmap>../../doc/icons/visibility.png</bitmap>
@@ -78,7 +52,7 @@
 			<selected>../../doc/icons/visibility.png</selected>
 			<focus>../../doc/icons/visibility.png</focus>
 			<default>1</default>
-			<pos>100,26</pos>
+			<pos>192,6</pos>
 			<size>26,21</size>
 			<style>wxBU_AUTODRAW|wxNO_BORDER</style>
 			<handler function="OnBitmapButtonVisibilityClick" entry="EVT_BUTTON" />
@@ -86,7 +60,7 @@
 		<object class="wxBitmapButton" name="ID_BITMAPBUTTONDELETE" variable="BitmapButtonDelete" member="yes">
 			<bitmap>../../doc/icons/delete.png</bitmap>
 			<default>1</default>
-			<pos>88,4</pos>
+			<pos>240,12</pos>
 			<size>13,13</size>
 			<handler function="OnBitmapButtonDeleteClick" entry="EVT_BUTTON" />
 		</object>

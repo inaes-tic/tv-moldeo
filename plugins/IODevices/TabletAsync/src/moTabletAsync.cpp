@@ -392,8 +392,8 @@ MOboolean moTablet::Init()
     conf += moText(".cfg");
 
 	if (m_Config.LoadConfig(conf) != MO_CONFIG_OK ) {
-		text = "Couldn't load tablet config";
-		MODebug->Push(text);
+		text = moText("Couldn't load tablet config");
+		MODebug2->Error(text);
 		return false;
 	}
 

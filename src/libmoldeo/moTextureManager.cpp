@@ -94,6 +94,7 @@ MOint moTextureManager::GetTextureMOId(moValue *value, MOboolean p_create_tex)
 MOint moTextureManager::GetTextureMOId(moText p_name, MOboolean p_create_tex)
 {
 	moTexture* ptex;
+	if (p_name.Trim() == moText("")) return -1;
 	for (MOuint i = 0; i < m_textures_array.Count(); i++)
 	{
 		ptex = m_textures_array[i];
@@ -234,20 +235,25 @@ MOint moTextureManager::AddTexture(moText p_filename)
 	if (ptex != NULL)
 	{
 		MOboolean res = false;
-		if (type == MO_TYPE_TEXTURE) res = ptex->BuildFromFile(p_filename);
-		else if (type == MO_TYPE_MOVIE)
-		{
+		if (type == MO_TYPE_TEXTURE) {
+
+		  res = ptex->BuildFromFile(p_filename);
+
+		} else if (type == MO_TYPE_MOVIE)	{
+
 			ptex_mov = (moMovie*)ptex;
 			res = ptex_mov->LoadMovieFile(p_filename);
+
 		}
-		if (res)
-		{
+
+
+		if (res) {
+
 			m_textures_array.Add(ptex);
 			ptex->SetMOId(m_textures_array.Count() - 1);
 			return ptex->GetMOId();
-		}
-		else
-		{
+
+		}	else {
 			delete ptex;
 			return -1;
 		}

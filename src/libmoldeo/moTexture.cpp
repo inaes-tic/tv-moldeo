@@ -507,11 +507,11 @@ moText  moTexture::CreateThumbnail( moText p_bufferformat, int w, int h, moText 
 
     fbitmap = FreeImage_ConvertFromRawBits( (BYTE*)tempbuffer, GetWidth(), GetHeight(), pitch, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK, false );
 
-    unsigned width = FreeImage_GetWidth(fbitmap);
-    unsigned height = FreeImage_GetHeight(fbitmap);
-    unsigned ppitch = FreeImage_GetPitch(fbitmap);
-    FREE_IMAGE_TYPE image_type = FreeImage_GetImageType( fbitmap );
-    BYTE *bits = (BYTE*)FreeImage_GetBits(fbitmap);
+    //unsigned width = FreeImage_GetWidth(fbitmap);
+    //unsigned height = FreeImage_GetHeight(fbitmap);
+    //unsigned ppitch = FreeImage_GetPitch(fbitmap);
+    //FREE_IMAGE_TYPE image_type = FreeImage_GetImageType( fbitmap );
+    //BYTE *bits = (BYTE*)FreeImage_GetBits(fbitmap);
 
     FILE* fp = fopen( thumbnailfilename ,"wb" );
     fwrite( tempbuffer, sizeof(BYTE), m_width * m_height * 4 , fp );
@@ -888,6 +888,7 @@ MOboolean moTextureMultiple::SupportedFile(moText p_filename)
 MOboolean moTextureMultiple::Load(moParam* p_param)
 {
     moValue* pValue = &p_param->GetValue();
+    return Load(pValue);
 }
 
 MOboolean moTextureMultiple::Load(moValue * p_value)

@@ -198,17 +198,17 @@ LIBMOLDEO_API moResource* moNewResource(moText effect_name, moResourcePluginsArr
     if(!stricmp(effect_name, "nil")) return NULL;
 
     #if defined(_WIN32)
-    complete_name = "plugins/resources/" + effect_name;
+    complete_name = moText("plugins/resources/") + (moText)effect_name;
 		#ifdef _DEBUG
-		complete_name+= "d";
+		complete_name+= moText("_d");
 		#endif
-    complete_name += ".dll";
+    complete_name += moText(".dll");
     #else
-    complete_name = "plugins/resources/lib" + effect_name;
+    complete_name = moText("plugins/resources/lib") + (moText)effect_name;
 		#ifdef _DEBUG
-		complete_name+= "d";
+		complete_name+= moText("_d");
 		#endif
-    complete_name += ".so";
+    complete_name += moText(".so");
     #endif
 
     // Indice del plugin que se utilizara para crear a este efecto.
@@ -251,15 +251,15 @@ LIBMOLDEO_API void moDeleteResource(moResource *Resource, moResourcePluginsArray
     #if defined(_WIN32)
     complete_name = moText("plugins/resources/") + moText(Resource->GetResourceName());
 		#ifdef _DEBUG
-		complete_name+= "d";
+		complete_name+= moText("_d");
 		#endif
-    complete_name += ".dll";
+    complete_name += moText(".dll");
     #else
     complete_name =  moText("plugins/resources/lib") +  moText(Resource->GetResourceName());
 		#ifdef _DEBUG
-		complete_name+= "d";
+		complete_name+= moText("_d");
 		#endif
-    complete_name += ".so";
+    complete_name += moText(".so");
     #endif
 		printf("completename:%s\n",(char*)complete_name);
 

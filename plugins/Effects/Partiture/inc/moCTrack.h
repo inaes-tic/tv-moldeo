@@ -74,8 +74,8 @@ Convertir al oyente en lector de lo que oye.
 */
 
 enum moDynamicalMode {
-  STATIC_MODE,
-  DYNAMIC_MODE
+  STATIC_MODE, /// Modo estatico
+  DYNAMIC_MODE /// Modo dinámico
 };
 
 class moCTrack : public moAbstract {
@@ -85,16 +85,57 @@ class moCTrack : public moAbstract {
         moCTrack();
         virtual ~moCTrack();
 
-        /** Add a note with specific tone and dynamics
+        /** Agrega una nota a ser dibujada
         *
         */
         void AddNote( moCNote *p_pNote );
 
         void Init( moConfig* pConfig );
 
+        /** Cambia la clave, por ende la forma de visualizacion del track y su pentagrama asociado
+        *
+        */
+        void SetHeader( int p_header );
+        int GetHeader(  );
+
+        /**
+        * Modo de creación de notas
+        * Estatico:
+        * Dinamico:
+        */
         void SetMode( moDynamicalMode Mode, MOint MaxNotes );
 
-        void Draw( float x, float y , float w, float h, moEffectState& state, int scrolltime );
+        /**
+        * Posicion del centro del track
+        */
+        void SetPosition( float x_track, float y_track );
+        moVector2f GetPosition();
+
+        /** Tamaño del track
+        *
+        */
+        void SetSize( float w_track, float h_track);
+        moVector2f GetSize();
+
+        /** Lo que corresponde al ancho en milisegunddos
+        *
+        */
+        void SetScrollTime( int scrolltime );
+        int GetScrollTime();
+
+        void SetFont(moFont* pFont);
+
+        /**
+        * Dibuja el track en la posicion centrada en x e y, con el ancho w, y el alto h
+        * nota: la posicion y el tamaño puede ser modificadas dinámicamente
+        *
+        */
+        void Draw( moEffectState& state );
+        void DrawGroupToPlayLine( moCNotes &NoteGroup, moEffectState& state );
+        void DrawGroup( moCNotes &NoteGroup, moEffectState& state );
+
+        void UpdateHeaderParameters();
+
 
         moCNotes        Notes[128];
         moCPentagram    Pentagram;
@@ -104,6 +145,22 @@ class moCTrack : public moAbstract {
         moDynamicalMode m_DynamicalMode;
         MOint           m_MaxNotes;
 
+        int             m_number;
+        float           m_x_track;
+        float           m_y_track;
+        float           m_w_track;
+        float           m_h_track;
+        int             m_scrolltime;
+        int             m_header;
+        int             m_inter_line;
+        int             m_start_draw_line;
+        int             m_stop_draw_line;
+        int             m_stroke_width;
+        int             m_threashold;
+        float           m_relation_w_time;
+
+
+        moFont*         m_pFont;
 };
 
 

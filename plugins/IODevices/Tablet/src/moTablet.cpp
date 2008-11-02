@@ -369,7 +369,9 @@ void moTablet::Update(moEventList *Events)
 			Codes[tabletcode].state = true;
 			Codes[tabletcode].AddValueToArray(Pen[tabletcode].value);
 
+			#ifdef _DEBUG
             MODebug2->Push( moText(" motion x: ") + IntToStr(Pen[tabletcode].value) );
+            #endif
 		}
 
 		if (t_pkYNew != pkYOld)
@@ -379,7 +381,9 @@ void moTablet::Update(moEventList *Events)
 			Codes[tabletcode].state = true;
 			Codes[tabletcode].AddValueToArray(Pen[tabletcode].value);
 
+			#ifdef _DEBUG
 			MODebug2->Push( moText(" motion y: ") + IntToStr(Pen[tabletcode].value) );
+			#endif
 		}
 
 		if (t_pkZNew != pkZOld)
@@ -397,7 +401,9 @@ void moTablet::Update(moEventList *Events)
 			Codes[tabletcode].state = true;
 			Codes[tabletcode].AddValueToArray(Pen[tabletcode].value);
 			//MODebug->Push(moText("Pressure: ") + IntToStr(t_prsNew));
+			#ifdef _DEBUG
 			MODebug2->Push( moText(" pressure: ") + IntToStr(Pen[tabletcode].value) );
+			#endif
 		}
 
 		if (t_ortNew.orAzimuth != ortOld.orAzimuth)
@@ -407,7 +413,7 @@ void moTablet::Update(moEventList *Events)
 			Codes[tabletcode].state = true;
 			Codes[tabletcode].AddValueToArray(Pen[tabletcode].value);
 
-			MODebug2->Push( moText(" azimuth: ") + IntToStr(Pen[tabletcode].value) );
+			//MODebug2->Push( moText(" azimuth: ") + IntToStr(Pen[tabletcode].value) );
 		}
 
 		if (t_ortNew.orAltitude != ortOld.orAltitude)

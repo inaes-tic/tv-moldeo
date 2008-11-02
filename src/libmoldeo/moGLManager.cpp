@@ -40,7 +40,7 @@ moGLManager::moGLManager()
 	SetName("GL Manager");
 
 	m_gpu_vendor_code = 0;
-	m_gpu_ventor_string = "";
+	m_gpu_ventor_string = moText("");
 
 	m_current_fbo = m_previous_fbo = 0;
 

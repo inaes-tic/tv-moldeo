@@ -57,6 +57,7 @@ moMoldeoObject::~moMoldeoObject() {
 
 }
 
+
 MOboolean
 moMoldeoObject::Init() {
 
@@ -102,47 +103,79 @@ moMoldeoObject::Init() {
 
                 moValueBase& valuebase(value.GetSubValue(0));
 
-                switch(param.GetParamDefinition().GetType() ) {
+                switch((int)param.GetParamDefinition().GetType() ) {
 
                     case MO_PARAM_TEXTURE:
                     case MO_PARAM_VIDEO:
                     case MO_PARAM_FILTER:
-                        MODebug2->Log( moText("") );
-                        idx = m_pResourceManager->GetTextureMan()->GetTextureMOId( valuebase.Text(), true);
-                        if (idx>-1) {
-                            moTexture*  pTexture = m_pResourceManager->GetTextureMan()->GetTexture(idx);
-                            valuebase.SetTexture( pTexture );
+                        if ( ! (valuebase.Text().Trim() == moText("")) ) {
+                            idx = m_pResourceManager->GetTextureMan()->GetTextureMOId( valuebase.Text(), true);
+                            if (idx>-1) {
+                                moTexture*  pTexture = m_pResourceManager->GetTextureMan()->GetTexture(idx);
+                                valuebase.SetTexture( pTexture );
 
-                            if (pTexture->GetType()!=MO_TYPE_TEXTURE_MULTIPLE && value.GetSubValueCount()>1) {
-                                idx = m_pResourceManager->GetShaderMan()->GetTextureFilterIndex()->LoadFilter( &value );
-                                moTextureFilter*  pTextureFilter = m_pResourceManager->GetShaderMan()->GetTextureFilterIndex()->Get(idx-1);
-                                valuebase.SetTextureFilter( pTextureFilter );
-                            }
+                                if (pTexture->GetType()!=MO_TYPE_TEXTURE_MULTIPLE && value.GetSubValueCount()>1) {
+                                    idx = m_pResourceManager->GetShaderMan()->GetTextureFilterIndex()->LoadFilter( &value );
+                                    moTextureFilter*  pTextureFilter = m_pResourceManager->GetShaderMan()->GetTextureFilterIndex()->Get(idx-1);
+                                    valuebase.SetTextureFilter( pTextureFilter );
+                                }
 
-                            if (value.GetSubValueCount()==4) {
-                                valuebase.SetTextureFilterAlpha( value.GetSubValue(3).GetData() );
-                            }
+                                if (value.GetSubValueCount()==4) {
+                                    valuebase.SetTextureFilterAlpha( value.GetSubValue(3).GetData() );
+                                }
 
-                            if (value.GetSubValueCount()>=5) {
-                                //valuebase.SetTextureFilterParam( value.GetSubValue(4).GetData() );
+                                if (value.GetSubValueCount()>=5) {
+                                    //valuebase.SetTextureFilterParam( value.GetSubValue(4).GetData() );
+                                }
                             }
+                        } else {
+                            MODebug2->Error( moText(" VALUE BASE EMPTY: ")+ valuebase.Text() + moText(" Param name:") +param.GetParamDefinition().GetName() );
                         }
                         break;
 
                     case MO_PARAM_FONT:
+
                         moFont* pFont;
-                        pFont = m_pResourceManager->GetFontMan()->AddFont( valuebase.Text(), MO_FONT_TRANSLUCENT );
-                        if (pFont) {
-                            valuebase.SetFont( pFont );
+                        moFontType fonttype;
+                        moFontSize  fontsize;
+
+                        if ( value.GetSubValueCount()==3 ) {
+                            if ( ! (valuebase.Text().Trim() == moText("")) ) {
+
+                                if ( value.GetSubValue(1).GetType()==MO_VALUE_TXT) {
+                                    moText fonttypeT = value.GetSubValue(1).Text();
+                                    fonttype = m_pResourceManager->GetFontMan()->GetFontType(fonttypeT);
+                                } else {
+                                    fonttype = (moFontType)value.GetSubValue(1).Int();
+                                }
+
+                                if ( value.GetSubValue(2).GetType()==MO_VALUE_NUM ) {
+                                    fontsize = value.GetSubValue(2).Int();
+                                } else if ( value.GetSubValue(2).GetType()==MO_VALUE_FUNCTION ) {
+                                    fontsize = 12;
+                                }
+
+                                pFont = m_pResourceManager->GetFontMan()->AddFont( valuebase.Text(), fonttype, fontsize);
+
+                                if (pFont) {
+                                    valuebase.SetFont( pFont );
+                                }
+                            } else {
+                                MODebug2->Error( moText(" VALUE BASE EMPTY: ")+ valuebase.Text() + moText(" Param name:") +param.GetParamDefinition().GetName() );
+                            }
+                        } else {
+                            MODebug2->Error( moText(" MISSING VALUES: ")+ valuebase.Text() + moText(" Param name:") +param.GetParamDefinition().GetName() );
                         }
                         break;
 
                     case MO_PARAM_3DMODEL:
                     case MO_PARAM_OBJECT:
                         if (value.GetSubValueCount()>0) {
+                            //PROBAR!!!!!
+                            /*
                             moValueBase& valuebase(value.GetSubValue(0));
                             mo3dModel* pModel = m_pResourceManager->GetModelMan()->Get3dModel( valuebase.Text() );
-                            /*if (pModel)
+                            if (pModel)
                                 valuebase.SetModel( pModel );*/
                         }
                         break;

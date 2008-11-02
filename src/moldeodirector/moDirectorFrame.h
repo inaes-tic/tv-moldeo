@@ -55,7 +55,7 @@
 
 #include "moEffectLayerCtrl.h"
 #include "moTreeObjectsLayerCtrl.h"
-
+#include "moConnectionsWindow.h"
 
 #include <wx/aui/auibook.h>
 
@@ -99,6 +99,7 @@ public:
 	MOboolean Init();
 	MOboolean Finish();
 
+    void CreateGUINotebook();
     void CreateDataBook();
     void CreateFilesBook();
     void CreateGLWindows();
@@ -192,6 +193,7 @@ private:
 	wxGLContext* m_pGLContext;
 	wxGLCanvas* m_pBaseGLCanvas;
 
+    moConnectionsWindow* m_pConnectionsWindow;
 	moPreviewWindow* m_pPreviewWindow;
 
 	moPreviewFrame* m_pPreviewFrame;
@@ -199,12 +201,13 @@ private:
 	moLayersPanelCtrl  *m_pLayersPanelCtrl;
 
 	moDataNotebook*		m_pDataNotebook;
+	wxAuiNotebook*      m_pGUINotebook;
 
 	wxPanel*			m_pLog;
 	wxPanel*			m_pInspector;
 
-	moTreeObjectsLayerCtrl*			m_pLayers;
-	moTreeObjectsLayerCtrl*			m_pLayers2;
+	moTreeLayerCtrl*			m_pLayers;
+	moTreeLayerCtrl*			m_pLayers2;
 
 	wxTreeMultiItem				m_preeffectsid,m_preeffectsid2;
 	wxTreeMultiItem				m_effectsid, m_effectsid2;

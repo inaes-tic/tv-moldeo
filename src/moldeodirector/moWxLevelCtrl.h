@@ -8,7 +8,7 @@
 class moWxLevelCtrl : public wxControl {
 
     public:
-        moWxLevelCtrl( wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0, const wxValidator& validator = wxDefaultValidator, const wxString& name = wxPanelNameStr );
+        moWxLevelCtrl( wxWindow* parent, wxWindowID id, const int value, const int minvalue, const int maxvalue, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0, const wxValidator& validator = wxDefaultValidator, const wxString& name = wxPanelNameStr );
         virtual ~moWxLevelCtrl();
 
 
@@ -18,7 +18,6 @@ class moWxLevelCtrl : public wxControl {
         int GetValue();
         int SlidePosition();
         int SlideValue( int pointerxposition );
-
 
 
     private:

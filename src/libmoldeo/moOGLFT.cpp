@@ -124,7 +124,7 @@ namespace OGLFT {
     foreground_color_[G] = 0.;
     foreground_color_[B] = 0.;
     foreground_color_[A] = 1.;
-    
+
     background_color_[R] = 1.;
     background_color_[G] = 1.;
     background_color_[B] = 1.;
@@ -531,7 +531,7 @@ namespace OGLFT {
   {
     if ( string_rotation_ == 0. )
       return measure( s );
-    
+
     for ( unsigned int f = 0; f < faces_.size(); f++ )
       FT_Set_Transform( faces_[f].face_, 0, 0 );
 
@@ -568,7 +568,7 @@ namespace OGLFT {
   {
     if ( string_rotation_ == 0. )
       return measure( s );
-    
+
     for ( unsigned int f = 0; f < faces_.size(); f++ )
       FT_Set_Transform( faces_[f].face_, 0, 0 );
 
@@ -703,7 +703,7 @@ namespace OGLFT {
       }
 
       ++it;
-      
+
       if ( it != list.end() && !(*it).isEmpty() )
 	postfix = *it;
     }
@@ -723,7 +723,7 @@ namespace OGLFT {
     for ( char c = *s_tmp; c != 0; c = *++s_tmp ) {
       compile( c );
     }
-    
+
     GLuint dlist = glGenLists( 1 );
     glNewList( dlist, GL_COMPILE );
 
@@ -751,7 +751,7 @@ namespace OGLFT {
     for ( unsigned int i = 0; i < s.length(); i++ ) {
       compile( s.at( i ) );
     }
-    
+
     GLuint dlist = glGenLists( 1 );
     glNewList( dlist, GL_COMPILE );
 
@@ -1065,7 +1065,7 @@ namespace OGLFT {
     glColor4f( foreground_color_[R], foreground_color_[G], foreground_color_[B],
 	       foreground_color_[A] );
 
-    glRasterPos2i( 0, 0 );
+    glRasterPos2f( 0, 0 );
 
     draw( s );
 
@@ -1213,7 +1213,7 @@ namespace OGLFT {
       // Code from measure_nominal, but changed to use measureRaw instead
       if ( string_rotation_ == 0. )
 	bbox = measureRaw( s );
-    
+
       else {
 	// Undo rotation
 	for ( unsigned int f = 0; f < faces_.size(); f++ )
@@ -2248,7 +2248,7 @@ namespace OGLFT {
   {
     init();
   }
-  
+
   void Outline::init ( void )
   {
     interface_.move_to = (FT_Outline_MoveTo_Func)moveToCallback;
@@ -2710,7 +2710,7 @@ namespace OGLFT {
     }
 
     VertexInfo* vertex = new VertexInfo( to, filled->colorTess(), filled->textureTess() );
-  
+
     vertex->v_[X] *= filled->vector_scale_;
     vertex->v_[Y] *= filled->vector_scale_;
 
@@ -2782,10 +2782,10 @@ namespace OGLFT {
     }
 
     VertexInfo* vertex = new VertexInfo( to, filled->colorTess(), filled->textureTess() );
-  
+
     vertex->v_[X] *= filled->vector_scale_;
     vertex->v_[Y] *= filled->vector_scale_;
-  
+
     filled->vertices_.push_back( vertex );
 
     gluTessVertex( filled->tess_obj_, vertex->v_, vertex );
@@ -3014,7 +3014,7 @@ namespace OGLFT {
       // the contour array. To make things match up at the end, the first
       // normal is copied to the end of the normal array and the extrusion
       // routine is passed the list of normals starting at the second entry.
-      
+
       solid->extrusion_.contour_normals_.
 	push_back( solid->extrusion_.contour_normals_.front() );
 #if 1
@@ -3112,7 +3112,7 @@ namespace OGLFT {
 
     VertexInfo normal( solid->extrusion_.normal_sign_.y_ * df[Y],
 		       solid->extrusion_.normal_sign_.x_ * df[X] );
-  
+
     vertex.v_[X] *= solid->vector_scale_;
     vertex.v_[Y] *= solid->vector_scale_;
 
@@ -3192,12 +3192,12 @@ namespace OGLFT {
 
     VertexInfo normal( solid->extrusion_.normal_sign_.y_ * df[Y],
 		       solid->extrusion_.normal_sign_.x_ * df[X] );
-  
+
     vertex.v_[X] *= solid->vector_scale_;
     vertex.v_[Y] *= solid->vector_scale_;
 
     normal.normalize();
-  
+
     solid->extrusion_.contour_.push_back( vertex );
     solid->extrusion_.contour_normals_.push_back( normal );
 
@@ -3470,7 +3470,7 @@ namespace OGLFT {
     glTexCoord2f( 0., texture_info.texture_t_ );
     glVertex2f( texture_info.left_bearing_,
 		texture_info.bottom_bearing_ + texture_info.height_ );
-    
+
     glEnd();
 
     if ( character_rotation_.active_ ) {
@@ -3513,7 +3513,7 @@ namespace OGLFT {
     for ( ; ; ) {
       if ( b == 1 )
 	break;
-      
+
       else if ( b == 3 ) {
 	c *= 4;
 	break;
@@ -3589,7 +3589,7 @@ namespace OGLFT {
       return;
 
     error = FT_Render_Glyph( face->glyph, FT_RENDER_MODE_MONO );
-	
+
     if ( error != 0 )
       return;
 
@@ -3692,7 +3692,7 @@ namespace OGLFT {
       return;
 
     error = FT_Render_Glyph( face->glyph, FT_RENDER_MODE_NORMAL );
-	
+
     if ( error != 0 )
       return;
 
@@ -3797,7 +3797,7 @@ namespace OGLFT {
       return;
 
     error = FT_Render_Glyph( face->glyph, FT_RENDER_MODE_NORMAL );
-	
+
     if ( error != 0 )
       return;
 

@@ -7,7 +7,7 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="debug">
-				<Option output="../../../bin/linux/plugins/iodevices/libmixerd.so" prefix_auto="0" extension_auto="0" />
+				<Option output="../../../bin/linux/plugins/iodevices/libmixer_d.so" prefix_auto="0" extension_auto="0" />
 				<Option object_output=".objsd" />
 				<Option deps_output=".depsd" />
 				<Option type="3" />

@@ -123,9 +123,9 @@ MOboolean moDirectorChildFrame::Finish() {
 void
 moDirectorChildFrame::Save() {
     if (m_pDirectorFrame->SaveMob( m_MobDescriptor ) == MO_DIRECTOR_STATUS_OK) {
-        Log("Object Saved");
+        ShowMessage("Object saved succesfully");
     } else {
-        LogError("Object Not Saved!!");
+        ErrorMessage("Object Not Saved!!");
     }
 }
 
@@ -138,7 +138,7 @@ moDirectorChildFrame::ParameterUpdated( moParameterDescriptor p_ParameterDesc ) 
 
         moValueTreeItem ValueTreeItem;
 
-        for( int i=0; i<ParamItem.GetValueTreeItemList().Count(); i++) {
+        for( int i=0; i<(int)ParamItem.GetValueTreeItemList().Count(); i++) {
 
             ValueTreeItem = ParamItem.GetValueTreeItemList().Get(i);
 
@@ -172,7 +172,7 @@ moDirectorChildFrame::DeleteValue( moValueDescriptor p_ValueDesc ) {
 
         moValueTreeItem ValueTreeItem = ParamItem.GetValueTreeItemList().Get( p_ValueDesc.GetValueIndex().m_ValueIndex );
 
-        moValueCtrl* pValueCtrl = (moValueCtrl*)ValueTreeItem.GetWindow();
+        //moValueCtrl* pValueCtrl = (moValueCtrl*)ValueTreeItem.GetWindow();
 
         //if (pValueCtrl)
            // pValueCtrl->Destroy();
@@ -184,7 +184,7 @@ moDirectorChildFrame::DeleteValue( moValueDescriptor p_ValueDesc ) {
 
         ParamItem.GetValueTreeItemList().Remove( p_ValueDesc.GetValueIndex().m_ValueIndex );
 
-        for( int i=p_ValueDesc.GetValueIndex().m_ValueIndex; i<ParamItem.GetValueTreeItemList().Count(); i++) {
+        for( int i=p_ValueDesc.GetValueIndex().m_ValueIndex; i<(int)ParamItem.GetValueTreeItemList().Count(); i++) {
             moValueTreeItem ValueTreeItem = ParamItem.GetValueTreeItemList().Get(i);
             moValueCtrl* pValueCtrl = (moValueCtrl*)ValueTreeItem.GetWindow();
             if (pValueCtrl) {
@@ -203,7 +203,11 @@ moDirectorChildFrame::DeleteValue( moValueDescriptor p_ValueDesc ) {
 
         }
 
+        return MO_DIRECTOR_STATUS_OK;
+
     }
+
+    return MO_DIRECTOR_STATUS_ERROR;
 
 }
 
@@ -299,7 +303,7 @@ void moDirectorChildFrame::OnFocus(wxFocusEvent& event) {
 
     //UpdateMob(); ???
     if ( event.GetWindow() != this && event.GetWindow()->GetParent() != this && event.GetWindow()->GetParent()->GetParent() != this) {
-        for( int i=0; i<m_ParamTreeItemList.Count(); i++) {
+        for( int i=0; i<(int)m_ParamTreeItemList.Count(); i++) {
             moParamTreeItem& ParamItem( m_ParamTreeItemList.Get(i) );
             ParameterUpdated( ParamItem.GetParamDescriptor() );
         }

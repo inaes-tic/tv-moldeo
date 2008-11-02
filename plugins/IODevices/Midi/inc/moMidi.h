@@ -63,6 +63,13 @@
 #define	MO_MIDI_SYTEM_LABELNAME		0
 #define	MO_MIDI_SYSTEM_ON			1
 
+enum moMidiParamIndex {
+
+  MIDI_DEVICE,
+  MIDI_CODES
+
+};
+
 enum moEncoderType {
 	MOMIDI_ROTARY=0,
 	MOMIDI_PUSHBUTTON=1,
@@ -94,7 +101,7 @@ template class moDynamicArray<moMidiDataCode>;
 typedef  moDynamicArray<moMidiDataCode> moMidiDataCodes;
 
 
-class moMidiDevice : public moAbstract {
+class moMidiDevice : /*public moThread,*/ public moAbstract {
 
 	public:
 
@@ -174,6 +181,8 @@ public:
     MOswitch SetStatus( MOdevcode,MOswitch);
 	void SetValue( MOdevcode cd, MOint vl );
 	void SetValue( MOdevcode cd, MOfloat vl );
+
+    moConfigDefinition *GetDefinition( moConfigDefinition *p_configdefinition );
 
     MOint GetValue(MOdevcode);
 	MOpointer GetPointer(MOdevcode devcode );

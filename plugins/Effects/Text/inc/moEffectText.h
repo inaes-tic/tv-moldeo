@@ -44,7 +44,7 @@ enum moTextParamIndex {
 	TEXT_COLOR,
 	TEXT_SYNC,
 	TEXT_PHASE,
-	TEXT_TEXTURE,
+	TEXT_FONT,
 	TEXT_TEXT,
 	TEXT_BLENDING,
 	TEXT_WIDTH,
@@ -74,21 +74,6 @@ class moEffectText : public moEffect
         void Interaction( moIODeviceManager * );
         moConfigDefinition * GetDefinition( moConfigDefinition *p_configdefinition );
 
-    private:
-
-        GLuint m_GLBaseList; // Base Display List For The Font
-        GLuint FontId;
-
-        MOint Tx, Ty;
-        MOfloat Sx, Sy;
-        MOint Rz;
-
-        moTexture*  m_pFont;
-
-        //esto lo podriamos poner en el FontManager....
-        GLvoid BuildFont(void);
-        GLvoid glPrint(GLint x, GLint y, char *string, int set, float scx, float scy, float rt);
-        GLvoid KillFont(void);
 };
 
 class moEffectTextFactory : public moEffectFactory

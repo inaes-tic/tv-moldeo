@@ -3,6 +3,8 @@
 #include "moNewProject.h"
 #include "moNewEffectDialog.h"
 
+#include <wx/display.h>
+
 moDataNotebook::moDataNotebook( wxWindow* parent, wxWindowID id ) :
 		wxAuiNotebook(parent, id, wxPoint(0,0), wxSize(100,100),  wxBORDER_NONE | wxAUI_NB_TAB_SPLIT | wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_TAB_MOVE ),
 		m_pVirtualDirTreeCtrl(NULL),
@@ -57,8 +59,26 @@ END_EVENT_TABLE()
 
 // frame constructor
 moDirectorFrame::moDirectorFrame(const wxString& title)
-       : wxFrame(NULL, wxID_ANY, title, wxPoint(0,0), wxSize(1024,768))
+
 {
+    wxDisplay thisDisplay(0);
+    //wxDisplay theOtherDisplay(1);
+
+    //thisDisplay.GetFromWindow(this);
+
+    wxRect client = thisDisplay.GetClientArea();
+    //wxRect client2 = theOtherDisplay.GetClientArea();
+
+    wxString clientareastr;
+    //wxString clientareastr2;
+
+    //clientareastr.Printf(" area: %d,%d,%d,%d", client.GetLeft(), client.GetTop(), client.GetWidth(), client.GetHeight() );
+    //clientareastr2.Printf(" area: %d,%d,%d,%d", client2.GetLeft(), client2.GetTop(), client2.GetWidth(), client2.GetHeight() );
+
+   //wxMessageBox(thisDisplay.GetName() + clientareastr);
+    //wxMessageBox(theOtherDisplay.GetName() + clientareastr2 );
+
+    wxFrame::Create(NULL, wxID_ANY, title, wxPoint(client.GetLeft(),client.GetTop()), wxSize(client.GetWidth(),client.GetHeight()));
 
     m_cForeground = wxColour(255,255,255);
     m_cBackground = wxColour(80,80,80);
@@ -141,7 +161,7 @@ moDirectorFrame::moDirectorFrame(const wxString& title)
 #endif // wxUSE_STATUSBAR
 
     CreateDataBook();
-    CreateGLWindows();
+    CreateGUINotebook();
     CreateInspector();
     CreateLayerControls();
     CreateProjectPanel();
@@ -161,15 +181,16 @@ moDirectorFrame::moDirectorFrame(const wxString& title)
 
 
 
-	FrameManager.AddPane( m_pPreviewWindow, wxAuiPaneInfo().Name(wxT("preview")).Caption(wxT("Console")).CaptionVisible().Floatable().Movable().Dockable().MaximizeButton().MinimizeButton().Resizable(true));
+	FrameManager.AddPane( m_pGUINotebook, wxAuiPaneInfo().Name(wxT("preview")).Caption(wxT("Console")).CaptionVisible().Floatable().Movable().Dockable().MaximizeButton().MinimizeButton().Resizable(true));
 
 	//LEFT PANE
-	FrameManager.GetPane(wxT("explorer")).Show().Left().Layer(1).Row(0).Position(0);
-	FrameManager.GetPane(wxT("log")).Show().Left().Layer(1).Row(0).Position(1);
+	FrameManager.GetPane(wxT("explorer")).Show().Left().Layer(1).Row(0).Position(0).MinSize(200,370).BestSize(300,370);
+
 
 	//CENTER PANE
-	FrameManager.GetPane(wxT("preview")).Show().Center().Top().Layer(0).Row(0).Position(0);
-	FrameManager.GetPane(wxT("layers")).Show().Center().Layer(0).Row(0).Position(0);
+	FrameManager.GetPane(wxT("preview")).Show().Center().Top().Layer(0).Row(0).Position(0).MinSize(400,370);
+	FrameManager.GetPane(wxT("layers")).Show().Center().Top().Layer(0).Row(1).Position(0).MinSize(300,150);
+	FrameManager.GetPane(wxT("log")).Show().Center().Layer(0).Row(2).Position(0).MinSize(400,50).BestSize(300,50);
 
 	//RIGHT PANE
 	FrameManager.GetPane(wxT("inspector")).Show().Right().Layer(1).Row(0).Position(0);
@@ -202,6 +223,22 @@ moDirectorFrame::~moDirectorFrame() {
     m_pGLCanvas = NULL;
 	FrameManager.UnInit();
 
+}
+
+void
+moDirectorFrame::CreateGUINotebook() {
+
+	m_pGUINotebook = new wxAuiNotebook( this, wxID_ANY, wxPoint(0,0), wxSize(300,200), wxBORDER_NONE | wxAUI_NB_TAB_SPLIT | wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_TAB_MOVE  );
+	m_pGUINotebook->SetForegroundColour(m_cForeground);
+    m_pGUINotebook->SetBackgroundColour(m_cBackground);
+
+    CreateGLWindows();
+
+    m_pConnectionsWindow = new moConnectionsWindow(m_pGUINotebook,wxID_ANY, wxPoint(0,0), wxSize(300,200));
+    m_pConnectionsWindow->Init(this);
+
+    m_pGUINotebook->AddPage( m_pPreviewWindow, wxT("Preview"));
+    m_pGUINotebook->AddPage( m_pConnectionsWindow, wxT("Connections"));
 }
 
 void
@@ -269,7 +306,7 @@ moDirectorFrame::CreateGLWindows() {
     //create preview window, dockable...
 
 	m_pPreviewWindow = NULL;
-	m_pPreviewWindow = new moPreviewWindow( this, wxID_ANY );
+	m_pPreviewWindow = new moPreviewWindow( m_pGUINotebook, wxID_ANY );
 
 	if (m_pPreviewWindow) {
 
@@ -298,7 +335,10 @@ moDirectorFrame::CreateLayerControls() {
 	m_pLayers2 = m_pLayers = NULL;
 	m_pLayersPanelCtrl = new moLayersPanelCtrl(this, wxID_ANY, wxPoint(0,0), wxSize(440,220), wxSP_NOBORDER | wxNO_BORDER );
 	if (m_pLayersPanelCtrl) {
-        m_pLayers = new moTreeObjectsLayerCtrl( m_pLayersPanelCtrl, wxID_ANY );
+	    m_pLayers = m_pLayersPanelCtrl->m_pLayersTreeCtrl;
+	    m_pLayers2 = NULL;
+/*
+        m_pLayers = new moTreeObjectsLayerCtrl( m_pLayersPanelCtrl, wxID_ANY, wxPoint(0,0), wxSize(150,220) );
         m_pLayers->SetForegroundColour(m_cForeground);
         m_pLayers->SetBackgroundColour( wxColour(0,0,0) );
         m_pLayers->ShowScrollBars( true, false);
@@ -309,8 +349,13 @@ moDirectorFrame::CreateLayerControls() {
         m_pLayers2->ShowScrollBars( true, true);
         m_pLayers2->SetSecondTargetWindow( m_pLayers );
         m_pLayers->SetSecondTargetWindow( m_pLayers2 );
-
+*/
+        /*
         m_pLayersPanelCtrl->SplitVertically( m_pLayers, m_pLayers2 );
+        m_pLayersPanelCtrl->SetSashPosition( 220, true );
+        m_pLayersPanelCtrl->SetForegroundColour(m_cForeground);
+        m_pLayersPanelCtrl->SetBackgroundColour( wxColour(52,52,52) );
+        */
 	}
 
 }
@@ -420,7 +465,7 @@ moDirectorFrame::Inspect( moMobDescriptor  p_MobDescriptor ) {
 
         mParams = GetParameterDescriptors( p_MobDescriptor );
 
-        for(int i=0; i<mParams.Count(); i++) {
+        for(int i=0; i<(int)mParams.Count(); i++) {
 
             mParam = mParams[i];
 
@@ -656,7 +701,25 @@ moDirectorFrame::OnSaveProject(wxCommandEvent& event) {
 void
 moDirectorFrame::OnCloseProject(wxCommandEvent& event) {
 
-    this->CloseProject();
+    wxString tName = moText2Wx( GetProject().GetFullConfigName() );
+
+    int result = wxMessageBox(_T("Save project before close \"")+tName+_T("\" ?"), _T("Please confirm"),
+                      wxICON_QUESTION | wxYES_NO | wxCANCEL );
+    switch(result) {
+        case wxYES:
+            //save before closing
+            SaveProject();
+            CloseProject();
+            break;
+        case wxNO:
+            //do not save project
+            CloseProject();
+            break;
+        case wxCANCEL:
+            break;
+    }
+
+
 }
 
 void
@@ -812,6 +875,7 @@ moDirectorFrame::CloseProject() {
 	moDirectorChildConsole* pDirectorChildConsole = NULL;
 
     if (this->CloseAll()==MO_DIRECTOR_STATUS_OK) {
+
         if ( m_pDirectorCore->CloseProject() == MO_DIRECTOR_STATUS_OK ) {
 
             if(m_pDataNotebook)
@@ -821,6 +885,9 @@ moDirectorFrame::CloseProject() {
                 m_pLayers->DeleteAllItems();
             if (m_pLayers2)
                 m_pLayers2->DeleteAllItems();
+            if(m_pConnectionsWindow)
+                m_pConnectionsWindow->DeleteAll();
+
             return MO_DIRECTOR_STATUS_OK;
         }
     }
@@ -1085,22 +1152,23 @@ moDirectorFrame::ProjectUpdated( moProjectDescriptor p_ProjectDescriptor ) {
 	//moMoldeoObjects	*pMOBS = p_ProjectDescriptor.m_pMOBS;
 	moMobDescriptors pMobDescriptors = GetMobDescriptors();
 
-	moEffectLayerCtrl* pobject = NULL;
+	moItemLayerWindow* pobject = NULL;
 	moEffectLayerTimelineCtrl* pobject2 = NULL;
 
-	if (m_pLayers && m_pLayers2) {
-
+	if (m_pLayers) {
 		m_pLayers->DeleteAllItems();
 
+		m_preeffectsid = m_pLayers->AddRoot( wxT("0"), wxT("pre-effects"), NULL );
+		m_effectsid = m_pLayers->AddRoot( wxT("1"), wxT("effects"), NULL );
+		m_posteffectsid = m_pLayers->AddRoot( wxT("2"), wxT("post-effects"), NULL );
+	}
+
+	if (m_pLayers2) {
 		m_pLayers2->DeleteAllItems();
 
-		m_preeffectsid = m_pLayers->AddRoot( wxT("Layer 0 [pre]"), wxT("pre-effects"), (wxWindow*)new wxStaticText(m_pLayers, wxID_ANY,wxT("- 0")) );
-		m_effectsid = m_pLayers->AddRoot( wxT("Layer 1 [effects]"), wxT("effects"), (wxWindow*)new wxStaticText(m_pLayers, wxID_ANY,wxT("- 1")) );
-		m_posteffectsid = m_pLayers->AddRoot( wxT("Layer 2 [post]"), wxT("post-effects"), (wxWindow*)new wxStaticText(m_pLayers, wxID_ANY,wxT("- 3")) );
-
-		m_preeffectsid2 = m_pLayers2->AddRoot( wxT("timeline"), wxT("pre-effects"),  (wxWindow*)new wxStaticText(m_pLayers, wxID_ANY,wxT("- 0")));
-		m_effectsid2 = m_pLayers2->AddRoot( wxT("timeline"), wxT("effects"), (wxWindow*)new wxStaticText(m_pLayers, wxID_ANY,wxT("- 1")) );
-		m_posteffectsid2 = m_pLayers2->AddRoot( wxT("timeline"), wxT("post-effects"),  (wxWindow*)new wxStaticText(m_pLayers, wxID_ANY,wxT("- 2")) );
+		m_preeffectsid2 = m_pLayers2->AddRoot( wxT("timeline"), wxT("pre-effects"),  NULL );
+		m_effectsid2 = m_pLayers2->AddRoot( wxT("timeline"), wxT("effects"), NULL );
+		m_posteffectsid2 = m_pLayers2->AddRoot( wxT("timeline"), wxT("post-effects"),  NULL );
 	}
 
 	//intento de borrar unicamente los layers correspondientes...al final resolvimos borrar todo...mejor..
@@ -1115,8 +1183,8 @@ moDirectorFrame::ProjectUpdated( moProjectDescriptor p_ProjectDescriptor ) {
     wndinfo.Indent(0);
     //m_pLayers->SetCheckboxView();
 
-    m_pLayers->SetSpacingY(0);
-    m_pLayers2->SetSpacingY(0);
+    if (m_pLayers) m_pLayers->SetSpacingY(0);
+    if (m_pLayers2) m_pLayers2->SetSpacingY(0);
 
 	for( i=0;  i < pMobDescriptors.Count(); i++) {
 	    moMobDescriptor pMobDescriptor = pMobDescriptors[i];
@@ -1127,52 +1195,63 @@ moDirectorFrame::ProjectUpdated( moProjectDescriptor p_ProjectDescriptor ) {
 
 			case MO_OBJECT_PREEFFECT:
 				exid = m_pDataNotebook->m_pProjectTreeCtrl->AppendItem( preeffectsid, xitemname , 1 );
-				pobject = new moEffectLayerCtrl(m_pLayers);
-				pobject2 = new moEffectLayerTimelineCtrl(m_pLayers2);
+				if (exid.IsOk()) m_pDataNotebook->m_pProjectTreeCtrl->SetItemData( exid, new moMobItemData( pMobDescriptor ));
+				pobject = new moItemLayerWindow( m_pLayers , wxID_ANY, wxPoint(0,0), wxSize(m_pLayersPanelCtrl->GetSize().GetWidth(),40) );
+				//pobject2 = new moEffectLayerTimelineCtrl(m_pLayers2);
 				if (pobject) {
 				    pobject->SetNextActionHandler(this);
 					pobject->Set( pMobDescriptor );
-				    pobject2->SetNextActionHandler(this);
-					pobject2->Set( pMobDescriptor );
+				    //pobject2->SetNextActionHandler(this);
+					//pobject2->Set( pMobDescriptor );
 					m_pLayers->AppendWindow( m_preeffectsid, pobject, _(""), wndinfo);
-					m_pLayers2->AppendWindow( m_preeffectsid2, pobject2, _(""), wndinfo);
+					//m_pLayers2->AppendWindow( m_preeffectsid2, pobject2, _(""), wndinfo);
 				}
 				break;
 
 			case MO_OBJECT_EFFECT:
+				//tree
 				exid = m_pDataNotebook->m_pProjectTreeCtrl->AppendItem( effectsid, xitemname , 1);
-				pobject = new moEffectLayerCtrl(m_pLayers);
-				pobject2 = new moEffectLayerTimelineCtrl(m_pLayers2);
+				if (exid.IsOk()) m_pDataNotebook->m_pProjectTreeCtrl->SetItemData( exid, new moMobItemData( pMobDescriptor ));
+
+				//timelinetree
+				pobject = new moItemLayerWindow( m_pLayers , wxID_ANY, wxPoint(0,0), wxSize(m_pLayersPanelCtrl->GetSize().GetWidth(),40) );
+				//pobject2 = new moEffectLayerTimelineCtrl(m_pLayers2);
 				if (pobject) {
 				    pobject->SetNextActionHandler(this);
 					pobject->Set( pMobDescriptor );
-				    pobject2->SetNextActionHandler(this);
-					pobject2->Set( pMobDescriptor );
+				    //pobject2->SetNextActionHandler(this);
+					//pobject2->Set( pMobDescriptor );
+					//tree
 					m_pLayers->AppendWindow( m_effectsid, pobject, _(""), wndinfo);
-					m_pLayers2->AppendWindow( m_effectsid2, pobject2, _(""), wndinfo);
+					//and timeline
+					//m_pLayers2->AppendWindow( m_effectsid2, pobject2, _(""), wndinfo);
 				}
 				break;
 			case MO_OBJECT_POSTEFFECT:
 				exid = m_pDataNotebook->m_pProjectTreeCtrl->AppendItem( posteffectsid, xitemname , 1);
-				pobject = new moEffectLayerCtrl(m_pLayers);
-				pobject2 = new moEffectLayerTimelineCtrl(m_pLayers2);
+				if (exid.IsOk()) m_pDataNotebook->m_pProjectTreeCtrl->SetItemData( exid, new moMobItemData( pMobDescriptor ));
+				pobject = new moItemLayerWindow( m_pLayers , wxID_ANY, wxPoint(0,0), wxSize(m_pLayersPanelCtrl->GetSize().GetWidth(),40) );
+				//pobject2 = new moEffectLayerTimelineCtrl(m_pLayers2);
 				if (pobject) {
 				    pobject->SetNextActionHandler(this);
 					pobject->Set( pMobDescriptor );
-				    pobject2->SetNextActionHandler(this);
-					pobject2->Set( pMobDescriptor );
+				    //pobject2->SetNextActionHandler(this);
+					//pobject2->Set( pMobDescriptor );
 					m_pLayers->AppendWindow( m_posteffectsid, pobject, _(""), wndinfo);
-					m_pLayers2->AppendWindow( m_posteffectsid2, pobject2, _(""), wndinfo);
+					//m_pLayers2->AppendWindow( m_posteffectsid2, pobject2, _(""), wndinfo);
 				}
 				break;
 			case MO_OBJECT_MASTEREFFECT:
 				exid = m_pDataNotebook->m_pProjectTreeCtrl->AppendItem( mastereffectsid, xitemname , 1);
+				if (exid.IsOk()) m_pDataNotebook->m_pProjectTreeCtrl->SetItemData( exid, new moMobItemData( pMobDescriptor ));
 				break;
 			case MO_OBJECT_IODEVICE:
 				exid = m_pDataNotebook->m_pIODevicesTreeCtrl->AppendItem( iodevicesid, xitemname , 1);
+				if (exid.IsOk()) m_pDataNotebook->m_pIODevicesTreeCtrl->SetItemData( exid, new moMobItemData( pMobDescriptor ));
 				break;
 			case MO_OBJECT_RESOURCE:
 				exid = m_pDataNotebook->m_pResourcesTreeCtrl->AppendItem( resourcesid, xitemname , 1);
+				if (exid.IsOk()) m_pDataNotebook->m_pResourcesTreeCtrl->SetItemData( exid, new moMobItemData( pMobDescriptor ));
 				break;
 
 			default:
@@ -1180,14 +1259,15 @@ moDirectorFrame::ProjectUpdated( moProjectDescriptor p_ProjectDescriptor ) {
 				break;
 		}
 
-		if (exid.IsOk()) {
-			m_pDataNotebook->m_pProjectTreeCtrl->SetItemData( exid, new moMobItemData( pMobDescriptor ) );
-		}
 	}
 
 	m_pDataNotebook->m_pProjectTreeCtrl->Expand(root);
+	m_pDataNotebook->m_pIODevicesTreeCtrl->Expand(iodevicesid);
+	m_pDataNotebook->m_pResourcesTreeCtrl->Expand(resourcesid);
 
 	FrameManager.Update();
+
+	m_pConnectionsWindow->ProjectUpdated( p_ProjectDescriptor );
 
 	return MO_DIRECTOR_STATUS_OK;
 }
@@ -1286,8 +1366,8 @@ moDirectorFrame::ValueUpdated( moValueDescriptor p_ValueDesc ) {
     //dentro de los effect-layer-control
 
     //hay que hacerlo bien, a través del LayerControlPanel
-    Dstatus = CHECK_DIRECTOR_STATUS_ERROR( Dstatus, m_pLayers->ValueUpdated( p_ValueDesc ) );
-    Dstatus = CHECK_DIRECTOR_STATUS_ERROR( Dstatus, m_pLayers2->ValueUpdated( p_ValueDesc ) );
+    if (m_pLayers) Dstatus = CHECK_DIRECTOR_STATUS_ERROR( Dstatus, m_pLayers->ValueUpdated( p_ValueDesc ) );
+    if (m_pLayers2) Dstatus = CHECK_DIRECTOR_STATUS_ERROR( Dstatus, m_pLayers2->ValueUpdated( p_ValueDesc ) );
 
     return Dstatus;
 }

@@ -39,6 +39,8 @@ moDefineDynamicArray(moVideoBuffers)
 moDefineDynamicArray(moLiveSystemPtrs)
 moDefineDynamicArray(moVideoBufferPaths)
 
+#include "FreeImage.h"
+
 //===========================================
 //
 //				moVideoFrame
@@ -49,7 +51,7 @@ moVideoFrame::moVideoFrame() {
 	m_FrameSize = 0;
 	hmem = NULL;
 	options = 0;
-	fif = FIF_UNKNOWN;
+	fif = (int)FIF_UNKNOWN;
 }
 
 moVideoFrame::~moVideoFrame() {
@@ -64,7 +66,10 @@ moVideoFrame::Init( ) {
 
 //FreeImage_SaveToMemory(FREE_IMAGE_FORMAT fif, FIBITMAP *dib, FIMEMORY *stream, int flags FI_DEFAULT(0));
 MOboolean
-moVideoFrame::Init( moText bufferformat, FIBITMAP* pImageResult ) {
+moVideoFrame::Init( moText bufferformat, moBitmap* pImageResult ) {
+
+    FIBITMAP* _pImageResult = (FIBITMAP*)pImageResult;
+
 	if (!hmem) {
 		hmem = FreeImage_OpenMemory();
 	}
@@ -89,8 +94,8 @@ moVideoFrame::Init( moText bufferformat, FIBITMAP* pImageResult ) {
 			fif = FIF_TARGA;
 			options = 0;
 		}
-		FreeImage_SaveToMemory( fif, pImageResult, hmem, options );
-		m_FrameSize = FreeImage_TellMemory(hmem);
+		FreeImage_SaveToMemory( (FREE_IMAGE_FORMAT)fif, _pImageResult, (FIMEMORY*)hmem, options );
+		m_FrameSize = FreeImage_TellMemory((FIMEMORY*)hmem);
 	}
 	return Init();
 }
@@ -99,13 +104,13 @@ MOboolean
 moVideoFrame::Finish() {
 
 	if (hmem) {
-		FreeImage_CloseMemory( hmem );
+		FreeImage_CloseMemory( (FIMEMORY*)hmem );
 		hmem = NULL;
 	}
 
 	m_FrameSize = 0;
 	hmem = NULL;
-	fif = FIF_UNKNOWN;
+	fif = (int)FIF_UNKNOWN;
 
 	return true;
 }
@@ -179,18 +184,19 @@ MOboolean  moVideoBuffer::Finish() {
 }
 
 MOboolean
-moVideoBuffer::LoadImage( FIBITMAP* pImage , MOuint indeximage ) {
+moVideoBuffer::LoadImage( moBitmap* pImage , MOuint indeximage ) {
 
+    FIBITMAP* _pImage = (FIBITMAP*)pImage;
 	FIBITMAP* pImageResult = NULL;
 	FIBITMAP* pImageCropped = NULL;
 	FIBITMAP* pImageScaled = NULL;
 
-	if ( m_width!=FreeImage_GetWidth(pImage) || m_height!=FreeImage_GetHeight(pImage) ) {
+	if ( m_width!=FreeImage_GetWidth(_pImage) || m_height!=FreeImage_GetHeight(_pImage) ) {
 		//CROP MODE
-		pImageCropped = FreeImage_Copy( pImage, m_XSource , m_YSource , m_XSource + m_SourceWidth , m_YSource+m_SourceHeight );
+		pImageCropped = FreeImage_Copy( _pImage, m_XSource , m_YSource , m_XSource + m_SourceWidth , m_YSource+m_SourceHeight );
 		pImageResult = pImageCropped;
 
-	} else pImageResult = pImage;
+	} else pImageResult = _pImage;
 
 	//RESCALE
 	if ( m_width != m_SourceWidth || m_height != m_SourceHeight ) {
@@ -215,7 +221,7 @@ moVideoBuffer::LoadImage( FIBITMAP* pImage , MOuint indeximage ) {
 		m_Frames.Add(pVideoFrame);
 	}
 
-	if (pImageResult!=pImage)
+	if (pImageResult!=_pImage)
 		FreeImage_Unload(pImageResult);
 
 	m_nFrames = m_Frames.Count();
@@ -239,21 +245,21 @@ void moVideoBuffer::GetFrame( MOuint p_i ) {
 
 		if (pVideoFrame) {
 
-			FIBITMAP *m_pImage;
+			FIBITMAP *pImage;
 			//FIMEMORY	*hmem;
 
 			MOuint p_format;
 
 			//MOint FrameSize =
-			FreeImage_TellMemory(pVideoFrame->hmem);
-			FreeImage_SeekMemory( pVideoFrame->hmem, 0L, SEEK_SET);
+			FreeImage_TellMemory((FIMEMORY*)pVideoFrame->hmem);
+			FreeImage_SeekMemory( (FIMEMORY*)pVideoFrame->hmem, 0L, SEEK_SET);
 
 			//hmem = FreeImage_OpenMemory( pVideoFrame->hmem,  pVideoFrame->m_FrameSize);
 			//FreeImage_TellMemory(VideoFrame->hmem);
 			// load an image from the memory stream
-			m_pImage = FreeImage_LoadFromMemory( pVideoFrame->fif, pVideoFrame->hmem, 0);
+			pImage = FreeImage_LoadFromMemory( (FREE_IMAGE_FORMAT)pVideoFrame->fif, (FIMEMORY*)pVideoFrame->hmem, 0);
 
-			switch (FreeImage_GetBPP(m_pImage))
+			switch (FreeImage_GetBPP(pImage))
 			{
 				case 8: // 8 bit, indexed or grayscale
 					m_param.internal_format = GL_RGB;
@@ -263,19 +269,19 @@ void moVideoBuffer::GetFrame( MOuint p_i ) {
 					break;
 				case 24: // 24 bits
 					m_param.internal_format = GL_RGB;
-					if (FreeImage_GetBlueMask(m_pImage) == 0x000000FF) p_format = GL_BGR;
+					if (FreeImage_GetBlueMask(pImage) == 0x000000FF) p_format = GL_BGR;
 					else p_format = GL_RGB;
 					break;
 				case 32: // 32 bits
 					m_param.internal_format = GL_RGBA;
-					if (FreeImage_GetBlueMask(m_pImage) == 0x000000FF) p_format = GL_BGRA_EXT;
+					if (FreeImage_GetBlueMask(pImage) == 0x000000FF) p_format = GL_BGRA_EXT;
 					else p_format = GL_RGBA;
 					break;
 				default:
 					break;
 			}
-			SetBuffer( m_width, m_height, FreeImage_GetBits(m_pImage), p_format);
-			FreeImage_Unload( m_pImage );
+			SetBuffer( m_width, m_height, FreeImage_GetBits(pImage), p_format);
+			FreeImage_Unload( pImage );
 		}
 	}
 
@@ -454,21 +460,21 @@ void moCircularVideoBuffer::GetFrame( MOuint p_i ) {
 
 		if (pVideoFrame) {
 
-			FIBITMAP *m_pImage;
+			FIBITMAP *pImage;
 			//FIMEMORY	*hmem;
 
 			MOuint p_format;
 
 			//MOint FrameSize =
-			FreeImage_TellMemory(pVideoFrame->hmem);
-			FreeImage_SeekMemory( pVideoFrame->hmem, 0L, SEEK_SET);
+			FreeImage_TellMemory((FIMEMORY*)pVideoFrame->hmem);
+			FreeImage_SeekMemory( (FIMEMORY*)pVideoFrame->hmem, 0L, SEEK_SET);
 
 			//hmem = FreeImage_OpenMemory( pVideoFrame->hmem,  pVideoFrame->m_FrameSize);
 			//FreeImage_TellMemory(VideoFrame->hmem);
 			// load an image from the memory stream
-			m_pImage = FreeImage_LoadFromMemory( pVideoFrame->fif, pVideoFrame->hmem, 0);
+			pImage = FreeImage_LoadFromMemory( (FREE_IMAGE_FORMAT)pVideoFrame->fif, (FIMEMORY*)pVideoFrame->hmem, 0);
 
-			switch (FreeImage_GetBPP(m_pImage))
+			switch (FreeImage_GetBPP(pImage))
 			{
 				case 8: // 8 bit, indexed or grayscale
 					m_param.internal_format = GL_RGB;
@@ -478,19 +484,19 @@ void moCircularVideoBuffer::GetFrame( MOuint p_i ) {
 					break;
 				case 24: // 24 bits
 					m_param.internal_format = GL_RGB;
-					if (FreeImage_GetBlueMask(m_pImage) == 0x000000FF) p_format = GL_BGR;
+					if (FreeImage_GetBlueMask(pImage) == 0x000000FF) p_format = GL_BGR;
 					else p_format = GL_RGB;
 					break;
 				case 32: // 32 bits
 					m_param.internal_format = GL_RGBA;
-					if (FreeImage_GetBlueMask(m_pImage) == 0x000000FF) p_format = GL_BGRA_EXT;
+					if (FreeImage_GetBlueMask(pImage) == 0x000000FF) p_format = GL_BGRA_EXT;
 					else p_format = GL_RGBA;
 					break;
 				default:
 					break;
 			}
-			SetBuffer( m_width, m_height, FreeImage_GetBits(m_pImage), p_format);
-			FreeImage_Unload( m_pImage );
+			SetBuffer( m_width, m_height, FreeImage_GetBits(pImage), p_format);
+			FreeImage_Unload( pImage );
 		}
 	}
 
@@ -1085,7 +1091,7 @@ moLiveSystem::moLiveSystem() {
 	m_pVideoGraph = NULL;
 	m_pVideoSample = NULL;
 
-	m_CodeName = "";
+	m_CodeName = moText("");
 	m_Type = LST_UNKNOWN;
 
 }
@@ -1288,7 +1294,7 @@ moLiveSystems::LoadLiveSystems( moCaptureDevices* p_pPreferredDevices ) {
 		moLiveSystemPtr pLS = new moLiveSystem( pCapDevs->Get(i) );
 		if (pLS) {
 
-			CodeStr = "LIVEIN";
+			CodeStr = moText("LIVEIN");
 			CodeStr+= IntToStr(i);
 
 			pLS->SetCodeName( CodeStr );
@@ -1304,7 +1310,7 @@ moLiveSystems::LoadLiveSystems( moCaptureDevices* p_pPreferredDevices ) {
 		moLiveSystemPtr pLS = new moLiveSystem( Cap );
 		if (pLS) {
 
-			CodeStr = "LIVEIN";
+			CodeStr = moText("LIVEIN");
 			CodeStr+= IntToStr(i);
 
 			pLS->SetCodeName( CodeStr );

@@ -57,7 +57,7 @@ moFunctionPanel::moFunctionPanel(wxWindow* parent,wxWindowID id,const wxPoint& p
 	ButtonSqrt = new wxButton(Panel1, ID_BUTTON8, _("sqrt"), wxPoint(0,72), wxSize(32,23), 0, wxDefaultValidator, _T("ID_BUTTON8"));
 	Button1x = new wxButton(Panel1, ID_BUTTON9, _("1/x"), wxPoint(32,72), wxSize(32,23), 0, wxDefaultValidator, _T("ID_BUTTON9"));
 	ButtonCosSin = new wxButton(Panel1, ID_BUTTON6, _("cos*sin"), wxPoint(0,96), wxSize(64,23), 0, wxDefaultValidator, _T("ID_BUTTON6"));
-
+	
 	Connect(ID_FUNCTIONTEXTCTRL,wxEVT_COMMAND_TEXT_UPDATED,(wxObjectEventFunction)&moFunctionPanel::OnFunctionTextCtrlText);
 	//*)
 

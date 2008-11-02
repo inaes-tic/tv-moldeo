@@ -34,38 +34,14 @@
 #include "moDirectorTypes.h"
 #include "moIDirectorActions.h"
 #include "wxTreeMultiCtrl.h"
+#include "moEffectLayerCtrl.h"
+#include "moTimelineRuler.h"
 
-class moTreeObjectLayerCtrl : public wxPanel, public moIDirectorActions {
-
-    public:
-
-        moTreeObjectLayerCtrl() {}
-        virtual ~moTreeObjectLayerCtrl() {}
-
-        virtual void Set( moMobDescriptor   p_MobDescriptor );
-        moMobDescriptor& Get();
-
-    public:
-        //===============================
-        // INTERFACE DIRECTOR ACTIONS
-        //===============================
-
-        virtual moDirectorStatus    ValueUpdated( moValueDescriptor p_ValueDesc ) = 0;
-        virtual moDirectorStatus    MobUpdated( moMobDescriptor p_MobDesc ) = 0;
-
-    protected:
-        moMobDescriptor m_MobDescriptor;
-
-        void OnMouseEvent( wxMouseEvent& event );
-
-        DECLARE_EVENT_TABLE()
-};
-
-class moTreeObjectsLayerCtrl : public wxTreeMultiCtrl, public moIDirectorActions {
+class moTreeLayerCtrl : public wxTreeMultiCtrl, public moIDirectorActions {
 
 	public:
 
-		moTreeObjectsLayerCtrl(wxWindow *parent, wxWindowID id = -1,
+		moTreeLayerCtrl(wxWindow *parent, wxWindowID id = -1,
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
                         long style = wxTMC_DEFAULT_STYLE,
@@ -78,7 +54,7 @@ class moTreeObjectsLayerCtrl : public wxTreeMultiCtrl, public moIDirectorActions
 
 		MOboolean Init();
 		MOboolean Finish();
-		void AddLayer( wxTreeMultiItem id, moTreeObjectLayerCtrl* p_ObjectLayerCtrl );
+		void AddLayer( wxTreeMultiItem id, moItemLayerWindow* p_ObjectLayerCtrl );
 
     public:
         //===============================
@@ -93,12 +69,15 @@ class moTreeObjectsLayerCtrl : public wxTreeMultiCtrl, public moIDirectorActions
 		moObjectLayerCtrls m_pEffectsLayers;
 		moObjectLayerCtrls m_pPostEffectsLayers;*/
 
-    private:
-        moTreeObjectLayerCtrl* FindObjectByMob( moMobDescriptor p_MobDesc, TreeMultiItemNode *n=NULL );
+        void    SetSplitPosition( int position );
+        void    SetScrollPosition( int position );
+
+
+        moItemLayerWindow* FindObjectByMob( moMobDescriptor p_MobDesc, TreeMultiItemNode *n=NULL );
 
 };
 
-
+/*
 class moLayersPanelCtrl : public wxSplitterWindow {
 
     public:
@@ -115,6 +94,43 @@ class moLayersPanelCtrl : public wxSplitterWindow {
     DECLARE_EVENT_TABLE()
 
 };
+*/
 
+
+
+class moLayersPanelCtrl : public wxPanel {
+
+    public:
+        moLayersPanelCtrl( wxWindow *parent, wxWindowID id,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        long style = wxNO_BORDER,
+                        const wxString& name = "LayersPanel" );
+        virtual ~moLayersPanelCtrl() {
+        }
+
+        wxSplitterWindow*   TopSplitter;
+        wxSplitterWindow*   BottomSplitter;
+
+        wxWindow*           m_pTimelineRulerWindow;
+        moTimelineRuler*    m_pTimelineRuler;
+
+        wxScrollBar*        ScrollBar;
+
+        wxPanel*            m_pLayersTopCtrl;
+        moTreeLayerCtrl*    m_pLayersTreeCtrl;
+        wxPanel*            m_pLayersBottomCtrl;
+
+        void SashPosition( wxSplitterEvent& event );
+        void SashDClick( wxSplitterEvent& event );
+        void SashChanged( wxSplitterEvent& event );
+        void ScrollTimeline( wxScrollEvent& event );
+
+
+    protected:
+
+    DECLARE_EVENT_TABLE()
+
+};
 
 #endif

@@ -38,7 +38,7 @@ moTextureItemCtrl::moTextureItemCtrl(wxWindow* parent,wxWindowID id,const wxPoin
 	StaticTextSize->SetForegroundColour(wxColour(255,255,0));
 	wxFont StaticTextSizeFont(8,wxSWISS,wxFONTSTYLE_NORMAL,wxBOLD,false,_T("Arial"),wxFONTENCODING_DEFAULT);
 	StaticTextSize->SetFont(StaticTextSizeFont);
-
+	
 	PanelItem->Connect(ID_PANELITEM,wxEVT_LEFT_DOWN,(wxObjectEventFunction)&moTextureItemCtrl::OnMouseEnter,0,this);
 	Connect(wxID_ANY,wxEVT_KILL_FOCUS,(wxObjectEventFunction)&moTextureItemCtrl::OnSetFocus);
 	//*)

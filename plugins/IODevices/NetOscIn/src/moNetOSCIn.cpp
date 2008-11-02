@@ -234,11 +234,13 @@ void moNetOSCIn::Update(moEventList *Eventos)
         moOutlet* pOutlet = GetOutlets()->Get(i);
         if (pOutlet) {
             if (pOutlet->Updated()) {
+                /*
                 MODebug2->Push(moText("NetOscIn messages: ")+IntToStr(pOutlet->GetMessages().Count() )
                              +moText(" [1s int]: ")+IntToStr(pOutlet->GetMessages().Get(0).Get(0).Int())
                              +moText(" [2d int]: ")+IntToStr(pOutlet->GetMessages().Get(0).Get(1).Int())
                              +moText(" [3rd int]: ")+IntToStr(pOutlet->GetMessages().Get(0).Get(2).Int())
                              );
+                             */
             }
         }
     }

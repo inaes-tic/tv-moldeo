@@ -370,10 +370,10 @@ public:
 	{
 		moMathVariable* pvar = new moMathVariable(p_pNewName, 0.0);
 
-		if (p_pNewName != NULL)
+		if (p_pNewName != NULL) {
 			if (p_pNewName[0] == '_') m_pParArray->Add(pvar); // Agregando parámetro.
 			else m_pVarArray->Add(pvar);                      // Agregando variable.
-
+		}
         return pvar->GetValuePointer();
 	}
 private:

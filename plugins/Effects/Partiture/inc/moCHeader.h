@@ -16,7 +16,7 @@ class moCHeader {
     static int claveSolSostenidos[12];
 
 
-    static void HeaderToY( moCNote *p_CNote, float h, float yPent, float& y, bool &sostenido);
+    static void HeaderToY( moCNote *p_CNote, float interline, float& y, bool &sostenido);
 };
 
 #include "moCNote.h"

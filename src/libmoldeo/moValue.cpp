@@ -134,6 +134,13 @@ moData::Copy( const moData& data ) {
     (*this) = data;
 }
 
+
+bool
+moData::IsValid() {
+    return (m_DataType!=MO_DATA_UNDEFINED);
+}
+
+
 void
 moData::SetText( moText ptext ) {
 	m_Text = ptext;
@@ -325,7 +332,7 @@ moData::Text() {
 moText
 moData::TypeToText() {
 
-    switch(m_DataType) {
+    switch((int)m_DataType) {
         case MO_DATA_NUMBER:
             return moText("MO_DATA_NUMBER");
             break;
@@ -445,7 +452,7 @@ moData::TextToType( moText texttype ) {
 moText
 moData::ToText() {
 
-    switch(m_DataType) {
+    switch((int)m_DataType) {
         case MO_DATA_NUMBER:
             return IntToStr( Int() );
             break;
@@ -473,7 +480,7 @@ MOint
 moData::Int() {
 	double rndD;
 	float rndF;
-	switch(m_DataType) {
+	switch((int)m_DataType) {
 		case MO_DATA_NUMBER_INT:
 			return m_Number.m_Int;
 			break;
@@ -501,7 +508,7 @@ MOlonglong
 moData::Long() {
 	double rndD;
 	float rndF;
-	switch(m_DataType) {
+	switch((int)m_DataType) {
 		case MO_DATA_NUMBER_LONG:
 			return m_Number.m_Long;
 			break;
@@ -527,7 +534,7 @@ moData::Long() {
 
 MOfloat
 moData::Float() {
-	switch(m_DataType) {
+	switch((int)m_DataType) {
 		case MO_DATA_NUMBER_FLOAT:
 			return m_Number.m_Float;
 			break;
@@ -548,7 +555,7 @@ moData::Float() {
 
 MOdouble
 moData::Double() {
-	switch(m_DataType) {
+	switch((int)m_DataType) {
 		case MO_DATA_NUMBER_DOUBLE:
 			return m_Number.m_Double;
 			break;
@@ -571,7 +578,7 @@ MOchar
 moData::Char() {
 	float rndF;
 	double rndD;
-	switch(m_DataType) {
+	switch((int)m_DataType) {
 		case MO_DATA_NUMBER_CHAR:
 			return m_Number.m_Char;
 			break;
@@ -610,7 +617,9 @@ moData::Pointer() {
                 return (MOpointer) PTI->GetTexture(0);
             }
         }
-    } else return m_Number.m_Pointer;
+    }
+
+    return m_Number.m_Pointer;
 }
 
 MOulong
@@ -787,9 +796,10 @@ moData::GetGLId(MOfloat p_fade, moTextFilterParam *p_filterparam ) {
 moValueDefinition::moValueDefinition() {
     m_Min = -1.0;
     m_Max = -1.0;
-    m_CodeName = "";
-    m_Attribute = "";
+    m_CodeName = moText("");
+    m_Attribute = moText("");
     m_Index = -1;
+    m_Type =  MO_VALUE_UNDEFINED;
 }
 
 moValueDefinition::moValueDefinition(const moValueDefinition &src) {
@@ -894,6 +904,11 @@ moValueDefinition::SetAttribute( moText p_attribute ) {
     m_Attribute = p_attribute;
 }
 
+bool
+moValueDefinition::IsValid() {
+    return (m_Type!=MO_VALUE_UNDEFINED);
+}
+
 //================================================================
 //	moValueBase
 //================================================================
@@ -976,6 +991,26 @@ moValue::moValue( const moText &strvalue , const moText &type ) {
 	AddSubValue( strvalue, type );
 }
 
+
+moValue::moValue( const moText &strvalue, const moText &type, const moText &strvalue2, const moText &type2 ) {
+	AddSubValue( strvalue, type );
+	AddSubValue( strvalue2, type2 );
+
+}
+
+moValue::moValue( const moText &strvalue, const moText &type, const moText &strvalue2, const moText &type2, const moText &strvalue3, const moText &type3 ) {
+	AddSubValue( strvalue, type );
+	AddSubValue( strvalue2, type2 );
+	AddSubValue( strvalue3, type3 );
+}
+moValue::moValue( const moText &strvalue, const moText &type, const moText &strvalue2, const moText &type2, const moText &strvalue3, const moText &type3, const moText &strvalue4, const moText &type4 ) {
+	AddSubValue( strvalue, type );
+	AddSubValue( strvalue2, type2 );
+	AddSubValue( strvalue3, type3 );
+	AddSubValue( strvalue4, type4 );
+}
+
+
 void moValue::RemoveSubValue( MOint p_indexsubvalue ) {
     m_List.Remove( p_indexsubvalue );
 }
@@ -1040,7 +1075,7 @@ moValue::AddSubValue( const moText &strvalue, const moText &type ) {
 
 	} else if ( (moText)type== moText("LONG")) {
 
-		MOlonglong tmp2;
+		MOlong tmp2;
 		sscanf( moText(strvalue), "%li", &tmp2);
 		valuebase.SetLong( tmp2 );
 		valuebase.SetType( MO_VALUE_NUM_LONG );

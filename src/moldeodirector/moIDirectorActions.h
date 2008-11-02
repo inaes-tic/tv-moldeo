@@ -36,6 +36,26 @@
 
 #include "moDirectorTypes.h"
 
+// ----------------------------------------------------------------------------
+// private classes
+// ----------------------------------------------------------------------------
+
+// Define a new application type, each program should derive a class from wxApp
+class moDirectorApp : public wxApp
+{
+public:
+
+	// override base class virtuals
+    // ----------------------------
+
+    // this one is called on application startup and is a good place for the app
+    // initialization(doing it here and not in the ctor allows to have an error
+    // return: if OnInit() returns false, the application terminates)
+    virtual bool OnInit();
+};
+
+DECLARE_APP(moDirectorApp)
+
 #define MO_ITEM_ID_UNDEFINED		65536
 
 enum moDirectorStatus {
@@ -109,10 +129,9 @@ class  moProjectDescriptor {
 public:
 
 	moProjectDescriptor() {
-		m_configname = "";
-		m_configpath = "";
-		m_fullconfigname = "";
-		m_pMOBS = NULL;
+		m_configname = moText("");
+		m_configpath = moText("");
+		m_fullconfigname = moText("");
 	}
 
 	moProjectDescriptor( moText p_fullconfigname ) {
@@ -127,14 +146,21 @@ public:
 		m_configname = moText((char*)cfilename);
 		m_configpath = moText((char*)cfilepath);
 		m_fullconfigname = p_fullconfigname;
-		m_pMOBS = NULL;
 	}
+
+    moProjectDescriptor& operator = ( const moProjectDescriptor& mpd) {
+
+        m_configname = mpd.m_configname;
+        m_configpath = mpd.m_configpath;
+        m_fullconfigname = mpd.m_fullconfigname;
+
+        return(*this);
+    }
 
 	moProjectDescriptor( moText p_configname, moText p_configpath) {
 		m_configname = p_configname;
 		m_configpath = p_configpath;
 		m_fullconfigname = (moText)p_configpath + (moText)p_configname;
-		m_pMOBS = NULL;
 	}
 
 	void Set( moText p_configpath, moText p_configname ) {
@@ -146,18 +172,6 @@ public:
 	moText GetConfigName() { return m_configname; }
 	moText GetConfigPath() { return m_configpath; }
 	moText GetFullConfigName() { return m_fullconfigname; }
-
-	int GetMobsCount( moMoldeoObjectType p_type) {
-		MOint c = 0;
-		if (m_pMOBS) {
-			for(MOuint i=0; i<m_pMOBS->Count();i++) {
-				if (m_pMOBS->Get(i)->GetType()==p_type) c++;
-			}
-		}
-		return c;
-	}
-
-	moMoldeoObjects*	m_pMOBS;
 
 //REQUIRED MEMBERS TO GetProject
 public:
@@ -515,6 +529,15 @@ public:
 	    m_ProjectDescriptor = p_ProjectDescriptor;
     }
 
+    moMobDescriptor& operator = ( const moMobDescriptor& mbd) {
+
+        m_MobDefinition = mbd.m_MobDefinition;
+        m_ProjectDescriptor = mbd.m_ProjectDescriptor;
+        m_MobState = mbd.m_MobState;
+
+        return(*this);
+    }
+
     void SetProjectDescriptor( moProjectDescriptor p_ProjectDescriptor ) {
         m_ProjectDescriptor = p_ProjectDescriptor;
     }
@@ -712,7 +735,7 @@ public:
 	virtual moDirectorStatus ConsoleLoop() { return MO_ACTIONHANDLER(ConsoleLoop()); }
 	virtual moDirectorStatus SetView( int x, int y, int w, int h ) { return MO_ACTIONHANDLER(SetView(x,y,w,h)); }
 	virtual void ViewSwapBuffers() { MO_ACTIONHANDLER_VOID(ViewSwapBuffers()); }
-	virtual MO_HANDLE GetHandle() { MO_ACTIONHANDLER_HANDLE(GetHandle()); }
+	virtual MO_HANDLE GetHandle() { return MO_ACTIONHANDLER_HANDLE(GetHandle()); }
 
     /**
     *   Hace foco sobre la ventana

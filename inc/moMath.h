@@ -322,7 +322,8 @@ public:
     inline static int ScaledFloatToInt(float fFloat, int iLog)
     {
 		int iInt;
-        int iShift = 150 - iLog - ((*(int*)(&fFloat) >> 23) & 0xFF);
+        int iShift;
+        iShift = 150 - iLog - ((*(int*)(&fFloat) >> 23) & 0xFF);
         if ( iShift < 24 )
         {
             iInt = ((*(int*)(&fFloat) & 0x007FFFFF) | 0x00800000) >> iShift;

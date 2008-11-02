@@ -130,9 +130,9 @@ class LIBMOLDEO_API moMobDefinition
 {
 	public:
 		moMobDefinition() {
-		    m_Name = "";
-		    m_ConfigName = "";
-		    m_MoldeoLabelName = "";
+		    m_Name = moText("");
+		    m_ConfigName = moText("");
+		    m_MoldeoLabelName = moText("");
 		    m_MoldeoId = -1;
 		    m_Type = MO_OBJECT_UNDEFINED;
         }
@@ -153,6 +153,11 @@ class LIBMOLDEO_API moMobDefinition
 		    m_MoldeoLabelName = mb.m_MoldeoLabelName;
 		    m_MoldeoId = mb.m_MoldeoId;
 		    m_MobIndex = mb.m_MobIndex;
+		    return(*this);
+        }
+
+        bool    IsValid() {
+            return ( m_Type != MO_OBJECT_UNDEFINED);
         }
 
         moText GetName() {

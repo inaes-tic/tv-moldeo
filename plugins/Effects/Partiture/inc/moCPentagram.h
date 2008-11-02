@@ -12,9 +12,9 @@ class moCPentagram {
         moCPentagram();
         virtual ~moCPentagram();
 
-        void Init( moConfig* pConfig );
+        void Init( moConfig* pConfigPartiture );
 
-        void Draw( float x, float y, float w, float h, moEffectState& state );
+        void Draw( int header, int m_inter_line, int start_draw_line, int stop_draw_line, int m_stroke_width, float x_track, float y_track, float w_track, float h_track, moEffectState& state );
 
     private:
 

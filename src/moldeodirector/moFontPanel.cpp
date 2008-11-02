@@ -27,7 +27,7 @@ moFontPanel::moFontPanel(wxWindow* parent,wxWindowID id,const wxPoint& pos,const
 	TextCtrlFont->SetFont(TextCtrlFontFont);
 	BitmapButtonImport = new wxBitmapButton(this, ID_BITMAPBUTTONIMPORT, wxBitmap(wxImage(_T("../../doc/icons/import.png"))), wxPoint(160,16), wxSize(13,13), wxBU_AUTODRAW, wxDefaultValidator, _T("ID_BITMAPBUTTONIMPORT"));
 	BitmapButtonImport->SetDefault();
-
+	
 	Connect(ID_TEXTCTRL1,wxEVT_COMMAND_TEXT_UPDATED,(wxObjectEventFunction)&moFontPanel::OnTextCtrlFontText);
 	Connect(ID_BITMAPBUTTONIMPORT,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&moFontPanel::OnBitmapButton1Click);
 	//*)

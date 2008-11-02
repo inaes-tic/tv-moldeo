@@ -3,11 +3,11 @@
 	<FileVersion major="1" minor="6" />
 	<Project>
 		<Option title="icon3d" />
-		<Option pch_mode="0" />
+		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="debug">
-				<Option output="..\..\..\bin\mingw\plugins\effects\icon3dd.dll" prefix_auto="0" extension_auto="0" />
+				<Option output="..\..\..\bin\mingw\plugins\effects\icon3d_d" prefix_auto="1" extension_auto="1" />
 				<Option object_output=".wobjsd" />
 				<Option deps_output=".depsd" />
 				<Option type="3" />
@@ -15,6 +15,7 @@
 				<Option createDefFile="1" />
 				<Option createStaticLib="1" />
 				<Compiler>
+					<Add option="-Wall" />
 					<Add option="-g" />
 				</Compiler>
 				<Linker>
@@ -32,7 +33,7 @@
 				</Linker>
 			</Target>
 			<Target title="release">
-				<Option output="..\..\..\bin\mingw\plugins\effects\icon3d.dll" prefix_auto="0" extension_auto="0" />
+				<Option output="..\..\..\bin\mingw\plugins\effects\icon3d" prefix_auto="1" extension_auto="1" />
 				<Option object_output=".wobjs" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -73,7 +74,6 @@
 			<Add directory="..\..\..\..\..\externlibs\SDL_image\include" />
 			<Add directory="..\..\..\..\..\externlibs\SDL_net\include" />
 			<Add directory="..\..\..\..\..\externlibs\gstreamer\include" />
-
 			<Add directory="..\..\..\..\..\externlibs\gstreamer\include\glib-2.0" />
 			<Add directory="..\..\..\..\..\externlibs\gstreamer\lib\glib-2.0\include" />
 		</Compiler>

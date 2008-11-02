@@ -154,7 +154,7 @@ moDirectorConsole::OpenProject( moProjectDescriptor p_projectdescriptor )  {//lo
                  (mMob.GetMobDefinition().GetType()!=MO_OBJECT_RESOURCE) &&
                  (mMob.GetMobDefinition().GetType()!=MO_OBJECT_MASTEREFFECT) ) {
 
-                for( int j=0; j<pParams.Count(); j++ ) {
+                for( int j=0; j<(int)pParams.Count(); j++ ) {
 
                     moParameterDescriptor pParam = pParams[j];
 
@@ -202,9 +202,13 @@ moDirectorConsole::CloseProject() {
 moDirectorStatus
 moDirectorConsole::SaveProject() { //save a console.cfg file with their effects.cfg
 
-    m_Config.SaveConfig();
-
-	return MO_DIRECTOR_STATUS_OK;
+    if ( m_Config.SaveConfig() == MO_CONFIG_OK ) {
+        ShowMessage( moText("Project saved succesfully.") );
+        return MO_DIRECTOR_STATUS_OK;
+    } else {
+        ErrorMessage(moText("Failed to save project! Retry later."));
+        return MO_DIRECTOR_STATUS_ERROR;
+    }
 }
 
 moDirectorStatus
@@ -280,7 +284,7 @@ moMobDescriptors moDirectorConsole::GetMobDescriptors() {
             return moResourceDescriptor();
         }
 
-        switch( p_ResourceDescriptor.GetResourceDefinition().GetType() ) {
+        switch( (int)p_ResourceDescriptor.GetResourceDefinition().GetType() ) {
             case MO_RESOURCETYPE_TEXTURE:
 
                 //moTextureDescriptor TexDescriptor( );
@@ -346,7 +350,7 @@ moMobDescriptors moDirectorConsole::GetMobDescriptors() {
 
         moTextureManager* pTM = NULL;
 
-        switch( p_ResourceType ) {
+        switch( (int)p_ResourceType ) {
             case MO_RESOURCETYPE_TEXTURE:
 
                 pTM = m_pResourceManager->GetTextureMan();
@@ -481,7 +485,7 @@ moMobDescriptors moDirectorConsole::GetMobDescriptors() {
         moMoldeoObject* pMOB = NULL;
         moMobIndex& MobIndex( p_MobDesc.GetMobDefinition().GetMobIndex() );
 
-	    switch(pMobDef.GetType()) {
+	    switch( (int) pMobDef.GetType()) {
 	        case MO_OBJECT_PREEFFECT:
                 MobIndex.SetParamIndex( m_Config.GetParamIndex("preeffect") );
                 MobIndex.SetValueIndex( m_EffectManager.PreEffects().Count() );
@@ -504,7 +508,7 @@ moMobDescriptors moDirectorConsole::GetMobDescriptors() {
                 if (pMOB) pMOB->GetConfig()->Set( pMOB->GetName(), "posteffect" );
                 break;
             case MO_OBJECT_IODEVICE:
-                MobIndex.SetParamIndex( m_Config.GetParamIndex("iodevices") );
+                MobIndex.SetParamIndex( m_Config.GetParamIndex("devices") );
                 MobIndex.SetValueIndex( m_pIODeviceManager->IODevices().Count() );
                 pMOB = (moMoldeoObject*) m_pIODeviceManager->NewIODevice( pMobDef.GetName(), pMobDef.GetConfigName(), pMobDef.GetLabelName(), MO_OBJECT_IODEVICE, MobIndex.GetParamIndex(), MobIndex.GetValueIndex() );
                 if (pMOB) pMOB->GetConfig()->Set( pMOB->GetName(), "iodevice" );
@@ -562,7 +566,7 @@ moMobDescriptors moDirectorConsole::GetMobDescriptors() {
                 LogError( moText("moDirectorConsole::NewMob Config filename undefined" ) );
             }
         } else {
-            LogError( moText("moDirectorConsole::NewMob Couldn't create effect" ) );
+            LogError( moText("moDirectorConsole::NewMob Couldn't create effect: " ) + pMobDef.GetName() );
         }
 
         return MO_DIRECTOR_STATUS_ERROR;
@@ -639,7 +643,7 @@ moMobDescriptors moDirectorConsole::GetMobDescriptors() {
 
 		//if ( 0<=idx && idx < (int)m_EffectManager.Effects.Count() ) {
 		//for ( int idx=0; idx < (int)m_MoldeoObjects.Count(); idx++ ) {
-        switch( p_MobDesc.GetMobDefinition().GetType() ) {
+        switch( (int) p_MobDesc.GetMobDefinition().GetType() ) {
             case MO_OBJECT_PREEFFECT:
                 pMOB = (moMoldeoObject*) m_EffectManager.PreEffects().Get(idx);
                 break;
@@ -648,6 +652,15 @@ moMobDescriptors moDirectorConsole::GetMobDescriptors() {
                 break;
             case MO_OBJECT_POSTEFFECT:
                 pMOB = (moMoldeoObject*) m_EffectManager.PostEffects().Get(idx);
+                break;
+            case MO_OBJECT_MASTEREFFECT:
+                pMOB = (moMoldeoObject*) m_EffectManager.MasterEffects().Get(idx);
+                break;
+            case MO_OBJECT_IODEVICE:
+                pMOB = (moMoldeoObject*) m_pIODeviceManager->IODevices().Get(idx);
+                break;
+            case MO_OBJECT_RESOURCE:
+                pMOB = (moMoldeoObject*) m_pResourceManager->Resources().Get(idx);
                 break;
         }
 
@@ -682,12 +695,16 @@ moMobDescriptors moDirectorConsole::GetMobDescriptors() {
                 LoadConnections();
 
                 MOint idx = p_MobDesc.GetMobDefinition().GetMobIndex().GetValueIndex();
+                moMobIndex mobindex = p_MobDesc.GetMobDefinition().GetMobIndex();
                 if (idx>-1) {
-                    switch( pMOB->GetType() ) {
+                    switch( (int)pMOB->GetType() ) {
                         case MO_OBJECT_PREEFFECT:
                         case MO_OBJECT_EFFECT:
                         case MO_OBJECT_POSTEFFECT:
-                            m_EffectManager.RemoveEffect( idx, pMOB->GetType());
+                            if (m_EffectManager.RemoveEffect( idx, pMOB->GetType())) {
+                                //remove from config
+                                m_Config.GetParam( mobindex.GetParamIndex() ).DeleteValue( mobindex.GetValueIndex() );
+                            }
                             break;
                     }
                 }
@@ -935,10 +952,10 @@ moDirectorConsole::SetParameter( moParameterDescriptor  p_ParameterDesc ) {
 
                 firsthaschange = !( Value.GetSubValue(0).Text() == p_ValueDesc.GetValue().GetSubValue(0).Text() );
 
-                if ( Value.GetSubValueCount() >= 1 ) {
+                if ( Value.GetSubValueCount() > 1 ) {
                     secondhaschange = !( Value.GetSubValue(1).Text() == p_ValueDesc.GetValue().GetSubValue(1).Text() );
                 }
-                if ( Value.GetSubValueCount() >= 2 ) {
+                if ( Value.GetSubValueCount() > 2 ) {
                     thirdhaschange = !( Value.GetSubValue(2).Text() == p_ValueDesc.GetValue().GetSubValue(2).Text() );
                 }
 
@@ -990,9 +1007,14 @@ moDirectorConsole::SetParameter( moParameterDescriptor  p_ParameterDesc ) {
                         break;
 
                     case MO_PARAM_FONT:
-                        pFont = m_pResourceManager->GetFontMan()->AddFont( Value.GetSubValue(0).Text() );
-                        if (pFont)
-                            Value.GetSubValue(0).SetFont( pFont );
+                        if ( Value.GetSubValueCount() == 3 ) {
+                            pFont = m_pResourceManager->GetFontMan()->GetFont( Value, true );
+                            if (pFont) {
+                                Value.GetSubValue(0).SetFont( pFont );
+                                //Value.GetSubValue(2).SetInt();
+                                return MO_DIRECTOR_STATUS_OK;
+                            } else return MO_DIRECTOR_STATUS_ERROR;
+                        } else return MO_DIRECTOR_STATUS_ERROR;
                         break;
 
                     case MO_PARAM_TEXTURE:
@@ -1084,7 +1106,7 @@ moDirectorConsole::SetParameter( moParameterDescriptor  p_ParameterDesc ) {
                                 //tenemos que usar los filtros-param
                                 moTextFilterParam*  pFilterParam = new moTextFilterParam();
 
-                                for( int i=4; i<Value.GetSubValueCount(); i++) {
+                                for( int i=4; i<(int)Value.GetSubValueCount(); i++) {
                                     //si o si tenemos que usar los codes... o names para los subvalores...
                                     moValueBase& vbase( Value.GetSubValue(i) );
 
@@ -1191,9 +1213,9 @@ moValueDescriptors  moDirectorConsole::GetValueDescriptors( moParameterDescripto
 
             moParam& Param( pConfig->GetParam( ParamDef.GetIndex() ) );
 
-            for( int i=0; i< Param.GetValuesCount(); i++ ) {
+            for( int i=0; i< (int)Param.GetValuesCount(); i++ ) {
 
-                moValue& Value( Param.GetValue( i ) );
+                //moValue& Value( Param.GetValue( i ) );
 
                 moValueIndex ix;
                 ix.m_ParamIndex = Param.GetParamDefinition().GetIndex();

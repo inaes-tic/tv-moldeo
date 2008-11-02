@@ -29,6 +29,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-w" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -43,16 +44,16 @@
 		</VirtualTargets>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add option="`pkg-config sdl --cflags`" />
 			<Add directory="../../inc" />
 			<Add directory="../../inc/3ds" />
 		</Compiler>
 		<Linker>
+			<Add option="`pkg-config sdl --libs`" />
 			<Add library="glut" />
 			<Add library="GLEW" />
 			<Add library="GLU" />
 			<Add library="gle" />
-			<Add library="freetype" />
-			<Add library="freeimage" />
 			<Add library="openal" />
 			<Add library="alut" />
 			<Add library="Cg" />

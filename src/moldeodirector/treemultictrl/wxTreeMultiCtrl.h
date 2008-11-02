@@ -1114,7 +1114,7 @@ private:
 
     DECLARE_EVENT_TABLE()
 
-    friend class moTreeObjectsLayerCtrl;
+    friend class moTreeLayerCtrl;
 };
 
 #endif

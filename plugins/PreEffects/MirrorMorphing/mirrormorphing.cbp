@@ -9,7 +9,7 @@
 		<Option compiler="0"/>
 		<Build>
 			<Target title="debug">
-				<Option output="..\..\..\bin\mingw\plugins\preeffects\mirrormorphingd.dll"/>
+				<Option output="..\..\..\bin\mingw\plugins\preeffects\mirrormorphing_d.dll"/>
 				<Option working_dir="."/>
 				<Option object_output=".objsd"/>
 				<Option deps_output=".depsd"/>

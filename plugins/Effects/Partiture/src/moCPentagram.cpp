@@ -14,16 +14,26 @@ moCPentagram::~moCPentagram() {
 
 }
 
-void moCPentagram::Init( moConfig* pConfig ) {
+void moCPentagram::Init( moConfig* pConfigPartiture ) {
 
-    m_pConfig = pConfig;
+    m_pConfig = pConfigPartiture;
 
 }
 
-void moCPentagram::Draw( float x, float y, float w, float h, moEffectState& state ) {
+void moCPentagram::Draw( int header, int m_inter_line, int start_draw_line, int stop_draw_line, int m_stroke_width, float x_track, float y_track, float w_track, float h_track, moEffectState& state ) {
 
     int i = 0;
-    int dy = h / 4;
+    float displace = 0.5 * m_inter_line;
+
+    //OOJO!!! esta informacion dependera del
+        //header.... (clave)
+            //percusion, header -> una sola linea en el medio...
+    switch(header) {
+
+        default:
+            break;
+    }
+
 
     glBindTexture( GL_TEXTURE_2D, 0);
     //moTexture* pImage = (moTexture*) m_Config[moR(PARTITURE_PENTAGRAMATEXTURE)].GetData()->Pointer();
@@ -41,16 +51,16 @@ void moCPentagram::Draw( float x, float y, float w, float h, moEffectState& stat
 
     glBegin(GL_QUADS);
         glTexCoord2f( 0, 0);
-        glVertex2f( x, y-dy*3 );
+        glVertex2f( x_track - w_track/2, y_track - h_track/2 );
 
         glTexCoord2f( 0, 1);
-        glVertex2f(  x+w, y-dy*3 );
+        glVertex2f(  x_track + w_track/2, y_track - h_track/2 );
 
         glTexCoord2f( 1, 1);
-        glVertex2f(  x+w,  y + h + dy*3 );
+        glVertex2f(  x_track + w_track/2,  y_track + h_track/2 );
 
         glTexCoord2f( 1, 0);
-        glVertex2f( x,  y + h + dy*3 );
+        glVertex2f( x_track - w_track/2,  y_track + h_track/2 );
     glEnd();
 
 	moEffect::SetColor( m_pConfig->GetParam(moR(PARTITURE_PENTAGRAMAFRONT)).GetValue(),
@@ -58,19 +68,19 @@ void moCPentagram::Draw( float x, float y, float w, float h, moEffectState& stat
 
     //glColor4f( 1, 1, 1, 1);
 
-    for( i=0; i<5; i++) {
+    for( i=start_draw_line; i<stop_draw_line; i++) {
         glBegin(GL_QUADS);
             glTexCoord2f( 0, 0);
-            glVertex2f( x, y + dy*i );
+            glVertex2f( x_track-w_track/2, y_track - h_track/2  + m_inter_line*i - m_stroke_width/2 + displace );
 
             glTexCoord2f( 0, 1);
-            glVertex2f(  x+w, y + dy*i );
+            glVertex2f(  x_track+w_track/2, y_track - h_track/2 + m_inter_line*i - m_stroke_width/2 + displace );
 
             glTexCoord2f( 1, 1);
-            glVertex2f(  x+w,  y + dy*i + 2 );
+            glVertex2f(  x_track+w_track/2,  y_track - h_track/2 + m_inter_line*i + m_stroke_width/2 + displace );
 
             glTexCoord2f( 1, 0);
-            glVertex2f( x,  y + dy*i + 2 );
+            glVertex2f( x_track-w_track/2,  y_track - h_track/2 + m_inter_line*i + m_stroke_width/2 + displace );
         glEnd();
     }
 

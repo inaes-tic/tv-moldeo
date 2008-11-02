@@ -190,17 +190,17 @@ LIBMOLDEO_API moPostEffect* moNewPostEffect(moText effect_name, moPostPluginsArr
     if(!stricmp(effect_name, "nil")) return NULL;
 
     #if defined(_WIN32)
-    complete_name = "plugins/posteffects/" + effect_name;
+    complete_name = moText("plugins/posteffects/") + (moText)effect_name;
 		#ifdef _DEBUG
-		complete_name+= "d";
+		complete_name+= moText("_d");
 		#endif
-    complete_name += ".dll";
+    complete_name += moText(".dll");
     #else
-    complete_name = "plugins/posteffects/lib" + effect_name;
+    complete_name = moText("plugins/posteffects/lib") + (moText)effect_name;
 		#ifdef _DEBUG
-		complete_name+= "d";
+		complete_name+= moText("_d");
 		#endif
-    complete_name += ".so";
+    complete_name += moText(".so");
     #endif
 		//printf("completename:%s\n",complete_name);
 
@@ -242,15 +242,15 @@ LIBMOLDEO_API void moDeletePostEffect(moPostEffect *posteffect, moPostPluginsArr
     #if defined(_WIN32)
     complete_name = moText("plugins/posteffects/") + moText(posteffect->GetName());
 		#ifdef _DEBUG
-		complete_name+= "d";
+		complete_name+= moText("_d");
 		#endif
-    complete_name += ".dll";
+    complete_name += moText(".dll");
     #else
     complete_name = moText("plugins/posteffects/lib") + moText(posteffect->GetName());
 		#ifdef _DEBUG
-		complete_name+= "d";
+		complete_name+= moText("_d");
 		#endif
-    complete_name += ".so";
+    complete_name += moText(".so");
     #endif
 
     // Indice del plugin que se utilizara para crear a este efecto.

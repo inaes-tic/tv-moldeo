@@ -7,7 +7,7 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="debug">
-				<Option output="..\..\..\bin\mingw\plugins\iodevices\midid.dll" prefix_auto="0" extension_auto="0" />
+				<Option output="..\..\..\bin\mingw\plugins\iodevices\midi_d.dll" prefix_auto="0" extension_auto="0" />
 				<Option object_output=".wobjsd" />
 				<Option deps_output=".depsd" />
 				<Option type="3" />

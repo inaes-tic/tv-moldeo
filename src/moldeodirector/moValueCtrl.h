@@ -72,6 +72,7 @@ class moValueCtrl : public wxPanel, public moIDirectorActions {
         wxSpinCtrl* m_pSpinCtrl;
         wxComboBox* m_pBlendingCtrl;
         wxComboBox* m_pPolygonModeCtrl;
+        wxComboBox* m_pFontTypeCtrl;
 
         wxTextCtrl* m_pTextCtrl;
         wxTextCtrl*	m_pTextCtrlR;
@@ -88,6 +89,7 @@ class moValueCtrl : public wxPanel, public moIDirectorActions {
 
         wxString blendings[MO_BLENDINGS];
         wxString polygonmodes[MO_POLYGONMODES];
+        wxString fonttypes[MO_FONT_TYPES];
 
         bool    m_bInit;
         bool block;
