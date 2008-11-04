@@ -84,6 +84,7 @@ MOboolean moEffectPartiture::Init() {
 	moDefineParamIndex( PARTITURE_PHASE, moText("phase") );
 	moDefineParamIndex( PARTITURE_TEXTURE, moText("texture") );
 	moDefineParamIndex( PARTITURE_FONT, moText("font") );
+	moDefineParamIndex( PARTITURE_SKETCHFONT, moText("sketchfont") );
 	moDefineParamIndex( PARTITURE_SCROLLTIME, moText("scrolltime") );
     moDefineParamIndex( PARTITURE_SPECULAR, moText("specular") );
 	moDefineParamIndex( PARTITURE_DIFFUSE, moText("diffuse") );
@@ -117,14 +118,14 @@ MOboolean moEffectPartiture::Init() {
 
 	g_ViewMode = GL_TRIANGLES;
 
-    m_pFont = NULL;
-    m_pFont = m_pResourceManager->GetFontMan()->GetFont(0);
+	m_pFont = m_Config[moR(PARTITURE_FONT)][MO_SELECTED][0].GetData()->Font();
+	m_pSketchFont = m_Config[moR(PARTITURE_SKETCHFONT)][MO_SELECTED][0].GetData()->Font();
 
     for( int ii=0; ii<PARTITURE_MAXTRACKS ; ii++ ) {
 
         CTracks[ii].Init( GetConfig() );
         CTracks[ii].SetMode( DYNAMIC_MODE, 400 );
-        CTracks[ii].SetFont(m_pFont);
+        CTracks[ii].SetFonts( m_pFont, m_pSketchFont );
         CTracks[ii].m_number = ii;
 
     }
@@ -161,6 +162,7 @@ void moEffectPartiture::Draw( moTempo* tempogral,moEffectState* parentstate)
 	//m_pResourceManager->GetGuiMan()->DisplayInfoWindow( 20 , 20, 200, 20,  Textos);
 
 	m_pFont = m_Config[moR(PARTITURE_FONT)][MO_SELECTED][0].GetData()->Font();
+	m_pSketchFont = m_Config[moR(PARTITURE_SKETCHFONT)][MO_SELECTED][0].GetData()->Font();
 	//m_pFont = m_pResourceManager->GetFontMan()->GetFont(0);
 
 	glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
@@ -189,6 +191,7 @@ void moEffectPartiture::Draw( moTempo* tempogral,moEffectState* parentstate)
 
         //CTracks[t].SetPosition( 0, yPent+t*hPent*2.5 );
         //CTracks[t].SetSize( m_pResourceManager->GetRenderMan()->ScreenWidth(), hPent);
+        CTracks[t].SetFonts( m_pFont, m_pSketchFont );
         CTracks[t].SetPosition( 0, 0 );
         CTracks[t].SetSize( 162, 100 );
         CTracks[t].SetScrollTime( scrolltime );
@@ -278,8 +281,8 @@ void moEffectPartiture::Update( moEventList* p_EventList ) {
             timecode = this->state.tempo.ticks;
 
             //1.0: right top most
-            moCNote* pCNote = new moCNote( 1.0, timecode, track, header, note, velocity, dynamic, modulator, tiempo );
-            pCNote->m_pFont = m_pFont;
+            moCNote* pCNote = new moCNote( 1.0, timecode, track, header, note, velocity, dynamic, modulator, tiempo, m_pFont, m_pSketchFont );
+
 
             if ( 0<=track && track<PARTITURE_MAXTRACKS) {
                 if (pCNote) {
@@ -369,6 +372,7 @@ moEffectPartiture::GetDefinition( moConfigDefinition *p_configdefinition ) {
 	p_configdefinition = moEffect::GetDefinition( p_configdefinition );
 	p_configdefinition->Add( moText("texture"), MO_PARAM_TEXTURE, PARTITURE_TEXTURE, moValue( "partiture.jpg", "TXT") );
     p_configdefinition->Add( moText("font"), MO_PARAM_FONT, PARTITURE_FONT, moValue( "fonts/arial.ttf", "TXT") );
+    p_configdefinition->Add( moText("sketchfont"), MO_PARAM_FONT, PARTITURE_SKETCHFONT, moValue( "fonts/Tamburo.ttf", "TXT","0","NUM","12","NUM") );
 	p_configdefinition->Add( moText("scrolltime"), MO_PARAM_NUMERIC, PARTITURE_SCROLLTIME, moValue("4000","NUM") );
 	p_configdefinition->Add( moText("specular"), MO_PARAM_COLOR, PARTITURE_SPECULAR );
 	p_configdefinition->Add( moText("diffuse"), MO_PARAM_COLOR, PARTITURE_DIFFUSE );

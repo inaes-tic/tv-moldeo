@@ -24,7 +24,7 @@ class moCNote  {
         * @param    p_time  time
         * @param
         */
-        moCNote( float p_x, MOulong p_time, int p_track, int p_header, int p_note, int p_velocity, moText p_dynamic, int p_modulador, int p_tiempo, moFont* pFont = NULL );
+        moCNote( float p_x, MOulong p_time, int p_track, int p_header, int p_note, int p_velocity, moText p_dynamic, int p_modulador, int p_tiempo, moFont* pFont = NULL, moFont* pSketchFont = NULL );
 
         /** Drawing function for CNote
         *
@@ -37,6 +37,7 @@ class moCNote  {
         void DrawTrail( moCNote* pCNoteAnterior, float note_delay_x, float w_track, float h_track, float interline, moEffectState& state );
         void DrawTriangle( float note_delay_x, float w_track, float h_track, float inter_line, float triangle_length, moEffectState& state );
 
+        void SetFonts( moFont* pFont, moFont *pSketchFont );
 
         /**
         *
@@ -163,6 +164,7 @@ class moCNote  {
         float m_x;
 
         moFont* m_pFont;
+        moFont* m_pSketchFont;
 
         bool    m_grouphead;
 

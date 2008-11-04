@@ -123,7 +123,7 @@ class moCTrack : public moAbstract {
         void SetScrollTime( int scrolltime );
         int GetScrollTime();
 
-        void SetFont(moFont* pFont);
+        void SetFonts( moFont* pFont, moFont* pSketchFont );
 
         /**
         * Dibuja el track en la posicion centrada en x e y, con el ancho w, y el alto h
@@ -161,6 +161,7 @@ class moCTrack : public moAbstract {
 
 
         moFont*         m_pFont;
+        moFont*         m_pSketchFont;
 };
 
 
