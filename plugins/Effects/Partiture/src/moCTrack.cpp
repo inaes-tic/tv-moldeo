@@ -116,8 +116,9 @@ int moCTrack::GetScrollTime() {
     return m_scrolltime;
 }
 
-void moCTrack::SetFont(moFont* pFont) {
+void moCTrack::SetFonts( moFont* pFont, moFont* pSketchFont ) {
         m_pFont = pFont;
+        m_pSketchFont = pSketchFont;
 }
 
 void moCTrack::DrawGroupToPlayLine( moCNotes &NoteGroup, moEffectState& state ) {

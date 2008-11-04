@@ -17,7 +17,7 @@ moCNote::moCNote() {
         m_grouphead = false;
 }
 
-moCNote::moCNote( float p_x, MOulong p_time, int p_track, int p_header, int p_note, int p_velocity, moText p_dynamic, int p_modulador, int p_tiempo, moFont* pFont ) {
+moCNote::moCNote( float p_x, MOulong p_time, int p_track, int p_header, int p_note, int p_velocity, moText p_dynamic, int p_modulador, int p_tiempo, moFont* pFont, moFont* pSketchFont ) {
         m_x = p_x;
         m_time = p_time;
         m_track = p_track;
@@ -28,8 +28,17 @@ moCNote::moCNote( float p_x, MOulong p_time, int p_track, int p_header, int p_no
         m_modulador = p_modulador;
         m_tiempo = p_tiempo;
         m_pFont = pFont;
+        m_pSketchFont = pSketchFont;
         m_grouphead = false;
 }
+
+void moCNote::SetFonts( moFont* pFont, moFont *pSketchFont ) {
+
+    m_pFont = pFont;
+    m_pSketchFont = pSketchFont;
+
+}
+
 
 void moCNote::DrawTriangle( float note_delay_x, float w_track, float h_track, float inter_line, float triangle_length, moEffectState& state ) {
 
