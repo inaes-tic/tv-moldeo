@@ -10,7 +10,6 @@
 
 #include <wx/scrolwin.h>
 #include <wx/bitmap.h>
-#include <wx/ogl/ogl.h>
 
 #ifdef MO_WXART2D
 
