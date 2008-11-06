@@ -54,8 +54,10 @@ public:
     a2dObject* Clone( CloneOptions options ) const;
 
     //! Pins of this class can only connect to ElementWire pins and ElementObject pins
-    static a2dPinClass* ElementOutlet;
-    static a2dPinClass* ElementInlet;
+
+    static a2dPinClass* ElementObject;
+    //static a2dPinClass* ElementOutlet;
+    //static a2dPinClass* ElementInlet;
     //! Pins of this class can only connect to ElementObject pins
     static a2dPinClass* ElementWire;
 
@@ -110,8 +112,36 @@ class moMoldeoCanvasObject : public a2dRect, public moIDirectorActions {
 
         moMoldeoCanvasObject();
         moMoldeoCanvasObject( double xc, double yc, double w, double h, double angle, double radius, moMobDescriptor p_MobDescriptor, moIDirectorActions* parenthandler );
+        moMoldeoCanvasObject( const moMoldeoCanvasObject &other, CloneOptions options );
         virtual ~moMoldeoCanvasObject();
 
+        //! clone this object
+        virtual a2dObject* Clone( CloneOptions options ) const;
+        void OnCanvasObjectMouseEvent( a2dCanvasObjectMouseEvent& event );
+
+public:
+    static const a2dPropertyIdString PROPID_refdes;
+    static const a2dPropertyIdString PROPID_spice;
+    static const a2dPropertyIdString PROPID_freeda;
+
+    wxString GetNetlistLine( wxString simulator );
+
+    const a2dNamedProperty* FindProperty( const wxString name );
+
+    //! Get name of net connected to pin
+    /*
+        The name of the net is determined by a label connected to the net.
+        If no label is connected, it will determine a net name, based on the
+        components refdes and pin name. Eg. for a component Q1 with pin e
+        the netname will become netQ1_e.
+    */
+    static wxString GetNetName( a2dPin* pin );
+
+    private:
+    //! Private function to determine all pins connected to a net.
+    static void GetNetPins(  a2dCanvasObjectList* pins, a2dPin* pin );
+
+    public:
         virtual void Render (a2dIterC &ic, OVERLAP clipparent);
 
     public:
@@ -125,13 +155,12 @@ class moMoldeoCanvasObject : public a2dRect, public moIDirectorActions {
 
     protected:
 
-        void OnLeftDown( wxMouseEvent& event );
-        void OnHandleEvent (a2dHandleMouseEvent &event);
-        bool ProcessCanvasObjectEvent( a2dIterC &ic, a2dHitEvent &hitEvent );
+        //void OnLeftDown( wxMouseEvent& event );
+        //void OnHandleEvent (a2dHandleMouseEvent &event);
+        //bool ProcessCanvasObjectEvent( a2dIterC &ic, a2dHitEvent &hitEvent );
 
-        void OnEnterObject (a2dCanvasObjectMouseEvent &event);
-        void OnCanvasObjectMouseEvent(a2dCanvasObjectMouseEvent &event);
-        void OnLeaveObject (a2dCanvasObjectMouseEvent &event);
+        //void OnEnterObject (a2dCanvasObjectMouseEvent &event);
+        //void OnLeaveObject (a2dCanvasObjectMouseEvent &event);
 
         a2dText*  m_pMoldeoCanvasObjectTitle;
 
