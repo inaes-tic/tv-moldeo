@@ -21,9 +21,10 @@ moDefineDynamicArray( moMoldeoCanvasObjects )
 moDefineDynamicArray( moPinOutlets )
 moDefineDynamicArray( moPinInlets )
 
-a2dPinClass* moPin::ElementInlet = NULL;
-a2dPinClass* moPin::ElementOutlet = NULL;
+a2dPinClass* moPin::ElementObject = NULL;
 a2dPinClass* moPin::ElementWire = NULL;
+//a2dPinClass* moPin::ElementInlet = NULL;
+//a2dPinClass* moPin::ElementOutlet = NULL;
 
 A2D_BEGIN_EVENT_TABLE( a2dConnector, a2dWindowViewConnector )
     A2D_EVT_POST_CREATE_VIEW( a2dConnector::OnPostCreateView )
@@ -136,15 +137,18 @@ moPin::~moPin()
 
 void moPin::InitializeExtraClasses()
 {
-    ElementInlet = new a2dPinClass( wxT("eleInlet"), a2dPinClass::PC_input | a2dPinClass::PC_output );
-    ElementOutlet = new a2dPinClass( wxT("eleOutlet"), a2dPinClass::PC_output | a2dPinClass::PC_input);
-
+    ElementObject = new a2dPinClass( wxT("eleObject"), a2dPinClass::PC_input | a2dPinClass::PC_output );
     ElementWire = new a2dPinClass( wxT("eleWire"), a2dPinClass::PC_input | a2dPinClass::PC_output  );
 
-    a2dPinClass::m_allPinClasses.push_back( ElementInlet );
-    a2dPinClass::m_allPinClasses.push_back( ElementOutlet );
-
+    a2dPinClass::m_allPinClasses.push_back( ElementObject );
     a2dPinClass::m_allPinClasses.push_back( ElementWire );
+
+    //ElementInlet = new a2dPinClass( wxT("eleInlet"), a2dPinClass::PC_input | a2dPinClass::PC_output );
+    //ElementOutlet = new a2dPinClass( wxT("eleOutlet"), a2dPinClass::PC_output | a2dPinClass::PC_input);
+    //a2dPinClass::m_allPinClasses.push_back( ElementInlet );
+    //a2dPinClass::m_allPinClasses.push_back( ElementOutlet );
+
+
 }
 
 a2dObject* moPin::Clone( CloneOptions options ) const
@@ -241,19 +245,41 @@ a2dBoundingBox moPin::DoGetUnTransformedBbox( a2dBboxFlags flags ) const
 
 
 
-
+/*
 A2D_BEGIN_EVENT_TABLE( moMoldeoCanvasObject, a2dRect )
     //A2D_EVT_CANVASOBJECT_ENTER_EVENT( moMoldeoCanvasObject::OnEnterObject )
     //A2D_EVT_CANVASOBJECT_MOUSE_EVENT( moMoldeoCanvasObject::OnCanvasObjectMouseEvent )
     //A2D_EVT_CANVASOBJECT_LEAVE_EVENT( moMoldeoCanvasObject::OnLeaveObject )
     //A2D_EVT_CANVASHANDLE_MOUSE_EVENT( moMoldeoCanvasObject::OnHandleEvent )
 A2D_END_EVENT_TABLE()
+*/
+
+A2D_BEGIN_EVENT_TABLE( moMoldeoCanvasObject, a2dRect )
+    A2D_EVT_CANVASOBJECT_MOUSE_EVENT( moMoldeoCanvasObject::OnCanvasObjectMouseEvent )
+A2D_END_EVENT_TABLE()
+
+const a2dPropertyIdString moMoldeoCanvasObject::PROPID_refdes( CLASSNAME( moMoldeoCanvasObject ), wxT("REFDES"), a2dPropertyId::flag_none, wxT("CMP1") );
+const a2dPropertyIdString moMoldeoCanvasObject::PROPID_spice( CLASSNAME( moMoldeoCanvasObject ), wxT("SPICE"), a2dPropertyId::flag_none, wxT("") );
+const a2dPropertyIdString moMoldeoCanvasObject::PROPID_freeda( CLASSNAME( moMoldeoCanvasObject ), wxT("FREEDA"), a2dPropertyId::flag_none, wxT("") );
 
 moMoldeoCanvasObject::moMoldeoCanvasObject() {
     m_pMoldeoCanvasObjectTitle = NULL;
 }
 
-moMoldeoCanvasObject::moMoldeoCanvasObject( double xc, double yc, double w, double h, double angle, double radius, moMobDescriptor p_MobDescriptor, moIDirectorActions* parenthandler ) : a2dRect( xc, yc, w, h, radius ) {
+
+moMoldeoCanvasObject::moMoldeoCanvasObject( const moMoldeoCanvasObject &other, CloneOptions options )
+    : a2dRect( other, options )
+{
+}
+
+a2dObject* moMoldeoCanvasObject::Clone( CloneOptions options ) const
+{
+    return new moMoldeoCanvasObject( *this, options );
+};
+
+
+moMoldeoCanvasObject::moMoldeoCanvasObject( double xc, double yc, double w, double h, double angle, double radius, moMobDescriptor p_MobDescriptor, moIDirectorActions* parenthandler )
+    : a2dRect( xc, yc, w, h, radius ) {
 
     SetVisible(true);
     SetEditable(true);
@@ -294,121 +320,6 @@ moMoldeoCanvasObject::moMoldeoCanvasObject( double xc, double yc, double w, doub
 }
 
 
-ElementConnectionGenerator::ElementConnectionGenerator()
-{
-
-}
-
-ElementConnectionGenerator::~ElementConnectionGenerator()
-{
-}
-
-a2dPinClass* ElementConnectionGenerator::GetPinClassForTask( a2dPinClass* pinClass, a2dConnectTask task, a2dCanvasObject* obj ) const
-{
-
-    if (pinClass==NULL) wxMessageBox("pinClass cant be null2");
-
-    if ( pinClass == a2dPinClass::Any )
-    {
-        if ( wxDynamicCast( obj, moMoldeoCanvasObject ) )
-        {
-            //return moPin::ElementObject;
-            ///no nos conectamos al objeto...
-            return NULL;
-        }
-        else if ( obj->IsConnect() )
-        {
-            /*
-            if ( wxDynamicCast( obj, a2dWirePolylineL )->GetStartPinClass() ==  moPin::ElementWire )
-                return moPin::ElementWire;
-                */
-            if ( wxDynamicCast( obj, a2dWirePolylineL )->GetStartPinClass() ==  a2dPinClass::WireInput )
-                return a2dPinClass::WireOutput;
-            if ( wxDynamicCast( obj, a2dWirePolylineL )->GetStartPinClass() ==  a2dPinClass::WireOutput )
-                return a2dPinClass::WireInput;
-            else
-                return a2dPinClass::Wire;
-        }
-        else
-        {
-            return a2dPinClass::Object;
-        }
-    }
-
-    if ( pinClass == moPin::ElementInlet )
-    {
-        if ( obj->IsConnect() )
-            return moPin::ElementOutlet;
-        else
-            return moPin::ElementOutlet;
-    }
-
-
-    if ( pinClass == moPin::ElementOutlet )
-    {
-        if ( obj->IsConnect() )
-            return moPin::ElementInlet;
-        else
-            return moPin::ElementInlet;
-    }
-
-/*
-    if ( pinClass == moPin::ElementWire )
-    {
-        if ( obj->IsConnect() )
-            return moPin::ElementWire;
-        else
-            return moPin::ElementObject;
-    }
-*/
-
-
-    if ( pinClass == a2dPinClass::Standard )
-        return a2dPinClass::Standard->CanConnectTo();
-
-    if ( pinClass == a2dPinClass::Object )
-    {
-        if ( obj->IsConnect() )
-            return a2dPinClass::Wire;
-        else
-            return a2dPinClass::Object;
-    }
-
-
-
-    if ( pinClass == a2dPinClass::Wire )
-    {
-        if ( obj->IsConnect() )
-            return a2dPinClass::Wire;
-        else
-            return a2dPinClass::Object;
-    }
-
-
-    if ( pinClass == a2dPinClass::Input )
-        return a2dPinClass::Output;
-    if ( pinClass == a2dPinClass::Output )
-        return a2dPinClass::Input;
-
-    if ( pinClass == a2dPinClass::ObjectInput )
-    {
-        if ( obj->IsConnect() )
-            return a2dPinClass::WireOutput;
-        else
-            return a2dPinClass::ObjectOutput;
-    }
-
-    if ( pinClass == a2dPinClass::ObjectOutput )
-    {
-        if ( obj->IsConnect() )
-            return a2dPinClass::WireInput;
-        else
-            return a2dPinClass::ObjectInput;
-    }
-
-    return NULL;
-}
-
 
 moMoldeoCanvasObject::~moMoldeoCanvasObject() {
 
@@ -416,7 +327,7 @@ moMoldeoCanvasObject::~moMoldeoCanvasObject() {
 
 
 }
-
+/*
 bool moMoldeoCanvasObject::ProcessCanvasObjectEvent( a2dIterC &ic, a2dHitEvent &hitEvent ) {
 
     a2dHitEvent eee = hitEvent;
@@ -449,6 +360,7 @@ void moMoldeoCanvasObject::OnCanvasObjectMouseEvent(a2dCanvasObjectMouseEvent &e
 
 }
 
+
 void moMoldeoCanvasObject::OnLeaveObject(a2dCanvasObjectMouseEvent &event) {
 
     if (IsSelected()) {
@@ -460,6 +372,7 @@ void moMoldeoCanvasObject::OnLeaveObject(a2dCanvasObjectMouseEvent &event) {
     event.Skip();
 
 }
+
 
 void
 moMoldeoCanvasObject::OnLeftDown( wxMouseEvent& event ) {
@@ -482,7 +395,7 @@ moMoldeoCanvasObject::OnHandleEvent(a2dHandleMouseEvent &event) {
     event.Skip();
 
 }
-
+*/
 void
 moMoldeoCanvasObject::Render (a2dIterC &ic, OVERLAP clipparent) {
 
@@ -560,7 +473,7 @@ moMoldeoCanvasObject::SetMob( moMobDescriptor p_MobDescriptor ) {
 
                         m_pPinText->SetAlignment( wxLEFT | wxCENTER );
                         //m_pMoldeoObjectPin = this->AddPin( pvdname, xpos, ypos, a2dPin::objectPin, m_pPinOutlet );
-                        moPin* pin = new moPin(this, pvdname, moPin::ElementInlet, xpos, ypos );
+                        moPin* pin = new moPin(this, pvdname, moPin::ElementObject, xpos, ypos );
                         Append( pin );
                         Append(m_pPinText);
 
@@ -586,7 +499,7 @@ moMoldeoCanvasObject::SetMob( moMobDescriptor p_MobDescriptor ) {
                         m_pPinText->SetStroke( a2dStroke( wxColour( 50,50,50), 2, a2dSTROKE_SOLID ) );
                         m_pPinText->SetAlignment( wxRIGHT | wxCENTER );
                         //m_pMoldeoObjectPin = this->AddPin( pvdname, xpos, ypos, a2dPin::objectPin, m_pPinOutlet );
-                        moPin* pin = new moPin(this, pvdname, moPin::ElementOutlet, xpos, ypos );
+                        moPin* pin = new moPin(this, pvdname, moPin::ElementObject, xpos, ypos );
                         Append( pin );
                         Append(m_pPinText);
 
@@ -634,6 +547,339 @@ moMoldeoCanvasObject::GetMob() {
     return m_MobDescriptor;
 
 }
+
+
+void moMoldeoCanvasObject::OnCanvasObjectMouseEvent( a2dCanvasObjectMouseEvent& event )
+{
+    a2dIterC* ic = event.GetIterC();
+    if ( m_flags.m_editingCopy )
+    {
+        //to world group coordinates to do hit test in world group coordinates
+        double xw,yw;
+        xw = event.GetX();
+        yw = event.GetY();
+
+        a2dAffineMatrix atWorld = ic->GetTransform();
+
+        if ( event.GetMouseEvent().LeftDown() )
+        {
+            moMoldeoCanvasObject* original = wxDynamicCast( PROPID_Original.GetPropertyValue( this ).Get(), moMoldeoCanvasObject );;
+
+	     	a2dHitEvent hitevent = a2dHitEvent( xw, yw, false );
+            if ( IsHitWorld( *ic, hitevent ) )
+            {
+                a2dHitEvent hitinfo( xw, yw, false );
+                hitinfo.m_xyRelToChildren = true;
+                a2dCanvasObject* text = original->ChildIsHitWorld( *ic, hitinfo );
+                if ( wxDynamicCast( text, a2dText ) && text->GetEditable() )
+                {
+                    a2dIterCU cu( *ic, original );
+                    a2dStToolContr* controller = wxStaticCast( PROPID_Controller.GetPropertyValue( this ).Get(), a2dStToolContr ) ;
+
+                    ic->SetCorridorPath( true, NULL );
+                    controller->StartEditingObject( text, *ic );
+
+                    SetPending( true );
+                    ic->GetCanvasView()->SetCursor( a2dCanvasGlobals->GetCursor( a2dCURSOR_CROSS ) );
+                    event.Skip(); //first event for new tool ( meaning text that is edited )
+                }
+                else
+                    event.Skip();
+            }
+            else
+                EndEdit();
+        }
+        else if ( event.GetMouseEvent().LeftDClick()  )
+        {
+            EndEdit();
+        }
+        else if ( event.GetMouseEvent().Moving() )
+        {
+            event.Skip();
+        }
+        else
+            event.Skip();
+    }
+    else
+        event.Skip();
+}
+
+bool PointerSorter(const a2dCanvasObjectPtr& x, const a2dCanvasObjectPtr& y)
+{
+    return x.Get() > y.Get();
+}
+
+wxString moMoldeoCanvasObject::GetNetName( a2dPin* pin )
+{
+    // Create a list of all pins connected to pin.
+    a2dCanvasObjectList pinlist;
+    GetNetPins( &pinlist, pin );
+    // Sort list, based on pointer values.
+    // This way, we will allways get the same pointer, independant of starting point.
+    s_a2dCanvasObjectSorter = &PointerSorter;
+
+    pinlist.sort();
+
+    a2dCanvasObjectList::iterator iter;
+    // First check if a pin is part of a label.
+    /*
+	for( iter = pinlist.begin(); iter != pinlist.end(); ++iter )
+	{
+        a2dPin *pin = wxDynamicCast( (*iter).Get(), a2dPin );
+        if ( pin && wxDynamicCast( pin->GetParent(), Label ) )
+        {
+            // return label.
+            Label *label = (Label*) pin->GetParent();
+            return label->PROPID_label.GetPropertyValue( label );
+        }
+    }
+    */
+
+    // Find a pin as part of an Element
+	for( iter = pinlist.begin(); iter != pinlist.end(); ++iter )
+	{
+        a2dPin *pin = wxDynamicCast( (*iter).Get(), a2dPin );
+        if ( pin && wxDynamicCast( pin->GetParent(), moMoldeoCanvasObject ) )
+        {
+            // return "net{REFDES}_{PINNAME}".
+            moMoldeoCanvasObject *elm = (moMoldeoCanvasObject*) pin->GetParent();
+            return wxT("net") + elm->PROPID_refdes.GetPropertyValue( elm ) + wxT("_") + pin->GetName();
+        }
+    }
+
+    // If pin is part of a floating wire, return pointer to pin as a unique net name.
+    if ( !pinlist.empty() )
+    {
+        iter = pinlist.begin();
+        wxString result;
+        result.Printf( wxT("net%p"), (*iter).Get() );
+        return result;
+    }
+
+    return wxEmptyString;
+}
+
+// Recursively fill a pinlist with all pins connected to a certain pin.
+void moMoldeoCanvasObject::GetNetPins( a2dCanvasObjectList* pinlist, a2dPin* pin )
+{
+    wxASSERT( pinlist );
+
+    // Only continue if pin exists and pin is not allready in list
+    if ( pin && !pinlist->Find( pin ) )
+    {
+        pinlist->push_back( pin );
+        // If pin is connected, also proces this one.
+        a2dPin *connectedpin = pin->ConnectedTo();
+        if ( connectedpin )
+            GetNetPins( pinlist, connectedpin );
+
+        // If parent of pin is a wire, proces all pins connected to the wire
+        a2dWirePolylineL *wire = wxDynamicCast( pin->GetParent(), a2dWirePolylineL );
+        if ( wire )
+        {
+			for( a2dCanvasObjectList::iterator iter = wire->GetChildObjectList()->begin(); iter != wire->GetChildObjectList()->end(); ++iter )
+            {
+                GetNetPins( pinlist,  wxDynamicCast( (*iter).Get(), a2dPin ) );
+            }
+        }
+    }
+}
+
+/*
+    Generate netlist lines based on a string.
+    lets assume pin 1 is connected to net001 and C is 10pF and OPT=""
+    replaces {C} with contents of vairable C, so 10pF
+    replaces {var=C} with var=10pF, only if C != "", otherwise just empty string
+    replaces [1] with net of pin 1, so net001
+    eg:
+    C_{REFDES} [1] [2] var={C} {optional=OPT}
+    becomes
+    C_C1 net001 net002 var=10pF
+*/
+
+wxString moMoldeoCanvasObject::GetNetlistLine( wxString simulator )
+{
+    wxString spice;
+    const a2dNamedProperty *prop = FindProperty( simulator );
+    if (prop)
+        spice = prop->StringValueRepresentation();
+    else
+        return wxEmptyString;
+
+    // replace property names by value.
+    size_t lastchar = spice.Length();
+    size_t index = lastchar;
+    while ( index > 0 )
+    {
+        index--;
+        // Replace property name by its value
+        if ( spice[index] == wxChar('{') )
+        {
+            size_t idx1 = index;
+            size_t idx2 = index;
+            while ( spice[idx1] != wxChar('}') && spice[idx1] != wxChar('=') &&idx1 < lastchar )
+                idx1++;
+            wxString propname;
+            if ( spice[idx1] == wxChar('=') )
+            {
+                idx2 = idx1 + 1;
+                while ( spice[idx2] != wxChar('}') && idx2 < lastchar )
+                    idx2++;
+                propname = spice.Mid( idx1 + 1, idx2 - idx1 - 1);
+            }
+            else
+                propname = spice.Mid( index + 1, idx1 - index - 1);
+
+            wxString propval;
+            const a2dNamedProperty *prop = FindProperty( propname );
+            if (prop)
+                    propval = prop->StringValueRepresentation();
+
+            if ( idx2 >idx1 )
+            {
+               if ( !propval.IsEmpty() )
+                    spice = spice.Left( index ) + spice.Mid( index + 1, idx1 - index ) + propval + spice.Mid(idx2 + 1);
+               else
+                   spice = spice.Left( index ) + spice.Mid(idx2 + 1);
+            }
+            else
+                spice = spice.Left( index ) + propval + spice.Mid(idx1 + 1);
+            lastchar =index;
+        }
+        // Replace pin name by its net
+        else if ( spice[index] == wxChar('[') )
+        {
+            size_t idx2 = index;
+            while ( spice[idx2] != wxChar(']') && idx2 < lastchar )
+                idx2++;
+            wxString number = spice.Mid( index + 1, idx2 - index - 1);
+
+			for( a2dCanvasObjectList::iterator iter = GetChildObjectList()->begin(); iter != GetChildObjectList()->end(); ++iter )
+            {
+               a2dPin* pin = wxDynamicCast( (*iter).Get(), a2dPin );
+               if ( pin && pin->GetName() == number )
+                   number = GetNetName( pin );
+            }
+
+            spice = spice.Left( index ) + number + spice.Mid(idx2 + 1);
+            lastchar =index;
+        }
+    }
+    return spice;
+}
+
+// could not find this in base classes
+// probably did not look good enough.
+const a2dNamedProperty* moMoldeoCanvasObject::FindProperty( const wxString name )
+{
+    if ( GetFirstProperty() )
+    {
+        const a2dNamedProperty *prop = GetFirstProperty();
+        while (prop)
+        {
+            if ( prop->GetName() == name )
+                return prop;
+            prop = prop->GetNext();
+        }
+    }
+    return NULL;
+}
+
+ElementConnectionGenerator::ElementConnectionGenerator()
+{
+
+}
+
+ElementConnectionGenerator::~ElementConnectionGenerator()
+{
+}
+
+a2dPinClass* ElementConnectionGenerator::GetPinClassForTask( a2dPinClass* pinClass, a2dConnectTask task, a2dCanvasObject* obj ) const
+{
+
+    if ( pinClass == a2dPinClass::Any )
+    {
+        if ( wxDynamicCast( obj, moMoldeoCanvasObject ) )
+        {
+            return moPin::ElementObject;
+        }
+        else if ( obj->IsConnect() )
+        {
+            if ( wxDynamicCast( obj, a2dWirePolylineL )->GetStartPinClass() ==  moPin::ElementWire )
+                return  moPin::ElementWire;
+            if ( wxDynamicCast( obj, a2dWirePolylineL )->GetStartPinClass() ==  a2dPinClass::WireInput )
+                return a2dPinClass::WireOutput;
+            if ( wxDynamicCast( obj, a2dWirePolylineL )->GetStartPinClass() ==  a2dPinClass::WireOutput )
+                return a2dPinClass::WireInput;
+            else
+                return a2dPinClass::Wire;
+        }
+        else
+        {
+            return a2dPinClass::Object;
+        }
+    }
+
+    if ( pinClass ==  moPin::ElementObject )
+    {
+        if ( obj->IsConnect() )
+            return  moPin::ElementObject;
+        else
+            return  moPin::ElementWire;
+    }
+
+    if ( pinClass ==  moPin::ElementWire )
+    {
+        if ( obj->IsConnect() )
+            return  moPin::ElementWire;
+        else
+            return  moPin::ElementObject;
+    }
+
+    if ( pinClass == a2dPinClass::Standard )
+        return a2dPinClass::Standard->CanConnectTo();
+
+    if ( pinClass == a2dPinClass::Object )
+    {
+        if ( obj->IsConnect() )
+            return a2dPinClass::Wire;
+        else
+            return a2dPinClass::Object;
+    }
+
+    if ( pinClass == a2dPinClass::Wire )
+    {
+        if ( obj->IsConnect() )
+            return a2dPinClass::Wire;
+        else
+            return a2dPinClass::Object;
+    }
+
+    if ( pinClass == a2dPinClass::Input )
+        return a2dPinClass::Output;
+    if ( pinClass == a2dPinClass::Output )
+        return a2dPinClass::Input;
+
+    if ( pinClass == a2dPinClass::ObjectInput )
+    {
+        if ( obj->IsConnect() )
+            return a2dPinClass::WireOutput;
+        else
+            return a2dPinClass::ObjectOutput;
+    }
+
+    if ( pinClass == a2dPinClass::ObjectOutput )
+    {
+        if ( obj->IsConnect() )
+            return a2dPinClass::WireInput;
+        else
+            return a2dPinClass::ObjectInput;
+    }
+
+    return NULL;
+}
+
+
 
 A2D_BEGIN_EVENT_TABLE( moConnectionsToolContr, a2dStToolContr )
 
@@ -1102,9 +1348,8 @@ moConnectionsWindow::~moConnectionsWindow()
 {
 	//(*Destroy(moConnectionsWindow)
 	//*)
-	//delete m_pDrawer2D;
-	//delete m_pCanvas;
-	//delete m_pConnectionsCanvasDocument;
+    a2dDocviewGlobals->GetEventDistributer()->Unregister( this );
+
 }
 
 
@@ -1126,10 +1371,9 @@ void moConnectionsWindow::Init( moIDirectorActions*   pActionsHandler) {
 
     moPin::InitializeExtraClasses();
 
-
     //Setup a wire/pin to define which pins can connect, and with which wire
     a2dWirePolylineL* wire = new a2dWirePolylineL();
-    wire->SetStroke(a2dStroke(wxColour(255,0,0), 8,a2dSTROKE_SHORT_DASH));
+    wire->SetStroke(a2dStroke(wxColour(255,50,0), 8,a2dSTROKE_SHORT_DASH));
     //!todo oops putting this, somehow prevents connecting wires to this wire.
     // this is a bug.
     // wire->SetLayer( 2 );
@@ -1140,7 +1384,6 @@ void moConnectionsWindow::Init( moIDirectorActions*   pActionsHandler) {
     a2dPinClass::Wire->SetConnectObject( wire );
 
     //Setup a wire/pin to define which  directional  pins can connect, and with which wire
-
     a2dWirePolylineL* wiredirect = new a2dWirePolylineL();
     a2dStroke wirestroke = a2dStroke(wxColour(0,255,255), 4,a2dSTROKE_LONG_DASH);
     wiredirect->SetStroke(wirestroke);
@@ -1149,15 +1392,12 @@ void moConnectionsWindow::Init( moIDirectorActions*   pActionsHandler) {
     a2dArrow* arrow2 = new  a2dArrow( 0,0,4,0,2 );
     arrow2->SetStroke(wirestroke);
     wiredirect->SetEnd(arrow2);
-    wiredirect->SetBegin(arrow2);
 
-
+    ////wiredirect->SetBegin(arrow2);
     // if you do not want wires connecting to wires
-
-    a2dPinClass::WireInput->RemoveConnect( a2dPinClass::WireOutput );
-    a2dPinClass::WireOutput->RemoveConnect( a2dPinClass::WireInput );
-    wiredirect->SetGeneratePins( false );
-
+    // a2dPinClass::WireInput->RemoveConnect( a2dPinClass::WireOutput );
+    // a2dPinClass::WireOutput->RemoveConnect( a2dPinClass::WireInput );
+    // wiredirect->SetGeneratePins( false );
 
     a2dPinClass::WireInput->SetAngleLine( false );
     a2dPinClass::WireOutput->SetAngleLine( false );
@@ -1167,7 +1407,6 @@ void moConnectionsWindow::Init( moIDirectorActions*   pActionsHandler) {
     a2dPinClass::WireOutput->SetConnectObject( wiredirect );
 
     //define the pin which will be used for generating dynamic connection pins
-    /*
     a2dPin* defPin = new moPin( NULL, wxT("global"), moPin::ElementObject, 0, 0, 0, pinwidth, pinwidth );
     defPin->SetFill( wxColour( 5, 219, 225 ) );
     defPin->SetStroke( wxColour( 5, 219, 225 ), 0 );
@@ -1177,54 +1416,33 @@ void moConnectionsWindow::Init( moIDirectorActions*   pActionsHandler) {
     a2dPin* defPin2 = new moPin( NULL, wxT("global"), moPin::ElementObject, 0, 0, 0, pinwidth, pinwidth );
     defPin2->SetFill( wxColour( 5, 219, 25 ) );
     defPin2->SetStroke( wxColour( 5, 219, 225 ), 0 );
-    */
-    a2dPin* defPin = new moPin( NULL, wxT("global"), moPin::ElementInlet, 0, 0, 0, pinwidth, pinwidth );
-    defPin->SetFill( wxColour( 5, 219, 225 ) );
-    defPin->SetStroke( wxColour( 5, 219, 225 ), 0 );
-    a2dPin* defPin2 = new moPin( NULL, wxT("global"), moPin::ElementOutlet, 0, 0, 0, pinwidth, pinwidth );
-    defPin2->SetFill( wxColour( 255, 0, 225 ) );
-    defPin2->SetStroke( wxColour( 255, 255, 0 ), 0 );
 
     //Setup a pin class map array to define which pins can connect, and with which wire
-/*
     a2dWirePolylineL* wireele = new a2dWirePolylineL();
     wireele->SetStroke(a2dStroke(wxColour(5,250,0), 0.5,a2dSTROKE_SOLID ));
     wireele->SetStartPinClass( moPin::ElementWire );
     wireele->SetEndPinClass( moPin::ElementWire );
-    wireele->SetGeneratePins( false );
+    //wireele->SetGeneratePins( false );
     moPin::ElementWire->SetConnectObject( wireele );
-*/
-    // define the template pins for new or rending features for pins of this class.
-//    moPin::ElementObject->SetPin( defPin ) ;
-//    moPin::ElementObject->SetPinCanConnect( defPin3 );
-//    moPin::ElementObject->SetPinCannotConnect( defPin2 );
 
-    moPin::ElementWire->SetPin( defPin2 ) ;
-    moPin::ElementWire->SetPinCanConnect( defPin );
+    // define the template pins for new or rending features for pins of this class.
+    moPin::ElementObject->SetPin( defPin ) ;
+    moPin::ElementObject->SetPinCanConnect( defPin3 );
+    moPin::ElementObject->SetPinCannotConnect( defPin2 );
+    moPin::ElementWire->SetPin( defPin ) ;
+    moPin::ElementWire->SetPinCanConnect( defPin3 );
     moPin::ElementWire->SetPinCannotConnect( defPin2 );
 
-    moPin::ElementInlet->SetPin( defPin ) ;
-    moPin::ElementInlet->SetPinCanConnect( defPin2 );
-    moPin::ElementInlet->SetPinCannotConnect( defPin );
-
-    moPin::ElementOutlet->SetPin( defPin2 ) ;
-    moPin::ElementOutlet->SetPinCanConnect( defPin );
-    moPin::ElementOutlet->SetPinCannotConnect( defPin2 );
-
 	a2dConnectionGenerator* elecon = new ElementConnectionGenerator();
-    //moPin::ElementObject->SetConnectionGenerator( elecon );
-    moPin::ElementInlet->SetConnectionGenerator( elecon );
-    moPin::ElementOutlet->SetConnectionGenerator( elecon );
+    moPin::ElementObject->SetConnectionGenerator( elecon );
     moPin::ElementWire->SetConnectionGenerator( elecon );
 
     // define which connector should be used for connecting to the automatically generated on pin a2dPinClass::Any
     a2dPinClass::Any->SetConnectionGenerator( elecon );
 
-    //moPin::ElementObject->AddConnect( moPin::ElementWire );
-    //moPin::ElementObject->AddConnect( moPin::ElementObject );
-    moPin::ElementInlet->AddConnect( moPin::ElementOutlet );
-    moPin::ElementOutlet->AddConnect( moPin::ElementInlet );
-    //moPin::ElementWire->AddConnect( moPin::ElementObject );
+    moPin::ElementObject->AddConnect( moPin::ElementWire );
+    moPin::ElementObject->AddConnect( moPin::ElementObject );
+    moPin::ElementWire->AddConnect( moPin::ElementObject );
     moPin::ElementWire->AddConnect( moPin::ElementWire );
 
 #endif
