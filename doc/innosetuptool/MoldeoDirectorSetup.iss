@@ -290,6 +290,66 @@ Source: ..\icons\motionvertical.png; DestDir: {app}\doc\icons
 Source: ..\icons\off32.bmp; DestDir: {app}\doc\icons
 Source: ..\icons\off.jpg; DestDir: {app}\doc\icons
 Source: ..\icons\on32.bmp; DestDir: {app}\doc\icons
+Source: ..\..\art\icons\volume.jpg; DestDir: {app}\art\icons
+Source: ..\..\art\icons\add.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\colors.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\copy_cur.cur; DestDir: {app}\art\icons
+Source: ..\..\art\icons\csvColors32.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\csvColors64.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\csvColors256.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\delete.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\drag_cur.cur; DestDir: {app}\art\icons
+Source: ..\..\art\icons\edit_cur.cur; DestDir: {app}\art\icons
+Source: ..\..\art\icons\ff.jpg; DestDir: {app}\art\icons
+Source: ..\..\art\icons\fullscreen32.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\functiontest.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\help.jpg; DestDir: {app}\art\icons
+Source: ..\..\art\icons\imageempty.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\import.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\information.jpg; DestDir: {app}\art\icons
+Source: ..\..\art\icons\inspect.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\layercontrols.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\Moldeo32.ico; DestDir: {app}\art\icons
+Source: ..\..\art\icons\more.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\motioncircular.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\motiondiagonal.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\motionhorizontal.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\motionrandom.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\motionvertical.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\move_cur.cur; DestDir: {app}\art\icons
+Source: ..\..\art\icons\off32.bmp; DestDir: {app}\art\icons
+Source: ..\..\art\icons\off.jpg; DestDir: {app}\art\icons
+Source: ..\..\art\icons\on32.bmp; DestDir: {app}\art\icons
+Source: ..\..\art\icons\on.jpg; DestDir: {app}\art\icons
+Source: ..\..\art\icons\onoffall32.bmp; DestDir: {app}\art\icons
+Source: ..\..\art\icons\onoffall.jpg; DestDir: {app}\art\icons
+Source: ..\..\art\icons\onofficon32.bmp; DestDir: {app}\art\icons
+Source: ..\..\art\icons\onofficon.jpg; DestDir: {app}\art\icons
+Source: ..\..\art\icons\pause32.bmp; DestDir: {app}\art\icons
+Source: ..\..\art\icons\pause32.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\pause.jpg; DestDir: {app}\art\icons
+Source: ..\..\art\icons\pickcolor.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\play32.bmp; DestDir: {app}\art\icons
+Source: ..\..\art\icons\play32.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\play32dis.bmp; DestDir: {app}\art\icons
+Source: ..\..\art\icons\play.jpg; DestDir: {app}\art\icons
+Source: ..\..\art\icons\rewind.jpg; DestDir: {app}\art\icons
+Source: ..\..\art\icons\rotate.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\savesession32.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\savevideo32.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\scale.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\screenshot32.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\select.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\set.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\skip.jpg; DestDir: {app}\art\icons
+Source: ..\..\art\icons\stop.jpg; DestDir: {app}\art\icons
+Source: ..\..\art\icons\translate.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\visibility.png; DestDir: {app}\art\icons
+Source: ..\..\art\icons\visibilitynone.png; DestDir: {app}\art\icons
+Source: ..\..\art\cursors\copy_cur.cur; DestDir: {app}\art\cursors
+Source: ..\..\art\cursors\drag_cur.cur; DestDir: {app}\art\cursors
+Source: ..\..\art\cursors\edit_cur.cur; DestDir: {app}\art\cursors
+Source: ..\..\art\cursors\move_cur.cur; DestDir: {app}\art\cursors
 
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\bin\mingw\{#MyAppExeName}; WorkingDir: {app}\bin\mingw\; IconFilename: {app}\doc\icons\Moldeo32.ico; Comment: Moldeo Director 0.7 GUI for Realtime Animated Images Composition; IconIndex: 0
@@ -332,6 +392,9 @@ Name: {app}\images
 Name: {app}\doc
 Name: {app}\doc\installers
 Name: {app}\data\test\brushes
+Name: {app}\art
+Name: {app}\art\icons
+Name: {app}\art\cursors
 [Registry]
 Root: HKLM; Subkey: SOFTWARE\Microsoft\Windows\CurrentVersion\Moldeo\bin\mingw\moldeodirector.exe; ValueType: string; ValueName: ; ValueData: {app}\moldeodirector.exe; Flags: uninsdeletekey
 Root: HKLM; Subkey: SYSTEM\CurrentControlSet\Control\Session Manager\Environment; ValueType: string; ValueName: WXART2D; ValueData: "C:\wxArt2D;D:\_data\programacion\wxWidgets\wxArt2d\wxArt2D"

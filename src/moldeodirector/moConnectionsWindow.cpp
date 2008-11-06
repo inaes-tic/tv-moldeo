@@ -187,8 +187,9 @@ void moPin::DoRender( a2dIterC& ic, OVERLAP clipparent )
             else if (  m_mode == sm_PinCanConnectToPinClass )
             {
                 // This is the mode of a pin that is hit by the mouse (set in OnEnter)
-                ic.GetDrawer2D()->SetDrawerStroke( a2dStroke( wxColour(12,34,78), 0.5) );
-                ic.GetDrawer2D()->DeviceDrawCircle(dx, dy, m_width/4);
+                ic.GetDrawer2D()->SetDrawerStroke( a2dStroke( wxColour(155,155,0), 2.0) );
+                ic.GetDrawer2D()->SetDrawerFill( a2dFill( *a2dTRANSPARENT_FILL));
+                ic.GetDrawer2D()->DeviceDrawCircle(dx, dy, m_width*1.2);
             }
             else if ( m_mode == sm_PinCanConnect )
             {
@@ -220,9 +221,12 @@ void moPin::DoRender( a2dIterC& ic, OVERLAP clipparent )
             // This shouldn't happen, but show it, if it does happen
             if( IsDislocated() || m_RenderConnected )
             {
-                ic.GetDrawer2D()->SetDrawerFill( *a2dTRANSPARENT_FILL );
-                ic.GetDrawer2D()->DeviceDrawLine( (int)(dx - w2), (int)(dy + h2),  (int)(dx + w2), (int)(dy - h2));
-                ic.GetDrawer2D()->DeviceDrawLine( (int)(dx - w2), (int)(dy - h2),  (int)(dx + w2), (int)(dy + h2));
+                //ic.GetDrawer2D()->SetDrawerFill( *a2dTRANSPARENT_FILL );
+                //ic.GetDrawer2D()->DeviceDrawLine( (int)(dx - w2), (int)(dy + h2),  (int)(dx + w2), (int)(dy - h2));
+                //ic.GetDrawer2D()->DeviceDrawLine( (int)(dx - w2), (int)(dy - h2),  (int)(dx + w2), (int)(dy + h2));
+                ic.GetDrawer2D()->SetDrawerFill( a2dFill( wxColour(0,255,0)) );
+                ic.GetDrawer2D()->SetDrawerStroke( a2dStroke( wxColour(0,0,0), 1) );
+                ic.GetDrawer2D()->DeviceDrawCircle( (int)dx, (int)dy, (int) w2 );
             }
         }
     }
@@ -234,6 +238,16 @@ void moPin::DoRender( a2dIterC& ic, OVERLAP clipparent )
             ic.GetDrawer2D()->SetDrawerFill( m_pinclass->GetPin()->GetFill() );
             ic.GetDrawer2D()->SetDrawerStroke( m_pinclass->GetPin()->GetStroke() );
             ic.GetDrawer2D()->DeviceDrawCircle( (int)dx, (int)dy, (int) w2 );
+        } else {
+            if( IsDislocated() || m_RenderConnected )
+            {
+                //ic.GetDrawer2D()->SetDrawerFill( *a2dTRANSPARENT_FILL );
+                //ic.GetDrawer2D()->DeviceDrawLine( (int)(dx - w2), (int)(dy + h2),  (int)(dx + w2), (int)(dy - h2));
+                //ic.GetDrawer2D()->DeviceDrawLine( (int)(dx - w2), (int)(dy - h2),  (int)(dx + w2), (int)(dy + h2));
+                ic.GetDrawer2D()->SetDrawerFill( a2dFill( wxColour(0,255,0)) );
+                ic.GetDrawer2D()->SetDrawerStroke( a2dStroke( wxColour(0,0,0), 1) );
+                ic.GetDrawer2D()->DeviceDrawCircle( (int)dx, (int)dy, (int) w2 );
+            }
         }
     }
 }
@@ -264,12 +278,15 @@ const a2dPropertyIdString moMoldeoCanvasObject::PROPID_freeda( CLASSNAME( moMold
 
 moMoldeoCanvasObject::moMoldeoCanvasObject() {
     m_pMoldeoCanvasObjectTitle = NULL;
+    //SetSelectable(true);
 }
 
 
 moMoldeoCanvasObject::moMoldeoCanvasObject( const moMoldeoCanvasObject &other, CloneOptions options )
     : a2dRect( other, options )
 {
+    m_pMoldeoCanvasObjectTitle = NULL;
+    //SetSelectable(true);
 }
 
 a2dObject* moMoldeoCanvasObject::Clone( CloneOptions options ) const
@@ -282,8 +299,8 @@ moMoldeoCanvasObject::moMoldeoCanvasObject( double xc, double yc, double w, doub
     : a2dRect( xc, yc, w, h, radius ) {
 
     SetVisible(true);
-    SetEditable(true);
-    SetSelectable(true);
+    SetEditable(false);
+    //SetSelectable(true);
     SetDraggable(true);
     //SetShowShadow(true);
     //SetEvtHandlerEnabled(true);
@@ -473,7 +490,7 @@ moMoldeoCanvasObject::SetMob( moMobDescriptor p_MobDescriptor ) {
 
                         m_pPinText->SetAlignment( wxLEFT | wxCENTER );
                         //m_pMoldeoObjectPin = this->AddPin( pvdname, xpos, ypos, a2dPin::objectPin, m_pPinOutlet );
-                        moPin* pin = new moPin(this, pvdname, moPin::ElementObject, xpos, ypos );
+                        moPin* pin = new moPin(this, pvdname, a2dPinClass::ObjectInput, xpos, ypos );
                         Append( pin );
                         Append(m_pPinText);
 
@@ -499,7 +516,7 @@ moMoldeoCanvasObject::SetMob( moMobDescriptor p_MobDescriptor ) {
                         m_pPinText->SetStroke( a2dStroke( wxColour( 50,50,50), 2, a2dSTROKE_SOLID ) );
                         m_pPinText->SetAlignment( wxRIGHT | wxCENTER );
                         //m_pMoldeoObjectPin = this->AddPin( pvdname, xpos, ypos, a2dPin::objectPin, m_pPinOutlet );
-                        moPin* pin = new moPin(this, pvdname, moPin::ElementObject, xpos, ypos );
+                        moPin* pin = new moPin(this, pvdname, a2dPinClass::ObjectOutput, xpos, ypos );
                         Append( pin );
                         Append(m_pPinText);
 
@@ -801,7 +818,8 @@ a2dPinClass* ElementConnectionGenerator::GetPinClassForTask( a2dPinClass* pinCla
     {
         if ( wxDynamicCast( obj, moMoldeoCanvasObject ) )
         {
-            return moPin::ElementObject;
+            //return moPin::ElementObject;
+            return NULL;
         }
         else if ( obj->IsConnect() )
         {
@@ -1194,7 +1212,7 @@ moConnectionsWindow::moConnectionsWindow(wxWindow* parent,wxWindowID id,const wx
         restrict->SetSnapGrid( 2, 2 );
         restrict->SetRotationAngle(45);
 
-        a2dCanvasGlobals->SetSelectStroke( a2dStroke(wxColour(255,55,0), 2, a2dSTROKE_SOLID ) );
+        a2dCanvasGlobals->SetSelectStroke( a2dStroke(wxColour(0,255,0), 1, a2dSTROKE_SOLID ) );
         a2dCanvasGlobals->SetSelectFill( *a2dTRANSPARENT_FILL );
         a2dCanvasGlobals->SetSelectDrawStyle( RenderWIREFRAME_SELECT );
         a2dIOHandlerCVGIn* cvghin = new a2dIOHandlerCVGIn();
@@ -1277,11 +1295,11 @@ moConnectionsWindow::moConnectionsWindow(wxWindow* parent,wxWindowID id,const wx
         //a2dGeneralGlobal->GetFontPathList().Add( wxT(".") );
         //a2dGeneralGlobal->GetFontPathList().Add( wxT("..") );
 
-       #if wxART2D_USE_AGGDRAWER
+       //#if wxART2D_USE_AGGDRAWER
            m_pDrawer2D = new a2dAggDrawer( dvx, dvy );
-       #else
-            m_pDrawer2D = new a2dMemDcDrawer( dvx, dvy );
-       #endif
+       //#else
+       //     m_pDrawer2D = new a2dMemDcDrawer( dvx, dvy );
+       //#endif
 
         m_pDrawer2D->SetDrawerStroke( a2dStroke( *wxRED, 4.0 ) );
         m_pDrawer2D->SetDrawerFill( a2dFill( *wxBLUE ) );
@@ -1352,6 +1370,8 @@ moConnectionsWindow::~moConnectionsWindow()
 
 }
 
+using std::list;
+
 
 void moConnectionsWindow::Init( moIDirectorActions*   pActionsHandler) {
 
@@ -1370,7 +1390,7 @@ void moConnectionsWindow::Init( moIDirectorActions*   pActionsHandler) {
     int pinwidth = 9;//7; //pixels
 
     moPin::InitializeExtraClasses();
-
+/*
     //Setup a wire/pin to define which pins can connect, and with which wire
     a2dWirePolylineL* wire = new a2dWirePolylineL();
     wire->SetStroke(a2dStroke(wxColour(255,50,0), 8,a2dSTROKE_SHORT_DASH));
@@ -1382,22 +1402,44 @@ void moConnectionsWindow::Init( moIDirectorActions*   pActionsHandler) {
     a2dPinClass::Wire->SetAngleLine( false );
     a2dPinClass::Object->SetAngleLine( false );
     a2dPinClass::Wire->SetConnectObject( wire );
+    */
+    a2dPinClass* testc = a2dPinClass::WireInput;
+    list < a2dPinClass * > pclist;
+    list<a2dPinClass * >::const_iterator it;
+
+    for(it=pclist.begin(); it!=pclist.end(); ++it)
+    {
+        a2dPinClass* pData = *it;
+        if (pData) {
+
+            wxMessageBox("hola");
+        }
+
+    }
 
     //Setup a wire/pin to define which  directional  pins can connect, and with which wire
     a2dWirePolylineL* wiredirect = new a2dWirePolylineL();
-    a2dStroke wirestroke = a2dStroke(wxColour(0,255,255), 4,a2dSTROKE_LONG_DASH);
+    a2dStroke wirestroke = a2dStroke(wxColour(127,200,127), 3,a2dSTROKE_SOLID);
     wiredirect->SetStroke(wirestroke);
     wiredirect->SetStartPinClass( a2dPinClass::WireInput );
     wiredirect->SetEndPinClass( a2dPinClass::WireOutput );
-    a2dArrow* arrow2 = new  a2dArrow( 0,0,4,0,2 );
+    wiredirect->SetGeneratePins( false );
+    //wiredirect->SetSpline( true );
+    //a2dArrow* arrow1 = new  a2dArrow( 0,0,15,0,15 );
+    a2dArrow* arrow2 = new  a2dArrow( 0,0,12,0,7 );
     arrow2->SetStroke(wirestroke);
     wiredirect->SetEnd(arrow2);
 
-    ////wiredirect->SetBegin(arrow2);
+    //wiredirect->SetBegin(arrow2);
     // if you do not want wires connecting to wires
-    // a2dPinClass::WireInput->RemoveConnect( a2dPinClass::WireOutput );
-    // a2dPinClass::WireOutput->RemoveConnect( a2dPinClass::WireInput );
-    // wiredirect->SetGeneratePins( false );
+    a2dPinClass::WireOutput->RemoveConnect( a2dPinClass::Any );
+    a2dPinClass::WireOutput->RemoveConnect( a2dPinClass::Object );
+    a2dPinClass::WireOutput->RemoveConnect( a2dPinClass::Standard );
+
+
+    a2dPinClass::WireInput->RemoveConnect( a2dPinClass::WireOutput );
+    a2dPinClass::WireOutput->RemoveConnect( a2dPinClass::WireInput );
+    wiredirect->SetGeneratePins( false );
 
     a2dPinClass::WireInput->SetAngleLine( false );
     a2dPinClass::WireOutput->SetAngleLine( false );
@@ -1407,7 +1449,7 @@ void moConnectionsWindow::Init( moIDirectorActions*   pActionsHandler) {
     a2dPinClass::WireOutput->SetConnectObject( wiredirect );
 
     //define the pin which will be used for generating dynamic connection pins
-    a2dPin* defPin = new moPin( NULL, wxT("global"), moPin::ElementObject, 0, 0, 0, pinwidth, pinwidth );
+    /*a2dPin* defPin = new moPin( NULL, wxT("global"), moPin::ElementObject, 0, 0, 0, pinwidth, pinwidth );
     defPin->SetFill( wxColour( 5, 219, 225 ) );
     defPin->SetStroke( wxColour( 5, 219, 225 ), 0 );
     a2dPin* defPin3 = new moPin( NULL, wxT("global"), moPin::ElementObject, 0, 0, 0, pinwidth, pinwidth );
@@ -1416,15 +1458,19 @@ void moConnectionsWindow::Init( moIDirectorActions*   pActionsHandler) {
     a2dPin* defPin2 = new moPin( NULL, wxT("global"), moPin::ElementObject, 0, 0, 0, pinwidth, pinwidth );
     defPin2->SetFill( wxColour( 5, 219, 25 ) );
     defPin2->SetStroke( wxColour( 5, 219, 225 ), 0 );
-
+*/
     //Setup a pin class map array to define which pins can connect, and with which wire
+    /*
     a2dWirePolylineL* wireele = new a2dWirePolylineL();
-    wireele->SetStroke(a2dStroke(wxColour(5,250,0), 0.5,a2dSTROKE_SOLID ));
+    wireele->SetStroke(a2dStroke(wxColour(0,0,100), 2.0,a2dSTROKE_SOLID ));
     wireele->SetStartPinClass( moPin::ElementWire );
     wireele->SetEndPinClass( moPin::ElementWire );
-    //wireele->SetGeneratePins( false );
+    wireele->SetGeneratePins( false );
+    wireele->SetSpline( true );
+    wireele->SetContourWidth( 2.0 );
     moPin::ElementWire->SetConnectObject( wireele );
-
+    */
+/*
     // define the template pins for new or rending features for pins of this class.
     moPin::ElementObject->SetPin( defPin ) ;
     moPin::ElementObject->SetPinCanConnect( defPin3 );
@@ -1432,7 +1478,7 @@ void moConnectionsWindow::Init( moIDirectorActions*   pActionsHandler) {
     moPin::ElementWire->SetPin( defPin ) ;
     moPin::ElementWire->SetPinCanConnect( defPin3 );
     moPin::ElementWire->SetPinCannotConnect( defPin2 );
-
+*/
 	a2dConnectionGenerator* elecon = new ElementConnectionGenerator();
     moPin::ElementObject->SetConnectionGenerator( elecon );
     moPin::ElementWire->SetConnectionGenerator( elecon );
@@ -1443,7 +1489,7 @@ void moConnectionsWindow::Init( moIDirectorActions*   pActionsHandler) {
     moPin::ElementObject->AddConnect( moPin::ElementWire );
     moPin::ElementObject->AddConnect( moPin::ElementObject );
     moPin::ElementWire->AddConnect( moPin::ElementObject );
-    moPin::ElementWire->AddConnect( moPin::ElementWire );
+    //moPin::ElementWire->AddConnect( moPin::ElementWire );//esto se puede sacar siempre y cuando no este SetGeneratePins(false) desactvado
 
 #endif
 }

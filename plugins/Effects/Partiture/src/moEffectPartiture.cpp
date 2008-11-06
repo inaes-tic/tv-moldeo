@@ -163,6 +163,8 @@ void moEffectPartiture::Draw( moTempo* tempogral,moEffectState* parentstate)
 
 	m_pFont = m_Config[moR(PARTITURE_FONT)][MO_SELECTED][0].GetData()->Font();
 	m_pSketchFont = m_Config[moR(PARTITURE_SKETCHFONT)][MO_SELECTED][0].GetData()->Font();
+	if (m_pFont) m_pFont->Draw( 0, 0, moText("Test Font") );
+	if (m_pSketchFont) m_pSketchFont->Draw( 0, 0, moText("Test Sketch Font") );
 	//m_pFont = m_pResourceManager->GetFontMan()->GetFont(0);
 
 	glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
