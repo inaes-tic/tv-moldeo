@@ -37,16 +37,16 @@
 
 moEffectLightsFactory *m_EffectLightsFactory = NULL;
 
-MO_PLG_API moEffectFactory* CreateEffectFactory(){ 
+MO_PLG_API moEffectFactory* CreateEffectFactory(){
 	if(m_EffectLightsFactory==NULL)
 		m_EffectLightsFactory = new moEffectLightsFactory();
 	return(moEffectFactory*) m_EffectLightsFactory;
-} 
+}
 
-MO_PLG_API void DestroyEffectFactory(){ 
+MO_PLG_API void DestroyEffectFactory(){
 	delete m_EffectLightsFactory;
 	m_EffectLightsFactory = NULL;
-} 
+}
 
 moEffect*  moEffectLightsFactory::Create() {
 	return new moEffectLights();
@@ -61,11 +61,7 @@ void moEffectLightsFactory::Destroy(moEffect* fx) {
 //========================
 
 moEffectLights::moEffectLights() {
-	devicecode = NULL;
-	ncodes = 0;
-
-	Images = NULL;
-	m_Name = "lights";
+	SetName("lights");
 
 }
 
@@ -76,46 +72,29 @@ moEffectLights::~moEffectLights() {
 MOboolean
 moEffectLights::Init() {
 
-	MOuint i;
-
     if (!PreInit()) return false;
 
-    // Hacer la inicializacion de este efecto en particular.
-    color = m_Config.GetParamIndex("color");
-	configuration = m_Config.GetParamIndex("configuration");
-    images = m_Config.GetParamIndex("textura");
-	divisorf = m_Config.GetParamIndex("divisorf");
-	factorx = m_Config.GetParamIndex("factorx");
-	factory = m_Config.GetParamIndex("factory");
-	factorz = m_Config.GetParamIndex("factorz");
+	moDefineParamIndex( LIGHTS_ALPHA, moText("alpha") );
+	moDefineParamIndex( LIGHTS_COLOR, moText("color") );
+	moDefineParamIndex( LIGHTS_SYNC, moText("syncro") );
+	moDefineParamIndex( LIGHTS_PHASE, moText("phase") );
+	moDefineParamIndex( LIGHTS_TEXTURE, moText("texture") );
+	moDefineParamIndex( LIGHTS_NUMBER, moText("number") );
+	moDefineParamIndex( LIGHTS_BLENDING, moText("blending") );
+	moDefineParamIndex( LIGHTS_DIVISOR, moText("divisor") );
+	moDefineParamIndex( LIGHTS_FACTORX, moText("factorx") );
+	moDefineParamIndex( LIGHTS_FACTORY, moText("factory") );
+	moDefineParamIndex( LIGHTS_FACTORZ, moText("factorz") );
+	moDefineParamIndex( LIGHTS_TRANSLATEX, moText("translatex") );
+	moDefineParamIndex( LIGHTS_TRANSLATEY, moText("translatey") );
+	moDefineParamIndex( LIGHTS_SCALEX, moText("scalex") );
+	moDefineParamIndex( LIGHTS_SCALEY, moText("scaley") );
+	moDefineParamIndex( LIGHTS_ROTATEZ, moText("rotatez") );
+	moDefineParamIndex( LIGHTS_INLET, moText("inlet") );
+	moDefineParamIndex( LIGHTS_OUTLET, moText("outlet") );
 
+    m_Config.PreConfFirst();
 
-
-    //Seteos de Texturas.
-	m_Config.SetCurrentParamIndex(images);
-	m_Config.FirstValue();
-	nimages = m_Config.GetParam(images).GetValuesCount();
-	Images = new  MOtexture [nimages];
-	for(i = 0; i < nimages; i++) {
-		Images[i] = m_pResourceManager->GetTextureMan()->GetTexture(m_Config.GetParam().GetValue().GetSubValue(0).Text());
-		m_Config.NextValue();
-	}
-
-	radius = 2.0f;
-	MOfloat angulo = 0.0f;
-
-	nlights = 60;
-
-	for(i=0;i<nlights;i++) {
-		angulo+=5.0f*pi/10.0f;
-		LIGHTS[i].X = cos(angulo)*radius;
-		LIGHTS[i].Y = sin(angulo)*radius;
-		LIGHTS[i].Z = -10.0f;
-	}
-
-	//Image = Images[0];
-    if(preconfig.GetPreConfNum() > 0)
-        preconfig.PreConfFirst( GetConfig());
 	return true;
 }
 
@@ -126,7 +105,7 @@ void moEffectLights::Draw( moTempo* tempogral,moEffectState* parentstate)
 	//MOfloat r;//random
 	float angulo;
 
-    
+
 	PreDraw( tempogral, parentstate);
 
     glMatrixMode( GL_PROJECTION );
@@ -137,64 +116,62 @@ void moEffectLights::Draw( moTempo* tempogral,moEffectState* parentstate)
 
 	glLoadIdentity();
 
-    glColor4f(  m_Config.GetParam(color).GetValue().GetSubValue(MO_RED).Float()*state.tintr,
-				m_Config.GetParam(color).GetValue().GetSubValue(MO_GREEN).Float()*state.tintg,
-                m_Config.GetParam(color).GetValue().GetSubValue(MO_BLUE).Float()*state.tintb,
-                m_Config.GetParam(color).GetValue().GetSubValue(MO_ALPHA).Float()*state.alpha);
-			
-/*
-    glTranslatef(   mov.movx(m_Config.GetParam(transx), state.tempo),
-                    mov.movy(m_Config.GetParam(transy), state.tempo),
-                    mov.movz(m_Config.GetParam(transz), state.tempo));
-*/
-/*
-	glRotatef(  mov.movx(m_Config.GetParam(rotatx), state.tempo), 1.0, 0.0, 0.0 );
-    glRotatef(  mov.movy(m_Config.GetParam(rotaty), state.tempo), 0.0, 1.0, 0.0 );
-    glRotatef(  mov.movz(m_Config.GetParam(rotatz), state.tempo), 0.0, 0.0, 1.0 );
-	glScalef(   mov.movx(m_Config.GetParam(scalex), state.tempo),
-                mov.movy(m_Config.GetParam(scaley), state.tempo),
-                mov.movz(m_Config.GetParam(scalez), state.tempo));
-*/
-	divf = m_Config.GetParam(divisorf).GetValue().GetSubValue(0).Float();
-	facx = mov.movx(m_Config.GetParam(factorx), state.tempo);
-	facy = mov.movy(m_Config.GetParam(factory), state.tempo);
-	facz = mov.movz(m_Config.GetParam(factorz), state.tempo);
-	
-	Image = m_Config.GetCurrentValueIndex(images);
-
-	glDisable(GL_DEPTH_TEST);	
+	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_ALPHA);
-	glDisable(GL_CULL_FACE);	
-	glEnable(GL_BLEND);		
-	glBlendFunc(GL_SRC_ALPHA,GL_ONE);
+	glDisable(GL_CULL_FACE);
+	glEnable(GL_BLEND);
 
-	glBindTexture(GL_TEXTURE_2D, Images[Image]);
-  
+
+    // Draw //
+	glTranslatef(  m_Config[moR(LIGHTS_TRANSLATEX)].GetData()->Fun()->Eval(state.tempo.ang),
+                   m_Config[moR(LIGHTS_TRANSLATEY)].GetData()->Fun()->Eval(state.tempo.ang),
+					0.0);
+
+    glRotatef(  m_Config[moR(LIGHTS_ROTATEZ)].GetData()->Fun()->Eval(state.tempo.ang), 0.0, 0.0, 1.0 );
+	glScalef(   m_Config[moR(LIGHTS_SCALEX)].GetData()->Fun()->Eval(state.tempo.ang),
+                m_Config[moR(LIGHTS_SCALEY)].GetData()->Fun()->Eval(state.tempo.ang),
+                1.0);
+
+    SetColor( m_Config[moR(LIGHTS_COLOR)][MO_SELECTED], m_Config[moR(LIGHTS_ALPHA)][MO_SELECTED], state );
+
+    SetBlending( (moBlendingModes) m_Config[moR(LIGHTS_BLENDING)][MO_SELECTED][0].Int() );
+
+    moTexture* pImage = (moTexture*) m_Config[moR(LIGHTS_TEXTURE)].GetData()->Pointer();
+
+    glBindTexture( GL_TEXTURE_2D, m_Config[moR(LIGHTS_TEXTURE)].GetData()->GetGLId(&state.tempo) );
+
+
+	divf = m_Config[moR(LIGHTS_DIVISOR)].GetData()->Fun()->Eval(state.tempo.ang);
+	facx = m_Config[moR(LIGHTS_FACTORX)].GetData()->Fun()->Eval(state.tempo.ang);
+	facy = m_Config[moR(LIGHTS_FACTORY)].GetData()->Fun()->Eval(state.tempo.ang);
+	facz = m_Config[moR(LIGHTS_FACTORZ)].GetData()->Fun()->Eval(state.tempo.ang);
+
 	angulo = 0.0f;
 	radius = 2.0f;
-	
-	for(i=0;i<nlights;i++) {
-		//angulo+=5.0f*pi/divf;
-		angulo+=5.0f*pi/10.0f;
-		LIGHTS[i].X = cos(angulo)*radius;
-		LIGHTS[i].Y = sin(angulo)*radius;
-		LIGHTS[i].Z = -10.0f;
-	}
 
-	for(i=0;i<nlights;i++) {
+	if (m_Config[moR(LIGHTS_NUMBER)][MO_SELECTED][0].Int()!=Lights.Count()) {
+	    Lights.Init( m_Config[moR(LIGHTS_NUMBER)][MO_SELECTED][0].Int(), moCoord() );
+    }
+
+    for( i=0; i<Lights.Count(); i++ ) {
+        //angulo+=5.0f*pi/divf;
+        angulo+= 5.0f * moMathf::PI / 10.0f;
+        Lights[i].Position = moVector3f( cos(angulo)*radius, sin(angulo)*radius, -10.0f );
+    }
+
+
+	for(i=0;i<Lights.Count();i++) {
 		//angulo+=pi/(nlights)/(divf/5.0);
-		angulo+=pi/(nlights/ divf);		
-		LIGHTS[i].XN = LIGHTS[i].X+cos(angulo)*facx; 
-		LIGHTS[i].YN = LIGHTS[i].Y+sin(angulo)*facy;
-		LIGHTS[i].ZN = LIGHTS[i].Z;
+		angulo+= moMathf::PI / ( Lights.Count() / divf );
+		Lights[i].Normal = moVector3f( Lights[i].Position.X() + cos(angulo)*facx, Lights[i].Position.Y() + sin(angulo)*facy, Lights[i].Position.Z() );
 
 		glLoadIdentity();
 		glTranslatef(0.0,0.0,0.0);
 		glScalef(1.0*state.magnitude*cos(state.tempo.ang),1.0*state.magnitude*cos(state.tempo.ang),1.0*state.magnitude);
 		glRotatef(60*state.tempo.ang, 0.0, 0.0, 1.0 );
-		
-		glTranslatef(LIGHTS[i].XN,LIGHTS[i].YN,LIGHTS[i].ZN);
-		
+
+		glTranslatef( Lights[i].Normal.X() , Lights[i].Normal.Y() , Lights[i].Normal.Z()  );
+
 		glBegin(GL_QUADS);
 			glTexCoord2f(0.0, 0.0); glVertex3f(-1.0, -1.0, 0);
 			glTexCoord2f(1.0, 0.0); glVertex3f( 1.0, -1.0, 0);
@@ -202,7 +179,7 @@ void moEffectLights::Draw( moTempo* tempogral,moEffectState* parentstate)
 			glTexCoord2f(0.0, 1.0); glVertex3f(-1.0,  1.0, 0);
 		glEnd();
 	}
-	
+
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glPopMatrix();
 	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
@@ -211,7 +188,28 @@ void moEffectLights::Draw( moTempo* tempogral,moEffectState* parentstate)
 
 MOboolean moEffectLights::Finish()
 {
-	if(Images!=NULL)	delete [] Images;
-	Images = NULL;
     return PreFinish();
+}
+
+
+moConfigDefinition *
+moEffectLights::GetDefinition( moConfigDefinition *p_configdefinition ) {
+
+	//default: alpha, color, syncro
+	p_configdefinition = moEffect::GetDefinition( p_configdefinition );
+	p_configdefinition->Add( moText("number"), MO_PARAM_NUMERIC, LIGHTS_NUMBER, moValue( "60", "NUM").Ref() );
+	p_configdefinition->Add( moText("blending"), MO_PARAM_BLENDING, LIGHTS_BLENDING, moValue( "0", "NUM").Ref() );
+	p_configdefinition->Add( moText("texture"), MO_PARAM_TEXTURE, LIGHTS_TEXTURE, moValue( "icons/star.tga", "TXT") );
+
+	p_configdefinition->Add( moText("factorx"), MO_PARAM_FUNCTION, LIGHTS_FACTORX, moValue( "0.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("factory"), MO_PARAM_FUNCTION, LIGHTS_FACTORY, moValue( "0.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("factorz"), MO_PARAM_FUNCTION, LIGHTS_FACTORZ, moValue( "0.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("divisor"), MO_PARAM_FUNCTION, LIGHTS_DIVISOR, moValue( "1.0", "FUNCTION").Ref() );
+
+	p_configdefinition->Add( moText("translatex"), MO_PARAM_TRANSLATEX, LIGHTS_TRANSLATEX, moValue( "0.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("translatey"), MO_PARAM_TRANSLATEY, LIGHTS_TRANSLATEY, moValue( "0.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("rotatez"), MO_PARAM_ROTATEZ, LIGHTS_ROTATEZ, moValue( "0.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("scalex"), MO_PARAM_SCALEX, LIGHTS_SCALEX, moValue( "1.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("scaley"), MO_PARAM_SCALEY, LIGHTS_SCALEY, moValue( "1.0", "FUNCTION").Ref() );
+	return p_configdefinition;
 }
