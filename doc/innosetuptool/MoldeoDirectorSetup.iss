@@ -350,6 +350,7 @@ Source: ..\..\art\cursors\copy_cur.cur; DestDir: {app}\art\cursors
 Source: ..\..\art\cursors\drag_cur.cur; DestDir: {app}\art\cursors
 Source: ..\..\art\cursors\edit_cur.cur; DestDir: {app}\art\cursors
 Source: ..\..\art\cursors\move_cur.cur; DestDir: {app}\art\cursors
+Source: ..\..\art\fonts\Tuffy.ttf; DestDir: {app}\art\fonts
 
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\bin\mingw\{#MyAppExeName}; WorkingDir: {app}\bin\mingw\; IconFilename: {app}\doc\icons\Moldeo32.ico; Comment: Moldeo Director 0.7 GUI for Realtime Animated Images Composition; IconIndex: 0
@@ -395,6 +396,7 @@ Name: {app}\data\test\brushes
 Name: {app}\art
 Name: {app}\art\icons
 Name: {app}\art\cursors
+Name: {app}\art\fonts
 [Registry]
 Root: HKLM; Subkey: SOFTWARE\Microsoft\Windows\CurrentVersion\Moldeo\bin\mingw\moldeodirector.exe; ValueType: string; ValueName: ; ValueData: {app}\moldeodirector.exe; Flags: uninsdeletekey
 Root: HKLM; Subkey: SYSTEM\CurrentControlSet\Control\Session Manager\Environment; ValueType: string; ValueName: WXART2D; ValueData: "C:\wxArt2D;D:\_data\programacion\wxWidgets\wxArt2d\wxArt2D"
