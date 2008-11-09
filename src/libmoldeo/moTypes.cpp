@@ -32,7 +32,6 @@
 #include "moTypes.h"
 
 
-
 /** ticks desde el arranque de la aplicación*/
 MOulong moGetTicks() {
 

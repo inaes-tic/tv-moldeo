@@ -76,7 +76,7 @@ moFontManager::Init() {
 		moText	completepath;
 
 		//completepath = m_pResourceManager->GetDataMan()->GetDataPath() + moText("/");
-		completepath = moText("../../doc/fonts/arial.ttf");
+		completepath = moText("../../art/fonts/Tuffy.ttf");
 
 		pFont->Init( MO_FONT_TRANSLUCENT, completepath, 16 );
 
