@@ -221,8 +221,6 @@
 		<Unit filename="moTreeObjectsLayerCtrl.h" />
 		<Unit filename="moValueCtrl.cpp" />
 		<Unit filename="moValueCtrl.h" />
-		<Unit filename="moWxConnectorsObjectCtrl.cpp" />
-		<Unit filename="moWxConnectorsObjectCtrl.h" />
 		<Unit filename="moWxLevelCtrl.cpp" />
 		<Unit filename="moWxLevelCtrl.h" />
 		<Unit filename="moldeodirector.cpp" />

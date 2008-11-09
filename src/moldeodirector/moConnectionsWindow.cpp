@@ -1212,9 +1212,13 @@ moConnectionsWindow::moConnectionsWindow(wxWindow* parent,wxWindowID id,const wx
         restrict->SetSnapGrid( 2, 2 );
         restrict->SetRotationAngle(45);
 
-        a2dCanvasGlobals->SetSelectStroke( a2dStroke(wxColour(0,255,0), 1, a2dSTROKE_SOLID ) );
-        a2dCanvasGlobals->SetSelectFill( *a2dTRANSPARENT_FILL );
-        a2dCanvasGlobals->SetSelectDrawStyle( RenderWIREFRAME_SELECT );
+        a2dCanvasGlobals->SetSelectStroke( a2dStroke(wxColour(0,255,255), 1, a2dSTROKE_SOLID ) );
+        a2dFill SelectFill(wxColour(0,255,255));
+        SelectFill.SetAlpha(50);
+        a2dCanvasGlobals->SetSelectFill( SelectFill );
+        //a2dCanvasGlobals->SetSelectFill( *a2dTRANSPARENT_FILL );
+        //a2dCanvasGlobals->SetSelectDrawStyle( RenderWIREFRAME_SELECT );
+
         a2dIOHandlerCVGIn* cvghin = new a2dIOHandlerCVGIn();
         a2dIOHandlerCVGOut* cvghout = new a2dIOHandlerCVGOut();
 
