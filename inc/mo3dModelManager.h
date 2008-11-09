@@ -26,6 +26,21 @@ typedef struct {
 
 } mo3dModelParam;
 
+#include "moMathVector.h"
+#include "moMathVector3.h"
+
+class LIBMOLDEO_API moCoord {
+public:
+   moVector3f   Position;
+   moVector3f   Normal;
+   moVector3f   NextPosition;
+   moVector2f   TextureCoords;
+   moVector2f   Raster;
+   GLuint       TextureId;
+   MOfloat      Scale;
+};
+
+moDeclareExportedDynamicArray( moCoord, moCoords )
 
 //===========  3D  ================//
 class LIBMOLDEO_API CVector3
