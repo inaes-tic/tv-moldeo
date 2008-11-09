@@ -31,6 +31,8 @@
 
 #include "mo3dModelManager.h"
 
+#include "moArray.cpp"
+moDefineDynamicArray( moCoords )
 
 mo3DModel::mo3DModel() {
     m_pModel = NULL;
