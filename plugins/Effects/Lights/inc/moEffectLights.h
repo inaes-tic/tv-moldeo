@@ -41,42 +41,53 @@
 #define MO_ALPHA    3
 #endif
 
-class moEffectLights : public moEffect
-{
-public:
-    //config
-    MOint color;
-    MOint images;
 
-    MOint divisorf, factorx, factory, factorz;
-
-    MOint transx, transy, transz;
-    MOint rotatx, rotaty, rotatz;
-    MOint scalex, scaley, scalez;
-
-    MOint configuration;
-
-    //images
-    MOtexture *Images;
-    MOtexture Image, Imageprevious;
-    MOuint nimages;
-
-    ajCoord LIGHTS[60];
-    MOuint nlights;
-
-    MOfloat radius;
-
-    MOint cf, cfprevious, NSteps, NS;
-
-    moEffectLights();
-    virtual ~moEffectLights();
-
-    MOboolean Init();
-    void Draw(moTempo*, moEffectState* parentstate = NULL);
-    MOboolean Finish();
+enum moLightsParamIndex {
+	LIGHTS_ALPHA,
+	LIGHTS_COLOR,
+	LIGHTS_SYNC,
+	LIGHTS_PHASE,
+	LIGHTS_BLENDING,
+	LIGHTS_NUMBER,
+	LIGHTS_TEXTURE,
+	LIGHTS_FACTORX,
+	LIGHTS_FACTORY,
+	LIGHTS_FACTORZ,
+	LIGHTS_DIVISOR,
+	LIGHTS_TRANSLATEX,
+	LIGHTS_TRANSLATEY,
+    LIGHTS_SCALEX,
+	LIGHTS_SCALEY,
+	LIGHTS_ROTATEZ,
+    LIGHTS_INLET,
+	LIGHTS_OUTLET
 };
 
-class moEffectLightsFactory : public moEffectFactory 
+class moEffectLights : public moEffect
+{
+
+    public:
+
+        moEffectLights();
+        virtual ~moEffectLights();
+
+        MOboolean Init();
+        void Draw(moTempo*, moEffectState* parentstate = NULL);
+        MOboolean Finish();
+
+        moConfigDefinition *GetDefinition( moConfigDefinition *p_configdefinition );
+
+    protected:
+
+        moCoords Lights;
+
+        MOfloat radius;
+
+        MOint cf, cfprevious, NSteps, NS;
+
+};
+
+class moEffectLightsFactory : public moEffectFactory
 {
 public:
     moEffectLightsFactory() {}
