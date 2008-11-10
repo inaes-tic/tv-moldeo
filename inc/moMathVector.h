@@ -411,11 +411,12 @@ inline moVector2<Real> operator* (Real fScalar, const moVector2<Real>& rkV)
 	return moVector2<Real>(fScalar*rkV[0], fScalar*rkV[1]);
 }
 
-
+#ifndef MO_MACOSX
 template class LIBMOLDEO_API moVector2<MOfloat>;
-typedef moVector2<MOfloat> moVector2f;
-
 template class LIBMOLDEO_API moVector2<MOdouble>;
+#endif
+
+typedef moVector2<MOfloat> moVector2f;
 typedef moVector2<MOdouble> moVector2d;
 
 moDeclareExportedDynamicArray( moVector2f*, moVector2fArray )

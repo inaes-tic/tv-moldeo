@@ -138,10 +138,12 @@ private:
         Real fFm, Real fT1, Real fF1, int iLevel);
 };
 
+#ifndef MO_MACOSX
 template class LIBMOLDEO_API moMinimize1<MOfloat>;
-typedef moMinimize1<MOfloat> moMinimize1f;
-
 template class LIBMOLDEO_API moMinimize1<MOdouble>;
+#endif
+
+typedef moMinimize1<MOfloat> moMinimize1f;
 typedef moMinimize1<MOdouble> moMinimize1d;
 
 #endif

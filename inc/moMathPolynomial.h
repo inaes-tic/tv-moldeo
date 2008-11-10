@@ -41,7 +41,7 @@
 #define __MO_MATH_POLYNOMIAL_H__
 
 template <class Real>
-class LIBMOLDEO_API moPolynomial1 : public moAbstract 
+class LIBMOLDEO_API moPolynomial1 : public moAbstract
 {
 public:
     // construction and destruction
@@ -120,10 +120,12 @@ moPolynomial1<Real> operator* (Real fScalar, const moPolynomial1<Real>& rkPoly)
     return kProd;
 }
 
+#ifndef MO_MACOSX
 template class LIBMOLDEO_API moPolynomial1<MOfloat>;
-typedef moPolynomial1<MOfloat> moPolynomial1f;
-
 template class LIBMOLDEO_API moPolynomial1<MOdouble>;
+#endif
+
+typedef moPolynomial1<MOfloat> moPolynomial1f;
 typedef moPolynomial1<MOdouble> moPolynomial1d;
 
 #endif

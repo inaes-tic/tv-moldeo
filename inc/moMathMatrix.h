@@ -324,10 +324,14 @@ inline LIBMOLDEO_API moVector2<Real> operator* (const moVector2<Real>& rkV,
         rkV[0]*rkM[0][1] + rkV[1]*rkM[1][1]);
 }
 
+#ifndef MO_MACOSX
 template class LIBMOLDEO_API moMatrix2<MOfloat>;
+#endif
 typedef moMatrix2<MOfloat> moMatrix2f;
 
+#ifndef MO_MACOSX
 template class LIBMOLDEO_API moMatrix2<MOdouble>;
+#endif
 typedef moMatrix2<MOdouble> moMatrix2d;
 
 // moMatrix3 class ------------------------------------------------------------
@@ -738,10 +742,14 @@ inline moVector3<Real> operator* (const moVector3<Real>& rkV,
         rkV[0]*rkM[0][2] + rkV[1]*rkM[1][2] + rkV[2]*rkM[2][2]);
 }
 
+#ifndef MO_MACOSX
 template class LIBMOLDEO_API moMatrix3<MOfloat>;
+#endif
 typedef moMatrix3<MOfloat> moMatrix3f;
 
+#ifndef MO_MACOSX
 template class LIBMOLDEO_API moMatrix3<MOdouble>;
+#endif
 typedef moMatrix3<MOdouble> moMatrix3d;
 
 // moMatrix4 class ------------------------------------------------------------
@@ -1205,7 +1213,10 @@ inline moVector4<Real> operator* (const moVector4<Real>& rkV,
         rkV[0]*rkM[0][3]+rkV[1]*rkM[1][3]+rkV[2]*rkM[2][3]+rkV[3]*rkM[3][3]);
 }
 
+#ifndef MO_MACOSX
 template class LIBMOLDEO_API moMatrix4<MOfloat>;
+#endif
+
 typedef moMatrix4<MOfloat> moMatrix4f;
 
 /*

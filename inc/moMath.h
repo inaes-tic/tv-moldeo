@@ -836,10 +836,12 @@ public:
     static const Real INV_LN_10;
 };
 
+#ifndef MO_MACOSX
 template class LIBMOLDEO_API moMath<double>;
-typedef moMath<double> moMathd;
-
 template class LIBMOLDEO_API moMath<float>;
+#endif
+
+typedef moMath<double> moMathd;
 typedef moMath<float> moMathf;
 
 #ifdef MO_USING_VC
