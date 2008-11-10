@@ -44,20 +44,28 @@
 		</VirtualTargets>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add option="`pkg-config sdl --cflags`" />
-			<Add option="`freetype-config --cflags`" />
-			<Add option="`pkg-config gstreamer-0.10 --cflags`" />
-			<Add option="`pkg-config lua5.1 --cflags`" />
+			<Add option="`/sw/bin/pkg-config gstreamer-0.10 --cflags`" />
+			<Add option="`/sw/bin/pkg-config sdl --cflags`" />
+			<Add option="`/sw/bin/pkg-config ftgl --cflags`" />
+			<Add option="`/sw/bin/pkg-config freetype2 --cflags`" />
+			<Add option="`/sw/bin/pkg-config lua --cflags`" />
 			<Add option="-DMO_GSTREAMER" />
 			<Add directory="../../inc" />
 			<Add directory="../../inc/3ds" />
 			<Add directory="../../contrib/src/tinyxml/" />
+			<Add directory="/sw/include" />
+			<Add directory="/Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/OpenAL.framework/Versions/A/Headers" />
+			<Add directory="/Users/Shared/Moldeo/boost_1_36_0" />
+			<Add directory="/sw/include/FTGL" />
+			<Add directory="/sw/lib/freetype219/include" />
+			<Add directory="/sw/lib/freetype219/include/freetype2" />
+			<Add directory="/Library/Frameworks/Cg.framework/Versions/1.0/Headers" />
 		</Compiler>
 		<Linker>
 			<Add option="`freetype-config --libs`" />
-			<Add option="`pkg-config gstreamer-0.10 --libs`" />
-			<Add option="`pkg-config lua5.1 --libs`" />
-			<Add option="`pkg-config muparser --libs`" />
+			<Add option="`/sw/bin/pkg-config gstreamer-0.10 --libs`" />
+			<Add option="`/sw/bin/pkg-config lua --libs`" />
+			<Add option="`/sw/bin/pkg-config muparser --libs`" />
 			<Add library="freeimage" />
 			<Add library="libboost_filesystem-mt" />
 		</Linker>
@@ -117,7 +125,6 @@
 		<Unit filename="../../inc/moMoldeoObject.h" />
 		<Unit filename="../../inc/moMotion.h" />
 		<Unit filename="../../inc/moNetManager.h" />
-		<Unit filename="../../inc/moOGLFT.h" />
 		<Unit filename="../../inc/moP5.h" />
 		<Unit filename="../../inc/moParam.h" />
 		<Unit filename="../../inc/moPlugin.h" />
@@ -203,7 +210,6 @@
 		<Unit filename="../../src/libmoldeo/moMoldeoObject.cpp" />
 		<Unit filename="../../src/libmoldeo/moMotion.cpp" />
 		<Unit filename="../../src/libmoldeo/moNetManager.cpp" />
-		<Unit filename="../../src/libmoldeo/moOGLFT.cpp" />
 		<Unit filename="../../src/libmoldeo/moP5.cpp" />
 		<Unit filename="../../src/libmoldeo/moParam.cpp" />
 		<Unit filename="../../src/libmoldeo/moPlugin.cpp" />

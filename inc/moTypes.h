@@ -72,6 +72,10 @@
     #include "muParserDLL.h"
 #endif
 
+#ifdef MO_MACOSX
+    #include <muParser.h>
+#endif
+
 #ifdef MO_LINUX
     #include <muParser/muParser.h>
 #endif

@@ -31,12 +31,7 @@
 
 #include "moFontManager.h"
 
-#include "FTGLExtrdFont.h"
-#include "FTGLOutlineFont.h"
-#include "FTGLPolygonFont.h"
-#include "FTGLTextureFont.h"
-#include "FTGLPixmapFont.h"
-#include "FTGLBitmapFont.h"
+#include "ftgl.h"
 
 #include "moArray.cpp"
 moDefineDynamicArray(moFonts)

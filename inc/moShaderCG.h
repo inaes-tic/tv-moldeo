@@ -36,9 +36,13 @@
 #define __MO_SHADER_CG_H__
 
 #include "moShader.h"
-#include <Cg/cg.h>
-#include <Cg/cgGL.h>
-
+#ifdef MO_MACOSX
+    #include <cg.h>
+    #include <cgGL.h>
+#else
+    #include <Cg/cg.h>
+    #include <Cg/cgGL.h>
+#endif
 /**
  * Clase que encapsula un shader escrito en el lenguaje CG de NVidia.
  */

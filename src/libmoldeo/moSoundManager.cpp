@@ -126,12 +126,12 @@ void moSound::PlaySample( MOint sampleid ) {
 
 	m_OldSample = m_ActualSample;
 
-	alGetSourcei( m_SourceId , AL_BYTE_OFFSET, &m_ActualSample);
+	alGetSourcei( m_SourceId , AL_BUFFER /*AL_BYTE_OFFSET*/, &m_ActualSample);
 
 	alSourceStop(m_SourceId);
 
 	if (m_ActualSample!=sampleid) {
-		alSourcei( m_SourceId, AL_BYTE_OFFSET, sampleid );
+		alSourcei( m_SourceId, AL_BUFFER /*AL_BYTE_OFFSET*/, sampleid );
 		m_ActualSample = sampleid;
 	}
 
@@ -176,7 +176,7 @@ MOint moSound::State() {
 
 void moSound::Update() {
 	alGetSourcei( m_SourceId, AL_SOURCE_STATE, &m_State );
-	alGetSourcei( m_SourceId, AL_BYTE_OFFSET, &m_ActualSample );
+	alGetSourcei( m_SourceId, AL_BUFFER /*AL_BYTE_OFFSET*/, &m_ActualSample );
 }
 
 void moSound::SetPosition( float x, float y, float z ) {

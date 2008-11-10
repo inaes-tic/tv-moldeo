@@ -408,8 +408,7 @@ protected:
 	double x;
 	#ifdef WIN32
 	parser_handle m_hParser;
-	#endif
-	#ifdef MO_LINUX
+    #else
 	mu::Parser m_Parser;
 	#endif
 

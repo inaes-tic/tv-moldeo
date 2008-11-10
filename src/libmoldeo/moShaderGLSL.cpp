@@ -60,7 +60,7 @@ MOboolean moShaderGLSL::Finish()
         glDetachObjectARB(m_ProgramObject, m_VertexShader);
         m_VertexShader = 0;
     }
-    if (m_FragmentShader != 0) 
+    if (m_FragmentShader != 0)
     {
         glDetachObjectARB(m_ProgramObject, m_FragmentShader);
         m_FragmentShader = 0;
@@ -185,12 +185,12 @@ void moShaderGLSL::printInfoLog(GLhandleARB obj)
     int charsWritten  = 0;
     char *infoLog;
 
-    glGetObjectParameterivARB(obj, GL_OBJECT_INFO_LOG_LENGTH_ARB, &infologLength);
+    glGetObjectParameterivARB(obj, GL_OBJECT_INFO_LOG_LENGTH_ARB, &(GLint)infologLength);
 
     if (infologLength > 0)
     {
         infoLog = (char *)malloc(infologLength);
-        glGetInfoLogARB(obj, infologLength, &charsWritten, infoLog);
+        glGetInfoLogARB(obj, infologLength, &(GLsizei)charsWritten, infoLog);
 		moText msg = moText(infoLog);
         if (MODebug != NULL) MODebug->Push(msg);
         free(infoLog);
