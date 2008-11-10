@@ -139,8 +139,8 @@ class LIBMOLDEO_API moConfigDefinition
 
 };
 
-#define moDefineParamIndex(X,Y) if ( m_Config.GetConfigDefinition()!=NULL && X<m_Config.GetConfigDefinition()->ParamIndexes().Count() )\
-                                    m_Config.GetConfigDefinition()->ParamIndexes().Set( X, moParamIndex(m_Config.GetParamIndex(Y)))
+#define moDefineParamIndex(X,Y) if ( m_Config.GetConfigDefinition()!=NULL && (MOuint)X<m_Config.GetConfigDefinition()->ParamIndexes().Count() )\
+                                    m_Config.GetConfigDefinition()->ParamIndexes().Set( (int)X, moParamIndex((MOint)m_Config.GetParamIndex(Y)))
 
 
 /// almacena la configuración de los parámetros de un objeto en un archivo XML

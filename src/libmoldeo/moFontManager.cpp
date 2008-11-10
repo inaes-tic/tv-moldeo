@@ -30,15 +30,13 @@
 *******************************************************************************/
 
 #include "moFontManager.h"
-#include "moOGLFT.h"
+
 #include "FTGLExtrdFont.h"
 #include "FTGLOutlineFont.h"
 #include "FTGLPolygonFont.h"
 #include "FTGLTextureFont.h"
 #include "FTGLPixmapFont.h"
 #include "FTGLBitmapFont.h"
-
-#define MO_FTGL
 
 #include "moArray.cpp"
 moDefineDynamicArray(moFonts)
@@ -280,7 +278,6 @@ moFont::Init( moFontType p_Type, moText p_fontname, MOint p_size, MOuint glid ) 
 
   glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
 
-#ifdef MO_FTGL
 	switch( (int)p_Type ) {
 		case MO_FONT_OUTLINE://3d
 			m_pFace = (FTFont*)new FTGLOutlineFont( p_fontname );
@@ -330,51 +327,6 @@ moFont::Init( moFontType p_Type, moText p_fontname, MOint p_size, MOuint glid ) 
 		m_Name = p_fontname;
 		return true;
 	}
-#else
-	switch( (int)p_Type ) {
-		case MO_FONT_OUTLINE:
-			m_pFace = (moFontFace*)new OGLFT::Outline( p_fontname, p_size );
-			break;
-		case MO_FONT_TRANSLUCENT:
-			m_pFace = (moFontFace*)new OGLFT::Translucent( p_fontname, p_size );
-			break;
-		case MO_FONT_TRANSLUCENTTEXTURE:
-			m_pFace = (moFontFace*)new OGLFT::TranslucentTexture( p_fontname, p_size );
-			break;
-		case MO_FONT_GRAYSCALE:
-			m_pFace = (moFontFace*)new OGLFT::Grayscale( p_fontname, p_size );
-			break;
-		case MO_FONT_MONOCHROME:
-			m_pFace = (moFontFace*)new OGLFT::Monochrome( p_fontname, p_size );
-			break;
-		case MO_FONT_SOLID:
-			m_pFace = (moFontFace*)new OGLFT::Solid( p_fontname, p_size );
-			break;
-		case MO_FONT_FILLED:
-			m_pFace = (moFontFace*)new OGLFT::Filled( p_fontname, p_size );
-			break;
-    case MO_FONT_GLBUILD:
-      m_FontGLId = glid;
-      BuildFont();
-			break;
-    case MO_FONT_UNDEFINED:
-      MODebug2->Error(moText(" FontManager:: UNDEFINED font type"));
-      m_pFace = NULL;
-      break;
-
-	}
-
-    OGLFT::Face* FF = (OGLFT::Face*) m_pFace;
-
-	if ( ( p_Type!=MO_FONT_GLBUILD && ( FF == NULL || !FF->isValid() ) ) ||
-         ( p_Type==MO_FONT_UNDEFINED )  || (p_Type==MO_FONT_GLBUILD && m_FontGLId==-1)) {
-        MODebug2->Error(moText("FontManager: Could not construct face from ")+(moText)p_fontname);
-        return false;
-	} else {
-		m_Name = p_fontname;
-		return true;
-	}
-#endif
 
 
 	return false;
@@ -382,21 +334,13 @@ moFont::Init( moFontType p_Type, moText p_fontname, MOint p_size, MOuint glid ) 
 
 MOboolean
 moFont::Finish() {
-    #ifdef MO_FTGL
+
     FTFont* FF = (FTFont*) m_pFace;
     if (FF) {
         delete FF;
         FF = NULL;
     }
 
-    #else
-    OGLFT::Face* FF = (OGLFT::Face*) m_pFace;
-	if (FF!=NULL) {
-		delete FF;
-		FF = NULL;
-		m_Name = moText("");
-	}
-    #endif
 	return true;
 
 }
@@ -405,50 +349,32 @@ void
 moFont::SetSize( MOfloat size ) {
 
     m_FontSize = size;
-    #ifdef MO_FTGL
+
     FTFont* FF = (FTFont*) m_pFace;
     if (FF) FF->FaceSize(m_FontSize);
-    #else
-	OGLFT::Face* FF = (OGLFT::Face*) m_pFace;
-	if (FF)
-		FF->setPointSize( m_FontSize );
-    #endif
+
 }
 
 void
 moFont::SetForegroundColor( MOfloat p_r, MOfloat p_g, MOfloat p_b) {
 
-    #ifdef MO_FTGL
 
-    #else
-	OGLFT::Face* FF = (OGLFT::Face*) m_pFace;
-	if (FF)
-		FF->setForegroundColor( p_r, p_g, p_b );
-    #endif
 }
 
 void
 moFont::SetHorizontalJustification( int p_horizontal_justification) {
-    #ifdef MO_FTGL
+
     FTFont* FF = (FTFont*) m_pFace;
     //if (FF) FF->
-    #else
-    OGLFT::Face* FF = (OGLFT::Face*) m_pFace;
-	if (FF)
-		FF->setHorizontalJustification( (OGLFT::Face::HorizontalJustification)p_horizontal_justification );
-    #endif
+
 }
 
 void
 moFont::SetStringRotation( MOfloat p_string_rotation ) {
-    #ifdef MO_FTGL
+
     FTFont* FF = (FTFont*) m_pFace;
     //if (FF) FF->
-    #else
-	OGLFT::Face* FF = (OGLFT::Face*) m_pFace;
-	if (FF)
-		FF->setStringRotation( p_string_rotation );
-    #endif
+
 }
 
 void
@@ -459,24 +385,12 @@ moFont::Draw( MOfloat x, MOfloat y, moText& text) {
 void
 moFont::Draw( MOfloat x, MOfloat y, moText& text, moFontSize p_fontsize, MOint set, MOfloat sx, MOfloat sy, MOfloat rt ) {
 
-    #ifdef MO_FTGL
     FTFont* FF = (FTFont*) m_pFace;
     if (FF) {
         SetSize(p_fontsize);
         FF->Render( text );
     }
-    #else
-	OGLFT::Face* FF = (OGLFT::Face*) m_pFace;
 
-	SetSize(p_fontsize);
-
-	if (FF) {
-    glScalef( sx, sy, 1.0 );
-	  FF->setPointSize( p_fontsize );
-	  FF->setStringRotation(rt);
-		FF->draw( x, y, text );
-    }
-    #endif
     else {
       if (m_FontGLId>=0) {
           this->glPrint( (int)x, (int)y, text, set, sx, sy, rt );

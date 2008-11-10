@@ -118,13 +118,19 @@ using namespace std;
 /*OSX*/
 #ifdef MO_MACOSX
 
+  #include <X11/X.h>
+
+  #define MO_HANDLE Window
+
+  //revisar esto!!! para Mac OSX
+  #define MO_DISPLAY void*
+
   #include "SDL.h"
   #include "SDL_thread.h"
   #include "SDL_mutex.h"
   #include "SDL_net.h"
   #include "SDL_image.h"
-  #include "QuickTime.h"
-  #include "GLUT/glut.h"
+  //#include "QuickTime.h"
 
   #ifdef USE_GL_EXTENSIONS
     // GLEW provides gl.h, glu.h and glext.h
@@ -134,6 +140,22 @@ using namespace std;
     #include "OpenGL/glu.h"
     #include "OpenGL/glext.h"
   #endif
+
+    #include "GLUT/glut.h"
+
+	#define MO_GSTREAMER 1
+
+    # ifndef __int64
+    # define __int64 long long
+    # endif
+
+    # ifndef _int64
+    # define _int64 __int64
+    # endif
+
+    #define moint64 __int64
+    typedef __int16_t moWord;
+    typedef __int32_t moDWord;
 
 #endif
 
@@ -370,6 +392,13 @@ enum moPolygonModes {
 //////////////////////////////////////////////////////
 
 #ifdef MO_LINUX
+//#    include "port/getc.h"
+//#    include "port/itoa.h"
+//#    include "port/ptypes.h"
+#    include "port/stricmp.h"
+#endif
+
+#ifdef MO_MACOSX
 //#    include "port/getc.h"
 //#    include "port/itoa.h"
 //#    include "port/ptypes.h"
