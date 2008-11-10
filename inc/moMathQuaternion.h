@@ -326,10 +326,12 @@ inline moQuaternion<Real> operator* (Real fScalar, const moQuaternion<Real>& rkQ
     return kProd;
 }
 
+#ifndef MO_MACOSX
 template class LIBMOLDEO_API moQuaternion<MOfloat>;
-typedef moQuaternion<MOfloat> moQuaternionf;
-
 template class LIBMOLDEO_API moQuaternion<MOdouble>;
+#endif
+
+typedef moQuaternion<MOfloat> moQuaternionf;
 typedef moQuaternion<MOdouble> moQuaterniond;
 
 #endif
