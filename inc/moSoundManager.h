@@ -48,6 +48,12 @@
     #include <AL/alext.h>
 #endif
 
+#ifdef MO_MACOSX
+    #include <al.h>
+    #include <alut.h>
+    //#include <alext.h>
+#endif
+
 #define NUMBUFFERS              (4)
 #define	SERVICE_UPDATE_PERIOD	(20)
 #define MO_SOUNDERROR 65535

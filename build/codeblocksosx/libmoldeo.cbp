@@ -44,6 +44,7 @@
 		</VirtualTargets>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add option="`pkg-config sdl --cflags`" />
 			<Add option="`freetype-config --cflags`" />
 			<Add option="`pkg-config gstreamer-0.10 --cflags`" />
 			<Add option="`pkg-config lua5.1 --cflags`" />
