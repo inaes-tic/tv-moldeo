@@ -28,17 +28,16 @@
   Andrés Colubri
 
 *******************************************************************************/
-
-#include "moNetManager.h"
-
-#include "moArray.cpp"
-moDefineDynamicArray(moNetObjects)
-
 #ifdef MO_LINUX
     #include <asio.hpp>
 #else
     #include <boost/asio.hpp>
 #endif
+
+#include "moNetManager.h"
+
+#include "moArray.cpp"
+moDefineDynamicArray(moNetObjects)
 
 
 //===========================================

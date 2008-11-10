@@ -153,7 +153,7 @@ class LIBMOLDEO_API moSound : public  moAbstract {
 		moSoundType GetType() { return m_SoundType; }
 
 		MOint	GetBufferSize() { return m_BufferSize; }
-		MOint	GetActualSample() { return m_ActualSample; }
+		ALint	GetActualSample() { return m_ActualSample; }
 
 		void Play();
 		void PlaySample( MOint sampleid );
@@ -173,8 +173,8 @@ class LIBMOLDEO_API moSound : public  moAbstract {
 		float GetVolume();
 	protected:
 
-		MOint			m_ActualSample;
-		MOint			m_OldSample;
+		ALint			m_ActualSample;
+		ALint			m_OldSample;
 
 		moFile*			m_pFile;
 		moDataManager*	m_pDataMan;
