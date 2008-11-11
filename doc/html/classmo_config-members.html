@@ -31,6 +31,8 @@
   <tr class="memlist"><td><a class="el" href="classmo_config.html#f5f2d40803b5d1b5b60d27726dafe4a7">GetCurrentValueIndex</a>(MOint p_paramindex)</td><td><a class="el" href="classmo_config.html">moConfig</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_config.html#06eb989e1f1b3f720a834ad2eeac5ad2">GetFullText</a>()</td><td><a class="el" href="classmo_config.html">moConfig</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_config.html#589be847fde85f0a7d2274e4698347f2">GetName</a>()</td><td><a class="el" href="classmo_config.html">moConfig</a></td><td><code> [inline]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classmo_config.html#184d6bfb5530d6531771effb088016f3">GetObjectClass</a>()</td><td><a class="el" href="classmo_config.html">moConfig</a></td><td><code> [inline]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classmo_config.html#831836f0b8d22811b8d44e9567e97d90">GetObjectName</a>()</td><td><a class="el" href="classmo_config.html">moConfig</a></td><td><code> [inline]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_config.html#f915d226cdf244e45204d3df0f6683f5">GetParam</a>(MOint p_paramindex=-1)</td><td><a class="el" href="classmo_config.html">moConfig</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_config.html#045eee1005114c53d05179ff92ead818">GetParam</a>(moText p_paramname)</td><td><a class="el" href="classmo_config.html">moConfig</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_config.html#c4555d2d6851734b456e7060d8e665ea">GetParam</a>(moParamIndex p_paramindex)</td><td><a class="el" href="classmo_config.html">moConfig</a></td><td><code> [inline]</code></td></tr>
@@ -50,8 +52,6 @@
   <tr class="memlist"><td><a class="el" href="classmo_config.html#789a0182fcea7110874de379e52bcb1b">m_FileName</a></td><td><a class="el" href="classmo_config.html">moConfig</a></td><td><code> [private]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_config.html#c6fb86144af7621741ff5c61a82ff260">m_MajorVersion</a></td><td><a class="el" href="classmo_config.html">moConfig</a></td><td><code> [private]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_config.html#d4c70c58957e493231df6771f4e09bf7">m_MinorVersion</a></td><td><a class="el" href="classmo_config.html">moConfig</a></td><td><code> [private]</code></td></tr>
-  <tr class="memlist"><td><a class="el" href="classmo_config.html#a7568cc0f40b552fc29ee5a20232217f">m_ObjectClass</a></td><td><a class="el" href="classmo_config.html">moConfig</a></td><td><code> [private]</code></td></tr>
-  <tr class="memlist"><td><a class="el" href="classmo_config.html#393c8f7e54b693bce9846356a783bce8">m_ObjectName</a></td><td><a class="el" href="classmo_config.html">moConfig</a></td><td><code> [private]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_config.html#d8f7da4e35c8f9e2c5ac65a79d44ae9c">m_Params</a></td><td><a class="el" href="classmo_config.html">moConfig</a></td><td><code> [private]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_config.html#f8e6b146a798ec6a6aef9dc3bec2da8f">m_PreconfActual</a></td><td><a class="el" href="classmo_config.html">moConfig</a></td><td><code> [private]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_config.html#7126aecba92d32b7afb14f029c364fe1">m_PreConfigs</a></td><td><a class="el" href="classmo_config.html">moConfig</a></td><td><code> [private]</code></td></tr>
@@ -69,12 +69,13 @@
   <tr class="memlist"><td><a class="el" href="classmo_config.html#04ec50e56f76d5287c39778fb6d3376b">PreviousValue</a>()</td><td><a class="el" href="classmo_config.html">moConfig</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_config.html#3ff785e179ec668c8a93bbaf73fb8f7e">PrevParam</a>()</td><td><a class="el" href="classmo_config.html">moConfig</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_config.html#a934ba757be69b85e9d266dc7e4ab325">SaveConfig</a>(moText p_filename=moText(&quot;&quot;))</td><td><a class="el" href="classmo_config.html">moConfig</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classmo_config.html#ac17b222aa8cd6eb2de95c4dad281f57">Set</a>(moText p_objectname, moText p_objectclass)</td><td><a class="el" href="classmo_config.html">moConfig</a></td><td><code> [inline]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_config.html#2b5d0c436bbe260e047da0500ecd34fc">SetCurrentParamIndex</a>(int)</td><td><a class="el" href="classmo_config.html">moConfig</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_config.html#413abc9abba6105667cfb324994f0cf0">SetCurrentPreConf</a>(MOint p_actual)</td><td><a class="el" href="classmo_config.html">moConfig</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_config.html#fc0b36a90f2b50f21125ce34da49947c">SetCurrentValueIndex</a>(int p_paramindex, int p_valueindex)</td><td><a class="el" href="classmo_config.html">moConfig</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_config.html#d94735d0fb4126a031e3d60d8a75ee57">UnloadConfig</a>()</td><td><a class="el" href="classmo_config.html">moConfig</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_config.html#526d01d263beb6ab8b589bee2107dd0a">~moConfig</a>()</td><td><a class="el" href="classmo_config.html">moConfig</a></td><td><code> [virtual]</code></td></tr>
-</table><hr size="1"><address style="align: right;"><small>Generated on Mon Apr 28 20:04:23 2008 for MOLDEO by&nbsp;
+</table><hr size="1"><address style="align: right;"><small>Generated on Sun Nov 9 18:55:15 2008 for MOLDEO by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.6-NO </small></address>
 </body>

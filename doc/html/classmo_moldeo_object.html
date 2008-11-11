@@ -81,7 +81,7 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_moldeo_object.html#839801123b69cd5fdd4913e8bddf3fa4">SetName</a> (moText p_name)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_moldeo_object.html#4f67b03fdde986297f5a5f2264fda0ed">SetLabelName</a> (moText p_name)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_moldeo_object.html#074443abd9b5bb1ba7d7c3b08175a6eb">SetLabelName</a> (moText p_labelname)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">moText&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_moldeo_object.html#c770ff556cb12ccdfc647d7b0a6e9c7b">GetName</a> ()</td></tr>
 
@@ -94,6 +94,8 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">moText&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_moldeo_object.html#579aadf4f06b30eacce49bdf3d7dcf10">GetConfigName</a> ()</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">moText&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_moldeo_object.html#4152af54573a3f7115fc2bc05418f597">GetDescription</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="classmo_mob_definition.html">moMobDefinition</a> &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_moldeo_object.html#9547142f59e31e42b45fd34f16ab3746">GetMobDefinition</a> ()</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual <a class="el" href="classmo_config_definition.html">moConfigDefinition</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_moldeo_object.html#c968eaf78adcee663c1ddfc54f71e595">GetDefinition</a> (<a class="el" href="classmo_config_definition.html">moConfigDefinition</a> *p_configdefinition=NULL)</td></tr>
 
@@ -111,15 +113,7 @@
 <tr><td colspan="2"><br><h2>Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">MOboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_moldeo_object.html#d122bebaaae233afcdebefaddf6072d5">m_bLoading</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">MOint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_moldeo_object.html#2fc2f6e565b31069abde2396b31828a8">m_MoldeoId</a></td></tr>
-
-<tr><td class="memItemLeft" nowrap align="right" valign="top">moText&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_moldeo_object.html#b40434618d4bb640496269f6b677751f">m_MoldeoLabelName</a></td></tr>
-
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="mo_types_8h.html#dd0fd24f4fcaa97a6b2efd9872f5eef4">moMoldeoObjectType</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_moldeo_object.html#50896b0edc258b6b8f2b184d7303599f">m_Type</a></td></tr>
-
-<tr><td class="memItemLeft" nowrap align="right" valign="top">moText&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_moldeo_object.html#8b9874c8d2a22e6194fa117adbbce985">m_Name</a></td></tr>
-
-<tr><td class="memItemLeft" nowrap align="right" valign="top">moText&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_moldeo_object.html#3cd49ecdd0e9623168a008c23ed4b6b8">m_ConfigName</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="classmo_mob_definition.html">moMobDefinition</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_moldeo_object.html#e69220fce44848c301733846ed65e64e">m_MobDefinition</a></td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">moText&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_moldeo_object.html#4c3058db4f90301ac0565c597f80fa80">m_Description</a></td></tr>
 
@@ -429,6 +423,33 @@ función que devuelve el puntero a los Conectores de Recepción de este objeto.   
 
 <p>
 función que devuelve el nombre identificatorio del objeto.     </td>
+  </tr>
+</table>
+<a class="anchor" name="9547142f59e31e42b45fd34f16ab3746"></a><!-- doxytag: member="moMoldeoObject::GetMobDefinition" ref="9547142f59e31e42b45fd34f16ab3746" args="()" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"><a class="el" href="classmo_mob_definition.html">moMobDefinition</a>&amp; moMoldeoObject::GetMobDefinition           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap><code> [inline]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
   </tr>
 </table>
 <a class="anchor" name="c770ff556cb12ccdfc647d7b0a6e9c7b"></a><!-- doxytag: member="moMoldeoObject::GetName" ref="c770ff556cb12ccdfc647d7b0a6e9c7b" args="()" --><p>
@@ -815,7 +836,7 @@ función que especifica el Identificador del objeto.
 Reimplemented in <a class="el" href="classmo_i_o_device.html#f7d982d4e618ee269ce658a843f8e0f6">moIODevice</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="4f67b03fdde986297f5a5f2264fda0ed"></a><!-- doxytag: member="moMoldeoObject::SetLabelName" ref="4f67b03fdde986297f5a5f2264fda0ed" args="(moText p_name)" --><p>
+<a class="anchor" name="074443abd9b5bb1ba7d7c3b08175a6eb"></a><!-- doxytag: member="moMoldeoObject::SetLabelName" ref="074443abd9b5bb1ba7d7c3b08175a6eb" args="(moText p_labelname)" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -824,7 +845,7 @@ Reimplemented in <a class="el" href="classmo_i_o_device.html#f7d982d4e618ee269ce
           <td class="md" nowrap valign="top">void moMoldeoObject::SetLabelName           </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top">moText&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap> <em>p_name</em>          </td>
+          <td class="mdname1" valign="top" nowrap> <em>p_labelname</em>          </td>
           <td class="md" valign="top">&nbsp;)&nbsp;</td>
           <td class="md" nowrap><code> [inline]</code></td>
         </tr>
@@ -1043,29 +1064,6 @@ Reimplemented in <a class="el" href="classmo_video_manager.html#07ba31d7c0b12d29
     </td>
   </tr>
 </table>
-<a class="anchor" name="3cd49ecdd0e9623168a008c23ed4b6b8"></a><!-- doxytag: member="moMoldeoObject::m_ConfigName" ref="3cd49ecdd0e9623168a008c23ed4b6b8" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">moText <a class="el" href="classmo_moldeo_object.html#3cd49ecdd0e9623168a008c23ed4b6b8">moMoldeoObject::m_ConfigName</a><code> [protected]</code>          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-    </td>
-  </tr>
-</table>
 <a class="anchor" name="4c3058db4f90301ac0565c597f80fa80"></a><!-- doxytag: member="moMoldeoObject::m_Description" ref="4c3058db4f90301ac0565c597f80fa80" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -1112,59 +1110,13 @@ Reimplemented in <a class="el" href="classmo_video_manager.html#07ba31d7c0b12d29
     </td>
   </tr>
 </table>
-<a class="anchor" name="2fc2f6e565b31069abde2396b31828a8"></a><!-- doxytag: member="moMoldeoObject::m_MoldeoId" ref="2fc2f6e565b31069abde2396b31828a8" args="" --><p>
+<a class="anchor" name="e69220fce44848c301733846ed65e64e"></a><!-- doxytag: member="moMoldeoObject::m_MobDefinition" ref="e69220fce44848c301733846ed65e64e" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top">MOint <a class="el" href="classmo_moldeo_object.html#2fc2f6e565b31069abde2396b31828a8">moMoldeoObject::m_MoldeoId</a><code> [protected]</code>          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-    </td>
-  </tr>
-</table>
-<a class="anchor" name="b40434618d4bb640496269f6b677751f"></a><!-- doxytag: member="moMoldeoObject::m_MoldeoLabelName" ref="b40434618d4bb640496269f6b677751f" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">moText <a class="el" href="classmo_moldeo_object.html#b40434618d4bb640496269f6b677751f">moMoldeoObject::m_MoldeoLabelName</a><code> [protected]</code>          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-    </td>
-  </tr>
-</table>
-<a class="anchor" name="8b9874c8d2a22e6194fa117adbbce985"></a><!-- doxytag: member="moMoldeoObject::m_Name" ref="8b9874c8d2a22e6194fa117adbbce985" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">moText <a class="el" href="classmo_moldeo_object.html#8b9874c8d2a22e6194fa117adbbce985">moMoldeoObject::m_Name</a><code> [protected]</code>          </td>
+          <td class="md" nowrap valign="top"><a class="el" href="classmo_mob_definition.html">moMobDefinition</a> <a class="el" href="classmo_moldeo_object.html#e69220fce44848c301733846ed65e64e">moMoldeoObject::m_MobDefinition</a><code> [protected]</code>          </td>
         </tr>
       </table>
     </td>
@@ -1227,32 +1179,9 @@ Reimplemented in <a class="el" href="classmo_video_manager.html#07ba31d7c0b12d29
     </td>
   </tr>
 </table>
-<a class="anchor" name="50896b0edc258b6b8f2b184d7303599f"></a><!-- doxytag: member="moMoldeoObject::m_Type" ref="50896b0edc258b6b8f2b184d7303599f" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top"><a class="el" href="mo_types_8h.html#dd0fd24f4fcaa97a6b2efd9872f5eef4">moMoldeoObjectType</a> <a class="el" href="classmo_moldeo_object.html#50896b0edc258b6b8f2b184d7303599f">moMoldeoObject::m_Type</a><code> [protected]</code>          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-    </td>
-  </tr>
-</table>
 <hr>The documentation for this class was generated from the following file:<ul>
-<li>D:/_data/proyectos/SINESTESIA/OPENSVN/trunk/0.7/inc/<a class="el" href="mo_moldeo_object_8h.html">moMoldeoObject.h</a></ul>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Apr 28 20:04:24 2008 for MOLDEO by&nbsp;
+<li>D:/_data/proyectos/SINESTESIA/SVNSOURCEFORGE/trunk/0.7/inc/<a class="el" href="mo_moldeo_object_8h.html">moMoldeoObject.h</a></ul>
+<hr size="1"><address style="align: right;"><small>Generated on Sun Nov 9 18:55:17 2008 for MOLDEO by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.6-NO </small></address>
 </body>

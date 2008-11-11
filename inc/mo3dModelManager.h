@@ -136,17 +136,46 @@ struct mo3dModel
 
 #include "3ds/3ds.h"
 
+/// Clase para un nodo de una escena
+/**
+* Una nodo de escena es el objeto principal que contiene una jerarquía de objetos 3d
+* este nodo puede contener tanto un
+*
+*/
+class LIBMOLDEO_API moSceneNode : public moAbstract {
+
+    public:
+
+        moSceneNode();
+        virtual ~moSceneNode();
+
+        virtual MOboolean Init();
+        virtual MOboolean Finish();
+
+        virtual void Draw( moEffectState *state, GLuint g_ViewMode );
+        virtual void Update();
+        virtual void Interaction();
+
+        virtual moSceneNode*    GetParent();
+        virtual void            SetParent( moSceneNode* p_SceneNode );
+
+    protected:
+
+        void*   SceneNodeImplementation;
+
+};
+
 /// Clase base para los modelos tridimensionales
 /**
 * De esta clase deberían derivar los objetos tridimensionales importados por los recursos
 *
 */
-class LIBMOLDEO_API mo3DModel : public moAbstract {
+class LIBMOLDEO_API mo3DModelSceneNode : public moSceneNode {
 
     public:
 
-        mo3DModel();
-        virtual ~mo3DModel();
+        mo3DModelSceneNode();
+        virtual ~mo3DModelSceneNode();
 
         virtual MOboolean Init();
         virtual MOboolean Init( mo3dModel* p_pModel ) {
@@ -163,6 +192,28 @@ class LIBMOLDEO_API mo3DModel : public moAbstract {
 
         /** 3ds model structure */
         mo3dModel* m_pModel;
+
+};
+
+
+
+class LIBMOLDEO_API moScene : public moAbstract {
+
+    public:
+
+        moScene();
+        virtual ~moScene();
+
+        virtual MOboolean Init();
+        virtual MOboolean Finish();
+
+        virtual void Draw( moEffectState *state, GLuint g_ViewMode );
+        virtual void Update();
+        virtual void Interaction();
+
+    protected:
+
+        void*   SceneImplementation;
 
 };
 
@@ -189,7 +240,7 @@ public:
 
 private:
 
-    mo3DModel*  m_pMoldeoLogo;
+    mo3DModelSceneNode*  m_pMoldeoLogo;
 
 	mo3dModel* Load3dModel( moText namemodelo, moText datapath = "");
 

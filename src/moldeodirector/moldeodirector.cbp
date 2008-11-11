@@ -19,7 +19,6 @@
 				</Compiler>
 				<Linker>
 					<Add library="libmoldeod" />
-					<Add library="tinyxmld" />
 					<Add library="wxart2d_msw_general-2.8" />
 					<Add library="wxart2d_msw_xmlparse-2.8" />
 					<Add library="wxart2d_msw_curves-2.8" />
@@ -51,7 +50,6 @@
 				<Linker>
 					<Add option="-s" />
 					<Add library="libmoldeo" />
-					<Add library="tinyxml" />
 					<Add library="wxart2d_msw_general-2.8" />
 					<Add library="wxart2d_msw_xmlparse-2.8" />
 					<Add library="wxart2d_msw_curves-2.8" />
@@ -88,7 +86,6 @@
 			<Add directory="..\..\..\..\externlibs\SDL\include" />
 			<Add directory="..\..\..\..\externlibs\SDL_net\include" />
 			<Add directory="..\..\..\..\externlibs\SDL_image\include" />
-			<Add directory="..\..\..\..\externlibs\muparser\include" />
 			<Add directory="..\..\..\..\externlibs\opengl\include" />
 			<Add directory="..\..\..\..\externlibs\cg\include" />
 			<Add directory="..\..\..\..\externlibs\lua\include" />

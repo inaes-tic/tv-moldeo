@@ -40,9 +40,9 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual MOboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_console.html#b3b926f72f3a9dab6abe3eedc489f63f">Init</a> ()</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Inicializador predeterminado.  <a href="#b3b926f72f3a9dab6abe3eedc489f63f"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual MOboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_console.html#73da38907507a27e7b0a5cfdca731107">Init</a> (moText p_datapath, moText p_consoleconfig, moIODeviceManager *p_pIODeviceManager=NULL, <a class="el" href="classmo_resource_manager.html">moResourceManager</a> *p_pResourceManager=NULL, MOint p_render_to_texture_mode=MO_RENDER_TO_TEXTURE_FBSCREEN, MOint p_screen_width=MO_DEF_SCREEN_WIDTH, MOint p_screen_height=MO_DEF_SCREEN_HEIGHT, MOint p_render_width=MO_DEF_RENDER_WIDTH, MOint p_render_height=MO_DEF_RENDER_HEIGHT)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual MOboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_console.html#9bc2bf74deef3922c7bcc9c65d52ad7d">Init</a> (moText p_datapath, moText p_consoleconfig, moIODeviceManager *p_pIODeviceManager=NULL, <a class="el" href="classmo_resource_manager.html">moResourceManager</a> *p_pResourceManager=NULL, MOint p_render_to_texture_mode=MO_RENDER_TO_TEXTURE_FBSCREEN, MOint p_screen_width=MO_DEF_SCREEN_WIDTH, MOint p_screen_height=MO_DEF_SCREEN_HEIGHT, MOint p_render_width=MO_DEF_RENDER_WIDTH, MOint p_render_height=MO_DEF_RENDER_HEIGHT, MO_HANDLE p_OpWindowHandle=0, MO_DISPLAY p_Display=NULL)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Inicializador paramétrico.  <a href="#73da38907507a27e7b0a5cfdca731107"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Inicializador paramétrico.  <a href="#9bc2bf74deef3922c7bcc9c65d52ad7d"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_console.html#965a389630d7b8f7cbaca241c3f3d197">Interaction</a> ()</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Procesa los eventos de los dispositivos de entrada/salida.  <a href="#965a389630d7b8f7cbaca241c3f3d197"></a><br></td></tr>
@@ -55,9 +55,9 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual MOboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_console.html#536c9a969237753a3e976951482cac82">Finish</a> ()</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Finalizador.  <a href="#536c9a969237753a3e976951482cac82"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_console.html#30d2a58cc742bab6468a1c7fbe222ef2">InitResources</a> (<a class="el" href="classmo_resource_manager.html">moResourceManager</a> *pResourceManager, moText p_datapath, <a class="el" href="classmo_config.html">moConfig</a> &amp;p_consoleconfig, MOint p_render_to_texture_mode=MO_RENDER_TO_TEXTURE_FBSCREEN, MOint p_screen_width=MO_DEF_SCREEN_WIDTH, MOint p_screen_height=MO_DEF_SCREEN_HEIGHT, MOint p_render_width=MO_DEF_RENDER_WIDTH, MOint p_render_height=MO_DEF_RENDER_HEIGHT)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_console.html#c8b40b525f55345450929134c5ee2eeb">InitResources</a> (<a class="el" href="classmo_resource_manager.html">moResourceManager</a> *pResourceManager, moText p_datapath, <a class="el" href="classmo_config.html">moConfig</a> &amp;p_consoleconfig, MOint p_render_to_texture_mode=MO_RENDER_TO_TEXTURE_FBSCREEN, MOint p_screen_width=MO_DEF_SCREEN_WIDTH, MOint p_screen_height=MO_DEF_SCREEN_HEIGHT, MOint p_render_width=MO_DEF_RENDER_WIDTH, MOint p_render_height=MO_DEF_RENDER_HEIGHT, MO_HANDLE p_OpWindowHandle=0, MO_DISPLAY p_Display=NULL)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">inicializa el administrador de recursos  <a href="#30d2a58cc742bab6468a1c7fbe222ef2"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">inicializa el administrador de recursos  <a href="#c8b40b525f55345450929134c5ee2eeb"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_console.html#affc9f56f85d9bd8a504bfd15edc9d76">SetIODeviceManager</a> (moIODeviceManager *p_IODeviceManager)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">asignación del administrador de dispositivos  <a href="#affc9f56f85d9bd8a504bfd15edc9d76"></a><br></td></tr>
@@ -417,7 +417,7 @@ Reimplemented from <a class="el" href="classmo_moldeo_object.html#c968eaf78adcee
     </td>
   </tr>
 </table>
-<a class="anchor" name="73da38907507a27e7b0a5cfdca731107"></a><!-- doxytag: member="moConsole::Init" ref="73da38907507a27e7b0a5cfdca731107" args="(moText p_datapath, moText p_consoleconfig, moIODeviceManager *p_pIODeviceManager=NULL, moResourceManager *p_pResourceManager=NULL, MOint p_render_to_texture_mode=MO_RENDER_TO_TEXTURE_FBSCREEN, MOint p_screen_width=MO_DEF_SCREEN_WIDTH, MOint p_screen_height=MO_DEF_SCREEN_HEIGHT, MOint p_render_width=MO_DEF_RENDER_WIDTH, MOint p_render_height=MO_DEF_RENDER_HEIGHT)" --><p>
+<a class="anchor" name="9bc2bf74deef3922c7bcc9c65d52ad7d"></a><!-- doxytag: member="moConsole::Init" ref="9bc2bf74deef3922c7bcc9c65d52ad7d" args="(moText p_datapath, moText p_consoleconfig, moIODeviceManager *p_pIODeviceManager=NULL, moResourceManager *p_pResourceManager=NULL, MOint p_render_to_texture_mode=MO_RENDER_TO_TEXTURE_FBSCREEN, MOint p_screen_width=MO_DEF_SCREEN_WIDTH, MOint p_screen_height=MO_DEF_SCREEN_HEIGHT, MOint p_render_width=MO_DEF_RENDER_WIDTH, MOint p_render_height=MO_DEF_RENDER_HEIGHT, MO_HANDLE p_OpWindowHandle=0, MO_DISPLAY p_Display=NULL)" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -474,7 +474,19 @@ Reimplemented from <a class="el" href="classmo_moldeo_object.html#c968eaf78adcee
           <td class="md" nowrap align="right"></td>
           <td class="md"></td>
           <td class="md" nowrap>MOint&nbsp;</td>
-          <td class="mdname" nowrap> <em>p_render_height</em> = <code>MO_DEF_RENDER_HEIGHT</code></td>
+          <td class="mdname" nowrap> <em>p_render_height</em> = <code>MO_DEF_RENDER_HEIGHT</code>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>MO_HANDLE&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_OpWindowHandle</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>MO_DISPLAY&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_Display</em> = <code>NULL</code></td>
         </tr>
         <tr>
           <td class="md"></td>
@@ -596,7 +608,7 @@ Reimplemented from <a class="el" href="classmo_moldeo_object.html#ed71053e8cc6d0
     </td>
   </tr>
 </table>
-<a class="anchor" name="30d2a58cc742bab6468a1c7fbe222ef2"></a><!-- doxytag: member="moConsole::InitResources" ref="30d2a58cc742bab6468a1c7fbe222ef2" args="(moResourceManager *pResourceManager, moText p_datapath, moConfig &amp;p_consoleconfig, MOint p_render_to_texture_mode=MO_RENDER_TO_TEXTURE_FBSCREEN, MOint p_screen_width=MO_DEF_SCREEN_WIDTH, MOint p_screen_height=MO_DEF_SCREEN_HEIGHT, MOint p_render_width=MO_DEF_RENDER_WIDTH, MOint p_render_height=MO_DEF_RENDER_HEIGHT)" --><p>
+<a class="anchor" name="c8b40b525f55345450929134c5ee2eeb"></a><!-- doxytag: member="moConsole::InitResources" ref="c8b40b525f55345450929134c5ee2eeb" args="(moResourceManager *pResourceManager, moText p_datapath, moConfig &amp;p_consoleconfig, MOint p_render_to_texture_mode=MO_RENDER_TO_TEXTURE_FBSCREEN, MOint p_screen_width=MO_DEF_SCREEN_WIDTH, MOint p_screen_height=MO_DEF_SCREEN_HEIGHT, MOint p_render_width=MO_DEF_RENDER_WIDTH, MOint p_render_height=MO_DEF_RENDER_HEIGHT, MO_HANDLE p_OpWindowHandle=0, MO_DISPLAY p_Display=NULL)" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -647,7 +659,19 @@ Reimplemented from <a class="el" href="classmo_moldeo_object.html#ed71053e8cc6d0
           <td class="md" nowrap align="right"></td>
           <td class="md"></td>
           <td class="md" nowrap>MOint&nbsp;</td>
-          <td class="mdname" nowrap> <em>p_render_height</em> = <code>MO_DEF_RENDER_HEIGHT</code></td>
+          <td class="mdname" nowrap> <em>p_render_height</em> = <code>MO_DEF_RENDER_HEIGHT</code>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>MO_HANDLE&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_OpWindowHandle</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>MO_DISPLAY&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_Display</em> = <code>NULL</code></td>
         </tr>
         <tr>
           <td class="md"></td>
@@ -1521,8 +1545,8 @@ Cada objeto <a class="el" href="classmo_resource.html">moResource</a> implementa
   </tr>
 </table>
 <hr>The documentation for this class was generated from the following file:<ul>
-<li>D:/_data/proyectos/SINESTESIA/OPENSVN/trunk/0.7/inc/<a class="el" href="mo_console_8h.html">moConsole.h</a></ul>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Apr 28 20:04:23 2008 for MOLDEO by&nbsp;
+<li>D:/_data/proyectos/SINESTESIA/SVNSOURCEFORGE/trunk/0.7/inc/<a class="el" href="mo_console_8h.html">moConsole.h</a></ul>
+<hr size="1"><address style="align: right;"><small>Generated on Sun Nov 9 18:55:15 2008 for MOLDEO by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.6-NO </small></address>
 </body>

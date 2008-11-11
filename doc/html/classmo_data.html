@@ -52,6 +52,8 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#ea7bf6b0b5841fd9735bb114a9072a0e">Copy</a> (const <a class="el" href="classmo_data.html">moData</a> &amp;data)</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#574b54dea1f1f5bf42b9c5cec40fe932">IsValid</a> ()</td></tr>
+
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#c96f289599e836ec0782fbdc97d5940d">SetFloat</a> (MOfloat pfloat)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#aaf748e9fdb02071be56275d0ae04689">SetDouble</a> (MOdouble pdouble)</td></tr>
@@ -71,12 +73,6 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#0ce6cfe84230f0732236df8473d5fd33">SetType</a> (<a class="el" href="mo_value_8h.html#e51089b5e16548eef55fb06e5aac6949">moDataType</a> p_DataType)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#a467c6eb7be9b1c6890ea42adefd54c8">SetSize</a> (MOulong p_DataSize)</td></tr>
-
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#6dae09025e6eeaa541c6510d49dcc6c0">SetFun</a> (moMathFunction *p_Function)</td></tr>
-
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#ec3ffdb0a674e95a40ed6491d2c7c2b4">SetTexture</a> (<a class="el" href="classmo_texture.html">moTexture</a> *p_Texture)</td></tr>
-
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#00d01fb26e7ab40571660f5afacb62bd">SetTextureFilter</a> (<a class="el" href="classmo_texture_filter.html">moTextureFilter</a> *p_TextureFilter)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">moText&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#08307c5c1d3d5e8ee0e0bb8c6b80e96e">Text</a> ()</td></tr>
 
@@ -100,17 +96,49 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">moMathFunction *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#cfb29de331fe1751c7394ee1271a329d">Fun</a> ()</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="classmo_font.html">moFont</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#6c0fb365e02b2ffbf33410c6750dd038">Font</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">mo3DModel *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#a36d245adb4a0e4b119ce022d8b1e1ad">Model</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="mo_value_8h.html#86f7e3588edae70305ca440cf797d3ce">moDataMessage</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#966a26179895c5b9df873a1dbaab90e7">Message</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">moDataMessages *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#be0c7b954c0c0371edfe9486f55a831d">Messages</a> ()</td></tr>
+
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="classmo_data.html">moData</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#8a685611d757a1d520db98947bd2c7ea">GetData</a> ()</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">moText&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#c9512cb0fef7471398b8c42a77891b32">ToText</a> ()</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">GLint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#0038d61501ce7b4b2b92666123e61ce1">GetGLId</a> (MOfloat p_cycle, <a class="el" href="structmo_text_filter_param.html">moTextFilterParam</a> p_filterparam)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">moText&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#f60042dea8bd6e8c864aa943d1b9dcbc">TypeToText</a> ()</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">GLint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#0f0b0549435509a7351ad2f4cc20ad5b">GetGLId</a> (moTempo *p_tempo, <a class="el" href="structmo_text_filter_param.html">moTextFilterParam</a> p_filterparam)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="mo_value_8h.html#e51089b5e16548eef55fb06e5aac6949">moDataType</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#7b346407029abd96411fdd6e49e622f8">TextToType</a> (moText texttype)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">GLint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#78260771b168c06163b89ad753f5644b">GetGLId</a> (MOuint p_i, <a class="el" href="structmo_text_filter_param.html">moTextFilterParam</a> p_filterparam)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">GLint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#314d4b56b009b64817df93ce4fe04ea7">GetGLId</a> (MOfloat p_cycle, MOfloat p_fade=1.0, <a class="el" href="classmo_text_filter_param.html">moTextFilterParam</a> *p_filterparam=NULL)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">GLint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#a7c6c7e9a07aa9e39f10421a815217f5">GetGLId</a> (<a class="el" href="structmo_text_filter_param.html">moTextFilterParam</a> p_filterparam)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">GLint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#7dab02040a1c6eca3e8d7ca602ae9378">GetGLId</a> (moTempo *p_tempo, MOfloat p_fade=1.0, <a class="el" href="classmo_text_filter_param.html">moTextFilterParam</a> *p_filterparam=NULL)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">GLint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#fc2893032f9663c3854ac91e10a495bd">GetGLId</a> (MOuint p_i, MOfloat p_fade=1.0, <a class="el" href="classmo_text_filter_param.html">moTextFilterParam</a> *p_filterparam=NULL)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">GLint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#8aacb5651f0f65331cf9170b29a9f41a">GetGLId</a> (MOfloat p_fade=1.0, <a class="el" href="classmo_text_filter_param.html">moTextFilterParam</a> *p_filterparam=NULL)</td></tr>
+
+<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#6dae09025e6eeaa541c6510d49dcc6c0">SetFun</a> (moMathFunction *p_Function)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fija el dato a una textura.  <a href="#6dae09025e6eeaa541c6510d49dcc6c0"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#ec3ffdb0a674e95a40ed6491d2c7c2b4">SetTexture</a> (<a class="el" href="classmo_texture.html">moTexture</a> *p_Texture)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#00d01fb26e7ab40571660f5afacb62bd">SetTextureFilter</a> (<a class="el" href="classmo_texture_filter.html">moTextureFilter</a> *p_TextureFilter)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#d6ae54069df7479cf8ee63003261cf77">SetTextureFilterAlpha</a> (<a class="el" href="classmo_data.html">moData</a> *p_alpha)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#2a749cdad3bfc30940fc4108640c37a3">SetTextureFilterParam</a> (<a class="el" href="classmo_text_filter_param.html">moTextFilterParam</a> *p_filterparam)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#f622c12c969fa124dfe24e1e8c850b06">SetFont</a> (<a class="el" href="classmo_font.html">moFont</a> *p_Font)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#2b188859c5eabb2981a6cc8da76fddeb">SetModel</a> (mo3DModel *p_Model)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#caeff35491924331a69c96a53eb28243">SetMessage</a> (<a class="el" href="mo_value_8h.html#86f7e3588edae70305ca440cf797d3ce">moDataMessage</a> *p_datamessage)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#1eabd1fa573283443f3bf515256ea5f4">SetMessages</a> (moDataMessages *p_datamessages)</td></tr>
 
 <tr><td colspan="2"><br><h2>Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="mo_value_8h.html#e51089b5e16548eef55fb06e5aac6949">moDataType</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#342d6c57e69c877cc4944a68067090a1">m_DataType</a></td></tr>
@@ -121,10 +149,17 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">MOulong&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#864c5ed0a8ecff33f345f7079cb316d3">m_DataSize</a></td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#1311b595cb8cd05b8014ec104d868208">m_bFilteredAlpha</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#b0c033a9c3eb43f1898ef7375f397ab6">m_bFilteredParams</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">MOfloat&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#ce5729e10136e6df0074a8f95c8f8370">m_AlphaFilter</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="classmo_text_filter_param.html">moTextFilterParam</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#1155e00e7dd46c260a1c0f4777790e23">m_pFilterParam</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="classmo_data.html">moData</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_data.html#7684da51e62a6f7aa8386ac2863ba798">m_pAlphaFilter</a></td></tr>
+
 </table>
-<hr><a name="_details"></a><h2>Detailed Description</h2>
-<a class="el" href="classmo_data.html">moData</a> dato universal 
-<p>
 <hr><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" name="d7a4c3839ab9846bc8810c1d814a2816"></a><!-- doxytag: member="moData::moData" ref="d7a4c3839ab9846bc8810c1d814a2816" args="()" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
@@ -529,6 +564,33 @@
     </td>
   </tr>
 </table>
+<a class="anchor" name="6c0fb365e02b2ffbf33410c6750dd038"></a><!-- doxytag: member="moData::Font" ref="6c0fb365e02b2ffbf33410c6750dd038" args="()" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"><a class="el" href="classmo_font.html">moFont</a>* moData::Font           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
 <a class="anchor" name="cfb29de331fe1751c7394ee1271a329d"></a><!-- doxytag: member="moData::Fun" ref="cfb29de331fe1751c7394ee1271a329d" args="()" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -583,7 +645,7 @@
     </td>
   </tr>
 </table>
-<a class="anchor" name="a7c6c7e9a07aa9e39f10421a815217f5"></a><!-- doxytag: member="moData::GetGLId" ref="a7c6c7e9a07aa9e39f10421a815217f5" args="(moTextFilterParam p_filterparam)" --><p>
+<a class="anchor" name="8aacb5651f0f65331cf9170b29a9f41a"></a><!-- doxytag: member="moData::GetGLId" ref="8aacb5651f0f65331cf9170b29a9f41a" args="(MOfloat p_fade=1.0, moTextFilterParam *p_filterparam=NULL)" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -591,10 +653,19 @@
         <tr>
           <td class="md" nowrap valign="top">GLint moData::GetGLId           </td>
           <td class="md" valign="top">(&nbsp;</td>
-          <td class="md" nowrap valign="top"><a class="el" href="structmo_text_filter_param.html">moTextFilterParam</a>&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap> <em>p_filterparam</em>          </td>
-          <td class="md" valign="top">&nbsp;)&nbsp;</td>
-          <td class="md" nowrap></td>
+          <td class="md" nowrap valign="top">MOfloat&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_fade</em> = <code>1.0</code>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap><a class="el" href="classmo_text_filter_param.html">moTextFilterParam</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_filterparam</em> = <code>NULL</code></td>
+        </tr>
+        <tr>
+          <td class="md"></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"></td>
         </tr>
       </table>
     </td>
@@ -611,7 +682,7 @@
     </td>
   </tr>
 </table>
-<a class="anchor" name="78260771b168c06163b89ad753f5644b"></a><!-- doxytag: member="moData::GetGLId" ref="78260771b168c06163b89ad753f5644b" args="(MOuint p_i, moTextFilterParam p_filterparam)" --><p>
+<a class="anchor" name="fc2893032f9663c3854ac91e10a495bd"></a><!-- doxytag: member="moData::GetGLId" ref="fc2893032f9663c3854ac91e10a495bd" args="(MOuint p_i, MOfloat p_fade=1.0, moTextFilterParam *p_filterparam=NULL)" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -625,8 +696,14 @@
         <tr>
           <td class="md" nowrap align="right"></td>
           <td class="md"></td>
-          <td class="md" nowrap><a class="el" href="structmo_text_filter_param.html">moTextFilterParam</a>&nbsp;</td>
-          <td class="mdname" nowrap> <em>p_filterparam</em></td>
+          <td class="md" nowrap>MOfloat&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_fade</em> = <code>1.0</code>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap><a class="el" href="classmo_text_filter_param.html">moTextFilterParam</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_filterparam</em> = <code>NULL</code></td>
         </tr>
         <tr>
           <td class="md"></td>
@@ -648,7 +725,7 @@
     </td>
   </tr>
 </table>
-<a class="anchor" name="0f0b0549435509a7351ad2f4cc20ad5b"></a><!-- doxytag: member="moData::GetGLId" ref="0f0b0549435509a7351ad2f4cc20ad5b" args="(moTempo *p_tempo, moTextFilterParam p_filterparam)" --><p>
+<a class="anchor" name="7dab02040a1c6eca3e8d7ca602ae9378"></a><!-- doxytag: member="moData::GetGLId" ref="7dab02040a1c6eca3e8d7ca602ae9378" args="(moTempo *p_tempo, MOfloat p_fade=1.0, moTextFilterParam *p_filterparam=NULL)" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -662,8 +739,14 @@
         <tr>
           <td class="md" nowrap align="right"></td>
           <td class="md"></td>
-          <td class="md" nowrap><a class="el" href="structmo_text_filter_param.html">moTextFilterParam</a>&nbsp;</td>
-          <td class="mdname" nowrap> <em>p_filterparam</em></td>
+          <td class="md" nowrap>MOfloat&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_fade</em> = <code>1.0</code>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap><a class="el" href="classmo_text_filter_param.html">moTextFilterParam</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_filterparam</em> = <code>NULL</code></td>
         </tr>
         <tr>
           <td class="md"></td>
@@ -685,7 +768,7 @@
     </td>
   </tr>
 </table>
-<a class="anchor" name="0038d61501ce7b4b2b92666123e61ce1"></a><!-- doxytag: member="moData::GetGLId" ref="0038d61501ce7b4b2b92666123e61ce1" args="(MOfloat p_cycle, moTextFilterParam p_filterparam)" --><p>
+<a class="anchor" name="314d4b56b009b64817df93ce4fe04ea7"></a><!-- doxytag: member="moData::GetGLId" ref="314d4b56b009b64817df93ce4fe04ea7" args="(MOfloat p_cycle, MOfloat p_fade=1.0, moTextFilterParam *p_filterparam=NULL)" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -699,8 +782,14 @@
         <tr>
           <td class="md" nowrap align="right"></td>
           <td class="md"></td>
-          <td class="md" nowrap><a class="el" href="structmo_text_filter_param.html">moTextFilterParam</a>&nbsp;</td>
-          <td class="mdname" nowrap> <em>p_filterparam</em></td>
+          <td class="md" nowrap>MOfloat&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_fade</em> = <code>1.0</code>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap><a class="el" href="classmo_text_filter_param.html">moTextFilterParam</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_filterparam</em> = <code>NULL</code></td>
         </tr>
         <tr>
           <td class="md"></td>
@@ -749,6 +838,33 @@
     </td>
   </tr>
 </table>
+<a class="anchor" name="574b54dea1f1f5bf42b9c5cec40fe932"></a><!-- doxytag: member="moData::IsValid" ref="574b54dea1f1f5bf42b9c5cec40fe932" args="()" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">bool moData::IsValid           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
 <a class="anchor" name="3badd10dfef3e1640874482feb0f7667"></a><!-- doxytag: member="moData::Long" ref="3badd10dfef3e1640874482feb0f7667" args="()" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -756,6 +872,87 @@
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td class="md" nowrap valign="top">MOlonglong moData::Long           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="966a26179895c5b9df873a1dbaab90e7"></a><!-- doxytag: member="moData::Message" ref="966a26179895c5b9df873a1dbaab90e7" args="()" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"><a class="el" href="mo_value_8h.html#86f7e3588edae70305ca440cf797d3ce">moDataMessage</a>* moData::Message           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="be0c7b954c0c0371edfe9486f55a831d"></a><!-- doxytag: member="moData::Messages" ref="be0c7b954c0c0371edfe9486f55a831d" args="()" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">moDataMessages* moData::Messages           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="a36d245adb4a0e4b119ce022d8b1e1ad"></a><!-- doxytag: member="moData::Model" ref="a36d245adb4a0e4b119ce022d8b1e1ad" args="()" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">mo3DModel* moData::Model           </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="mdname1" valign="top" nowrap>          </td>
           <td class="md" valign="top">&nbsp;)&nbsp;</td>
@@ -942,6 +1139,34 @@
     </td>
   </tr>
 </table>
+<a class="anchor" name="f622c12c969fa124dfe24e1e8c850b06"></a><!-- doxytag: member="moData::SetFont" ref="f622c12c969fa124dfe24e1e8c850b06" args="(moFont *p_Font)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">void moData::SetFont           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="classmo_font.html">moFont</a> *&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>p_Font</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
 <a class="anchor" name="6dae09025e6eeaa541c6510d49dcc6c0"></a><!-- doxytag: member="moData::SetFun" ref="6dae09025e6eeaa541c6510d49dcc6c0" args="(moMathFunction *p_Function)" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -967,7 +1192,9 @@
     <td>
 
 <p>
-    </td>
+Fija el dato a una textura. 
+<p>
+Estas funciones asignan la referencia al objeto definido por el valor, a través del puntero a su objeto     </td>
   </tr>
 </table>
 <a class="anchor" name="d2238ba43c6747208e928ee90c21136d"></a><!-- doxytag: member="moData::SetInt" ref="d2238ba43c6747208e928ee90c21136d" args="(MOint pint)" --><p>
@@ -1008,6 +1235,90 @@
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top">MOlonglong&nbsp;</td>
           <td class="mdname1" valign="top" nowrap> <em>plong</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="caeff35491924331a69c96a53eb28243"></a><!-- doxytag: member="moData::SetMessage" ref="caeff35491924331a69c96a53eb28243" args="(moDataMessage *p_datamessage)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">void moData::SetMessage           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="mo_value_8h.html#86f7e3588edae70305ca440cf797d3ce">moDataMessage</a> *&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>p_datamessage</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="1eabd1fa573283443f3bf515256ea5f4"></a><!-- doxytag: member="moData::SetMessages" ref="1eabd1fa573283443f3bf515256ea5f4" args="(moDataMessages *p_datamessages)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">void moData::SetMessages           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">moDataMessages *&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>p_datamessages</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="2b188859c5eabb2981a6cc8da76fddeb"></a><!-- doxytag: member="moData::SetModel" ref="2b188859c5eabb2981a6cc8da76fddeb" args="(mo3DModel *p_Model)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">void moData::SetModel           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">mo3DModel *&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>p_Model</em>          </td>
           <td class="md" valign="top">&nbsp;)&nbsp;</td>
           <td class="md" nowrap></td>
         </tr>
@@ -1203,6 +1514,62 @@
     </td>
   </tr>
 </table>
+<a class="anchor" name="d6ae54069df7479cf8ee63003261cf77"></a><!-- doxytag: member="moData::SetTextureFilterAlpha" ref="d6ae54069df7479cf8ee63003261cf77" args="(moData *p_alpha)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">void moData::SetTextureFilterAlpha           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="classmo_data.html">moData</a> *&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>p_alpha</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="2a749cdad3bfc30940fc4108640c37a3"></a><!-- doxytag: member="moData::SetTextureFilterParam" ref="2a749cdad3bfc30940fc4108640c37a3" args="(moTextFilterParam *p_filterparam)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">void moData::SetTextureFilterParam           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="classmo_text_filter_param.html">moTextFilterParam</a> *&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>p_filterparam</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
 <a class="anchor" name="0ce6cfe84230f0732236df8473d5fd33"></a><!-- doxytag: member="moData::SetType" ref="0ce6cfe84230f0732236df8473d5fd33" args="(moDataType p_DataType)" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -1285,6 +1652,34 @@
     </td>
   </tr>
 </table>
+<a class="anchor" name="7b346407029abd96411fdd6e49e622f8"></a><!-- doxytag: member="moData::TextToType" ref="7b346407029abd96411fdd6e49e622f8" args="(moText texttype)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"><a class="el" href="mo_value_8h.html#e51089b5e16548eef55fb06e5aac6949">moDataType</a> moData::TextToType           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">moText&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>texttype</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
 <a class="anchor" name="c9512cb0fef7471398b8c42a77891b32"></a><!-- doxytag: member="moData::ToText" ref="c9512cb0fef7471398b8c42a77891b32" args="()" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -1339,7 +1734,103 @@
     </td>
   </tr>
 </table>
+<a class="anchor" name="f60042dea8bd6e8c864aa943d1b9dcbc"></a><!-- doxytag: member="moData::TypeToText" ref="f60042dea8bd6e8c864aa943d1b9dcbc" args="()" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">moText moData::TypeToText           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
 <hr><h2>Member Data Documentation</h2>
+<a class="anchor" name="ce5729e10136e6df0074a8f95c8f8370"></a><!-- doxytag: member="moData::m_AlphaFilter" ref="ce5729e10136e6df0074a8f95c8f8370" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">MOfloat <a class="el" href="classmo_data.html#ce5729e10136e6df0074a8f95c8f8370">moData::m_AlphaFilter</a><code> [protected]</code>          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="1311b595cb8cd05b8014ec104d868208"></a><!-- doxytag: member="moData::m_bFilteredAlpha" ref="1311b595cb8cd05b8014ec104d868208" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">bool <a class="el" href="classmo_data.html#1311b595cb8cd05b8014ec104d868208">moData::m_bFilteredAlpha</a><code> [protected]</code>          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="b0c033a9c3eb43f1898ef7375f397ab6"></a><!-- doxytag: member="moData::m_bFilteredParams" ref="b0c033a9c3eb43f1898ef7375f397ab6" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">bool <a class="el" href="classmo_data.html#b0c033a9c3eb43f1898ef7375f397ab6">moData::m_bFilteredParams</a><code> [protected]</code>          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
 <a class="anchor" name="864c5ed0a8ecff33f345f7079cb316d3"></a><!-- doxytag: member="moData::m_DataSize" ref="864c5ed0a8ecff33f345f7079cb316d3" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -1409,6 +1900,52 @@
     </td>
   </tr>
 </table>
+<a class="anchor" name="7684da51e62a6f7aa8386ac2863ba798"></a><!-- doxytag: member="moData::m_pAlphaFilter" ref="7684da51e62a6f7aa8386ac2863ba798" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"><a class="el" href="classmo_data.html">moData</a>* <a class="el" href="classmo_data.html#7684da51e62a6f7aa8386ac2863ba798">moData::m_pAlphaFilter</a><code> [protected]</code>          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="1155e00e7dd46c260a1c0f4777790e23"></a><!-- doxytag: member="moData::m_pFilterParam" ref="1155e00e7dd46c260a1c0f4777790e23" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"><a class="el" href="classmo_text_filter_param.html">moTextFilterParam</a>* <a class="el" href="classmo_data.html#1155e00e7dd46c260a1c0f4777790e23">moData::m_pFilterParam</a><code> [protected]</code>          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
 <a class="anchor" name="d6edcd8b2f8353621edf00af7734e4fc"></a><!-- doxytag: member="moData::m_Text" ref="d6edcd8b2f8353621edf00af7734e4fc" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -1433,8 +1970,8 @@
   </tr>
 </table>
 <hr>The documentation for this class was generated from the following file:<ul>
-<li>D:/_data/proyectos/SINESTESIA/OPENSVN/trunk/0.7/inc/<a class="el" href="mo_value_8h.html">moValue.h</a></ul>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Apr 28 20:04:23 2008 for MOLDEO by&nbsp;
+<li>D:/_data/proyectos/SINESTESIA/SVNSOURCEFORGE/trunk/0.7/inc/<a class="el" href="mo_value_8h.html">moValue.h</a></ul>
+<hr size="1"><address style="align: right;"><small>Generated on Sun Nov 9 18:55:16 2008 for MOLDEO by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.6-NO </small></address>
 </body>

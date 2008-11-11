@@ -110,8 +110,8 @@ int moConfig::LoadConfig( moText p_filename ) {
 //		FirstChild( "DEFINITION" ).Child( "Child", 1 ).Element();
 		if ( MOCONFIG )
 		{
-			MOCONFIG->QueryIntAttribute( "majorversion", &(int)m_MajorVersion);
-			MOCONFIG->QueryIntAttribute( "minorversion", &(int)m_MinorVersion);
+			MOCONFIG->QueryIntAttribute( "majorversion", &((int&)m_MajorVersion));
+			MOCONFIG->QueryIntAttribute( "minorversion", &((int&)m_MinorVersion));
 
 			TiXmlNode* NODEDEFINITION = MOCONFIG->FirstChild( "DEFINITION" );
 			TiXmlElement* DEFINITION = NULL;

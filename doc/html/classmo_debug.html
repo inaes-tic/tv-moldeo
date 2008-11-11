@@ -32,14 +32,18 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_debug.html#d55663e577c350bbc2652b3c71c0f517">Error</a> (moText p_text)</td></tr>
 
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Anuncia un error.  <a href="#d55663e577c350bbc2652b3c71c0f517"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_debug.html#95c468455e93dfc67fa9489811197489">Message</a> (moText p_text)</td></tr>
 
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Anuncia un mensaje al usuario además de guardarlo en el log de texto.  <a href="#95c468455e93dfc67fa9489811197489"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_debug.html#c4fa6e6e4b365d489d410cdc117bb0c7">Log</a> (moText p_text)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Escribe un mensaje en el archivo de registro.  <a href="#c4fa6e6e4b365d489d410cdc117bb0c7"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Escribe un mensaje en el archivo de registro (log).  <a href="#c4fa6e6e4b365d489d410cdc117bb0c7"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_debug.html#361363d25b81fff69a34b6e36b8add40">Push</a> (moText p_text)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">moText&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_debug.html#966fc4c437c73a80ceb4f2a8f6d77be7">Pop</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">MOint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_debug.html#99a20da7e14e82810831ac59c6590f99">Count</a> ()</td></tr>
 
 <tr><td colspan="2"><br><h2>Private Attributes</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">moTextHeap&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_debug.html#0a126626c4f1667b0bcd9957eaf8b7b6">m_Debug</a></td></tr>
@@ -47,9 +51,10 @@
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Lista de mensajes.  <a href="#0a126626c4f1667b0bcd9957eaf8b7b6"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">ofstream&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_debug.html#c6fdf2e19539de262742e5866fa3045a">moErr</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Lista de mensajes.  <a href="#c6fdf2e19539de262742e5866fa3045a"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Cadena de salida de los mensajes de error.  <a href="#c6fdf2e19539de262742e5866fa3045a"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">ofstream&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_debug.html#cb4c9535eecc9e8bde7d686a3ca314c5">moLog</a></td></tr>
 
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Cadena de salida de los mensajes registrados.  <a href="#cb4c9535eecc9e8bde7d686a3ca314c5"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Lista de mensajes para la depuración de errores y anuncio de errores y mensajes. 
@@ -114,6 +119,33 @@ A este objeto pueden acceder todas las funciones desde cualquier objeto que haya
   </tr>
 </table>
 <hr><h2>Member Function Documentation</h2>
+<a class="anchor" name="99a20da7e14e82810831ac59c6590f99"></a><!-- doxytag: member="moDebug::Count" ref="99a20da7e14e82810831ac59c6590f99" args="()" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">MOint moDebug::Count           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap><code> [inline]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
 <a class="anchor" name="d55663e577c350bbc2652b3c71c0f517"></a><!-- doxytag: member="moDebug::Error" ref="d55663e577c350bbc2652b3c71c0f517" args="(moText p_text)" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -139,7 +171,9 @@ A este objeto pueden acceder todas las funciones desde cualquier objeto que haya
     <td>
 
 <p>
-Anuncia un error     </td>
+Anuncia un error. 
+<p>
+Anuncia un error apilandolo en la lista de mensajes y escribiéndolo al archivo de mensajes de errores y al de mensajes registrados...     </td>
   </tr>
 </table>
 <a class="anchor" name="c4fa6e6e4b365d489d410cdc117bb0c7"></a><!-- doxytag: member="moDebug::Log" ref="c4fa6e6e4b365d489d410cdc117bb0c7" args="(moText p_text)" --><p>
@@ -167,9 +201,9 @@ Anuncia un error     </td>
     <td>
 
 <p>
-Escribe un mensaje en el archivo de registro. 
+Escribe un mensaje en el archivo de registro (log). 
 <p>
-    </td>
+El archivo log se llama comunmente moldeolog.txt y se encuentra en el raíz del archivo ejecutable de Moldeo     </td>
   </tr>
 </table>
 <a class="anchor" name="95c468455e93dfc67fa9489811197489"></a><!-- doxytag: member="moDebug::Message" ref="95c468455e93dfc67fa9489811197489" args="(moText p_text)" --><p>
@@ -197,7 +231,9 @@ Escribe un mensaje en el archivo de registro.
     <td>
 
 <p>
-Anuncia un mensaje     </td>
+Anuncia un mensaje al usuario además de guardarlo en el log de texto. 
+<p>
+Pone el mensaje en la pila de mensajes, y escribe este al log de texto     </td>
   </tr>
 </table>
 <a class="anchor" name="966fc4c437c73a80ceb4f2a8f6d77be7"></a><!-- doxytag: member="moDebug::Pop" ref="966fc4c437c73a80ceb4f2a8f6d77be7" args="()" --><p>
@@ -253,9 +289,9 @@ Saca y devuelve el primer texto ingresado a la lista <dl compact><dt><b>Returns:
     <td>
 
 <p>
-Empuja dentro de la lista el texto establecido <dl compact><dt><b>Parameters:</b></dt><dd>
+Apila el mensaje dentro de la pila de mensajes <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>p_text</em>&nbsp;</td><td>el texto del mensaje </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>p_text</em>&nbsp;</td><td>el mensaje </td></tr>
   </table>
 </dl>
     </td>
@@ -307,9 +343,9 @@ para depurar     </td>
     <td>
 
 <p>
-Lista de mensajes. 
+Cadena de salida de los mensajes de error. 
 <p>
-para depurar     </td>
+la función Error dirige sus mensajes a esta salida     </td>
   </tr>
 </table>
 <a class="anchor" name="cb4c9535eecc9e8bde7d686a3ca314c5"></a><!-- doxytag: member="moDebug::moLog" ref="cb4c9535eecc9e8bde7d686a3ca314c5" args="" --><p>
@@ -332,12 +368,14 @@ para depurar     </td>
     <td>
 
 <p>
-    </td>
+Cadena de salida de los mensajes registrados. 
+<p>
+la función Message y Log dirigen sus mensajes a esta salida     </td>
   </tr>
 </table>
 <hr>The documentation for this class was generated from the following file:<ul>
-<li>D:/_data/proyectos/SINESTESIA/OPENSVN/trunk/0.7/inc/<a class="el" href="mo_abstract_8h.html">moAbstract.h</a></ul>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Apr 28 20:04:23 2008 for MOLDEO by&nbsp;
+<li>D:/_data/proyectos/SINESTESIA/SVNSOURCEFORGE/trunk/0.7/inc/<a class="el" href="mo_abstract_8h.html">moAbstract.h</a></ul>
+<hr size="1"><address style="align: right;"><small>Generated on Sun Nov 9 18:55:16 2008 for MOLDEO by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.6-NO </small></address>
 </body>

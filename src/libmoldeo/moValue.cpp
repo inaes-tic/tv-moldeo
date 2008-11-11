@@ -228,7 +228,7 @@ moData::SetFont( moFont*	p_Font ) {
 }
 
 void
-moData::SetModel( mo3DModel*    p_Model ) {
+moData::SetModel( mo3DModelSceneNode*    p_Model ) {
     m_DataType = MO_DATA_3DMODELPOINTER;
 	m_Number.m_Pointer = (MOpointer) p_Model;
 }
@@ -308,9 +308,9 @@ moData::Font() {
     return (moFont*) m_Number.m_Pointer;
 }
 
-mo3DModel*
+mo3DModelSceneNode*
 moData::Model() {
-    return (mo3DModel*) m_Number.m_Pointer;
+    return (mo3DModelSceneNode*) m_Number.m_Pointer;
 }
 /*
 moTexture*

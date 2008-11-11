@@ -68,7 +68,7 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_curve2.html#7120f25130e7eaa789c161b7a784ef95">SubdivideByLength</a> (int iNumPoints, <a class="el" href="classmo_vector2.html">moVector2</a>&lt; Real &gt; *&amp;rakPoint) const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_curve2.html#0d6f1b9da9723e307fec0e9dd70f1c0e">moCurve2</a> (Real fMinVariation, int iMaxLevel, int &amp;riNumPoints, <a class="el" href="classmo_vector2.html">moVector2</a>&lt; Real &gt; *&amp;rakPoint) const </td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_curve2.html#9af833bc13d378fd212cf6b5ddf95814">SubdivideByVariation</a> (Real fMinVariation, int iMaxLevel, int &amp;riNumPoints, <a class="el" href="classmo_vector2.html">moVector2</a>&lt; Real &gt; *&amp;rakPoint) const </td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual Real&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_curve2.html#875cff6312d485e23416275de1d7dabe">GetVariation</a> (Real fT0, Real fT1, const <a class="el" href="classmo_vector2.html">moVector2</a>&lt; Real &gt; *pkP0=0, const <a class="el" href="classmo_vector2.html">moVector2</a>&lt; Real &gt; *pkP1=0) const =0</td></tr>
 
@@ -144,59 +144,6 @@ template&lt;class Real&gt; </td>
           <td class="mdname1" valign="top" nowrap>          </td>
           <td class="md" valign="top">&nbsp;)&nbsp;</td>
           <td class="md" nowrap><code> [inline, virtual]</code></td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-    </td>
-  </tr>
-</table>
-<a class="anchor" name="0d6f1b9da9723e307fec0e9dd70f1c0e"></a><!-- doxytag: member="moCurve2::moCurve2" ref="0d6f1b9da9723e307fec0e9dd70f1c0e" args="(Real fMinVariation, int iMaxLevel, int &amp;riNumPoints, moVector2&lt; Real &gt; *&amp;rakPoint) const " --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="mdPrefix" colspan="4">
-template&lt;class Real&gt; </td>
-        </tr>
-        <tr>
-          <td class="md" nowrap valign="top">void <a class="el" href="classmo_curve2.html">moCurve2</a>&lt; Real &gt;::<a class="el" href="classmo_curve2.html">moCurve2</a>           </td>
-          <td class="md" valign="top">(&nbsp;</td>
-          <td class="md" nowrap valign="top">Real&nbsp;</td>
-          <td class="mdname" nowrap> <em>fMinVariation</em>, </td>
-        </tr>
-        <tr>
-          <td class="md" nowrap align="right"></td>
-          <td class="md"></td>
-          <td class="md" nowrap>int&nbsp;</td>
-          <td class="mdname" nowrap> <em>iMaxLevel</em>, </td>
-        </tr>
-        <tr>
-          <td class="md" nowrap align="right"></td>
-          <td class="md"></td>
-          <td class="md" nowrap>int &amp;&nbsp;</td>
-          <td class="mdname" nowrap> <em>riNumPoints</em>, </td>
-        </tr>
-        <tr>
-          <td class="md" nowrap align="right"></td>
-          <td class="md"></td>
-          <td class="md" nowrap><a class="el" href="classmo_vector2.html">moVector2</a>&lt; Real &gt; *&amp;&nbsp;</td>
-          <td class="mdname" nowrap> <em>rakPoint</em></td>
-        </tr>
-        <tr>
-          <td class="md"></td>
-          <td class="md">)&nbsp;</td>
-          <td class="md" colspan="2"> const<code> [inline]</code></td>
         </tr>
       </table>
     </td>
@@ -963,6 +910,59 @@ template&lt;class Real&gt; </td>
     </td>
   </tr>
 </table>
+<a class="anchor" name="9af833bc13d378fd212cf6b5ddf95814"></a><!-- doxytag: member="moCurve2::SubdivideByVariation" ref="9af833bc13d378fd212cf6b5ddf95814" args="(Real fMinVariation, int iMaxLevel, int &amp;riNumPoints, moVector2&lt; Real &gt; *&amp;rakPoint) const " --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="mdPrefix" colspan="4">
+template&lt;class Real&gt; </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap valign="top">void <a class="el" href="classmo_curve2.html">moCurve2</a>&lt; Real &gt;::SubdivideByVariation           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">Real&nbsp;</td>
+          <td class="mdname" nowrap> <em>fMinVariation</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>int&nbsp;</td>
+          <td class="mdname" nowrap> <em>iMaxLevel</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>int &amp;&nbsp;</td>
+          <td class="mdname" nowrap> <em>riNumPoints</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap><a class="el" href="classmo_vector2.html">moVector2</a>&lt; Real &gt; *&amp;&nbsp;</td>
+          <td class="mdname" nowrap> <em>rakPoint</em></td>
+        </tr>
+        <tr>
+          <td class="md"></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"> const<code> [inline]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
 <hr><h2>Member Data Documentation</h2>
 <a class="anchor" name="d4b161408c4942b710d8541a96fade6b"></a><!-- doxytag: member="moCurve2::m_fTMax" ref="d4b161408c4942b710d8541a96fade6b" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
@@ -1019,8 +1019,8 @@ template&lt;class Real&gt; </td>
   </tr>
 </table>
 <hr>The documentation for this class was generated from the following file:<ul>
-<li>D:/_data/proyectos/SINESTESIA/OPENSVN/trunk/0.7/inc/<a class="el" href="mo_math_curve_8h.html">moMathCurve.h</a></ul>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Apr 28 20:04:23 2008 for MOLDEO by&nbsp;
+<li>D:/_data/proyectos/SINESTESIA/SVNSOURCEFORGE/trunk/0.7/inc/<a class="el" href="mo_math_curve_8h.html">moMathCurve.h</a></ul>
+<hr size="1"><address style="align: right;"><small>Generated on Sun Nov 9 18:55:15 2008 for MOLDEO by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.6-NO </small></address>
 </body>

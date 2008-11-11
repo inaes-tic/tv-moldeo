@@ -111,7 +111,7 @@ class LIBMOLDEO_API moWindow : public moWidget {
 *	@see moGUIObject
 *	@see moGUIManager
 */
-class LIBMOLDEO_API mo3dWidget : public moWidget, public mo3DModel {
+class LIBMOLDEO_API mo3dWidget : public moWidget, public moSceneNode {
 
 	public:
 		mo3dWidget();

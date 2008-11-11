@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
-<title>MOLDEO: D:/_data/proyectos/SINESTESIA/OPENSVN/trunk/0.7/inc/moTypes.h File Reference</title>
+<title>MOLDEO: D:/_data/proyectos/SINESTESIA/SVNSOURCEFORGE/trunk/0.7/inc/moTypes.h File Reference</title>
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
@@ -17,7 +17,8 @@
     <li><a href="files.html"><span>File&nbsp;List</span></a></li>
     <li><a href="globals.html"><span>File&nbsp;Members</span></a></li>
   </ul></div>
-<h1>D:/_data/proyectos/SINESTESIA/OPENSVN/trunk/0.7/inc/moTypes.h File Reference</h1><code>#include &lt;math.h&gt;</code><br>
+<h1>D:/_data/proyectos/SINESTESIA/SVNSOURCEFORGE/trunk/0.7/inc/moTypes.h File Reference</h1><code>#include &lt;math.h&gt;</code><br>
+<code>#include &lt;limits.h&gt;</code><br>
 <code>#include &lt;iostream&gt;</code><br>
 <code>#include &lt;stdio.h&gt;</code><br>
 <code>#include &lt;stdlib.h&gt;</code><br>
@@ -26,6 +27,7 @@
 <code>#include &lt;time.h&gt;</code><br>
 <code>#include &lt;string&gt;</code><br>
 <code>#include &lt;vector&gt;</code><br>
+<code>#include &lt;fstream&gt;</code><br>
 <code>#include &quot;<a class="el" href="mo_tempo_8h.html">moTempo.h</a>&quot;</code><br>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
@@ -47,6 +49,8 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_types_8h.html#7c16b1e4d5914b6e733b1273846e9f0e">USE_GL_EXTENSIONS</a></td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_types_8h.html#90c2cd63205c47a359bb9e3d9254b0d6">USE_FREEIMAGE</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_types_8h.html#dea7f0ce882379427da5b095f8e88c09">USE_MOTEXT0</a></td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_types_8h.html#fe56b93391af50dd37e8ece95943fe11">LIBMOLDEO_API</a></td></tr>
 
@@ -80,7 +84,7 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_types_8h.html#891b6513545ef8de1065332567e5a4a4">MO_UNDEFINED</a>&nbsp;&nbsp;&nbsp;-1</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_types_8h.html#92111475f5bd39a7fd17a00674ef0379">MO_MAX_DEBUG</a>&nbsp;&nbsp;&nbsp;26</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_types_8h.html#92111475f5bd39a7fd17a00674ef0379">MO_MAX_DEBUG</a>&nbsp;&nbsp;&nbsp;65535</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_types_8h.html#8eb50dcbc590e4ff2e74f1f76f1c6f34">MO_MAX_TEXTURAS</a>&nbsp;&nbsp;&nbsp;512</td></tr>
 
@@ -98,9 +102,13 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_types_8h.html#8b0d27c3f0ecf80686d9bb9f4306fc69">MOulong</a>&nbsp;&nbsp;&nbsp;unsigned long</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_types_8h.html#e5f487147ba902a754ee00c2a2863ec7">MOlonglong</a>&nbsp;&nbsp;&nbsp;long</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_types_8h.html#e5f487147ba902a754ee00c2a2863ec7">MOlonglong</a>&nbsp;&nbsp;&nbsp;moint64</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_types_8h.html#0353082950dbb0bfd89a7f4c0126d808">MOulonglong</a>&nbsp;&nbsp;&nbsp;unsigned long</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_types_8h.html#0353082950dbb0bfd89a7f4c0126d808">MOulonglong</a>&nbsp;&nbsp;&nbsp;unsigned moint64</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_types_8h.html#f922b6e51d9c430d6d79b87570970a16">MOword</a>&nbsp;&nbsp;&nbsp;moWord</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_types_8h.html#3447fdc1007c9df034bed5681d612c5d">MOdword</a>&nbsp;&nbsp;&nbsp;moDWord</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_types_8h.html#c9e5eee7e5716276502ce99400adbcfd">MOchar</a>&nbsp;&nbsp;&nbsp;char</td></tr>
 
@@ -165,6 +173,28 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_types_8h.html#41d1920deff57e8e86c9778fc01b7343">momin</a>(a, b)&nbsp;&nbsp;&nbsp;(((a) &lt; (b)) ? (a) : (b))</td></tr>
 
 <tr><td colspan="2"><br><h2>Enumerations</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_types_8h.html#499d785d19f25df4c83d1f9362760f1f">moBlendingModes</a> { <br>
+&nbsp;&nbsp;<a class="el" href="mo_types_8h.html#499d785d19f25df4c83d1f9362760f1f2aab86c57c17f17739d487f1f2aa8107">MO_BLENDING_TRANSPARENCY</a> =  0, 
+<a class="el" href="mo_types_8h.html#499d785d19f25df4c83d1f9362760f1f4d9d6fc7cc39943f702ad1a9b9cbb5d1">MO_BLENDING_ADDITIVEALPHA</a> =  1, 
+<a class="el" href="mo_types_8h.html#499d785d19f25df4c83d1f9362760f1f5df4441e3d57c947340219600c75ac43">MO_BLENDING_MIXING</a> =  2, 
+<a class="el" href="mo_types_8h.html#499d785d19f25df4c83d1f9362760f1ff71a004d584504d3e38957f5dfbfca56">MO_BLENDING_MULTIPLY</a> =  3, 
+<br>
+&nbsp;&nbsp;<a class="el" href="mo_types_8h.html#499d785d19f25df4c83d1f9362760f1fde8cb8e5679ffa06dbc6c96f3568c154">MO_BLENDING_EXCLUSION</a> =  4, 
+<a class="el" href="mo_types_8h.html#499d785d19f25df4c83d1f9362760f1f3f33eb33ac5ebea684adbc76461e6457">MO_BLENDING_ADDITIVE</a> =  5, 
+<a class="el" href="mo_types_8h.html#499d785d19f25df4c83d1f9362760f1fc1b4ddb7dc84ae32650f673ba650002d">MO_BLENDING_OVERLAY</a> =  6, 
+<a class="el" href="mo_types_8h.html#499d785d19f25df4c83d1f9362760f1f3338aa930971018edbf5f2d261ddd7a5">MO_BLENDING_SUBSTRACTIVE</a> =  7, 
+<br>
+&nbsp;&nbsp;<a class="el" href="mo_types_8h.html#499d785d19f25df4c83d1f9362760f1f0d474bd3d308dfceb018b202a4d4ac17">MO_BLENDING_SATURATE</a> =  8, 
+<a class="el" href="mo_types_8h.html#499d785d19f25df4c83d1f9362760f1ff57a5274cc0e2386c74c141429da618d">MO_BLENDINGS</a> =  9
+<br>
+ }</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_types_8h.html#3e9d5553eca74679b010577766f96496">moPolygonModes</a> { <a class="el" href="mo_types_8h.html#3e9d5553eca74679b010577766f96496aef650e7642fdbaae3da87146fd11521">MO_POLYGONMODE_FILL</a> =  0, 
+<a class="el" href="mo_types_8h.html#3e9d5553eca74679b010577766f96496dc9aed282b5f3b598f2954d728bbbb1d">MO_POLYGONMODE_LINE</a> =  1, 
+<a class="el" href="mo_types_8h.html#3e9d5553eca74679b010577766f964965850b82bd1d0bf51cba99e62a822481b">MO_POLYGONMODE_POINT</a> =  2, 
+<a class="el" href="mo_types_8h.html#3e9d5553eca74679b010577766f96496fd8274e06e57b84b7ea8d4f987377261">MO_POLYGONMODES</a> =  3
+ }</td></tr>
+
 <tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_types_8h.html#dd0fd24f4fcaa97a6b2efd9872f5eef4">moMoldeoObjectType</a> { <br>
 &nbsp;&nbsp;<a class="el" href="mo_types_8h.html#dd0fd24f4fcaa97a6b2efd9872f5eef4d060cbe789d2ef8bf0d9737aaf58618a">MO_OBJECT_UNDEFINED</a> =  -1, 
 <a class="el" href="mo_types_8h.html#dd0fd24f4fcaa97a6b2efd9872f5eef469c8cd8d041e13d07aae05c1a6b1146c">MO_OBJECT_EFFECT</a> =  0, 
@@ -637,7 +667,7 @@
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top">#define MO_MAX_DEBUG&nbsp;&nbsp;&nbsp;26          </td>
+          <td class="md" nowrap valign="top">#define MO_MAX_DEBUG&nbsp;&nbsp;&nbsp;65535          </td>
         </tr>
       </table>
     </td>
@@ -1160,6 +1190,29 @@
     </td>
   </tr>
 </table>
+<a class="anchor" name="3447fdc1007c9df034bed5681d612c5d"></a><!-- doxytag: member="moTypes.h::MOdword" ref="3447fdc1007c9df034bed5681d612c5d" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define MOdword&nbsp;&nbsp;&nbsp;moDWord          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
 <a class="anchor" name="c5ab0243406a88678fe6551cea29e418"></a><!-- doxytag: member="moTypes.h::MOefectoid" ref="c5ab0243406a88678fe6551cea29e418" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -1258,7 +1311,7 @@
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top">#define MOlonglong&nbsp;&nbsp;&nbsp;long          </td>
+          <td class="md" nowrap valign="top">#define MOlonglong&nbsp;&nbsp;&nbsp;moint64          </td>
         </tr>
       </table>
     </td>
@@ -1527,7 +1580,7 @@
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top">#define MOulonglong&nbsp;&nbsp;&nbsp;unsigned long          </td>
+          <td class="md" nowrap valign="top">#define MOulonglong&nbsp;&nbsp;&nbsp;unsigned moint64          </td>
         </tr>
       </table>
     </td>
@@ -1551,6 +1604,29 @@
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td class="md" nowrap valign="top">#define MOushort&nbsp;&nbsp;&nbsp;unsigned short          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="f922b6e51d9c430d6d79b87570970a16"></a><!-- doxytag: member="moTypes.h::MOword" ref="f922b6e51d9c430d6d79b87570970a16" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define MOword&nbsp;&nbsp;&nbsp;moWord          </td>
         </tr>
       </table>
     </td>
@@ -1636,7 +1712,77 @@
     </td>
   </tr>
 </table>
+<a class="anchor" name="dea7f0ce882379427da5b095f8e88c09"></a><!-- doxytag: member="moTypes.h::USE_MOTEXT0" ref="dea7f0ce882379427da5b095f8e88c09" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define USE_MOTEXT0          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
 <hr><h2>Enumeration Type Documentation</h2>
+<a class="anchor" name="499d785d19f25df4c83d1f9362760f1f"></a><!-- doxytag: member="moTypes.h::moBlendingModes" ref="499d785d19f25df4c83d1f9362760f1f" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">enum <a class="el" href="mo_types_8h.html#499d785d19f25df4c83d1f9362760f1f">moBlendingModes</a>          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+<dl compact><dt><b>Enumerator: </b></dt><dd>
+<table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" name="499d785d19f25df4c83d1f9362760f1f2aab86c57c17f17739d487f1f2aa8107"></a><!-- doxytag: member="MO_BLENDING_TRANSPARENCY" ref="499d785d19f25df4c83d1f9362760f1f2aab86c57c17f17739d487f1f2aa8107" args="" -->MO_BLENDING_TRANSPARENCY</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="499d785d19f25df4c83d1f9362760f1f4d9d6fc7cc39943f702ad1a9b9cbb5d1"></a><!-- doxytag: member="MO_BLENDING_ADDITIVEALPHA" ref="499d785d19f25df4c83d1f9362760f1f4d9d6fc7cc39943f702ad1a9b9cbb5d1" args="" -->MO_BLENDING_ADDITIVEALPHA</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="499d785d19f25df4c83d1f9362760f1f5df4441e3d57c947340219600c75ac43"></a><!-- doxytag: member="MO_BLENDING_MIXING" ref="499d785d19f25df4c83d1f9362760f1f5df4441e3d57c947340219600c75ac43" args="" -->MO_BLENDING_MIXING</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="499d785d19f25df4c83d1f9362760f1ff71a004d584504d3e38957f5dfbfca56"></a><!-- doxytag: member="MO_BLENDING_MULTIPLY" ref="499d785d19f25df4c83d1f9362760f1ff71a004d584504d3e38957f5dfbfca56" args="" -->MO_BLENDING_MULTIPLY</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="499d785d19f25df4c83d1f9362760f1fde8cb8e5679ffa06dbc6c96f3568c154"></a><!-- doxytag: member="MO_BLENDING_EXCLUSION" ref="499d785d19f25df4c83d1f9362760f1fde8cb8e5679ffa06dbc6c96f3568c154" args="" -->MO_BLENDING_EXCLUSION</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="499d785d19f25df4c83d1f9362760f1f3f33eb33ac5ebea684adbc76461e6457"></a><!-- doxytag: member="MO_BLENDING_ADDITIVE" ref="499d785d19f25df4c83d1f9362760f1f3f33eb33ac5ebea684adbc76461e6457" args="" -->MO_BLENDING_ADDITIVE</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="499d785d19f25df4c83d1f9362760f1fc1b4ddb7dc84ae32650f673ba650002d"></a><!-- doxytag: member="MO_BLENDING_OVERLAY" ref="499d785d19f25df4c83d1f9362760f1fc1b4ddb7dc84ae32650f673ba650002d" args="" -->MO_BLENDING_OVERLAY</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="499d785d19f25df4c83d1f9362760f1f3338aa930971018edbf5f2d261ddd7a5"></a><!-- doxytag: member="MO_BLENDING_SUBSTRACTIVE" ref="499d785d19f25df4c83d1f9362760f1f3338aa930971018edbf5f2d261ddd7a5" args="" -->MO_BLENDING_SUBSTRACTIVE</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="499d785d19f25df4c83d1f9362760f1f0d474bd3d308dfceb018b202a4d4ac17"></a><!-- doxytag: member="MO_BLENDING_SATURATE" ref="499d785d19f25df4c83d1f9362760f1f0d474bd3d308dfceb018b202a4d4ac17" args="" -->MO_BLENDING_SATURATE</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="499d785d19f25df4c83d1f9362760f1ff57a5274cc0e2386c74c141429da618d"></a><!-- doxytag: member="MO_BLENDINGS" ref="499d785d19f25df4c83d1f9362760f1ff57a5274cc0e2386c74c141429da618d" args="" -->MO_BLENDINGS</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dl>
+    </td>
+  </tr>
+</table>
 <a class="anchor" name="dd0fd24f4fcaa97a6b2efd9872f5eef4"></a><!-- doxytag: member="moTypes.h::moMoldeoObjectType" ref="dd0fd24f4fcaa97a6b2efd9872f5eef4" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -1674,6 +1820,41 @@
 <tr><td valign="top"><em><a class="anchor" name="dd0fd24f4fcaa97a6b2efd9872f5eef4e04280ac0023c5950932cdee4bf6eb02"></a><!-- doxytag: member="MO_OBJECT_RESOURCE" ref="dd0fd24f4fcaa97a6b2efd9872f5eef4e04280ac0023c5950932cdee4bf6eb02" args="" -->MO_OBJECT_RESOURCE</em>&nbsp;</td><td>
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" name="dd0fd24f4fcaa97a6b2efd9872f5eef468d6d7e2e600cef2141c6f9d9d8301e0"></a><!-- doxytag: member="MO_OBJECT_TYPES" ref="dd0fd24f4fcaa97a6b2efd9872f5eef468d6d7e2e600cef2141c6f9d9d8301e0" args="" -->MO_OBJECT_TYPES</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dl>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="3e9d5553eca74679b010577766f96496"></a><!-- doxytag: member="moTypes.h::moPolygonModes" ref="3e9d5553eca74679b010577766f96496" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">enum <a class="el" href="mo_types_8h.html#3e9d5553eca74679b010577766f96496">moPolygonModes</a>          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+<dl compact><dt><b>Enumerator: </b></dt><dd>
+<table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" name="3e9d5553eca74679b010577766f96496aef650e7642fdbaae3da87146fd11521"></a><!-- doxytag: member="MO_POLYGONMODE_FILL" ref="3e9d5553eca74679b010577766f96496aef650e7642fdbaae3da87146fd11521" args="" -->MO_POLYGONMODE_FILL</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="3e9d5553eca74679b010577766f96496dc9aed282b5f3b598f2954d728bbbb1d"></a><!-- doxytag: member="MO_POLYGONMODE_LINE" ref="3e9d5553eca74679b010577766f96496dc9aed282b5f3b598f2954d728bbbb1d" args="" -->MO_POLYGONMODE_LINE</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="3e9d5553eca74679b010577766f964965850b82bd1d0bf51cba99e62a822481b"></a><!-- doxytag: member="MO_POLYGONMODE_POINT" ref="3e9d5553eca74679b010577766f964965850b82bd1d0bf51cba99e62a822481b" args="" -->MO_POLYGONMODE_POINT</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="3e9d5553eca74679b010577766f96496fd8274e06e57b84b7ea8d4f987377261"></a><!-- doxytag: member="MO_POLYGONMODES" ref="3e9d5553eca74679b010577766f96496fd8274e06e57b84b7ea8d4f987377261" args="" -->MO_POLYGONMODES</em>&nbsp;</td><td>
 </td></tr>
 </table>
 </dl>
@@ -1889,7 +2070,7 @@
 </pre></div>MOUndefinedTex     </td>
   </tr>
 </table>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Apr 28 20:04:22 2008 for MOLDEO by&nbsp;
+<hr size="1"><address style="align: right;"><small>Generated on Sun Nov 9 18:55:14 2008 for MOLDEO by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.6-NO </small></address>
 </body>

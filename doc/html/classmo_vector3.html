@@ -115,7 +115,7 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">static void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_vector3.html#ff3d16121eab96ed32270cb7096e3366">GenerateComplementBasis</a> (<a class="el" href="classmo_vector3.html">moVector3</a> &amp;rkU, <a class="el" href="classmo_vector3.html">moVector3</a> &amp;rkV, const <a class="el" href="classmo_vector3.html">moVector3</a> &amp;rkW)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">static void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_vector3.html#7750c51f8f473ac3d0f1550de7fe2b30">moVector3</a> (int iVQuantity, const <a class="el" href="classmo_vector3.html">moVector3</a> *akPoint, <a class="el" href="classmo_vector3.html">moVector3</a> &amp;rkMin, <a class="el" href="classmo_vector3.html">moVector3</a> &amp;rkMax)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">static void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_vector3.html#37349bd4383dbd6e395f091df6e56240">ComputeExtremes</a> (int iVQuantity, const <a class="el" href="classmo_vector3.html">moVector3</a> *akPoint, <a class="el" href="classmo_vector3.html">moVector3</a> &amp;rkMin, <a class="el" href="classmo_vector3.html">moVector3</a> &amp;rkMax)</td></tr>
 
 <tr><td colspan="2"><br><h2>Static Public Attributes</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">static const <a class="el" href="classmo_vector3.html">moVector3</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_vector3.html#f3045cb9141e0a7cd881e8628781de11">ZERO</a></td></tr>
@@ -281,59 +281,6 @@ template&lt;class Real&gt; </td>
     </td>
   </tr>
 </table>
-<a class="anchor" name="7750c51f8f473ac3d0f1550de7fe2b30"></a><!-- doxytag: member="moVector3::moVector3" ref="7750c51f8f473ac3d0f1550de7fe2b30" args="(int iVQuantity, const moVector3 *akPoint, moVector3 &amp;rkMin, moVector3 &amp;rkMax)" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="mdPrefix" colspan="4">
-template&lt;class Real&gt; </td>
-        </tr>
-        <tr>
-          <td class="md" nowrap valign="top">static void <a class="el" href="classmo_vector3.html">moVector3</a>&lt; Real &gt;::<a class="el" href="classmo_vector3.html">moVector3</a>           </td>
-          <td class="md" valign="top">(&nbsp;</td>
-          <td class="md" nowrap valign="top">int&nbsp;</td>
-          <td class="mdname" nowrap> <em>iVQuantity</em>, </td>
-        </tr>
-        <tr>
-          <td class="md" nowrap align="right"></td>
-          <td class="md"></td>
-          <td class="md" nowrap>const <a class="el" href="classmo_vector3.html">moVector3</a>&lt; Real &gt; *&nbsp;</td>
-          <td class="mdname" nowrap> <em>akPoint</em>, </td>
-        </tr>
-        <tr>
-          <td class="md" nowrap align="right"></td>
-          <td class="md"></td>
-          <td class="md" nowrap><a class="el" href="classmo_vector3.html">moVector3</a>&lt; Real &gt; &amp;&nbsp;</td>
-          <td class="mdname" nowrap> <em>rkMin</em>, </td>
-        </tr>
-        <tr>
-          <td class="md" nowrap align="right"></td>
-          <td class="md"></td>
-          <td class="md" nowrap><a class="el" href="classmo_vector3.html">moVector3</a>&lt; Real &gt; &amp;&nbsp;</td>
-          <td class="mdname" nowrap> <em>rkMax</em></td>
-        </tr>
-        <tr>
-          <td class="md"></td>
-          <td class="md">)&nbsp;</td>
-          <td class="md" colspan="2"><code> [inline, static]</code></td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-    </td>
-  </tr>
-</table>
 <hr><h2>Member Function Documentation</h2>
 <a class="anchor" name="95b68075c88aeb81b92bcb5f450ed39e"></a><!-- doxytag: member="moVector3::Angle" ref="95b68075c88aeb81b92bcb5f450ed39e" args="(const moVector3&lt; Real &gt; &amp;rkV)" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
@@ -383,6 +330,59 @@ template&lt;class Real&gt; </td>
           <td class="mdname1" valign="top" nowrap> <em>rkV</em>          </td>
           <td class="md" valign="top">&nbsp;)&nbsp;</td>
           <td class="md" nowrap> const<code> [inline, private]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="37349bd4383dbd6e395f091df6e56240"></a><!-- doxytag: member="moVector3::ComputeExtremes" ref="37349bd4383dbd6e395f091df6e56240" args="(int iVQuantity, const moVector3 *akPoint, moVector3 &amp;rkMin, moVector3 &amp;rkMax)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="mdPrefix" colspan="4">
+template&lt;class Real&gt; </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap valign="top">static void <a class="el" href="classmo_vector3.html">moVector3</a>&lt; Real &gt;::ComputeExtremes           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">int&nbsp;</td>
+          <td class="mdname" nowrap> <em>iVQuantity</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>const <a class="el" href="classmo_vector3.html">moVector3</a>&lt; Real &gt; *&nbsp;</td>
+          <td class="mdname" nowrap> <em>akPoint</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap><a class="el" href="classmo_vector3.html">moVector3</a>&lt; Real &gt; &amp;&nbsp;</td>
+          <td class="mdname" nowrap> <em>rkMin</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap><a class="el" href="classmo_vector3.html">moVector3</a>&lt; Real &gt; &amp;&nbsp;</td>
+          <td class="mdname" nowrap> <em>rkMax</em></td>
+        </tr>
+        <tr>
+          <td class="md"></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"><code> [inline, static]</code></td>
         </tr>
       </table>
     </td>
@@ -1839,8 +1839,8 @@ template&lt;class Real&gt; </td>
   </tr>
 </table>
 <hr>The documentation for this class was generated from the following file:<ul>
-<li>D:/_data/proyectos/SINESTESIA/OPENSVN/trunk/0.7/inc/<a class="el" href="mo_math_vector3_8h.html">moMathVector3.h</a></ul>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Apr 28 20:04:25 2008 for MOLDEO by&nbsp;
+<li>D:/_data/proyectos/SINESTESIA/SVNSOURCEFORGE/trunk/0.7/inc/<a class="el" href="mo_math_vector3_8h.html">moMathVector3.h</a></ul>
+<hr size="1"><address style="align: right;"><small>Generated on Sun Nov 9 18:55:19 2008 for MOLDEO by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.6-NO </small></address>
 </body>

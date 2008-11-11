@@ -34,18 +34,16 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual MOboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_video_frame.html#26676cc7399c8e4a4adbc146bc00e579">Init</a> ()</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual MOboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_video_frame.html#9f590664e2c7d1f7e67e156b9213b649">Init</a> (moText bufferformat, FIBITMAP *pImageResult)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual MOboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_video_frame.html#696b74d00793ba4244848c0665d3936c">Init</a> (moText bufferformat, <a class="el" href="mo_texture_8h.html#9a559b27ac7c92c6bcbb1fcb6c53968f">moBitmap</a> *pImageResult)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual MOboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_video_frame.html#13a32566989d457117b6568a837436b4">Finish</a> ()</td></tr>
 
 <tr><td colspan="2"><br><h2>Public Attributes</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">MOint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_video_frame.html#66e0e54d72c7340685ea94516f505b56">options</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">FIMEMORY *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_video_frame.html#1c30beb422a64f97412442e239ae786a">hmem</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="mo_texture_8h.html#f55dbfd702388333dec0e002394b369e">moMemory</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_video_frame.html#f70db85d6da9a6e0f0e8ad6d51cc4e31">hmem</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">FREE_IMAGE_FORMAT&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_video_frame.html#cc7e1b8cf3031bdaf971cce9d4b9edbd">fif</a></td></tr>
-
-<tr><td class="memItemLeft" nowrap align="right" valign="top">FIBITMAP *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_video_frame.html#6c6e7f50f780e0bd236af61de77b5d8d">m_pImage</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="mo_texture_8h.html#dd7afed869a71e9fa01e3227a3d6c1bd">moBitmapFormat</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_video_frame.html#eae95c2921b47bf03f93af26634fafbc">fif</a></td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">MOlong&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_video_frame.html#4e5c7f5a637fe3f540f221f6d0ea441c">m_FrameSize</a></td></tr>
 
@@ -140,7 +138,7 @@ Función de finalización. Libera los recursos generados en la función de iniciali
 Reimplemented from <a class="el" href="classmo_abstract.html#ebca6a4528826e8339e62b242b9547be">moAbstract</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="9f590664e2c7d1f7e67e156b9213b649"></a><!-- doxytag: member="moVideoFrame::Init" ref="9f590664e2c7d1f7e67e156b9213b649" args="(moText bufferformat, FIBITMAP *pImageResult)" --><p>
+<a class="anchor" name="696b74d00793ba4244848c0665d3936c"></a><!-- doxytag: member="moVideoFrame::Init" ref="696b74d00793ba4244848c0665d3936c" args="(moText bufferformat, moBitmap *pImageResult)" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -154,7 +152,7 @@ Reimplemented from <a class="el" href="classmo_abstract.html#ebca6a4528826e8339e
         <tr>
           <td class="md" nowrap align="right"></td>
           <td class="md"></td>
-          <td class="md" nowrap>FIBITMAP *&nbsp;</td>
+          <td class="md" nowrap><a class="el" href="mo_texture_8h.html#9a559b27ac7c92c6bcbb1fcb6c53968f">moBitmap</a> *&nbsp;</td>
           <td class="mdname" nowrap> <em>pImageResult</em></td>
         </tr>
         <tr>
@@ -208,13 +206,13 @@ Reimplemented from <a class="el" href="classmo_abstract.html#f22d480d10cc8259504
   </tr>
 </table>
 <hr><h2>Member Data Documentation</h2>
-<a class="anchor" name="cc7e1b8cf3031bdaf971cce9d4b9edbd"></a><!-- doxytag: member="moVideoFrame::fif" ref="cc7e1b8cf3031bdaf971cce9d4b9edbd" args="" --><p>
+<a class="anchor" name="eae95c2921b47bf03f93af26634fafbc"></a><!-- doxytag: member="moVideoFrame::fif" ref="eae95c2921b47bf03f93af26634fafbc" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top">FREE_IMAGE_FORMAT <a class="el" href="classmo_video_frame.html#cc7e1b8cf3031bdaf971cce9d4b9edbd">moVideoFrame::fif</a>          </td>
+          <td class="md" nowrap valign="top"><a class="el" href="mo_texture_8h.html#dd7afed869a71e9fa01e3227a3d6c1bd">moBitmapFormat</a> <a class="el" href="classmo_video_frame.html#eae95c2921b47bf03f93af26634fafbc">moVideoFrame::fif</a>          </td>
         </tr>
       </table>
     </td>
@@ -231,13 +229,13 @@ Reimplemented from <a class="el" href="classmo_abstract.html#f22d480d10cc8259504
     </td>
   </tr>
 </table>
-<a class="anchor" name="1c30beb422a64f97412442e239ae786a"></a><!-- doxytag: member="moVideoFrame::hmem" ref="1c30beb422a64f97412442e239ae786a" args="" --><p>
+<a class="anchor" name="f70db85d6da9a6e0f0e8ad6d51cc4e31"></a><!-- doxytag: member="moVideoFrame::hmem" ref="f70db85d6da9a6e0f0e8ad6d51cc4e31" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top">FIMEMORY* <a class="el" href="classmo_video_frame.html#1c30beb422a64f97412442e239ae786a">moVideoFrame::hmem</a>          </td>
+          <td class="md" nowrap valign="top"><a class="el" href="mo_texture_8h.html#f55dbfd702388333dec0e002394b369e">moMemory</a>* <a class="el" href="classmo_video_frame.html#f70db85d6da9a6e0f0e8ad6d51cc4e31">moVideoFrame::hmem</a>          </td>
         </tr>
       </table>
     </td>
@@ -284,29 +282,6 @@ Reimplemented from <a class="el" href="classmo_abstract.html#f22d480d10cc8259504
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td class="md" nowrap valign="top">MOuint <a class="el" href="classmo_video_frame.html#cfb9d5d77d26caed57d997706f561204">moVideoFrame::m_height</a>          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-    </td>
-  </tr>
-</table>
-<a class="anchor" name="6c6e7f50f780e0bd236af61de77b5d8d"></a><!-- doxytag: member="moVideoFrame::m_pImage" ref="6c6e7f50f780e0bd236af61de77b5d8d" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">FIBITMAP* <a class="el" href="classmo_video_frame.html#6c6e7f50f780e0bd236af61de77b5d8d">moVideoFrame::m_pImage</a>          </td>
         </tr>
       </table>
     </td>
@@ -370,8 +345,8 @@ Reimplemented from <a class="el" href="classmo_abstract.html#f22d480d10cc8259504
   </tr>
 </table>
 <hr>The documentation for this class was generated from the following file:<ul>
-<li>D:/_data/proyectos/SINESTESIA/OPENSVN/trunk/0.7/inc/<a class="el" href="mo_video_manager_8h.html">moVideoManager.h</a></ul>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Apr 28 20:04:26 2008 for MOLDEO by&nbsp;
+<li>D:/_data/proyectos/SINESTESIA/SVNSOURCEFORGE/trunk/0.7/inc/<a class="el" href="mo_video_manager_8h.html">moVideoManager.h</a></ul>
+<hr size="1"><address style="align: right;"><small>Generated on Sun Nov 9 18:55:19 2008 for MOLDEO by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.6-NO </small></address>
 </body>

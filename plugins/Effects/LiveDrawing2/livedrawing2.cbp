@@ -18,10 +18,7 @@
 					<Add option="-g" />
 				</Compiler>
 				<Linker>
-					<Add library="libtinyxmld" />
 					<Add library="glew_sharedd" />
-					<Add library="libfreetype235MT_D" />
-					<Add library="libmuparserd" />
 					<Add library="libgled" />
 					<Add library="libopengl32" />
 					<Add library="libglut32" />
@@ -39,10 +36,7 @@
 				<Option createDefFile="1" />
 				<Option createStaticLib="1" />
 				<Linker>
-					<Add library="libtinyxml" />
 					<Add library="glew_shared" />
-					<Add library="libfreetype235MT" />
-					<Add library="libmuparser" />
 					<Add library="libgle" />
 					<Add library="libopengl32" />
 					<Add library="libglut32" />
@@ -63,17 +57,12 @@
 			<Add directory="..\..\..\inc\3dsd" />
 			<Add directory="..\..\..\..\..\externlibs\glew\include" />
 			<Add directory="..\..\..\..\..\externlibs\opengl\include" />
-			<Add directory="..\..\..\..\..\externlibs\opentnl\include" />
 			<Add directory="..\..\..\..\..\externlibs\openal\include" />
-			<Add directory="..\..\..\..\..\externlibs\freeimage\include" />
-			<Add directory="..\..\..\..\..\externlibs\freetype\include" />
 			<Add directory="..\..\..\..\..\externlibs\lua\include" />
-			<Add directory="..\..\..\..\..\externlibs\muparser\include" />
 			<Add directory="..\..\..\..\..\externlibs\SDL\include" />
 			<Add directory="..\..\..\..\..\externlibs\SDL_image\include" />
 			<Add directory="..\..\..\..\..\externlibs\SDL_net\include" />
 			<Add directory="..\..\..\..\..\externlibs\gstreamer\include" />
-
 			<Add directory="..\..\..\..\..\externlibs\gstreamer\include\glib-2.0" />
 			<Add directory="..\..\..\..\..\externlibs\gstreamer\lib\glib-2.0\include" />
 		</Compiler>
@@ -85,17 +74,12 @@
 			<Add library="cgGL" />
 			<Add library="OpenAL32" />
 			<Add library="EFX-Util" />
-			<Add library="FreeImage" />
-			<Add directory="..\..\..\..\..\externlibs\tinyxml\lib" />
 			<Add directory="..\..\..\..\..\externlibs\SDL\lib" />
 			<Add directory="..\..\..\..\..\externlibs\glew\lib" />
 			<Add directory="..\..\..\..\..\externlibs\lua\lib" />
-			<Add directory="..\..\..\..\..\externlibs\muparser\lib" />
-			<Add directory="..\..\..\..\..\externlibs\freetype\lib" />
 			<Add directory="..\..\..\..\..\externlibs\cg\lib" />
 			<Add directory="..\..\..\..\..\externlibs\openal\libs\win32" />
 			<Add directory="..\..\..\..\..\externlibs\opengl\lib" />
-			<Add directory="..\..\..\..\..\externlibs\freeimage\lib" />
 			<Add directory="..\..\..\lib\mingw" />
 		</Linker>
 		<Unit filename="inc\moEffectLiveDrawing2.h" />

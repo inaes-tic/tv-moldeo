@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
-<title>MOLDEO: D:/_data/proyectos/SINESTESIA/OPENSVN/trunk/0.7/inc/moFontManager.h File Reference</title>
+<title>MOLDEO: D:/_data/proyectos/SINESTESIA/SVNSOURCEFORGE/trunk/0.7/inc/moFontManager.h File Reference</title>
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
@@ -17,29 +17,37 @@
     <li><a href="files.html"><span>File&nbsp;List</span></a></li>
     <li><a href="globals.html"><span>File&nbsp;Members</span></a></li>
   </ul></div>
-<h1>D:/_data/proyectos/SINESTESIA/OPENSVN/trunk/0.7/inc/moFontManager.h File Reference</h1><code>#include &quot;<a class="el" href="mo_types_8h.html">moTypes.h</a>&quot;</code><br>
+<h1>D:/_data/proyectos/SINESTESIA/SVNSOURCEFORGE/trunk/0.7/inc/moFontManager.h File Reference</h1><code>#include &quot;<a class="el" href="mo_types_8h.html">moTypes.h</a>&quot;</code><br>
 <code>#include &quot;<a class="el" href="mo_abstract_8h.html">moAbstract.h</a>&quot;</code><br>
 <code>#include &quot;<a class="el" href="mo_array_8h.html">moArray.h</a>&quot;</code><br>
 <code>#include &quot;<a class="el" href="mo_resource_manager_8h.html">moResourceManager.h</a>&quot;</code><br>
 <code>#include &quot;<a class="el" href="mo_text_8h.html">moText.h</a>&quot;</code><br>
 <code>#include &quot;<a class="el" href="mo_param_8h.html">moParam.h</a>&quot;</code><br>
-<code>#include &quot;<a class="el" href="mo_o_g_l_f_t_8h.html">moOGLFT.h</a>&quot;</code><br>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Classes</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_font.html">moFont</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">clase base para una fuente 3d o 2d  <a href="classmo_font.html#_details">More...</a><br></td></tr>
+<tr><td colspan="2"><br><h2>Typedefs</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">typedef void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_font_manager_8h.html#4c29cfb73f821b6ead8d1a61dc5c6b13">moFontFace</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">typedef MOfloat&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_font_manager_8h.html#d766a9a26b0a7392cf5aa0a86bddc83b">moFontSize</a></td></tr>
+
 <tr><td colspan="2"><br><h2>Enumerations</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_font_manager_8h.html#aa4ae0ba2a9fcb5f467acd60fa184b3f">moFontType</a> { <br>
-&nbsp;&nbsp;<a class="el" href="mo_font_manager_8h.html#aa4ae0ba2a9fcb5f467acd60fa184b3f7eefd38f0f99d2daaac16bdd68f3493c">MO_FONT_OUTLINE</a>, 
-<a class="el" href="mo_font_manager_8h.html#aa4ae0ba2a9fcb5f467acd60fa184b3f66fb3bd15226af05d952f6244468898c">MO_FONT_TRANSLUCENT</a>, 
-<a class="el" href="mo_font_manager_8h.html#aa4ae0ba2a9fcb5f467acd60fa184b3fb664bade90f05f8c07e56fe034c1a7fc">MO_FONT_TRANSLUCENTTEXTURE</a>, 
-<a class="el" href="mo_font_manager_8h.html#aa4ae0ba2a9fcb5f467acd60fa184b3fdd7205f45595f503aeb29024a19b778e">MO_FONT_GRAYSCALE</a>, 
+&nbsp;&nbsp;<a class="el" href="mo_font_manager_8h.html#aa4ae0ba2a9fcb5f467acd60fa184b3f7eefd38f0f99d2daaac16bdd68f3493c">MO_FONT_OUTLINE</a> =  0, 
+<a class="el" href="mo_font_manager_8h.html#aa4ae0ba2a9fcb5f467acd60fa184b3f66fb3bd15226af05d952f6244468898c">MO_FONT_TRANSLUCENT</a> =  1, 
+<a class="el" href="mo_font_manager_8h.html#aa4ae0ba2a9fcb5f467acd60fa184b3fb664bade90f05f8c07e56fe034c1a7fc">MO_FONT_TRANSLUCENTTEXTURE</a> =  2, 
+<a class="el" href="mo_font_manager_8h.html#aa4ae0ba2a9fcb5f467acd60fa184b3fdd7205f45595f503aeb29024a19b778e">MO_FONT_GRAYSCALE</a> =  3, 
 <br>
-&nbsp;&nbsp;<a class="el" href="mo_font_manager_8h.html#aa4ae0ba2a9fcb5f467acd60fa184b3f433c4add5291cabebe8b8ab600afd67f">MO_FONT_MONOCHROME</a>, 
-<a class="el" href="mo_font_manager_8h.html#aa4ae0ba2a9fcb5f467acd60fa184b3fb56977c71ff9a847bc762a017e8c19c6">MO_FONT_SOLID</a>, 
-<a class="el" href="mo_font_manager_8h.html#aa4ae0ba2a9fcb5f467acd60fa184b3f1e79756786fe70bf2fa8f93de7368d9d">MO_FONT_FILLED</a>
+&nbsp;&nbsp;<a class="el" href="mo_font_manager_8h.html#aa4ae0ba2a9fcb5f467acd60fa184b3f433c4add5291cabebe8b8ab600afd67f">MO_FONT_MONOCHROME</a> =  4, 
+<a class="el" href="mo_font_manager_8h.html#aa4ae0ba2a9fcb5f467acd60fa184b3fb56977c71ff9a847bc762a017e8c19c6">MO_FONT_SOLID</a> =  5, 
+<a class="el" href="mo_font_manager_8h.html#aa4ae0ba2a9fcb5f467acd60fa184b3f1e79756786fe70bf2fa8f93de7368d9d">MO_FONT_FILLED</a> =  6, 
+<a class="el" href="mo_font_manager_8h.html#aa4ae0ba2a9fcb5f467acd60fa184b3ffe3f9dc86256de734ebf44be83bd3204">MO_FONT_GLBUILD</a> =  7, 
+<br>
+&nbsp;&nbsp;<a class="el" href="mo_font_manager_8h.html#aa4ae0ba2a9fcb5f467acd60fa184b3f86987fa4219eabb98b5177ba80d478ba">MO_FONT_TYPES</a> =  8, 
+<a class="el" href="mo_font_manager_8h.html#aa4ae0ba2a9fcb5f467acd60fa184b3f3991b9f41a1f9910967a00031c1c3e0c">MO_FONT_UNDEFINED</a> = -1
 <br>
  }</td></tr>
 
@@ -47,6 +55,53 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_font_manager_8h.html#1911842bb75e3c2668bca712fea8adad">moDeclareExportedDynamicArray</a> (<a class="el" href="classmo_font.html">moFont</a> *, moFonts) class LIBMOLDEO_API moFontManager</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">administrator de fuentes  <a href="#1911842bb75e3c2668bca712fea8adad"></a><br></td></tr>
+</table>
+<hr><h2>Typedef Documentation</h2>
+<a class="anchor" name="4c29cfb73f821b6ead8d1a61dc5c6b13"></a><!-- doxytag: member="moFontManager.h::moFontFace" ref="4c29cfb73f821b6ead8d1a61dc5c6b13" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">typedef void <a class="el" href="mo_font_manager_8h.html#4c29cfb73f821b6ead8d1a61dc5c6b13">moFontFace</a>          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="d766a9a26b0a7392cf5aa0a86bddc83b"></a><!-- doxytag: member="moFontManager.h::moFontSize" ref="d766a9a26b0a7392cf5aa0a86bddc83b" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">typedef MOfloat <a class="el" href="mo_font_manager_8h.html#d766a9a26b0a7392cf5aa0a86bddc83b">moFontSize</a>          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Tipo de representación de tipografía     </td>
+  </tr>
 </table>
 <hr><h2>Enumeration Type Documentation</h2>
 <a class="anchor" name="aa4ae0ba2a9fcb5f467acd60fa184b3f"></a><!-- doxytag: member="moFontManager.h::moFontType" ref="aa4ae0ba2a9fcb5f467acd60fa184b3f" args="" --><p>
@@ -69,7 +124,7 @@
     <td>
 
 <p>
-Tipo de representación de tipografía <dl compact><dt><b>Enumerator: </b></dt><dd>
+<dl compact><dt><b>Enumerator: </b></dt><dd>
 <table border="0" cellspacing="2" cellpadding="0">
 <tr><td valign="top"><em><a class="anchor" name="aa4ae0ba2a9fcb5f467acd60fa184b3f7eefd38f0f99d2daaac16bdd68f3493c"></a><!-- doxytag: member="MO_FONT_OUTLINE" ref="aa4ae0ba2a9fcb5f467acd60fa184b3f7eefd38f0f99d2daaac16bdd68f3493c" args="" -->MO_FONT_OUTLINE</em>&nbsp;</td><td>
 </td></tr>
@@ -84,6 +139,12 @@ Tipo de representación de tipografía <dl compact><dt><b>Enumerator: </b></dt><dd
 <tr><td valign="top"><em><a class="anchor" name="aa4ae0ba2a9fcb5f467acd60fa184b3fb56977c71ff9a847bc762a017e8c19c6"></a><!-- doxytag: member="MO_FONT_SOLID" ref="aa4ae0ba2a9fcb5f467acd60fa184b3fb56977c71ff9a847bc762a017e8c19c6" args="" -->MO_FONT_SOLID</em>&nbsp;</td><td>
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" name="aa4ae0ba2a9fcb5f467acd60fa184b3f1e79756786fe70bf2fa8f93de7368d9d"></a><!-- doxytag: member="MO_FONT_FILLED" ref="aa4ae0ba2a9fcb5f467acd60fa184b3f1e79756786fe70bf2fa8f93de7368d9d" args="" -->MO_FONT_FILLED</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="aa4ae0ba2a9fcb5f467acd60fa184b3ffe3f9dc86256de734ebf44be83bd3204"></a><!-- doxytag: member="MO_FONT_GLBUILD" ref="aa4ae0ba2a9fcb5f467acd60fa184b3ffe3f9dc86256de734ebf44be83bd3204" args="" -->MO_FONT_GLBUILD</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="aa4ae0ba2a9fcb5f467acd60fa184b3f86987fa4219eabb98b5177ba80d478ba"></a><!-- doxytag: member="MO_FONT_TYPES" ref="aa4ae0ba2a9fcb5f467acd60fa184b3f86987fa4219eabb98b5177ba80d478ba" args="" -->MO_FONT_TYPES</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="aa4ae0ba2a9fcb5f467acd60fa184b3f3991b9f41a1f9910967a00031c1c3e0c"></a><!-- doxytag: member="MO_FONT_UNDEFINED" ref="aa4ae0ba2a9fcb5f467acd60fa184b3f3991b9f41a1f9910967a00031c1c3e0c" args="" -->MO_FONT_UNDEFINED</em>&nbsp;</td><td>
 </td></tr>
 </table>
 </dl>
@@ -130,7 +191,7 @@ administrator de fuentes
     </td>
   </tr>
 </table>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Apr 28 20:04:22 2008 for MOLDEO by&nbsp;
+<hr size="1"><address style="align: right;"><small>Generated on Sun Nov 9 18:55:14 2008 for MOLDEO by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.6-NO </small></address>
 </body>

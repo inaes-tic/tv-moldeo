@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
-<title>MOLDEO: D:/_data/proyectos/SINESTESIA/OPENSVN/trunk/0.7/inc/moTexture.h File Reference</title>
+<title>MOLDEO: D:/_data/proyectos/SINESTESIA/SVNSOURCEFORGE/trunk/0.7/inc/moTexture.h File Reference</title>
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
@@ -17,14 +17,13 @@
     <li><a href="files.html"><span>File&nbsp;List</span></a></li>
     <li><a href="globals.html"><span>File&nbsp;Members</span></a></li>
   </ul></div>
-<h1>D:/_data/proyectos/SINESTESIA/OPENSVN/trunk/0.7/inc/moTexture.h File Reference</h1><code>#include &quot;<a class="el" href="mo_types_8h.html">moTypes.h</a>&quot;</code><br>
+<h1>D:/_data/proyectos/SINESTESIA/SVNSOURCEFORGE/trunk/0.7/inc/moTexture.h File Reference</h1><code>#include &quot;<a class="el" href="mo_types_8h.html">moTypes.h</a>&quot;</code><br>
 <code>#include &quot;<a class="el" href="mo_text_8h.html">moText.h</a>&quot;</code><br>
 <code>#include &quot;<a class="el" href="mo_param_8h.html">moParam.h</a>&quot;</code><br>
 <code>#include &quot;<a class="el" href="mo_buckets_8h.html">moBuckets.h</a>&quot;</code><br>
 <code>#include &quot;<a class="el" href="mo_video_graph_8h.html">moVideoGraph.h</a>&quot;</code><br>
 <code>#include &quot;<a class="el" href="mo_gs_graph_8h.html">moGsGraph.h</a>&quot;</code><br>
 <code>#include &quot;<a class="el" href="mo_ds_graph_8h.html">moDsGraph.h</a>&quot;</code><br>
-<code>#include &quot;FreeImage.h&quot;</code><br>
 <code>#include &quot;<a class="el" href="mo_texture_index_8h.html">moTextureIndex.h</a>&quot;</code><br>
 <code>#include &quot;<a class="el" href="mo_f_b_o_8h.html">moFBO.h</a>&quot;</code><br>
 <code>#include &quot;<a class="el" href="mo_g_l_manager_8h.html">moGLManager.h</a>&quot;</code><br>
@@ -44,14 +43,21 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_movie.html">moMovie</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">una textura animada basada en una película  <a href="classmo_movie.html#_details">More...</a><br></td></tr>
+<tr><td colspan="2"><br><h2>Typedefs</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">typedef void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_texture_8h.html#9a559b27ac7c92c6bcbb1fcb6c53968f">moBitmap</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">typedef int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_texture_8h.html#dd7afed869a71e9fa01e3227a3d6c1bd">moBitmapFormat</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">typedef void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_texture_8h.html#f55dbfd702388333dec0e002394b369e">moMemory</a></td></tr>
+
 <tr><td colspan="2"><br><h2>Enumerations</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <br>
-&nbsp;&nbsp;<a class="el" href="mo_texture_8h.html#06fc87d81c62e9abb8790b6e5713c55bfbc010551b862cd2313a71a91c1b8d1a">MO_TYPE_TEXTURE</a>, 
-<a class="el" href="mo_texture_8h.html#06fc87d81c62e9abb8790b6e5713c55b3f11b0ca273c66d87fa917e8f2fdda3c">MO_TYPE_TEXTURE_MULTIPLE</a>, 
-<a class="el" href="mo_texture_8h.html#06fc87d81c62e9abb8790b6e5713c55b50feaae4a5daebe93c2a7f61985c5cf7">MO_TYPE_MOVIE</a>, 
-<a class="el" href="mo_texture_8h.html#06fc87d81c62e9abb8790b6e5713c55b04f7cb2c8341e9622ebdd227ca2d24a4">MO_TYPE_VIDEOBUFFER</a>, 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_texture_8h.html#58570bb1b786baae5ade70cdbe8152f8">moTextureType</a> { <br>
+&nbsp;&nbsp;<a class="el" href="mo_texture_8h.html#58570bb1b786baae5ade70cdbe8152f8fbc010551b862cd2313a71a91c1b8d1a">MO_TYPE_TEXTURE</a>, 
+<a class="el" href="mo_texture_8h.html#58570bb1b786baae5ade70cdbe8152f83f11b0ca273c66d87fa917e8f2fdda3c">MO_TYPE_TEXTURE_MULTIPLE</a>, 
+<a class="el" href="mo_texture_8h.html#58570bb1b786baae5ade70cdbe8152f850feaae4a5daebe93c2a7f61985c5cf7">MO_TYPE_MOVIE</a>, 
+<a class="el" href="mo_texture_8h.html#58570bb1b786baae5ade70cdbe8152f804f7cb2c8341e9622ebdd227ca2d24a4">MO_TYPE_VIDEOBUFFER</a>, 
 <br>
-&nbsp;&nbsp;<a class="el" href="mo_texture_8h.html#06fc87d81c62e9abb8790b6e5713c55b3bbb18d84b46925022614a07107d52c9">MO_TYPE_CIRCULARVIDEOBUFFER</a>
+&nbsp;&nbsp;<a class="el" href="mo_texture_8h.html#58570bb1b786baae5ade70cdbe8152f83bbb18d84b46925022614a07107d52c9">MO_TYPE_CIRCULARVIDEOBUFFER</a>
 <br>
  }</td></tr>
 
@@ -59,14 +65,84 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_texture_8h.html#be3d54455e8910566431e0ac8a15d451">moDeclareExportedDynamicArray</a> (<a class="el" href="classmo_texture.html">moTexture</a> *, moTextureArray) class <a class="el" href="classmo_shader.html">moShader</a></td></tr>
 
 </table>
-<hr><h2>Enumeration Type Documentation</h2>
-<a class="anchor" name="06fc87d81c62e9abb8790b6e5713c55b"></a><!-- doxytag: member="moTexture.h::@0" ref="06fc87d81c62e9abb8790b6e5713c55b" args="" --><p>
+<hr><h2>Typedef Documentation</h2>
+<a class="anchor" name="9a559b27ac7c92c6bcbb1fcb6c53968f"></a><!-- doxytag: member="moTexture.h::moBitmap" ref="9a559b27ac7c92c6bcbb1fcb6c53968f" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top">anonymous enum          </td>
+          <td class="md" nowrap valign="top">typedef void <a class="el" href="mo_texture_8h.html#9a559b27ac7c92c6bcbb1fcb6c53968f">moBitmap</a>          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="dd7afed869a71e9fa01e3227a3d6c1bd"></a><!-- doxytag: member="moTexture.h::moBitmapFormat" ref="dd7afed869a71e9fa01e3227a3d6c1bd" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">typedef int <a class="el" href="mo_texture_8h.html#dd7afed869a71e9fa01e3227a3d6c1bd">moBitmapFormat</a>          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="f55dbfd702388333dec0e002394b369e"></a><!-- doxytag: member="moTexture.h::moMemory" ref="f55dbfd702388333dec0e002394b369e" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">typedef void <a class="el" href="mo_texture_8h.html#f55dbfd702388333dec0e002394b369e">moMemory</a>          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<hr><h2>Enumeration Type Documentation</h2>
+<a class="anchor" name="58570bb1b786baae5ade70cdbe8152f8"></a><!-- doxytag: member="moTexture.h::moTextureType" ref="58570bb1b786baae5ade70cdbe8152f8" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">enum <a class="el" href="mo_texture_8h.html#58570bb1b786baae5ade70cdbe8152f8">moTextureType</a>          </td>
         </tr>
       </table>
     </td>
@@ -82,15 +158,15 @@
 <p>
 <dl compact><dt><b>Enumerator: </b></dt><dd>
 <table border="0" cellspacing="2" cellpadding="0">
-<tr><td valign="top"><em><a class="anchor" name="06fc87d81c62e9abb8790b6e5713c55bfbc010551b862cd2313a71a91c1b8d1a"></a><!-- doxytag: member="MO_TYPE_TEXTURE" ref="06fc87d81c62e9abb8790b6e5713c55bfbc010551b862cd2313a71a91c1b8d1a" args="" -->MO_TYPE_TEXTURE</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="58570bb1b786baae5ade70cdbe8152f8fbc010551b862cd2313a71a91c1b8d1a"></a><!-- doxytag: member="MO_TYPE_TEXTURE" ref="58570bb1b786baae5ade70cdbe8152f8fbc010551b862cd2313a71a91c1b8d1a" args="" -->MO_TYPE_TEXTURE</em>&nbsp;</td><td>
 </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="06fc87d81c62e9abb8790b6e5713c55b3f11b0ca273c66d87fa917e8f2fdda3c"></a><!-- doxytag: member="MO_TYPE_TEXTURE_MULTIPLE" ref="06fc87d81c62e9abb8790b6e5713c55b3f11b0ca273c66d87fa917e8f2fdda3c" args="" -->MO_TYPE_TEXTURE_MULTIPLE</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="58570bb1b786baae5ade70cdbe8152f83f11b0ca273c66d87fa917e8f2fdda3c"></a><!-- doxytag: member="MO_TYPE_TEXTURE_MULTIPLE" ref="58570bb1b786baae5ade70cdbe8152f83f11b0ca273c66d87fa917e8f2fdda3c" args="" -->MO_TYPE_TEXTURE_MULTIPLE</em>&nbsp;</td><td>
 </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="06fc87d81c62e9abb8790b6e5713c55b50feaae4a5daebe93c2a7f61985c5cf7"></a><!-- doxytag: member="MO_TYPE_MOVIE" ref="06fc87d81c62e9abb8790b6e5713c55b50feaae4a5daebe93c2a7f61985c5cf7" args="" -->MO_TYPE_MOVIE</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="58570bb1b786baae5ade70cdbe8152f850feaae4a5daebe93c2a7f61985c5cf7"></a><!-- doxytag: member="MO_TYPE_MOVIE" ref="58570bb1b786baae5ade70cdbe8152f850feaae4a5daebe93c2a7f61985c5cf7" args="" -->MO_TYPE_MOVIE</em>&nbsp;</td><td>
 </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="06fc87d81c62e9abb8790b6e5713c55b04f7cb2c8341e9622ebdd227ca2d24a4"></a><!-- doxytag: member="MO_TYPE_VIDEOBUFFER" ref="06fc87d81c62e9abb8790b6e5713c55b04f7cb2c8341e9622ebdd227ca2d24a4" args="" -->MO_TYPE_VIDEOBUFFER</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="58570bb1b786baae5ade70cdbe8152f804f7cb2c8341e9622ebdd227ca2d24a4"></a><!-- doxytag: member="MO_TYPE_VIDEOBUFFER" ref="58570bb1b786baae5ade70cdbe8152f804f7cb2c8341e9622ebdd227ca2d24a4" args="" -->MO_TYPE_VIDEOBUFFER</em>&nbsp;</td><td>
 </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="06fc87d81c62e9abb8790b6e5713c55b3bbb18d84b46925022614a07107d52c9"></a><!-- doxytag: member="MO_TYPE_CIRCULARVIDEOBUFFER" ref="06fc87d81c62e9abb8790b6e5713c55b3bbb18d84b46925022614a07107d52c9" args="" -->MO_TYPE_CIRCULARVIDEOBUFFER</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="58570bb1b786baae5ade70cdbe8152f83bbb18d84b46925022614a07107d52c9"></a><!-- doxytag: member="MO_TYPE_CIRCULARVIDEOBUFFER" ref="58570bb1b786baae5ade70cdbe8152f83bbb18d84b46925022614a07107d52c9" args="" -->MO_TYPE_CIRCULARVIDEOBUFFER</em>&nbsp;</td><td>
 </td></tr>
 </table>
 </dl>
@@ -135,7 +211,7 @@
     </td>
   </tr>
 </table>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Apr 28 20:04:22 2008 for MOLDEO by&nbsp;
+<hr size="1"><address style="align: right;"><small>Generated on Sun Nov 9 18:55:14 2008 for MOLDEO by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.6-NO </small></address>
 </body>

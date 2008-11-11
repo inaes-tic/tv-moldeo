@@ -181,16 +181,16 @@ void moShaderGLSL::linkProgram()
 
 void moShaderGLSL::printInfoLog(GLhandleARB obj)
 {
-    int infologLength = 0;
-    int charsWritten  = 0;
+    GLint infologLength = 0;
+    GLsizei charsWritten  = 0;
     char *infoLog;
 
-    glGetObjectParameterivARB(obj, GL_OBJECT_INFO_LOG_LENGTH_ARB, &(GLint)infologLength);
+    glGetObjectParameterivARB(obj, GL_OBJECT_INFO_LOG_LENGTH_ARB, &infologLength);
 
     if (infologLength > 0)
     {
         infoLog = (char *)malloc(infologLength);
-        glGetInfoLogARB(obj, infologLength, &(GLsizei)charsWritten, infoLog);
+        glGetInfoLogARB(obj, infologLength, &charsWritten, infoLog);
 		moText msg = moText(infoLog);
         if (MODebug != NULL) MODebug->Push(msg);
         free(infoLog);

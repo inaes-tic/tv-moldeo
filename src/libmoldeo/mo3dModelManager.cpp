@@ -34,27 +34,71 @@
 #include "moArray.cpp"
 moDefineDynamicArray( moCoords )
 
-mo3DModel::mo3DModel() {
+
+moSceneNode::moSceneNode() {
+
+}
+
+moSceneNode*
+moSceneNode::GetParent() {
+    return NULL;
+}
+
+
+void
+moSceneNode::SetParent( moSceneNode* p_SceneNode ) {
+
+}
+
+
+moSceneNode::~moSceneNode() {
+
+}
+
+MOboolean moSceneNode::Init() {
+
+
+}
+
+MOboolean moSceneNode::Finish() {
+
+}
+
+void moSceneNode::Draw( moEffectState *state, GLuint g_ViewMode ) {
+
+
+}
+
+void moSceneNode::Update() {
+
+}
+
+void moSceneNode::Interaction() {
+
+}
+
+
+mo3DModelSceneNode::mo3DModelSceneNode() {
     m_pModel = NULL;
 }
 
 
-mo3DModel::~mo3DModel() {
+mo3DModelSceneNode::~mo3DModelSceneNode() {
 
 }
 
 MOboolean
-mo3DModel::Init() {
+mo3DModelSceneNode::Init() {
     m_pModel = NULL;
     return true;
 }
 
-MOboolean mo3DModel::Finish() {
+MOboolean mo3DModelSceneNode::Finish() {
     return true;
 }
 
 
-void mo3DModel::Draw(moEffectState *state, GLuint g_ViewMode) {
+void mo3DModelSceneNode::Draw(moEffectState *state, GLuint g_ViewMode) {
 
 	int i;
 	float x,y;
@@ -186,11 +230,11 @@ void mo3DModel::Draw(moEffectState *state, GLuint g_ViewMode) {
 
 }
 
-void mo3DModel::Update() {
+void mo3DModelSceneNode::Update() {
 
 }
 
-void mo3DModel::Interaction() {
+void mo3DModelSceneNode::Interaction() {
 
 }
 
@@ -237,7 +281,7 @@ mo3dModelManager::Init() {
 	if (!m_pMoldeoLogo) {
 	    mo3dModel* pmodel = Load3dModel( "objetos/iconos3d/moldeologo.3ds", "../../data/test" );
 	    if (pmodel) {
-            m_pMoldeoLogo = new mo3DModel();
+            m_pMoldeoLogo = new mo3DModelSceneNode();
             m_pMoldeoLogo->Init(pmodel);
         }
     }

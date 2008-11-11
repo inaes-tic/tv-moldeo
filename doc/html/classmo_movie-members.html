@@ -26,6 +26,7 @@
   <tr class="memlist"><td><a class="el" href="classmo_texture.html#eb8011642c79fb7746ddb295859f48cb">BuildFromFile</a>(moText p_filename)</td><td><a class="el" href="classmo_texture.html">moTexture</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_texture.html#afcdbf16293ce341d02656b7866fa006">CalculateSize</a>(MOuint p_width, MOuint p_height)</td><td><a class="el" href="classmo_texture.html">moTexture</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_texture.html#5ce411a718716b61a5c751f8875979c5">CopyFromTex</a>(moTexture *p_src_tex, MOboolean p_copy_glid, MOboolean p_copy_moid, MOboolean p_copy_type, MOboolean p_copy_name)</td><td><a class="el" href="classmo_texture.html">moTexture</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classmo_texture.html#761f432fa74ed3a4d1005cfab01590be">CreateThumbnail</a>(moText p_bufferformat, int w, int h, moText newfilename=moText(&quot;&quot;))</td><td><a class="el" href="classmo_texture.html">moTexture</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_movie.html#4da18d072138eb63117f1254a102d93b">EnableAudio</a>(int)</td><td><a class="el" href="classmo_movie.html">moMovie</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_movie.html#d4cecbb1834a2a703c6e9df7c5fb3519">EnableVideo</a>(int)</td><td><a class="el" href="classmo_movie.html">moMovie</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_movie.html#4328d137f80765c246a20e728e1c4c3e">Finish</a>()</td><td><a class="el" href="classmo_movie.html">moMovie</a></td><td><code> [virtual]</code></td></tr>
@@ -64,12 +65,14 @@
   <tr class="memlist"><td><a class="el" href="classmo_abstract.html#f22d480d10cc8259504c59c4847acd15">moAbstract::Init</a>()</td><td><a class="el" href="classmo_abstract.html">moAbstract</a></td><td><code> [virtual]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_abstract.html#2a6c2871c94ca506e0afcf846287c4f8">Initialized</a>()</td><td><a class="el" href="classmo_abstract.html">moAbstract</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_texture_animated.html#a6ad8e1372c78513225757f146f741e1">Interpolate</a>()</td><td><a class="el" href="classmo_texture_animated.html">moTextureAnimated</a></td><td><code> [protected, virtual]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classmo_texture.html#609e42c97e4f9f82db983db75bc14a84">IsBuildedFromFile</a>()</td><td><a class="el" href="classmo_texture.html">moTexture</a></td><td><code> [inline]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_texture_animated.html#e6b00feb4d8218000e5d336886e79991">IsInterpolating</a>()</td><td><a class="el" href="classmo_texture_animated.html">moTextureAnimated</a></td><td><code> [virtual]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_texture_animated.html#a79e06e269e3e154983e0de88dc5c5cc">IsInterpolationActive</a>()</td><td><a class="el" href="classmo_texture_animated.html">moTextureAnimated</a></td><td><code> [virtual]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_movie.html#68e43cd96b7a9712979b920ba04c2462">lastframe</a></td><td><a class="el" href="classmo_movie.html">moMovie</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_movie.html#98d969fb79ca696c0ee78107a9e88667">Load</a>(moParam *p_param)</td><td><a class="el" href="classmo_movie.html">moMovie</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_movie.html#79161b4863e4dd28585966d5dac4631a">Load</a>(moValue *p_value)</td><td><a class="el" href="classmo_movie.html">moMovie</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_movie.html#6eef2d7b29e14d562a2b61b37eb75311">LoadMovieFile</a>(moText p_filename)</td><td><a class="el" href="classmo_movie.html">moMovie</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classmo_texture.html#3bf5b329709855a97874530a7a13757b">m_bBuildedFromFile</a></td><td><a class="el" href="classmo_texture.html">moTexture</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_abstract.html#540ec2682b0883fe74d1a2b96bab172a">m_bInitialized</a></td><td><a class="el" href="classmo_abstract.html">moAbstract</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_texture_animated.html#13e413d377bb38c7ffd0e157fea5e723">m_bInterpolating</a></td><td><a class="el" href="classmo_texture_animated.html">moTextureAnimated</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_texture_animated.html#e67d9cdc260eb2dcfa3ecee4762473e0">m_bInterpolation</a></td><td><a class="el" href="classmo_texture_animated.html">moTextureAnimated</a></td><td><code> [protected]</code></td></tr>
@@ -142,7 +145,7 @@
   <tr class="memlist"><td><a class="el" href="classmo_movie.html#f278c085b770349533432cdce388c23d">~moMovie</a>()</td><td><a class="el" href="classmo_movie.html">moMovie</a></td><td><code> [virtual]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_texture.html#edecb4c149f34663bc594c0d83d7f9a6">~moTexture</a>()</td><td><a class="el" href="classmo_texture.html">moTexture</a></td><td><code> [virtual]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_texture_animated.html#6bff4182e75de7bac6fbace9e61e427b">~moTextureAnimated</a>()</td><td><a class="el" href="classmo_texture_animated.html">moTextureAnimated</a></td><td><code> [virtual]</code></td></tr>
-</table><hr size="1"><address style="align: right;"><small>Generated on Mon Apr 28 20:04:24 2008 for MOLDEO by&nbsp;
+</table><hr size="1"><address style="align: right;"><small>Generated on Sun Nov 9 18:55:17 2008 for MOLDEO by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.6-NO </small></address>
 </body>
