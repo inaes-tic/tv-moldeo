@@ -44,13 +44,13 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">MOint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_texture_filter_index.html#08a9192e6a87a0613485718b72a1eaad">Add</a> (<a class="el" href="classmo_texture_filter.html">moTextureFilter</a> *p_filter)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_texture_filter_index.html#ffce2a4058e45d6d98c2d5b469e20614">Apply</a> (MOuint p_idx, MOuint p_i, <a class="el" href="structmo_text_filter_param.html">moTextFilterParam</a> p_params=<a class="el" href="mo_texture_filter_8h.html#b990cc1accbdd94410c05ce24fb486d0">MOEmptyTexFilterParam</a>)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_texture_filter_index.html#e6303b01a7285aebb474094e58267701">Apply</a> (MOuint p_idx, MOuint p_i, MOfloat p_fade=1.0, <a class="el" href="classmo_text_filter_param.html">moTextFilterParam</a> *p_params=NULL)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_texture_filter_index.html#db138cee6ea582a52b4db5a23eee6dee">Apply</a> (MOuint p_idx, MOfloat p_cycle, <a class="el" href="structmo_text_filter_param.html">moTextFilterParam</a> p_params=<a class="el" href="mo_texture_filter_8h.html#b990cc1accbdd94410c05ce24fb486d0">MOEmptyTexFilterParam</a>)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_texture_filter_index.html#429e216f5d67ff4ec5ff9a91b07ea5c1">Apply</a> (MOuint p_idx, MOfloat p_cycle, MOfloat p_fade=1.0, <a class="el" href="classmo_text_filter_param.html">moTextFilterParam</a> *p_params=NULL)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_texture_filter_index.html#ad6bd6b5b32f43ed943473cd9870fcc9">Apply</a> (MOuint p_idx, moTempo *p_tempo, <a class="el" href="structmo_text_filter_param.html">moTextFilterParam</a> p_params=<a class="el" href="mo_texture_filter_8h.html#b990cc1accbdd94410c05ce24fb486d0">MOEmptyTexFilterParam</a>)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_texture_filter_index.html#41a5d652e092f0a2fec591085e324774">Apply</a> (MOuint p_idx, moTempo *p_tempo, MOfloat p_fade=1.0, <a class="el" href="classmo_text_filter_param.html">moTextFilterParam</a> *p_params=NULL)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_texture_filter_index.html#38d9f30234ab842c6aa9a7a6d0e76325">Apply</a> (moTempo *p_tempo, <a class="el" href="structmo_text_filter_param.html">moTextFilterParam</a> p_params=<a class="el" href="mo_texture_filter_8h.html#b990cc1accbdd94410c05ce24fb486d0">MOEmptyTexFilterParam</a>)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_texture_filter_index.html#51bf196e8b07b1a51fed4bee6cdcbff5">Apply</a> (moTempo *p_tempo, MOfloat p_fade=1.0, <a class="el" href="classmo_text_filter_param.html">moTextFilterParam</a> *p_params=NULL)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">MOboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_texture_filter_index.html#e92e56d7b79de8e8d344208d84845754">ValidIndex</a> (MOuint p_idx)</td></tr>
 
@@ -67,6 +67,10 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">MOuint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_texture_filter_index.html#197c89f389c41b29283e4262745f9621">LoadFilters</a> (<a class="el" href="classmo_config.html">moConfig</a> *p_cfg, MOuint p_param_idx)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">MOuint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_texture_filter_index.html#03d5c2c9454e41ee4824c66ab7d2281e">LoadFilters</a> (moTextArray *p_filters_str)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">MOint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_texture_filter_index.html#279021def4e20534479bb2c254f15879">TextureFilterExists</a> (moValue *p_value)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">moText&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_texture_filter_index.html#8f209c164851c27dc06b7a89c8c9598f">MakeTextureFilterLabelName</a> (moValue *p_value)</td></tr>
 
 <tr><td colspan="2"><br><h2>Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">MOint&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_texture_filter_index.html#485340a049ca9dec2396f9d0a96bd8fb">LoadShader</a> (moText &amp;name, <a class="el" href="classmo_shader.html">moShader</a> **pshader)</td></tr>
@@ -181,7 +185,7 @@ Agrega el filtro apuntado por p_filter. <dl compact><dt><b>Returns:</b></dt><dd>
     </td>
   </tr>
 </table>
-<a class="anchor" name="38d9f30234ab842c6aa9a7a6d0e76325"></a><!-- doxytag: member="moTextureFilterIndex::Apply" ref="38d9f30234ab842c6aa9a7a6d0e76325" args="(moTempo *p_tempo, moTextFilterParam p_params=MOEmptyTexFilterParam)" --><p>
+<a class="anchor" name="51bf196e8b07b1a51fed4bee6cdcbff5"></a><!-- doxytag: member="moTextureFilterIndex::Apply" ref="51bf196e8b07b1a51fed4bee6cdcbff5" args="(moTempo *p_tempo, MOfloat p_fade=1.0, moTextFilterParam *p_params=NULL)" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -195,8 +199,14 @@ Agrega el filtro apuntado por p_filter. <dl compact><dt><b>Returns:</b></dt><dd>
         <tr>
           <td class="md" nowrap align="right"></td>
           <td class="md"></td>
-          <td class="md" nowrap><a class="el" href="structmo_text_filter_param.html">moTextFilterParam</a>&nbsp;</td>
-          <td class="mdname" nowrap> <em>p_params</em> = <code><a class="el" href="mo_texture_filter_8h.html#b990cc1accbdd94410c05ce24fb486d0">MOEmptyTexFilterParam</a></code></td>
+          <td class="md" nowrap>MOfloat&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_fade</em> = <code>1.0</code>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap><a class="el" href="classmo_text_filter_param.html">moTextFilterParam</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_params</em> = <code>NULL</code></td>
         </tr>
         <tr>
           <td class="md"></td>
@@ -218,13 +228,14 @@ Agrega el filtro apuntado por p_filter. <dl compact><dt><b>Returns:</b></dt><dd>
 Aplica todos los filtros sobre las texturas de orígen y escribiendo el resutlado en las texturas de destino. <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>p_tempo</em>&nbsp;</td><td>tempo a utilizar en las texturas de orígen (en el caso de que sean animadas). </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>p_fade</em>&nbsp;</td><td>constante de "fading" utilizada para mezclar el resultado del filtro. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>p_params</em>&nbsp;</td><td>parámetros del filtro. </td></tr>
   </table>
 </dl>
     </td>
   </tr>
 </table>
-<a class="anchor" name="ad6bd6b5b32f43ed943473cd9870fcc9"></a><!-- doxytag: member="moTextureFilterIndex::Apply" ref="ad6bd6b5b32f43ed943473cd9870fcc9" args="(MOuint p_idx, moTempo *p_tempo, moTextFilterParam p_params=MOEmptyTexFilterParam)" --><p>
+<a class="anchor" name="41a5d652e092f0a2fec591085e324774"></a><!-- doxytag: member="moTextureFilterIndex::Apply" ref="41a5d652e092f0a2fec591085e324774" args="(MOuint p_idx, moTempo *p_tempo, MOfloat p_fade=1.0, moTextFilterParam *p_params=NULL)" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -244,8 +255,14 @@ Aplica todos los filtros sobre las texturas de orígen y escribiendo el resutlado
         <tr>
           <td class="md" nowrap align="right"></td>
           <td class="md"></td>
-          <td class="md" nowrap><a class="el" href="structmo_text_filter_param.html">moTextFilterParam</a>&nbsp;</td>
-          <td class="mdname" nowrap> <em>p_params</em> = <code><a class="el" href="mo_texture_filter_8h.html#b990cc1accbdd94410c05ce24fb486d0">MOEmptyTexFilterParam</a></code></td>
+          <td class="md" nowrap>MOfloat&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_fade</em> = <code>1.0</code>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap><a class="el" href="classmo_text_filter_param.html">moTextFilterParam</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_params</em> = <code>NULL</code></td>
         </tr>
         <tr>
           <td class="md"></td>
@@ -268,13 +285,14 @@ Aplica el filtro p_idx sobre las texturas de orígen y escribiendo el resutlado e
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>p_idx</em>&nbsp;</td><td>índice del filtro a aplicar. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>p_tempo</em>&nbsp;</td><td>tempo a utilizar en las texturas de orígen (en el caso de que sean animadas). </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>p_fade</em>&nbsp;</td><td>constante de "fading" utilizada para mezclar el resultado del filtro. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>p_params</em>&nbsp;</td><td>parámetros del filtro. </td></tr>
   </table>
 </dl>
     </td>
   </tr>
 </table>
-<a class="anchor" name="db138cee6ea582a52b4db5a23eee6dee"></a><!-- doxytag: member="moTextureFilterIndex::Apply" ref="db138cee6ea582a52b4db5a23eee6dee" args="(MOuint p_idx, MOfloat p_cycle, moTextFilterParam p_params=MOEmptyTexFilterParam)" --><p>
+<a class="anchor" name="429e216f5d67ff4ec5ff9a91b07ea5c1"></a><!-- doxytag: member="moTextureFilterIndex::Apply" ref="429e216f5d67ff4ec5ff9a91b07ea5c1" args="(MOuint p_idx, MOfloat p_cycle, MOfloat p_fade=1.0, moTextFilterParam *p_params=NULL)" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -294,8 +312,14 @@ Aplica el filtro p_idx sobre las texturas de orígen y escribiendo el resutlado e
         <tr>
           <td class="md" nowrap align="right"></td>
           <td class="md"></td>
-          <td class="md" nowrap><a class="el" href="structmo_text_filter_param.html">moTextFilterParam</a>&nbsp;</td>
-          <td class="mdname" nowrap> <em>p_params</em> = <code><a class="el" href="mo_texture_filter_8h.html#b990cc1accbdd94410c05ce24fb486d0">MOEmptyTexFilterParam</a></code></td>
+          <td class="md" nowrap>MOfloat&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_fade</em> = <code>1.0</code>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap><a class="el" href="classmo_text_filter_param.html">moTextFilterParam</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_params</em> = <code>NULL</code></td>
         </tr>
         <tr>
           <td class="md"></td>
@@ -318,13 +342,14 @@ Aplica el filtro p_idx sobre las texturas de orígen y escribiendo el resutlado e
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>p_idx</em>&nbsp;</td><td>índice del filtro a aplicar. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>p_cycle</em>&nbsp;</td><td>fracción del ciclo entre 0.0 y 1.0 a utilizar en las texturas de orígen (en el caso de que sean animadas). </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>p_fade</em>&nbsp;</td><td>constante de "fading" utilizada para mezclar el resultado del filtro. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>p_params</em>&nbsp;</td><td>parámetros del filtro. </td></tr>
   </table>
 </dl>
     </td>
   </tr>
 </table>
-<a class="anchor" name="ffce2a4058e45d6d98c2d5b469e20614"></a><!-- doxytag: member="moTextureFilterIndex::Apply" ref="ffce2a4058e45d6d98c2d5b469e20614" args="(MOuint p_idx, MOuint p_i, moTextFilterParam p_params=MOEmptyTexFilterParam)" --><p>
+<a class="anchor" name="e6303b01a7285aebb474094e58267701"></a><!-- doxytag: member="moTextureFilterIndex::Apply" ref="e6303b01a7285aebb474094e58267701" args="(MOuint p_idx, MOuint p_i, MOfloat p_fade=1.0, moTextFilterParam *p_params=NULL)" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -344,8 +369,14 @@ Aplica el filtro p_idx sobre las texturas de orígen y escribiendo el resutlado e
         <tr>
           <td class="md" nowrap align="right"></td>
           <td class="md"></td>
-          <td class="md" nowrap><a class="el" href="structmo_text_filter_param.html">moTextFilterParam</a>&nbsp;</td>
-          <td class="mdname" nowrap> <em>p_params</em> = <code><a class="el" href="mo_texture_filter_8h.html#b990cc1accbdd94410c05ce24fb486d0">MOEmptyTexFilterParam</a></code></td>
+          <td class="md" nowrap>MOfloat&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_fade</em> = <code>1.0</code>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap><a class="el" href="classmo_text_filter_param.html">moTextFilterParam</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_params</em> = <code>NULL</code></td>
         </tr>
         <tr>
           <td class="md"></td>
@@ -368,6 +399,7 @@ Aplica el filtro p_idx sobre las texturas de orígen y escribiendo el resutlado e
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>p_idx</em>&nbsp;</td><td>índice del filtro a aplicar. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>p_i</em>&nbsp;</td><td>cuadro a utilizar en las texturas de orígen (en el caso de que sean animadas). </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>p_fade</em>&nbsp;</td><td>constante de "fading" utilizada para mezclar el resultado del filtro. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>p_params</em>&nbsp;</td><td>parámetros del filtro. </td></tr>
   </table>
 </dl>
@@ -1053,6 +1085,34 @@ Método de inicialización. <dl compact><dt><b>Parameters:</b></dt><dd>
     </td>
   </tr>
 </table>
+<a class="anchor" name="8f209c164851c27dc06b7a89c8c9598f"></a><!-- doxytag: member="moTextureFilterIndex::MakeTextureFilterLabelName" ref="8f209c164851c27dc06b7a89c8c9598f" args="(moValue *p_value)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">moText moTextureFilterIndex::MakeTextureFilterLabelName           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">moValue *&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>p_value</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
 <a class="anchor" name="3f9613f408402c18ae7f9bd41f1fa283"></a><!-- doxytag: member="moTextureFilterIndex::operator[]" ref="3f9613f408402c18ae7f9bd41f1fa283" args="(MOuint p_idx)" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -1098,6 +1158,34 @@ Devuelve un puntero al filtro con índice p_idx. <dl compact><dt><b>Parameters:</
           <td class="mdname1" valign="top" nowrap>          </td>
           <td class="md" valign="top">&nbsp;)&nbsp;</td>
           <td class="md" nowrap><code> [protected]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="279021def4e20534479bb2c254f15879"></a><!-- doxytag: member="moTextureFilterIndex::TextureFilterExists" ref="279021def4e20534479bb2c254f15879" args="(moValue *p_value)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">MOint moTextureFilterIndex::TextureFilterExists           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">moValue *&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>p_value</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
         </tr>
       </table>
     </td>
@@ -1288,8 +1376,8 @@ Verifica el índice p_idx. <dl compact><dt><b>Parameters:</b></dt><dd>
   </tr>
 </table>
 <hr>The documentation for this class was generated from the following file:<ul>
-<li>D:/_data/proyectos/SINESTESIA/OPENSVN/trunk/0.7/inc/<a class="el" href="mo_texture_filter_index_8h.html">moTextureFilterIndex.h</a></ul>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Apr 28 20:04:25 2008 for MOLDEO by&nbsp;
+<li>D:/_data/proyectos/SINESTESIA/SVNSOURCEFORGE/trunk/0.7/inc/<a class="el" href="mo_texture_filter_index_8h.html">moTextureFilterIndex.h</a></ul>
+<hr size="1"><address style="align: right;"><small>Generated on Sun Nov 9 18:55:19 2008 for MOLDEO by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.6-NO </small></address>
 </body>

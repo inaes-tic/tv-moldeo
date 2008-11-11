@@ -31,7 +31,7 @@
 
 #include "moFontManager.h"
 
-#include "ftgl.h"
+#include "FTGL/ftgl.h"
 
 #include "moArray.cpp"
 moDefineDynamicArray(moFonts)

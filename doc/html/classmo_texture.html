@@ -126,6 +126,10 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="classmo_texture.html">moTexture</a> &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_texture.html#6864e4e77e02ea256b9482ab5ee436d6">operator=</a> (const <a class="el" href="classmo_texture.html">moTexture</a> &amp;p_src_tex)</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">MOboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_texture.html#609e42c97e4f9f82db983db75bc14a84">IsBuildedFromFile</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">moText&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_texture.html#761f432fa74ed3a4d1005cfab01590be">CreateThumbnail</a> (moText p_bufferformat, int w, int h, moText newfilename=moText(&quot;&quot;))</td></tr>
+
 <tr><td colspan="2"><br><h2>Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_texture.html#14c5239357cd492eedfdc68899ed1fc5">SetParam</a> ()</td></tr>
 
@@ -136,6 +140,8 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">MOboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_texture.html#3a24c9fcaf57986c344cfc4f3e975b32">Build</a> ()</td></tr>
 
 <tr><td colspan="2"><br><h2>Protected Attributes</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">MOboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_texture.html#3bf5b329709855a97874530a7a13757b">m_bBuildedFromFile</a></td></tr>
+
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="classmo_file.html">moFile</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_texture.html#4d46e57d2c06d64ade434c6d1bc86b24">m_pFile</a></td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="classmo_data_manager.html">moDataManager</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_texture.html#d1f86b8eb3cf670502c864d453c34f38">m_pDataMan</a></td></tr>
@@ -502,6 +508,64 @@ Copia a esta textura la que esta siendo apuntada por p_src_tex. <dl compact><dt>
     <tr><td valign="top"></td><td valign="top"><em>p_copy_name</em>&nbsp;</td><td>si es true entonces el nombre de la textura es copiado. </td></tr>
   </table>
 </dl>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="761f432fa74ed3a4d1005cfab01590be"></a><!-- doxytag: member="moTexture::CreateThumbnail" ref="761f432fa74ed3a4d1005cfab01590be" args="(moText p_bufferformat, int w, int h, moText newfilename=moText(&quot;&quot;))" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">moText moTexture::CreateThumbnail           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">moText&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_bufferformat</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>int&nbsp;</td>
+          <td class="mdname" nowrap> <em>w</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>int&nbsp;</td>
+          <td class="mdname" nowrap> <em>h</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>moText&nbsp;</td>
+          <td class="mdname" nowrap> <em>newfilename</em> = <code>moText(&quot;&quot;)</code></td>
+        </tr>
+        <tr>
+          <td class="md"></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Salva al disco la textura especificando el nuevo tamaño y el formato El nombre del archivo es opcional, se toma en general el nombre de la textura y se le agrega: .thm.jpg o .thm.tga <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>p_bufferformat</em>&nbsp;</td><td>el formato: "JPG" (75:1), "JPGSUPERB" (100:1), "JPGBAD" (10:1), "JPEGNORMAL" (50:1), "JPGAVERAGE" (25:1), "JPGGOOD" (75:1), "TGA" </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>w</em>&nbsp;</td><td>ancho de la nueva imagen </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>h</em>&nbsp;</td><td>alto de la nueva imagen </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>newfilename</em>&nbsp;</td><td>el nombre del archivo, si no especifica se usa: <a class="el" href="classmo_texture.html#e0c03caabb1fd05180faf1809dbac8a4">GetName()</a> y se le agrega: .thm.jpg o .thm.tga </td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Returns:</b></dt><dd>el nombre del archivo si fue salvado exitosamente, sino una cadena vacía moText("") </dd></dl>
     </td>
   </tr>
 </table>
@@ -1309,6 +1373,34 @@ Inicializa propiedades básicas de la textura tales como el nombre, id, administr
 Reimplemented in <a class="el" href="classmo_texture_animated.html#7cf7e9dd6425709e85530ceba654d7b9">moTextureAnimated</a>, <a class="el" href="classmo_texture_multiple.html#36ecc728d672044221550403c9e5da14">moTextureMultiple</a>, and <a class="el" href="classmo_movie.html#f267fe845408a8a139bc1b630cb19884">moMovie</a>.    </td>
   </tr>
 </table>
+<a class="anchor" name="609e42c97e4f9f82db983db75bc14a84"></a><!-- doxytag: member="moTexture::IsBuildedFromFile" ref="609e42c97e4f9f82db983db75bc14a84" args="()" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">MOboolean moTexture::IsBuildedFromFile           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap><code> [inline]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Devuelve verdadero si esta textura fue cargada desde un archivo <dl compact><dt><b>Returns:</b></dt><dd>verdadero si fue cargada, falso si es cualquier otro tipo de textura </dd></dl>
+    </td>
+  </tr>
+</table>
 <a class="anchor" name="e4fe5623bf3570b09a61675428056a8f"></a><!-- doxytag: member="moTexture::Load" ref="e4fe5623bf3570b09a61675428056a8f" args="(moValue *p_value)" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -1871,6 +1963,29 @@ Reimplemented in <a class="el" href="classmo_texture_multiple.html#614df94c83f7c
   </tr>
 </table>
 <hr><h2>Member Data Documentation</h2>
+<a class="anchor" name="3bf5b329709855a97874530a7a13757b"></a><!-- doxytag: member="moTexture::m_bBuildedFromFile" ref="3bf5b329709855a97874530a7a13757b" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">MOboolean <a class="el" href="classmo_texture.html#3bf5b329709855a97874530a7a13757b">moTexture::m_bBuildedFromFile</a><code> [protected]</code>          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
 <a class="anchor" name="73876c0561b54d2a60915643ec5a2c71"></a><!-- doxytag: member="moTexture::m_components" ref="73876c0561b54d2a60915643ec5a2c71" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -2263,8 +2378,8 @@ Reimplemented in <a class="el" href="classmo_texture_multiple.html#614df94c83f7c
   </tr>
 </table>
 <hr>The documentation for this class was generated from the following file:<ul>
-<li>D:/_data/proyectos/SINESTESIA/OPENSVN/trunk/0.7/inc/<a class="el" href="mo_texture_8h.html">moTexture.h</a></ul>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Apr 28 20:04:25 2008 for MOLDEO by&nbsp;
+<li>D:/_data/proyectos/SINESTESIA/SVNSOURCEFORGE/trunk/0.7/inc/<a class="el" href="mo_texture_8h.html">moTexture.h</a></ul>
+<hr size="1"><address style="align: right;"><small>Generated on Sun Nov 9 18:55:18 2008 for MOLDEO by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.6-NO </small></address>
 </body>

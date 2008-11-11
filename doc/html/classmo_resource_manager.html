@@ -35,11 +35,11 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_resource_manager.html#0d35031d2795760efb4a9346c5018acb">~moResourceManager</a> ()</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual MOboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_resource_manager.html#56cf88aef02cdea82c691eeea47eef9b">Init</a> (const moText &amp;p_datapath, <a class="el" href="classmo_config.html">moConfig</a> &amp;p_consoleconfig, MOint p_render_to_texture_mode, MOint p_screen_width, MOint p_screen_height, MOint p_render_width, MOint p_render_height)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual MOboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_resource_manager.html#dde4bda62ae5bbd58c28eda141303043">Init</a> (const moText &amp;p_datapath, <a class="el" href="classmo_config.html">moConfig</a> &amp;p_consoleconfig, MOint p_render_to_texture_mode, MOint p_screen_width, MOint p_screen_height, MOint p_render_width, MOint p_render_height, MO_HANDLE p_OpWindowHandle=0, MO_DISPLAY p_Display=NULL)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual MOboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_resource_manager.html#5b94ebff49275b3395722614fb5b80ce">Finish</a> ()</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">MOboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_resource_manager.html#049e4913718605a251ce2dd6b704ac3e">NewResource</a> (moText p_resname)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">MOboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_resource_manager.html#c2a6950d6aa612f1ca17a45e9a9eebf7">NewResource</a> (moText p_resname, int paramindex=-1, int valueindex=-1)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">MOboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_resource_manager.html#ff737819f7cac9996eb2276702b82403">AddResource</a> (<a class="el" href="classmo_resource.html">moResource</a> *m_pResource)</td></tr>
 
@@ -880,7 +880,7 @@ crea un nuevo recurso     </td>
 crea un nuevo recurso     </td>
   </tr>
 </table>
-<a class="anchor" name="56cf88aef02cdea82c691eeea47eef9b"></a><!-- doxytag: member="moResourceManager::Init" ref="56cf88aef02cdea82c691eeea47eef9b" args="(const moText &amp;p_datapath, moConfig &amp;p_consoleconfig, MOint p_render_to_texture_mode, MOint p_screen_width, MOint p_screen_height, MOint p_render_width, MOint p_render_height)" --><p>
+<a class="anchor" name="dde4bda62ae5bbd58c28eda141303043"></a><!-- doxytag: member="moResourceManager::Init" ref="dde4bda62ae5bbd58c28eda141303043" args="(const moText &amp;p_datapath, moConfig &amp;p_consoleconfig, MOint p_render_to_texture_mode, MOint p_screen_width, MOint p_screen_height, MOint p_render_width, MOint p_render_height, MO_HANDLE p_OpWindowHandle=0, MO_DISPLAY p_Display=NULL)" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -925,7 +925,19 @@ crea un nuevo recurso     </td>
           <td class="md" nowrap align="right"></td>
           <td class="md"></td>
           <td class="md" nowrap>MOint&nbsp;</td>
-          <td class="mdname" nowrap> <em>p_render_height</em></td>
+          <td class="mdname" nowrap> <em>p_render_height</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>MO_HANDLE&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_OpWindowHandle</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>MO_DISPLAY&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_Display</em> = <code>NULL</code></td>
         </tr>
         <tr>
           <td class="md"></td>
@@ -947,7 +959,7 @@ crea un nuevo recurso     </td>
 inicialización se especifican los parámetros generales para el acceso a los datos     </td>
   </tr>
 </table>
-<a class="anchor" name="049e4913718605a251ce2dd6b704ac3e"></a><!-- doxytag: member="moResourceManager::NewResource" ref="049e4913718605a251ce2dd6b704ac3e" args="(moText p_resname)" --><p>
+<a class="anchor" name="c2a6950d6aa612f1ca17a45e9a9eebf7"></a><!-- doxytag: member="moResourceManager::NewResource" ref="c2a6950d6aa612f1ca17a45e9a9eebf7" args="(moText p_resname, int paramindex=-1, int valueindex=-1)" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -956,9 +968,24 @@ inicialización se especifican los parámetros generales para el acceso a los dato
           <td class="md" nowrap valign="top">MOboolean moResourceManager::NewResource           </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top">moText&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap> <em>p_resname</em>          </td>
-          <td class="md" valign="top">&nbsp;)&nbsp;</td>
-          <td class="md" nowrap></td>
+          <td class="mdname" nowrap> <em>p_resname</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>int&nbsp;</td>
+          <td class="mdname" nowrap> <em>paramindex</em> = <code>-1</code>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>int&nbsp;</td>
+          <td class="mdname" nowrap> <em>valueindex</em> = <code>-1</code></td>
+        </tr>
+        <tr>
+          <td class="md"></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"></td>
         </tr>
       </table>
     </td>
@@ -1492,8 +1519,8 @@ crea un nuevo recurso     </td>
   </tr>
 </table>
 <hr>The documentation for this class was generated from the following file:<ul>
-<li>D:/_data/proyectos/SINESTESIA/OPENSVN/trunk/0.7/inc/<a class="el" href="mo_resource_manager_8h.html">moResourceManager.h</a></ul>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Apr 28 20:04:25 2008 for MOLDEO by&nbsp;
+<li>D:/_data/proyectos/SINESTESIA/SVNSOURCEFORGE/trunk/0.7/inc/<a class="el" href="mo_resource_manager_8h.html">moResourceManager.h</a></ul>
+<hr size="1"><address style="align: right;"><small>Generated on Sun Nov 9 18:55:18 2008 for MOLDEO by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.6-NO </small></address>
 </body>

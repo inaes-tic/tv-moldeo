@@ -35,16 +35,32 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_config_definition.html#f3b188d4218490be5de17e581aa19769">Add</a> (moText p_name, <a class="el" href="mo_param_8h.html#d5ad31c763ed510189cec462657f2470">moParamType</a> p_type, MOint p_index=-1)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Agrega la definición de un parámetro.  <a href="#f3b188d4218490be5de17e581aa19769"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_config_definition.html#71e868fe867c99e5362d83bf2f925788">Add</a> (moText p_name, <a class="el" href="mo_param_8h.html#d5ad31c763ed510189cec462657f2470">moParamType</a> p_type, MOint p_index, moValue p_defaultvalue)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Agrega la definición de un parámetro con un valor predeterminado a tomar.  <a href="#71e868fe867c99e5362d83bf2f925788"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">moParamDefinitions *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_config_definition.html#a1561b76a1e21b3aa4665c9990040b1b">GetParamDefinitions</a> ()</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Devuelve el puntero al arreglo de definciones de parámetros.  <a href="#a1561b76a1e21b3aa4665c9990040b1b"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">moParamIndexes &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_config_definition.html#f35685f69ccf6b4d40c8151e4f66dc27">ParamIndexes</a> ()</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Devuelve el puntero al arreglo de índices de los parámetros.  <a href="#f35685f69ccf6b4d40c8151e4f66dc27"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_config_definition.html#a641886dcaee08addba69b1c8cdd1d3e">Set</a> (moText p_objectname, moText p_objectclass)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fija el nombre y la clase del objeto a configurar.  <a href="#a641886dcaee08addba69b1c8cdd1d3e"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">moText&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_config_definition.html#d5a989b9e2141dab168f6489aa29b8a3">GetObjectName</a> ()</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Devuelve el nombre del objeto asociado a este config.  <a href="#d5a989b9e2141dab168f6489aa29b8a3"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">moText&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_config_definition.html#aa409b75613b98f88c64a6f5568c00be">GetObjectClass</a> ()</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Devuelve el nombre de la clase del objeto asociado a este config.  <a href="#aa409b75613b98f88c64a6f5568c00be"></a><br></td></tr>
 <tr><td colspan="2"><br><h2>Private Attributes</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">moParamDefinitions&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_config_definition.html#6d9722d32e51a5aa5e86f6bddcc7f085">m_ParamDefinitions</a></td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">moParamIndexes&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_config_definition.html#82fc8454a738a71032a77b0fe587ee91">m_ParamIndexes</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">moText&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_config_definition.html#25ba5aa5ab19415c8b2269d6c31657d0">m_ObjectName</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">moText&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_config_definition.html#e4b64f848ede03f780ea7c29d0434afb">m_ObjectClass</a></td></tr>
 
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
@@ -116,6 +132,65 @@ destructor
   </tr>
 </table>
 <hr><h2>Member Function Documentation</h2>
+<a class="anchor" name="71e868fe867c99e5362d83bf2f925788"></a><!-- doxytag: member="moConfigDefinition::Add" ref="71e868fe867c99e5362d83bf2f925788" args="(moText p_name, moParamType p_type, MOint p_index, moValue p_defaultvalue)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">void moConfigDefinition::Add           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">moText&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap><a class="el" href="mo_param_8h.html#d5ad31c763ed510189cec462657f2470">moParamType</a>&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_type</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>MOint&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>moValue&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_defaultvalue</em></td>
+        </tr>
+        <tr>
+          <td class="md"></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Agrega la definición de un parámetro con un valor predeterminado a tomar. 
+<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>p_name</em>&nbsp;</td><td>nombre del parámetro </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>p_type</em>&nbsp;</td><td>tipo del parámetro </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>p_index</em>&nbsp;</td><td>índice del parámetro dentro del archivo de configuración (-1 si no está definido aún) </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>p_defaultvalue</em>&nbsp;</td><td>valor predeterminado </td></tr>
+  </table>
+</dl>
+    </td>
+  </tr>
+</table>
 <a class="anchor" name="f3b188d4218490be5de17e581aa19769"></a><!-- doxytag: member="moConfigDefinition::Add" ref="f3b188d4218490be5de17e581aa19769" args="(moText p_name, moParamType p_type, MOint p_index=-1)" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -165,6 +240,66 @@ Agrega la definición de un parámetro.
     <tr><td valign="top"></td><td valign="top"><em>p_index</em>&nbsp;</td><td>índice del parámetro dentro del archivo de configuración (-1 si no está definido aún) </td></tr>
   </table>
 </dl>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="aa409b75613b98f88c64a6f5568c00be"></a><!-- doxytag: member="moConfigDefinition::GetObjectClass" ref="aa409b75613b98f88c64a6f5568c00be" args="()" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">moText moConfigDefinition::GetObjectClass           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap><code> [inline]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Devuelve el nombre de la clase del objeto asociado a este config. 
+<p>
+El nombre de la clase puede ser del objeto del que deriva este. <dl compact><dt><b>Returns:</b></dt><dd>el nombre de la clase </dd></dl>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="d5a989b9e2141dab168f6489aa29b8a3"></a><!-- doxytag: member="moConfigDefinition::GetObjectName" ref="d5a989b9e2141dab168f6489aa29b8a3" args="()" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">moText moConfigDefinition::GetObjectName           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap><code> [inline]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Devuelve el nombre del objeto asociado a este config. 
+<p>
+El nombre del objeto no especifica la clase. <dl compact><dt><b>Returns:</b></dt><dd>el nombre del objeto </dd></dl>
     </td>
   </tr>
 </table>
@@ -228,7 +363,98 @@ Este objeto permite la enumeración de los índices correspondiente a cada parámet
     </td>
   </tr>
 </table>
+<a class="anchor" name="a641886dcaee08addba69b1c8cdd1d3e"></a><!-- doxytag: member="moConfigDefinition::Set" ref="a641886dcaee08addba69b1c8cdd1d3e" args="(moText p_objectname, moText p_objectclass)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">void moConfigDefinition::Set           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">moText&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_objectname</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>moText&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_objectclass</em></td>
+        </tr>
+        <tr>
+          <td class="md"></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"><code> [inline]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Fija el nombre y la clase del objeto a configurar. 
+<p>
+El nombre del objeto no especifica la clase. El nombre de la clase puede ser del objeto del que deriva este. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>p_objectname</em>&nbsp;</td><td>el nombre del objeto </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>p_objectclass</em>&nbsp;</td><td>la clase del objeto </td></tr>
+  </table>
+</dl>
+    </td>
+  </tr>
+</table>
 <hr><h2>Member Data Documentation</h2>
+<a class="anchor" name="e4b64f848ede03f780ea7c29d0434afb"></a><!-- doxytag: member="moConfigDefinition::m_ObjectClass" ref="e4b64f848ede03f780ea7c29d0434afb" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">moText <a class="el" href="classmo_config_definition.html#e4b64f848ede03f780ea7c29d0434afb">moConfigDefinition::m_ObjectClass</a><code> [private]</code>          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="25ba5aa5ab19415c8b2269d6c31657d0"></a><!-- doxytag: member="moConfigDefinition::m_ObjectName" ref="25ba5aa5ab19415c8b2269d6c31657d0" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">moText <a class="el" href="classmo_config_definition.html#25ba5aa5ab19415c8b2269d6c31657d0">moConfigDefinition::m_ObjectName</a><code> [private]</code>          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
 <a class="anchor" name="6d9722d32e51a5aa5e86f6bddcc7f085"></a><!-- doxytag: member="moConfigDefinition::m_ParamDefinitions" ref="6d9722d32e51a5aa5e86f6bddcc7f085" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -276,8 +502,8 @@ Este objeto permite la enumeración de los índices correspondiente a cada parámet
   </tr>
 </table>
 <hr>The documentation for this class was generated from the following file:<ul>
-<li>D:/_data/proyectos/SINESTESIA/OPENSVN/trunk/0.7/inc/<a class="el" href="mo_config_8h.html">moConfig.h</a></ul>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Apr 28 20:04:23 2008 for MOLDEO by&nbsp;
+<li>D:/_data/proyectos/SINESTESIA/SVNSOURCEFORGE/trunk/0.7/inc/<a class="el" href="mo_config_8h.html">moConfig.h</a></ul>
+<hr size="1"><address style="align: right;"><small>Generated on Sun Nov 9 18:55:15 2008 for MOLDEO by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.6-NO </small></address>
 </body>

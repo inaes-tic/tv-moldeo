@@ -70,7 +70,7 @@ NOTES:
 0.0f : ((x)>=0?(long)((x)+0.5):(long)((x)-0.5))
 
 class moFont;
-class mo3DModel;
+class mo3DModelSceneNode;
 class moTexture;
 class moTextureFilter;
 class moTextFilterParam;
@@ -174,7 +174,7 @@ class LIBMOLDEO_API moData {
 		void        SetTextureFilterAlpha( moData* p_alpha );
 		void        SetTextureFilterParam( moTextFilterParam *p_filterparam );
 		void        SetFont( moFont*	p_Font );
-		void        SetModel( mo3DModel*    p_Model );
+		void        SetModel( mo3DModelSceneNode*    p_Model );
 		void        SetMessage( moDataMessage*  p_datamessage );
 		void        SetMessages( moDataMessages*  p_datamessages );
 		/**
@@ -194,7 +194,7 @@ class LIBMOLDEO_API moData {
 		MOulong		Size();
 		moMathFunction*	Fun();
 		moFont*     Font();
-		mo3DModel*  Model();
+		mo3DModelSceneNode*  Model();
 		moDataMessage*  Message();
 		moDataMessages*  Messages();
 		/*

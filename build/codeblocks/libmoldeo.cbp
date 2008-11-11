@@ -23,7 +23,6 @@
 					<Add library="libtinyxmld" />
 					<Add library="glew_sharedd" />
 					<Add library="libfreetype235MT_D" />
-					<Add library="libmuparserd" />
 					<Add library="libgled" />
 					<Add library="libopengl32" />
 					<Add library="libglut32" />
@@ -51,7 +50,6 @@
 					<Add library="libtinyxml" />
 					<Add library="glew_shared" />
 					<Add library="libfreetype235MT" />
-					<Add library="libmuparser" />
 					<Add library="libgle" />
 					<Add library="libopengl32" />
 					<Add library="libglut32" />
@@ -119,6 +117,7 @@
 			<Add library="gcc" />
 			<Add library="user32" />
 			<Add library="uuid" />
+			<Add library="muparser" />
 			<Add directory="..\..\..\..\externlibs\tinyxml\lib" />
 			<Add directory="..\..\..\..\externlibs\SDL\lib" />
 			<Add directory="..\..\..\..\externlibs\glew\lib" />
@@ -267,9 +266,6 @@
 		<Unit filename="..\..\inc\moNetManager.h">
 			<Option target="debug" />
 		</Unit>
-		<Unit filename="..\..\inc\moOGLFT.h">
-			<Option target="debug" />
-		</Unit>
 		<Unit filename="..\..\inc\moP5.h">
 			<Option target="debug" />
 		</Unit>
@@ -373,9 +369,6 @@
 		<Unit filename="..\..\inc\moVideoManager.h">
 			<Option target="debug" />
 		</Unit>
-		<Unit filename="..\..\inc\moXmlConfig.h">
-			<Option target="debug" />
-		</Unit>
 		<Unit filename="..\..\inc\openal\CWaves.h" />
 		<Unit filename="..\..\inc\openal\Framework.h" />
 		<Unit filename="..\..\inc\openal\LoadOAL.h" />
@@ -430,7 +423,6 @@
 		<Unit filename="..\..\src\libmoldeo\moMoldeoObject.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moMotion.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moNetManager.cpp" />
-		<Unit filename="..\..\src\libmoldeo\moOGLFT.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moP5.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moParam.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moPlugin.cpp" />
@@ -466,7 +458,6 @@
 		<Unit filename="..\..\src\libmoldeo\moValue.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moVideoGraph.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moVideoManager.cpp" />
-		<Unit filename="..\..\src\libmoldeo\moXmlConfig.cpp" />
 		<Unit filename="..\..\src\libmoldeo\openal\CWaves.cpp" />
 		<Unit filename="..\..\src\libmoldeo\openal\Framework.cpp" />
 		<Unit filename="..\..\src\libmoldeo\openal\LoadOAL.cpp" />

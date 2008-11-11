@@ -40,7 +40,7 @@ bool moDirectorApp::OnInit()
 	moDirectorCore*			m_pDirectorCore = NULL;
 	moDirectorFrame*		m_pDirectorFrame = NULL;
 
-	//SetAppName("Moldeo Director");
+	SetAppName("Moldeo Director");
 
     // created initially)
    cout << "Image Handlers..." << endl;

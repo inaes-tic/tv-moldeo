@@ -37,6 +37,8 @@
 #include "moAbstract.h"
 #include "moMath.h"
 
+typedef void moParser;
+
 moDeclareExportedDynamicArray( MOuint, moIntArray )
 moDeclareExportedDynamicArray( bool, moBoolArray )
 moDeclareExportedDynamicArray( float, moFloatArray )
@@ -101,10 +103,7 @@ private:
 	 */
     double m_value;
 };
-/*
-template class LIBMOLDEO_API moDynamicArray<moMathVariable*>;
-typedef moDynamicArray<moMathVariable*> moMathVariableArray;
-*/
+
 typedef moMathVariable* moMathVariablePtr;
 moDeclareExportedDynamicArray( moMathVariablePtr, moMathVariableArray )
 
@@ -259,10 +258,7 @@ protected:
 	 */
 	virtual void BuildVarList() = 0;
 };
-/*
-template class LIBMOLDEO_API moDynamicArray<moMathFunction*>;
-typedef moDynamicArray<moMathFunction*> moMathFunctionArray;
-*/
+
 typedef moMathFunction* MathFunctionPtr;
 moDeclareExportedDynamicArray( MathFunctionPtr, moMathFunctionArray )
 
@@ -406,11 +402,8 @@ public:
 	MOboolean Finish();
 protected:
 	double x;
-	#ifdef WIN32
-	parser_handle m_hParser;
-    #else
-	mu::Parser m_Parser;
-	#endif
+
+	moParser*   m_pParser;
 
 	void AddMathFunctions();
 	void AddMathConstants();

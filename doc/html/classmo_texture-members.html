@@ -25,6 +25,7 @@
   <tr class="memlist"><td><a class="el" href="classmo_texture.html#eb8011642c79fb7746ddb295859f48cb">BuildFromFile</a>(moText p_filename)</td><td><a class="el" href="classmo_texture.html">moTexture</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_texture.html#afcdbf16293ce341d02656b7866fa006">CalculateSize</a>(MOuint p_width, MOuint p_height)</td><td><a class="el" href="classmo_texture.html">moTexture</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_texture.html#5ce411a718716b61a5c751f8875979c5">CopyFromTex</a>(moTexture *p_src_tex, MOboolean p_copy_glid, MOboolean p_copy_moid, MOboolean p_copy_type, MOboolean p_copy_name)</td><td><a class="el" href="classmo_texture.html">moTexture</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classmo_texture.html#761f432fa74ed3a4d1005cfab01590be">CreateThumbnail</a>(moText p_bufferformat, int w, int h, moText newfilename=moText(&quot;&quot;))</td><td><a class="el" href="classmo_texture.html">moTexture</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_texture.html#99204131be52c1ed2e90ccf6bd3c3b29">Finish</a>()</td><td><a class="el" href="classmo_texture.html">moTexture</a></td><td><code> [virtual]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_texture.html#083dadfba3c1e457113e44d298d93ad7">FlipBufferVert</a>(MOubyte *pBuffer, MOint p_depth)</td><td><a class="el" href="classmo_texture.html">moTexture</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_texture.html#20f2f2b2198ca759ff00e97908513229">GetBuffer</a>(GLvoid *p_buffer, GLenum p_format=GL_RGBA, GLenum p_type=GL_UNSIGNED_BYTE)</td><td><a class="el" href="classmo_texture.html">moTexture</a></td><td></td></tr>
@@ -53,8 +54,10 @@
   <tr class="memlist"><td><a class="el" href="classmo_texture.html#c5b6f873725041ce2674f302e66704f9">Init</a>(moText p_name, MOuint p_moid, moResourceManager *p_res, moTexParam p_param=MODefTex2DParams)</td><td><a class="el" href="classmo_texture.html">moTexture</a></td><td><code> [virtual]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_abstract.html#f22d480d10cc8259504c59c4847acd15">moAbstract::Init</a>()</td><td><a class="el" href="classmo_abstract.html">moAbstract</a></td><td><code> [virtual]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_abstract.html#2a6c2871c94ca506e0afcf846287c4f8">Initialized</a>()</td><td><a class="el" href="classmo_abstract.html">moAbstract</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classmo_texture.html#609e42c97e4f9f82db983db75bc14a84">IsBuildedFromFile</a>()</td><td><a class="el" href="classmo_texture.html">moTexture</a></td><td><code> [inline]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_texture.html#a8c796917b54c1f1e38a6dc7cd45cecf">Load</a>(moParam *p_param)</td><td><a class="el" href="classmo_texture.html">moTexture</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_texture.html#e4fe5623bf3570b09a61675428056a8f">Load</a>(moValue *p_value)</td><td><a class="el" href="classmo_texture.html">moTexture</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classmo_texture.html#3bf5b329709855a97874530a7a13757b">m_bBuildedFromFile</a></td><td><a class="el" href="classmo_texture.html">moTexture</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_abstract.html#540ec2682b0883fe74d1a2b96bab172a">m_bInitialized</a></td><td><a class="el" href="classmo_abstract.html">moAbstract</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_texture.html#73876c0561b54d2a60915643ec5a2c71">m_components</a></td><td><a class="el" href="classmo_texture.html">moTexture</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_texture.html#f65872684db0ec3d267aaea7213b6c5f">m_fbo</a></td><td><a class="el" href="classmo_texture.html">moTexture</a></td><td><code> [protected]</code></td></tr>
@@ -93,7 +96,7 @@
   <tr class="memlist"><td><a class="el" href="classmo_texture.html#8566bc7c27b12125fcf2f5255ad317ac">SupportedFile</a>(moText p_filename)</td><td><a class="el" href="classmo_texture.html">moTexture</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_abstract.html#a1b1ff6edec7d3f1883b395fd8da0933">~moAbstract</a>()</td><td><a class="el" href="classmo_abstract.html">moAbstract</a></td><td><code> [virtual]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_texture.html#edecb4c149f34663bc594c0d83d7f9a6">~moTexture</a>()</td><td><a class="el" href="classmo_texture.html">moTexture</a></td><td><code> [virtual]</code></td></tr>
-</table><hr size="1"><address style="align: right;"><small>Generated on Mon Apr 28 20:04:25 2008 for MOLDEO by&nbsp;
+</table><hr size="1"><address style="align: right;"><small>Generated on Sun Nov 9 18:55:18 2008 for MOLDEO by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.6-NO </small></address>
 </body>

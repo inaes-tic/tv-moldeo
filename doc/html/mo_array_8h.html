@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
-<title>MOLDEO: D:/_data/proyectos/SINESTESIA/OPENSVN/trunk/0.7/inc/moArray.h File Reference</title>
+<title>MOLDEO: D:/_data/proyectos/SINESTESIA/SVNSOURCEFORGE/trunk/0.7/inc/moArray.h File Reference</title>
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
@@ -17,11 +17,313 @@
     <li><a href="files.html"><span>File&nbsp;List</span></a></li>
     <li><a href="globals.html"><span>File&nbsp;Members</span></a></li>
   </ul></div>
-<h1>D:/_data/proyectos/SINESTESIA/OPENSVN/trunk/0.7/inc/moArray.h File Reference</h1><code>#include &quot;<a class="el" href="mo_types_8h.html">moTypes.h</a>&quot;</code><br>
+<h1>D:/_data/proyectos/SINESTESIA/SVNSOURCEFORGE/trunk/0.7/inc/moArray.h File Reference</h1><code>#include &quot;<a class="el" href="mo_types_8h.html">moTypes.h</a>&quot;</code><br>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
+<tr><td colspan="2"><br><h2>Classes</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_array.html">moArray&lt; T, N &gt;</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_dynamic_array.html">moDynamicArray&lt; T &gt;</a></td></tr>
+
+<tr><td colspan="2"><br><h2>Defines</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_array_8h.html#f7c9706e74cef57fa56961d4eff0685f">_moDeclareDynamicArray</a>(T, name, classexp)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_array_8h.html#b2eef53c235a5c5173558be3eb05b3dc">moDeclareDynamicArray</a>(T, name)&nbsp;&nbsp;&nbsp;moDeclareDynamicArrayDecl(T, name, class )</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_array_8h.html#090d8c70fef3e715c884712fc51bc011">moDeclareExportedDynamicArray</a>(T, name)&nbsp;&nbsp;&nbsp;moDeclareUserExportedDynamicArray(T, name, LIBMOLDEO_API)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_array_8h.html#7794f9cc93fee525e51850842f075104">moDeclareDynamicArrayDecl</a>(T, name, decl)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_array_8h.html#a3507cef978dbf825eef251b2835680d">moDeclareUserExportedDynamicArray</a>(T, name, expmode)&nbsp;&nbsp;&nbsp;moDeclareDynamicArrayDecl(T, name, class expmode)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_array_8h.html#32d479446ad95508f9c5c67d1ea65d30">moDefineDynamicArray</a>(name)&nbsp;&nbsp;&nbsp;DidYouIncludeArrayCpp</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_array_8h.html#0dbcd0ec43eb822d722c9c8a4f1dae53">moDefineExportedDynamicArray</a>(name)&nbsp;&nbsp;&nbsp;moDefineDynamicArray(name)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_array_8h.html#e4b39a158e596fc7459452de3d62056e">moDefineUserExportedDynamicArray</a>(name)&nbsp;&nbsp;&nbsp;moDefineDynamicArray(name)</td></tr>
+
 </table>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Apr 28 20:04:22 2008 for MOLDEO by&nbsp;
+<hr><h2>Define Documentation</h2>
+<a class="anchor" name="f7c9706e74cef57fa56961d4eff0685f"></a><!-- doxytag: member="moArray.h::_moDeclareDynamicArray" ref="f7c9706e74cef57fa56961d4eff0685f" args="(T, name, classexp)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define _moDeclareDynamicArray          </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">T,         <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>name,         <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>classexp&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+<b>Value:</b><div class="fragment"><pre class="fragment">classexp name                                                                                                                    \
+{                                                                        \
+<span class="keyword">public</span>:                                                                  \
+    name();                                                                                                                              \
+    name(<span class="keyword">const</span> name&amp; src);                                               \
+        name(<span class="keywordtype">int</span> N);                                                                                                             \
+    name&amp; operator=(<span class="keyword">const</span> name&amp; src);                                    \
+                                                                         \
+    <span class="keyword">virtual</span> ~name();                                                     \
+                                                                         \
+        <a class="code" href="mo_types_8h.html#55eb2631e47416e92179bed670df62dc">MOboolean</a> Init( <span class="keywordtype">int</span> N, T initvalue );                                                            \
+        <a class="code" href="mo_types_8h.html#55eb2631e47416e92179bed670df62dc">MOboolean</a> Finish();                                                                                                      \
+        <span class="keywordtype">void</span> Empty();                                                                                                            \
+        <span class="keywordtype">void</span> Set(<span class="keywordtype">int</span> x, <span class="keyword">const</span> T &amp;value);                                                                         \
+        <span class="keywordtype">void</span> Insert(<span class="keywordtype">int</span> x, <span class="keyword">const</span> T &amp;value);                                                                      \
+        T&amp; Get(<span class="keywordtype">int</span> x);                                                                                                           \
+        T&amp; operator[] (<span class="keywordtype">int</span> x) { <span class="keywordflow">return</span> Get(x); }                                                 \
+        <a class="code" href="mo_types_8h.html#bf95ab75265b6be0fdfb6527e012486e">MOuint</a> Count();                                                                                                          \
+        <span class="keywordtype">void</span> Add( <span class="keyword">const</span> T &amp;value );                                                                                      \
+        <span class="keywordtype">void</span> Remove(<span class="keywordtype">int</span> x);                                                                                                      \
+        <span class="keywordtype">void</span> Copy( <span class="keyword">const</span> name &amp;<a class="code" href="namespace_o_g_l_f_t.html#6818ada148c1a201534d44e783ac05447193bcdcdc531697719e5f071aa593a5">A</a>);                                                                                       \
+        <span class="keywordtype">void</span> Copy( <span class="keyword">const</span> name &amp;<a class="code" href="namespace_o_g_l_f_t.html#6818ada148c1a201534d44e783ac05447193bcdcdc531697719e5f071aa593a5">A</a>, <span class="keywordtype">int</span> x0, <span class="keywordtype">int</span> x1);                                                       \
+                                                                                                                                                 \
+<span class="keyword">private</span>:                                                                                                                                 \
+    T *array;                                                                                                                    \
+    <a class="code" href="mo_types_8h.html#bf95ab75265b6be0fdfb6527e012486e">MOuint</a> n;                                                                                                                            \
+        T m_NULL;                                                                                                                        \
+                                                                                                                                                 \
+};
+</pre></div>    </td>
+  </tr>
+</table>
+<a class="anchor" name="b2eef53c235a5c5173558be3eb05b3dc"></a><!-- doxytag: member="moArray.h::moDeclareDynamicArray" ref="b2eef53c235a5c5173558be3eb05b3dc" args="(T, name)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define moDeclareDynamicArray          </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">T,         <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>name&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap>&nbsp;&nbsp;&nbsp;moDeclareDynamicArrayDecl(T, name, class )</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="7794f9cc93fee525e51850842f075104"></a><!-- doxytag: member="moArray.h::moDeclareDynamicArrayDecl" ref="7794f9cc93fee525e51850842f075104" args="(T, name, decl)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define moDeclareDynamicArrayDecl          </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">T,         <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>name,         <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>decl&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+<b>Value:</b><div class="fragment"><pre class="fragment"><span class="keyword">typedef</span> T _moObjArray##name;                                                                            \
+    <a class="code" href="mo_array_8h.html#f7c9706e74cef57fa56961d4eff0685f">_moDeclareDynamicArray</a>(_moObjArray##name, name, decl)
+</pre></div>    </td>
+  </tr>
+</table>
+<a class="anchor" name="090d8c70fef3e715c884712fc51bc011"></a><!-- doxytag: member="moArray.h::moDeclareExportedDynamicArray" ref="090d8c70fef3e715c884712fc51bc011" args="(T, name)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define moDeclareExportedDynamicArray          </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">T,         <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>name&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap>&nbsp;&nbsp;&nbsp;moDeclareUserExportedDynamicArray(T, name, LIBMOLDEO_API)</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="a3507cef978dbf825eef251b2835680d"></a><!-- doxytag: member="moArray.h::moDeclareUserExportedDynamicArray" ref="a3507cef978dbf825eef251b2835680d" args="(T, name, expmode)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define moDeclareUserExportedDynamicArray          </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">T,         <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>name,         <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>expmode&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap>&nbsp;&nbsp;&nbsp;moDeclareDynamicArrayDecl(T, name, class expmode)</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="32d479446ad95508f9c5c67d1ea65d30"></a><!-- doxytag: member="moArray.h::moDefineDynamicArray" ref="32d479446ad95508f9c5c67d1ea65d30" args="(name)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define moDefineDynamicArray          </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">name&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap>&nbsp;&nbsp;&nbsp;DidYouIncludeArrayCpp</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="0dbcd0ec43eb822d722c9c8a4f1dae53"></a><!-- doxytag: member="moArray.h::moDefineExportedDynamicArray" ref="0dbcd0ec43eb822d722c9c8a4f1dae53" args="(name)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define moDefineExportedDynamicArray          </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">name&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap>&nbsp;&nbsp;&nbsp;moDefineDynamicArray(name)</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="e4b39a158e596fc7459452de3d62056e"></a><!-- doxytag: member="moArray.h::moDefineUserExportedDynamicArray" ref="e4b39a158e596fc7459452de3d62056e" args="(name)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define moDefineUserExportedDynamicArray          </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">name&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap>&nbsp;&nbsp;&nbsp;moDefineDynamicArray(name)</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<hr size="1"><address style="align: right;"><small>Generated on Sun Nov 9 18:55:14 2008 for MOLDEO by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.6-NO </small></address>
 </body>

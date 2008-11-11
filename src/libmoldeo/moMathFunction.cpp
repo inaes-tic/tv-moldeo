@@ -33,6 +33,20 @@
 
 #include "moMathFunction.h"
 
+#ifdef MO_WIN32
+    #include "muParser.h"
+#endif
+
+#ifdef MO_MACOSX
+    #include <muParser.h>
+#endif
+
+#ifdef MO_LINUX
+    #include <muParser/muParser.h>
+#endif
+
+
+
 #include "moArray.cpp"
 moDefineDynamicArray( moIntArray )
 moDefineDynamicArray( moBoolArray )
@@ -411,156 +425,105 @@ void moTautInterpolant::BuildVarList()
 
 MOboolean moParserFunction::Init(const moText& p_Expression)
 {
-    #ifdef MO_WIN32
-	m_hParser = mupInit();
-	#endif
+    mu::Parser* pParser = new mu::Parser();
+    m_pParser = (moParser*) pParser;
 
     moMathVariableFactory* pVarFactory = new moMathVariableFactory(&m_Parameters, &m_Variables);
 
-    #ifdef MO_WIN32
-	mupSetVarFactory(m_hParser, AddParserVariableFunction, pVarFactory);
-	#else
-	m_Parser.SetVarFactory(AddParserVariableFunction, pVarFactory);
-	#endif
+    if (pParser) {
+        pParser->SetVarFactory(AddParserVariableFunction, pVarFactory);
 
-    AddMathFunctions();
-	AddMathConstants();
+        AddMathFunctions();
+        AddMathConstants();
 
-	m_Expression = p_Expression;
-	char* expr = (char*)(m_Expression);
+        m_Expression = p_Expression;
+        char* expr = (char*)(m_Expression);
 
-	#ifdef MO_WIN32
-	mupSetExpr(m_hParser, expr);
-	mupEval(m_hParser);
-	#else
-	try {
-        m_Parser.SetExpr(expr);
-        m_Parser.Eval();
-	}
-	catch ( mu::ParserError Exc) {
-	    moText msgexpr = (char*)Exc.GetExpr().c_str();
-	    moText msgerror = (char*)Exc.GetMsg().c_str();
-        MODebug2->Error( (moText)msgexpr + moText(":") + (moText)msgerror );
+        try {
+            pParser->SetExpr(expr);
+            pParser->Eval();
+        }
+        catch ( mu::ParserError Exc) {
+            moText msgexpr = (char*)Exc.GetExpr().c_str();
+            moText msgerror = (char*)Exc.GetMsg().c_str();
+            MODebug2->Error( (moText)msgexpr + moText(":") + (moText)msgerror );
+            delete pVarFactory;
+            return false;
+        }
+
         delete pVarFactory;
-        return false;
-    }
-	#endif
 
-	delete pVarFactory;
+    }
 
 	return CheckVariables();
 }
 
 MOboolean moParserFunction::Finish()
 {
-    #ifdef MO_WIN32
-	mupRelease(m_hParser);
-	#endif
+    if (m_pParser) {
+        delete m_pParser;
+        m_pParser = NULL;
+    }
 	return true;
 }
 
 void moParserFunction::AddMathFunctions()
 {
-    #ifdef MO_WIN32
-	mupDefineFun1(m_hParser, "UnitRandom", moMathd::UnitRandom, false);
-	mupDefineFun1(m_hParser, "SymmetricRandom", moMathd::SymmetricRandom, false);
-	mupDefineFun3(m_hParser, "IntervalRandom", moMathd::IntervalRandom, false);
+    mu::Parser* pParser = (mu::Parser*) m_pParser;
+    if (pParser) {
+        pParser->DefineFun("UnitRandom", moMathd::UnitRandom, false);
+        pParser->DefineFun("SymmetricRandom", moMathd::SymmetricRandom, false);
+        pParser->DefineFun("IntervalRandom", moMathd::IntervalRandom, false);
 
-	mupDefineFun1(m_hParser, "FastSin0", moMathd::FastSin0, false);
-	mupDefineFun1(m_hParser, "FastSin1", moMathd::FastSin1, false);
+        pParser->DefineFun("FastSin0", moMathd::FastSin0, false);
+        pParser->DefineFun("FastSin1", moMathd::FastSin1, false);
 
-	mupDefineFun1(m_hParser, "FastCos0", moMathd::FastCos0, false);
-	mupDefineFun1(m_hParser, "FastCos1", moMathd::FastCos1, false);
+        pParser->DefineFun("FastCos0", moMathd::FastCos0, false);
+        pParser->DefineFun("FastCos1", moMathd::FastCos1, false);
 
-	mupDefineFun1(m_hParser, "FastTan0", moMathd::FastTan0, false);
-	mupDefineFun1(m_hParser, "FastTan1", moMathd::FastTan1, false);
+        pParser->DefineFun("FastTan0", moMathd::FastTan0, false);
+        pParser->DefineFun("FastTan1", moMathd::FastTan1, false);
 
-	mupDefineFun1(m_hParser, "FastInvSin0", moMathd::FastInvSin0, false);
-	mupDefineFun1(m_hParser, "FastInvSin1", moMathd::FastInvSin1, false);
+        pParser->DefineFun("FastInvSin0", moMathd::FastInvSin0, false);
+        pParser->DefineFun("FastInvSin1", moMathd::FastInvSin1, false);
 
-	mupDefineFun1(m_hParser, "FastInvCos0", moMathd::FastInvCos0, false);
-	mupDefineFun1(m_hParser, "FastInvCos1", moMathd::FastInvCos1, false);
+        pParser->DefineFun("FastInvCos0", moMathd::FastInvCos0, false);
+        pParser->DefineFun("FastInvCos1", moMathd::FastInvCos1, false);
 
-	mupDefineFun1(m_hParser, "FastInvTan0", moMathd::FastInvTan0, false);
-	mupDefineFun1(m_hParser, "FastInvTan1", moMathd::FastInvTan1, false);
+        pParser->DefineFun("FastInvTan0", moMathd::FastInvTan0, false);
+        pParser->DefineFun("FastInvTan1", moMathd::FastInvTan1, false);
 
-	mupDefineFun1(m_hParser, "FastInvSqrt", moMathd::FastInvSqrt, false);
+        pParser->DefineFun("FastInvSqrt", moMathd::FastInvSqrt, false);
 
-	mupDefineFun1(m_hParser, "FastNegExp0", moMathd::FastNegExp0, false);
-	mupDefineFun1(m_hParser, "FastNegExp1", moMathd::FastNegExp1, false);
-	mupDefineFun1(m_hParser, "FastNegExp2", moMathd::FastNegExp2, false);
-	mupDefineFun1(m_hParser, "FastNegExp3", moMathd::FastNegExp3, false);
+        pParser->DefineFun("FastNegExp0", moMathd::FastNegExp0, false);
+        pParser->DefineFun("FastNegExp1", moMathd::FastNegExp1, false);
+        pParser->DefineFun("FastNegExp2", moMathd::FastNegExp2, false);
+        pParser->DefineFun("FastNegExp3", moMathd::FastNegExp3, false);
 
-	mupDefineFun1(m_hParser, "DegToRad", moMathd::DegToRad, false);
-	mupDefineFun1(m_hParser, "RadToDeg", moMathd::RadToDeg, false);
-	#else
-	m_Parser.DefineFun("UnitRandom", moMathd::UnitRandom, false);
-	m_Parser.DefineFun("SymmetricRandom", moMathd::SymmetricRandom, false);
-	m_Parser.DefineFun("IntervalRandom", moMathd::IntervalRandom, false);
-
-	m_Parser.DefineFun("FastSin0", moMathd::FastSin0, false);
-	m_Parser.DefineFun("FastSin1", moMathd::FastSin1, false);
-
-	m_Parser.DefineFun("FastCos0", moMathd::FastCos0, false);
-	m_Parser.DefineFun("FastCos1", moMathd::FastCos1, false);
-
-	m_Parser.DefineFun("FastTan0", moMathd::FastTan0, false);
-	m_Parser.DefineFun("FastTan1", moMathd::FastTan1, false);
-
-	m_Parser.DefineFun("FastInvSin0", moMathd::FastInvSin0, false);
-	m_Parser.DefineFun("FastInvSin1", moMathd::FastInvSin1, false);
-
-	m_Parser.DefineFun("FastInvCos0", moMathd::FastInvCos0, false);
-	m_Parser.DefineFun("FastInvCos1", moMathd::FastInvCos1, false);
-
-	m_Parser.DefineFun("FastInvTan0", moMathd::FastInvTan0, false);
-	m_Parser.DefineFun("FastInvTan1", moMathd::FastInvTan1, false);
-
-	m_Parser.DefineFun("FastInvSqrt", moMathd::FastInvSqrt, false);
-
-	m_Parser.DefineFun("FastNegExp0", moMathd::FastNegExp0, false);
-	m_Parser.DefineFun("FastNegExp1", moMathd::FastNegExp1, false);
-	m_Parser.DefineFun("FastNegExp2", moMathd::FastNegExp2, false);
-	m_Parser.DefineFun("FastNegExp3", moMathd::FastNegExp3, false);
-
-	m_Parser.DefineFun("DegToRad", moMathd::DegToRad, false);
-	m_Parser.DefineFun("RadToDeg", moMathd::RadToDeg, false);
-	#endif
+        pParser->DefineFun("DegToRad", moMathd::DegToRad, false);
+        pParser->DefineFun("RadToDeg", moMathd::RadToDeg, false);
+    }
 }
 
 void moParserFunction::AddMathConstants()
 {
-    #ifdef MO_WIN32
-    mupDefineConst(m_hParser, "EPSILON", moMathd::EPSILON);
-    mupDefineConst(m_hParser, "ZERO_TOLERANCE", moMathd::ZERO_TOLERANCE);
-    mupDefineConst(m_hParser, "MAX_REAL", moMathd::MAX_REAL);
-    mupDefineConst(m_hParser, "PI", moMathd::PI);
-    mupDefineConst(m_hParser, "TWO_PI", moMathd::TWO_PI);
-    mupDefineConst(m_hParser, "HALF_PI", moMathd::HALF_PI);
-    mupDefineConst(m_hParser, "INV_PI", moMathd::INV_PI);
-    mupDefineConst(m_hParser, "INV_TWO_PI", moMathd::INV_TWO_PI);
-    mupDefineConst(m_hParser, "DEG_TO_RAD", moMathd::DEG_TO_RAD);
-    mupDefineConst(m_hParser, "RAD_TO_DEG", moMathd::RAD_TO_DEG);
-    mupDefineConst(m_hParser, "LN_2", moMathd::LN_2);
-    mupDefineConst(m_hParser, "LN_10", moMathd::LN_10);
-    mupDefineConst(m_hParser, "INV_LN_2", moMathd::INV_LN_2);
-    mupDefineConst(m_hParser, "INV_LN_10", moMathd::INV_LN_10);
-    #else
-    m_Parser.DefineConst("EPSILON", moMathd::EPSILON);
-    m_Parser.DefineConst("ZERO_TOLERANCE", moMathd::ZERO_TOLERANCE);
-    m_Parser.DefineConst("MAX_REAL", moMathd::MAX_REAL);
-    m_Parser.DefineConst("PI", moMathd::PI);
-    m_Parser.DefineConst("TWO_PI", moMathd::TWO_PI);
-    m_Parser.DefineConst("HALF_PI", moMathd::HALF_PI);
-    m_Parser.DefineConst("INV_PI", moMathd::INV_PI);
-    m_Parser.DefineConst("INV_TWO_PI", moMathd::INV_TWO_PI);
-    m_Parser.DefineConst("DEG_TO_RAD", moMathd::DEG_TO_RAD);
-    m_Parser.DefineConst("RAD_TO_DEG", moMathd::RAD_TO_DEG);
-    m_Parser.DefineConst("LN_2", moMathd::LN_2);
-    m_Parser.DefineConst("LN_10", moMathd::LN_10);
-    m_Parser.DefineConst("INV_LN_2", moMathd::INV_LN_2);
-    m_Parser.DefineConst("INV_LN_10", moMathd::INV_LN_10);
-    #endif
+    mu::Parser* pParser = (mu::Parser*) m_pParser;
+    if (pParser) {
+        pParser->DefineConst("EPSILON", moMathd::EPSILON);
+        pParser->DefineConst("ZERO_TOLERANCE", moMathd::ZERO_TOLERANCE);
+        pParser->DefineConst("MAX_REAL", moMathd::MAX_REAL);
+        pParser->DefineConst("PI", moMathd::PI);
+        pParser->DefineConst("TWO_PI", moMathd::TWO_PI);
+        pParser->DefineConst("HALF_PI", moMathd::HALF_PI);
+        pParser->DefineConst("INV_PI", moMathd::INV_PI);
+        pParser->DefineConst("INV_TWO_PI", moMathd::INV_TWO_PI);
+        pParser->DefineConst("DEG_TO_RAD", moMathd::DEG_TO_RAD);
+        pParser->DefineConst("RAD_TO_DEG", moMathd::RAD_TO_DEG);
+        pParser->DefineConst("LN_2", moMathd::LN_2);
+        pParser->DefineConst("LN_10", moMathd::LN_10);
+        pParser->DefineConst("INV_LN_2", moMathd::INV_LN_2);
+        pParser->DefineConst("INV_LN_10", moMathd::INV_LN_10);
+    }
 }
 
 MOboolean moParserFunction::CheckVariables()
@@ -569,109 +532,62 @@ MOboolean moParserFunction::CheckVariables()
     int nvar, npar;
 	nvar = npar = 0;
 
-    #ifdef MO_WIN32
-    iNumVar = mupGetVarNum(m_hParser);
+    mu::Parser* pParser = (mu::Parser*) m_pParser;
+    if (pParser) {
+        mu::varmap_type variables = pParser->GetVar();
+        iNumVar = (int)variables.size();
 
-    // Query the variables
-    for (int i=0; i < iNumVar; ++i)
-    {
-        const char *szName = 0;
-        double *pVar = 0;
-        mupGetVar(m_hParser, i, &szName, &pVar);
+        mu::varmap_type::const_iterator item = variables.begin();
 
-		if (szName[0] == '_')
-		{
-			npar++;
-		}
-		else
-		{
-			nvar++;
-		}
+        for (; item!=variables.end(); ++item)
+        {
+            if (item->first[0] == '_')
+            {
+                npar++;
+            }
+            else
+            {
+                nvar++;
+            }
+        }
+
+        if (nvar != (MOint)m_Variables.Count())
+        {
+            MODebug->Push("Error in number of parser variables.");
+            return false;
+        }
+
+        if (npar != (MOint)m_Parameters.Count())
+        {
+            MODebug->Push("Error in number of parser parameters.");
+            return false;
+        }
+        return true;
     }
-    #else
-    mu::varmap_type variables = m_Parser.GetVar();
-    iNumVar = (int)variables.size();
-
-    mu::varmap_type::const_iterator item = variables.begin();
-
-    for (; item!=variables.end(); ++item)
-    {
-		if (item->first[0] == '_')
-		{
-			npar++;
-		}
-		else
-		{
-			nvar++;
-		}
-    }
-    #endif
-
-	if (nvar != (MOint)m_Variables.Count())
-	{
-		MODebug->Push("Error in number of parser variables.");
-		return false;
-	}
-
-	if (npar != (MOint)m_Parameters.Count())
-	{
-		MODebug->Push("Error in number of parser parameters.");
-		return false;
-	}
-
-	/*
-	// Este codigo de chequeo de los nombres de las variables hay que revisarlo.
-	nvar = npar = -1;
-	moText s;
-    for(item=variables.begin(); item!= variables.end(); ++item)
-	{
-		if (item->first[0] == '_')
-		{
-			npar++;
-			s = item->first;
-			if (s != m_Parameters[npar]->GetName())
-			{
-		        MODebug->Push("Error in name of parser parameter.");
-		        return false;
-			}
-		}
-		else
-		{
-			nvar++;
-			s = item->first;
-			if (s != m_Variables[npar]->GetName())
-			{
-		        MODebug->Push("Error in name of parser variable.");
-		        return false;
-			}
-		}
-	}
-	*/
-
-	return true;
+	return false;
 }
 
 
 double moParserFunction::OnFuncEval() {
 
- {
-    double evaluation;
 
-    #ifdef MO_WIN32
-    evaluation = mupEval(m_hParser);
-    #else
-    try {
-        evaluation = m_Parser.Eval();
+    double evaluation  = 0.0;
+
+    mu::Parser* pParser = (mu::Parser*) m_pParser;
+    if (pParser) {
+
+        try {
+            evaluation = pParser->Eval();
+        }
+        catch ( mu::ParserError Exc) {
+            moText msgexpr = (char*)Exc.GetExpr().c_str();
+            moText msgerror = (char*)Exc.GetMsg().c_str();
+            MODebug2->Error( (moText)msgexpr + moText(":") + (moText)msgerror );
+            evaluation = 0.0;
+        }
+
     }
-    catch ( mu::ParserError Exc) {
-        moText msgexpr = (char*)Exc.GetExpr().c_str();
-        moText msgerror = (char*)Exc.GetMsg().c_str();
-        MODebug2->Error( (moText)msgexpr + moText(":") + (moText)msgerror );
-        evaluation = 0.0;
-    }
-    #endif
+
     return evaluation;
-}
-
 
 }

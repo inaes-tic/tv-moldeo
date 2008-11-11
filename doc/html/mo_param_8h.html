@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
-<title>MOLDEO: D:/_data/proyectos/SINESTESIA/OPENSVN/trunk/0.7/inc/moParam.h File Reference</title>
+<title>MOLDEO: D:/_data/proyectos/SINESTESIA/SVNSOURCEFORGE/trunk/0.7/inc/moParam.h File Reference</title>
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
@@ -17,7 +17,7 @@
     <li><a href="files.html"><span>File&nbsp;List</span></a></li>
     <li><a href="globals.html"><span>File&nbsp;Members</span></a></li>
   </ul></div>
-<h1>D:/_data/proyectos/SINESTESIA/OPENSVN/trunk/0.7/inc/moParam.h File Reference</h1><code>#include &quot;<a class="el" href="mo_types_8h.html">moTypes.h</a>&quot;</code><br>
+<h1>D:/_data/proyectos/SINESTESIA/SVNSOURCEFORGE/trunk/0.7/inc/moParam.h File Reference</h1><code>#include &quot;<a class="el" href="mo_types_8h.html">moTypes.h</a>&quot;</code><br>
 <code>#include &quot;<a class="el" href="mo_text_8h.html">moText.h</a>&quot;</code><br>
 <code>#include &quot;<a class="el" href="mo_value_8h.html">moValue.h</a>&quot;</code><br>
 <table border="0" cellpadding="0" cellspacing="0">
@@ -36,11 +36,16 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_param_8h.html#d5ad31c763ed510189cec462657f2470">moParamType</a> { <br>
 &nbsp;&nbsp;<a class="el" href="mo_param_8h.html#d5ad31c763ed510189cec462657f24704a7a55ed0e89b5b1a8c85f49fa0ce38e">MO_PARAM_ALPHA</a>, 
 <a class="el" href="mo_param_8h.html#d5ad31c763ed510189cec462657f24706ac1147950333dd1e5284f28f3bba058">MO_PARAM_COLOR</a>, 
-<a class="el" href="mo_param_8h.html#d5ad31c763ed510189cec462657f247088e9b5f7836ee76b843dc39caae613c4">MO_PARAM_SYNC</a>, 
-<a class="el" href="mo_param_8h.html#d5ad31c763ed510189cec462657f24708cea4f10e17473b594de71488957ab21">MO_PARAM_PHASE</a>, 
+<a class="el" href="mo_param_8h.html#d5ad31c763ed510189cec462657f2470a60f29e541d4f1f6e5684c9793c2f645">MO_PARAM_BLENDING</a>, 
+<a class="el" href="mo_param_8h.html#d5ad31c763ed510189cec462657f24703fd7b3c65bc8ad88d06a7325ffc3b98e">MO_PARAM_POLYGONMODE</a>, 
 <br>
-&nbsp;&nbsp;<a class="el" href="mo_param_8h.html#d5ad31c763ed510189cec462657f2470397e25682ea32764e0cf2988b12fb28f">MO_PARAM_TEXT</a>, 
+&nbsp;&nbsp;<a class="el" href="mo_param_8h.html#d5ad31c763ed510189cec462657f247088e9b5f7836ee76b843dc39caae613c4">MO_PARAM_SYNC</a>, 
+<a class="el" href="mo_param_8h.html#d5ad31c763ed510189cec462657f24708cea4f10e17473b594de71488957ab21">MO_PARAM_PHASE</a>, 
+<a class="el" href="mo_param_8h.html#d5ad31c763ed510189cec462657f2470397e25682ea32764e0cf2988b12fb28f">MO_PARAM_TEXT</a>, 
 <a class="el" href="mo_param_8h.html#d5ad31c763ed510189cec462657f24704d24dc957832458102718846c0a2d0de">MO_PARAM_TEXTURE</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="mo_param_8h.html#d5ad31c763ed510189cec462657f24708455af86043aa7d5cf764437d033c4de">MO_PARAM_FONT</a>, 
+<a class="el" href="mo_param_8h.html#d5ad31c763ed510189cec462657f24700d3506d534c17ff7d7266a59670784c2">MO_PARAM_3DMODEL</a>, 
 <a class="el" href="mo_param_8h.html#d5ad31c763ed510189cec462657f24702b92e38367b8b722fbffe72e5fe9c945">MO_PARAM_OBJECT</a>, 
 <a class="el" href="mo_param_8h.html#d5ad31c763ed510189cec462657f24709f648ff2e9835d0b6bc8f0ae1cab7921">MO_PARAM_VIDEO</a>, 
 <br>
@@ -61,8 +66,11 @@
 <br>
 &nbsp;&nbsp;<a class="el" href="mo_param_8h.html#d5ad31c763ed510189cec462657f24700478aac94e67cae0a0a6c1620a1af2ab">MO_PARAM_SCRIPT</a>, 
 <a class="el" href="mo_param_8h.html#d5ad31c763ed510189cec462657f24706430fa5bd5b346be86a862d0c6053452">MO_PARAM_FILTER</a>, 
+<a class="el" href="mo_param_8h.html#d5ad31c763ed510189cec462657f2470d0d2e4459c19af9edf0d1032cae49c88">MO_PARAM_COMPOSE</a>, 
 <a class="el" href="mo_param_8h.html#d5ad31c763ed510189cec462657f24703d0d766431242bbd423123b6f47fa318">MO_PARAM_INLET</a>, 
-<a class="el" href="mo_param_8h.html#d5ad31c763ed510189cec462657f24703f3c9ac3c12bb58b25fc2ce4f6d67a91">MO_PARAM_OUTLET</a>
+<br>
+&nbsp;&nbsp;<a class="el" href="mo_param_8h.html#d5ad31c763ed510189cec462657f24703f3c9ac3c12bb58b25fc2ce4f6d67a91">MO_PARAM_OUTLET</a>, 
+<a class="el" href="mo_param_8h.html#d5ad31c763ed510189cec462657f247043b2c3aa05b01f3e67761f10b13e52d2">MO_PARAM_UNDEFINED</a> =  -1
 <br>
  }</td></tr>
 
@@ -146,6 +154,10 @@
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" name="d5ad31c763ed510189cec462657f24706ac1147950333dd1e5284f28f3bba058"></a><!-- doxytag: member="MO_PARAM_COLOR" ref="d5ad31c763ed510189cec462657f24706ac1147950333dd1e5284f28f3bba058" args="" -->MO_PARAM_COLOR</em>&nbsp;</td><td>
 </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="d5ad31c763ed510189cec462657f2470a60f29e541d4f1f6e5684c9793c2f645"></a><!-- doxytag: member="MO_PARAM_BLENDING" ref="d5ad31c763ed510189cec462657f2470a60f29e541d4f1f6e5684c9793c2f645" args="" -->MO_PARAM_BLENDING</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="d5ad31c763ed510189cec462657f24703fd7b3c65bc8ad88d06a7325ffc3b98e"></a><!-- doxytag: member="MO_PARAM_POLYGONMODE" ref="d5ad31c763ed510189cec462657f24703fd7b3c65bc8ad88d06a7325ffc3b98e" args="" -->MO_PARAM_POLYGONMODE</em>&nbsp;</td><td>
+</td></tr>
 <tr><td valign="top"><em><a class="anchor" name="d5ad31c763ed510189cec462657f247088e9b5f7836ee76b843dc39caae613c4"></a><!-- doxytag: member="MO_PARAM_SYNC" ref="d5ad31c763ed510189cec462657f247088e9b5f7836ee76b843dc39caae613c4" args="" -->MO_PARAM_SYNC</em>&nbsp;</td><td>
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" name="d5ad31c763ed510189cec462657f24708cea4f10e17473b594de71488957ab21"></a><!-- doxytag: member="MO_PARAM_PHASE" ref="d5ad31c763ed510189cec462657f24708cea4f10e17473b594de71488957ab21" args="" -->MO_PARAM_PHASE</em>&nbsp;</td><td>
@@ -153,6 +165,10 @@
 <tr><td valign="top"><em><a class="anchor" name="d5ad31c763ed510189cec462657f2470397e25682ea32764e0cf2988b12fb28f"></a><!-- doxytag: member="MO_PARAM_TEXT" ref="d5ad31c763ed510189cec462657f2470397e25682ea32764e0cf2988b12fb28f" args="" -->MO_PARAM_TEXT</em>&nbsp;</td><td>
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" name="d5ad31c763ed510189cec462657f24704d24dc957832458102718846c0a2d0de"></a><!-- doxytag: member="MO_PARAM_TEXTURE" ref="d5ad31c763ed510189cec462657f24704d24dc957832458102718846c0a2d0de" args="" -->MO_PARAM_TEXTURE</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="d5ad31c763ed510189cec462657f24708455af86043aa7d5cf764437d033c4de"></a><!-- doxytag: member="MO_PARAM_FONT" ref="d5ad31c763ed510189cec462657f24708455af86043aa7d5cf764437d033c4de" args="" -->MO_PARAM_FONT</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="d5ad31c763ed510189cec462657f24700d3506d534c17ff7d7266a59670784c2"></a><!-- doxytag: member="MO_PARAM_3DMODEL" ref="d5ad31c763ed510189cec462657f24700d3506d534c17ff7d7266a59670784c2" args="" -->MO_PARAM_3DMODEL</em>&nbsp;</td><td>
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" name="d5ad31c763ed510189cec462657f24702b92e38367b8b722fbffe72e5fe9c945"></a><!-- doxytag: member="MO_PARAM_OBJECT" ref="d5ad31c763ed510189cec462657f24702b92e38367b8b722fbffe72e5fe9c945" args="" -->MO_PARAM_OBJECT</em>&nbsp;</td><td>
 </td></tr>
@@ -186,9 +202,13 @@
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" name="d5ad31c763ed510189cec462657f24706430fa5bd5b346be86a862d0c6053452"></a><!-- doxytag: member="MO_PARAM_FILTER" ref="d5ad31c763ed510189cec462657f24706430fa5bd5b346be86a862d0c6053452" args="" -->MO_PARAM_FILTER</em>&nbsp;</td><td>
 </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="d5ad31c763ed510189cec462657f2470d0d2e4459c19af9edf0d1032cae49c88"></a><!-- doxytag: member="MO_PARAM_COMPOSE" ref="d5ad31c763ed510189cec462657f2470d0d2e4459c19af9edf0d1032cae49c88" args="" -->MO_PARAM_COMPOSE</em>&nbsp;</td><td>
+</td></tr>
 <tr><td valign="top"><em><a class="anchor" name="d5ad31c763ed510189cec462657f24703d0d766431242bbd423123b6f47fa318"></a><!-- doxytag: member="MO_PARAM_INLET" ref="d5ad31c763ed510189cec462657f24703d0d766431242bbd423123b6f47fa318" args="" -->MO_PARAM_INLET</em>&nbsp;</td><td>
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" name="d5ad31c763ed510189cec462657f24703f3c9ac3c12bb58b25fc2ce4f6d67a91"></a><!-- doxytag: member="MO_PARAM_OUTLET" ref="d5ad31c763ed510189cec462657f24703f3c9ac3c12bb58b25fc2ce4f6d67a91" args="" -->MO_PARAM_OUTLET</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="d5ad31c763ed510189cec462657f247043b2c3aa05b01f3e67761f10b13e52d2"></a><!-- doxytag: member="MO_PARAM_UNDEFINED" ref="d5ad31c763ed510189cec462657f247043b2c3aa05b01f3e67761f10b13e52d2" args="" -->MO_PARAM_UNDEFINED</em>&nbsp;</td><td>
 </td></tr>
 </table>
 </dl>
@@ -270,7 +290,7 @@
     </td>
   </tr>
 </table>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Apr 28 20:04:22 2008 for MOLDEO by&nbsp;
+<hr size="1"><address style="align: right;"><small>Generated on Sun Nov 9 18:55:14 2008 for MOLDEO by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.6-NO </small></address>
 </body>

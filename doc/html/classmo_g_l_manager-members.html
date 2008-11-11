@@ -41,6 +41,7 @@
   <tr class="memlist"><td><a class="el" href="classmo_moldeo_object.html#bc3ea32b83e2c18325b95454542b9b9f">GetId</a>()</td><td><a class="el" href="classmo_moldeo_object.html">moMoldeoObject</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_moldeo_object.html#dc8bd6a3e9b3bd6ce7eb5d02c54e136b">GetInlets</a>()</td><td><a class="el" href="classmo_moldeo_object.html">moMoldeoObject</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_moldeo_object.html#40f3cae274cac63e116760f1bd19cad9">GetLabelName</a>()</td><td><a class="el" href="classmo_moldeo_object.html">moMoldeoObject</a></td><td><code> [inline]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classmo_moldeo_object.html#9547142f59e31e42b45fd34f16ab3746">GetMobDefinition</a>()</td><td><a class="el" href="classmo_moldeo_object.html">moMoldeoObject</a></td><td><code> [inline]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_moldeo_object.html#c770ff556cb12ccdfc647d7b0a6e9c7b">GetName</a>()</td><td><a class="el" href="classmo_moldeo_object.html">moMoldeoObject</a></td><td><code> [inline]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_moldeo_object.html#8e3de7a8c3d8037d276802ace1bdc07c">GetOutlets</a>()</td><td><a class="el" href="classmo_moldeo_object.html">moMoldeoObject</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_g_l_manager.html#69b62f784932bbe6a4e774768ccd0f6c">GetRenderMode</a>()</td><td><a class="el" href="classmo_g_l_manager.html">moGLManager</a></td><td></td></tr>
@@ -59,7 +60,6 @@
   <tr class="memlist"><td><a class="el" href="classmo_abstract.html#540ec2682b0883fe74d1a2b96bab172a">m_bInitialized</a></td><td><a class="el" href="classmo_abstract.html">moAbstract</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_moldeo_object.html#d122bebaaae233afcdebefaddf6072d5">m_bLoading</a></td><td><a class="el" href="classmo_moldeo_object.html">moMoldeoObject</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_moldeo_object.html#477ed34a1f3ec6438ea8a57af83341ae">m_Config</a></td><td><a class="el" href="classmo_moldeo_object.html">moMoldeoObject</a></td><td><code> [protected]</code></td></tr>
-  <tr class="memlist"><td><a class="el" href="classmo_moldeo_object.html#3cd49ecdd0e9623168a008c23ed4b6b8">m_ConfigName</a></td><td><a class="el" href="classmo_moldeo_object.html">moMoldeoObject</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_g_l_manager.html#fa6638e2bc85ad0572114445a366bd5e">m_current_draw_buffer</a></td><td><a class="el" href="classmo_g_l_manager.html">moGLManager</a></td><td><code> [private]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_g_l_manager.html#42def3e9e042b7e507d6a8c65f819c25">m_current_fbo</a></td><td><a class="el" href="classmo_g_l_manager.html">moGLManager</a></td><td><code> [private]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_g_l_manager.html#537ed7f762c53879a0f069e840255a3f">m_current_read_buffer</a></td><td><a class="el" href="classmo_g_l_manager.html">moGLManager</a></td><td><code> [private]</code></td></tr>
@@ -70,9 +70,7 @@
   <tr class="memlist"><td><a class="el" href="classmo_script.html#aba9961dd765ac34d7b14fbb510a344d">m_initalized</a></td><td><a class="el" href="classmo_script.html">moScript</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_moldeo_object.html#1e30adbc464b43c51de65214217c54b4">m_Inlets</a></td><td><a class="el" href="classmo_moldeo_object.html">moMoldeoObject</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_script.html#26c75575ecd7a5e0a981633cb335e867">m_iThisRef</a></td><td><a class="el" href="classmo_script.html">moScript</a></td><td><code> [protected]</code></td></tr>
-  <tr class="memlist"><td><a class="el" href="classmo_moldeo_object.html#2fc2f6e565b31069abde2396b31828a8">m_MoldeoId</a></td><td><a class="el" href="classmo_moldeo_object.html">moMoldeoObject</a></td><td><code> [protected]</code></td></tr>
-  <tr class="memlist"><td><a class="el" href="classmo_moldeo_object.html#b40434618d4bb640496269f6b677751f">m_MoldeoLabelName</a></td><td><a class="el" href="classmo_moldeo_object.html">moMoldeoObject</a></td><td><code> [protected]</code></td></tr>
-  <tr class="memlist"><td><a class="el" href="classmo_moldeo_object.html#8b9874c8d2a22e6194fa117adbbce985">m_Name</a></td><td><a class="el" href="classmo_moldeo_object.html">moMoldeoObject</a></td><td><code> [protected]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classmo_moldeo_object.html#e69220fce44848c301733846ed65e64e">m_MobDefinition</a></td><td><a class="el" href="classmo_moldeo_object.html">moMoldeoObject</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_script.html#5546e266f5296c95d482b8b5224f882c">m_nArgs</a></td><td><a class="el" href="classmo_script.html">moScript</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_script.html#3dc663df5c6cdc34747003d79f6d5481">m_nMethods</a></td><td><a class="el" href="classmo_script.html">moScript</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_moldeo_object.html#51d489ea1f4adf9bf656e2cdcb479dd2">m_Outlets</a></td><td><a class="el" href="classmo_moldeo_object.html">moMoldeoObject</a></td><td><code> [protected]</code></td></tr>
@@ -84,7 +82,6 @@
   <tr class="memlist"><td><a class="el" href="classmo_g_l_manager.html#2cc02dfaff6f0d74e1d48921c8c1ab3a">m_saved_fbo</a></td><td><a class="el" href="classmo_g_l_manager.html">moGLManager</a></td><td><code> [private]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_g_l_manager.html#62ff52e8b513fefb9746b5a01ed2e8bf">m_saved_read_buffer</a></td><td><a class="el" href="classmo_g_l_manager.html">moGLManager</a></td><td><code> [private]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_script.html#2110fd7d6601fb035dd0d93b83c8b541">m_strFunctionName</a></td><td><a class="el" href="classmo_script.html">moScript</a></td><td><code> [protected]</code></td></tr>
-  <tr class="memlist"><td><a class="el" href="classmo_moldeo_object.html#50896b0edc258b6b8f2b184d7303599f">m_Type</a></td><td><a class="el" href="classmo_moldeo_object.html">moMoldeoObject</a></td><td><code> [protected]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_script.html#eac2f80e46e613ebd2aefe68a69d8dec">m_vm</a></td><td><a class="el" href="classmo_script.html">moScript</a></td><td><code> [protected, static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_script.html#8e072306897b13bb66200534e1b095b6">methods</a>(void)</td><td><a class="el" href="classmo_script.html">moScript</a></td><td><code> [inline]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_g_l_manager.html#cec458cd53e9612c46619682b8761a3d">MipMapTexture</a>(GLint p_min_filter)</td><td><a class="el" href="classmo_g_l_manager.html">moGLManager</a></td><td></td></tr>
@@ -120,7 +117,7 @@
   <tr class="memlist"><td><a class="el" href="classmo_g_l_manager.html#0df3de2bddf2c3af7bcd514058573cd7">SetDefaultGLState</a>()</td><td><a class="el" href="classmo_g_l_manager.html">moGLManager</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_g_l_manager.html#f4dafde4d2737454ac1e7c73fe20fdad">SetDefaultPixelStorageModes</a>()</td><td><a class="el" href="classmo_g_l_manager.html">moGLManager</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_moldeo_object.html#0a63401e89016868d7c2b1c99d9c45f1">SetId</a>(MOint p_id)</td><td><a class="el" href="classmo_moldeo_object.html">moMoldeoObject</a></td><td></td></tr>
-  <tr class="memlist"><td><a class="el" href="classmo_moldeo_object.html#4f67b03fdde986297f5a5f2264fda0ed">SetLabelName</a>(moText p_name)</td><td><a class="el" href="classmo_moldeo_object.html">moMoldeoObject</a></td><td><code> [inline]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classmo_moldeo_object.html#074443abd9b5bb1ba7d7c3b08175a6eb">SetLabelName</a>(moText p_labelname)</td><td><a class="el" href="classmo_moldeo_object.html">moMoldeoObject</a></td><td><code> [inline]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_g_l_manager.html#2f416257932f01c694a19c451ebf036b">SetMoldeoGLState</a>()</td><td><a class="el" href="classmo_g_l_manager.html">moGLManager</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_moldeo_object.html#839801123b69cd5fdd4913e8bddf3fa4">SetName</a>(moText p_name)</td><td><a class="el" href="classmo_moldeo_object.html">moMoldeoObject</a></td><td><code> [inline]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_g_l_manager.html#e3d745d85a01128d42379a7bccfecebd">SetOrthographicView</a>(MOint p_width, MOint p_height)</td><td><a class="el" href="classmo_g_l_manager.html">moGLManager</a></td><td></td></tr>
@@ -137,7 +134,7 @@
   <tr class="memlist"><td><a class="el" href="classmo_moldeo_object.html#7f812f3fdb46677f8943504bc3ee431e">~moMoldeoObject</a>()</td><td><a class="el" href="classmo_moldeo_object.html">moMoldeoObject</a></td><td><code> [virtual]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_resource.html#5ff02093e2b9a01396d3895b801035e6">~moResource</a>()</td><td><a class="el" href="classmo_resource.html">moResource</a></td><td><code> [virtual]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classmo_script.html#94c3348bf2683842ff2c36d8948b2202">~moScript</a>(void)</td><td><a class="el" href="classmo_script.html">moScript</a></td><td><code> [virtual]</code></td></tr>
-</table><hr size="1"><address style="align: right;"><small>Generated on Mon Apr 28 20:04:23 2008 for MOLDEO by&nbsp;
+</table><hr size="1"><address style="align: right;"><small>Generated on Sun Nov 9 18:55:16 2008 for MOLDEO by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.6-NO </small></address>
 </body>

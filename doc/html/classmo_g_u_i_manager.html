@@ -40,16 +40,32 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual MOboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_g_u_i_manager.html#d57908bde6f58f4cd478cb75a8f0a6c7">Init</a> ()</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual MOboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_g_u_i_manager.html#3e833ff93ca77db52c8eeff356d7212d">Init</a> (MO_HANDLE p_OpHandle, MO_DISPLAY p_Display)</td></tr>
+
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual MOboolean&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_g_u_i_manager.html#6a59dc244131fd7ce4c93661f91c7424">Finish</a> ()</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="classmo_window.html">moWindow</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_g_u_i_manager.html#c8cb3e16e223b853e2390c22a22f9329">NewWindow</a> (MOfloat x, MOfloat y, MOfloat width, MOfloat height, moTextHeap &amp;textheap)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_g_u_i_manager.html#e3a1988d7b35465c3c99d476c9cbfa80">DisplayInfoWindow</a> (MOfloat x, MOfloat y, MOfloat width, MOfloat height, moTextArray &amp;pTexts)</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_g_u_i_manager.html#a546c89f0f761aa156d85c8bd10b3a37">SetDisplay</a> (MO_DISPLAY p_Display)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_g_u_i_manager.html#853164372dec20f6e569c6c1199414a5">SetOpWindowHandle</a> (MO_HANDLE p_OpHandle)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_g_u_i_manager.html#5ed1b4b7cc1a03eecdabd3997cab914f">SetVisWindowHandle</a> (MO_HANDLE p_VisHandle)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">MO_DISPLAY&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_g_u_i_manager.html#6358b124cc1444959a46e73ee7e61355">GetDisplay</a> ()</td></tr>
+
 <tr><td class="memItemLeft" nowrap align="right" valign="top">MO_HANDLE&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_g_u_i_manager.html#c930de0646e5e2d0f668f9da02b9b5e9">GetOpWindowHandle</a> ()</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">MO_HANDLE&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_g_u_i_manager.html#119e28c9fd581feeafbdc8eb8079854a">GetVisWindowHandle</a> ()</td></tr>
+
 <tr><td colspan="2"><br><h2>Private Attributes</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">MO_HANDLE&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_g_u_i_manager.html#6fe34ea220b85acb10d4a2d4a5b2862b">m_Handle</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">MO_DISPLAY&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_g_u_i_manager.html#9847eb41e14738a79d5036a22ab8eb92">m_Display</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">MO_HANDLE&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_g_u_i_manager.html#f0f6b423b2e896d684ead40fa2616ee8">m_OpHandle</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">MO_HANDLE&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_g_u_i_manager.html#21790e1fa05dd019f2aec68183de20df">m_VisHandle</a></td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">moGuiObjectArray&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_g_u_i_manager.html#46720f973c79277ab9736b85798ec134">m_GuiObjects</a></td></tr>
 
@@ -202,6 +218,33 @@ constructor genérico de la clase.
 Reimplemented from <a class="el" href="classmo_resource.html#aca2982bb31c4f5c19e1a5e1a8f84aba">moResource</a>.    </td>
   </tr>
 </table>
+<a class="anchor" name="6358b124cc1444959a46e73ee7e61355"></a><!-- doxytag: member="moGUIManager::GetDisplay" ref="6358b124cc1444959a46e73ee7e61355" args="()" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">MO_DISPLAY moGUIManager::GetDisplay           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
 <a class="anchor" name="c930de0646e5e2d0f668f9da02b9b5e9"></a><!-- doxytag: member="moGUIManager::GetOpWindowHandle" ref="c930de0646e5e2d0f668f9da02b9b5e9" args="()" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -213,6 +256,70 @@ Reimplemented from <a class="el" href="classmo_resource.html#aca2982bb31c4f5c19e
           <td class="mdname1" valign="top" nowrap>          </td>
           <td class="md" valign="top">&nbsp;)&nbsp;</td>
           <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="119e28c9fd581feeafbdc8eb8079854a"></a><!-- doxytag: member="moGUIManager::GetVisWindowHandle" ref="119e28c9fd581feeafbdc8eb8079854a" args="()" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">MO_HANDLE moGUIManager::GetVisWindowHandle           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="3e833ff93ca77db52c8eeff356d7212d"></a><!-- doxytag: member="moGUIManager::Init" ref="3e833ff93ca77db52c8eeff356d7212d" args="(MO_HANDLE p_OpHandle, MO_DISPLAY p_Display)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">virtual MOboolean moGUIManager::Init           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">MO_HANDLE&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_OpHandle</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>MO_DISPLAY&nbsp;</td>
+          <td class="mdname" nowrap> <em>p_Display</em></td>
+        </tr>
+        <tr>
+          <td class="md"></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"><code> [virtual]</code></td>
         </tr>
       </table>
     </td>
@@ -313,7 +420,114 @@ Reimplemented from <a class="el" href="classmo_resource.html#da91af11d309cbdd685
     </td>
   </tr>
 </table>
+<a class="anchor" name="a546c89f0f761aa156d85c8bd10b3a37"></a><!-- doxytag: member="moGUIManager::SetDisplay" ref="a546c89f0f761aa156d85c8bd10b3a37" args="(MO_DISPLAY p_Display)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">void moGUIManager::SetDisplay           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">MO_DISPLAY&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>p_Display</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="853164372dec20f6e569c6c1199414a5"></a><!-- doxytag: member="moGUIManager::SetOpWindowHandle" ref="853164372dec20f6e569c6c1199414a5" args="(MO_HANDLE p_OpHandle)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">void moGUIManager::SetOpWindowHandle           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">MO_HANDLE&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>p_OpHandle</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="5ed1b4b7cc1a03eecdabd3997cab914f"></a><!-- doxytag: member="moGUIManager::SetVisWindowHandle" ref="5ed1b4b7cc1a03eecdabd3997cab914f" args="(MO_HANDLE p_VisHandle)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">void moGUIManager::SetVisWindowHandle           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">MO_HANDLE&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>p_VisHandle</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
 <hr><h2>Member Data Documentation</h2>
+<a class="anchor" name="9847eb41e14738a79d5036a22ab8eb92"></a><!-- doxytag: member="moGUIManager::m_Display" ref="9847eb41e14738a79d5036a22ab8eb92" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">MO_DISPLAY <a class="el" href="classmo_g_u_i_manager.html#9847eb41e14738a79d5036a22ab8eb92">moGUIManager::m_Display</a><code> [private]</code>          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
 <a class="anchor" name="46720f973c79277ab9736b85798ec134"></a><!-- doxytag: member="moGUIManager::m_GuiObjects" ref="46720f973c79277ab9736b85798ec134" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -337,13 +551,36 @@ Reimplemented from <a class="el" href="classmo_resource.html#da91af11d309cbdd685
     </td>
   </tr>
 </table>
-<a class="anchor" name="6fe34ea220b85acb10d4a2d4a5b2862b"></a><!-- doxytag: member="moGUIManager::m_Handle" ref="6fe34ea220b85acb10d4a2d4a5b2862b" args="" --><p>
+<a class="anchor" name="f0f6b423b2e896d684ead40fa2616ee8"></a><!-- doxytag: member="moGUIManager::m_OpHandle" ref="f0f6b423b2e896d684ead40fa2616ee8" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top">MO_HANDLE <a class="el" href="classmo_g_u_i_manager.html#6fe34ea220b85acb10d4a2d4a5b2862b">moGUIManager::m_Handle</a><code> [private]</code>          </td>
+          <td class="md" nowrap valign="top">MO_HANDLE <a class="el" href="classmo_g_u_i_manager.html#f0f6b423b2e896d684ead40fa2616ee8">moGUIManager::m_OpHandle</a><code> [private]</code>          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="21790e1fa05dd019f2aec68183de20df"></a><!-- doxytag: member="moGUIManager::m_VisHandle" ref="21790e1fa05dd019f2aec68183de20df" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">MO_HANDLE <a class="el" href="classmo_g_u_i_manager.html#21790e1fa05dd019f2aec68183de20df">moGUIManager::m_VisHandle</a><code> [private]</code>          </td>
         </tr>
       </table>
     </td>
@@ -361,8 +598,8 @@ Reimplemented from <a class="el" href="classmo_resource.html#da91af11d309cbdd685
   </tr>
 </table>
 <hr>The documentation for this class was generated from the following file:<ul>
-<li>D:/_data/proyectos/SINESTESIA/OPENSVN/trunk/0.7/inc/<a class="el" href="mo_g_u_i_manager_8h.html">moGUIManager.h</a></ul>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Apr 28 20:04:23 2008 for MOLDEO by&nbsp;
+<li>D:/_data/proyectos/SINESTESIA/SVNSOURCEFORGE/trunk/0.7/inc/<a class="el" href="mo_g_u_i_manager_8h.html">moGUIManager.h</a></ul>
+<hr size="1"><address style="align: right;"><small>Generated on Sun Nov 9 18:55:16 2008 for MOLDEO by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.6-NO </small></address>
 </body>

@@ -68,17 +68,7 @@
   #endif
 #endif
 
-#ifdef MO_WIN32
-    #include "muParserDLL.h"
-#endif
 
-#ifdef MO_MACOSX
-    #include <muParser.h>
-#endif
-
-#ifdef MO_LINUX
-    #include <muParser/muParser.h>
-#endif
 
 
 #include <math.h>
@@ -252,8 +242,6 @@ using namespace std;
 	#include <SDL.h>
 	#include <SDL_thread.h>
 	#include <SDL_mutex.h>
-	#include <SDL_net.h>
-	#include <SDL_image.h>
 	#include <SDL_syswm.h>
 
 	#ifdef USE_QUICKTIME

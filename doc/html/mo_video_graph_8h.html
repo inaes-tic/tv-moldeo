@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
-<title>MOLDEO: D:/_data/proyectos/SINESTESIA/OPENSVN/trunk/0.7/inc/moVideoGraph.h File Reference</title>
+<title>MOLDEO: D:/_data/proyectos/SINESTESIA/SVNSOURCEFORGE/trunk/0.7/inc/moVideoGraph.h File Reference</title>
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
@@ -17,7 +17,7 @@
     <li><a href="files.html"><span>File&nbsp;List</span></a></li>
     <li><a href="globals.html"><span>File&nbsp;Members</span></a></li>
   </ul></div>
-<h1>D:/_data/proyectos/SINESTESIA/OPENSVN/trunk/0.7/inc/moVideoGraph.h File Reference</h1><code>#include &quot;<a class="el" href="mo_types_8h.html">moTypes.h</a>&quot;</code><br>
+<h1>D:/_data/proyectos/SINESTESIA/SVNSOURCEFORGE/trunk/0.7/inc/moVideoGraph.h File Reference</h1><code>#include &quot;<a class="el" href="mo_types_8h.html">moTypes.h</a>&quot;</code><br>
 <code>#include &quot;<a class="el" href="mo_text_8h.html">moText.h</a>&quot;</code><br>
 <code>#include &quot;<a class="el" href="mo_buckets_8h.html">moBuckets.h</a>&quot;</code><br>
 <code>#include &quot;<a class="el" href="mo_array_8h.html">moArray.h</a>&quot;</code><br>
@@ -27,12 +27,16 @@
 <tr><td colspan="2"><br><h2>Classes</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_video_format.html">moVideoFormat</a></td></tr>
 
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Formato de video.  <a href="classmo_video_format.html#_details">More...</a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_video_sample.html">moVideoSample</a></td></tr>
 
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Muestra de video o cuadro.  <a href="classmo_video_sample.html#_details">More...</a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_capture_device.html">moCaptureDevice</a></td></tr>
 
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Definición de un dispositivo de video, generalmente uno de captura de video, o camara.  <a href="classmo_capture_device.html#_details">More...</a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmo_video_graph.html">moVideoGraph</a></td></tr>
 
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Grafo de reproducción de video.  <a href="classmo_video_graph.html#_details">More...</a><br></td></tr>
 <tr><td colspan="2"><br><h2>Enumerations</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_video_graph_8h.html#cb71d1b711745979811d1b13f6a5e032">moVideoMode</a> { <br>
 &nbsp;&nbsp;<a class="el" href="mo_video_graph_8h.html#cb71d1b711745979811d1b13f6a5e032ff94af802bfa18a69653594637495b5c">PAL_D1</a> =  414720, 
@@ -59,9 +63,11 @@
 <br>
  }</td></tr>
 
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Resoluciones de video.  <a href="mo_video_graph_8h.html#cb71d1b711745979811d1b13f6a5e032">More...</a><br></td></tr>
 <tr><td colspan="2"><br><h2>Functions</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="mo_video_graph_8h.html#f7b8616156a6ff345f0c79f9d31d014e">moDeclareExportedDynamicArray</a> (<a class="el" href="classmo_capture_device.html">moCaptureDevice</a>, moCaptureDevices) class LIBMOLDEO_API moVideoFramework</td></tr>
 
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Plataforma de reproducción de video, actualmente GStreamer para todas las plataformas.  <a href="#f7b8616156a6ff345f0c79f9d31d014e"></a><br></td></tr>
 </table>
 <hr><h2>Enumeration Type Documentation</h2>
 <a class="anchor" name="cb71d1b711745979811d1b13f6a5e032"></a><!-- doxytag: member="moVideoGraph.h::moVideoMode" ref="cb71d1b711745979811d1b13f6a5e032" args="" --><p>
@@ -84,7 +90,9 @@
     <td>
 
 <p>
-<dl compact><dt><b>Enumerator: </b></dt><dd>
+Resoluciones de video. 
+<p>
+enumeración de resoluciones de video <dl compact><dt><b>Enumerator: </b></dt><dd>
 <table border="0" cellspacing="2" cellpadding="0">
 <tr><td valign="top"><em><a class="anchor" name="cb71d1b711745979811d1b13f6a5e032ff94af802bfa18a69653594637495b5c"></a><!-- doxytag: member="PAL_D1" ref="cb71d1b711745979811d1b13f6a5e032ff94af802bfa18a69653594637495b5c" args="" -->PAL_D1</em>&nbsp;</td><td>
 </td></tr>
@@ -160,10 +168,31 @@
     <td>
 
 <p>
-    </td>
+Plataforma de reproducción de video, actualmente GStreamer para todas las plataformas. 
+<p>
+clase que define la interfaz virtual a la plataforma de manejo de video del sistema de esta clase derivan moDsFramework(obsoleta) y moGsFramework que son implementaciones de DirectShow y GStreamer respectivamente. <dl compact><dt><b>See also:</b></dt><dd>moDsFramework (obsoleta) <p>
+moGsFramework</dd></dl>
+Fija los dispositivos predeterminados<p>
+Guarda en m_PreferredDevices los nombres y formatos del dispositivo<p>
+Fija el formato de un dispositivo<p>
+fija el formato con el formato de la referencia a un <a class="el" href="classmo_capture_device.html">moCaptureDevice</a><p>
+Acceso a los dispositivos de video preferidos<p>
+devuelve una referencia a los dispositivos de video preferidos<p>
+Acceso a los dispositivos de video disponibles<p>
+devuelve una referencia a los dispositivos de video disponibles<p>
+Carga los dispositivos de video disponibles<p>
+devuelve una referencia a los dispositivos de video disponibles esta función debe ser implementada en cada plataforma<p>
+Actualiza los dispositivos de video disponibles<p>
+devuelve una referencia a los dispositivos de video disponibles esta función debe ser implementada en cada plataforma<p>
+Chequea si el dispositivos de video disponible está aún disponible<p>
+En el indice i del arreglo de los dispositivos de video disponibles confirma la disponibilidad de este. Al implementar esta función se puede conectar y reconectar cámaras. <dl compact><dt><b>Returns:</b></dt><dd>verdadero si está disponible, falso si no</dd></dl>
+Limpia el arreglo de dispositivos de video<p>
+Elimina del arreglo todos los dispositivos de video<p>
+Dispositivos de video disponibles<p>
+Dispositivos de video preferidos     </td>
   </tr>
 </table>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Apr 28 20:04:22 2008 for MOLDEO by&nbsp;
+<hr size="1"><address style="align: right;"><small>Generated on Sun Nov 9 18:55:14 2008 for MOLDEO by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.6-NO </small></address>
 </body>

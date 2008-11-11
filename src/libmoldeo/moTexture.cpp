@@ -32,7 +32,6 @@
 #include "moTexture.h"
 #include "FreeImage.h"
 
-
 #include "moArray.cpp"
 moDefineDynamicArray(moTextureArray)
 
@@ -124,47 +123,6 @@ MOboolean moTexture::BuildFromFile(moText p_filename)
 	if ( pFile==NULL ) return false;
 	m_pFile = pFile;
 
-	#ifdef USE_SDLIMAGE
-	SDL_Surface *m_pImage = IMG_Load(p_filename);
-
-	if (m_pImage != NULL)
-	{
-		MOuint p_width = m_pImage->w;
-		MOuint p_height = m_pImage->h;
-		MOuint p_format;
-
-		m_param.target = GL_TEXTURE_2D;
-		switch (m_pImage->format->BytesPerPixel)
-		{
-			case 1: // 8 bit, indexed or grayscale
-				m_param.internal_format = GL_RGB;
-				p_format = GL_LUMINANCE;
-				break;
-			case 2: // 16 bits
-				break;
-			case 3: // 24 bits
-				m_param.internal_format = GL_RGB;
-				if (m_pImage->format->Bmask == 0x000000FF) p_format = GL_BGR;
-				else p_format = GL_RGB;
-				break;
-			case 4: // 32 bits
-				m_param.internal_format = GL_RGBA;
-				if (m_pImage->format->Bmask == 0x000000FF) p_format = GL_BGRA_EXT;
-				else p_format = GL_RGBA;
-				break;
-			default:
-				break;
-		}
-
-		BuildEmpty(p_width, p_height);
-		FlipBufferVert((MOubyte *)m_pImage->pixels, m_pImage->format->BytesPerPixel);
-		res = SetBuffer(p_width, p_height, m_pImage->pixels, p_format);
-
-		SDL_FreeSurface(m_pImage);
-	}
-	#endif
-	#ifdef USE_FREEIMAGE
-
 	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
 	FIBITMAP *m_pImage = NULL;
 
@@ -229,9 +187,8 @@ MOboolean moTexture::BuildFromFile(moText p_filename)
 
 		FreeImage_Unload(m_pImage);
 	}
-	#endif
 	else {
-		if (MODebug != NULL) MODebug->Push(moText("Error at image load ") + IMG_GetError());
+		if (MODebug != NULL) MODebug->Push(moText("Error at image load: ") + (moText)p_filename);
 		res = false;
 	}
 
