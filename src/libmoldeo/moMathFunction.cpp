@@ -29,23 +29,12 @@
 
 *******************************************************************************/
 
+
+#include "muParser/muParser.h"
+
 #include <cstdarg>
 
 #include "moMathFunction.h"
-
-#ifdef MO_WIN32
-    #include "muParser.h"
-#endif
-
-#ifdef MO_MACOSX
-    #include <muParser.h>
-#endif
-
-#ifdef MO_LINUX
-    #include <muParser/muParser.h>
-#endif
-
-
 
 #include "moArray.cpp"
 moDefineDynamicArray( moIntArray )
@@ -53,6 +42,7 @@ moDefineDynamicArray( moBoolArray )
 moDefineDynamicArray( moFloatArray )
 moDefineDynamicArray( moMathVariableArray )
 moDefineDynamicArray( moMathFunctionArray )
+
 
 moMathFunction* BuiltInMathFunctionFactory(const moText& p_expr)
 {
@@ -74,7 +64,7 @@ double* AddParserVariableFunction(const char *p_pVarName, void *p_pUserData)
 moMathFunction::moMathFunction()
 {
     m_Expression = moText("");
-	m_EmptyName = moText("");
+    m_EmptyName = moText("");
 }
 
 moMathFunction::~moMathFunction()
@@ -461,7 +451,8 @@ MOboolean moParserFunction::Init(const moText& p_Expression)
 MOboolean moParserFunction::Finish()
 {
     if (m_pParser) {
-        delete m_pParser;
+        mu::Parser* pParser = (mu::Parser*) m_pParser;
+        delete pParser;
         m_pParser = NULL;
     }
 	return true;

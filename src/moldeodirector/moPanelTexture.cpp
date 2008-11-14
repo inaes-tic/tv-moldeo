@@ -170,10 +170,7 @@ void moPanelTexture::LoadImage() {
             }
 
           } else {
-            Log("PanelTexture:: Resource undefined ");
-            #ifdef MO_DEBUG
-              LogError("Resource not found or Empty string");
-            #endif
+            LogError("PanelTexture:: Resource not found ");
           }
         } else {
           LogError("PanelTexture::Empty string");

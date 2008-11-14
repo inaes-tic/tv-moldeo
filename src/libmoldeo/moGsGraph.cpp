@@ -25,7 +25,7 @@
 
   Authors:
   Fabricio Costa
-  Andrés Colubri
+  AndrÃ©s Colubri
 
 *******************************************************************************/
 
@@ -235,10 +235,11 @@ moGsFramework::~moGsFramework() {
 
 }
 
+
 moCaptureDevices* moGsFramework::LoadCaptureDevices() {
 
     #ifdef MO_WIN32
-        //m_CaptureDevices.Add( moCaptureDevice( moText("Microsoft DV Camera and VCR"), moText("DV IEEE 1394"), moText("-") ) );
+        m_CaptureDevices.Add( moCaptureDevice( moText("Microsoft DV Camera and VCR"), moText("DV IEEE 1394"), moText("-") ) );
         m_CaptureDevices.Add( moCaptureDevice( moText("Laptop Integrated Webcam"), moText("webcam"), moText("-") ) );
         //DIRECT SHOW TEST//
         /*
@@ -263,6 +264,7 @@ moCaptureDevices* moGsFramework::LoadCaptureDevices() {
         }
         */
     #else
+        m_CaptureDevices.Add( moCaptureDevice( moText("Laptop Integrated Webcam"), moText("webcam"), moText("") ) );
         m_CaptureDevices.Add( moCaptureDevice( moText("DV"), moText("DV IEEE 1394"), moText("") ) );
     #endif
 
@@ -349,7 +351,7 @@ bool
 moGsGraph::InitGraph() {
 
     //opner en el main de la consola...
-    //inicialización de la libreria gstreamer
+    //inicializaciÃ³n de la libreria gstreamer
     guint major, minor, micro, nano;
     //GError *errores;
 
@@ -381,7 +383,7 @@ moGsGraph::InitGraph() {
     m_pGstBus = gst_pipeline_get_bus (GST_PIPELINE (m_pGstPipeline));
     //gst_bus_add_watch (m_pGstBus, moGsGraph::bus_call, NULL);
     gst_object_unref (m_pGstBus);
-    //fin inicialización
+    //fin inicializaciÃ³n
 
 
 /*

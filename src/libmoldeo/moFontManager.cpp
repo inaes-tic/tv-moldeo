@@ -269,8 +269,6 @@ moFont::Init() {
 MOboolean
 moFont::Init( moFontType p_Type, moText p_fontname, MOint p_size, MOuint glid ) {
 
-  int idx = -1;
-
   glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
 
 	switch( (int)p_Type ) {
@@ -307,22 +305,24 @@ moFont::Init( moFontType p_Type, moText p_fontname, MOint p_size, MOuint glid ) 
 	}
 
 
-    FTFont* FF = (FTFont*) m_pFace;
-    if (FF) {
-        SetSize(p_size);
-        FF->Depth(20);
-		//FF->CharMap(ft_encoding_unicode);
-    }
+  FTFont* FF = (FTFont*) m_pFace;
+  FT_Error FontError;
+  if (FF)
+    FontError = FF->Error();
 
-	if ( ( p_Type!=MO_FONT_GLBUILD && ( FF == NULL || FF->Error() ) ) ||
-         ( p_Type==MO_FONT_UNDEFINED )  || (p_Type==MO_FONT_GLBUILD && m_FontGLId==-1)) {
+	if ( ( p_Type!=MO_FONT_GLBUILD && ( FF == NULL || FontError!=0 ) ) ||
+         ( p_Type==MO_FONT_UNDEFINED )  || (p_Type==MO_FONT_GLBUILD && (int)m_FontGLId==-1)) {
         MODebug2->Error(moText("FontManager: Could not construct face from ")+(moText)p_fontname);
         return false;
 	} else {
 		m_Name = p_fontname;
+    if (FF) {
+      SetSize(p_size);
+      FF->Depth(20);
+      //FF->CharMap(ft_encoding_unicode);
+    }
 		return true;
 	}
-
 
 	return false;
 }
@@ -359,7 +359,7 @@ moFont::SetForegroundColor( MOfloat p_r, MOfloat p_g, MOfloat p_b) {
 void
 moFont::SetHorizontalJustification( int p_horizontal_justification) {
 
-    FTFont* FF = (FTFont*) m_pFace;
+    //FTFont* FF = (FTFont*) m_pFace;
     //if (FF) FF->
 
 }
@@ -367,7 +367,7 @@ moFont::SetHorizontalJustification( int p_horizontal_justification) {
 void
 moFont::SetStringRotation( MOfloat p_string_rotation ) {
 
-    FTFont* FF = (FTFont*) m_pFace;
+    //FTFont* FF = (FTFont*) m_pFace;
     //if (FF) FF->
 
 }

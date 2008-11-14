@@ -47,10 +47,12 @@
 			<Add option="`freetype-config --cflags`" />
 			<Add option="`pkg-config gstreamer-0.10 --cflags`" />
 			<Add option="`pkg-config lua5.1 --cflags`" />
+			<Add option="`pkg-config muparser --cflags`" />
 			<Add option="-DMO_GSTREAMER" />
 			<Add directory="../../inc" />
 			<Add directory="../../inc/3ds" />
 			<Add directory="../../contrib/src/tinyxml/" />
+			<Add directory="/usr/" />
 		</Compiler>
 		<Linker>
 			<Add option="`freetype-config --libs`" />
@@ -116,7 +118,6 @@
 		<Unit filename="../../inc/moMoldeoObject.h" />
 		<Unit filename="../../inc/moMotion.h" />
 		<Unit filename="../../inc/moNetManager.h" />
-		<Unit filename="../../inc/moOGLFT.h" />
 		<Unit filename="../../inc/moP5.h" />
 		<Unit filename="../../inc/moParam.h" />
 		<Unit filename="../../inc/moPlugin.h" />
@@ -202,7 +203,6 @@
 		<Unit filename="../../src/libmoldeo/moMoldeoObject.cpp" />
 		<Unit filename="../../src/libmoldeo/moMotion.cpp" />
 		<Unit filename="../../src/libmoldeo/moNetManager.cpp" />
-		<Unit filename="../../src/libmoldeo/moOGLFT.cpp" />
 		<Unit filename="../../src/libmoldeo/moP5.cpp" />
 		<Unit filename="../../src/libmoldeo/moParam.cpp" />
 		<Unit filename="../../src/libmoldeo/moPlugin.cpp" />

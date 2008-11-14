@@ -4,16 +4,14 @@
 #include "moDirectorTypes.h"
 #include "moIDirectorActions.h"
 
+#include "wxart2d.h"
+
 //(*Headers(moConnectionsWindow)
 #include <wx/panel.h>
 //*)
 
 #include <wx/scrolwin.h>
 #include <wx/bitmap.h>
-
-#ifdef MO_WXART2D
-
-#include "wxart2d.h"
 
 
 class a2dConnector: public a2dWindowViewConnector
@@ -192,7 +190,6 @@ class moConnectionsToolContr : public a2dStToolContr {
     A2D_DECLARE_EVENT_TABLE()
 };
 
-#endif
 
 class moConnectionsWindow: public wxPanel, public moIDirectorActions
 {
@@ -229,14 +226,11 @@ class moConnectionsWindow: public wxPanel, public moIDirectorActions
         void OnSize(wxSizeEvent& event);
         //void OnMouseEvents(wxMouseEvent& event);
 
-        #ifdef MO_WXART2D
-
         a2dDrawer2D*            m_pDrawer2D;
         a2dCanvas*              m_pCanvas;
         a2dCanvasDocument*      m_pConnectionsCanvasDocument;
         moMoldeoCanvasObjects   m_MoldeoCanvasObjects;
 
-        #endif
 
 		DECLARE_EVENT_TABLE()
 };

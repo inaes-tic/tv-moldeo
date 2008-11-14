@@ -9,8 +9,6 @@
 #include <wx/dcclient.h>
 
 
-#ifdef MO_WXART2D
-
 #include "moArray.cpp"
 
 IMPLEMENT_DYNAMIC_CLASS(moPin, a2dPin)
@@ -679,7 +677,7 @@ wxString moMoldeoCanvasObject::GetNetName( a2dPin* pin )
 // Recursively fill a pinlist with all pins connected to a certain pin.
 void moMoldeoCanvasObject::GetNetPins( a2dCanvasObjectList* pinlist, a2dPin* pin )
 {
-    wxASSERT( pinlist );
+    //wxASSERT( pinlist );
 
     // Only continue if pin exists and pin is not allready in list
     if ( pin && !pinlist->Find( pin ) )
@@ -1178,7 +1176,7 @@ void moConnectionsToolContr::OnMouseEvent(wxMouseEvent& event)
     event.Skip();
 }
 
-#endif
+
 
 //(*IdInit(moConnectionsWindow)
 //*)
@@ -1202,7 +1200,7 @@ moConnectionsWindow::moConnectionsWindow(wxWindow* parent,wxWindowID id,const wx
 
     SetForegroundColour(wxColour(0,0,0));
 
-    #ifdef MO_WXART2D
+
         a2dDocviewGlobals->GetEventDistributer()->Register( this );
         a2dRestrictionEngine *restrict=new a2dRestrictionEngine();
 
@@ -1363,7 +1361,7 @@ moConnectionsWindow::moConnectionsWindow(wxWindow* parent,wxWindowID id,const wx
         //m_pConnectionsCanvasView->SetDocument(m_pConnectionsCanvasDocument);
         //m_pConnectionsCanvasView->SetMappingShowAll();
 
-	#endif
+
 }
 
 moConnectionsWindow::~moConnectionsWindow()
@@ -1382,7 +1380,7 @@ void moConnectionsWindow::Init( moIDirectorActions*   pActionsHandler) {
 
     SetNextActionHandler( pActionsHandler );
 
-#ifdef MO_WXART2D
+
 
 
     //moConnectionsToolContr* pTools = new moConnectionsToolContr(m_pCanvas->GetCanvasView(),(wxFrame*) wxGetApp().GetTopWindow() );
@@ -1495,16 +1493,16 @@ void moConnectionsWindow::Init( moIDirectorActions*   pActionsHandler) {
     moPin::ElementWire->AddConnect( moPin::ElementObject );
     //moPin::ElementWire->AddConnect( moPin::ElementWire );//esto se puede sacar siempre y cuando no este SetGeneratePins(false) desactvado
 
-#endif
+
 }
 
 void moConnectionsWindow::OnSize(wxSizeEvent& event) {
 
-#ifdef MO_WXART2D
+
     if (m_pCanvas) {
         m_pCanvas->SetSize( event.GetSize() );
     }
-#endif
+
     event.Skip();
 
 }
@@ -1512,7 +1510,7 @@ void moConnectionsWindow::OnSize(wxSizeEvent& event) {
 
 void moConnectionsWindow::OnPaint(wxPaintEvent& event)
 {
-#ifdef MO_WXART2D
+
     wxPaintDC dc(this);
 
     //ininiate the wxDc's etc. in a2dCanvasView.
@@ -1541,7 +1539,7 @@ void moConnectionsWindow::OnPaint(wxPaintEvent& event)
         it++;
     }
     m_pDrawer2D->EndDraw();
-    #endif
+
 }
 
 void moConnectionsWindow::OnEraseBackground(wxEraseEvent& event)
@@ -1551,7 +1549,7 @@ void moConnectionsWindow::OnEraseBackground(wxEraseEvent& event)
 
 moDirectorStatus moConnectionsWindow::ProjectUpdated( moProjectDescriptor p_projectdescriptor ) {
 
-#ifdef MO_WXART2D
+
         moMobDescriptors pMobDescriptors = GetMobDescriptors();
 
         /// reload everything
@@ -1594,7 +1592,7 @@ moDirectorStatus moConnectionsWindow::ProjectUpdated( moProjectDescriptor p_proj
 
 
         }
-#endif
+
 
          return MO_DIRECTOR_STATUS_OK;
 
@@ -1603,7 +1601,7 @@ moDirectorStatus moConnectionsWindow::ProjectUpdated( moProjectDescriptor p_proj
 /// only mob updated, search for mob and update it....
 moDirectorStatus moConnectionsWindow::MobUpdated( moMobDescriptor p_MobDesc ) {
 
-#ifdef MO_WXART2D
+
         for( MOuint i=0;  i < m_MoldeoCanvasObjects.Count(); i++) {
             moMoldeoCanvasObject*   pObj = m_MoldeoCanvasObjects[i];
 
@@ -1616,15 +1614,15 @@ moDirectorStatus moConnectionsWindow::MobUpdated( moMobDescriptor p_MobDesc ) {
                 }
             }
         }
-#endif
+
         return MO_DIRECTOR_STATUS_OK;
 
 }
 
 void moConnectionsWindow::DeleteAll() {
-#ifdef MO_WXART2D
+
         if (m_pConnectionsCanvasDocument)
             m_pConnectionsCanvasDocument->DeleteContents();
         m_MoldeoCanvasObjects.Empty();
-#endif
+
 }

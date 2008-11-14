@@ -140,7 +140,9 @@ moMoldeoObject::Init() {
                         moFontSize  fontsize;
 
                         if ( value.GetSubValueCount()==3 ) {
-                            if ( ! (valuebase.Text().Trim() == moText("")) ) {
+                            if ( valuebase.Text().Trim() == moText("Default") ) {
+                              pFont = m_pResourceManager->GetFontMan()->GetFont(0);
+                            } else if ( ! (valuebase.Text().Trim() == moText("")) ) {
 
                                 if ( value.GetSubValue(1).GetType()==MO_VALUE_TXT) {
                                     moText fonttypeT = value.GetSubValue(1).Text();
@@ -156,12 +158,17 @@ moMoldeoObject::Init() {
                                 }
 
                                 pFont = m_pResourceManager->GetFontMan()->AddFont( valuebase.Text(), fonttype, fontsize);
-
-                                if (pFont) {
-                                    valuebase.SetFont( pFont );
+                                if (pFont==NULL) {
+                                  MODebug2->Error( moText(" FONT NOT FOUND: Using Default")+ valuebase.Text() + moText(" Param name:") +param.GetParamDefinition().GetName() );
+                                  pFont = m_pResourceManager->GetFontMan()->GetFont(0);
                                 }
                             } else {
-                                MODebug2->Error( moText(" VALUE BASE EMPTY: ")+ valuebase.Text() + moText(" Param name:") +param.GetParamDefinition().GetName() );
+                                MODebug2->Error( moText(" VALUE BASE EMPTY: Using Default")+ valuebase.Text() + moText(" Param name:") +param.GetParamDefinition().GetName() );
+                                pFont = m_pResourceManager->GetFontMan()->GetFont(0);
+                            }
+
+                            if (pFont) {
+                                valuebase.SetFont( pFont );
                             }
                         } else {
                             MODebug2->Error( moText(" MISSING VALUES: ")+ valuebase.Text() + moText(" Param name:") +param.GetParamDefinition().GetName() );

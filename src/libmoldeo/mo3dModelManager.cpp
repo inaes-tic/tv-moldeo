@@ -57,11 +57,12 @@ moSceneNode::~moSceneNode() {
 
 MOboolean moSceneNode::Init() {
 
+  return true;
 
 }
 
 MOboolean moSceneNode::Finish() {
-
+  return true;
 }
 
 void moSceneNode::Draw( moEffectState *state, GLuint g_ViewMode ) {
