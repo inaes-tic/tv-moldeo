@@ -30,7 +30,7 @@
 *******************************************************************************/
 
 
-#include "muParser/muParser.h"
+#include "muParser.h"
 
 #include <cstdarg>
 
