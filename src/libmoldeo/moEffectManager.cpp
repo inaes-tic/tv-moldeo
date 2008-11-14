@@ -139,7 +139,7 @@ MOboolean
 moEffectManager::RemoveEffect( MOint p_ID, moMoldeoObjectType p_type ) {
 
 	MOint all_ID;
-	MOint i;
+	MOuint i;
 
 	moEffect* peffect = NULL;
 	moPreEffect* ppreeffect = NULL;

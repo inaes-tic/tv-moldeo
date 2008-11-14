@@ -126,7 +126,7 @@
     inline
     static void Point2fAdd(Point2fT* NewObj, const Tuple2fT* t1)
     {
-        assert(NewObj && t1);
+        ////assert(NewObj && t1);
 
         NewObj->s.X += t1->s.X;
         NewObj->s.Y += t1->s.Y;
@@ -139,7 +139,7 @@
     inline
     static void Point2fSub(Point2fT* NewObj, const Tuple2fT* t1)
     {
-        assert(NewObj && t1);
+        ////assert(NewObj && t1);
 
         NewObj->s.X -= t1->s.X;
         NewObj->s.Y -= t1->s.Y;
@@ -155,7 +155,7 @@
     {
         Vector3fT Result; //safe not to initialize
 
-        assert(NewObj && v1 && v2);
+        ////assert(NewObj && v1 && v2);
 
         // store on stack once for aliasing-safty
         // i.e. safe when a.cross(a, b)
@@ -175,7 +175,7 @@
     inline
     static GLfloat Vector3fDot(const Vector3fT* NewObj, const Vector3fT* v1)
     {
-        assert(NewObj && v1);
+        ////assert(NewObj && v1);
 
         return (NewObj->s.X * v1->s.X) +
                (NewObj->s.Y * v1->s.Y) +
@@ -189,7 +189,7 @@
     inline
     static GLfloat Vector3fLengthSquared(const Vector3fT* NewObj)
     {
-        assert(NewObj);
+        ////assert(NewObj);
 
         return (NewObj->s.X * NewObj->s.X) +
                (NewObj->s.Y * NewObj->s.Y) +
@@ -203,7 +203,7 @@
     inline
     static GLfloat Vector3fLength(const Vector3fT* NewObj)
     {
-        assert(NewObj);
+        ////assert(NewObj);
 
         return FuncSqrt(Vector3fLengthSquared(NewObj));
     }
@@ -245,7 +245,7 @@
         GLfloat xx, xy, xz;
         GLfloat yy, yz, zz;
 
-        assert(NewObj && q1);
+        ////assert(NewObj && q1);
 
         n =(q1->s.X * q1->s.X) +(q1->s.Y * q1->s.Y) +(q1->s.Z * q1->s.Z) +(q1->s.W * q1->s.W);
         s =(n > 0.0f) ?(2.0f / n) : 0.0f;
@@ -270,7 +270,7 @@
     {
         Matrix3fT Result; //safe not to initialize
 
-        assert(NewObj && m1);
+        ////assert(NewObj && m1);
 
         // alias-safe way.
         Result.s.M00 =(NewObj->s.M00 * m1->s.M00) +(NewObj->s.M01 * m1->s.M10) +(NewObj->s.M02 * m1->s.M20);
@@ -292,7 +292,7 @@
     inline
     static void Matrix4fSetRotationScaleFromMatrix4f(Matrix4fT* NewObj, const Matrix4fT* m1)
     {
-        assert(NewObj && m1);
+        //assert(NewObj && m1);
 
         NewObj->s.XX = m1->s.XX; NewObj->s.YX = m1->s.YX; NewObj->s.ZX = m1->s.ZX;
         NewObj->s.XY = m1->s.XY; NewObj->s.YY = m1->s.YY; NewObj->s.ZY = m1->s.ZY;
@@ -311,7 +311,7 @@
     {
         GLfloat s, n;
 
-        assert(NewObj);
+        //assert(NewObj);
 
         // this is a simple svd.
         // Not complete but fast and reasonable.
@@ -390,7 +390,7 @@
     inline
     static void Matrix4fSetRotationScaleFromMatrix3f(Matrix4fT* NewObj, const Matrix3fT* m1)
     {
-        assert(NewObj && m1);
+        //assert(NewObj && m1);
 
         NewObj->s.XX = m1->s.XX; NewObj->s.YX = m1->s.YX; NewObj->s.ZX = m1->s.ZX;
         NewObj->s.XY = m1->s.XY; NewObj->s.YY = m1->s.YY; NewObj->s.ZY = m1->s.ZY;
@@ -400,7 +400,7 @@
     inline
     static void Matrix4fMulRotationScale(Matrix4fT* NewObj, GLfloat scale)
     {
-        assert(NewObj);
+        //assert(NewObj);
 
         NewObj->s.XX *= scale; NewObj->s.YX *= scale; NewObj->s.ZX *= scale;
         NewObj->s.XY *= scale; NewObj->s.YY *= scale; NewObj->s.ZY *= scale;
@@ -422,7 +422,7 @@
     {
         GLfloat scale;
 
-        assert(NewObj && m1);
+        //assert(NewObj && m1);
 
         scale = Matrix4fSVD(NewObj, NULL, NULL);
 
@@ -452,7 +452,7 @@
             inline
             void    setBounds(GLfloat NewWidth, GLfloat NewHeight)
             {
-                assert((NewWidth > 1.0f) &&(NewHeight > 1.0f));
+                //assert((NewWidth > 1.0f) &&(NewHeight > 1.0f));
 
                 //Set adjustment factor for width/height
                 this->AdjustWidth  = 1.0f /((NewWidth  - 1.0f) * 0.5f);

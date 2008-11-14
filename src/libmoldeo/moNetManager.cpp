@@ -28,11 +28,7 @@
   Andrés Colubri
 
 *******************************************************************************/
-#ifdef MO_LINUX
-    #include <asio.hpp>
-#else
-    #include <boost/asio.hpp>
-#endif
+#include <asio.hpp>
 
 #include "moNetManager.h"
 

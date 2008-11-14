@@ -188,7 +188,7 @@ MOboolean moTexture::BuildFromFile(moText p_filename)
 		FreeImage_Unload(m_pImage);
 	}
 	else {
-		if (MODebug != NULL) MODebug->Push(moText("Error at image load: ") + (moText)p_filename);
+		if (MODebug2 != NULL) MODebug2->Error(moText("Error at image load: ") + (moText)p_filename);
 		res = false;
 	}
 

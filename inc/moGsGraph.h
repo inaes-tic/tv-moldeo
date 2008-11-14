@@ -83,7 +83,31 @@ typedef enum {
   GST_VIDEO_TEST_SRC_BLINK
 } GstVideoTestSrcPattern;
 
+/***
+All functions related to GStreamer Framework
 
+  in Linux:
+
+      use the dv1394src for DV
+      and the v4l2src for Webcams
+
+      it's important to grant permission to device in linux running in terminal:
+        sudo chmod 666 raw1394
+
+  in Windows:
+      dshowvideosrc is used from the dshowvideowrapper
+
+
+  To test gstreamer in linux run:
+    gst-launch -v -m v4l2src ! decodebin ! ffmpegcolorspace ! autovideosink
+
+  To test gstreamer in windows run:
+    gst-launch -v -m dv1394src ! decodebin ! ffmpegcolorspace ! autovideosink
+
+  ( tested with last gstreamer in linux: 0.10.20 )
+  ( tested with last gstreamer in windows: 0.10.10 from windows official vinaries and special wrapper dshowvideowrapper )
+
+*/
 class LIBMOLDEO_API moGsFramework : public moVideoFramework {
 
 	public:
@@ -106,6 +130,11 @@ class LIBMOLDEO_API moGsFramework : public moVideoFramework {
 
 };
 
+/***
+  GStreamer Graph Class for video filters and video reproduction: you don't have to link to gstreamer
+  This is C++ wrapper to some GStreamer basic functions...
+
+*/
 
 class LIBMOLDEO_API moGsGraph : public moVideoGraph {
 

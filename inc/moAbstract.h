@@ -172,7 +172,7 @@ public:
     */
 	MOboolean		Initialized();/*!< Pregunta si está inicializado */
 
-protected:
+
 	MOboolean		m_bInitialized;/**< Valor de inicialización*/
 
     static moDebug *MODebug2;/**< Clase de impresión de errores para depuración*/

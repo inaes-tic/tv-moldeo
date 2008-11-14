@@ -45,19 +45,18 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="`pkg-config sdl --cflags`" />
+			<Add option="`pkg-config ftgl --cflags`" />
 			<Add directory="../../inc" />
 			<Add directory="../../inc/3ds" />
 		</Compiler>
 		<Linker>
 			<Add option="`pkg-config sdl --libs`" />
-			<Add library="glut" />
+			<Add option="`pkg-config ftgl --libs`" />
+			<Add option="`pkg-config openal --libs`" />
 			<Add library="GLEW" />
-			<Add library="GLU" />
-			<Add library="gle" />
-			<Add library="openal" />
-			<Add library="alut" />
 			<Add library="Cg" />
 			<Add library="CgGL" />
+			<Add library="GL" />
 			<Add directory="../../lib/" />
 		</Linker>
 		<Unit filename="moldeomain.cpp" />

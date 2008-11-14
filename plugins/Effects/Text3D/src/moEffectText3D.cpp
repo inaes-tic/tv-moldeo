@@ -263,7 +263,7 @@ moEffectText3D::GetDefinition( moConfigDefinition *p_configdefinition ) {
 
 	//default: alpha, color, syncro
 	p_configdefinition = moEffect::GetDefinition( p_configdefinition );
-	p_configdefinition->Add( moText("font"), MO_PARAM_FONT, TEXT3D_FONT, moValue( "Tuffy.ttf", "TXT", "0", "NUM", "32.0", "NUM") );
+	p_configdefinition->Add( moText("font"), MO_PARAM_FONT, TEXT3D_FONT, moValue( "Default", "TXT", "0", "NUM", "32.0", "NUM") );
 	p_configdefinition->Add( moText("text"), MO_PARAM_TEXT, TEXT3D_TEXT, moValue( "Insert text in text parameter", "TXT") );
 	p_configdefinition->Add( moText("blending"), MO_PARAM_BLENDING, TEXT3D_BLENDING, moValue( "0", "NUM").Ref() );
 	p_configdefinition->Add( moText("width"), MO_PARAM_FUNCTION, TEXT3D_WIDTH, moValue( "256", "FUNCTION").Ref() );
@@ -272,7 +272,7 @@ moEffectText3D::GetDefinition( moConfigDefinition *p_configdefinition ) {
 	p_configdefinition->Add( moText("translatey"), MO_PARAM_TRANSLATEY, TEXT3D_TRANSLATEY, moValue( "0.0", "FUNCTION").Ref() );
 	p_configdefinition->Add( moText("translatez"), MO_PARAM_TRANSLATEZ, TEXT3D_TRANSLATEZ, moValue( "0.0", "FUNCTION").Ref() );
 	p_configdefinition->Add( moText("rotatex"), MO_PARAM_ROTATEX, TEXT3D_ROTATEX, moValue( "0.0", "FUNCTION").Ref() );
-    p_configdefinition->Add( moText("rotatey"), MO_PARAM_ROTATEY, TEXT3D_ROTATEY, moValue( "0.0", "FUNCTION").Ref() );
+  p_configdefinition->Add( moText("rotatey"), MO_PARAM_ROTATEY, TEXT3D_ROTATEY, moValue( "0.0", "FUNCTION").Ref() );
 	p_configdefinition->Add( moText("rotatez"), MO_PARAM_ROTATEZ, TEXT3D_ROTATEZ, moValue( "0.0", "FUNCTION").Ref() );
 	p_configdefinition->Add( moText("scalex"), MO_PARAM_SCALEX, TEXT3D_SCALEX, moValue( "1.0", "FUNCTION").Ref() );
 	p_configdefinition->Add( moText("scaley"), MO_PARAM_SCALEY, TEXT3D_SCALEY, moValue( "1.0", "FUNCTION").Ref() );

@@ -30,6 +30,21 @@
 *******************************************************************************/
 
 #include "moTextureManager.h"
+#include "FreeImage.h"
+
+/**
+FreeImage error handler
+@param fif Format / Plugin responsible for the error
+@param message Error message
+*/
+void FreeImageErrorHandler(FREE_IMAGE_FORMAT fif, const char *message) {
+
+   if(fif != FIF_UNKNOWN) {
+     //printf("%s Format\n", FreeImage_GetFormatFromFIF(fif));
+   }
+   moAbstract::MODebug2->Error(moText("FreeImage error:") + moText(message));
+
+}
 
 //===========================================
 //
@@ -42,6 +57,9 @@ moTextureManager::moTextureManager()
 	SetType( MO_OBJECT_RESOURCE );
 	SetResourceType( MO_RESOURCETYPE_TEXTURE );
 	SetName("Texture Manager");
+
+  // In your main program ...
+  FreeImage_SetOutputMessage(FreeImageErrorHandler);
 
 	m_glmanager = NULL;
 	m_fbmanager = NULL;
@@ -362,3 +380,5 @@ MOint moTextureManager::GetType(MOuint p_moid) {
 MOuint moTextureManager::GetGLId(MOuint p_moid) {
     return ValidTexture(p_moid) ? m_textures_array[p_moid]->GetGLId() : 0;
 }
+
+

@@ -411,7 +411,7 @@ moValueCtrl::OnSpinUpdated( wxSpinEvent& event) {
 
     moValue& rValue( m_ValueDescriptor.GetValue() );
 
-    switch( m_ValueDescriptor.GetParamDescriptor().GetParamDefinition().GetType()) {
+    switch( (int)m_ValueDescriptor.GetParamDescriptor().GetParamDefinition().GetType()) {
 
         case MO_PARAM_NUMERIC:
             if (m_pSpinCtrl) rValue.GetSubValue(0).SetInt( m_pSpinCtrl->GetValue() );
@@ -544,7 +544,7 @@ moValueCtrl::OnComboUpdated( wxCommandEvent& event) {
     if (m_bInit) {
 
         moValue& rValue( m_ValueDescriptor.GetValue() );
-        switch( m_ValueDescriptor.GetParamDescriptor().GetParamDefinition().GetType()) {
+        switch( (int)m_ValueDescriptor.GetParamDescriptor().GetParamDefinition().GetType()) {
             case MO_PARAM_BLENDING:
                 if (m_pBlendingCtrl) {
                     int i,isel = 0;

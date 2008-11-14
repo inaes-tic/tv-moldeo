@@ -15,15 +15,10 @@
 				<Option projectLinkerOptionsRelation="2" />
 				<Compiler>
 					<Add option="-g" />
-					<Add option="`wx-config --cflags --debug=yes`" />
 				</Compiler>
 				<Linker>
-					<Add option="`wx-config --libs --debug=yes --static=no`" />
 					<Add library="libmoldeod" />
 					<Add library="tinyxmld" />
-					<Add library="wx_gtk2d_gl-2.8" />
-					<Add library="wx_gtk2d_ogl-2.8" />
-					<Add library="wx_gtk2d-2.8" />
 					<Add directory="../../contrib/src/tinyxml/Debug/" />
 				</Linker>
 			</Target>
@@ -37,16 +32,11 @@
 				<Compiler>
 					<Add option="-O2" />
 					<Add option="-w" />
-					<Add option="`wx-config --cflags --debug=no`" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add option="`wx-config --libs --debug=no --static=no`" />
 					<Add library="libmoldeo" />
 					<Add library="tinyxml" />
-					<Add library="wx_gtk2-2.8" />
-					<Add library="wx_gtk2_gl-2.8" />
-					<Add library="wx_gtk2_ogl-2.8" />
 					<Add directory="../../contrib/src/tinyxml/Release/" />
 				</Linker>
 			</Target>
@@ -56,14 +46,20 @@
 		</VirtualTargets>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add option="`pkg-config freetype2 --cflags`" />
+			<Add option="`wx-config --cflags --debug=no --static=no`" />
 			<Add directory="../../inc" />
 			<Add directory="../../inc/3ds" />
 			<Add directory="./vdtc" />
 			<Add directory="./treemultictrl" />
 			<Add directory="../moldeodirector" />
+			<Add directory="/usr/local/wxart2d" />
+			<Add directory="/usr/local/wxart2d/agg2/include" />
 		</Compiler>
 		<Linker>
 			<Add option="`pkg-config sdl --libs`" />
+			<Add option="`pkg-config ftgl --libs`" />
+			<Add option="`wx-config --libs --debug=no --static=yes`" />
 			<Add library="glut" />
 			<Add library="GLEW" />
 			<Add library="GLU" />
@@ -71,10 +67,26 @@
 			<Add library="freetype" />
 			<Add library="freeimage" />
 			<Add library="openal" />
+			<Add library="wx_gtk2-2.8" />
+			<Add library="wx_gtk2_gl-2.8" />
 			<Add library="alut" />
 			<Add library="Cg" />
 			<Add library="CgGL" />
+			<Add library="wxart2d_gtk2_general-2.8" />
+			<Add library="wxart2d_gtk2_xmlparse-2.8" />
+			<Add library="wxart2d_gtk2_curves-2.8" />
+			<Add library="wxart2d_gtk2_docview-2.8" />
+			<Add library="wxart2d_gtk2_aggdrawer-2.8" />
+			<Add library="wxart2d_gtk2_editor-2.8" />
+			<Add library="wxart2d_gtk2_canvas-2.8" />
+			<Add library="wxart2d_gtk2_canextobj-2.8" />
+			<Add library="wxart2d_gtk2_artbase-2.8" />
+			<Add library="wxart2d_gtk2_gdsio-2.8" />
+			<Add library="wxart2d_gtk2_svgio-2.8" />
+			<Add library="agg" />
+			<Add library="kbool" />
 			<Add directory="../../lib/" />
+			<Add directory="/usr/local/lib" />
 		</Linker>
 		<Unit filename="mo3dModelPanel.cpp" />
 		<Unit filename="mo3dModelPanel.h" />

@@ -27,5 +27,7 @@
 		<Project filename="../../plugins/PostEffects/VideoWall/videowalllinux.cbp" />
 		<Project filename="../../plugins/Effects/Movie/movielinux.cbp" />
 		<Project filename="../../src/moldeodirector/moldeodirectorlinux.cbp" active="1" />
+		<Project filename="../../plugins/Effects/Text3D/text3dlinux.cbp" />
+		<Project filename="../../plugins/Effects/Text/textlinux.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>

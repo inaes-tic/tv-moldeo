@@ -42,11 +42,11 @@
 #include "moAbstract.h"
 
 #ifndef NOMINMAX
-#ifndef max
-#define max(a,b) ((a)>(b)?(a):(b))
+#ifndef momax
+#define momax(a,b) ((a)>(b)?(a):(b))
 #endif
-#ifndef min
-#define min(a,b) ((a)<(b)?(a):(b))
+#ifndef momin
+#define momin(a,b) ((a)<(b)?(a):(b))
 #endif
 #endif
 

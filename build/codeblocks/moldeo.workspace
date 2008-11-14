@@ -8,7 +8,7 @@
 		<Project filename="..\..\src\main\moldeo_mingw_sdl.cbp">
 			<Depends filename="libmoldeo.cbp" />
 		</Project>
-		<Project filename="..\..\src\moldeodirector\moldeodirector.cbp">
+		<Project filename="..\..\src\moldeodirector\moldeodirector.cbp" active="1">
 			<Depends filename="libmoldeo.cbp" />
 		</Project>
 		<Project filename="..\..\plugins\Effects\Icon3D\icon3d.cbp">
@@ -119,6 +119,6 @@
 		<Project filename="..\..\plugins\Resources\TrackerGpuKLT2\trackergpuklt2.cbp">
 			<Depends filename="libmoldeo.cbp" />
 		</Project>
-		<Project filename="..\..\plugins\Effects\Text3D\text3d.cbp" active="1" />
+		<Project filename="..\..\plugins\Effects\Text3D\text3d.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>

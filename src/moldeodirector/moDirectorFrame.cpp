@@ -1377,7 +1377,7 @@ moDirectorFrame::Log( moText p_message ) {
 
 	wxString  w =(wxChar*)(char*)p_message;
 
-	m_pLogTextCtrl->SetDefaultStyle( wxTextAttr( wxColour( 0, 200, 200 )) );
+	m_pLogTextCtrl->SetDefaultStyle( wxTextAttr( wxColour( 50, 255, 50 )) );
 
 	m_pLogTextCtrl->AppendText(w + wxT("\n"));
 
@@ -1393,6 +1393,6 @@ moDirectorFrame::LogError( moText p_message ) {
 
 	m_pLogTextCtrl->AppendText(w + wxT("\n"));
 
-	wxMessageBox(w);
+	//wxMessageBox(w);
 
 }
