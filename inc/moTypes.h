@@ -273,7 +273,7 @@ using namespace std;
     typedef __int16 moWord;
     typedef __int32 moDWord;
 
-    #define assert(X) {}
+    //#define assert(X) {}
 #endif
 
 
