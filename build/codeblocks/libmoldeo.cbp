@@ -67,6 +67,8 @@
 			<Add alias="All" targets="debug;release;" />
 		</VirtualTargets>
 		<Compiler>
+			<Add option="-DGST_DISABLE_LOADSAVE" />
+			<Add option="-DGST_DISABLE_REGISTRY" />
 			<Add directory="..\..\inc" />
 			<Add directory="..\..\inc\3ds" />
 			<Add directory="..\..\inc\openal" />
