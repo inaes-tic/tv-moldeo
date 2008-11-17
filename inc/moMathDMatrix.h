@@ -142,10 +142,14 @@ moDMatrix<Real> operator* (Real fScalar, const moDMatrix<Real>& rkM);
 template <class Real>
 moDVector<Real> operator* (const moDVector<Real>& rkV, const moDMatrix<Real>& rkM);
 
+#ifndef MO_MACOSX
 template class LIBMOLDEO_API moDMatrix<MOfloat>;
+#endif
 typedef moDMatrix<MOfloat> moDMatrixf;
 
+#ifndef MO_MACOSX
 template class LIBMOLDEO_API moDMatrix<MOdouble>;
+#endif
 typedef moDMatrix<MOdouble> moDMatrixd;
 
 // moDBandedMatrix class ------------------------------------------------
@@ -191,10 +195,14 @@ private:
     Real** m_aafUBand;
 };
 
+#ifndef MO_MACOSX
 template class LIBMOLDEO_API moDBandedMatrix<MOfloat>;
+#endif
 typedef moDBandedMatrix<MOfloat> moDBandedMatrixf;
 
+#ifndef MO_MACOSX
 template class LIBMOLDEO_API moDBandedMatrix<MOdouble>;
+#endif
 typedef moDBandedMatrix<MOdouble> moDBandedMatrixd;
 
 

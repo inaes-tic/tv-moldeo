@@ -99,10 +99,14 @@ public:
         Function oF, void* pvUserData = 0);
 };
 
+#ifndef MO_MACOSX
 template class LIBMOLDEO_API moIntegrate1<MOfloat>;
+#endif
 typedef moIntegrate1<MOfloat> moIntegrate1f;
 
+#ifndef MO_MACOSX
 template class LIBMOLDEO_API moIntegrate1<MOdouble>;
+#endif
 typedef moIntegrate1<MOdouble> moIntegrate1d;
 
 // moMinimize1 class -----------------------------------------------------------

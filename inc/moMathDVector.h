@@ -99,10 +99,14 @@ protected:
 template <class Real>
 moDVector<Real> operator* (Real fScalar, const moDVector<Real>& rkV);
 
+#ifndef MO_MACOSX
 template class LIBMOLDEO_API moDVector<MOfloat>;
+#endif
 typedef moDVector<MOfloat> moDVectorf;
 
+#ifndef MO_MACOSX
 template class LIBMOLDEO_API moDVector<MOdouble>;
+#endif
 typedef moDVector<MOdouble> moDVectord;
 
 
