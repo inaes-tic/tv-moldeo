@@ -40,7 +40,7 @@
 			<Add directory="/usr/include/muParser/" />
 		</Compiler>
 		<Unit filename="inc/moEffectCubeMap.h" />
-		<Unit filename="src/moEffectCubeMap.cpp" />
+		<Unit filename="src/moEffectCubemap.cpp" />
 		<Extensions>
 			<envvars />
 			<code_completion />

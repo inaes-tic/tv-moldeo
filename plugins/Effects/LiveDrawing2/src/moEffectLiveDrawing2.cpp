@@ -867,8 +867,8 @@ void moEffectLiveDrawing2::drawPalette()
 
 void moEffectLiveDrawing2::drawTimer()
 {
-	drawTimer(20.0, 100.0, 5 * rotosketch_start / 1000.0, 5 * rotosketch_duration / 1000.0);
-	drawTimer(110.0, 190.0, 5 * dissolve_start / 1000.0, 5 * dissolve_time / 1000.0);
+	drawTimer(20.0, 100.0, 5 * (float)rotosketch_start / 1000.0, 5 * (float)rotosketch_duration / 1000.0);
+	drawTimer(110.0, 190.0, 5 * (float)dissolve_start / 1000.0, 5 * (float)dissolve_time / 1000.0);
 }
 
 void moEffectLiveDrawing2::drawTimer(float box0, float box1, float time0, float time1)

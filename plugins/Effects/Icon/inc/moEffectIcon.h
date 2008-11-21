@@ -72,6 +72,7 @@ public:
     MOboolean Finish();
 	void Interaction( moIODeviceManager * );
 	moConfigDefinition * GetDefinition( moConfigDefinition *p_configdefinition );
+    void Update( moEventList *Events );
 
 private:
 
