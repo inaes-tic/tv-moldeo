@@ -46,13 +46,13 @@
 			<Add option="-Wall" />
 			<Add option="`freetype-config --cflags`" />
 			<Add option="`pkg-config gstreamer-0.10 --cflags`" />
-			<Add option="`pkg-config lua5.1 --cflags`" />
 			<Add option="`pkg-config muparser --cflags`" />
+			<Add option="`pkg-config lua5.1 --cflags`" />
 			<Add option="-DMO_GSTREAMER" />
 			<Add directory="../../inc" />
 			<Add directory="../../inc/3ds" />
 			<Add directory="../../contrib/src/tinyxml/" />
-			<Add directory="/usr/" />
+			<Add directory="/usr/include/muParser" />
 		</Compiler>
 		<Linker>
 			<Add option="`freetype-config --libs`" />
