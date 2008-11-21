@@ -167,6 +167,61 @@ void moEffectIcon::Draw( moTempo* tempogral, moEffectState* parentstate )
 		glTexCoord2f( PosTextX0, PosTextY0);
 		glVertex2i( -ancho,  alto);
 	glEnd();
+
+
+    moTrackerSystemData* m_pTrackerData = NULL;
+    bool m_bTrackerInit = false;
+	//Procesar Inlets
+
+	for(int i=0; i<m_Inlets.Count(); i++) {
+		moInlet* pInlet = m_Inlets[i];
+		if (pInlet->Updated() && pInlet->GetConnectorLabelName()==moText("TRACKERKLT")) {
+
+			m_pTrackerData = (moTrackerSystemData *)pInlet->GetData()->Pointer();
+			if (m_pTrackerData && !m_bTrackerInit) {
+				m_bTrackerInit = true;
+
+				//SelectScriptFunction("Reset");
+				//RunSelectedFunction();
+
+				//MODebug2->Push(IntToStr(TrackerId));
+				//MODebug2->Push(moText("Receiving:") + IntToStr(m_pTrackerData->GetFeaturesCount()) );
+				if (m_pTrackerData->GetFeaturesCount()>0) {
+                    int tw = m_pTrackerData->GetVideoFormat().m_Width;
+                    int th = m_pTrackerData->GetVideoFormat().m_Height;
+                    //MODebug2->Push(moText("vformat:")+IntToStr(tw)+moText("x")+IntToStr(th));
+
+                    for (i = 0; i < m_pTrackerData->GetFeaturesCount(); i++)
+                    {
+                        int x = w * m_pTrackerData->GetFeature(i)->x / tw;
+                        int y = h * m_pTrackerData->GetFeature(i)->y / th;
+                        int v = m_pTrackerData->GetFeature(i)->val;
+
+                        //MODebug2->Push(moText("    x:")+IntToStr(m_pTrackerData->GetFeature(i)->x) + moText(" y:")+IntToStr(m_pTrackerData->GetFeature(i)->y) );
+
+                       /*
+                        if (v == KLT_TRACKED) glColor4f(0.5, 1.0, 0.5, 1.0);
+                        else if (v == KLT_NOT_FOUND) glColor4f(0.0, 0.0, 0.0, 1.0);
+                        else if (v == KLT_SMALL_DET) glColor4f(1.0, 0.0, 0.0, 1.0);
+                        else if (v == KLT_MAX_ITERATIONS) glColor4f(0.0, 1.0, 0.0, 1.0);
+                        else if (v == KLT_OOB) glColor4f(0.0, 0.0, 1.0, 1.0);
+                        else if (v == KLT_LARGE_RESIDUE) glColor4f(1.0, 1.0, 0.0, 1.0);
+                        */
+                        glColor4f(1.0, 0.0, 0.0, 1.0);
+                        glBegin(GL_QUADS);
+                            glVertex2f(x - 5, y - 5);
+                            glVertex2f(x - 5, y + 5);
+                            glVertex2f(x + 5, y + 5);
+                            glVertex2f(x + 5, y - 5);
+                        glEnd();
+                    }
+                }
+
+			}
+		}
+
+	}
+
 }
 
 MOboolean moEffectIcon::Finish()
@@ -237,4 +292,18 @@ moEffectIcon::GetDefinition( moConfigDefinition *p_configdefinition ) {
 	return p_configdefinition;
 }
 
+#define KLT_TRACKED           0
+#define KLT_NOT_FOUND        -1
+#define KLT_SMALL_DET        -2
+#define KLT_MAX_ITERATIONS   -3
+#define KLT_OOB              -4
+#define KLT_LARGE_RESIDUE    -5
 
+void
+moEffectIcon::Update( moEventList *Events ) {
+
+	//get the pointer from the Moldeo Object sending it...
+	moMoldeoObject::Update(Events);
+
+
+}
