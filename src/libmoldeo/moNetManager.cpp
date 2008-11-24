@@ -28,7 +28,7 @@
   Andrés Colubri
 
 *******************************************************************************/
-#include <asio.hpp>
+#include <boost/asio.hpp>
 
 #include "moNetManager.h"
 

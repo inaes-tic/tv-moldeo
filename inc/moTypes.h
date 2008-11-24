@@ -112,9 +112,9 @@ using namespace std;
 /*OSX*/
 #ifdef MO_MACOSX
 
-  #include <X11/X.h>
+  //#include <X11/X.h>
 
-  #define MO_HANDLE Window
+  #define MO_HANDLE void*
 
   //revisar esto!!! para Mac OSX
   #define MO_DISPLAY void*

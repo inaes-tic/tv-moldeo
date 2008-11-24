@@ -17,7 +17,7 @@ moGLCanvas::moGLCanvas(wxWindow *parent,
     wxWindowID id,
     int* attribList,
     const wxPoint& pos, const wxSize& size, long style, const wxString& name)
-    : wxGLCanvas(parent, id, attribList, pos, size, style|wxFULL_REPAINT_ON_RESIZE, name)
+    : wxGLCanvas(parent, id, pos, size, style|wxFULL_REPAINT_ON_RESIZE, name, attribList, wxNullPalette)
 {
 	m_init = false;
     block = false;
