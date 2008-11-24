@@ -31,7 +31,7 @@ void moTextureDescriptor::SetSpecificParameters( MOint p_Width,
     m_Datas.Add( moData( (MOint)m_param.target ) );//8
     m_Datas.Add( moData( m_param.wrap_s ) );//9
     m_Datas.Add( moData( m_param.wrap_t ) );//10
-    m_Datas.Add( moData( p_bBuildedFromFile ) );//11
+    m_Datas.Add( moData( (MOint)p_bBuildedFromFile ) );//11
 
 }
 

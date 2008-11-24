@@ -41,6 +41,8 @@
 #ifndef __MO_LUNA_H__
 #define __MO_LUNA_H__
 
+#undef check
+
 extern "C"
 {
    #include "lua.h"
