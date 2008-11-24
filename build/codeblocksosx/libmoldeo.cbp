@@ -8,8 +8,9 @@
 		<Build>
 			<Target title="Debug">
 				<Option platforms="Mac;" />
-				<Option output="../../lib/moldeod" prefix_auto="1" extension_auto="1" />
-				<Option object_output="objd/Debug/" />
+				<Option output="../../lib/osx/libmoldeod" prefix_auto="0" extension_auto="1" />
+				<Option working_dir="../../lib/osx" />
+				<Option object_output="objd/DebugOSX/" />
 				<Option type="3" />
 				<Option compiler="gcc" />
 				<Option createDefFile="1" />
@@ -19,25 +20,25 @@
 				</Compiler>
 				<Linker>
 					<Add library="tinyxmld" />
-					<Add directory="../../contrib/src/tinyxml/Debug" />
+					<Add directory="../../contrib/src/tinyxml/DebugOSX" />
 				</Linker>
 			</Target>
 			<Target title="Release">
 				<Option platforms="Mac;" />
-				<Option output="../../lib/moldeo" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj/Release/" />
+				<Option output="../../lib/osx/libmoldeo" prefix_auto="0" extension_auto="1" />
+				<Option working_dir="../../lib/osx" />
+				<Option object_output="obj/ReleaseOSX/" />
 				<Option type="3" />
 				<Option compiler="gcc" />
 				<Option createDefFile="1" />
 				<Option createStaticLib="1" />
 				<Compiler>
-					<Add option="-O2" />
+					<Add option="-march=i686" />
 					<Add option="-w" />
 				</Compiler>
 				<Linker>
-					<Add option="-s" />
 					<Add library="tinyxml" />
-					<Add directory="../../contrib/src/tinyxml/Release" />
+					<Add directory="../../contrib/src/tinyxml/ReleaseOSX" />
 				</Linker>
 			</Target>
 		</Build>
@@ -51,6 +52,8 @@
 			<Add option="`/sw/bin/pkg-config ftgl --cflags`" />
 			<Add option="`/sw/bin/pkg-config freetype2 --cflags`" />
 			<Add option="`/sw/bin/pkg-config lua --cflags`" />
+			<Add option="-dynamic" />
+			<Add option="-DPIC" />
 			<Add option="-DMO_GSTREAMER" />
 			<Add directory="../../inc" />
 			<Add directory="../../inc/3ds" />
@@ -69,16 +72,17 @@
 			<Add option="`/sw/bin/pkg-config gstreamer-0.10 --libs`" />
 			<Add option="`/sw/bin/pkg-config lua --libs`" />
 			<Add option="`/sw/bin/pkg-config muparser --libs`" />
+			<Add option="-dynamiclib" />
+			<Add option="-framework Cg" />
+			<Add option="-framework OpenGL" />
+			<Add option="-framework OpenAL" />
 			<Add library="freeimage" />
 			<Add library="libboost_filesystem-xgcc40-mt-1_36.a" />
 			<Add library="libboost_system-xgcc40-mt-1_36.a" />
-			<Add library="GL" />
 			<Add library="SDL" />
 			<Add library="GLU" />
 			<Add library="GLEW" />
 			<Add library="ftgl" />
-			<Add library="/Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/OpenAL.framework/Versions/A/OpenAL" />
-			<Add library="/Library/Frameworks/Cg.framework/Versions/1.0/Cg" />
 			<Add directory="/Users/Shared/Moldeo/boost_1_36_0/bin.v2/libs/filesystem/build/darwin-4.0.1/release/link-static/threading-multi" />
 			<Add directory="/Developer/SDKs/MacOSX10.4u.sdk/usr/X11R6/lib" />
 			<Add directory="/Users/Shared/Moldeo/boost_1_36_0/bin.v2/libs/system/build/darwin-4.0.1/release/link-static/threading-multi" />
