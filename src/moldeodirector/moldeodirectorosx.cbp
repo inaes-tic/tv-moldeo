@@ -74,6 +74,7 @@
 			<Add directory="/Users/Shared/Moldeo/wxart2d/wxArt2D/modules" />
 			<Add directory="/sw/lib/freetype219/include" />
 			<Add directory="/sw/lib/freetype219/include/freetype2" />
+			<Add directory="../../lib/osx" />
 		</Compiler>
 		<Linker>
 			<Add option="`/Users/Shared/Moldeo/wxMac-2.8.9/osx-build/wx-config --libs`" />
