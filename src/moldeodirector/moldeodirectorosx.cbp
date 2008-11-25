@@ -40,9 +40,6 @@
 				<Linker>
 					<Add option="-s" />
 					<Add library="libmoldeo" />
-					<Add library="wx_gtk2-2.8" />
-					<Add library="wx_gtk2_gl-2.8" />
-					<Add library="wx_gtk2_ogl-2.8" />
 					<Add directory="../../contrib/src/tinyxml/Release/" />
 				</Linker>
 			</Target>
@@ -80,6 +77,12 @@
 		</Compiler>
 		<Linker>
 			<Add option="`/Users/Shared/Moldeo/wxMac-2.8.9/osx-build/wx-config --libs`" />
+			<Add option="-framework OpenGL" />
+			<Add option="-framework OpenAL" />
+			<Add option="-framework IOKit" />
+			<Add option="-framework Carbon" />
+			<Add option="-framework Cocoa" />
+			<Add option="-framework Cg" />
 			<Add library="SDL" />
 			<Add library="GLU" />
 			<Add library="GLEW" />
