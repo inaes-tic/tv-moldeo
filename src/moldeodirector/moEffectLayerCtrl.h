@@ -136,8 +136,8 @@ class moEffectLayerTimelineCtrl : public moItemLayerCtrl, public wxPanel {
 		DECLARE_EVENT_TABLE()
 };
 
-template class moDynamicArray<moEffectLayerCtrl*>;
-typedef  moDynamicArray<moEffectLayerCtrl*> moEffectLayerCtrls;
+//template class moDynamicArray<moEffectLayerCtrl*>;
+//typedef  moDynamicArray<moEffectLayerCtrl*> moEffectLayerCtrls;
 
 
 

@@ -193,7 +193,9 @@ private:
 	wxGLContext* m_pGLContext;
 	wxGLCanvas* m_pBaseGLCanvas;
 
+    #ifdef WXART2D
     moConnectionsWindow* m_pConnectionsWindow;
+    #endif
 	moPreviewWindow* m_pPreviewWindow;
 
 	moPreviewFrame* m_pPreviewFrame;

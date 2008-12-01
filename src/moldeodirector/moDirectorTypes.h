@@ -87,7 +87,7 @@
 
 
 #include "wx/aui/aui.h"
-#include "sample.xpm"
+//#include "sample.xpm"
 
 
 #if wxUSE_GLCANVAS

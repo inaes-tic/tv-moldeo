@@ -4,6 +4,7 @@
 #include "moDirectorTypes.h"
 #include "moIDirectorActions.h"
 
+#ifdef WXART2D
 #include "wxart2d.h"
 
 //(*Headers(moConnectionsWindow)
@@ -234,5 +235,7 @@ class moConnectionsWindow: public wxPanel, public moIDirectorActions
 
 		DECLARE_EVENT_TABLE()
 };
+
+#endif
 
 #endif

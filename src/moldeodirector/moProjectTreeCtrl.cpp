@@ -11,7 +11,7 @@ wxTreeCtrl( parent, id, pos, size, style ) {
 
 	//SDL_Init( SDL_INIT_VIDEO );
 	//SDL_SetVideoMode( 160, 100, 24, SDL_SWSURFACE );
-	p_s = SDL_CreateRGBSurface( 0, 160, 100, 24, 0, 0, 0, 0);
+	//p_s = SDL_CreateRGBSurface( 0, 160, 100, 24, 0, 0, 0, 0);
 
 	/*
 	wxTreeItemId root = this->AddRoot(wxT("Moldeo Project"));
