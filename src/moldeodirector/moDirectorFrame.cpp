@@ -234,11 +234,16 @@ moDirectorFrame::CreateGUINotebook() {
 
     CreateGLWindows();
 
+    #ifdef WXART2D
     m_pConnectionsWindow = new moConnectionsWindow(m_pGUINotebook,wxID_ANY, wxPoint(0,0), wxSize(300,200));
     m_pConnectionsWindow->Init(this);
+    #endif
 
     m_pGUINotebook->AddPage( m_pPreviewWindow, wxT("Preview"));
+
+    #ifdef WXART2D
     m_pGUINotebook->AddPage( m_pConnectionsWindow, wxT("Connections"));
+    #endif
 }
 
 void
@@ -885,8 +890,10 @@ moDirectorFrame::CloseProject() {
                 m_pLayers->DeleteAllItems();
             if (m_pLayers2)
                 m_pLayers2->DeleteAllItems();
+            #ifdef WXART2D
             if(m_pConnectionsWindow)
                 m_pConnectionsWindow->DeleteAll();
+            #endif
 
             return MO_DIRECTOR_STATUS_OK;
         }
@@ -1267,7 +1274,9 @@ moDirectorFrame::ProjectUpdated( moProjectDescriptor p_ProjectDescriptor ) {
 
 	FrameManager.Update();
 
+    #ifdef WXART2D
 	m_pConnectionsWindow->ProjectUpdated( p_ProjectDescriptor );
+	#endif
 
 	return MO_DIRECTOR_STATUS_OK;
 }
