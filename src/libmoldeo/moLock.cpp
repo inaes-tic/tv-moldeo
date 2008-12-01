@@ -29,22 +29,27 @@
 
 *******************************************************************************/
 
+
+#include <boost/thread.hpp>
+
 #include "moLock.h"
 
 moLock::moLock() {
-	m_lock = SDL_CreateMutex();
+	//m_lock = SDL_CreateMutex();
 }
-		
+
 moLock::~moLock() {
-	SDL_DestroyMutex(m_lock);		
+	//SDL_DestroyMutex(m_lock);
 }
 
 bool
 moLock::Lock() {
-	return(SDL_mutexP( m_lock )!=-1);			
+	//return(SDL_mutexP( m_lock )!=-1);
+	return true;
 }
 
 bool
 moLock::Unlock() {
-	return(SDL_mutexV( m_lock )!=-1);			
+	//return(SDL_mutexV( m_lock )!=-1);
+	return true;
 }

@@ -40,7 +40,7 @@
 MOuint
 moTimeManager::GetTicks() {
 
-	return (SDL_GetTicks());
+	return (moGetTicks());
 
 }
 
