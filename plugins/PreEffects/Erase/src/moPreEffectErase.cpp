@@ -82,11 +82,11 @@ MOboolean moPreEffectErase::Init()
 void moPreEffectErase::Draw( moTempo* tempogral, moEffectState* parentstate )
 {
 	PreDraw(tempogral, parentstate);
-	glClearColor(  m_Config[moR(ERASE_COLOR)][MO_SELECTED][MO_RED].Fun()->Eval(state.tempo.ang) * state.tintr,
-                m_Config[moR(ERASE_COLOR)][MO_SELECTED][MO_GREEN].Fun()->Eval(state.tempo.ang) * state.tintg,
-                m_Config[moR(ERASE_COLOR)][MO_SELECTED][MO_BLUE].Fun()->Eval(state.tempo.ang) * state.tintb,
-				m_Config[moR(ERASE_COLOR)][MO_SELECTED][MO_ALPHA].Fun()->Eval(state.tempo.ang) *
-				m_Config[moR(ERASE_ALPHA)].GetData()->Fun()->Eval(state.tempo.ang) * state.alpha);
+	glClearColor(  m_Config[moR((MOint)ERASE_COLOR)][MO_SELECTED][MO_RED].Fun()->Eval(state.tempo.ang) * state.tintr,
+                m_Config[moR((MOint)ERASE_COLOR)][MO_SELECTED][MO_GREEN].Fun()->Eval(state.tempo.ang) * state.tintg,
+                m_Config[moR((MOint)ERASE_COLOR)][MO_SELECTED][MO_BLUE].Fun()->Eval(state.tempo.ang) * state.tintb,
+				m_Config[moR((MOint)ERASE_COLOR)][MO_SELECTED][MO_ALPHA].Fun()->Eval(state.tempo.ang) *
+				m_Config[moR((MOint)ERASE_ALPHA)].GetData()->Fun()->Eval(state.tempo.ang) * state.alpha);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
