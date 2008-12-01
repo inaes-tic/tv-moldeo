@@ -119,13 +119,14 @@ using namespace std;
   //revisar esto!!! para Mac OSX
   #define MO_DISPLAY void*
 
+/*
   #include "SDL.h"
   #include "SDL_thread.h"
   #include "SDL_mutex.h"
   #include "SDL_net.h"
   #include "SDL_image.h"
   //#include "QuickTime.h"
-
+*/
   #ifdef USE_GL_EXTENSIONS
     // GLEW provides gl.h, glu.h and glext.h
     #include <GL/glew.h>
@@ -161,13 +162,14 @@ using namespace std;
     #define MO_HANDLE Window
     #define MO_DISPLAY Display*
 
+/*
 	#include <SDL/SDL.h>
 	#include <SDL/SDL_thread.h>
 	#include <SDL/SDL_mutex.h>
 	#include <SDL/SDL_net.h>
 	#include <SDL/SDL_image.h>
 	#include <SDL/SDL_syswm.h>
-
+*/
 	#ifdef USE_GL_EXTENSIONS
 		// GLEW provides gl.h, glu.h and glext.h
 		#include <GL/glew.h>
@@ -238,12 +240,12 @@ using namespace std;
 
 	#define WIN32_LEAN_AND_MEAN
 	#include <windows.h>
-
+/*
 	#include <SDL.h>
 	#include <SDL_thread.h>
 	#include <SDL_mutex.h>
 	#include <SDL_syswm.h>
-
+*/
 	#ifdef USE_QUICKTIME
 	//#define TARGET_API_MAC_CARBON 0
 	//#define TARGET_OS_WIN32 1
@@ -490,13 +492,5 @@ LIBMOLDEO_API MOulong moGetTicks();
 #endif
 
 #include "moTempo.h"
-
-#ifdef USE_SDLIMAGE
-//#include "SDL_image.h"
-#endif
-
-#ifdef USE_FREEIMAGE
-//#include "FreeImage.h"
-#endif
 
 #endif

@@ -44,6 +44,8 @@
 #ifndef __MO_THREAD_H
 #define __MO_THREAD_H
 
+typedef void moThreadHandle;
+
 /// implementación de threads, primera versión basda en SDL_Thread
 /**
  * Esta clase es obsoleta. Revisar.
@@ -64,7 +66,8 @@ class LIBMOLDEO_API moThread {
 
 	private:
 
-		SDL_Thread *m_handleThread;
+		//SDL_Thread *m_handleThread;
+		moThreadHandle *m_handleThread;
 
 		moLock m_DataLock;
 
