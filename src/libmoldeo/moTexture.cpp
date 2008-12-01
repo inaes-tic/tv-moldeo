@@ -698,7 +698,7 @@ moTextureAnimated::NeedsInterpolation() {
 			//fijamos nuevamente el previous y el next
 			m_FramePrevious = m_FrameStart;
 			m_FrameNext = m_FrameEnd;
-			m_StartTime = SDL_GetTicks();
+			m_StartTime = moGetTicks();
 			return true;
 		}
 	} else {
@@ -716,7 +716,7 @@ moTextureAnimated::Interpolate() {
 	moTextFilterParam filterparam;
 	if ( m_pShaderCopy && m_pShaderInterpolate && m_bInterpolation) {
 		if (m_bInterpolating) {
-			MOuint m_ActualTime = SDL_GetTicks();
+			MOuint m_ActualTime = moGetTicks();
 			m_InterpolationPosition = (float)( m_ActualTime - m_StartTime ) / (m_InterpolationTime);
 			if ( m_InterpolationPosition >= 1.0) m_InterpolationPosition = 1.0;
 			if ( m_InterpolationPosition <= 0.0) m_InterpolationPosition = 0.0;
@@ -739,7 +739,7 @@ moTextureAnimated::GetGLId(moTempo *p_tempo) {
 
 
 	if(p_tempo==NULL) {
-			t = m_Time - SDL_GetTicks();
+			t = m_Time - moGetTicks();
 			ft =(t / 1000) * m_fFramesPerSecond;//frames que deberian haber pasado en este lapso...
 			if(ft >= 0.99)	{
 					m_FrameNext++;

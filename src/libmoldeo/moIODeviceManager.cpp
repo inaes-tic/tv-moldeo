@@ -164,6 +164,7 @@ moIODeviceManager::Update() {
 void
 moIODeviceManager::PollEvents() {
 
+	/*
 	SDL_Event event;
 
 	   //SDL_KEYDOWN,			// Keys pressed
@@ -184,7 +185,7 @@ moIODeviceManager::PollEvents() {
 					Events->Add(MO_IODEVICE_MOUSE,SDL_MOUSEBUTTONUP, event.button.button, event.button.x, event.button.y);
 					break;
 				case SDL_KEYDOWN:
-					/* Ignore ALT-TAB for windows */
+					// Ignore ALT-TAB for windows
 					if((event.key.keysym.sym == SDLK_LALT) ||
 						(event.key.keysym.sym == SDLK_RALT) ||
 						(event.key.keysym.sym == SDLK_TAB)) {
@@ -205,6 +206,7 @@ moIODeviceManager::PollEvents() {
 					break;
 		}
 	}
+	*/
 }
 
 moEventList*

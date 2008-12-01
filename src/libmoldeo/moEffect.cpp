@@ -126,7 +126,7 @@ void moEffect::PreDraw( moTempo *tempogral,moEffectState* parentstate) {
 
     if(state.synchronized==MO_DEACTIVATED)
     {
-        state.tempo.ticks = SDL_GetTicks();
+        state.tempo.ticks = moGetTicks();
 		state.tempo.getTempo();
     }
     else

@@ -46,6 +46,10 @@ moConsole::~moConsole()
     Finish();
 }
 
+moEffectManager& moConsole::GetEffectManager() {
+    return m_EffectManager;
+}
+
 void moConsole::SetIODeviceManager( moIODeviceManager*	p_IODeviceManager ) {
 
 	if (p_IODeviceManager!=NULL)
@@ -762,14 +766,14 @@ void moConsole::StopMasterEffects() {
 MOulong
 moConsole::GetTicks() {
 
-	return SDL_GetTicks();
-
+	//return SDL_GetTicks();
+    return moGetTicks();
 }
 
 void
 moConsole::GLSwapBuffers() {
 
-	SDL_GL_SwapBuffers();
+	//SDL_GL_SwapBuffers();
 }
 
 void

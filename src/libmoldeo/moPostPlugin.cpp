@@ -200,7 +200,7 @@ LIBMOLDEO_API moPostEffect* moNewPostEffect(moText effect_name, moPostPluginsArr
 		#ifdef _DEBUG
 		complete_name+= moText("_d");
 		#endif
-    complete_name += moText(".so");
+    complete_name += moPluginExtension;
     #endif
 		//printf("completename:%s\n",complete_name);
 

@@ -29,6 +29,8 @@
 
 *******************************************************************************/
 
+#include <boost/thread.hpp>
+
 #include "moThread.h"
 
 moThread::moThread() {
@@ -37,17 +39,19 @@ moThread::moThread() {
 
 moThread::~moThread() {
 	if(ThreadExists())
-		KillThread();	
-}		
+		KillThread();
+}
 
 bool moThread::CreateThread() {
-	m_handleThread = SDL_CreateThread( InitialThreadFunction,(void*)this);
+	//m_handleThread = SDL_CreateThread( InitialThreadFunction,(void*)this);
+	//m_handleThread = new thread( InitialThreadFunction,(void*)this);
+
 	return(m_handleThread!=NULL);
 }
 
 bool moThread::KillThread() {
 	if(ThreadExists()) {
-		SDL_KillThread( m_handleThread );//SDL_WaitThread ??? 
+		//SDL_KillThread( m_handleThread );//SDL_WaitThread ???
 		m_handleThread=NULL;
 	}
 	return(m_handleThread==NULL);
@@ -58,7 +62,7 @@ bool moThread::ThreadExists() {
 
 bool moThread::SendThreadMessage( int message ) {
 	return true;
-}			
+}
 
 int moThread::InitialThreadFunction( void *data ) {
 	moThread* m_pThreadClass;

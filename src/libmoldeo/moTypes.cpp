@@ -29,14 +29,19 @@
 
 *******************************************************************************/
 
+#include "boost/date_time/posix_time/posix_time.hpp"
+
 #include "moTypes.h"
+
+using namespace boost::posix_time;
 
 
 /** ticks desde el arranque de la aplicación*/
 MOulong moGetTicks() {
 
-    return SDL_GetTicks();
-
+    ptime t(microsec_clock::local_time());
+    //return SDL_GetTicks();
+    return (MOulong)clock ();
 }
 
 /**devuelve un valor con distribucion uniforme 0..1
