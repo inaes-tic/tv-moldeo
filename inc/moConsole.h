@@ -235,6 +235,8 @@ class LIBMOLDEO_API moConsole : public moMoldeoObject {
 
         moConfigDefinition* GetDefinition( moConfigDefinition *p_configdefinition = NULL );
 
+        moEffectManager& GetEffectManager();
+
     protected:
 
         virtual MOulong GetTicks();

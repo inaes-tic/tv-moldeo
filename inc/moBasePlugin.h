@@ -44,6 +44,12 @@
   typedef void* MOpluginHandle;
   #define MO_PLG_API
   #define MO_PLG_ENTRY
+  #ifdef MO_MACOSX
+    #define moPluginExtension moText(".dylib")
+  #endif
+  #ifdef MO_LINUX
+    #define moPluginExtension moText(".so")
+  #endif
 #endif
 
 inline MOpluginHandle moLoadPlugin(moText fn)
