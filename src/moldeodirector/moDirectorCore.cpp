@@ -228,7 +228,7 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
                 if (bDebug) PluginName.Left( PluginName.Length() - 3 );
 
 
-                if ( ( pFile->GetExtension()==moText(".dll") || pFile->GetExtension()==moText(".so") ) && !bDebug ) {
+                if ( ( pFile->GetExtension()==moText(".dll") || pFile->GetExtension()==moText(".so") || pFile->GetExtension()==moText(".dylib")) && !bDebug ) {
                     rPluginDefs.Add( moPluginDefinition( PluginName, pFile->GetCompletePath(), MO_OBJECT_PREEFFECT ) );
                 }
                 Log( pFile->GetFileName() );
@@ -260,7 +260,7 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
                 #endif
                 if (bDebug) PluginName.Left( PluginName.Length() - 3 );
 
-                if ( ( pFile->GetExtension()==moText(".dll") || pFile->GetExtension()==moText(".so") ) && bDebug ) {
+                if ( ( pFile->GetExtension()==moText(".dll") || pFile->GetExtension()==moText(".so") || pFile->GetExtension()==moText(".dylib") ) && bDebug ) {
                     rPluginDefs.Add( moPluginDefinition( PluginName, pFile->GetCompletePath(), MO_OBJECT_EFFECT ) );
                 }
                 Log( pFile->GetFileName() );
@@ -292,7 +292,7 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
                 #endif
                 if (bDebug) PluginName.Left( PluginName.Length() - 3 );
 
-                if ( ( pFile->GetExtension()==moText(".dll") || pFile->GetExtension()==moText(".so") ) && !bDebug ) {
+                if ( ( pFile->GetExtension()==moText(".dll") || pFile->GetExtension()==moText(".so") || pFile->GetExtension()==moText(".dylib") ) && !bDebug ) {
                     rPluginDefs.Add( moPluginDefinition( PluginName , pFile->GetCompletePath(), MO_OBJECT_POSTEFFECT ) );
                 }
                 Log( pFile->GetFileName() );
@@ -323,7 +323,7 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
                 #endif
                 if (bDebug) PluginName.Left( PluginName.Length() - 3 );
 
-                if ( ( pFile->GetExtension()==moText(".dll") || pFile->GetExtension()==moText(".so") ) && !bDebug) {
+                if ( ( pFile->GetExtension()==moText(".dll") || pFile->GetExtension()==moText(".so") || pFile->GetExtension()==moText(".dylib") ) && !bDebug) {
                     rPluginDefs.Add( moPluginDefinition( PluginName, pFile->GetCompletePath(), MO_OBJECT_IODEVICE ) );
                 }
                 Log( pFile->GetFileName() );
@@ -355,7 +355,7 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
                 #endif
                 if (bDebug) PluginName.Left( PluginName.Length() - 3 );
 
-                if ( ( pFile->GetExtension()==moText("dll") || pFile->GetExtension()==moText("so") ) && !bDebug) {
+                if ( ( pFile->GetExtension()==moText("dll") || pFile->GetExtension()==moText("so") || pFile->GetExtension()==moText(".dylib") ) && !bDebug) {
                     rPluginDefs.Add( moPluginDefinition( PluginName, pFile->GetCompletePath(), MO_OBJECT_RESOURCE ) );
                 }
                 Log( pFile->GetFileName() );

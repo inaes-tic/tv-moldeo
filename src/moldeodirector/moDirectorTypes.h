@@ -34,12 +34,6 @@
 #ifndef _MO_DIRECTOR_TYPES
 #define _MO_DIRECTOR_TYPES
 
-
-#include "moTypes.h"
-
-//muparser defines it... and wxwidgets too
-#undef _T
-
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
@@ -52,6 +46,8 @@
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif
+
+#include "moTypes.h"
 
 // ----------------------------------------------------------------------------
 // resources

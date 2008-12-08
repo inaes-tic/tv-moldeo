@@ -71,7 +71,7 @@ moPanelTexture::moPanelTexture(wxWindow* parent,wxWindowID id,const wxPoint& pos
 	Panel5->SetBackgroundColour(wxColour(0,0,0));
 	PanelPreview = new wxPanel(Panel5, ID_PANELPreview, wxPoint(0,0), wxSize(144,96), wxTAB_TRAVERSAL, _T("ID_PANELPreview"));
 	PanelPreview->SetBackgroundColour(wxColour(0,0,0));
-	StaticBitmapThumbnail = new wxStaticBitmap(PanelPreview, ID_STATICBITMAPTHUMB, wxBitmap(wxImage(_T("../../doc/icons/imageempty.png")).Rescale(wxSize(128,80).GetWidth(),wxSize(128,80).GetHeight())), wxPoint(0,0), wxSize(128,80), 0, _T("ID_STATICBITMAPTHUMB"));
+	StaticBitmapThumbnail = new wxStaticBitmap(PanelPreview, ID_STATICBITMAPTHUMB, wxBitmap(wxImage(_T("../../art/icons/imageempty.png")).Rescale(wxSize(128,80).GetWidth(),wxSize(128,80).GetHeight())), wxPoint(0,0), wxSize(128,80), 0, _T("ID_STATICBITMAPTHUMB"));
 	StaticTextType = new wxStaticText(Panel5, ID_STATICTEXT2, _("Type"), wxPoint(0,104), wxDefaultSize, 0, _T("ID_STATICTEXT2"));
 	StaticTextType->SetForegroundColour(wxColour(255,255,255));
 	StaticTextSize = new wxStaticText(Panel5, ID_STATICTEXTSIZE, _("Size"), wxPoint(0,128), wxDefaultSize, 0, _T("ID_STATICTEXTSIZE"));
@@ -162,7 +162,7 @@ void moPanelTexture::LoadImage() {
                   if ( mFileName.FileExists() ) {
                       NewBitmap = wxBitmap(wxImage( moText2Wx(tname) ).Rescale( 128, 80 ));
                   } else {
-                      NewBitmap = wxBitmap(wxImage(_T("../../doc/icons/imageempty.png")).Rescale(128,80) );
+                      NewBitmap = wxBitmap(wxImage(_T("../../art/icons/imageempty.png")).Rescale(128,80) );
                   }
 
                   StaticBitmapThumbnail->SetBitmap( NewBitmap );

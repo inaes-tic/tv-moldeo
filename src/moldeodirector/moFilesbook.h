@@ -34,7 +34,6 @@
 #ifndef _MO_FILES_BOOK_
 #define _MO_FILES_BOOK_
 
-#include "moTypes.h"
 #include "moDirectorTypes.h"
 #include "moDirectorChildFrame.h"
 
