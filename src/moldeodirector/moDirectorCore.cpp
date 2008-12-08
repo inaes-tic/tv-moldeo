@@ -49,6 +49,8 @@ moDirectorCore::Init() {
 
     moText workpath = moFileManager::GetWorkPath();
 
+    Log( moText("Work path: ") + (moText)workpath );
+
 	//conffilename.
 	if ( m_Config.LoadConfig( "director.gmo" ) != MO_CONFIG_OK ) {
 	    if ( !moFileManager::FileExists( "director.gmo" ) ) {
@@ -192,6 +194,7 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
         moPluginDefinitions& rPluginDefs( m_ApplicationDescriptor.GetPluginDefinitions());
 
         Log( moText("Checking plugins") );
+        Log( moText("Plugin path: ") + (moText)pluginsfullpath);
         //recorrer los plugins en busca de: dll o so
         //lo interesante sería que la definición de los plugins se complete a su vez
         //...
