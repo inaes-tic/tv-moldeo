@@ -47,45 +47,41 @@
 		</VirtualTargets>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add option="`/sw/bin/pkg-config gstreamer-0.10 --cflags`" />
-			<Add option="`/sw/bin/pkg-config sdl --cflags`" />
-			<Add option="`/sw/bin/pkg-config ftgl --cflags`" />
-			<Add option="`/sw/bin/pkg-config freetype2 --cflags`" />
-			<Add option="`/sw/bin/pkg-config lua --cflags`" />
+			<Add option="`/opt/local/bin/pkg-config gstreamer-0.10 --cflags`" />
+			<Add option="`/opt/local/bin/pkg-config sdl --cflags`" />
+			<Add option="`/opt/local/bin/pkg-config ftgl --cflags`" />
+			<Add option="`/opt/local/bin/pkg-config freetype2 --cflags`" />
+			<Add option="`/opt/local/bin/pkg-config lua --cflags`" />
+			<Add option="`/opt/local/bin/pkg-config muparser --cflags`" />
 			<Add option="-dynamic" />
 			<Add option="-DPIC" />
 			<Add option="-DMO_GSTREAMER" />
 			<Add directory="../../inc" />
 			<Add directory="../../inc/3ds" />
 			<Add directory="../../contrib/src/tinyxml/" />
-			<Add directory="/sw/include" />
-			<Add directory="/Developer/SDKs/MacOSX10.5.sdk/System/Library/Frameworks/OpenAL.framework/Versions/A/Headers" />
-			<Add directory="/Users/Shared/Moldeo/boost_1_36_0" />
-			<Add directory="/sw/include/FTGL" />
-			<Add directory="/sw/lib/freetype219/include" />
-			<Add directory="/sw/lib/freetype219/include/freetype2" />
-			<Add directory="/Library/Frameworks/Cg.framework/Versions/1.0/Headers" />
+			<Add directory="/opt/local/include" />
 			<Add directory="/usr/local/include" />
+			<Add directory="/Developer/SDKs/MacOSX10.5.sdk/System/Library/Frameworks/OpenAL.framework/Versions/A/Headers" />
+			<Add directory="/Library/Frameworks/Cg.framework/Versions/1.0/Headers" />
 		</Compiler>
 		<Linker>
-			<Add option="`freetype-config --libs`" />
-			<Add option="`/sw/bin/pkg-config gstreamer-0.10 --libs`" />
-			<Add option="`/sw/bin/pkg-config lua --libs`" />
-			<Add option="`/sw/bin/pkg-config muparser --libs`" />
+			<Add option="`/opt/local/bin/freetype-config --libs`" />
+			<Add option="`/opt/local/bin/pkg-config gstreamer-0.10 --libs`" />
+			<Add option="`/opt/local/bin/pkg-config lua --libs`" />
+			<Add option="`/opt/local/bin/pkg-config ftgl --libs`" />
+			<Add option="`/opt/local/bin/pkg-config muparser --libs`" />
 			<Add option="-dynamiclib" />
 			<Add option="-framework Cg" />
 			<Add option="-framework OpenGL" />
 			<Add option="-framework OpenAL" />
+			<Add option="-lSystem" />
+			<Add option="-compatibility_version 0.7" />
+			<Add option="-current_version 0.7.1" />
+			<Add option="-install_name @executable_path/../lib/osx/libmoldeo.dylib" />
 			<Add library="freeimage" />
-			<Add library="libboost_filesystem-xgcc40-mt-1_36.a" />
-			<Add library="libboost_system-xgcc40-mt-1_36.a" />
-			<Add library="SDL" />
-			<Add library="GLU" />
+			<Add library="libboost_filesystem-mt.a" />
+			<Add library="libboost_system-mt.a" />
 			<Add library="GLEW" />
-			<Add library="ftgl" />
-			<Add directory="/Users/Shared/Moldeo/boost_1_36_0/bin.v2/libs/filesystem/build/darwin-4.0.1/release/link-static/threading-multi" />
-			<Add directory="/Developer/SDKs/MacOSX10.4u.sdk/usr/X11R6/lib" />
-			<Add directory="/Users/Shared/Moldeo/boost_1_36_0/bin.v2/libs/system/build/darwin-4.0.1/release/link-static/threading-multi" />
 		</Linker>
 		<Unit filename="../../inc/3ds/3ds.h" />
 		<Unit filename="../../inc/mo3dModelManager.h" />
