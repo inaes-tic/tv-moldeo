@@ -1247,7 +1247,7 @@ moConnectionsWindow::moConnectionsWindow(wxWindow* parent,wxWindowID id,const wx
         a2dGlobals->GetIconPathList().Add( wxT("..") );
         a2dGlobals->GetIconPathList().Add( wxT(".") );
         a2dGlobals->GetIconPathList().Add( wxT("../../doc/images") );
-        a2dGlobals->GetIconPathList().Add( wxT("../../doc/icons") );
+        a2dGlobals->GetIconPathList().Add( wxT("../../art/icons") );
 
         a2dGeneralGlobals->GetVariablesHash().SetVariableString(  wxT( "WXART2D" ), wxT("../../") );
         a2dGeneralGlobals->GetVariablesHash().SetVariableString(  wxT( "WXART2D_ART" ), wxT("../../art") );

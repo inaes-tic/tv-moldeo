@@ -52,12 +52,12 @@ moEffectLayerCtrl::moEffectLayerCtrl(wxWindow* parent,wxWindowID id,const wxPoin
 	Connect(ID_SLIDERTEMPO, MO_EVT_DIRECTOR_LEVEL, (wxObjectEventFunction)&moEffectLayerCtrl::OnLevelSpeed );
 	CheckBoxOnOff = new wxCheckBox(this, ID_CHECKBOXONOFF, wxEmptyString, wxPoint(224,6), wxSize(16,21), 0, wxDefaultValidator, _T("ID_CHECKBOXONOFF"));
 	CheckBoxOnOff->SetValue(false);
-	BitmapButtonVisibility = new wxBitmapButton(this, ID_BITMAPBUTTONVISIBILITY, wxBitmap(wxImage(_T("../../doc/icons/visibility.png"))), wxPoint(192,6), wxSize(26,21), wxBU_AUTODRAW|wxNO_BORDER, wxDefaultValidator, _T("ID_BITMAPBUTTONVISIBILITY"));
-	BitmapButtonVisibility->SetBitmapDisabled(wxBitmap(wxImage(_T("../../doc/icons/visibility.png"))));
-	BitmapButtonVisibility->SetBitmapSelected(wxBitmap(wxImage(_T("../../doc/icons/visibility.png"))));
-	BitmapButtonVisibility->SetBitmapFocus(wxBitmap(wxImage(_T("../../doc/icons/visibility.png"))));
+	BitmapButtonVisibility = new wxBitmapButton(this, ID_BITMAPBUTTONVISIBILITY, wxBitmap(wxImage(_T("../../art/icons/visibility.png"))), wxPoint(192,6), wxSize(26,21), wxBU_AUTODRAW|wxNO_BORDER, wxDefaultValidator, _T("ID_BITMAPBUTTONVISIBILITY"));
+	BitmapButtonVisibility->SetBitmapDisabled(wxBitmap(wxImage(_T("../../art/icons/visibility.png"))));
+	BitmapButtonVisibility->SetBitmapSelected(wxBitmap(wxImage(_T("../../art/icons/visibility.png"))));
+	BitmapButtonVisibility->SetBitmapFocus(wxBitmap(wxImage(_T("../../art/icons/visibility.png"))));
 	BitmapButtonVisibility->SetDefault();
-	BitmapButtonDelete = new wxBitmapButton(this, ID_BITMAPBUTTONDELETE, wxBitmap(wxImage(_T("../../doc/icons/delete.png"))), wxPoint(240,12), wxSize(13,13), wxBU_AUTODRAW, wxDefaultValidator, _T("ID_BITMAPBUTTONDELETE"));
+	BitmapButtonDelete = new wxBitmapButton(this, ID_BITMAPBUTTONDELETE, wxBitmap(wxImage(_T("../../art/icons/delete.png"))), wxPoint(240,12), wxSize(13,13), wxBU_AUTODRAW, wxDefaultValidator, _T("ID_BITMAPBUTTONDELETE"));
 	BitmapButtonDelete->SetDefault();
 
 	Connect(ID_CHECKBOXONOFF,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&moEffectLayerCtrl::OnCheckBoxOnOffClick);
