@@ -49,11 +49,13 @@ bool moldeodirectorApp::OnInit()
 	wxStandardPaths StdPaths;
 
 	wxFileName exename(StdPaths.GetExecutablePath());
+	//exename = StdPaths.GetDataDir();
+	//moWx2Text(exename.GetPath())
 	exename.MakeAbsolute();
 
 	//wxFileName userdatadir( StdPaths.GetUserDataDir() );
 
-	m_pDirectorCore->SetPaths( moWx2Text(exename.GetPath()) );
+	m_pDirectorCore->SetPaths( moFileManager::GetWorkPath() );
 	m_pDirectorCore->Init();
 
 
