@@ -71,7 +71,7 @@ struct moFace
 
 struct moTextureMapInfo
 {
-	MOuint id;	// id for type identification( opacity map, specular map, ...)
+	MOushort id;	// id for type identification( opacity map, specular map, ...)
 	char  strFile[255];         // The texture file name(If this is set it's a texture map)
 	int   textureId;             // the texture ID
 	float uTile;

@@ -99,6 +99,13 @@ MOboolean moEffectIcon::Init() {
 	return true;
 }
 
+#define KLT_TRACKED           0
+#define KLT_NOT_FOUND        -1
+#define KLT_SMALL_DET        -2
+#define KLT_MAX_ITERATIONS   -3
+#define KLT_OOB              -4
+#define KLT_LARGE_RESIDUE    -5
+
 void moEffectIcon::Draw( moTempo* tempogral, moEffectState* parentstate )
 {
     MOint indeximage;
@@ -151,21 +158,21 @@ void moEffectIcon::Draw( moTempo* tempogral, moEffectState* parentstate )
     PosTextY0 = 0.0;
     PosTextY1 = 1.0 * ( pImage!=NULL ? pImage->GetMaxCoordT() :  1.0 );
 
-	ancho = (int)m_Config[ moR(ICON_WIDTH) ].GetData()->Fun()->Eval(state.tempo.ang)* (float)(w/800.0);
-	alto = (int)m_Config[ moR(ICON_HEIGHT) ].GetData()->Fun()->Eval(state.tempo.ang)* (float)(h/600.0);
+	//ancho = (int)m_Config[ moR(ICON_WIDTH) ].GetData()->Fun()->Eval(state.tempo.ang)* (float)(w/800.0);
+	//alto = (int)m_Config[ moR(ICON_HEIGHT) ].GetData()->Fun()->Eval(state.tempo.ang)* (float)(h/600.0);
 
 	glBegin(GL_QUADS);
 		glTexCoord2f( PosTextX0, PosTextY1);
-		glVertex2i( -ancho, -alto);
+		glVertex2f( -0.5*w, -0.5*h);
 
 		glTexCoord2f( PosTextX1, PosTextY1);
-		glVertex2i(  ancho, -alto);
+		glVertex2f(  0.5*w, -0.5*h);
 
 		glTexCoord2f( PosTextX1, PosTextY0);
-		glVertex2i(  ancho,  alto);
+		glVertex2f(  0.5*w,  0.5*h);
 
 		glTexCoord2f( PosTextX0, PosTextY0);
-		glVertex2i( -ancho,  alto);
+		glVertex2f( -0.5*w,  0.5*h);
 	glEnd();
 
 
@@ -175,7 +182,7 @@ void moEffectIcon::Draw( moTempo* tempogral, moEffectState* parentstate )
 
 	for(int i=0; i<m_Inlets.Count(); i++) {
 		moInlet* pInlet = m_Inlets[i];
-		if (pInlet->Updated() && pInlet->GetConnectorLabelName()==moText("TRACKERKLT")) {
+		if (pInlet->Updated() && ( pInlet->GetConnectorLabelName()==moText("TRACKERKLT") || pInlet->GetConnectorLabelName()==moText("TRACKERGPUKLT") || pInlet->GetConnectorLabelName()==moText("TRACKERGPUKLT2")) ) {
 
 			m_pTrackerData = (moTrackerSystemData *)pInlet->GetData()->Pointer();
 			if (m_pTrackerData && !m_bTrackerInit) {
@@ -185,41 +192,88 @@ void moEffectIcon::Draw( moTempo* tempogral, moEffectState* parentstate )
 				//RunSelectedFunction();
 
 				//MODebug2->Push(IntToStr(TrackerId));
+
 				//MODebug2->Push(moText("Receiving:") + IntToStr(m_pTrackerData->GetFeaturesCount()) );
 				if (m_pTrackerData->GetFeaturesCount()>0) {
                     int tw = m_pTrackerData->GetVideoFormat().m_Width;
                     int th = m_pTrackerData->GetVideoFormat().m_Height;
-                    //MODebug2->Push(moText("vformat:")+IntToStr(tw)+moText("x")+IntToStr(th));
+                    //MODebug2->Push(moText("vformat:")+IntToStr(tw)+moText("th")+IntToStr(th));
 
                     for (i = 0; i < m_pTrackerData->GetFeaturesCount(); i++)
                     {
-                        int x = w * m_pTrackerData->GetFeature(i)->x / tw;
-                        int y = h * m_pTrackerData->GetFeature(i)->y / th;
-                        int v = m_pTrackerData->GetFeature(i)->val;
 
-                        //MODebug2->Push(moText("    x:")+IntToStr(m_pTrackerData->GetFeature(i)->x) + moText(" y:")+IntToStr(m_pTrackerData->GetFeature(i)->y) );
+                        moTrackerFeature* pF = m_pTrackerData->GetFeature(i);
 
-                       /*
-                        if (v == KLT_TRACKED) glColor4f(0.5, 1.0, 0.5, 1.0);
-                        else if (v == KLT_NOT_FOUND) glColor4f(0.0, 0.0, 0.0, 1.0);
-                        else if (v == KLT_SMALL_DET) glColor4f(1.0, 0.0, 0.0, 1.0);
-                        else if (v == KLT_MAX_ITERATIONS) glColor4f(0.0, 1.0, 0.0, 1.0);
-                        else if (v == KLT_OOB) glColor4f(0.0, 0.0, 1.0, 1.0);
-                        else if (v == KLT_LARGE_RESIDUE) glColor4f(1.0, 1.0, 0.0, 1.0);
-                        */
+                        //if (pF && pF->valid) {
+
+                        float x = (pF->x / (float)tw) - 0.5;
+                        float y = -(pF->y / (float)th) + 0.5;
+                        float tr_x = (pF->tr_x / (float)tw) - 0.5;
+                        float tr_y = -(pF->tr_y / (float)th) + 0.5;
+                        float v_x = (pF->v_x / (float)tw);
+                        float v_y = -(pF->v_y / (float)th);
+                        float vel = sqrtf( v_x*v_x+v_y*v_y );
+                        int v = pF->val;
+
+
+
+                        //MODebug2->Log(moText("    x:")+FloatToStr(pF->x) + moText(" y:")+FloatToStr(pF->y) );
+
+                        glBindTexture(GL_TEXTURE_2D,0);
                         glColor4f(1.0, 0.0, 0.0, 1.0);
-                        glBegin(GL_QUADS);
-                            glVertex2f(x - 5, y - 5);
-                            glVertex2f(x - 5, y + 5);
-                            glVertex2f(x + 5, y + 5);
-                            glVertex2f(x + 5, y - 5);
-                        glEnd();
+
+                        if (v >= KLT_TRACKED) glColor4f(0.0, 1.0, 0.0, 1.0);
+                        else if (v == KLT_NOT_FOUND) glColor4f(1.0, 0.0, 1.0, 1.0);
+                        else if (v == KLT_SMALL_DET) glColor4f(1.0, 0.0, 1.0, 1.0);
+                        else if (v == KLT_MAX_ITERATIONS) glColor4f(1.0, 0.0, 1.0, 1.0);
+                        else if (v == KLT_OOB) glColor4f(1.0, 0.0, 1.0, 1.0);
+                        else if (v == KLT_LARGE_RESIDUE) glColor4f(1.0, 0.0, 1.0, 1.0);
+
+
+                        if ( pF->valid ) {
+
+                            glBegin(GL_QUADS);
+                                glVertex2f((tr_x - 0.008)*w, (tr_y - 0.008)*h);
+                                glVertex2f((tr_x - 0.008)*w, (tr_y + 0.008)*h);
+                                glVertex2f((tr_x + 0.008)*w, (tr_y + 0.008)*h);
+                                glVertex2f((tr_x + 0.008)*w, (tr_y - 0.008)*h);
+                            glEnd();
+
+                            glBegin(GL_QUADS);
+                                glVertex2f((x - 0.008)*w, (y - 0.008)*h);
+                                glVertex2f((x - 0.008)*w, (y + 0.008)*h);
+                                glVertex2f((x + 0.008)*w, (y + 0.008)*h);
+                                glVertex2f((x + 0.008)*w, (y - 0.008)*h);
+                            glEnd();
+
+                            glDisable(GL_TEXTURE_2D);
+                            glColor4f(1.0, 1.0, 1.0, 1.0);
+                            glBegin(GL_LINES);
+                                glVertex2f( x*w, y*h);
+                                glVertex2f( tr_x*w, tr_y*h);
+                            glEnd();
+
+                            if ( vel > 0.001 ) {
+                                glDisable(GL_TEXTURE_2D);
+                                glColor4f(0.0, 0.0, 1.0, 1.0);
+                                //glPointSize((GLfloat)10);
+                                glLineWidth((GLfloat)10.0);
+                                glBegin(GL_LINES);
+                                    glVertex2f( x*w, y*h);
+                                    glVertex2f( x*w+v_x*w, y*h+v_y*h);
+                                glEnd();
+                            }
+
+
+                        }
+
+
                     }
+
                 }
 
 			}
 		}
-
 	}
 
 }
@@ -276,7 +330,7 @@ moEffectIcon::GetDefinition( moConfigDefinition *p_configdefinition ) {
 
 	//default: alpha, color, syncro
 	p_configdefinition = moEffect::GetDefinition( p_configdefinition );
-	p_configdefinition->Add( moText("texture"), MO_PARAM_TEXTURE, ICON_TEXTURE, moValue( "iconos/estrellas/star.tga", "TXT") );
+	p_configdefinition->Add( moText("texture"), MO_PARAM_TEXTURE, ICON_TEXTURE, moValue( "default", "TXT") );
 	p_configdefinition->Add( moText("blending"), MO_PARAM_BLENDING, ICON_BLENDING, moValue( "0", "NUM").Ref() );
 	p_configdefinition->Add( moText("width"), MO_PARAM_FUNCTION, ICON_WIDTH, moValue( "256", "FUNCTION").Ref() );
 	p_configdefinition->Add( moText("height"), MO_PARAM_FUNCTION, ICON_HEIGHT, moValue( "256", "FUNCTION").Ref() );
@@ -292,12 +346,7 @@ moEffectIcon::GetDefinition( moConfigDefinition *p_configdefinition ) {
 	return p_configdefinition;
 }
 
-#define KLT_TRACKED           0
-#define KLT_NOT_FOUND        -1
-#define KLT_SMALL_DET        -2
-#define KLT_MAX_ITERATIONS   -3
-#define KLT_OOB              -4
-#define KLT_LARGE_RESIDUE    -5
+
 
 void
 moEffectIcon::Update( moEventList *Events ) {

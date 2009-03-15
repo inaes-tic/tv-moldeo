@@ -35,6 +35,26 @@
 moDefineDynamicArray(moTrackerFeatureArray)
 
 
+int moTrackerSystemData::GetFeaturesCount() {
+    return m_Features.Count();
+}
+
+moTrackerFeature* moTrackerSystemData::GetFeature(int i) {
+    return m_Features.Get(i);
+}
+
+moTrackerFeatureArray& moTrackerSystemData::GetFeatures() {
+    return m_Features;
+}
+
+moVector2f moTrackerSystemData::GetBarycenter() {
+        return m_Barycenter;
+}
+
+int moTrackerSystemData::GetValidFeatures() {
+        return m_ValidFeatures;
+}
+
 /*!
 \fn moTrackerFeature::moTrackerFeature()
 \brief Constructor

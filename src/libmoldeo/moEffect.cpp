@@ -169,7 +169,7 @@ moEffect::LoadCodes(moIODeviceManager *consolaesarray) {
 	MOint coddisp,accioncod;
 	moText strcod;
 
-	if(state.fulldebug==MO_ACTIVATED) MODebug2->Push(moText("Cargando codigos de dispositivo especificos..."));
+	if(state.fulldebug==MO_ACTIVATED) MODebug2->Message(moText("Cargando codigos de dispositivo especificos..."));
 
 	nroparam = m_Config.GetParamIndex("codes");
 	if(nroparam==MO_PARAM_NOT_FOUND) return;//se va, no hay codigos
@@ -179,12 +179,12 @@ moEffect::LoadCodes(moIODeviceManager *consolaesarray) {
 	devicecode = new moDeviceCodeList [ncodes];
 
 #ifdef MO_DEBUG
-        texto = moText("Cargando codigos efecto ");
+        texto = moText("\nCargando codigos efecto ");
         texto += GetName();
         texto += moText(" ncodes: ");
         texto += IntToStr(ncodes);
 	//printf(texto);
-	MODebug2->Log(moText("Cargando cod fx:")+IntToStr(ncodes));
+	MODebug2->Log( texto );
 #endif
 	if(ncodes>0)
 	for( i = 0; i < (MOuint)ncodes; i++) {
@@ -200,14 +200,15 @@ moEffect::LoadCodes(moIODeviceManager *consolaesarray) {
 
 			if((accioncod>=0) &&(accioncod<ncodes)) {
 				if(coddisp==-1) {
+				    texto += moText("\n");
                     texto += GetName();
-                    texto += moText(".cfg:\nno se encontró en ningun dispositivo el codigo de dispositivo correspondiente a: ");
+                    texto += moText(".cfg: no se encontró en ningun dispositivo el codigo de dispositivo correspondiente a: ");
                     texto += strcod;
 					MODebug2->Error(texto);
 				} else {
 					devicecode[accioncod].Add(j,coddisp); //agregar un cod disp a la lista
 #ifdef MO_DEBUG
-					texto = moText("accioncod: ");
+					texto = moText("\naccioncod: ");
 					texto += IntToStr(accioncod);
 					texto += moText(" strcod: ");
 					texto += strcod;

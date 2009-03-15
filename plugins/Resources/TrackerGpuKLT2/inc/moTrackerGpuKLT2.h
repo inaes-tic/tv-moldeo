@@ -48,24 +48,41 @@
 #define MO_TRACKERGPUKLT_LIVE_SYSTEM		1
 #define MO_TRACKERGPUKLT_SYSTEM_ON 		2
 
+using namespace V3D_GPU;
+
+struct PointTrack
+{
+     PointTrack() : len(0) { }
+
+     void add(float X, float Y)
+     {
+        pos[len][0] = X;
+        pos[len][1] = Y;
+        ++len;
+     }
+
+     void clear()
+     {
+        len = 0;
+     }
+
+     bool isValid() const { return pos[len-1][0] >= 0; }
+
+     int len;
+     float pos[4096][2];
+};
+
 class moTrackerGpuKLT2SystemData : public moTrackerSystemData
 {
 	public:
-		MOint m_NFeatures;
 
-		//GpuKLT_FeatureList*	m_FeatureList;
+        int                     nDetectedFeatures;
+        int                     nNewFeatures;
+        int                     nPresentFeatures;
+        int                     nFeatures;
 
-		moVideoFormat	m_VideoFormat;
-
-        int GetFeaturesCount() {
-            return m_Features.Count();
-        }
-        moTrackerFeature* GetFeature(int i) {
-            return m_Features.Get(i);
-        }
-        moTrackerFeatureArray& GetFeatures() {
-            return m_Features;
-        }
+        KLT_TrackedFeature*    features;
+        PointTrack*             tracks;
 };
 
 class moTrackerGpuKLT2System : public moAbstract
@@ -100,6 +117,8 @@ public:
 	void GetFeature(MOint p_feature, MOfloat &x, MOfloat &y, MOboolean &v);
 
 	void Track(GLubyte *p_pBuffer, MOuint p_RGB_mode);
+
+    void FirstTracking(GLubyte *p_pBuffer, MOuint p_RGB_mode);
     void StartTracking(GLubyte *p_pBuffer, MOuint p_RGB_mode);
     void ContinueTracking(GLubyte *p_pBuffer, MOuint p_RGB_mode);
 
@@ -111,9 +130,26 @@ private:
 	MOboolean m_bActive;
 	MOboolean m_init;
 	moTrackerGpuKLT2SystemData m_TrackerSystemData;
+
 	MOint m_TrackCount;
+	MOint m_FrameCount;
 	MOint m_ReinjectRate;
 	MOint m_width, m_height;
+
+    //GPUKLT2 specific
+    KLT_SequenceTracker * tracker;
+    KLT_SequenceTrackerConfig cfg;
+    bool     trackWithGain;// = false;
+    int      featuresWidth;//32
+    int      featuresHeight;//32
+    unsigned int nFeatures;// = featuresWidth*featuresHeight;
+    int      nTrackedFrames;// = 10;
+    int      nTimedFrames;// = 400;
+    int      nLevels;// = 4;
+    int      pointListWidth;// = 64;
+    int      pointListHeight;// = 64;
+    int      win, scrwidth, scrheight;
+   vector<float>         trueGains;
 
 //OLD
 //	GpuVis_Image			image;			// GpuVis Image object
@@ -162,6 +198,17 @@ protected:
 	moTrackerGpuKLT2Systems		m_TrackerSystems;
 };
 
+static void
+moSetEnv(const char *name, const char *value) {
+#ifdef HAVE_SETENV
+setenv(name, value, 1);
+#else
+int len = strlen(value)+1+strlen(value)+1;
+char *str = (char*)malloc(len);
+sprintf(str, "%s=%s", name, value);
+putenv(str);
+#endif
+}
 
 class moTrackerGpuKLT2Factory : public moResourceFactory {
 

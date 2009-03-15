@@ -204,6 +204,7 @@ moPreEffectMirrorG::DrawPoints2(void) {
   glEnd();*/
 }
 
+
 MOboolean moPreEffectMirrorG::Init()
 {
     if (!PreInit()) return false;
@@ -211,12 +212,13 @@ MOboolean moPreEffectMirrorG::Init()
 	int i;
 
     moDefineParamIndex( MIRRORG_ALPHA, moText("alpha") );
+	moDefineParamIndex( MIRRORG_COLOR, moText("color") );
 	moDefineParamIndex( MIRRORG_SYNCRO, moText("syncro") );
 	moDefineParamIndex( MIRRORG_PHASE, moText("phase") );
-	moDefineParamIndex( MIRRORG_COLOR, moText("color") );
-	moDefineParamIndex( MIRRORG_ABERRATION, moText("aberration") );
-	moDefineParamIndex( MIRRORG_BLENDING, moText("blending") );
 
+
+	moDefineParamIndex( MIRRORG_BLENDING, moText("blending") );
+	moDefineParamIndex( MIRRORG_ABERRATION, moText("aberration") );
 	moDefineParamIndex( MIRRORG_GENERALX, moText("generalx") );
 	moDefineParamIndex( MIRRORG_GENERALY, moText("generaly") );
 	moDefineParamIndex( MIRRORG_DOTS, moText("dots") );
@@ -227,22 +229,42 @@ MOboolean moPreEffectMirrorG::Init()
     // Seteos de Texturas.
 	hpoint2 = VMINOR_ORDER;
 	wpoint2 = hpoint2;
+
+	//cantidad de vertices del plano
 	npoint2 = hpoint2*wpoint2;
 
+    //array de coordenadas de cada vertice
 	DPoint2 = new MOfloat [npoint2*4];
 	for(i=0;i<(npoint2*4);i++) {
 		DPoint2[i] = 0.0;
 	}
+
+	//array de colores por cada vertice
 	CPoint2 = new MOfloat [npoint2*4];
 	for(i=0;i<(npoint2*4);i++) {
 		CPoint2[i] = 1.0;
 	}
+
+	//array de coordenadas de texturas por cada vertice
 	TPoint2 = new MOfloat [npoint2*2];
 	for(i=0;i<(npoint2*2);i++) {
 		TPoint2[i] = 0.0;
 	}
 
 	return true;
+}
+
+moConfigDefinition *
+moPreEffectMirrorG::GetDefinition( moConfigDefinition *p_configdefinition ) {
+	//default: alpha, color, syncro
+	p_configdefinition = moEffect::GetDefinition( p_configdefinition );
+	p_configdefinition->Add( moText("blending"), MO_PARAM_BLENDING, MIRRORG_BLENDING, moValue( "0", "NUM").Ref() );
+	p_configdefinition->Add( moText("aberration"), MO_PARAM_FUNCTION, MIRRORG_ABERRATION, moValue( "0.85", "FUNCTION").Ref());
+	p_configdefinition->Add( moText("generalx"), MO_PARAM_FUNCTION, MIRRORG_GENERALX, moValue( "0.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("generaly"), MO_PARAM_FUNCTION, MIRRORG_GENERALY, moValue( "0.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("dots"), MO_PARAM_COMPOSE, MIRRORG_DOTS, moValue( "0", "TXT") );
+	p_configdefinition->Add( moText("lines"), MO_PARAM_COMPOSE, MIRRORG_LINES, moValue( "0", "TXT") );
+	return p_configdefinition;
 }
 
 void
@@ -317,14 +339,15 @@ void moPreEffectMirrorG::Draw( moTempo* tempogral,moEffectState* parentstate)
 {
     PreDraw( tempogral, parentstate);
 
+    float w,h;
+
+    w = m_pResourceManager->GetRenderMan()->ScreenWidth();
+    h = m_pResourceManager->GetRenderMan()->ScreenHeight();
+
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
 
-	glColor4f(  m_Config[moR(MIRRORG_COLOR)][MO_SELECTED][MO_RED].Fun()->Eval(state.tempo.ang) * state.tintr,
-                m_Config[moR(MIRRORG_COLOR)][MO_SELECTED][MO_GREEN].Fun()->Eval(state.tempo.ang) * state.tintg,
-                m_Config[moR(MIRRORG_COLOR)][MO_SELECTED][MO_BLUE].Fun()->Eval(state.tempo.ang) * state.tintb,
-				m_Config[moR(MIRRORG_COLOR)][MO_SELECTED][MO_ALPHA].Fun()->Eval(state.tempo.ang) *
-				m_Config[moR(MIRRORG_ALPHA)].GetData()->Fun()->Eval(state.tempo.ang) * state.alpha);
+	SetColor( m_Config[moR(MIRRORG_COLOR)][MO_SELECTED], m_Config[moR(MIRRORG_ALPHA)][MO_SELECTED], state );
 
 	int i,j,bl;
 	float ab;
@@ -350,14 +373,14 @@ void moPreEffectMirrorG::Draw( moTempo* tempogral,moEffectState* parentstate)
 	GLfloat deltai,deltaj,tdeltai,tdeltaj;
 	GLfloat minora,minorb,majora,majorb;
 
-	minora = -0.4;//0.8 800 pix
-	minorb = 0.4;
+	minora = -0.4*1.0;//(w/1024.0f);//0.8 800 pix
+	minorb = 0.4*1.0;//*(w/1024.0f);
 	majora = -0.3;//0.6 600pix
 	majorb = 0.3;
 	deltai =(minorb-minora) /(float)(wpoint2-1);
 	deltaj =(majorb-majora) /(float)(hpoint2-1);
-	tdeltai = 0.78125f/(float)(wpoint2-1);
-	tdeltaj = 0.5859375f /(float)(hpoint2-1);
+	tdeltai = (w/1024.0f)/(float)(wpoint2-1);
+	tdeltaj = (h/1024.0f)/(float)(hpoint2-1);
 
 	//Valores iniciales por defecto
 	//DPoint //coordenadas del punto
@@ -392,8 +415,8 @@ void moPreEffectMirrorG::Draw( moTempo* tempogral,moEffectState* parentstate)
 
   // Estos factores de correccion se agregaron para tener el cuenta el cambio entre el viejo y el nuevo modo
   // de texturas.
-  float fs = 1024.0f / m_pResourceManager->GetRenderMan()->RenderWidth();
-  float ft = 1024.0f / m_pResourceManager->GetRenderMan()->RenderHeight();
+  float fs = 1024.0f / w;
+  float ft = 1024.0f / h;
 
   //solo dibujo los quads ya calculados
   for(j=0; j<(hpoint2-1); j++) {
@@ -431,19 +454,3 @@ MOboolean moPreEffectMirrorG::Finish()
     return PreFinish();
 }
 
-moConfigDefinition *
-moPreEffectMirrorG::GetDefinition( moConfigDefinition *p_configdefinition ) {
-	//default: alpha, color, syncro
-	p_configdefinition = moEffect::GetDefinition( p_configdefinition );
-	p_configdefinition->Add( moText("alpha"), MO_PARAM_FUNCTION, MIRRORG_ALPHA );
-	p_configdefinition->Add( moText("syncro"), MO_PARAM_FUNCTION, MIRRORG_SYNCRO );
-	p_configdefinition->Add( moText("phase"), MO_PARAM_FUNCTION, MIRRORG_PHASE );
-	p_configdefinition->Add( moText("color"), MO_PARAM_COLOR, MIRRORG_COLOR );
-	p_configdefinition->Add( moText("aberration"), MO_PARAM_FUNCTION, MIRRORG_ABERRATION);
-	p_configdefinition->Add( moText("blending"), MO_PARAM_FUNCTION, MIRRORG_BLENDING );
-	p_configdefinition->Add( moText("generalx"), MO_PARAM_FUNCTION, MIRRORG_GENERALX );
-	p_configdefinition->Add( moText("generaly"), MO_PARAM_FUNCTION, MIRRORG_GENERALY );
-	p_configdefinition->Add( moText("dots"), MO_PARAM_COMPOSE, MIRRORG_DOTS );
-	p_configdefinition->Add( moText("lines"), MO_PARAM_COMPOSE, MIRRORG_LINES );
-	return p_configdefinition;
-}

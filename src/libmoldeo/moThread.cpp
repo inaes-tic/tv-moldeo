@@ -29,9 +29,11 @@
 
 *******************************************************************************/
 
-#include <boost/thread.hpp>
-
 #include "moThread.h"
+
+#include "boost/thread/thread.hpp"
+
+using namespace boost;
 
 moThread::moThread() {
 	m_handleThread = NULL;
@@ -43,8 +45,10 @@ moThread::~moThread() {
 }
 
 bool moThread::CreateThread() {
+    thread* pthread;
+    //pthread = new thread( boost::bind( moThread::InitialThreadFunction, (void*)this ) );
+    //m_handleThread = (void*) pthread;
 	//m_handleThread = SDL_CreateThread( InitialThreadFunction,(void*)this);
-	//m_handleThread = new thread( InitialThreadFunction,(void*)this);
 
 	return(m_handleThread!=NULL);
 }
@@ -52,6 +56,8 @@ bool moThread::CreateThread() {
 bool moThread::KillThread() {
 	if(ThreadExists()) {
 		//SDL_KillThread( m_handleThread );//SDL_WaitThread ???
+		//thread* pthread = (thread*)m_handleThread;
+		//delete pthread;
 		m_handleThread=NULL;
 	}
 	return(m_handleThread==NULL);

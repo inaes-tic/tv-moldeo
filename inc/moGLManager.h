@@ -231,6 +231,9 @@ class LIBMOLDEO_API moGLManager : public moResource
          * Restaura el FBO y los búfers de escritura y lectura guardados con SaveFBOState.
          */
 		void RestoreFBOState();
+
+		void SetFrameBufferObjectActive( bool active = true );
+
     private:
 		MOuint m_gpu_vendor_code;
 		moText m_gpu_ventor_string;
@@ -244,6 +247,8 @@ class LIBMOLDEO_API moGLManager : public moResource
 		MOuint m_saved_fbo;
 		MOint m_saved_read_buffer;
 		MOint m_saved_draw_buffer;
+
+		bool    m_bFrameBufferObjectActive;
 
 		void QueryGPUVendorString();
 };

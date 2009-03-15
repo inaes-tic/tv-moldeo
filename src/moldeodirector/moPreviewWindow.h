@@ -22,6 +22,7 @@ class moPreviewWindow: public wxPanel, public moIDirectorActions
 		wxBitmapButton* BitmapButtonSaveSession;
 		wxBitmapButton* ButtonFullSCreen;
 		wxBitmapButton* BitmapButtonPlay;
+		wxBitmapButton* BitmapButtonStop;
 		wxBitmapButton* BitmapButtonPause;
 		wxBitmapButton* BitmapButtonSaveVideo;
 		wxBitmapButton* BitmapButtonScreenshot;
@@ -39,6 +40,7 @@ class moPreviewWindow: public wxPanel, public moIDirectorActions
 		static const long ID_BITMAPBUTTONSCREENSHOT;
 		static const long ID_BITMAPBUTTONSAVEVIDEO;
 		static const long ID_BITMAPBUTTONSAVESESSION;
+		static const long ID_BITMAPBUTTONSTOP;
 		//*)
 
 	private:
@@ -46,6 +48,10 @@ class moPreviewWindow: public wxPanel, public moIDirectorActions
 		//(*Handlers(moPreviewWindow)
 		void OnButtonFullSCreenClick(wxCommandEvent& event);
 		void OnBitmapButtonFocusAndActivate(wxCommandEvent& event);
+		void OnBitmapButtonPlayClick(wxCommandEvent& event);
+		void OnBitmapButtonPauseClick(wxCommandEvent& event);
+		void OnBitmapButtonSaveSessionClick(wxCommandEvent& event);
+		void OnBitmapButtonStopClick(wxCommandEvent& event);
 		//*)
 
 		DECLARE_EVENT_TABLE()

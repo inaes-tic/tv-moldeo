@@ -71,11 +71,25 @@ void moDirectorStartFrame::OnLinkClicked(wxHtmlLinkEvent& event) {
 
     if (href.StartsWith(_T("MO_CMD_")))
     {
-        wxCommandEvent evt(wxEVT_COMMAND_MENU_SELECTED, MODIRECTOR_OPENPROJECT );
+        /*wxCommandEvent evt( MODIRECTOR_COMMAND, GetId() );
         wxString pathproject = href.SubString(  7, href.Length()-1);
         evt.SetString( pathproject );
-        wxPostEvent( this->GetParent(), evt);
+        evt.SetEventObject( GetParent() );
+        //this->GetParent()->AddPendingEvent(evt);
+        wxPostEvent( GetParent(), evt );
         //return true;
+        */
+
+        wxCommandEvent event( wxEVT_MY_EVENT, GetId() );
+
+        wxString pathproject = href.SubString(  7, href.Length()-1);
+        event.SetString( pathproject );
+        event.SetEventObject( GetParent() );
+        // Send it
+        //GetParent()->GetEventHandler()->ProcessEvent( event );
+        wxPostEvent( GetParent(), event );
+
+
         return;
     }
 

@@ -123,6 +123,7 @@ moData& moData::operator =( const moData& data)
 	m_DataType = data.m_DataType;
 	m_DataSize = data.m_DataSize;
 	m_AlphaFilter = data.m_AlphaFilter;
+	m_pAlphaFilter = data.m_pAlphaFilter;
 	m_pFilterParam = data.m_pFilterParam;
 	m_bFilteredAlpha = data.m_bFilteredAlpha;
 	m_bFilteredParams = data.m_bFilteredParams;
@@ -242,6 +243,7 @@ moData::SetTextureFilterAlpha( moData* p_alpha ) {
             m_bFilteredAlpha = true;
             m_AlphaFilter = p_alpha->Fun()->Eval(0);
             m_pAlphaFilter = p_alpha;
+            m_pAlphaFilter = NULL;
             break;
         case MO_DATA_NUMBER:
         case MO_DATA_NUMBER_CHAR:

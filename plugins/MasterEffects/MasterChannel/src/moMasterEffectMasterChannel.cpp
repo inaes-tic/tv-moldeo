@@ -364,7 +364,7 @@ moMasterEffectMasterChannel::Interaction(moIODeviceManager *IODeviceManager) {
 					}
 					break;
 				case MO_ACTION_BEAT_PULSE_MASTER:
-					consolestate->tempo.BeatPulse(SDL_GetTicks());
+					consolestate->tempo.BeatPulse(moGetTicksAbsolute());
 					break;
 				default:
 					break;

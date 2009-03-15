@@ -120,5 +120,6 @@
 			<Depends filename="libmoldeo.cbp" />
 		</Project>
 		<Project filename="..\..\plugins\Effects\Text3D\text3d.cbp" />
+		<Project filename="..\..\plugins\Effects\Lights\lights.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>

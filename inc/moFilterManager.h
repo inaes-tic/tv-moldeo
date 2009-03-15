@@ -63,6 +63,7 @@ class LIBMOLDEO_API moTrackerFeature { //de GpuKLT_Feature
     float					x,y;					 //!< Location
 	float					normx, normy;            //!< Normalized Feature Coordinates [ 0 - 1 ]
 	float					tr_x, tr_y;              //!< Feature position in the previous frame.
+	float					v_x, v_y;                //!< Feature position in the previous frame.
 	bool				    valid;					 //!< True for a valid feature point.
 	int                     val;                     //!<Other states for valid feature point
 	moVector2fArray         track;					 //!< list of feature positions in the past frames. Forms the feature tracks in video.
@@ -100,15 +101,24 @@ moDeclareExportedDynamicArray( moTrackerFeature*, moTrackerFeatureArray )
 class LIBMOLDEO_API moTrackerSystemData {
 	public:
         virtual ~moTrackerSystemData() {}
-		virtual int GetFeaturesCount() = 0;
-		virtual moTrackerFeature* GetFeature(int i) = 0;
-		virtual moTrackerFeatureArray& GetFeatures() = 0;
+		virtual int GetFeaturesCount();
+		virtual moVector2f GetBarycenter();
+		virtual int GetValidFeatures();
+		virtual moTrackerFeature* GetFeature(int i);
+		virtual moTrackerFeatureArray& GetFeatures();
 
 		virtual moVideoFormat& GetVideoFormat() { return m_VideoFormat; }
+		virtual void SetBaryCenter( float b_x, float b_y) { m_Barycenter = moVector2f(b_x,b_y); }
+		virtual void SetValidFeatures( int validfeatures) { m_ValidFeatures = validfeatures; }
 
 	protected:
 		moVideoFormat	m_VideoFormat;
 		moTrackerFeatureArray m_Features;
+
+		moVector2f      m_Barycenter;
+		int             m_ValidFeatures;
+		moVector2f      m_Max;
+		moVector2f      m_Min;
 
 };
 

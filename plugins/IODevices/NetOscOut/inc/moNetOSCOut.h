@@ -82,6 +82,8 @@ private:
 	float minReconnecTime;
 
     void SendEvent(int i);
+    void SendDataMessage( int i, moDataMessage &datamessage );
+
 };
 
 class moNetOscOutFactory : public moIODeviceFactory {

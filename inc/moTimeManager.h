@@ -40,7 +40,7 @@
 
 /*
 
-class LIBMOLDEO_API moMathFunction : public  moAbstract 
+class LIBMOLDEO_API moMathFunction : public  moAbstract
 {
 public:
 protected:
@@ -68,6 +68,116 @@ public:
 protected:
 };*/
 
+LIBMOLDEO_API void moStartTimer();
+LIBMOLDEO_API void moSetDuration( MOulong p_timecode );
+LIBMOLDEO_API void moContinueTimer();
+LIBMOLDEO_API void moPauseTimer();
+LIBMOLDEO_API void moStopTimer();
+
+class LIBMOLDEO_API moTimerAbsolute {
+  public:
+        bool on;
+        bool pause_on;
+
+        long start_tick;
+        long start_last;
+
+        long duration;
+
+        long last_duration;
+
+    moTimerAbsolute() {
+        on = false;
+        pause_on = false;
+        start_tick = 0;
+        start_last = 0;
+        duration = 0;
+    }
+
+    int LastDuration() {
+        return duration;
+    }
+
+
+
+    virtual void Start();
+
+    void Stop() {
+        on = false;
+        pause_on = false;
+        start_tick = 0;
+        start_last = 0;
+        duration = 0;
+    }
+
+    void Pause() {
+        pause_on = true;
+    }
+
+    void Continue() {
+        pause_on = false;
+    }
+
+    bool Started() {
+        return on;
+    }
+
+    bool Paused() {
+        return pause_on;
+    }
+
+    virtual void SetDuration( MOulong p_timecode );
+
+    virtual long Duration();
+
+};
+LIBMOLDEO_API void moStartTimer();
+LIBMOLDEO_API void moSetDuration( MOulong p_timecode );
+LIBMOLDEO_API void moContinueTimer();
+LIBMOLDEO_API void moPauseTimer();
+LIBMOLDEO_API void moStopTimer();
+
+
+class LIBMOLDEO_API moTimer : public moTimerAbsolute {
+
+    public:
+
+        moTimer() : moTimerAbsolute() {
+            m_TimerId = -1;
+            m_ObjectId = -1;
+        }
+
+        void Start();
+        void SetDuration( MOulong p_timecode );
+        long Duration();
+        void Fix();
+
+        void SetTimerId( long p_timerid ) {
+                m_TimerId = p_timerid;
+        }
+
+        long GetTimerId() {
+                return m_TimerId;
+        }
+
+        void SetObjectId( long p_objectid ) {
+                m_ObjectId = p_objectid;
+        }
+
+        long GetObjectId() {
+                return m_ObjectId;
+        }
+
+
+        long m_TimerId;
+        long m_ObjectId;
+
+
+
+};
+
+moDeclareExportedDynamicArray( moTimer*, moTimers)
+
 class LIBMOLDEO_API moTimeManager : public moResource
 {
 	public:
@@ -78,13 +188,25 @@ class LIBMOLDEO_API moTimeManager : public moResource
 		virtual MOboolean Init();
 		virtual MOboolean Finish();
 
-		MOuint	GetTicks();
+        //static MOuint	StartTicks();
+		static MOuint	GetTicks();
+
+		moTimer*    NewTimer();
+		void AddTimer( moTimer* pTimer ); ///agrega un temporizador para ser manipulado
+
+		void    FixTimers(); /// modifica los temporizadores para adecuarse al cambio ocurrido en el temporizador absoluto...
+        void    SetDuration( MOulong p_timecode );
+
+        void ClearByObjectId( long p_objectid );
+        void ClearByTimerId( long p_timerid );
+
+        static moTimerAbsolute*     MoldeoTimer;
 
 	protected:
 
-		
+		//static  m_StartTicks;
 		//moMathFunctionArray m_func_array;
-
+        moTimers    m_Timers;
 };
 
 #endif

@@ -16,7 +16,6 @@ const long moEffectLayerCtrl::ID_SLIDERALPHA = wxNewId();
 const long moEffectLayerCtrl::ID_SLIDERTINT = wxNewId();
 const long moEffectLayerCtrl::ID_SLIDERTEMPO = wxNewId();
 const long moEffectLayerCtrl::ID_CHECKBOXONOFF = wxNewId();
-const long moEffectLayerCtrl::ID_BITMAPBUTTONVISIBILITY = wxNewId();
 const long moEffectLayerCtrl::ID_BITMAPBUTTONDELETE = wxNewId();
 //*)
 
@@ -40,7 +39,7 @@ moEffectLayerCtrl::moEffectLayerCtrl(wxWindow* parent,wxWindowID id,const wxPoin
 	SetBackgroundColour(wxColour(50,50,50));
 	TextCtrlLabel = new wxTextCtrl(this, ID_TEXTCTRL1, _("Text"), wxPoint(0,7), wxSize(96,7), wxNO_BORDER|wxTRANSPARENT_WINDOW, wxDefaultValidator, _T("ID_TEXTCTRL1"));
 	TextCtrlLabel->SetForegroundColour(wxColour(255,255,255));
-	TextCtrlLabel->SetBackgroundColour(wxColour(60,60,60));
+	TextCtrlLabel->SetBackgroundColour(wxColour(0,9,60));
 	wxFont TextCtrlLabelFont(6,wxSWISS,wxFONTSTYLE_NORMAL,wxBOLD,false,_T("Terminal"),wxFONTENCODING_DEFAULT);
 	TextCtrlLabel->SetFont(TextCtrlLabelFont);
 	TextCtrlLabel->SetEditable( false );
@@ -52,16 +51,10 @@ moEffectLayerCtrl::moEffectLayerCtrl(wxWindow* parent,wxWindowID id,const wxPoin
 	Connect(ID_SLIDERTEMPO, MO_EVT_DIRECTOR_LEVEL, (wxObjectEventFunction)&moEffectLayerCtrl::OnLevelSpeed );
 	CheckBoxOnOff = new wxCheckBox(this, ID_CHECKBOXONOFF, wxEmptyString, wxPoint(224,6), wxSize(16,21), 0, wxDefaultValidator, _T("ID_CHECKBOXONOFF"));
 	CheckBoxOnOff->SetValue(false);
-	BitmapButtonVisibility = new wxBitmapButton(this, ID_BITMAPBUTTONVISIBILITY, wxBitmap(wxImage(_T("../../art/icons/visibility.png"))), wxPoint(192,6), wxSize(26,21), wxBU_AUTODRAW|wxNO_BORDER, wxDefaultValidator, _T("ID_BITMAPBUTTONVISIBILITY"));
-	BitmapButtonVisibility->SetBitmapDisabled(wxBitmap(wxImage(_T("../../art/icons/visibility.png"))));
-	BitmapButtonVisibility->SetBitmapSelected(wxBitmap(wxImage(_T("../../art/icons/visibility.png"))));
-	BitmapButtonVisibility->SetBitmapFocus(wxBitmap(wxImage(_T("../../art/icons/visibility.png"))));
-	BitmapButtonVisibility->SetDefault();
-	BitmapButtonDelete = new wxBitmapButton(this, ID_BITMAPBUTTONDELETE, wxBitmap(wxImage(_T("../../art/icons/delete.png"))), wxPoint(240,12), wxSize(13,13), wxBU_AUTODRAW, wxDefaultValidator, _T("ID_BITMAPBUTTONDELETE"));
+	BitmapButtonDelete = new wxBitmapButton(this, ID_BITMAPBUTTONDELETE, wxBitmap(wxImage(_T("../../doc/icons/delete.png"))), wxPoint(240,12), wxSize(13,13), wxBU_AUTODRAW, wxDefaultValidator, _T("ID_BITMAPBUTTONDELETE"));
 	BitmapButtonDelete->SetDefault();
 
 	Connect(ID_CHECKBOXONOFF,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&moEffectLayerCtrl::OnCheckBoxOnOffClick);
-	Connect(ID_BITMAPBUTTONVISIBILITY,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&moEffectLayerCtrl::OnBitmapButtonVisibilityClick);
 	Connect(ID_BITMAPBUTTONDELETE,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&moEffectLayerCtrl::OnBitmapButtonDeleteClick);
 	//*)
 
@@ -340,7 +333,7 @@ moEffectLayerTimelineCtrl::ValueUpdated( moValueDescriptor p_ValueDesc ) {
 
                     moTextureDescriptor pTextDescriptor( GetResourceDescriptor( moTextureDescriptor( tname ) ) );
 
-                    m_BackgroundImage.LoadFile( moText2Wx( pTextDescriptor.GetResourceDefinition().GetFileName() ) );
+                    //m_BackgroundImage.LoadFile( moText2Wx( pTextDescriptor.GetResourceDefinition().GetFileName() ) );
 
                     Refresh();
                 }

@@ -569,3 +569,16 @@ moPostEffectVideoWallMorphing::GetDefinition( moConfigDefinition *p_configdefini
 
 	return p_configdefinition;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

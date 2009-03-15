@@ -254,7 +254,7 @@ moValueCtrl::Set( moValueDescriptor p_valuedescriptor ) {
     case MO_PARAM_POLYGONMODE:
         ValueInt = pValue.GetSubValue(0).Int();
         if ( 0<=ValueInt && ValueInt<MO_POLYGONMODES && m_pPolygonModeCtrl)
-            m_pPolygonModeCtrl->SetValue( polygonmodes[ValueInt] );
+                m_pPolygonModeCtrl->SetValue( polygonmodes[ValueInt] );
         break;
     case MO_PARAM_FONT:
         ValueStr =(wxChar*)(char*) pValue.GetSubValue(0).Text();
@@ -570,6 +570,7 @@ moValueCtrl::OnComboUpdated( wxCommandEvent& event) {
                     }
                     rValue.GetSubValue(0).SetInt( isel );
                 }
+                break;
             case MO_PARAM_FONT:
                 if (m_pFontTypeCtrl) {
                     int i,isel = 0;

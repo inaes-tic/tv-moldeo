@@ -87,7 +87,7 @@ public:
 
 //MOIDRECTORACTIONS
 
-    void ViewSwapBuffers();
+    void ViewSwapBuffers( int glidprev = 0 );
     MO_HANDLE   GetHandle();
 
 private:

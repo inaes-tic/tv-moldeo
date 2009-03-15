@@ -160,6 +160,14 @@
 		<Unit filename="mo3dModelPanel.h" />
 		<Unit filename="moColorMotion.cpp" />
 		<Unit filename="moColorMotion.h" />
+		<Unit filename="moConfigurationAdvancedOutput.cpp" />
+		<Unit filename="moConfigurationAdvancedOutput.h" />
+		<Unit filename="moConfigurationDialog.cpp" />
+		<Unit filename="moConfigurationDialog.h" />
+		<Unit filename="moConfigurationGeneral.cpp" />
+		<Unit filename="moConfigurationGeneral.h" />
+		<Unit filename="moConfigurationOutput.cpp" />
+		<Unit filename="moConfigurationOutput.h" />
 		<Unit filename="moConnectionsWindow.cpp" />
 		<Unit filename="moConnectionsWindow.h" />
 		<Unit filename="moDirectorChildConsole.cpp" />
@@ -181,7 +189,6 @@
 		<Unit filename="moEffectLayerCtrl.h" />
 		<Unit filename="moFilesbook.cpp" />
 		<Unit filename="moFilesbook.h" />
-		<Unit filename="moFilesbookPage.h" />
 		<Unit filename="moFontPanel.cpp" />
 		<Unit filename="moFontPanel.h" />
 		<Unit filename="moFunctionPanel.cpp" />
@@ -268,6 +275,10 @@
 					<wxPanel wxs="wxsmith/mo3dModelPanel.wxs" src="mo3dModelPanel.cpp" hdr="mo3dModelPanel.h" name="mo3dModelPanel" language="CPP" />
 					<wxPanel wxs="wxsmith/moFontPanel.wxs" src="moFontPanel.cpp" hdr="moFontPanel.h" name="moFontPanel" language="CPP" />
 					<wxPanel wxs="wxsmith/moConnectionsWindow.wxs" src="moConnectionsWindow.cpp" hdr="moConnectionsWindow.h" name="moConnectionsWindow" language="CPP" />
+					<wxDialog wxs="wxsmith/moConfigurationDialog.wxs" src="moConfigurationDialog.cpp" hdr="moConfigurationDialog.h" name="moConfigurationDialog" language="CPP" />
+					<wxPanel wxs="wxsmith/moConfigurationGeneral.wxs" src="moConfigurationGeneral.cpp" hdr="moConfigurationGeneral.h" name="moConfigurationGeneral" language="CPP" />
+					<wxPanel wxs="wxsmith/moConfigurationOutput.wxs" src="moConfigurationOutput.cpp" hdr="moConfigurationOutput.h" name="moConfigurationOutput" language="CPP" />
+					<wxFrame wxs="wxsmith/moConfigurationAdvancedOutput.wxs" src="moConfigurationAdvancedOutput.cpp" hdr="moConfigurationAdvancedOutput.h" name="moConfigurationAdvancedOutput" language="CPP" />
 				</resources>
 			</wxsmith>
 		</Extensions>

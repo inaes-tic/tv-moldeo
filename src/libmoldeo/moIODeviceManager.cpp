@@ -31,6 +31,18 @@
 
 #include "moIODeviceManager.h"
 
+#ifdef MO_WIN32
+  #include <SDL.h>
+#endif
+
+#ifdef MO_LINUX
+  #include <SDL/SDL.h>
+#endif
+
+#ifdef MO_MACOSX
+  #include <SDL/SDL.h>
+#endif
+
 #include "moArray.cpp"
 moDefineDynamicArray(moIODevicesArray)
 

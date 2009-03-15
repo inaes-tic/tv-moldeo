@@ -1,7 +1,5 @@
 #include "moConnectionsWindow.h"
 
-#ifdef WXART2D
-
 //(*InternalHeaders(moConnectionsWindow)
 #include <wx/intl.h>
 #include <wx/string.h>
@@ -311,7 +309,7 @@ moMoldeoCanvasObject::moMoldeoCanvasObject( double xc, double yc, double w, doub
 
     /// MOB NAME
     m_pMoldeoCanvasObjectTitle = new a2dText ( moText2Wx( p_MobDescriptor.GetMobDefinition().GetLabelName() ), 4, 10 );
-    m_pMoldeoCanvasObjectTitle->SetFont( a2dFont( a2dGlobals->GetFontPathList().FindValidPath( wxT("/arial.ttf") ), 10 ) );
+    m_pMoldeoCanvasObjectTitle->SetFont( a2dFont( a2dGlobals->GetFontPathList().FindValidPath( wxT("/Tuffy.ttf") ), 10 ) );
     m_pMoldeoCanvasObjectTitle->SetFill( a2dFill( wxColour(0,0,0),a2dFILL_SOLID) );
     m_pMoldeoCanvasObjectTitle->SetStroke( a2dStroke( wxColour( 0,0,0), 2, a2dSTROKE_SOLID ) );
     m_pMoldeoCanvasObjectTitle->SetAlignment( wxTOP | wxLEFT );
@@ -485,7 +483,7 @@ moMoldeoCanvasObject::SetMob( moMobDescriptor p_MobDescriptor ) {
                         ypos = j*11+24;
 
                         m_pPinText = new a2dText ( pvdname, xpos+10, ypos );
-                        m_pPinText->SetFont(a2dFont( a2dGlobals->GetFontPathList().FindValidPath( wxT("/arial.ttf") ), 5 ));
+                        m_pPinText->SetFont(a2dFont( a2dGlobals->GetFontPathList().FindValidPath( wxT("/Tuffy.ttf") ), 5 ));
                         m_pPinText->SetStroke( a2dStroke( wxColour( 50,50,50), 2, a2dSTROKE_SOLID ) );
 
                         m_pPinText->SetAlignment( wxLEFT | wxCENTER );
@@ -512,7 +510,7 @@ moMoldeoCanvasObject::SetMob( moMobDescriptor p_MobDescriptor ) {
                         ypos = j*11+24;
 
                         m_pPinText = new a2dText ( pvdname, xpos-10, ypos );
-                        m_pPinText->SetFont(a2dFont( a2dGlobals->GetFontPathList().FindValidPath( wxT("/arial.ttf") ), 5 ));
+                        m_pPinText->SetFont(a2dFont( a2dGlobals->GetFontPathList().FindValidPath( wxT("/Tuffy.ttf") ), 5 ));
                         m_pPinText->SetStroke( a2dStroke( wxColour( 50,50,50), 2, a2dSTROKE_SOLID ) );
                         m_pPinText->SetAlignment( wxRIGHT | wxCENTER );
                         //m_pMoldeoObjectPin = this->AddPin( pvdname, xpos, ypos, a2dPin::objectPin, m_pPinOutlet );
@@ -1236,8 +1234,8 @@ moConnectionsWindow::moConnectionsWindow(wxWindow* parent,wxWindowID id,const wx
         a2dDocviewGlobals->GetDocviewCommandProcessor()->AssociateDocTemplate(doctemplatenew);
 
         //THE DOCUMENT where objets are located
-        a2dGlobals->GetFontPathList().Add( wxT("../../doc/fonts") );
-        a2dGlobals->GetImagePathList().Add( wxT("../../doc/images") );
+        a2dGlobals->GetFontPathList().Add( wxT("../../art/fonts") );
+        a2dGlobals->GetImagePathList().Add( wxT("../../art/images") );
         a2dGlobals->GetImagePathList().Add( wxT("./") );
         a2dGlobals->GetImagePathList().Add( wxT("../") );
         a2dGlobals->GetFontPathList().Add( wxT(".") );
@@ -1246,7 +1244,7 @@ moConnectionsWindow::moConnectionsWindow(wxWindow* parent,wxWindowID id,const wx
         a2dGlobals->GetImagePathList().Add( wxT("..") );
         a2dGlobals->GetIconPathList().Add( wxT("..") );
         a2dGlobals->GetIconPathList().Add( wxT(".") );
-        a2dGlobals->GetIconPathList().Add( wxT("../../doc/images") );
+        a2dGlobals->GetIconPathList().Add( wxT("../../art/images") );
         a2dGlobals->GetIconPathList().Add( wxT("../../art/icons") );
 
         a2dGeneralGlobals->GetVariablesHash().SetVariableString(  wxT( "WXART2D" ), wxT("../../") );
@@ -1575,6 +1573,7 @@ moDirectorStatus moConnectionsWindow::ProjectUpdated( moProjectDescriptor p_proj
                 case MO_OBJECT_MASTEREFFECT:
                 case MO_OBJECT_IODEVICE:
 
+
                     pObj = new moMoldeoCanvasObject( icount*160+100,0+100,141,100,0,5, pMobDescriptor, this );
                     //p3DObj = new a2d3DShape( pObj , 5, 5);
 
@@ -1586,6 +1585,12 @@ moDirectorStatus moConnectionsWindow::ProjectUpdated( moProjectDescriptor p_proj
                     break;
 
                 case MO_OBJECT_RESOURCE:
+                    if (pMobDescriptor.GetMobDefinition().GetLabelName().Length()>0) {
+                        pObj = new moMoldeoCanvasObject( icount*160+100,0+100,141,100,0,5, pMobDescriptor, this );
+                        m_MoldeoCanvasObjects.Add( pObj );
+                        m_pConnectionsCanvasDocument->Append(pObj);
+                        icount++;
+                    }
                     break;
 
                 default:
@@ -1628,5 +1633,3 @@ void moConnectionsWindow::DeleteAll() {
         m_MoldeoCanvasObjects.Empty();
 
 }
-
-#endif

@@ -78,6 +78,13 @@ MOboolean moTextureManager::Init()
 	} else return false;
 
 	m_textures_array.Init(0, NULL);
+
+	m_preview_texture_idx = AddTexture("preview_texture", 1024, 1024);
+	//AddTexture("texture_clip1", 1024, 768);
+	//AddTexture("texture_clip2", 1024, 768);
+	//AddTexture("texture_clip3", 1024, 768);
+	AddTexture("default", 256, 256);
+
 	return (m_glmanager && m_fbmanager);
 }
 

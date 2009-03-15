@@ -75,6 +75,8 @@ moEffectImageFlow::Init() {
 
 	moDefineParamIndex( IMAGEFLOW_ALPHA, moText("alpha") );
 	moDefineParamIndex( IMAGEFLOW_COLOR, moText("color") );
+	moDefineParamIndex( IMAGEFLOW_SYNCRO, moText("syncro") );
+	moDefineParamIndex( IMAGEFLOW_PHASE, moText("phase") );
 	moDefineParamIndex( IMAGEFLOW_BLENDING, moText("blending") );
 	moDefineParamIndex( IMAGEFLOW_IMAGES, moText("images") );
 	moDefineParamIndex( IMAGEFLOW_VELOCITY, moText("velocity") );
@@ -123,7 +125,7 @@ void moEffectImageFlow::Draw( moTempo* tempogral,moEffectState* parentstate)
 
 	float t;
 
-	updateParameters();
+	updateParameters( );
 
 	flow_velocity_bak = flow_velocity;
 	if (state.tempo.delta <= 1.0) flow_velocity = state.tempo.delta * flow_velocity0;
@@ -210,7 +212,7 @@ MOboolean moEffectImageFlow::Finish()
 
 void moEffectImageFlow::updateParameters()
 {
-	flow_velocity0 = m_Config[moR(IMAGEFLOW_VELOCITY)].GetData()->Float();
+	flow_velocity0 = m_Config[moR(IMAGEFLOW_VELOCITY)].GetData()->Fun()->Eval(state.tempo.ang);
 }
 
 moConfigDefinition *
@@ -219,6 +221,6 @@ moEffectImageFlow::GetDefinition( moConfigDefinition *p_configdefinition ) {
 	p_configdefinition = moEffect::GetDefinition( p_configdefinition );
 	p_configdefinition->Add( moText("images"), MO_PARAM_TEXTURE, IMAGEFLOW_IMAGES );
 	p_configdefinition->Add( moText("blending"), MO_PARAM_BLENDING, IMAGEFLOW_BLENDING );
-	p_configdefinition->Add( moText("velocity"), MO_PARAM_FUNCTION, IMAGEFLOW_VELOCITY );
+	p_configdefinition->Add( moText("velocity"), MO_PARAM_FUNCTION, IMAGEFLOW_VELOCITY, moValue("2.0", "FUNCTION").Ref() );
 	return p_configdefinition;
 }

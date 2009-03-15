@@ -98,9 +98,9 @@ MOboolean moTrackerGpuKLTSystem::Init(MOint p_nFeatures, MOint p_width, MOint p_
 	gopt._nLevels = 4; // 4
 
 	// Pixel range in which to search for features while tracking.
-	gopt._klt_search_range = 100;// 25 RUEDA: 11
+	gopt._klt_search_range = 25;// 25 RUEDA: 11
 
-	gopt._kltwin            = 64;  // KLT Window Size 7 RUEDA:10
+	gopt._kltwin            = 16;  // KLT Window Size 7 RUEDA:10
 	gopt._kltborder         = 8; // Window Border Size to be avoided. 32 RUEDA:8
 	gopt._kltnumfeats       = p_nFeatures; // Number of features.
 	gopt._klteigenthreshold = p_klteigenthreshold; // Eigen Value threshold for Cornerness (pixel brightness is between 0 to 1).
@@ -116,6 +116,11 @@ MOboolean moTrackerGpuKLTSystem::Init(MOint p_nFeatures, MOint p_width, MOint p_
 
     gpuComputor = new GpuVis(gopt); // Create GpuVis computor object
 
+    if (!gpuComputor) {
+        MODebug2->Error(moText("moTrackerGpuKLTSystem::Init gpuComputor couldnt be created"));
+        return false;
+    }
+
 	m_TrackCount = 0;
 	m_init = true;
 
@@ -127,20 +132,20 @@ MOboolean moTrackerGpuKLTSystem::Init(MOint p_nFeatures, moVideoSample* p_pVideo
 					MOint p_kltmindist, MOfloat p_klteigenthreshold)
 {
 	if ( p_pVideoSample != NULL )
-		m_TrackerSystemData.m_VideoFormat = p_pVideoSample->m_VideoFormat;
+		m_TrackerSystemData.GetVideoFormat() = p_pVideoSample->m_VideoFormat;
 	else return false;
 
-	if ( m_TrackerSystemData.m_VideoFormat.m_Width<=0 || m_TrackerSystemData.m_VideoFormat.m_Height==0)
+	if ( m_TrackerSystemData.GetVideoFormat().m_Width<=0 || m_TrackerSystemData.GetVideoFormat().m_Height==0)
 		return false;
 
-	MOboolean res = Init(p_nFeatures, m_TrackerSystemData.m_VideoFormat.m_Width, m_TrackerSystemData.m_VideoFormat.m_Height,
+	MOboolean res = Init(p_nFeatures, m_TrackerSystemData.GetVideoFormat().m_Width, m_TrackerSystemData.GetVideoFormat().m_Height,
 						p_shaders_dir, p_arch,
 						p_kltmindist, p_klteigenthreshold);
 
 	if (res)
 	{
-		m_TrackerSystemData.m_NFeatures = p_nFeatures;
-		m_TrackerSystemData.m_FeatureList = list;
+		//m_TrackerSystemData.m_NFeatures = p_nFeatures;
+		//m_TrackerSystemData.m_FeatureList = list;
 		return true;
 	}
 	else return false;
@@ -176,10 +181,11 @@ void moTrackerGpuKLTSystem::GetFeature(MOint p_feature, MOfloat &x, MOfloat &y, 
 
 void moTrackerGpuKLTSystem::Track(GLubyte *p_pBuffer, MOuint p_RGB_mode)
 {
-	if (0 < m_TrackCount)
+	if (0 < m_TrackCount) {
 		ContinueTracking(p_pBuffer, p_RGB_mode);
-	else
+	} else {
 		StartTracking(p_pBuffer, p_RGB_mode);
+	}
 }
 
 void moTrackerGpuKLTSystem::StartTracking(GLubyte *p_pBuffer, MOuint p_RGB_mode)
@@ -190,10 +196,13 @@ void moTrackerGpuKLTSystem::StartTracking(GLubyte *p_pBuffer, MOuint p_RGB_mode)
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_BLEND);
 
-	gpuComputor->Init(image);
-	gpuComputor->computePyramid(image);
-	list = gpuComputor->selectGoodFeatures();
-	m_TrackerSystemData.m_FeatureList = list;
+	if (gpuComputor && p_pBuffer) {
+	    gpuComputor->Init(image);
+        gpuComputor->computePyramid(image);
+        list = gpuComputor->selectGoodFeatures();
+	}
+
+//	m_TrackerSystemData.m_FeatureList = list;
 
 	m_TrackCount = 1;
 }
@@ -220,7 +229,7 @@ void moTrackerGpuKLTSystem::ContinueTracking(GLubyte *p_pBuffer, MOuint p_RGB_mo
 		addedCount = gpuComputor->reselectGoodFeatures(&list, 1, 0.9); // Re-select in full image.
 
 	gpuComputor->uploadFeaturesToGPU(&list);
-	m_TrackerSystemData.m_FeatureList = list;
+//	m_TrackerSystemData.m_FeatureList = list;
 
 	m_TrackCount++;
 }
@@ -244,7 +253,50 @@ void moTrackerGpuKLTSystem::NewData( moVideoSample* p_pVideoSample )
 
 	if (m_buffer == NULL) return;
 
+
 	Track(m_buffer, GL_RGB);
+
+
+
+	for(int i=0; i<m_TrackerSystemData.GetFeatures().Count(); i++ ) {
+	    delete m_TrackerSystemData.GetFeatures().Get(i);
+	}
+
+
+	m_TrackerSystemData.GetFeatures().Empty();
+	moTrackerFeature* TF = NULL;
+
+	float sumX = 0.0f,sumY = 0.0f;
+	float sumN = 0.0f;
+
+	for(int i=0; i<list->_nFeats; i++ ) {
+	    TF = new moTrackerFeature();
+        if (TF) {
+            TF->x = list->_list[i]->x;
+            TF->y = list->_list[i]->y;
+            TF->tr_x = TF->x;
+            TF->tr_y = TF->y;
+            TF->val = -1;
+            TF->valid = list->_list[i]->valid;
+            if (list->_list[i]->track.size()>0) {
+                TF->tr_x = list->_list[i]->tr_x;
+                TF->tr_y = list->_list[i]->tr_y;
+            }
+            if (TF->valid) {
+                sumX+= TF->x;
+                sumY+= TF->y;
+                sumN+= 1.0f;
+            }
+            TF->normx = list->_list[i]->normx;
+            TF->normy = list->_list[i]->normy;
+            m_TrackerSystemData.GetFeatures().Add(TF);
+        }
+    }
+
+    if (sumN>0.0f) m_TrackerSystemData.SetBaryCenter( sumX/sumN, sumY/sumN );
+    else  m_TrackerSystemData.SetBaryCenter( 0, 0 );
+    m_TrackerSystemData.SetValidFeatures( (int)sumN );
+
 }
 
 //===========================================
@@ -287,7 +339,7 @@ MOboolean moTrackerGpuKLT::Init()
 	//int i;
 
     // Loading config file.
-	conf = m_pResourceManager->GetDataMan()->GetDataPath()+moText("/");
+	conf = m_pResourceManager->GetDataMan()->GetDataPath()+moSlash;
 	conf += GetConfigName();
     conf += moText(".cfg");
 	if (m_Config.LoadConfig(conf) != MO_CONFIG_OK ) {
@@ -304,7 +356,8 @@ MOboolean moTrackerGpuKLT::Init()
 	min_dist = m_Config.GetParam(m_Config.GetParamIndex("min_dist")).GetValue().GetSubValue().Float();
 	threshold_eigen = m_Config.GetParam(m_Config.GetParamIndex("threshold_eigen")).GetValue().GetSubValue().Float();;
 	klt_shaders_dir = m_Config.GetParam(m_Config.GetParamIndex("klt_shaders_dir")).GetValue().GetSubValue().Text();;
-	klt_shaders_dir = (moText)m_pResourceManager->GetDataMan()->GetDataPath()+moText("/") + (moText)klt_shaders_dir;
+	//klt_shaders_dir = (moText)m_pResourceManager->GetDataMan()->GetDataPath()+moText("/") + (moText)klt_shaders_dir;
+	klt_shaders_dir = moText("./plugins/resources/kltgpu");
 	m_SampleRate = m_Config.GetParam(m_Config.GetParamIndex("sample_rate")).GetValue().GetSubValue().Int();
 	num_frames = m_Config.GetParam(m_Config.GetParamIndex("num_frames")).GetValue().GetSubValue(0).Int();
 
@@ -334,7 +387,7 @@ MO_TRACKER1D_SYSTEM_ON 2
 			pTSystem->SetName( m_Config.GetParam().GetValue().GetSubValue(MO_TRACKERGPUKLT_SYTEM_LABELNAME).Text() );
 			pTSystem->SetLive( m_Config.GetParam().GetValue().GetSubValue(MO_TRACKERGPUKLT_LIVE_SYSTEM).Text() );
 			pTSystem->SetActive( m_Config.GetParam().GetValue().GetSubValue(MO_TRACKERGPUKLT_SYSTEM_ON).Int() );
-			MODebug2->Message( moText(" Tracker system: Name:") + pTSystem->GetName() + moText(" mLive:") + pTSystem->GetLive() );
+			MODebug2->Message( moText(" Tracker GPUKLT system: Name:") + pTSystem->GetName() + moText(" mLive:") + pTSystem->GetLive() );
 		}
 
 		m_TrackerSystems.Add( pTSystem );
@@ -381,9 +434,9 @@ MOint moTrackerGpuKLT::GetValue(MOdevcode devcode)
 	moTrackerGpuKLTSystemPtr pTS = NULL;
 
 	if ( 0 <= devcode && devcode < m_TrackerSystems.Count() ) {
-		return m_TrackerSystems.Get(devcode)->GetData()->m_NFeatures;
+		return m_TrackerSystems.Get(devcode)->GetData()->GetFeaturesCount();
 	} else if ( m_TrackerSystems.Count()<=devcode && devcode<(m_TrackerSystems.Count()*2) ) {
-		return m_TrackerSystems.Get( devcode - m_TrackerSystems.Count() )->GetData()->m_VideoFormat.m_Width;
+		return m_TrackerSystems.Get( devcode - m_TrackerSystems.Count() )->GetData()->GetVideoFormat().m_Width;
 	}
 
     return(-1);
@@ -442,6 +495,8 @@ void moTrackerGpuKLT::Update(moEventList *Events)
 
 	actual = Events->First;
 
+
+
 	if (m_SampleCounter>=200000) m_SampleCounter = 0;
 	m_SampleCounter++;
 
@@ -472,6 +527,7 @@ void moTrackerGpuKLT::Update(moEventList *Events)
 				pTS = m_TrackerSystems.Get( actual->devicecode );
 				if ( pTS )
 					if (pTS->IsActive() ) {
+
 						if (!pTS->IsInit()) {
 						    MOboolean res = false;
 							res = pTS->Init(num_feat, pSample,
@@ -485,6 +541,8 @@ void moTrackerGpuKLT::Update(moEventList *Events)
 						}
 
 						pTS->NewData( pSample );
+
+						/*
 
 						//calcular pesos y otras yerbas
 						moTrackerGpuKLTSystemData* pTData;
@@ -533,9 +591,11 @@ void moTrackerGpuKLT::Update(moEventList *Events)
 
 
 						Events->Add( MO_IODEVICE_TRACKER, NF, TrackersX , TrackersY, Variance, 0 );
+						*/
 
-						m_Outlets[actual->devicecode]->GetData()->SetPointer( (MOpointer)pTS->GetData(), sizeof(moTrackerGpuKLTSystemData) );
+						m_Outlets[actual->devicecode]->GetData()->SetPointer( (MOpointer)pTS->GetData(), sizeof(moTrackerSystemData) );
 						m_Outlets[actual->devicecode]->Update();
+
 					}
 			}
 

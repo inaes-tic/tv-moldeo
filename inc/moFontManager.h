@@ -128,7 +128,7 @@ class LIBMOLDEO_API moFontManager : public moResource {
 
 	private:
 
-        moFont* LoadFont( moText p_fontname, moFontType p_fonttype = MO_FONT_OUTLINE, MOfloat p_fontsize = 12 );
+        moFont* LoadFont( moText p_fontname_path, moFontType p_fonttype = MO_FONT_OUTLINE, MOfloat p_fontsize = 12 );
 
 		moFonts		m_Fonts;
 };

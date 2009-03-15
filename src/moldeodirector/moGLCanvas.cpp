@@ -104,10 +104,15 @@ void moGLCanvas::OnTimer(wxTimerEvent &event) {
 
 }
 
-void moGLCanvas::ViewSwapBuffers() {
+void moGLCanvas::ViewSwapBuffers( int glidprev ) {
     SetCurrent();
     if( m_init && !block ) {
+        if (glidprev>0) {
+            glBindTexture(GL_TEXTURE_2D, glidprev );
+            glCopyTexImage2D(GL_TEXTURE_2D,0,GL_RGB,0,0,GetSize().GetWidth(),GetSize().GetHeight(),0);
+        }
         SwapBuffers();
+
     }
 }
 

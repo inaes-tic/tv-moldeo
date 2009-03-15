@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Moldeo Director"
-#define MyAppVerName "Moldeo Director 0.7"
+#define MyAppVerName "Moldeo Director 0.7.2"
 #define MyAppPublisher "Moldeo"
 #define MyAppURL "http://www.moldeo.org/"
 #define MyAppExeName "moldeodirector.exe"
@@ -22,7 +22,7 @@ DefaultDirName={pf}\Moldeo
 DefaultGroupName=Moldeo
 LicenseFile=..\..\bin\mingw\moldeo license.txt
 OutputDir=..\..\doc\installers
-OutputBaseFilename=Moldeo Director 0.7 Setup
+OutputBaseFilename=Moldeo Director 0.7.2 Setup
 SetupIconFile=..\..\doc\icons\Moldeo32.ico
 Compression=lzma
 SolidCompression=yes
@@ -61,7 +61,6 @@ Source: ..\..\bin\mingw\FreeImage.dll; DestDir: {app}\bin\mingw; Tasks: ; Langua
 Source: ..\..\bin\mingw\moldeo license.txt; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\moldeo_mingw_sdl.exe; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\moldeodirector.exe; DestDir: {app}\bin\mingw
-Source: ..\..\bin\mingw\muparser.dll; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\SDL.dll; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\FreeImage.dll; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\glew_shared.dll; DestDir: {app}\bin\mingw
@@ -189,19 +188,14 @@ Source: ..\..\bin\mingw\plugins\iodevices\tablet.dll; DestDir: {app}\bin\mingw\p
 Source: ..\..\data\test\shaders\livedrawing\VertexProcessing.glsl; DestDir: {app}\data\test\shaders\livedrawing
 Source: ..\..\data\test\shaders\livedrawing\LineAntialising.cfg; DestDir: {app}\data\test\shaders\livedrawing
 Source: ..\..\data\test\shaders\livedrawing\LineAntialising.glsl; DestDir: {app}\data\test\shaders\livedrawing
-Source: ..\..\data\test\images\pajarito.png; DestDir: {app}\images
-Source: ..\..\data\test\images\pececito.png; DestDir: {app}\images
-Source: ..\..\data\test\images\pintura.jpg; DestDir: {app}\images
 Source: ..\..\bin\mingw\plugins\posteffects\videowall.dll; DestDir: {app}\bin\mingw\plugins\posteffects
 Source: ..\..\bin\mingw\plugins\preeffects\mirrorg.dll; DestDir: {app}\bin\mingw\plugins\preeffects
 Source: ..\..\bin\mingw\plugins\preeffects\mirror.dll; DestDir: {app}\bin\mingw\plugins\preeffects
 Source: ..\..\bin\mingw\cgGL.dll; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\cg.dll; DestDir: {app}\bin\mingw
-Source: ..\installers\GStreamerOABuild-20080911.exe; DestDir: {app}\doc\installers; Tasks: ; Languages: 
+Source: ..\installers\GStreamer-WinBuild-0.10.2.exe; DestDir: {app}\doc\installers; Tasks: ; Languages: 
 Source: ..\..\bin\mingw\glut32.dll; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\OpenAL32.dll; DestDir: {app}\bin\mingw
-Source: ..\..\data\test\video\video2.avi; DestDir: {app}\data\test\video
-Source: ..\..\data\test\video\video1.avi; DestDir: {app}\data\test\video
 Source: ..\..\data\test\brushes\brush1.tga; DestDir: {app}\data\test\brushes
 Source: ..\..\data\test\brushes\brush2.tga; DestDir: {app}\data\test\brushes
 Source: ..\..\data\test\brushes\brush3.tga; DestDir: {app}\data\test\brushes
@@ -351,6 +345,79 @@ Source: ..\..\art\cursors\drag_cur.cur; DestDir: {app}\art\cursors
 Source: ..\..\art\cursors\edit_cur.cur; DestDir: {app}\art\cursors
 Source: ..\..\art\cursors\move_cur.cur; DestDir: {app}\art\cursors
 Source: ..\..\art\fonts\Tuffy.ttf; DestDir: {app}\art\fonts
+Source: ..\..\art\icons\stop32.png; DestDir: {app}\art\icons
+Source: ..\..\bin\mingw\plugins\effects\imageflow.dll; DestDir: {app}\bin\mingw\plugins\effects
+Source: ..\..\bin\mingw\plugins\effects\text3d.dll; DestDir: {app}\bin\mingw\plugins\effects
+Source: ..\..\bin\mingw\plugins\effects\text.dll; DestDir: {app}\bin\mingw\plugins\effects
+Source: ..\..\bin\mingw\plugins\effects\lights.dll; DestDir: {app}\bin\mingw\plugins\effects
+Source: ..\..\bin\mingw\plugins\effects\particlessimple.dll; DestDir: {app}\bin\mingw\plugins\effects
+Source: ..\..\bin\mingw\plugins\resources\trackerklt.dll; DestDir: {app}\bin\mingw\plugins\resources
+Source: ..\..\bin\mingw\plugins\resources\trackergpuklt.dll; DestDir: {app}\bin\mingw\plugins\resources
+Source: ..\..\bin\mingw\plugins\resources\trackergpuklt2.dll; DestDir: {app}\bin\mingw\plugins\resources
+Source: ..\..\bin\mingw\plugins\posteffects\postprocess2d.dll; DestDir: {app}\bin\mingw\plugins\posteffects
+Source: ..\..\bin\mingw\plugins\posteffects\videowallmorphing.dll; DestDir: {app}\bin\mingw\plugins\posteffects
+Source: ..\..\data\test\particles.cfg; DestDir: {app}\data\test
+Source: ..\..\data\test\parts.cfg; DestDir: {app}\data\test
+Source: ..\..\data\test\videomanager2.cfg; DestDir: {app}\data\test
+Source: ..\..\data\test\videomanager.cfg; DestDir: {app}\data\test
+Source: ..\..\data\test\camaras.mol; DestDir: {app}\data\test
+Source: ..\..\data\test\camarasinteractivas.mol; DestDir: {app}\data\test
+Source: ..\..\data\test\camarasinteractivasgpu.mol; DestDir: {app}\data\test
+Source: ..\..\data\test\camarasinteractivasgpuklt2.mol; DestDir: {app}\data\test
+Source: ..\..\data\test\icam.cfg; DestDir: {app}\data\test
+Source: ..\..\data\test\text_test.cfg; DestDir: {app}\data\test
+Source: ..\..\data\test\trackergpuklt2.cfg; DestDir: {app}\data\test
+Source: ..\..\data\test\trackergpuklt.cfg; DestDir: {app}\data\test
+Source: ..\..\data\test\trackerklt.cfg; DestDir: {app}\data\test
+Source: ..\..\data\test\image_realtime.cfg; DestDir: {app}\data\test
+Source: ..\..\data\test\image_phase_0.cfg; DestDir: {app}\data\test
+Source: ..\..\data\test\image_phase_1.cfg; DestDir: {app}\data\test
+Source: ..\..\data\test\img_camara.cfg; DestDir: {app}\data\test
+Source: ..\..\data\test\cubocamaras.cfg; DestDir: {app}\data\test
+Source: ..\..\data\test\shaders\kltgpu\nvidia\white.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\nvidia
+Source: ..\..\data\test\shaders\kltgpu\nvidia\blue.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\nvidia
+Source: ..\..\data\test\shaders\kltgpu\nvidia\corner1.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\nvidia
+Source: ..\..\data\test\shaders\kltgpu\nvidia\corner2a.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\nvidia
+Source: ..\..\data\test\shaders\kltgpu\nvidia\corner2b.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\nvidia
+Source: ..\..\data\test\shaders\kltgpu\nvidia\corner2c.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\nvidia
+Source: ..\..\data\test\shaders\kltgpu\nvidia\chan.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\nvidia
+Source: ..\..\data\test\shaders\kltgpu\nvidia\floatingwin.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\nvidia
+Source: ..\..\data\test\shaders\kltgpu\nvidia\matrixelem1.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\nvidia
+Source: ..\..\data\test\shaders\kltgpu\nvidia\matrixelem2.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\nvidia
+Source: ..\..\data\test\shaders\kltgpu\nvidia\matrixelem3.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\nvidia
+Source: ..\..\data\test\shaders\kltgpu\nvidia\matrixsolve.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\nvidia
+Source: ..\..\data\test\shaders\kltgpu\nvidia\matrixsolve_f.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\nvidia
+Source: ..\..\data\test\shaders\kltgpu\nvidia\partialsum1.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\nvidia
+Source: ..\..\data\test\shaders\kltgpu\nvidia\partialsum2.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\nvidia
+Source: ..\..\data\test\shaders\kltgpu\nvidia\pass.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\nvidia
+Source: ..\..\data\test\shaders\kltgpu\nvidia\red.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\nvidia
+Source: ..\..\data\test\shaders\kltgpu\nvidia\undistort.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\nvidia
+Source: ..\..\data\test\shaders\kltgpu\nvidia\w1.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\nvidia
+Source: ..\..\data\test\shaders\kltgpu\nvidia\w2.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\nvidia
+Source: ..\..\data\test\shaders\kltgpu\ati\white.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\ati
+Source: ..\..\data\test\shaders\kltgpu\ati\blue.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\ati
+Source: ..\..\data\test\shaders\kltgpu\ati\corner1.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\ati
+Source: ..\..\data\test\shaders\kltgpu\ati\corner2a.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\ati
+Source: ..\..\data\test\shaders\kltgpu\ati\corner2b.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\ati
+Source: ..\..\data\test\shaders\kltgpu\ati\corner2c.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\ati
+Source: ..\..\data\test\shaders\kltgpu\ati\chan.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\ati
+Source: ..\..\data\test\shaders\kltgpu\ati\floatingwin.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\ati
+Source: ..\..\data\test\shaders\kltgpu\ati\matrixelem1.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\ati
+Source: ..\..\data\test\shaders\kltgpu\ati\matrixelem2.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\ati
+Source: ..\..\data\test\shaders\kltgpu\ati\matrixelem3.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\ati
+Source: ..\..\data\test\shaders\kltgpu\ati\matrixsolve.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\ati
+Source: ..\..\data\test\shaders\kltgpu\ati\matrixsolve_f.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\ati
+Source: ..\..\data\test\shaders\kltgpu\ati\partialsum1.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\ati
+Source: ..\..\data\test\shaders\kltgpu\ati\partialsum2.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\ati
+Source: ..\..\data\test\shaders\kltgpu\ati\pass.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\ati
+Source: ..\..\data\test\shaders\kltgpu\ati\red.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\ati
+Source: ..\..\data\test\shaders\kltgpu\ati\undistort.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\ati
+Source: ..\..\data\test\shaders\kltgpu\ati\w1.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\ati
+Source: ..\..\data\test\shaders\kltgpu\ati\w2.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\ati
+Source: ..\..\data\test\camarascircular.mol; DestDir: {app}\data\test
+Source: ..\..\bin\mingw\plugins\iodevices\netoscin.dll; DestDir: {app}\bin\mingw\plugins\iodevices
+Source: ..\..\bin\mingw\plugins\iodevices\netoscout.dll; DestDir: {app}\bin\mingw\plugins\iodevices
+
 
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\bin\mingw\{#MyAppExeName}; WorkingDir: {app}\bin\mingw\; IconFilename: {app}\doc\icons\Moldeo32.ico; Comment: Moldeo Director 0.7 GUI for Realtime Animated Images Composition; IconIndex: 0
@@ -361,7 +428,7 @@ Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}; Filen
 
 [Run]
 Filename: {app}\bin\mingw\globals.bat; WorkingDir: {app}\bin\mingw
-Filename: {app}\doc\installers\GStreamerOABuild-20080911.exe; Flags: postinstall
+Filename: {app}\doc\installers\GStreamer-WinBuild-0.10.2.exe; Flags: postinstall
 Filename: {app}\bin\mingw\{#MyAppExeName}; Description: {cm:LaunchProgram,{#MyAppName}}; Flags: nowait postinstall skipifsilent; Tasks: ; Languages: 
 
 [Dirs]
@@ -389,7 +456,6 @@ Name: {app}\data\test\iconos\estrellas
 Name: {app}\doc
 Name: {app}\doc\icons
 Name: {app}\data\test\shaders\livedrawing
-Name: {app}\images
 Name: {app}\doc
 Name: {app}\doc\installers
 Name: {app}\data\test\brushes
@@ -397,6 +463,10 @@ Name: {app}\art
 Name: {app}\art\icons
 Name: {app}\art\cursors
 Name: {app}\art\fonts
+Name: {app}\bin\mingw\plugins\resources\kltgpu
+Name: {app}\bin\mingw\plugins\resources\kltgpu\nvidia
+Name: {app}\bin\mingw\plugins\resources\kltgpu\ati
+
 [Registry]
 Root: HKLM; Subkey: SOFTWARE\Microsoft\Windows\CurrentVersion\Moldeo\bin\mingw\moldeodirector.exe; ValueType: string; ValueName: ; ValueData: {app}\moldeodirector.exe; Flags: uninsdeletekey
 Root: HKLM; Subkey: SYSTEM\CurrentControlSet\Control\Session Manager\Environment; ValueType: string; ValueName: WXART2D; ValueData: "C:\wxArt2D;D:\_data\programacion\wxWidgets\wxArt2d\wxArt2D"

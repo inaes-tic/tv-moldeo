@@ -75,27 +75,19 @@ moPostEffectDebug::Init()
 {
     if (!PreInit()) return false;
 
-    color = m_Config.GetParamIndex("color");
-    font = m_Config.GetParamIndex("font");
+	moDefineParamIndex( DEBUG_ALPHA, moText("alpha") );
+	moDefineParamIndex( DEBUG_COLOR, moText("color") );
+	moDefineParamIndex( DEBUG_SYNC, moText("syncro") );
+	moDefineParamIndex( DEBUG_PHASE, moText("phase") );
+	moDefineParamIndex( DEBUG_FONT, moText("font") );
 
-    // Hacer la inicializacion de este efecto en particular.
-    // Seteos de OpenGL.
-    // Seteos de Texturas.
-	Fonts.MODebug = MODebug;
-	Fonts.Init(GetConfig(),font,m_pResourceManager->GetTextureMan());
-
-	Font = 0;
-	BuildFont();
-
-	if(m_Config.GetPreConfCount() > 0)
-        m_Config.PreConfFirst();
 
 	ticks = 0;
 	fps_current = 0;
 	fps_mean = 0;
 	fps_count = 0;
 
-	MODebug2->Message(moText("debug inited"));
+	MODebug2->Message(moText("Debug initialized"));
 
 	return true;
 }
@@ -104,28 +96,15 @@ void moPostEffectDebug::Draw( moTempo* tempogral,moEffectState* parentstate)
 {
     PreDraw( tempogral, parentstate);
 
-	int canvasWidth = m_pResourceManager->GetRenderMan()->RenderWidth();
-    int canvasHeight = m_pResourceManager->GetRenderMan()->RenderHeight();
-    m_pResourceManager->GetGLMan()->SetOrthographicView(canvasWidth, canvasHeight);
-
-    // Aca van los comandos OpenGL del efecto.
-
-	//actualizamos la fuente
-	MOuint PrevFont;
-
-	PrevFont = Font;
-	Font = m_Config.GetCurrentValueIndex(font);
-
-	if(Font!=PrevFont) {
-		KillFont();
-		BuildFont();
-	}
+    MOulong timecodeticks;
+    int w = m_pResourceManager->GetRenderMan()->ScreenWidth();
+    int h = m_pResourceManager->GetRenderMan()->ScreenHeight();
 
 	//calculamos ticks y frames x seg
 	moTextArray TextArray;
 
 	ticksprevious = ticks;
-	ticks = m_pResourceManager->GetTimeMan()->GetTicks();
+	ticks = moGetTicksAbsolute();
 	tickselapsed = ticks - ticksprevious;
 
 	fps_current = 1000.0 / tickselapsed;
@@ -142,36 +121,13 @@ void moPostEffectDebug::Draw( moTempo* tempogral,moEffectState* parentstate)
 	TextArray.Add(fps_text);
 
 
-	//DIBUJAR
-	glColor4f(  m_Config.GetParam(color).GetValue().GetSubValue(MO_RED).Float()*state.tintr,
-                m_Config.GetParam(color).GetValue().GetSubValue(MO_GREEN).Float()*state.tintg,
-                m_Config.GetParam(color).GetValue().GetSubValue(MO_BLUE).Float()*state.tintb,
-                m_Config.GetParam(color).GetValue().GetSubValue(MO_ALPHA).Float()*state.alpha);
-
-	//glMatrixMode( GL_MODELVIEW );
-	//glLoadIdentity();									// Reset The View
-	//glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_ONE);
-	//glDisable(GL_ALPHA);
-	//glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA,GL_ONE);
-	//glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-
-
-    for(int g=560;g>=80 /*&& MODebug2->Count()>0*/;g-=20) {
+/*
+    for(int g=560;g>=80 ;g-=20) {
         //glPrint(0,g,MODebug2->Pop(),0,1.0,1.0);
-        glPrint(0,g,moText("test"),0,1.0,1.0);
+        //glPrint(0,g,moText("test"),0,1.0,1.0);
 
     }
-
-
-	/*
-	m_pResourceManager->GetGLMan()->SetOrthographicView( m_pResourceManager->GetRenderMan()->ScreenWidth(), m_pResourceManager->GetRenderMan()->ScreenHeight() );
-	m_pResourceManager->GetGuiMan()->DisplayInfoWindow( 20 , 20, 200, 20, TextArray );
-	TextArray.Finish();
-	m_pResourceManager->GetGuiMan()->DisplayInfoWindow( 400 , 300, 200, 200, textevents );
-	*/
-
+*/
 
 
 	/*
@@ -210,12 +166,65 @@ void moPostEffectDebug::Draw( moTempo* tempogral,moEffectState* parentstate)
 */
 
 
+    moFont* pFont = m_Config[moR(DEBUG_FONT)].GetData()->Font();
+
+    PreDraw( tempogral, parentstate);
+
+    // Cambiar la proyeccion para una vista ortogonal //
+	glDisable(GL_DEPTH_TEST);							// Disables Depth Testing
+	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
+	glLoadIdentity();									// Reset The Projection Matrix
+	glOrtho(0,w,0,h,-1,1);                              // Set Up An Ortho Screen
+    glMatrixMode(GL_MODELVIEW);                         // Select The Modelview Matrix
+	glLoadIdentity();									// Reset The View
+
+
+    glEnable(GL_BLEND);
+
+    //color
+    SetColor( m_Config[moR(DEBUG_COLOR)][MO_SELECTED], m_Config[moR(DEBUG_ALPHA)][MO_SELECTED], state );
+
+    moText Texto = moText("");
+    Texto+= fps_text;
+
+    int minutes;
+    int seconds;
+    int frames;
+
+    if (pFont) {
+        pFont->Draw(    0.0,
+                        0.0,
+                        Texto,
+                        m_Config[moR(DEBUG_FONT)][MO_SELECTED][2].Int(),
+                        0 );
+
+        timecodeticks = moGetTicks();
+        minutes = timecodeticks / (1000*60);
+        seconds = (timecodeticks - minutes*1000*60) / 1000;
+        frames = (timecodeticks - minutes*1000*60 - seconds*1000 ) * 25 / 1000;
+
+        Texto = moText("");
+        /*Texto = moText(" ticks: ") + (moText)IntToStr(timecodeticks) +
+                moText(" ang: ") + (moText)FloatToStr(tempogral->ang) +
+                moText(" timecode: ") + (moText)IntToStr(minutes) + moText(":") + (moText)IntToStr(seconds) + moText(":") + (moText)IntToStr(frames);
+*/
+        //glTranslatef( 0.0, 2.0, 0.0 );
+        pFont->Draw(    0.0,
+                        16.0,
+                        Texto);
+        //moText infod = moText("screen width:")+IntToStr(w)+moText(" screen height:")+IntToStr(h);
+        //pFont->Draw( 0, 0, infod, m_Config[moR(TEXT_FONT)][MO_SELECTED][2].Int(), 0, 2.0, 2.0, 0.0);
+    }
+
+	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
+	glPopMatrix();										// Restore The Old Projection Matrix
+	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
+	glPopMatrix();										// Restore The Old Projection Matrix
 
 }
 
 MOboolean moPostEffectDebug::Finish()
 {
-	Fonts.Finish();
     return PreFinish();
 }
 
@@ -249,74 +258,12 @@ moPostEffectDebug::Update( moEventList* p_EventList ) {
 }
 
 
-//====================
-//
-//		CUSTOM
-//
-//===================
+moConfigDefinition *
+moPostEffectDebug::GetDefinition( moConfigDefinition *p_configdefinition ) {
 
-
-GLvoid
-moPostEffectDebug::BuildFont()								// Build Our Font Display List
-{
-	float	cx;											// Holds Our X Character Coord
-	float	cy;											// Holds Our Y Character Coord
-
-	base=glGenLists(256);								// Creating 256 Display Lists
-	glBindTexture(GL_TEXTURE_2D, Fonts.GetGLId(Font));			// Select Our Font Texture
-	glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA,GL_ONE);
-	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-	for(loop=0; loop<256; loop++)						// Loop Through All 256 Lists
-	{
-		cx=float((int)(loop%16))/16.0f;						// X Position Of Current Character
-		cy=float((int)(loop/16))/16.0f;						// Y Position Of Current Character
-
-		glNewList(base+loop,GL_COMPILE);				// Start Building A List
-			glBegin(GL_QUADS);							// Use A Quad For Each Character
-				glTexCoord2f(cx,1.0f-cy-0.0625f);			// Texture Coord(Bottom Left)
-				glVertex2i(0,0);						// Vertex Coord(Bottom Left)
-				glTexCoord2f(cx+0.0625f,1.0f-cy-0.0625f);	// Texture Coord(Bottom Right)
-				glVertex2i(16,0);						// Vertex Coord(Bottom Right)
-				glTexCoord2f(cx+0.0625f,1.0f-cy);			// Texture Coord(Top Right)
-				glVertex2i(16,16);						// Vertex Coord(Top Right)
-				glTexCoord2f(cx,1.0f-cy);					// Texture Coord(Top Left)
-				glVertex2i(0,16);						// Vertex Coord(Top Left)
-			glEnd();									// Done Building Our Quad(Character)
-			glTranslated(16,0,0);						// Move To The Right Of The Character
-		glEndList();									// Done Building The Display List
-	}													// Loop Until All 256 Are Built
+	//default: alpha, color, syncro
+	p_configdefinition = moEffect::GetDefinition( p_configdefinition );
+	p_configdefinition->Add( moText("font"), MO_PARAM_FONT, DEBUG_FONT, moValue( "Default", "TXT", "0", "NUM", "32.0", "NUM") );
+	return p_configdefinition;
 }
 
-GLvoid
-moPostEffectDebug::glPrint(GLint x, GLint y, char *string, int set, float scx, float scy)	// Where The Printing Happens
-{
-	if(set>1)
-	{
-		set=1;
-	}
-	glBindTexture(GL_TEXTURE_2D, Fonts.GetGLId(Font));			// Select Our Font Texture
-	glDisable(GL_DEPTH_TEST);							// Disables Depth Testing
-	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
-	glPushMatrix();										// Store The Projection Matrix
-	glLoadIdentity();									// Reset The Projection Matrix
-	glOrtho(0,800,0,600,-1,1);							// Set Up An Ortho Screen
-	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
-	glPushMatrix();										// Store The Modelview Matrix
-	glLoadIdentity();									// Reset The Modelview Matrix
-	glTranslated(x,y,0);								// Position The Text(0,0 - Bottom Left)
-	glScalef(scx,scy,1.0f);
-	glListBase(base-32+(128*set));						// Choose The Font Set(0 or 1)
-	glCallLists(strlen(string),GL_BYTE,string);			// Write The Text To The Screen
-	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
-	glPopMatrix();										// Restore The Old Projection Matrix
-	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
-	glPopMatrix();										// Restore The Old Projection Matrix
-	//glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
-}
-
-GLvoid
-moPostEffectDebug::KillFont()									// Delete The Font From Memory
-{
-	glDeleteLists(base,256);							// Delete All 256 Display Lists
-}

@@ -37,11 +37,76 @@
 #include "moLock.h"
 #include "moResourceManager.h"
 
+#include "moMathVector.h"
+
 #define MO_RENDER_RESOLUTION 0
 #define MO_SCREEN_RESOLUTION 1
 
 #define MO_RENDER_TO_TEXTURE_FBSCREEN 0
 #define MO_RENDER_TO_TEXTURE_FBOBJECT 1
+
+enum moRenderOutputMode {
+
+    MO_RENDER_OUTPUT_MODE_NORMAL, ///rsolution ouput to display output
+    MO_RENDER_OUTPUT_MODE_ADVANCED ///clip based.... each clip is a subsection of render resolution to a display resolution
+
+};
+
+class LIBMOLDEO_API moResolution {
+
+  public:
+
+        int width;
+        int height;
+        int aspect;
+
+
+};
+
+class LIBMOLDEO_API moRenderClip {
+
+    public:
+
+        moVector2f points[4];
+
+
+};
+
+class LIBMOLDEO_API moDisplayOutput {
+
+  public:
+        moResolution    m_DisplayResolution;
+        int             m_renderclip;/// 1, 2 or 3
+
+};
+
+
+
+class LIBMOLDEO_API moRenderOutputConfiguration {
+
+  public:
+
+        moRenderOutputMode m_OutputMode;
+
+        moResolution    m_RenderResolution;
+
+        ///normal mode need this
+        moResolution    m_OutputResolution;
+
+        ///normal output need this
+
+        moRenderClip  Clip1;///clip or section of render resolution
+        moRenderClip  Clip2;///clip or section of render resolution
+        moRenderClip  Clip3;///clip or section of render resolution
+
+        moDisplayOutput Output1;///each with diff resolution or not
+        moDisplayOutput Output2;///each with diff resolution or not
+        moDisplayOutput Output3;///each with diff resolution or not
+
+};
+
+
+
 
 /**
  * Clase que implementa el administrador de render. Este administrador crea 4 texturas que son utilizadas para
@@ -252,6 +317,16 @@ class LIBMOLDEO_API moRenderManager : public moResource
          * @return true si la capacidad de shaders está soportada, false en caso contrario.
          */
 		MOboolean ShadersSupported();
+
+
+		void    SetOutputConfiguration( moRenderOutputConfiguration p_output_configuration );
+
+		moRenderOutputConfiguration GetOutputConfiguration();
+
+		moBucketsPool*  GetFramesPool() {
+                return m_pFramesPool;
+        }
+
 	protected:
 
 		moLock					m_RenderLock;
@@ -261,6 +336,10 @@ class LIBMOLDEO_API moRenderManager : public moResource
 		moTextureManager*       m_pTextureManager;
         moGLManager*			m_pGLManager;
 		moFBManager*			m_pFBManager;
+
+		moRenderOutputConfiguration m_OutputConfiguration;
+
+        moBucketsPool*           m_pFramesPool;
 
 		MOint m_render_to_texture_mode;
 		MOint m_screen_width, m_screen_height;

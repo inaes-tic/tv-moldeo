@@ -187,6 +187,12 @@ moMoldeoObject::Init() {
                         }
                         break;
 
+                    case MO_PARAM_SOUND:
+                        if (value.GetSubValueCount()>0) {
+
+                        }
+                        break;
+
                 }//fin siwtch
 
 			}//fin if

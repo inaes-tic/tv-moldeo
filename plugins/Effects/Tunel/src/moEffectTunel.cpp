@@ -194,7 +194,7 @@ moEffectTunel::GetDefinition( moConfigDefinition *p_configdefinition ) {
 
 	//default: alpha, color, syncro
 	p_configdefinition = moEffect::GetDefinition( p_configdefinition );
-	p_configdefinition->Add( moText("texture"), MO_PARAM_TEXTURE, TUNEL_TEXTURE, moValue( "iconos/estrellas/star.tga", "TXT")  );
+	p_configdefinition->Add( moText("texture"), MO_PARAM_TEXTURE, TUNEL_TEXTURE, moValue( "default", "TXT")  );
 	p_configdefinition->Add( moText("translatex"), MO_PARAM_TRANSLATEX, TUNEL_TRANSLATEX );
 	p_configdefinition->Add( moText("translatey"), MO_PARAM_TRANSLATEY, TUNEL_TRANSLATEY );
 	p_configdefinition->Add( moText("translatez"), MO_PARAM_TRANSLATEZ, TUNEL_TRANSLATEZ );

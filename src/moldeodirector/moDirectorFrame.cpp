@@ -5,6 +5,9 @@
 
 #include <wx/display.h>
 
+DEFINE_EVENT_TYPE(wxEVT_MY_EVENT)
+
+
 moDataNotebook::moDataNotebook( wxWindow* parent, wxWindowID id ) :
 		wxAuiNotebook(parent, id, wxPoint(0,0), wxSize(100,100),  wxBORDER_NONE | wxAUI_NB_TAB_SPLIT | wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_TAB_MOVE ),
 		m_pVirtualDirTreeCtrl(NULL),
@@ -47,10 +50,15 @@ BEGIN_EVENT_TABLE(moDirectorFrame, wxFrame)
 	EVT_MENU( MODIRECTOR_PROJECT_PREVIEW, moDirectorFrame::OnProjectPreview )
 	EVT_MENU( MODIRECTOR_PROJECT_PREVIEW_FULLSCREEN, moDirectorFrame::OnProjectPreviewFullscreen )
 	EVT_MENU( MODIRECTOR_FULLSCREEN, moDirectorFrame::OnFullscreen )
+	EVT_MENU( MODIRECTOR_CONFIGURATION, moDirectorFrame::OnConfiguration )
 
 	EVT_KEY_DOWN( moDirectorFrame::OnKeyDown )
-	EVT_COMMAND( -1, MODIRECTOR_COMMAND, moDirectorFrame::OnCommand)
+	//EVT_COMMAND( -1, MODIRECTOR_COMMAND, moDirectorFrame::OnCommand)
+	//EVT_NOTIFY(event, MODIRECTOR_NOTIFY, moDirectorFrame::OnNotify)
 	EVT_CLOSE( moDirectorFrame::OnClose )
+
+	EVT_COMMAND  (wxID_ANY, wxEVT_MY_EVENT, moDirectorFrame::OnCommand)
+
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -62,23 +70,23 @@ moDirectorFrame::moDirectorFrame(const wxString& title)
 
 {
     wxDisplay thisDisplay(0);
-    //wxDisplay theOtherDisplay(1);
+    wxDisplay theOtherDisplay(1);
 
-    //thisDisplay.GetFromWindow(this);
+    thisDisplay.GetFromWindow(this);
 
     wxRect client = thisDisplay.GetClientArea();
-    //wxRect client2 = theOtherDisplay.GetClientArea();
+    wxRect client2 = theOtherDisplay.GetClientArea();
 
     wxString clientareastr;
-    //wxString clientareastr2;
+    wxString clientareastr2;
 
-    //clientareastr.Printf(" area: %d,%d,%d,%d", client.GetLeft(), client.GetTop(), client.GetWidth(), client.GetHeight() );
-    //clientareastr2.Printf(" area: %d,%d,%d,%d", client2.GetLeft(), client2.GetTop(), client2.GetWidth(), client2.GetHeight() );
+    clientareastr.Printf(" area: %d,%d,%d,%d", client.GetLeft(), client.GetTop(), client.GetWidth(), client.GetHeight() );
+    clientareastr2.Printf(" area: %d,%d,%d,%d", client2.GetLeft(), client2.GetTop(), client2.GetWidth(), client2.GetHeight() );
 
-   //wxMessageBox(thisDisplay.GetName() + clientareastr);
-    //wxMessageBox(theOtherDisplay.GetName() + clientareastr2 );
+   wxMessageBox(thisDisplay.GetName() + clientareastr);
+   wxMessageBox(theOtherDisplay.GetName() + clientareastr2 );
 
-    wxFrame::Create(NULL, wxID_ANY, title, wxPoint(client.GetLeft(),client.GetTop()), wxSize(client.GetWidth(),client.GetHeight()));
+    wxFrame::Create(NULL, wxID_ANY, title, wxPoint(0,0), wxSize(1024,768));
 
     m_cForeground = wxColour(255,255,255);
     m_cBackground = wxColour(80,80,80);
@@ -134,6 +142,8 @@ moDirectorFrame::moDirectorFrame(const wxString& title)
 
 	//OPTIONS
 	wxMenu *optionsMenu = new wxMenu;
+	optionsMenu->Append( MODIRECTOR_CONFIGURATION, _T("&Configuration..."), _T("Configuration options..."));
+
 
     //HELP
     wxMenu *helpMenu = new wxMenu;
@@ -234,16 +244,11 @@ moDirectorFrame::CreateGUINotebook() {
 
     CreateGLWindows();
 
-    #ifdef WXART2D
     m_pConnectionsWindow = new moConnectionsWindow(m_pGUINotebook,wxID_ANY, wxPoint(0,0), wxSize(300,200));
     m_pConnectionsWindow->Init(this);
-    #endif
 
     m_pGUINotebook->AddPage( m_pPreviewWindow, wxT("Preview"));
-
-    #ifdef WXART2D
     m_pGUINotebook->AddPage( m_pConnectionsWindow, wxT("Connections"));
-    #endif
 }
 
 void
@@ -497,6 +502,8 @@ void moDirectorFrame::OnCommand( wxCommandEvent& event ) {
 
 	// do something
 	wxString text = event.GetString();
+	wxMessageBox(text);
+	OnOpenProject(event);
 
 }
 
@@ -890,10 +897,8 @@ moDirectorFrame::CloseProject() {
                 m_pLayers->DeleteAllItems();
             if (m_pLayers2)
                 m_pLayers2->DeleteAllItems();
-            #ifdef WXART2D
             if(m_pConnectionsWindow)
                 m_pConnectionsWindow->DeleteAll();
-            #endif
 
             return MO_DIRECTOR_STATUS_OK;
         }
@@ -924,6 +929,14 @@ moDirectorFrame::OnFullscreen( wxCommandEvent& event ) {
     } else {
         ShowFullScreen( false);
     }
+
+}
+
+void
+moDirectorFrame::OnConfiguration( wxCommandEvent& event ) {
+
+    moConfigurationDialog* pConfigurationDialog = new moConfigurationDialog(this);
+    pConfigurationDialog->Show();
 
 }
 
@@ -966,9 +979,48 @@ moDirectorChildFrame* moDirectorFrame::CreateChildFrame( moMobDescriptor p_MobDe
 moDirectorStatus
 moDirectorFrame::FocusOutput() {
 
+    int outputwidth;
+    int outputheight;
+    int outputleft;
+    int outputtop;
+
+    {
+        wxDisplay thisDisplay(0);
+        wxDisplay theOtherDisplay(1);
+
+        thisDisplay.GetFromWindow(this);
+
+        wxRect client = thisDisplay.GetClientArea();
+        wxRect client2 = theOtherDisplay.GetClientArea();
+
+        wxString clientareastr;
+        wxString clientareastr2;
+
+        clientareastr.Printf(" area: %d,%d,%d,%d", client.GetLeft(), client.GetTop(), client.GetWidth(), client.GetHeight() );
+        clientareastr2.Printf(" area: %d,%d,%d,%d", client2.GetLeft(), client2.GetTop(), client2.GetWidth(), client2.GetHeight() );
+
+       //wxMessageBox(thisDisplay.GetName() + clientareastr);
+       //wxMessageBox(theOtherDisplay.GetName() + clientareastr2 );
+       if (client2.GetWidth()!=0){
+           outputwidth = client2.GetWidth();
+           outputheight = client2.GetHeight();
+           outputleft = client2.GetLeft();
+           outputtop = client2.GetTop();
+       } else {
+            outputwidth = m_pDirectorCore->GetResourceManager()->GetRenderMan()->GetOutputConfiguration().m_OutputResolution.width;
+            outputheight = m_pDirectorCore->GetResourceManager()->GetRenderMan()->GetOutputConfiguration().m_OutputResolution.height;
+            outputleft = 0;
+            outputtop = 0;
+       }
+
+    }
+
 
     if(m_pGLCanvas) {
-
+        if (m_pPreviewFrame) {
+            if (m_pPreviewFrame->GetSize().GetWidth()!=outputwidth) m_pPreviewFrame->SetClientSize(wxSize(outputwidth,outputheight));
+            else m_pPreviewFrame->Move(outputleft,outputtop);
+        }
         m_pGLCanvas->Activate( m_pDirectorCore->GetDirectorIODeviceManager() );
     }
 
@@ -1001,7 +1053,7 @@ moDirectorFrame::ProjectPreview() {
         if (m_pGLCanvas)
             if (m_pGLCanvas==m_pPreviewWindow->m_pGLCanvas) {
 
-                m_pPreviewWindow->m_pGLCanvas->Finish();
+                //m_pPreviewWindow->m_pGLCanvas->Finish();
 
                 if (!m_pPreviewFrame) {
                     m_pPreviewFrame = new moPreviewFrame( this, wxID_ANY );
@@ -1021,6 +1073,7 @@ moDirectorFrame::ProjectPreview() {
                 m_pPreviewFrame->m_pGLCanvas->Finish();
                 m_pPreviewFrame->Hide();
 
+                m_pPreviewWindow->m_pGLCanvas->Finish();//agregado...al sacarse arriba
                 m_pPreviewWindow->Init( this, m_pGLContext );
                 m_pPreviewWindow->m_pGLCanvas->SetCurrent();
                 m_pPreviewWindow->Refresh();
@@ -1037,7 +1090,44 @@ moDirectorFrame::ProjectPreview() {
 void
 moDirectorFrame::ViewSwapBuffers() {
     if (m_pGLCanvas!=NULL) {
-        m_pGLCanvas->ViewSwapBuffers();
+
+        int ttid = m_pDirectorCore->GetResourceManager()->GetTextureMan()->GetTextureMOId( moText("preview_texture"), false);
+        moTexture* ptex = m_pDirectorCore->GetResourceManager()->GetTextureMan()->GetTexture(ttid);
+        int glid = 0;
+        if (ptex) {
+            glid = ptex->GetGLId();
+        }
+
+
+        if (m_pPreviewFrame && m_pGLCanvas==m_pPreviewFrame->m_pGLCanvas) {
+
+            m_pPreviewWindow->m_pGLCanvas->SetCurrent();
+            m_pDirectorCore->GetResourceManager()->GetGLMan()->SetOrthographicView(400, 300);
+
+            glBindTexture(GL_TEXTURE_2D, glid );
+            glColor4f(1.0,1.0,1.0,1.0);
+            glBegin(GL_QUADS);
+                glTexCoord2f(0, 0.0);
+                glVertex2f(0, 0);
+
+                glTexCoord2f(1.0, 0.0);
+                glVertex2f(400, 0);
+
+                glTexCoord2f(1.0, 1.0);
+                glVertex2f(400, 300);
+
+                glTexCoord2f(0, 1.0);
+                glVertex2f(0, 300);
+            glEnd();
+            glBindTexture(GL_TEXTURE_2D, 0);
+
+            m_pPreviewWindow->m_pGLCanvas->SwapBuffers();
+            //m_pPreviewWindow->m_pGLCanvas->Refresh();
+
+        }
+
+        //m_pGLCanvas->SwapBuffers();
+        m_pGLCanvas->ViewSwapBuffers( glid );
     }
 }
 
@@ -1274,9 +1364,7 @@ moDirectorFrame::ProjectUpdated( moProjectDescriptor p_ProjectDescriptor ) {
 
 	FrameManager.Update();
 
-    #ifdef WXART2D
-	m_pConnectionsWindow->ProjectUpdated( p_ProjectDescriptor );
-	#endif
+	//m_pConnectionsWindow->ProjectUpdated( p_ProjectDescriptor );
 
 	return MO_DIRECTOR_STATUS_OK;
 }

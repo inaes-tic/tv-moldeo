@@ -91,6 +91,24 @@ enum moVideoMode {
 	CGA = 64000, //320x200
 	MOVIDEOMODE_UNKNOWN
 };
+/**
+typedef enum {
+  GST_STATE_VOID_PENDING        = 0,
+  GST_STATE_NULL                = 1,
+  GST_STATE_READY               = 2,
+  GST_STATE_PAUSED              = 3,
+  GST_STATE_PLAYING             = 4
+} GstState;
+*/
+enum moStreamState {
+
+  MO_STREAMSTATE_UNKNOWN=-1,
+  MO_STREAMSTATE_PAUSED,
+  MO_STREAMSTATE_PLAYING,
+  MO_STREAMSTATE_WAITING,
+  MO_STREAMSTATE_READY,
+  MO_STREAMSTATE_STOPPED
+};
 
 /// Formato de video
 /**
@@ -210,15 +228,23 @@ class LIBMOLDEO_API moCaptureDevice {
 			m_Name = moText("");
 			m_Description = moText("");
 			m_Path  = moText("");
+			m_DevicePort = 0;
 			m_bPresent = false;
+		    m_SourceWidth = m_SourceHeight = m_SourceBpp = m_SourceFlipH = m_SourceFlipV = 0;
 		}
 
         /// contructor
-		moCaptureDevice( const moText &p_name, const moText &p_description, const moText &p_path ) {
+		moCaptureDevice( const moText &p_name, const moText &p_description, const moText &p_path, MOint p_deviceport = 0, MOint p_sourcewidth = 0, MOint p_sourceheight = 0, MOint p_bpp = 0, MOint p_fliph=0, MOint p_flipv=0 ) {
 			m_Name = p_name;
 			m_Description = p_description;
 			m_Path  = p_path;
+			m_DevicePort = p_deviceport;
 			m_bPresent = true;
+			m_SourceWidth = p_sourcewidth;
+			m_SourceHeight = p_sourceheight;
+			m_SourceBpp = p_bpp;
+            m_SourceFlipH = p_fliph;
+            m_SourceFlipV = p_flipv;
 		}
 
 		///Copy constructor
@@ -241,11 +267,15 @@ class LIBMOLDEO_API moCaptureDevice {
 			return m_Path;
 		}
 
+        /// Devuelve el puerto del dispositivo
+		MOint GetPort() {
+			return m_DevicePort;
+		}
+
         /// Devuelve el formato de video del dispositivo
 		moVideoFormat GetVideoFormat() {
 
 			return m_VideoFormat;
-
 		}
 
         /// Devuelve el formato de video del dispositivo
@@ -275,6 +305,31 @@ class LIBMOLDEO_API moCaptureDevice {
 			return m_CodeName;
 		}
 
+        /// Devuelve el ancho de la imagen de origen
+        int GetSourceWidth() {
+            return m_SourceWidth;
+        }
+
+        /// Devuelve el alto de la imagen de origen
+        int GetSourceHeight() {
+            return m_SourceHeight;
+        }
+
+        /// Devuelve los bits por pixel de la imagen de origen
+        int GetSourceBpp() {
+            return m_SourceBpp;
+        }
+
+        /// Devuelve el valor de inversión de imagen horizontal
+        int GetSourceFlipH() {
+            return m_SourceFlipH;
+        }
+
+        /// Devuelve el valor de inversión de imagen vertical
+        int GetSourceFlipV() {
+            return m_SourceFlipV;
+        }
+
 
         /// Operador de copia
 		moCaptureDevice &operator = (const moCaptureDevice &src)
@@ -285,15 +340,29 @@ class LIBMOLDEO_API moCaptureDevice {
 			m_Path = src.m_Path ;
 			m_VideoFormat = src.m_VideoFormat;
 			m_CodeName = src.m_CodeName;
+			m_DevicePort = src.m_DevicePort;
+			m_SourceWidth = src.m_SourceWidth;
+			m_SourceHeight = src.m_SourceHeight;
+			m_SourceBpp = src.m_SourceBpp;
+            m_SourceFlipH = src.m_SourceFlipH;
+            m_SourceFlipV = src.m_SourceFlipV;
 
 			return *this;
 		}
+
 	private:
 		bool			m_bPresent;///Presencia del dispositivo
 		moText			m_Name;///Nombre del dispositivo
 		moText			m_Description;///Descripción del dispositivo
 		moText			m_Path;///Camino o clave del dispositivo
 		moVideoFormat	m_VideoFormat;///Formato video del dispositivo
+		MOint           m_DevicePort;///PUERTO DEL DISPOSITIVO
+
+		MOint           m_SourceWidth;
+		MOint           m_SourceHeight;
+		MOint           m_SourceBpp;
+		MOint           m_SourceFlipH;
+		MOint           m_SourceFlipV;
 
 		moText			m_CodeName;///Código del dispositivo
 
@@ -368,6 +437,14 @@ class LIBMOLDEO_API moVideoFramework : public moAbstract {
 		*/
 		virtual bool	CheckCaptureDevice( int i ) = 0;
 
+		/// Agrega un dispositivo de video
+		/**
+        *   Si el dispositivo existe entonces esta función devuelve verdadero.
+		*   @return verdadero si existe y pudo ser agregado, falso si no
+		*/
+		virtual bool    AddCaptureDevice(  moCaptureDevice& p_capdev ) = 0;
+
+
         /// Limpia el arreglo de dispositivos de video
 		/**
 		*   Elimina del arreglo todos los dispositivos de video
@@ -428,6 +505,13 @@ class LIBMOLDEO_API moVideoGraph : public moAbstract {
 	virtual bool BuildLiveVideoGraph( moText filename, moBucketsPool* pBucketsPool) = 0;
 
 	virtual bool BuildLiveQTVideoGraph( moText filename, moBucketsPool* pBucketsPool) = 0;
+
+    /// Grafo de grabación
+    /**
+    *   genera un grafo para grabar a un archivo una serie de imagenes
+    *   @return verdadero si fue exitoso, falso sino
+    */
+	virtual bool BuildRecordGraph( moText filename, moBucketsPool* pBucketsPool) = 0;
 
 //================================================
 //	CONTROL METHODS
@@ -491,6 +575,10 @@ class LIBMOLDEO_API moVideoGraph : public moAbstract {
     *   @return moVideoFormat el formato de video
     */
     moVideoFormat	GetVideoFormat();
+
+    virtual moStreamState    GetState();
+
+    moText          StateToText( moStreamState state );
 
 	protected:
 

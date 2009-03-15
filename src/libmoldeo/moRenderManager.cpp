@@ -41,10 +41,24 @@ moRenderManager::moRenderManager() {
 	m_pFBManager = NULL;
 	m_pTextureManager = NULL;
 
+	m_render_tex_moid[0] = -1;
+	m_render_tex_moid[1] = -1;
+	m_render_tex_moid[2] = -1;
+	m_render_tex_moid[3] = -1;
+
+    m_OutputConfiguration.m_RenderResolution.width = 0;
+    m_OutputConfiguration.m_RenderResolution.height = 0;
+
+    m_OutputConfiguration.m_OutputResolution.width = 0;
+    m_OutputConfiguration.m_OutputResolution.height = 0;
+
+    m_pFramesPool = new moBucketsPool();
+
 	m_RenderLock.Unlock();
 }
 
 moRenderManager::~moRenderManager() {
+    delete m_pFramesPool;
 	m_RenderLock.Unlock();
 }
 
@@ -57,17 +71,37 @@ bool moRenderManager::Unlock() {
 	return m_RenderLock.Unlock();
 }
 
+void    moRenderManager::SetOutputConfiguration( moRenderOutputConfiguration p_output_configuration ) {
+
+    m_OutputConfiguration = p_output_configuration;
+
+}
+
+moRenderOutputConfiguration moRenderManager::GetOutputConfiguration() {
+
+    return m_OutputConfiguration;
+
+}
+
 MOboolean moRenderManager::Init(MOint p_render_to_texture_mode,
 						   MOint p_screen_width, MOint p_screen_height,
 						   MOint p_render_width, MOint p_render_height)
 {
+
 	GLenum err = glewInit();
 	if (GLEW_OK != err)
 	{
-		/* Problem: glewInit failed, something is seriously wrong. */
-		//MODebug->Push("GLEW Error: "+ moText(glewGetErrorString(err)));
+		// Problem: glewInit failed, something is seriously wrong.
+		MODebug2->Error(moText("GLEW Error: ")+ moText((char*)glewGetErrorString(err)));
 	}
-    //MODebug->Push("Using GLEW " + moText(glewGetString(GLEW_VERSION)));
+    MODebug2->Message( moText("Using GLEW ") + moText((char*)glewGetString(GLEW_VERSION)));
+    MODebug2->Message( moText("GLEW_ARB_texture_non_power_of_two: ") + moText(IntToStr(GLEW_ARB_texture_non_power_of_two)) );
+    MODebug2->Message( moText("GLEW_ARB_color_buffer_float: ") + moText(IntToStr(GLEW_ARB_color_buffer_float))) ;
+    MODebug2->Message( moText("GLEW_ARB_multitexture: ") + moText(IntToStr(GLEW_ARB_multitexture))) ;
+    MODebug2->Message( moText("GLEW_ARB_imaging: ") + moText(IntToStr(GLEW_ARB_imaging))) ;
+    MODebug2->Message( moText("GLEW_ARB_shading_language_100: ") + moText(IntToStr(GLEW_ARB_shading_language_100))) ;
+
+
 
 	m_render_to_texture_mode = p_render_to_texture_mode;
 
@@ -81,19 +115,33 @@ MOboolean moRenderManager::Init(MOint p_render_to_texture_mode,
 	m_render_width = p_render_width;
    	m_render_height = p_render_height;
 
-	m_render_tex_moid[0] = m_pTextureManager->AddTexture("render_texture", m_render_width, m_render_height);
-	m_render_tex_moid[1] = m_pTextureManager->AddTexture("screen_texture", m_render_width, m_render_height);
-	m_render_tex_moid[2] = m_pTextureManager->AddTexture("effects_texture", m_render_width, m_render_height);
-	m_render_tex_moid[3] = m_pTextureManager->AddTexture("final_texture", m_render_width, m_render_height);
+
+    //if (m_render_tex_moid[0]!=-1) m_pTextureManager->DeleteTexture(m_render_tex_moid[0]);
+    //if (m_render_tex_moid[1]!=-1) m_pTextureManager->DeleteTexture(m_render_tex_moid[1]);
+    //if (m_render_tex_moid[2]!=-1) m_pTextureManager->DeleteTexture(m_render_tex_moid[2]);
+    //if (m_render_tex_moid[3]!=-1) m_pTextureManager->DeleteTexture(m_render_tex_moid[3]);
+	if (m_render_tex_moid[0]==-1) m_render_tex_moid[0] = m_pTextureManager->AddTexture("render_texture", m_render_width, m_render_height);
+	if (m_render_tex_moid[1]==-1) m_render_tex_moid[1] = m_pTextureManager->AddTexture("screen_texture", m_render_width, m_render_height);
+	if (m_render_tex_moid[2]==-1) m_render_tex_moid[2] = m_pTextureManager->AddTexture("effects_texture", m_render_width, m_render_height);
+	if (m_render_tex_moid[3]==-1) m_render_tex_moid[3] = m_pTextureManager->AddTexture("final_texture", m_render_width, m_render_height);
 
     m_screen_width = p_screen_width;
    	m_screen_height = p_screen_height;
+
+
+   	if (m_OutputConfiguration.m_RenderResolution.width==0) m_OutputConfiguration.m_RenderResolution.width = m_render_width;
+   	if (m_OutputConfiguration.m_RenderResolution.height==0) m_OutputConfiguration.m_RenderResolution.height = m_render_height;
+
+   	if (m_OutputConfiguration.m_OutputResolution.width==0) m_OutputConfiguration.m_OutputResolution.width = m_screen_width;
+   	if (m_OutputConfiguration.m_OutputResolution.height==0) m_OutputConfiguration.m_OutputResolution.height = m_screen_height;
 
     m_pGLManager->SetMoldeoGLState();
 	m_pGLManager->SetPerspectiveView(m_screen_width, m_screen_height);
 
 	if (GLEW_EXT_framebuffer_object)
 	{
+	    m_pGLManager->SetFrameBufferObjectActive();
+        MODebug2->Message( moText("Using framebuffer_object: creating one fbo per predefined textures (4). ") );
 		m_fbo_idx = m_pFBManager->CreateFBO();
 		MOuint attach_point;
 		for (int i = 0; i < 4; i++)
@@ -106,7 +154,7 @@ MOboolean moRenderManager::Init(MOint p_render_to_texture_mode,
 			m_render_attach_points[i] = attach_point;
 		}
 		m_pFBManager->GetFBO(m_fbo_idx)->AddDepthStencilBuffer();
-	}
+	} else MODebug2->Message( moText("Framebuffer objects unavailable.") );
 	return true;
 }
 
@@ -190,6 +238,37 @@ void moRenderManager::EndDrawEffect()
 
 void moRenderManager::EndDraw()
 {
+    ///add last frame to bucket pool
+/*
+    moBucket *pbucket=NULL;
+    void*   pbuffer;
+    int     size;
+
+    if (m_pFramesPool)
+   if(!m_pFramesPool->IsFull()) {
+
+        moTexture* pFinalTexture = m_pTextureManager->GetTexture( m_pTextureManager->m_preview_texture_idx );
+
+        size = pFinalTexture->GetWidth() * pFinalTexture->GetHeight() * 3;
+
+        pbucket = new moBucket();
+        if(pbucket!=NULL) {
+
+            ///build buffer with 0
+            pbucket->BuildBucket( size, 0 );
+
+            ///populate buffer with tex image
+            pFinalTexture->GetBuffer( (void*)pbucket->GetBuffer(), GL_BGR_EXT, GL_UNSIGNED_BYTE );
+
+            if(m_pFramesPool->AddBucket( pbucket )) {
+
+                //Width = 720;
+                //Height = 480;
+            }
+        }
+    }
+
+*/
 	if (IsRenderToFBOEnabled())
 		m_pFBManager->UnbindFBO();
 }

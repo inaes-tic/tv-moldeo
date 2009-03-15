@@ -47,7 +47,41 @@ class moDebugManager : public moResource {
 		virtual MOboolean Init();
 		virtual MOboolean Finish();
 
-		void Push( moText text ) ;
+		/// Anuncia un error
+        /**
+        *   Anuncia un error apilandolo en la lista de mensajes y escribiéndolo
+        *   al archivo de mensajes de errores y al de mensajes registrados...
+        */
+        static void Error( moText p_text );
+
+        /// Anuncia un mensaje al usuario además de guardarlo en el log de texto
+        /**
+        * Pone el mensaje en la pila de mensajes, y escribe este al log de texto
+        *
+        */
+        static void Message( moText p_text );
+
+        /// Escribe un mensaje en el archivo de registro (log)
+        /**
+        *   El archivo log se llama comunmente moldeolog.txt y se encuentra en el raíz del archivo ejecutable
+        *   de Moldeo
+        *
+        */
+        static void Log( moText p_text );
+
+        /**
+        *   Apila el mensaje dentro de la pila de mensajes
+        *   @param p_text el mensaje
+        */
+        static void Push( moText p_text );
+
+        /**
+        *   Saca y devuelve el primer texto ingresado a la lista
+        *   @return un mensaje de texto
+        */
+        static moText Pop();
+
+        static MOint    Count();
 
 };
 

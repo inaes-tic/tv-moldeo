@@ -237,12 +237,12 @@ moEffectCubeMap::GetDefinition( moConfigDefinition *p_configdefinition ) {
 
 	//default: alpha, color, syncro
 	p_configdefinition = moEffect::GetDefinition( p_configdefinition );
-	p_configdefinition->Add( moText("texturefront"), MO_PARAM_TEXTURE, CUBEMAP_TEXTUREFRONT );
-	p_configdefinition->Add( moText("textureright"), MO_PARAM_TEXTURE, CUBEMAP_TEXTURERIGHT );
-	p_configdefinition->Add( moText("textureback"), MO_PARAM_TEXTURE, CUBEMAP_TEXTUREBACK );
-	p_configdefinition->Add( moText("textureleft"), MO_PARAM_TEXTURE, CUBEMAP_TEXTURELEFT );
-	p_configdefinition->Add( moText("texturetop"), MO_PARAM_TEXTURE, CUBEMAP_TEXTURETOP );
-	p_configdefinition->Add( moText("texturebottom"), MO_PARAM_TEXTURE, CUBEMAP_TEXTUREBOTTOM );
+	p_configdefinition->Add( moText("texturefront"), MO_PARAM_TEXTURE, CUBEMAP_TEXTUREFRONT, moValue( "iconos/estrellas/star.tga", "TXT") );
+	p_configdefinition->Add( moText("textureright"), MO_PARAM_TEXTURE, CUBEMAP_TEXTURERIGHT, moValue( "iconos/estrellas/star.tga", "TXT") );
+	p_configdefinition->Add( moText("textureback"), MO_PARAM_TEXTURE, CUBEMAP_TEXTUREBACK, moValue( "iconos/estrellas/star.tga", "TXT") );
+	p_configdefinition->Add( moText("textureleft"), MO_PARAM_TEXTURE, CUBEMAP_TEXTURELEFT, moValue( "iconos/estrellas/star.tga", "TXT") );
+	p_configdefinition->Add( moText("texturetop"), MO_PARAM_TEXTURE, CUBEMAP_TEXTURETOP, moValue( "iconos/estrellas/star.tga", "TXT") );
+	p_configdefinition->Add( moText("texturebottom"), MO_PARAM_TEXTURE, CUBEMAP_TEXTUREBOTTOM, moValue( "iconos/estrellas/star.tga", "TXT") );
 	p_configdefinition->Add( moText("translatex"), MO_PARAM_TRANSLATEX, CUBEMAP_TRANSLATEX );
 	p_configdefinition->Add( moText("translatey"), MO_PARAM_TRANSLATEY, CUBEMAP_TRANSLATEY );
 	p_configdefinition->Add( moText("translatez"), MO_PARAM_TRANSLATEZ, CUBEMAP_TRANSLATEZ );

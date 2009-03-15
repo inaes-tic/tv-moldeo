@@ -73,17 +73,17 @@ moEffectImage::GetDefinition( moConfigDefinition *p_configdefinition ) {
 
 	//default: alpha, color, syncro
 	p_configdefinition = moEffect::GetDefinition( p_configdefinition );
-	p_configdefinition->Add( moText("texture"), MO_PARAM_TEXTURE, IMAGE_TEXTURE );
+	p_configdefinition->Add( moText("texture"), MO_PARAM_TEXTURE, IMAGE_TEXTURE, moValue( "Default", "TXT").Ref() );
 	p_configdefinition->Add( moText("filters"), MO_PARAM_FILTER, IMAGE_FILTER );
-	p_configdefinition->Add( moText("blending"), MO_PARAM_FUNCTION, IMAGE_BLENDING);
-	p_configdefinition->Add( moText("pos_text_x"), MO_PARAM_FUNCTION, IMAGE_POSTEXX );
-	p_configdefinition->Add( moText("pos_text_y"), MO_PARAM_FUNCTION, IMAGE_POSTEXY );
-	p_configdefinition->Add( moText("anc_text_x"), MO_PARAM_FUNCTION, IMAGE_ANCTEXX );
-	p_configdefinition->Add( moText("alt_text_y"), MO_PARAM_FUNCTION, IMAGE_ALTTEXY );
-	p_configdefinition->Add( moText("pos_cuad_x"), MO_PARAM_FUNCTION, IMAGE_POSCUADX );
-	p_configdefinition->Add( moText("pos_cuad_y"), MO_PARAM_FUNCTION, IMAGE_POSCUADY );
-	p_configdefinition->Add( moText("anc_cuad_x"), MO_PARAM_FUNCTION, IMAGE_ANCCUADX );
-	p_configdefinition->Add( moText("alt_cuad_y"), MO_PARAM_FUNCTION, IMAGE_ALTCUADY );
+	p_configdefinition->Add( moText("blending"), MO_PARAM_BLENDING, IMAGE_BLENDING, moValue( "0", "NUM").Ref() );
+	p_configdefinition->Add( moText("pos_text_x"), MO_PARAM_FUNCTION, IMAGE_POSTEXX, moValue( "0.0", "FUNCTION" ).Ref() );
+	p_configdefinition->Add( moText("pos_text_y"), MO_PARAM_FUNCTION, IMAGE_POSTEXY, moValue( "0.0", "FUNCTION" ).Ref() );
+	p_configdefinition->Add( moText("anc_text_x"), MO_PARAM_FUNCTION, IMAGE_ANCTEXX, moValue( "1.0", "FUNCTION" ).Ref() );
+	p_configdefinition->Add( moText("alt_text_y"), MO_PARAM_FUNCTION, IMAGE_ALTTEXY, moValue( "1.0", "FUNCTION" ).Ref() );
+	p_configdefinition->Add( moText("pos_cuad_x"), MO_PARAM_FUNCTION, IMAGE_POSCUADX, moValue( "0.0", "FUNCTION" ).Ref() );
+	p_configdefinition->Add( moText("pos_cuad_y"), MO_PARAM_FUNCTION, IMAGE_POSCUADY, moValue( "0.0", "FUNCTION" ).Ref() );
+	p_configdefinition->Add( moText("anc_cuad_x"), MO_PARAM_FUNCTION, IMAGE_ANCCUADX, moValue( "1.0", "FUNCTION" ).Ref() );
+	p_configdefinition->Add( moText("alt_cuad_y"), MO_PARAM_FUNCTION, IMAGE_ALTCUADY, moValue( "1.0", "FUNCTION" ).Ref() );
 	return p_configdefinition;
 }
 
@@ -176,6 +176,8 @@ void moEffectImage::Draw( moTempo* tempogral,moEffectState* parentstate)
 
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 

@@ -73,6 +73,7 @@
 			<Add directory="..\..\inc\3ds" />
 			<Add directory="..\..\inc\openal" />
 			<Add directory="..\..\..\..\externlibs\boost\include\1_36_0" />
+			<Add directory="..\..\..\..\externlibs\boost\include\1_36_0\boost" />
 			<Add directory="..\..\..\..\externlibs\cg\include" />
 			<Add directory="..\..\..\..\externlibs\glew\include" />
 			<Add directory="..\..\..\..\externlibs\opengl\include" />
@@ -86,9 +87,8 @@
 			<Add directory="..\..\..\..\externlibs\SDL\include" />
 			<Add directory="..\..\..\..\externlibs\SDL_net\include" />
 			<Add directory="..\..\..\..\externlibs\SDL_image\include" />
-			<Add directory="..\..\..\..\externlibs\gstreamer\include" />
-			<Add directory="..\..\..\..\externlibs\gstreamer\include\glib-2.0" />
-			<Add directory="..\..\..\..\externlibs\gstreamer\lib\glib-2.0\include" />
+			<Add directory="C:\gstreamer\include\gstreamer-0.10" />
+			<Add directory="C:\gstreamer\include\glib-2.0" />
 			<Add directory="..\..\..\..\externlibs\FTGL\include" />
 		</Compiler>
 		<Linker>
@@ -120,6 +120,7 @@
 			<Add library="user32" />
 			<Add library="uuid" />
 			<Add library="muparser" />
+			<Add library="boost_thread-mt" />
 			<Add directory="..\..\..\..\externlibs\tinyxml\lib" />
 			<Add directory="..\..\..\..\externlibs\SDL\lib" />
 			<Add directory="..\..\..\..\externlibs\glew\lib" />
@@ -131,12 +132,14 @@
 			<Add directory="..\..\..\..\externlibs\openal\libs\win32" />
 			<Add directory="..\..\..\..\externlibs\opengl\lib" />
 			<Add directory="..\..\..\..\externlibs\freeimage\lib" />
-			<Add directory="..\..\..\..\externlibs\gstreamer\lib" />
+			<Add directory="C:\gstreamer\lib" />
 			<Add directory="..\..\..\..\externlibs\boost\lib\1_36_0" />
+			<Add directory="C:\gstreamer\lib\gstreamer-0.10" />
 		</Linker>
 		<Unit filename="..\..\inc\3ds\3ds.h" />
 		<Unit filename="..\..\inc\mo3dModelManager.h" />
 		<Unit filename="..\..\inc\moAbstract.h" />
+		<Unit filename="..\..\inc\moActions.h" />
 		<Unit filename="..\..\inc\moArcBall.h" />
 		<Unit filename="..\..\inc\moArray.h" />
 		<Unit filename="..\..\inc\moBasePlugin.h" />
@@ -378,6 +381,7 @@
 		<Unit filename="..\..\src\libmoldeo\3ds\3ds.cpp" />
 		<Unit filename="..\..\src\libmoldeo\mo3dModelManager.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moAbstract.cpp" />
+		<Unit filename="..\..\src\libmoldeo\moActions.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moArcBall.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moBuckets.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moConfig.cpp" />

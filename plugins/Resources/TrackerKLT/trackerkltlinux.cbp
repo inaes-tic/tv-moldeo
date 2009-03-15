@@ -36,8 +36,46 @@
 			<Add directory="/usr/include/freetype2" />
 			<Add directory="/usr/include/lua5.1/" />
 			<Add directory="/usr/include/muParser/" />
+			<Add directory="./inc/klt" />
 		</Compiler>
+		<Unit filename="inc/klt/base.h" />
+		<Unit filename="inc/klt/convolve.h" />
+		<Unit filename="inc/klt/error.h" />
+		<Unit filename="inc/klt/klt.h" />
+		<Unit filename="inc/klt/klt_util.h" />
+		<Unit filename="inc/klt/pnmio.h" />
+		<Unit filename="inc/klt/pyramid.h" />
 		<Unit filename="inc/moTrackerKLT.h" />
+		<Unit filename="src/klt/convolve.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/klt/error.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/klt/klt.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/klt/klt_util.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/klt/pnmio.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/klt/pyramid.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/klt/selectGoodFeatures.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/klt/storeFeatures.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/klt/trackFeatures.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/klt/writeFeatures.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/moTrackerKLT.cpp" />
 		<Extensions>
 			<envvars />

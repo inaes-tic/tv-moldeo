@@ -119,6 +119,8 @@ class LIBMOLDEO_API moGsFramework : public moVideoFramework {
 		virtual moCaptureDevices* UpdateCaptureDevices();
 
 		virtual bool	CheckCaptureDevice( int i );
+	    virtual bool    AddCaptureDevice(  moCaptureDevice& p_capdev );
+
 
 
 	private:
@@ -154,13 +156,17 @@ public:
 //	FILTER METHODS CONSTRUCTION
 //================================================
 	bool SetCaptureDevice( moText deviceport , MOint idevice /**/= 0);
-	bool BuildLiveDVGraph( moBucketsPool *pBucketsPool, MOint idevice = 0);
-	bool BuildLiveWebcamGraph( moBucketsPool *pBucketsPool, moText devicename = moText("") );
+	bool BuildLiveDVGraph( moBucketsPool *pBucketsPool, moCaptureDevice &p_capdev );
+	bool BuildLiveWebcamGraph( moBucketsPool *pBucketsPool, moCaptureDevice &p_capdev );
 	bool BuildLiveVideoGraph( moText filename , moBucketsPool *pBucketsPool );
 	bool BuildLiveQTVideoGraph( moText filename , moBucketsPool *pBucketsPool );
 
     bool BuildLiveSound( moText filename  );
 
+	bool BuildLiveStreamingGraph( moBucketsPool *pBucketsPool, moText p_location );
+    bool BuildRecordGraph( moText filename, moBucketsPool* pBucketsPool);
+
+    virtual moStreamState GetState();
 //================================================
 //	CONTROL METHODS
 //================================================
@@ -177,7 +183,7 @@ public:
 //================================================
 //	MISC METHODS
 //================================================
-    void SetVideoFormat( moGstCaps* caps, moGstBuffer* buffer = NULL );
+    void    SetVideoFormat( moGstCaps* caps, moGstBuffer* buffer = NULL );
 	/*
 	bool ShowError( HRESULT hr );
 	void SetVideoFormat( AM_MEDIA_TYPE* mt );
@@ -193,6 +199,8 @@ public:
     bool CheckState( moGstStateChangeReturn state_change_result, bool waitforsync = false);
     void RetreivePads( moGstElement* FilterElement);
     void WaitForFormatDefinition( MOulong timeout );
+
+    void CopyVideoFrame( void* bufferdst, int size );
 private:
 
     moBucketsPool       *m_pBucketsPool;
@@ -211,9 +219,18 @@ private:
     moGstElement          *m_pTypeFind; /** "typefind" */
     moGstElement          *m_pIdentity; /** "identity" */
 
+    moGstElement          *m_pVideoScale;
+
     moGstElement          *m_pDecoderBin;/** "decodebin" */
     moGstElement          *m_pFakeSink; /** "fakesink" */
     moGstElement          *m_pVideoTestSrc;/** "videotestsrc" */
+
+    moGstElement          *m_pFakeSource;/** "fakesrc" */
+    moGstElement          *m_pEncoder;/** "encoder" */
+    moGstElement          *m_pMultiplexer;/** "recorder" */
+    moGstElement          *m_pFileSink;/** "filesink" */
+
+    moGstElement          *m_pAudioSink;/** "filesink" */
 
     /**audio elements*/
     moGstElement   *m_pAudioConverter;

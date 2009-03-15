@@ -113,7 +113,7 @@ void moEffectPlane::Draw( moTempo* tempogral,moEffectState* parentstate)
 	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
 	glPushMatrix();										// Store The Projection Matrix
 	glLoadIdentity();									// Reset The Projection Matrix
-	gluPerspective(45.0f,(GLfloat)800/(GLfloat)600, 4.0f ,4000.0f);
+	gluPerspective(45.0f,(GLfloat)800/(GLfloat)600, 0.1f ,4000.0f);
 
     // Funcion de blending y de alpha channel //
     glEnable(GL_BLEND);
@@ -193,17 +193,17 @@ moEffectPlane::GetDefinition( moConfigDefinition *p_configdefinition ) {
 
 	//default: alpha, color, syncro
 	p_configdefinition = moEffect::GetDefinition( p_configdefinition );
-	p_configdefinition->Add( moText("texture"), MO_PARAM_TEXTURE, PLANE_TEXTURE );
-	p_configdefinition->Add( moText("width"), MO_PARAM_FUNCTION, PLANE_WIDTH );
-	p_configdefinition->Add( moText("height"), MO_PARAM_FUNCTION, PLANE_HEIGHT );
-	p_configdefinition->Add( moText("translatex"), MO_PARAM_TRANSLATEX, PLANE_TRANSLATEX );
-	p_configdefinition->Add( moText("translatey"), MO_PARAM_TRANSLATEY, PLANE_TRANSLATEY );
-	p_configdefinition->Add( moText("translatez"), MO_PARAM_TRANSLATEZ, PLANE_TRANSLATEZ );
-	p_configdefinition->Add( moText("rotatex"), MO_PARAM_ROTATEX, PLANE_ROTATEX );
-	p_configdefinition->Add( moText("rotatey"), MO_PARAM_ROTATEY, PLANE_ROTATEY );
-	p_configdefinition->Add( moText("rotatez"), MO_PARAM_ROTATEZ, PLANE_ROTATEZ );
-	p_configdefinition->Add( moText("scalex"), MO_PARAM_SCALEX, PLANE_SCALEX );
-	p_configdefinition->Add( moText("scaley"), MO_PARAM_SCALEY, PLANE_SCALEY );
-	p_configdefinition->Add( moText("scalez"), MO_PARAM_SCALEZ, PLANE_SCALEZ );
+	p_configdefinition->Add( moText("texture"), MO_PARAM_TEXTURE, PLANE_TEXTURE, moValue("Default", "TXT") );
+	p_configdefinition->Add( moText("width"), MO_PARAM_FUNCTION, PLANE_WIDTH, moValue("1.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("height"), MO_PARAM_FUNCTION, PLANE_HEIGHT, moValue("1.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("translatex"), MO_PARAM_TRANSLATEX, PLANE_TRANSLATEX, moValue("0.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("translatey"), MO_PARAM_TRANSLATEY, PLANE_TRANSLATEY, moValue("0.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("translatez"), MO_PARAM_TRANSLATEZ, PLANE_TRANSLATEZ, moValue("0.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("rotatex"), MO_PARAM_ROTATEX, PLANE_ROTATEX, moValue("0.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("rotatey"), MO_PARAM_ROTATEY, PLANE_ROTATEY, moValue("0.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("rotatez"), MO_PARAM_ROTATEZ, PLANE_ROTATEZ, moValue("0.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("scalex"), MO_PARAM_SCALEX, PLANE_SCALEX, moValue("1.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("scaley"), MO_PARAM_SCALEY, PLANE_SCALEY, moValue("1.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("scalez"), MO_PARAM_SCALEZ, PLANE_SCALEZ, moValue("1.0", "FUNCTION").Ref() );
 	return p_configdefinition;
 }

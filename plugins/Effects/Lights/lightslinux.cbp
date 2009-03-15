@@ -35,9 +35,7 @@
 			<Add directory="../../../inc" />
 			<Add directory="../../../inc/3ds" />
 			<Add directory="./inc" />
-			<Add directory="/usr/include/freetype2" />
 			<Add directory="/usr/include/lua5.1/" />
-			<Add directory="/usr/include/muParser/" />
 		</Compiler>
 		<Unit filename="inc/moEffectLights.h" />
 		<Unit filename="src/moEffectLights.cpp" />
@@ -47,11 +45,7 @@
 			<lightsger />
 			<lib_finder>
 				<lib name="lua5.1" />
-				<lib name="freetype2" />
 				<lib name="sdl" />
-				<lib name="muparser" />
-				<lib name="gstreamer-0.10" />
-				<lib name="gstreamer-base-0.10" />
 			</lib_finder>
 			<debugger />
 		</Extensions>

@@ -4,5 +4,6 @@
 		<Project filename="..\..\plugins\PostEffects\VideoWall\videowall.cbp" />
 		<Project filename="..\..\plugins\PostEffects\VideoWallMorphing\videowallmorphing.cbp" />
 		<Project filename="..\..\plugins\PostEffects\Debug\debug.cbp" />
+		<Project filename="..\..\plugins\PostEffects\PostProcess2d\postprocess2d.cbp" active="1" />
 	</Workspace>
 </CodeBlocks_workspace_file>

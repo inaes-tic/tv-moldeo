@@ -92,6 +92,14 @@
 		<Unit filename="mo3dModelPanel.h" />
 		<Unit filename="moColorMotion.cpp" />
 		<Unit filename="moColorMotion.h" />
+		<Unit filename="moConfigurationAdvancedOutput.cpp" />
+		<Unit filename="moConfigurationAdvancedOutput.h" />
+		<Unit filename="moConfigurationDialog.cpp" />
+		<Unit filename="moConfigurationDialog.h" />
+		<Unit filename="moConfigurationGeneral.cpp" />
+		<Unit filename="moConfigurationGeneral.h" />
+		<Unit filename="moConfigurationOutput.cpp" />
+		<Unit filename="moConfigurationOutput.h" />
 		<Unit filename="moConnectionsWindow.cpp" />
 		<Unit filename="moConnectionsWindow.h" />
 		<Unit filename="moDirectorChildFrame.cpp" />

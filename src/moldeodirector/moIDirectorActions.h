@@ -685,6 +685,79 @@ private:
 
 moDeclareDynamicArray( moValueDescriptor, moValueDescriptors )
 
+class  moPreconfigDescriptor {
+
+public:
+
+	moPreconfigDescriptor() {}
+	moPreconfigDescriptor( const moMobDescriptor& p_mobdescriptor ) {
+
+	    m_MobDescriptor =  p_mobdescriptor;
+
+    }
+
+    moPreconfigDescriptor& operator = ( const moPreconfigDescriptor& preconfd) {
+
+        m_MobDescriptor = preconfd.m_MobDescriptor;
+        m_PreconfigIndexes = preconfd.m_PreconfigIndexes;
+        return(*this);
+    }
+
+    moMobDescriptor& GetMobDescriptor() {
+	    return m_MobDescriptor;
+    }
+
+	moPreconfigIndexes& GetPreconfigParams() {
+	    return m_PreconfigIndexes;
+    }
+
+    void Add( moPreconfigParamIndex& p_preconfigparam ) {
+            m_PreconfigIndexes.Add(p_preconfigparam);
+    }
+    void Clear() {
+            m_PreconfigIndexes.Empty();
+    }
+
+private:
+
+    moPreconfigIndexes       m_PreconfigIndexes;
+    moMobDescriptor         m_MobDescriptor;
+
+};
+
+
+class moPresetDescriptor {
+
+public:
+
+	moPresetDescriptor() {}
+	moPresetDescriptor( const moProjectDescriptor& p_projectdescriptor ) {
+	    m_ProjectDescriptor =  p_projectdescriptor;
+    }
+
+    moPresetDescriptor& operator = ( const moPresetDescriptor& presetd) {
+
+        m_ProjectDescriptor = presetd.m_ProjectDescriptor;
+        m_PresetParams = presetd.m_PresetParams;
+        return(*this);
+    }
+
+    void Add( moPresetParamDefinition& p_presetparam ) {
+            m_PresetParams.Add(p_presetparam);
+    }
+
+    void Clear() {
+            m_PresetParams.Empty();
+    }
+
+private:
+
+    moProjectDescriptor     m_ProjectDescriptor;
+    moPresetParams          m_PresetParams;
+
+};
+
+
 #define MO_ACTIONHANDLER(F)  m_pNextActionHandler == NULL ? MO_DIRECTOR_STATUS_NO_HANDLER : m_pNextActionHandler->F;
 #define MO_ACTIONHANDLER_APPLICATION(F)  m_pNextActionHandler == NULL ? moApplicationDescriptor() : m_pNextActionHandler->F;
 #define MO_ACTIONHANDLER_PROJECT(F)  m_pNextActionHandler == NULL ? moProjectDescriptor() : m_pNextActionHandler->F;
@@ -748,6 +821,11 @@ public:
 	virtual moDirectorStatus Play() { return MO_ACTIONHANDLER(Play()); }
 
     /**
+    *   Parar el loop principal
+    */
+    virtual moDirectorStatus Stop() { return MO_ACTIONHANDLER(Stop()); }
+
+    /**
     *   Pausa del loop principal
     *   queda por verse si simplemente congelamos el clock
     *   o bien congelamos el loop (esto puede ser una opción dentro de la configuración del proyecto)
@@ -759,6 +837,11 @@ public:
     *   Salvar en disco la sesión visualizada, luego podrá ser reproducida...
     */
     virtual moDirectorStatus SaveSession() { return MO_ACTIONHANDLER(SaveSession()); }
+
+    /**
+    *   Parar el loop principal
+    */
+    virtual moDirectorStatus Seek( MOulong p_timecode ) { return MO_ACTIONHANDLER(Seek( p_timecode )); }
 
     /**
     *   Salvar todos los efectos abiertos, y el proyecto.
@@ -882,6 +965,16 @@ configuraciones. Será modificado unicamente ese valor, generalmente un cambio de
 //================================================================
 // Effects states
 //================================================================
+
+    virtual moDirectorStatus AddPreconfig( moMobDescriptor p_MobDesc, moPreconfigDescriptor p_PreConfDesc ) { return MO_ACTIONHANDLER(AddPreconfig( p_MobDesc, p_PreConfDesc)); }
+    virtual moDirectorStatus DeletePreconfig( moMobDescriptor p_MobDesc, moPreconfigDescriptor p_PreConfDesc ) { return MO_ACTIONHANDLER(DeletePreconfig( p_MobDesc, p_PreConfDesc)); }
+    virtual moDirectorStatus SavePreconfig( moMobDescriptor p_MobDesc, moPreconfigDescriptor p_PreConfDesc ) { return MO_ACTIONHANDLER(SavePreconfig( p_MobDesc, p_PreConfDesc)); }
+    virtual moDirectorStatus SetPreconfig( moMobDescriptor p_MobDesc, moPreconfigDescriptor p_PreConfDesc ) { return MO_ACTIONHANDLER(SetPreconfig( p_MobDesc, p_PreConfDesc)); }
+
+    virtual moDirectorStatus AddPreset( moPresetDescriptor p_PresetDesc ) { return MO_ACTIONHANDLER(AddPreset(p_PresetDesc)); }
+    virtual moDirectorStatus DeletePreset( moPresetDescriptor p_PresetDesc ) { return MO_ACTIONHANDLER(DeletePreset(p_PresetDesc)); }
+    virtual moDirectorStatus SavePreset( moPresetDescriptor p_PresetDesc ) { return MO_ACTIONHANDLER(SavePreset(p_PresetDesc)); }
+    virtual moDirectorStatus SetPreset( moPresetDescriptor p_PresetDesc ) { return MO_ACTIONHANDLER(SetPreset(p_PresetDesc)); }
 
     //virtual moDirectorStatus SetMobState( moMobState   m_MobState ) { return MO_ACTIONHANDLER(SetMobState(m_MobState)); }
     //virtual moDirectorStatus SetMobState( moMobState   m_MobState ) { return MO_ACTIONHANDLER(SetMobState(m_MobState)); }
