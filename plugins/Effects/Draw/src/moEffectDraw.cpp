@@ -245,7 +245,7 @@ moEffectDraw::GetDefinition( moConfigDefinition *p_configdefinition ) {
 
 	//default: alpha, color, syncro
 	p_configdefinition = moEffect::GetDefinition( p_configdefinition );
-	p_configdefinition->Add( moText("texture"), MO_PARAM_TEXTURE, DRAW_TEXTURE, moValue( "iconos/estrellas/star.tga", "TXT") );
+	p_configdefinition->Add( moText("texture"), MO_PARAM_TEXTURE, DRAW_TEXTURE, moValue( "default", "TXT") );
     p_configdefinition->Add( moText("script"), MO_PARAM_SCRIPT, DRAW_SCRIPT );
 	p_configdefinition->Add( moText("blending"), MO_PARAM_BLENDING, DRAW_BLENDING, moValue( "0", "NUM").Ref() );
 	p_configdefinition->Add( moText("width"), MO_PARAM_FUNCTION, DRAW_WIDTH, moValue( "256", "FUNCTION").Ref() );

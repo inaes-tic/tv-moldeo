@@ -6,7 +6,7 @@
 		<fg>#FFFFFF</fg>
 		<bg>#000000</bg>
 		<id_arg>0</id_arg>
-		<style>wxSTAY_ON_TOP|wxDEFAULT_FRAME_STYLE</style>
+		<style>wxNO_BORDER</style>
 		<handler function="OnClose" entry="EVT_CLOSE" />
 		<object class="wxToolBar" name="ID_TOOLBAR1" variable="ToolBar1" member="yes">
 			<bitmapsize>32,32</bitmapsize>

@@ -14,9 +14,9 @@
 //
 // Copyright Notice:
 //
-//   This code and attached libraries cannot be modified, reproduced or copied in any 
+//   This code and attached libraries cannot be modified, reproduced or copied in any
 //   form without the expressed consent of Dept. of Computer Science, UNC Chapel Hill.
-// 
+//
 //   Copyright Dept. of Computer Science, UNC Chapel Hill.
 //   All rights reserved.
 //
@@ -39,12 +39,12 @@
     Created during startup and used for initializing the GPU VIS Computor.
 */
 class DLL_SPEC  GpuVis_Options
-{  
+{
 
 public:
 
-  char       _CGdirectory[64];              //!< Folder where all CG shaders are located.
-  bool       _enableTiming;					//!< Flag indicates if substeps will be timed. 
+  char       _CGdirectory[256];              //!< Folder where all CG shaders are located.
+  bool       _enableTiming;					//!< Flag indicates if substeps will be timed.
   bool       _verbose;						//!< Flag indicates verbosity of output.
   int	     _nFrames, _nLevels;            //!< Store info for so many video frames in GPU memory. num levels in pyramid.
   int        _klt_search_range;             //!< Pixel range in which to search for features while tracking.
@@ -69,7 +69,7 @@ public:
 
 	//! Destructor
 	~GpuVis_Options() {};
-	
+
 	//! Set Shader Path
 	void setCGShadersDirPath(char *directory);
 

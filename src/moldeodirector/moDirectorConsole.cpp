@@ -128,10 +128,13 @@ moDirectorConsole::OpenProject( moProjectDescriptor p_projectdescriptor )  {//lo
               p_projectdescriptor.GetFullConfigName(),
               m_pIODeviceManager,
               m_pResourceManager,
-              0,400,300,400,300,
+              0,//render to texture
+              400,300,400,300,
               /*MO_DEF_SCREEN_WIDTH, MO_DEF_SCREEN_HEIGHT,
               MO_DEF_RENDER_WIDTH, MO_DEF_RENDER_HEIGHT,*/
               GetHandle())) {
+
+
         m_ProjectDescriptor = this->GetProject();
 
         //ahora actualizarmos el GUI
@@ -141,6 +144,8 @@ moDirectorConsole::OpenProject( moProjectDescriptor p_projectdescriptor )  {//lo
         //========================================================================
         //  ACTUALIZAMOS TODOS LOS VALORES: para aquellos objetos que lo necesiten
         //========================================================================
+
+
 
         moMobDescriptors mMobs = GetMobDescriptors();
 
@@ -173,6 +178,8 @@ moDirectorConsole::OpenProject( moProjectDescriptor p_projectdescriptor )  {//lo
             }
 
         }
+
+
 
 		//m_timer.Start();
         return MO_DIRECTOR_STATUS_OK;
@@ -304,14 +311,14 @@ moMobDescriptors moDirectorConsole::GetMobDescriptors() {
                                 //maybe is a movie or you cant loadit
                                 if ( tex->GetType()!=MO_TYPE_TEXTURE || p_ResourceDescriptor.IsCreateThumbnail() ) {
                                     //THEN CREATE THUMBNAIL
-                                    filename = tex->CreateThumbnail( "PNG", 132, 88 );
+                                    //filename = tex->CreateThumbnail( "PNG", 132, 88 );
                                 }
                             }
                         } else {
                             //maybe is a movie or you cant loadit
                             if ( p_ResourceDescriptor.IsCreateThumbnail() ) {
                                 //THEN CREATE THUMBNAIL
-                                filename = tex->CreateThumbnail( moText("PNG"), 132, 88 );
+                                //filename = tex->CreateThumbnail( moText("PNG"), 132, 88 );
                             }
                         }
 
@@ -377,7 +384,7 @@ moMobDescriptors moDirectorConsole::GetMobDescriptors() {
 
                             moTextureDescriptor pTextDesc( tex->GetName(),
                                                            filename,
-                                                           tex->GetWidth()*tex->GetHeight()*tex->GetComponents(), //just and idea of the size
+                                                           tex->GetWidth()*tex->GetHeight()*tex->GetComponents(), //just an idea of the size
                                                            (moTextureType)tex->GetType(),
                                                            m_pResourceManager->GetDataMan()->GetDataPath() );
 
@@ -944,23 +951,31 @@ moDirectorConsole::SetParameter( moParameterDescriptor  p_ParameterDesc ) {
                 moParamDefinition ParamDef = p_ValueDesc.GetParamDescriptor().GetParamDefinition();
                 moParam& Param( pConfig->GetParam( ParamDef.GetIndex() ) );
                 moValue& Value( Param.GetValue( p_ValueDesc.GetValueIndex().m_ValueIndex ) );
+                moValue& NewValue(p_ValueDesc.GetValue());
 
 
                 //=============================================
                 //COMPARAMOS CON EL ANTERIOR (JUST FOR SHADERS)
                 //=============================================
 
-                firsthaschange = !( Value.GetSubValue(0).Text() == p_ValueDesc.GetValue().GetSubValue(0).Text() );
+                firsthaschange = !( Value.GetSubValue(0).Text() == NewValue.GetSubValue(0).Text() );
 
-                if ( Value.GetSubValueCount() > 1 ) {
-                    secondhaschange = !( Value.GetSubValue(1).Text() == p_ValueDesc.GetValue().GetSubValue(1).Text() );
+                if ( NewValue.GetSubValueCount() > 1 ) {
+                    if ( NewValue.GetSubValueCount() > Value.GetSubValueCount() && NewValue.GetSubValue(1).Text()!=moText("") ) {
+                        secondhaschange = true;
+                    } else {
+                        secondhaschange = !( Value.GetSubValue(1).Text() == NewValue.GetSubValue(1).Text() );
+                    }
                 }
-                if ( Value.GetSubValueCount() > 2 ) {
-                    thirdhaschange = !( Value.GetSubValue(2).Text() == p_ValueDesc.GetValue().GetSubValue(2).Text() );
+                if ( NewValue.GetSubValueCount() > 2 ) {
+                    if ( NewValue.GetSubValueCount() > Value.GetSubValueCount() && NewValue.GetSubValue(2).Text()!=moText("") ) {
+                        thirdhaschange =  true;
+                    } else {
+                        thirdhaschange = !( Value.GetSubValue(2).Text() == NewValue.GetSubValue(2).Text() );
+                    }
                 }
 
-                //asigna el nuevo valor al config
-                Value = p_ValueDesc.GetValue();
+
 
                 //ahora segun el tipo de parametro se procesa el valor...
                 switch(ParamDef.GetType()) {
@@ -977,11 +992,14 @@ moDirectorConsole::SetParameter( moParameterDescriptor  p_ParameterDesc ) {
                     case MO_PARAM_ROTATEZ:
                     case MO_PARAM_SYNC:
                     case MO_PARAM_PHASE:
-                        idx = m_pResourceManager->GetMathMan()->AddFunction( Value.GetSubValue(0).Text(), (MOboolean)false );
+                        //asigna el nuevo valor al config
+
+                        idx = m_pResourceManager->GetMathMan()->AddFunction( NewValue.GetSubValue(0).Text(), (MOboolean)false );
 
                         if (idx>-1)
-                            Value.GetSubValue(0).SetFun( m_pResourceManager->GetMathMan()->GetFunction(idx) );
+                            NewValue.GetSubValue(0).SetFun( m_pResourceManager->GetMathMan()->GetFunction(idx) );
 
+                        Value = NewValue;
                         break;
 
                     case MO_PARAM_NUMERIC:
@@ -989,11 +1007,12 @@ moDirectorConsole::SetParameter( moParameterDescriptor  p_ParameterDesc ) {
                         MOlong ivalue = strtol( "%i", &vtext, 10 );
                         Value.GetSubValue(0).SetInt( ivalue );
                         */
-                        Param.GetValue(p_ValueDesc.GetValueIndex().m_ValueIndex) = p_ValueDesc.GetValue();
+                        //asigna el nuevo valor al config
+                        Value = NewValue;
                         break;
 
                     case MO_PARAM_TEXT:
-                        Param.GetValue(p_ValueDesc.GetValueIndex().m_ValueIndex) = p_ValueDesc.GetValue();
+                        Value = NewValue;
                         break;
                     case MO_PARAM_3DMODEL:
                     case MO_PARAM_OBJECT:
@@ -1007,11 +1026,13 @@ moDirectorConsole::SetParameter( moParameterDescriptor  p_ParameterDesc ) {
                         break;
 
                     case MO_PARAM_FONT:
-                        if ( Value.GetSubValueCount() == 3 ) {
+
+                        if ( NewValue.GetSubValueCount() == 3 ) {
                             pFont = m_pResourceManager->GetFontMan()->GetFont( Value, true );
                             if (pFont) {
-                                Value.GetSubValue(0).SetFont( pFont );
+                                NewValue.GetSubValue(0).SetFont( pFont );
                                 //Value.GetSubValue(2).SetInt();
+                                Value = NewValue;
                                 return MO_DIRECTOR_STATUS_OK;
                             } else return MO_DIRECTOR_STATUS_ERROR;
                         } else return MO_DIRECTOR_STATUS_ERROR;
@@ -1031,42 +1052,56 @@ moDirectorConsole::SetParameter( moParameterDescriptor  p_ParameterDesc ) {
                             //=========================================
                             if ( firsthaschange ) {
 
-                                idx = m_pResourceManager->GetTextureMan()->GetTextureMOId( valuebase.Text(), true);
+                                idx = m_pResourceManager->GetTextureMan()->GetTextureMOId( NewValue.GetSubValue(0).Text(), true);
 
                                 if (idx>-1) {
                                     moTexture*  pTexture = m_pResourceManager->GetTextureMan()->GetTexture(idx);
+                                    //copiamos los valores de texto correspondientes
+                                    valuebase = NewValue.GetSubValue(0);
                                     valuebase.SetTexture( pTexture );
+                                    Log( moText("moDirectorConsole::SetValue() Assigned new texture ") + Param.GetParamDefinition().GetName() );
                                 } else {
                                     LogError( moText("Param ") + Param.GetParamDefinition().GetName() +  moText(" Texture undefined") );
                                 }
+
                             }
 
                             //=====================================================
                             // SECOND SUBVALUE CORRESPOND TO SHADER CONFIG
                             // IF firstchange HAS TRIGGREER THIS STEP IS MANDATORY
                             //=====================================================
-                            if  ( Value.GetSubValueCount()>1 ) {
+                            if  ( NewValue.GetSubValueCount()>1 ) {
 
                                 if ( firsthaschange || secondhaschange || thirdhaschange ) {
                                     //============================
                                     //RELOAD TEXTUREFILTER
                                     //============================
-                                    idx = m_pResourceManager->GetShaderMan()->GetTextureFilterIndex()->TextureFilterExists( &Value );
+                                    idx = m_pResourceManager->GetShaderMan()->GetTextureFilterIndex()->TextureFilterExists( &NewValue );
 
                                     if (idx==-1) {
-                                        idx = m_pResourceManager->GetShaderMan()->GetTextureFilterIndex()->LoadFilter( &Value );
+                                        idx = m_pResourceManager->GetShaderMan()->GetTextureFilterIndex()->LoadFilter( &NewValue );
 
                                         if ( (idx-1)>=0 && (idx-1) < m_pResourceManager->GetShaderMan()->GetTextureFilterIndex()->Count() ) {
                                             moTextureFilter*  pTextureFilter = m_pResourceManager->GetShaderMan()->GetTextureFilterIndex()->Get(idx-1);
                                             valuebase.SetTextureFilter( pTextureFilter );
+                                            if (Value.GetSubValueCount()>=2) Value.GetSubValue(1) = NewValue.GetSubValue(1);
+                                            else Value.AddSubValue( NewValue.GetSubValue(1) );
+                                            if (Value.GetSubValueCount()>=3) Value.GetSubValue(2) = NewValue.GetSubValue(2);
+                                            else Value.AddSubValue( NewValue.GetSubValue(2) );
+                                            Log( moText("moDirectorConsole::SetValue() New filter loaded and assigned "));
+
                                         } else {
                                             LogError( moText("Param ") + Param.GetParamDefinition().GetName() +  moText(" Texture filter undefined") );
                                         }
                                     } else {
-                                        moText tfname = m_pResourceManager->GetShaderMan()->GetTextureFilterIndex()->MakeTextureFilterLabelName( &Value );
-                                        Log( moText("Param ") + Param.GetParamDefinition().GetName() +  moText(" Texture filter already defined: ") + (moText)tfname );
+                                        moText tfname = m_pResourceManager->GetShaderMan()->GetTextureFilterIndex()->MakeTextureFilterLabelName( &NewValue );
+                                        LogError( moText("moDirectorConsole::SetValue() Warning Param ") + Param.GetParamDefinition().GetName() +  moText(" Texture filter already defined: ") + (moText)tfname );
                                         moTextureFilter*  pTextureFilter = m_pResourceManager->GetShaderMan()->GetTextureFilterIndex()->Get(idx);
                                         valuebase.SetTextureFilter( pTextureFilter );
+                                        if (Value.GetSubValueCount()>=2) Value.GetSubValue(1) = NewValue.GetSubValue(1);
+                                        else Value.AddSubValue( NewValue.GetSubValue(1) );
+                                        if (Value.GetSubValueCount()>=3) Value.GetSubValue(2) = NewValue.GetSubValue(2);
+                                        else Value.AddSubValue( NewValue.GetSubValue(2) );
                                     }
 
 
@@ -1077,23 +1112,30 @@ moDirectorConsole::SetParameter( moParameterDescriptor  p_ParameterDesc ) {
                             // NOW TRY TO ADJUST ALPHA FILTER IF PARAMETER EXISTS
                             //=====================================================
 
-                            if (Value.GetSubValueCount()>=4) {
+                            if (NewValue.GetSubValueCount()>=4) {
 
                                 //======================================
                                 //ALPHA FILTER
                                 //======================================
 
-                                moValueBase& VAlpha( Value.GetSubValue(3) );
+                                moValueBase& VAlpha( NewValue.GetSubValue(3) );
 
 
                                 if (VAlpha.GetType()==MO_VALUE_FUNCTION) {
 
                                     idx = m_pResourceManager->GetMathMan()->AddFunction( VAlpha.Text(), (MOboolean)false );
-                                    if (idx>-1)
+                                    if (idx>-1) {
                                         VAlpha.SetFun( m_pResourceManager->GetMathMan()->GetFunction(idx) );
 
+                                        ///ATENCION!!!: en moValue::SetTextureFilterAlpha evaluamos en  (T = 0) !!!!
+                                        ///la funcion no se evalua!
+                                        valuebase.SetTextureFilterAlpha( VAlpha.GetData() );
+                                        if (Value.GetSubValueCount()>=4) Value.GetSubValue(3) = NewValue.GetSubValue(3);
+                                        else Value.AddSubValue( NewValue.GetSubValue(3) );
+                                    }
+
                                 }
-                                valuebase.SetTextureFilterAlpha( VAlpha.GetData() );
+
 
                             }
 
@@ -1102,13 +1144,14 @@ moDirectorConsole::SetParameter( moParameterDescriptor  p_ParameterDesc ) {
                             //TEXTURE FILTER PARAMETERS
                             //======================================
 
-                            if (Value.GetSubValueCount()>4) {
+                            /*
+                            if (NewValue.GetSubValueCount()>4) {
                                 //tenemos que usar los filtros-param
                                 moTextFilterParam*  pFilterParam = new moTextFilterParam();
 
-                                for( int i=4; i<(int)Value.GetSubValueCount(); i++) {
+                                for( int i=4; i<(int)NewValue.GetSubValueCount(); i++) {
                                     //si o si tenemos que usar los codes... o names para los subvalores...
-                                    moValueBase& vbase( Value.GetSubValue(i) );
+                                    moValueBase& vbase( NewValue.GetSubValue(i) );
 
                                     if ( vbase.GetCodeName() == moText("float1") ) {
                                         if ( vbase.Type() == MO_DATA_NUMBER_FLOAT ) {
@@ -1144,8 +1187,13 @@ moDirectorConsole::SetParameter( moParameterDescriptor  p_ParameterDesc ) {
                                         }
                                     }
                                 }
-                                valuebase.SetTextureFilterParam( pFilterParam );
+                                Value.GetSubValue(0).SetTextureFilterParam( pFilterParam );
                             }
+                            */
+
+                            //NewValue.GetSubValue(0) = Value.GetSubValue(0);
+                            //Value.GetSubValue(0) = ;
+                            //Value = NewValue;
 
                         }
                         break;
@@ -1154,30 +1202,33 @@ moDirectorConsole::SetParameter( moParameterDescriptor  p_ParameterDesc ) {
                         break;
 
                     case MO_PARAM_BLENDING:
-                        Param.GetValue(p_ValueDesc.GetValueIndex().m_ValueIndex) = p_ValueDesc.GetValue();
+                    case MO_PARAM_POLYGONMODE:
+                        Value = NewValue;
                         break;
 
                     case MO_PARAM_COLOR:
                         //RED=============================================================================
-                        idx = m_pResourceManager->GetMathMan()->AddFunction( Value.GetSubValue(MO_RED).Text(), (MOboolean)false );
+                        idx = m_pResourceManager->GetMathMan()->AddFunction( NewValue.GetSubValue(MO_RED).Text(), (MOboolean)false );
                         if (idx>-1)
-                            Value.GetSubValue(MO_RED).SetFun( m_pResourceManager->GetMathMan()->GetFunction(idx) );
+                            NewValue.GetSubValue(MO_RED).SetFun( m_pResourceManager->GetMathMan()->GetFunction(idx) );
                         //GREEN=============================================================================
-                        idx = m_pResourceManager->GetMathMan()->AddFunction( Value.GetSubValue(MO_GREEN).Text(), (MOboolean)false );
+                        idx = m_pResourceManager->GetMathMan()->AddFunction( NewValue.GetSubValue(MO_GREEN).Text(), (MOboolean)false );
                         if (idx>-1)
-                            Value.GetSubValue(MO_GREEN).SetFun( m_pResourceManager->GetMathMan()->GetFunction(idx) );
+                            NewValue.GetSubValue(MO_GREEN).SetFun( m_pResourceManager->GetMathMan()->GetFunction(idx) );
                         //BLUE=============================================================================
-                        idx = m_pResourceManager->GetMathMan()->AddFunction( Value.GetSubValue(MO_BLUE).Text(), (MOboolean)false );
+                        idx = m_pResourceManager->GetMathMan()->AddFunction( NewValue.GetSubValue(MO_BLUE).Text(), (MOboolean)false );
                         if (idx>-1)
-                            Value.GetSubValue(MO_BLUE).SetFun( m_pResourceManager->GetMathMan()->GetFunction(idx) );
+                            NewValue.GetSubValue(MO_BLUE).SetFun( m_pResourceManager->GetMathMan()->GetFunction(idx) );
                         //ALPHA=============================================================================
-                        idx = m_pResourceManager->GetMathMan()->AddFunction( Value.GetSubValue(MO_ALPHA).Text(), (MOboolean)false );
+                        idx = m_pResourceManager->GetMathMan()->AddFunction( NewValue.GetSubValue(MO_ALPHA).Text(), (MOboolean)false );
                         if (idx>-1)
-                            Value.GetSubValue(MO_ALPHA).SetFun( m_pResourceManager->GetMathMan()->GetFunction(idx) );
+                            NewValue.GetSubValue(MO_ALPHA).SetFun( m_pResourceManager->GetMathMan()->GetFunction(idx) );
+
+                        Value = NewValue;
                         break;
 
                     default:
-                        Param.GetValue(p_ValueDesc.GetValueIndex().m_ValueIndex) = p_ValueDesc.GetValue();
+                        Value = NewValue;
                         break;
                 };
 
@@ -1186,6 +1237,7 @@ moDirectorConsole::SetParameter( moParameterDescriptor  p_ParameterDesc ) {
                 p_ValueDesc.SetValue( Value );
 
                 //notificamos todos los modulos de la actualizacion de estos datos
+                //esto es importante para actualizar los campos dentro de los layers... (y el childframe)
                 ValueUpdated( p_ValueDesc );
             } //config
         } //object
@@ -1235,7 +1287,7 @@ moValueDescriptors  moDirectorConsole::GetValueDescriptors( moParameterDescripto
 void
 moDirectorConsole::OnTimer( wxTimerEvent &event) {
 
-	m_timerticks+=10;
+	m_timerticks = moGetTicks();
 	ConsoleLoop();
 
 }
@@ -1244,16 +1296,17 @@ moDirectorConsole::OnTimer( wxTimerEvent &event) {
 void
 moDirectorConsole::Draw() { //refresh actual console.cfg file with their effects.cfg
 
+
 	if( Initialized() ) {
 		moConsole::Draw();
 	}
+
 
 }
 
 MOulong
 moDirectorConsole::GetTicks() {
 
-	//return(MOulong)::wxGetElapsedTime();
 	return m_timerticks;
 
 }
@@ -1261,8 +1314,10 @@ moDirectorConsole::GetTicks() {
 void
 moDirectorConsole::GLSwapBuffers() {
 
+
     if (m_pDirectorCore)
         m_pDirectorCore->ViewSwapBuffers();
+
 
 }
 
@@ -1298,6 +1353,62 @@ moDirectorConsole::SetView( int x, int y, int w, int h ) {
     return MO_DIRECTOR_STATUS_OK;
 }
 
+moDirectorStatus moDirectorConsole::Play() {
+
+    if (moTimeManager::MoldeoTimer->Paused())
+        moContinueTimer();
+    else
+        moStartTimer();
+
+    return MO_DIRECTOR_STATUS_OK;
+}
+
+moDirectorStatus moDirectorConsole::Pause() {
+
+    moPauseTimer();
+
+    return MO_DIRECTOR_STATUS_OK;
+}
+
+moDirectorStatus moDirectorConsole::Stop() {
+
+    moStopTimer();
+
+    return MO_DIRECTOR_STATUS_OK;
+}
+
+moDirectorStatus moDirectorConsole::Seek( MOulong p_timecode ) {
+
+    moTimeManager::MoldeoTimer->SetDuration( p_timecode );
+
+    return MO_DIRECTOR_STATUS_OK;
+}
+
+
+moDirectorStatus moDirectorConsole::SaveSession() {
+    ///return m_pDirectorConsole->SaveSession();
+
+    /**/
+
+    moDataSession* pDataSession = m_pResourceManager->GetDataMan()->GetSession();
+
+
+    /*pDataSession->Set(   moText("NAME"),
+            moDataSessionConfig* pSessionConfig,
+            moDataSessionMode p_sessionmode,
+            moDataSessionRecordMode p_recordmode,
+            moDataSessionPlaybackMode p_playbackmode )
+*/
+
+    if (pDataSession) pDataSession->RecordLive( m_pResourceManager );
+
+
+
+    return MO_DIRECTOR_STATUS_OK;
+}
+
+
+
 moDirectorStatus moDirectorConsole::ConsoleLoop() {
 
     if (Initialized()) {
@@ -1328,3 +1439,20 @@ moDirectorStatus moDirectorConsole::ConsoleLoop() {
     }
     return MO_DIRECTOR_STATUS_OK;
 }
+
+
+moDirectorStatus moDirectorConsole::AddPreconfig( moMobDescriptor p_MobDesc, moPreconfigDescriptor p_PreConfDesc ) {
+
+    ///look for the effect parameter
+    moMoldeoObject* pObj = GetObject( p_MobDesc );
+
+    if (pObj) {
+            moConfig* pConf = pObj->GetConfig();
+            if (pConf) {
+                pConf->AddPreconfig( p_PreConfDesc.GetPreconfigParams() );
+            }
+    }
+
+    return MO_DIRECTOR_STATUS_OK;
+}
+

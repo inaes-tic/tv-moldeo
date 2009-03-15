@@ -21,34 +21,32 @@
   *                                                                          *
   ****************************************************************************
 
-  Copyright(C) 2007 Andrés Colubri
+  Copyright(C) 2008 Fabricio Costa
 
   Authors:
-  Based on the GPU_KLT code by Sudipta N. Sinha from the University of North Carolina
-  at Chapell Hill:
-  http://cs.unc.edu/~ssinha/Research/GPU_KLT/
-  Port to libmoldeo:  Andrés Colubri
+    Copyright (c) 2008 University of North Carolina at Chapel Hill
+
 
 *******************************************************************************/
 
 #include "moTrackerGpuKLT2.h"
 
-
+using namespace V3D_GPU;
 //========================
 //  Factory
 //========================
 
-moTrackerGpuKLT2Factory *m_TrackerGpuKLTFactory = NULL;
+moTrackerGpuKLT2Factory *m_TrackerGpuKLT2Factory = NULL;
 
 MO_PLG_API moResourceFactory* CreateResourceFactory(){
-	if (m_TrackerGpuKLTFactory==NULL)
-		m_TrackerGpuKLTFactory = new moTrackerGpuKLT2Factory();
-	return (moResourceFactory*) m_TrackerGpuKLTFactory;
+	if (m_TrackerGpuKLT2Factory==NULL)
+		m_TrackerGpuKLT2Factory = new moTrackerGpuKLT2Factory();
+	return (moResourceFactory*) m_TrackerGpuKLT2Factory;
 }
 
 MO_PLG_API void DestroyResourceFactory(){
-	delete m_TrackerGpuKLTFactory;
-	m_TrackerGpuKLTFactory = NULL;
+	delete m_TrackerGpuKLT2Factory;
+	m_TrackerGpuKLT2Factory = NULL;
 }
 
 moResource*  moTrackerGpuKLT2Factory::Create() {
@@ -69,6 +67,14 @@ moTrackerGpuKLT2System::moTrackerGpuKLT2System()
 {
 //	gpuComputor = NULL;
 	m_init = false;
+	m_TrackerSystemData.features = NULL;
+	m_TrackerSystemData.tracks = NULL;
+	m_TrackerSystemData.nDetectedFeatures = 0;
+	m_TrackerSystemData.nNewFeatures = 0;
+	m_FrameCount = 0;
+	m_TrackCount = 0;
+    tracker = NULL;
+
 //S	list = NULL;
 }
 
@@ -93,7 +99,7 @@ MOboolean moTrackerGpuKLT2System::Init(MOint p_nFeatures, MOint p_width, MOint p
 	m_width = p_width;
 	m_height = p_height;
 
-	m_ReinjectRate = 1;  // 1
+	m_ReinjectRate = 1;  /// 1  esto es trackedframes....!!!!
 
 	// Store info for so many video frames in GPU memory. num levels in pyramid.
     //OLD
@@ -120,7 +126,44 @@ MOboolean moTrackerGpuKLT2System::Init(MOint p_nFeatures, MOint p_width, MOint p
 
     gpuComputor = new GpuVis(gopt); // Create GpuVis computor object
 */
+    if (m_TrackerSystemData.features) {
+        delete m_TrackerSystemData.features;
+        m_TrackerSystemData.features = NULL;
+    }
+    if (m_TrackerSystemData.tracks) {
+        delete m_TrackerSystemData.tracks;
+        m_TrackerSystemData.tracks = NULL;
+    }
+
+    ///with and height must be integers, approximate by square root
+    featuresWidth = sqrt( p_nFeatures );
+    featuresHeight = featuresWidth;
+    ///recalculate nfeatures
+    p_nFeatures = featuresWidth*featuresHeight;
+    m_TrackerSystemData.nFeatures = p_nFeatures;
+
+    m_TrackerSystemData.features = new KLT_TrackedFeature[m_TrackerSystemData.nFeatures];
+    m_TrackerSystemData.tracks = new PointTrack[m_TrackerSystemData.nFeatures];
+
+    cfg.nIterations = 10;//10
+    cfg.nLevels     = 4;
+    cfg.levelSkip   = 1;
+    cfg.trackBorderMargin    = 10.0f;
+    cfg.convergenceThreshold = 0.1f;//0.1
+    cfg.SSD_Threshold        = 1000.0f;//1000
+    cfg.trackWithGain        = true;//true
+
+    cfg.minDistance   = 10;//10
+    cfg.minCornerness = 5.0f;//50
+    cfg.detectBorderMargin = cfg.trackBorderMargin;
+
+
+
+    tracker = new KLT_SequenceTracker(cfg);
+    tracker->allocate( m_TrackerSystemData.GetVideoFormat().m_Width, m_TrackerSystemData.GetVideoFormat().m_Height, cfg.nLevels, featuresWidth, featuresHeight);
+
 	m_TrackCount = 0;
+	m_FrameCount = 0;
 	m_init = true;
 
 	return true;
@@ -131,13 +174,13 @@ MOboolean moTrackerGpuKLT2System::Init(MOint p_nFeatures, moVideoSample* p_pVide
 					MOint p_kltmindist, MOfloat p_klteigenthreshold)
 {
 	if ( p_pVideoSample != NULL )
-		m_TrackerSystemData.m_VideoFormat = p_pVideoSample->m_VideoFormat;
+		m_TrackerSystemData.GetVideoFormat() = p_pVideoSample->m_VideoFormat;
 	else return false;
 
-	if ( m_TrackerSystemData.m_VideoFormat.m_Width<=0 || m_TrackerSystemData.m_VideoFormat.m_Height==0)
+	if ( m_TrackerSystemData.GetVideoFormat().m_Width<=0 || m_TrackerSystemData.GetVideoFormat().m_Height==0)
 		return false;
 
-	MOboolean res = Init(p_nFeatures, m_TrackerSystemData.m_VideoFormat.m_Width, m_TrackerSystemData.m_VideoFormat.m_Height,
+	MOboolean res = Init(p_nFeatures, m_TrackerSystemData.GetVideoFormat().m_Width, m_TrackerSystemData.GetVideoFormat().m_Height,
 						p_shaders_dir, p_arch,
 						p_kltmindist, p_klteigenthreshold);
 
@@ -187,10 +230,37 @@ void moTrackerGpuKLT2System::GetFeature(MOint p_feature, MOfloat &x, MOfloat &y,
 
 void moTrackerGpuKLT2System::Track(GLubyte *p_pBuffer, MOuint p_RGB_mode)
 {
-	if (0 < m_TrackCount)
-		ContinueTracking(p_pBuffer, p_RGB_mode);
-	else
+
+	if (m_FrameCount == 0) {
+        FirstTracking(p_pBuffer, p_RGB_mode);
+    } else if ( (m_TrackCount % m_ReinjectRate) == 0) {
 		StartTracking(p_pBuffer, p_RGB_mode);
+	} else {
+	    ContinueTracking(p_pBuffer, p_RGB_mode);
+    }
+
+    m_FrameCount++;
+}
+
+void moTrackerGpuKLT2System::FirstTracking(GLubyte *p_pBuffer, MOuint p_RGB_mode)
+{
+//OLD
+//	image.setPointer(p_pBuffer, m_width, m_height);
+
+//	glDisable(GL_DEPTH_TEST);
+//	glDisable(GL_TEXTURE_2D);
+//	glDisable(GL_BLEND);
+
+//OLD
+/*	gpuComputor->Init(image);
+	gpuComputor->computePyramid(image);
+	list = gpuComputor->selectGoodFeatures();
+	m_TrackerSystemData.m_FeatureList = list;
+*/
+    ///if (frameNo == 0)
+    tracker->detect( (V3D_GPU::uchar *)p_pBuffer, m_TrackerSystemData.nDetectedFeatures, m_TrackerSystemData.features);
+
+	m_TrackCount = 1;
 }
 
 void moTrackerGpuKLT2System::StartTracking(GLubyte *p_pBuffer, MOuint p_RGB_mode)
@@ -208,6 +278,9 @@ void moTrackerGpuKLT2System::StartTracking(GLubyte *p_pBuffer, MOuint p_RGB_mode
 	list = gpuComputor->selectGoodFeatures();
 	m_TrackerSystemData.m_FeatureList = list;
 */
+    ///if (relFrameNo == 0)
+    tracker->redetect((V3D_GPU::uchar *)p_pBuffer, m_TrackerSystemData.nNewFeatures, m_TrackerSystemData.features);
+
 	m_TrackCount = 1;
 }
 
@@ -236,6 +309,8 @@ void moTrackerGpuKLT2System::ContinueTracking(GLubyte *p_pBuffer, MOuint p_RGB_m
 	gpuComputor->uploadFeaturesToGPU(&list);
 	m_TrackerSystemData.m_FeatureList = list;
 */
+    ///if (relFrameNo > 0)
+    tracker->track((V3D_GPU::uchar *)p_pBuffer, m_TrackerSystemData.nPresentFeatures, m_TrackerSystemData.features);
 	m_TrackCount++;
 }
 
@@ -259,6 +334,65 @@ void moTrackerGpuKLT2System::NewData( moVideoSample* p_pVideoSample )
 	if (m_buffer == NULL) return;
 
 	Track(m_buffer, GL_RGB);
+
+
+	for(int i=0; i<m_TrackerSystemData.GetFeatures().Count(); i++ ) {
+	    delete m_TrackerSystemData.GetFeatures().Get(i);
+	}
+
+	m_TrackerSystemData.GetFeatures().Empty();
+	moTrackerFeature* TF = NULL;
+
+	float sumX = 0.0f,sumY = 0.0f;
+	float sumN = 0.0f;
+
+    int nTracks = 0;
+    for (int i = 0; i < m_TrackerSystemData.nFeatures; ++i)
+    {
+     if (m_TrackerSystemData.features[i].status == 0)
+     {
+        m_TrackerSystemData.tracks[i].add(m_TrackerSystemData.features[i].pos[0], m_TrackerSystemData.features[i].pos[1]);
+        ++nTracks;
+     }
+     else if (m_TrackerSystemData.features[i].status > 0)
+     {
+        m_TrackerSystemData.tracks[i].len = 1;
+        m_TrackerSystemData.tracks[i].pos[0][0] = m_TrackerSystemData.features[i].pos[0];
+        m_TrackerSystemData.tracks[i].pos[0][1] = m_TrackerSystemData.features[i].pos[1];
+     }
+     else
+        m_TrackerSystemData.tracks[i].clear();
+
+        TF = new moTrackerFeature();
+        if (TF) {
+            TF->x = m_TrackerSystemData.features[i].pos[0]*(float)m_width;
+            TF->y = m_TrackerSystemData.features[i].pos[1]*(float)m_height;
+            TF->tr_x = TF->x;
+            TF->tr_y = TF->y;
+            TF->val = m_TrackerSystemData.features[i].status;
+            TF->valid = (m_TrackerSystemData.features[i].status >= 0);
+            if (m_TrackerSystemData.features[i].status>0) {
+                TF->x = m_TrackerSystemData.features[i].pos[0]*(float)m_width;
+                TF->y = m_TrackerSystemData.features[i].pos[1]*(float)m_height;
+                TF->tr_x = m_TrackerSystemData.features[i].pos[0]*(float)m_width;
+                TF->tr_y = m_TrackerSystemData.features[i].pos[1]*(float)m_height;
+            }
+            //TF->tr_x = list->_list[i]->tr_x;
+            //TF->tr_y = list->_list[i]->tr_y;
+            TF->normx = m_TrackerSystemData.features[i].pos[0];
+            TF->normy = m_TrackerSystemData.features[i].pos[1];
+            m_TrackerSystemData.GetFeatures().Add(TF);
+
+           sumX+= TF->x;
+           sumY+= TF->y;
+           sumN+= 1.0f;
+        }
+
+    } // end for (i)
+
+    if (sumN>0.0f) m_TrackerSystemData.SetBaryCenter( sumX/sumN, sumY/sumN );
+    else  m_TrackerSystemData.SetBaryCenter( 0, 0 );
+    m_TrackerSystemData.SetValidFeatures( (int)sumN );
 }
 
 //===========================================
@@ -270,13 +404,15 @@ void moTrackerGpuKLT2System::NewData( moVideoSample* p_pVideoSample )
 moTrackerGpuKLT2::moTrackerGpuKLT2() : moResource()
 {
 	SetResourceType(MO_RESOURCETYPE_FILTER);
-	SetName("trackergpuklt");
+	SetName("trackergpuklt2");
 }
 
 moTrackerGpuKLT2::~moTrackerGpuKLT2()
 {
     Finish();
 }
+
+#include <stdlib.h>
 
 MOboolean moTrackerGpuKLT2::Init()
 {
@@ -301,11 +437,11 @@ MOboolean moTrackerGpuKLT2::Init()
 	//int i;
 
     // Loading config file.
-	conf = m_pResourceManager->GetDataMan()->GetDataPath()+moText("/");
+	conf = m_pResourceManager->GetDataMan()->GetDataPath()+moSlash;
 	conf += GetConfigName();
     conf += moText(".cfg");
 	if (m_Config.LoadConfig(conf) != MO_CONFIG_OK ) {
-		moText text = "Couldn't load trackergpuklt config:" + conf;
+		moText text = "Couldn't load trackergpuklt2 config:" + conf;
 		MODebug2->Error(text);
 		return false;
 	}
@@ -334,6 +470,12 @@ MO_TRACKER1D_SYTEM_LABELNAME	0
 MO_TRACKER1D_LIVE_SYSTEM	1
 MO_TRACKER1D_SYSTEM_ON 2
 	*/
+
+
+    moSetEnv( "V3D_SHADER_DIR", "./plugins/resources/trackergpuklt2/" );
+
+    Cg_ProgramBase::initializeCg();
+
 	for( int i = 0; i < nvalues; i++) {
 
 		m_Config.SetCurrentValueIndex( trackersystems, i );
@@ -395,9 +537,9 @@ MOint moTrackerGpuKLT2::GetValue(MOdevcode devcode)
 	moTrackerGpuKLT2SystemPtr pTS = NULL;
 
 	if ( 0 <= devcode && devcode < m_TrackerSystems.Count() ) {
-		return m_TrackerSystems.Get(devcode)->GetData()->m_NFeatures;
+		return m_TrackerSystems.Get(devcode)->GetData()->GetFeaturesCount();
 	} else if ( m_TrackerSystems.Count()<=devcode && devcode<(m_TrackerSystems.Count()*2) ) {
-		return m_TrackerSystems.Get( devcode - m_TrackerSystems.Count() )->GetData()->m_VideoFormat.m_Width;
+		return m_TrackerSystems.Get( devcode - m_TrackerSystems.Count() )->GetData()->GetVideoFormat().m_Width;
 	}
 
     return(-1);
@@ -499,7 +641,7 @@ void moTrackerGpuKLT2::Update(moEventList *Events)
 						}
 
 						pTS->NewData( pSample );
-
+/*
 						//calcular pesos y otras yerbas
 						moTrackerGpuKLT2SystemData* pTData;
 						pTData = pTS->GetData();
@@ -518,7 +660,7 @@ void moTrackerGpuKLT2::Update(moEventList *Events)
 						TrackersY = 0;
 						disV = 0;
 						Variance = 0;
-
+*/
 //OLD
 /*
 						for( i=0; i<pTData->m_FeatureList->_nFeats; i++) {
@@ -544,11 +686,11 @@ void moTrackerGpuKLT2::Update(moEventList *Events)
 							Variance =(int) ( (float)disV / (float)NF);
 						}
 */
-						TrackersX = (TrackersX*320)/pSample->m_VideoFormat.m_Width;
-						TrackersY = (TrackersY*240)/pSample->m_VideoFormat.m_Height;
+						//TrackersX = (TrackersX*320)/pSample->m_VideoFormat.m_Width;
+						//TrackersY = (TrackersY*240)/pSample->m_VideoFormat.m_Height;
 
 
-						Events->Add( MO_IODEVICE_TRACKER, NF, TrackersX , TrackersY, Variance, 0 );
+						//Events->Add( MO_IODEVICE_TRACKER, NF, TrackersX , TrackersY, Variance, 0 );
 
 						m_Outlets[actual->devicecode]->GetData()->SetPointer( (MOpointer)pTS->GetData(), sizeof(moTrackerGpuKLT2SystemData) );
 						m_Outlets[actual->devicecode]->Update();

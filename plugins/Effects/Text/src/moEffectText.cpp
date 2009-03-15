@@ -145,8 +145,8 @@ void moEffectText::Draw( moTempo* tempogral, moEffectState* parentstate)
 
 
     if (pFont) {
-        pFont->Draw(    m_Config[moR(TEXT_TRANSLATEX)].GetData()->Fun()->Eval(state.tempo.ang),
-                        m_Config[moR(TEXT_TRANSLATEY)].GetData()->Fun()->Eval(state.tempo.ang),
+        pFont->Draw(    0.0,
+                        0.0,
                         Texto,
                         m_Config[moR(TEXT_FONT)][MO_SELECTED][2].Int(),
                         0,
@@ -182,7 +182,7 @@ moEffectText::GetDefinition( moConfigDefinition *p_configdefinition ) {
 
 	//default: alpha, color, syncro
 	p_configdefinition = moEffect::GetDefinition( p_configdefinition );
-	p_configdefinition->Add( moText("font"), MO_PARAM_FONT, TEXT_FONT, moValue( "Tuffy.ttf", "TXT", "0", "NUM", "32.0", "NUM") );
+	p_configdefinition->Add( moText("font"), MO_PARAM_FONT, TEXT_FONT, moValue( "Default", "TXT", "0", "NUM", "32.0", "NUM") );
 	p_configdefinition->Add( moText("text"), MO_PARAM_TEXT, TEXT_TEXT, moValue( "Insert text in text parameter", "TXT") );
 	p_configdefinition->Add( moText("blending"), MO_PARAM_BLENDING, TEXT_BLENDING, moValue( "0", "NUM").Ref() );
 	p_configdefinition->Add( moText("width"), MO_PARAM_FUNCTION, TEXT_WIDTH, moValue( "256", "FUNCTION").Ref() );

@@ -44,6 +44,7 @@
 #define MO_CONFIG_OK 0
 #define MO_SELECTED -1
 
+
 /// definición de todos los parámetros a encontrar o a crear dentro del moConfig
 /**
  *  Cumple la función de describir detalladamente que nombres de parámetros y de que tipo
@@ -383,6 +384,36 @@ class LIBMOLDEO_API moConfig
 		/// Selecciona el valor anterior de la preconfiguración
 		void					PreConfPrev();
 
+
+
+
+
+        /// Agrega un valor
+        void                    AddValue( int paramindex,  moValue& p_value );
+
+        /// Inserta un valor
+        void                    InsertValue( int paramindex,  int valueindex, moValue& p_value );
+
+        /// Fija un valor
+        void                    SetValue( int paramindex,  int valueindex, moValue& p_value );
+
+        /// Borra un valor
+        void                    DeleteValue( int paramindex,  int valueindex );
+
+
+
+        /// Agrega una pre-configuración
+        void                    AddPreconfig( moPreconfigIndexes& p_preconfindexes );
+
+        /// Agrega una pre-configuración
+        void                    InsertPreconfig( int valueindex, moPreconfigIndexes& p_preconfindexes );
+
+        /// Agrega una pre-configuración
+        void                    SetPreconfig( int valueindex, moPreconfigIndexes& p_preconfindexes );
+
+        /// Borra una pre-configuración
+        void                    DeletePreconfig( int valueindex );
+
 	private:
 
 		MOboolean				m_ConfigLoaded;
@@ -397,6 +428,7 @@ class LIBMOLDEO_API moConfig
 		int						m_CurrentParam;// el indice que indica cual es el parametro actual.
 		MOint					m_PreconfParamNum;
 		MOint					m_PreconfActual;
+
 };
 
 

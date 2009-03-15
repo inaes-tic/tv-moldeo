@@ -204,7 +204,7 @@ void moEffectMovie::Draw( moTempo* tempogral, moEffectState* parentstate )
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
 
-    /*
+/*
 	if (Sound)
 		Sound->Update();
 */
@@ -696,174 +696,213 @@ void moEffectMovie::Interaction( moIODeviceManager *IODeviceManager ) {
                 //no hay ecualizacion en linux????
 
 				case MO_MOVIE_EQ_LOW_GAIN_UP:
+					/*
 					EQ->GetParameterF( AL_EQUALIZER_LOW_GAIN , &lowgain );
 					lowgain+= 0.1;
 					if (0.126>lowgain) lowgain = 0.126;
 					else if (lowgain>7.9) lowgain = 7.9;
 					EQ->SetParameterF( AL_EQUALIZER_LOW_GAIN, lowgain );
 					MODebug->Push( moText("LowGainUp: ")+FloatToStr(lowgain) );
-
+					*/
 					break;
 				case MO_MOVIE_EQ_LOW_GAIN_DOWN:
+                    /*
 					EQ->GetParameterF( AL_EQUALIZER_LOW_GAIN , &lowgain );
 					lowgain-= 0.1;
 					if (0.126>lowgain) lowgain = 0.126;
 					else if (lowgain>7.9) lowgain = 7.9;
 					EQ->SetParameterF( AL_EQUALIZER_LOW_GAIN, lowgain );
 					MODebug->Push( moText("LowGainDown: ")+FloatToStr(lowgain) );
+					*/
 					break;
 //1.0 AL_EQUALIZER_LOW_CUTOFF Hz [50.0, 800.0] 200.0
 				case MO_MOVIE_EQ_LOW_CUTOFF_UP:
+                    /*
 					EQ->GetParameterF( AL_EQUALIZER_LOW_CUTOFF , &lowcutoff );
 					lowcutoff+= 10.0;
 					if (50.0>lowcutoff) lowcutoff = 50.0;
 					else if (lowcutoff>800.0) lowcutoff = 800.0;
 					EQ->SetParameterF( AL_EQUALIZER_LOW_CUTOFF, lowcutoff );
 					MODebug->Push( moText("LowCutoffUp: ")+FloatToStr(lowcutoff) );
+					*/
 					break;
 				case MO_MOVIE_EQ_LOW_CUTOFF_DOWN:
+                    /*
 					EQ->GetParameterF( AL_EQUALIZER_LOW_CUTOFF , &lowcutoff );
 					lowcutoff-= 10.0;
 					if (50.0>lowcutoff) lowcutoff = 50.0;
 					else if (lowcutoff>800.0) lowcutoff = 800.0;
 					EQ->SetParameterF( AL_EQUALIZER_LOW_CUTOFF, lowgain );
 					MODebug->Push( moText("LowCutoffDown: ")+FloatToStr(lowcutoff) );
+					*/
 					break;
 //1.0 AL_EQUALIZER_MID1_GAIN [0.126, 7.943] 1.0
 				case MO_MOVIE_EQ_MID1_GAIN_UP:
+                    /*
 					EQ->GetParameterF( AL_EQUALIZER_MID1_GAIN , &fxvalue );
 					fxvalue+= 10;
 					if (0.126>fxvalue) fxvalue = 0.126;
 					else if (fxvalue>7.943) fxvalue = 7.943;
 					EQ->SetParameterF( AL_EQUALIZER_MID1_GAIN, fxvalue );
 					MODebug->Push( moText("Mid1GainUp: ")+FloatToStr(fxvalue) );
+					*/
 					break;
 				case MO_MOVIE_EQ_MID1_GAIN_DOWN:
+                    /*
 					EQ->GetParameterF( AL_EQUALIZER_MID1_GAIN , &fxvalue );
 					fxvalue-= 0.1;
 					if (0.126>fxvalue) fxvalue = 0.126;
 					else if (fxvalue>7.943) fxvalue = 7.943;
 					EQ->SetParameterF( AL_EQUALIZER_MID1_GAIN, fxvalue );
 					MODebug->Push(  moText("Mid1GainDown: ")+ FloatToStr(fxvalue) );
+					*/
 					break;
 //1.0 AL_EQUALIZER_MID1_CENTER Hz [200.0, 3000.0] 500.0
 				case MO_MOVIE_EQ_MID1_CENTER_UP:
+                    /*
 					EQ->GetParameterF( AL_EQUALIZER_MID1_CENTER , &fxvalue );
 					fxvalue+= 20;
 					if (200>fxvalue) fxvalue = 200;
 					else if (fxvalue>3000) fxvalue = 3000;
 					EQ->SetParameterF( AL_EQUALIZER_MID1_CENTER, fxvalue );
 					MODebug->Push( moText("Mid1CenterUp: ")+ FloatToStr(fxvalue) );
+					*/
 					break;
 				case MO_MOVIE_EQ_MID1_CENTER_DOWN:
+                    /*
 					EQ->GetParameterF( AL_EQUALIZER_MID1_CENTER , &fxvalue );
 					fxvalue-= 20;
 					if (200>fxvalue) fxvalue = 200;
 					else if (fxvalue>3000) fxvalue = 3000;
 					EQ->SetParameterF( AL_EQUALIZER_MID1_CENTER, fxvalue );
 					MODebug->Push( moText("Mid1CenterDown: ")+ FloatToStr(fxvalue) );
+					*/
 					break;
 //1.0 AL_EQUALIZER_MID1_WIDTH [0.01, 1.0] 1.0
 				case MO_MOVIE_EQ_MID1_WIDTH_UP:
+                    /*
 					EQ->GetParameterF( AL_EQUALIZER_MID1_WIDTH , &fxvalue );
 					fxvalue+= 0.1;
 					if (0.01>fxvalue) fxvalue = 0.01;
 					else if (fxvalue>1.0) fxvalue = 1.0;
 					EQ->SetParameterF( AL_EQUALIZER_MID1_WIDTH, fxvalue );
 					MODebug->Push( moText("Mid1WidthUp: ")+FloatToStr(fxvalue) );
+					*/
 					break;
 				case MO_MOVIE_EQ_MID1_WIDTH_DOWN:
+                    /*
 					EQ->GetParameterF( AL_EQUALIZER_MID1_WIDTH , &fxvalue );
 					fxvalue-= 0.1;
 					if (0.01>fxvalue) fxvalue = 0.01;
 					else if (fxvalue>1.0) fxvalue = 1.0;
 					EQ->SetParameterF( AL_EQUALIZER_MID1_WIDTH, fxvalue );
 					MODebug->Push( moText("Mid1WidthDown: ")+FloatToStr(fxvalue) );
+					*/
 					break;
 //1.0 AL_EQUALIZER_MID2_GAIN [0.126, 7.943] 1.0
 				case MO_MOVIE_EQ_MID2_GAIN_UP:
+                    /*
 					EQ->GetParameterF( AL_EQUALIZER_MID2_GAIN , &fxvalue );
 					fxvalue+= 0.1;
 					if (0.126>fxvalue) fxvalue = 0.126;
 					else if (fxvalue>7.943) fxvalue = 7.943;
 					EQ->SetParameterF( AL_EQUALIZER_MID2_GAIN, fxvalue );
 					MODebug->Push( moText("Mid2GainUp: ")+FloatToStr(fxvalue) );
+					*/
 					break;
 				case MO_MOVIE_EQ_MID2_GAIN_DOWN:
+				/*
 					EQ->GetParameterF( AL_EQUALIZER_MID2_GAIN , &fxvalue );
 					fxvalue-= 0.1;
 					if (0.126>fxvalue) fxvalue = 0.126;
 					else if (fxvalue>7.943) fxvalue = 7.943;
 					EQ->SetParameterF( AL_EQUALIZER_MID2_GAIN, fxvalue );
 					MODebug->Push( moText("Mid2GainDown: ")+FloatToStr(fxvalue) );
+					*/
 					break;
 //1.0 AL_EQUALIZER_MID2_CENTER [1000.0, 8000.0] 3000.0
 				case MO_MOVIE_EQ_MID2_CENTER_UP:
+                    /*
 					EQ->GetParameterF( AL_EQUALIZER_MID2_CENTER , &fxvalue );
 					fxvalue+= 50;
 					if (1000.0>fxvalue) fxvalue = 1000.0;
 					else if (fxvalue>8000.0) fxvalue = 8000.0;
 					EQ->SetParameterF( AL_EQUALIZER_MID2_CENTER, fxvalue );
 					MODebug->Push( moText("Mid2CenterUp: ")+FloatToStr(fxvalue) );
+					*/
 					break;
 				case MO_MOVIE_EQ_MID2_CENTER_DOWN:
+                    /*
 					EQ->GetParameterF( AL_EQUALIZER_MID2_CENTER , &fxvalue );
 					fxvalue-= 50;
 					if (1000.0>fxvalue) fxvalue = 1000.0;
 					else if (fxvalue>8000.0) fxvalue = 8000.0;
 					EQ->SetParameterF( AL_EQUALIZER_MID2_CENTER, fxvalue );
 					MODebug->Push( moText("Mid2CenterDown: ")+FloatToStr(fxvalue) );
+					*/
 					break;
 //1.0 AL_EQUALIZER_MID2_WIDTH [0.01, 1.0] 1.0
 				case MO_MOVIE_EQ_MID2_WIDTH_UP:
+                    /*
 					EQ->GetParameterF( AL_EQUALIZER_MID2_WIDTH , &fxvalue );
 					fxvalue+= 0.1;
 					if (0.01>fxvalue) fxvalue = 0.01;
 					else if (fxvalue>1.0) fxvalue = 1.0;
 					EQ->SetParameterF( AL_EQUALIZER_MID2_WIDTH, fxvalue );
 					MODebug->Push( moText("Mid2WidthUp: ")+FloatToStr(fxvalue) );
+					*/
 					break;
 				case MO_MOVIE_EQ_MID2_WIDTH_DOWN:
+                    /*
 					EQ->GetParameterF( AL_EQUALIZER_MID2_WIDTH , &fxvalue );
 					fxvalue-= 0.1;
 					if (0.01>fxvalue) fxvalue = 0.01;
 					else if (fxvalue>1.0) fxvalue = 1.0;
 					EQ->SetParameterF( AL_EQUALIZER_MID2_WIDTH, fxvalue );
 					MODebug->Push( moText("Mid2WidthDown: ")+FloatToStr(fxvalue) );
+					*/
 					break;
 //1.0 AL_EQUALIZER_HIGH_GAIN [0.126, 7.943] 1.0
 				case MO_MOVIE_EQ_HIGH_GAIN_UP:
+                    /*
 					EQ->GetParameterF( AL_EQUALIZER_HIGH_GAIN , &fxvalue );
 					fxvalue+= 0.1;
 					if (0.126>fxvalue) fxvalue = 0.126;
 					else if (fxvalue>7.943) fxvalue = 7.943;
 					EQ->SetParameterF( AL_EQUALIZER_HIGH_GAIN, fxvalue );
 					MODebug->Push( moText("HighGainUp: ")+FloatToStr(fxvalue) );
+					*/
 					break;
 				case MO_MOVIE_EQ_HIGH_GAIN_DOWN:
+                    /*
 					EQ->GetParameterF( AL_EQUALIZER_HIGH_GAIN , &fxvalue );
 					fxvalue-= 0.1;
 					if (0.126>fxvalue) fxvalue = 0.126;
 					else if (fxvalue>7.943) fxvalue = 7.943;
 					EQ->SetParameterF( AL_EQUALIZER_HIGH_GAIN, fxvalue );
 					MODebug->Push(  moText("HighGainDown: ")+FloatToStr(fxvalue) );
+					*/
 					break;
 //1.0 AL_EQUALIZER_HIGH_CUTOFF Hz [4000.0, 16000.0] 6000.0
 				case MO_MOVIE_EQ_HIGH_CUTOFF_UP:
+                    /*
 					EQ->GetParameterF( AL_EQUALIZER_HIGH_CUTOFF , &fxvalue );
 					fxvalue+= 100;
 					if (4000.0>fxvalue) fxvalue = 4000.0;
 					else if (fxvalue>16000.0) fxvalue = 16000.0;
 					EQ->SetParameterF( AL_EQUALIZER_HIGH_CUTOFF, fxvalue );
 					MODebug->Push( moText("HighCutoffUp: ")+FloatToStr(fxvalue) );
+					*/
 					break;
 				case MO_MOVIE_EQ_HIGH_CUTOFF_DOWN:
+                    /*
 					EQ->GetParameterF( AL_EQUALIZER_HIGH_CUTOFF , &fxvalue );
 					fxvalue-= 100;
 					if (4000.0>fxvalue) fxvalue = 4000.0;
 					else if (fxvalue>16000.0) fxvalue = 16000.0;
 					EQ->SetParameterF( AL_EQUALIZER_HIGH_CUTOFF, fxvalue );
 					MODebug->Push( moText("HighCutoffDown: ")+FloatToStr(fxvalue) );
+					*/
 					break;
 
                 #endif
@@ -930,21 +969,21 @@ moEffectMovie::GetDefinition( moConfigDefinition *p_configdefinition ) {
 	p_configdefinition->Add( moText("movies"), MO_PARAM_TEXTURE, MOVIE_MOVIES );
 	p_configdefinition->Add( moText("sounds"), MO_PARAM_SOUND, MOVIE_SOUNDS );
 	p_configdefinition->Add( moText("script"), MO_PARAM_SCRIPT, MOVIE_SCRIPT );
-	p_configdefinition->Add( moText("moviemode"), MO_PARAM_NUMERIC, MOVIE_MODE );
+	p_configdefinition->Add( moText("moviemode"), MO_PARAM_NUMERIC, MOVIE_MODE, moValue( "0","NUM").Ref() );
 	p_configdefinition->Add( moText("blending"), MO_PARAM_BLENDING, MOVIE_BLENDING);
-	p_configdefinition->Add( moText("startplaying"), MO_PARAM_NUMERIC, MOVIE_STARTPLAYING );
-	p_configdefinition->Add( moText("loop"), MO_PARAM_NUMERIC, MOVIE_LOOP );
-	p_configdefinition->Add( moText("showtrackdata"), MO_PARAM_NUMERIC, MOVIE_SHOWTRACKDATA );
-	p_configdefinition->Add( moText("showmoviedata"), MO_PARAM_NUMERIC, MOVIE_SHOWMOVIEDATA );
-	p_configdefinition->Add( moText("interpolation"), MO_PARAM_NUMERIC, MOVIE_INTERPOLATION );
-	p_configdefinition->Add( moText("pos_text_x"), MO_PARAM_FUNCTION, MOVIE_POSTEXX );
-	p_configdefinition->Add( moText("pos_text_y"), MO_PARAM_FUNCTION, MOVIE_POSTEXY );
-	p_configdefinition->Add( moText("anc_text_x"), MO_PARAM_FUNCTION, MOVIE_ANCTEXX );
-	p_configdefinition->Add( moText("alt_text_y"), MO_PARAM_FUNCTION, MOVIE_ALTTEXY );
-	p_configdefinition->Add( moText("pos_cuad_x"), MO_PARAM_FUNCTION, MOVIE_POSCUADX );
-	p_configdefinition->Add( moText("pos_cuad_y"), MO_PARAM_FUNCTION, MOVIE_POSCUADY );
-	p_configdefinition->Add( moText("anc_cuad_x"), MO_PARAM_FUNCTION, MOVIE_ANCCUADX );
-	p_configdefinition->Add( moText("alt_cuad_y"), MO_PARAM_FUNCTION, MOVIE_ALTCUADY );
+	p_configdefinition->Add( moText("startplaying"), MO_PARAM_NUMERIC, MOVIE_STARTPLAYING, moValue( "0","NUM").Ref() );
+	p_configdefinition->Add( moText("loop"), MO_PARAM_NUMERIC, MOVIE_LOOP, moValue( "0","NUM").Ref() );
+	p_configdefinition->Add( moText("showtrackdata"), MO_PARAM_NUMERIC, MOVIE_SHOWTRACKDATA, moValue( "0","NUM").Ref() );
+	p_configdefinition->Add( moText("showmoviedata"), MO_PARAM_NUMERIC, MOVIE_SHOWMOVIEDATA, moValue( "0","NUM").Ref() );
+	p_configdefinition->Add( moText("interpolation"), MO_PARAM_NUMERIC, MOVIE_INTERPOLATION, moValue( "0","NUM").Ref() );
+	p_configdefinition->Add( moText("pos_text_x"), MO_PARAM_FUNCTION, MOVIE_POSTEXX, moValue( "0.0","FUNCTION").Ref() );
+	p_configdefinition->Add( moText("pos_text_y"), MO_PARAM_FUNCTION, MOVIE_POSTEXY, moValue( "0.0","FUNCTION").Ref() );
+	p_configdefinition->Add( moText("anc_text_x"), MO_PARAM_FUNCTION, MOVIE_ANCTEXX, moValue( "1.0","FUNCTION").Ref() );
+	p_configdefinition->Add( moText("alt_text_y"), MO_PARAM_FUNCTION, MOVIE_ALTTEXY, moValue( "1.0","FUNCTION").Ref() );
+	p_configdefinition->Add( moText("pos_cuad_x"), MO_PARAM_FUNCTION, MOVIE_POSCUADX, moValue( "0.0","FUNCTION").Ref()  );
+	p_configdefinition->Add( moText("pos_cuad_y"), MO_PARAM_FUNCTION, MOVIE_POSCUADY, moValue( "0.0","FUNCTION").Ref()  );
+	p_configdefinition->Add( moText("anc_cuad_x"), MO_PARAM_FUNCTION, MOVIE_ANCCUADX, moValue( "1.0","FUNCTION").Ref()  );
+	p_configdefinition->Add( moText("alt_cuad_y"), MO_PARAM_FUNCTION, MOVIE_ALTCUADY, moValue( "1.0","FUNCTION").Ref()  );
 	return p_configdefinition;
 }
 

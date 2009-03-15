@@ -31,6 +31,13 @@
 
 #include "moKeyboard.h"
 
+#ifdef MO_WIN32
+  #include "SDL.h"
+#else
+  #include "SDL/SDL.h"
+#endif
+
+
 #define MO_KEYBOARD_CFG_STRCOD 0
 #define MO_KEYBOARD_CFG_TYPE 1
 #define MO_KEYBOARD_CFG_KEY 2

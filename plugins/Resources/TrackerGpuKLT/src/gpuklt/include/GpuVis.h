@@ -162,7 +162,7 @@ class DLL_SPEC GpuVis
 
 private:
 
-  char              CGcodeDirectory[64];   //!< Folder where all CG shaders are located.
+  char              CGcodeDirectory[256];   //!< Folder where all CG shaders are located.
 
   bool		        verbose;	   		   //!< Flag indicates verbosity of output.
   bool    		    subTiming;	  		   //!< Flag inidicates if substeps will be timed.

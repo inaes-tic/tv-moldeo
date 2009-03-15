@@ -35,11 +35,22 @@
 #include "moTypes.h"
 #include "moValue.h"
 
+class LIBMOLDEO_API moPreconfigParamIndex {
+
+    public:
+        moText  m_ParamName;
+        MOint	m_ParamIndex;
+        MOint	m_ValueIndex;
+};
+
+moDeclareExportedDynamicArray( moPreconfigParamIndex, moPreconfigIndexes )
 
 class LIBMOLDEO_API moPreConfig {
 
 	public:
 	    moPreConfig();
+	    moPreConfig( moPreconfigIndexes& preconfindexes );
+	    moPreConfig( moValueIndexes& valueindexes );
 	    virtual ~moPreConfig();
 		virtual MOboolean Init();
 		virtual MOboolean Finish();
@@ -48,6 +59,7 @@ class LIBMOLDEO_API moPreConfig {
 		moPreConfig& operator = ( const moPreConfig& preconf);
 
 		moValueIndexes	m_ValueIndexes;
+		moPreconfigIndexes  m_PreconfIndexes;
 
 };
 

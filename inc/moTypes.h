@@ -401,26 +401,6 @@ enum moPolygonModes {
 
 //////////////////////////////////////////////////////
 
-class LIBMOLDEO_API ajCoord {
-public:
-   MOfloat X, Y, Z;     //coord
-   MOfloat XN, YN, ZN;  //coord news
-   MOfloat INCX, INCY, INCZ;  //coord news
-   MOfloat NX,NY,NZ;    //normal
-   MOfloat U,V;         //text
-   MOint I,J;           //raster
-   MOtexture Texture;   //texture
-   MOfloat Scalef;
-};
-
-class LIBMOLDEO_API ajQuad {
-public:
-	ajCoord A;
-	ajCoord B;
-	ajCoord C;
-	ajCoord D;
-};
-
 LIBMOLDEO_API MOfloat morand();
 LIBMOLDEO_API MOint moRand(MOint);
 LIBMOLDEO_API void HSVtoRGB(short,short,short,float*,float*,float*);
@@ -463,8 +443,8 @@ const moTexParam MODefTex2DParams =
     GL_RGBA,
 	GL_LINEAR,
 	GL_LINEAR,
-	GL_CLAMP_TO_EDGE,
-	GL_CLAMP_TO_EDGE
+	GL_REPEAT,
+	GL_REPEAT
 };
 
 
@@ -485,6 +465,7 @@ const moTexParam MOUndefinedTex =
 
 
 LIBMOLDEO_API MOulong moGetTicks();
+LIBMOLDEO_API MOulong moGetTicksAbsolute();
 
 #ifndef momax
 #define momax(a,b) (((a) > (b)) ? (a) : (b))

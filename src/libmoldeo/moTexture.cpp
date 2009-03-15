@@ -154,8 +154,12 @@ MOboolean moTexture::BuildFromFile(moText p_filename)
 
 	if (m_pImage != NULL)
 	{
-		MOuint p_width = FreeImage_GetWidth(m_pImage);
-		MOuint p_height = FreeImage_GetHeight(m_pImage);
+	    MOuint p_width;
+	    MOuint p_height;
+
+	    p_width = FreeImage_GetWidth(m_pImage);
+        p_height = FreeImage_GetHeight(m_pImage);
+
 		MOuint p_format;
 
 		m_param.target = GL_TEXTURE_2D;
@@ -361,30 +365,30 @@ void moTexture::CalculateSize(MOuint p_width, MOuint p_height)
 		m_height = p_height;
 		m_max_coord_s = p_width;
 		m_max_coord_t = p_height;
-	}
+	}/*
 	else
 	{
 		m_width = p_width;
 		m_height = p_height;
 		m_max_coord_s = 1.0;
 		m_max_coord_t = 1.0;
-	}
-	/*
-	else if (GLEW_ARB_texture_non_power_of_two)
+	}*/
+	else if (!GLEW_ARB_texture_non_power_of_two)
 	{
-		m_width = p_width;
-		m_height = p_height;
-		m_max_coord_s = 1.0;
-		m_max_coord_t = 1.0;
-	}
-	else
-	{
-            m_width = NextPowerOf2(p_width);
+        m_width = NextPowerOf2(p_width);
 		m_height = NextPowerOf2(p_height);
-		m_max_coord_s = p_width / m_width;
-		m_max_coord_t = p_height / m_height;
+		m_max_coord_s = (float)p_width / (float)m_width;
+		m_max_coord_t = (float)p_height / (float)m_height;
+    }
+	else
+	{
+		m_width = p_width;
+		m_height = p_height;
+		m_max_coord_s = 1.0;
+		m_max_coord_t = 1.0;
+
 	}
-	*/
+
 }
 
 MOuint moTexture::NextPowerOf2(MOuint p_seed)
@@ -935,9 +939,11 @@ MOboolean moMovie::Init(moText p_name, MOuint p_moid, moResourceManager* p_res, 
 {
 	moTextureAnimated::Init(p_name, p_moid, p_res, p_param);
     if(!m_pGraph) {
+
         #ifdef MO_DIRECTSHOW
             m_pGraph = (moVideoGraph*) new moDsGraph();
         #endif
+
         #ifdef MO_GSTREAMER
             m_pGraph = (moVideoGraph*) new moGsGraph();
         #endif

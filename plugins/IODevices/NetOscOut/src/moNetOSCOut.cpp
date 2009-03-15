@@ -68,7 +68,7 @@ moNetOSCOut::moNetOSCOut()
 {
 	packetBuffer = NULL;
 	packetStream = NULL;
-    SetName("net_osc_out");
+    SetName("netoscout");
 }
 
 moNetOSCOut::~moNetOSCOut()
@@ -88,9 +88,11 @@ MOboolean moNetOSCOut::Init()
     conf += moText(".cfg");
 	if (m_Config.LoadConfig(conf) != MO_CONFIG_OK ) {
 		moText text = "Couldn't load netoscout config";
-		MODebug->Push(text);
+		MODebug2->Error(text);
 		return false;
 	}
+
+	moMoldeoObject::Init();
 
     // Reading list of devices which will be used as source of events to send over the network.
     for(dev = MO_IODEVICE_KEYBOARD; dev <= MO_IODEVICE_TABLET; dev++) recog_devices[dev] = false;
@@ -179,11 +181,13 @@ void moNetOSCOut::Update(moEventList *Eventos)
     moEvent *actual;
 
     // Sending over the network the events that correspond to recognized devices.
+    //Eventos->Add( MO_IODEVICE_TRACKER, moGetTicks(), 112, 113, 114, 115 );
+
     actual = Eventos->First;
     while(actual != NULL)
     {
-		if (actual->deviceid>=0 && actual->deviceid<=MO_IODEVICE_TABLET)
-		if(recog_devices[actual->deviceid])
+		if (actual->deviceid>=0 && actual->deviceid<=MO_IODEVICE_TABLET) {
+		//if(recog_devices[actual->deviceid])
 	        for (i = 0; i < host_name.Count(); i++)
 				{
 					res = eventPacket[i]->AddEvent(actual);
@@ -194,6 +198,7 @@ void moNetOSCOut::Update(moEventList *Eventos)
 						if (!res) eventPacket[i]->AddEvent(actual);
 					}
 			    }
+		}
 
         if (delete_events)
         {
@@ -203,6 +208,54 @@ void moNetOSCOut::Update(moEventList *Eventos)
         }
         else actual = actual->next;
     }
+
+
+    //inlets outlets
+    moMoldeoObject::Update(Eventos);
+
+    moTrackerSystemData* m_pTrackerData = NULL;
+    //bool m_bTrackerInit = false;
+	//Procesar Inlets
+
+	//MODebug2->Message("netoscout:  updating");
+
+	for(int i=0; i<m_Inlets.Count(); i++) {
+		moInlet* pInlet = m_Inlets[i];
+		if (pInlet->Updated() && ( pInlet->GetConnectorLabelName()==moText("TRACKERKLT") || pInlet->GetConnectorLabelName()==moText("TRACKERGPUKLT") || pInlet->GetConnectorLabelName()==moText("TRACKERGPUKLT2")) ) {
+
+            //MODebug2->Message("netoscout: receiving tracker data");
+
+			m_pTrackerData = (moTrackerSystemData *)pInlet->GetData()->Pointer();
+			if (m_pTrackerData /*&& !m_bTrackerInit*/ ) {
+
+			    moDataMessage tracker_data_message;
+
+			    moData pData;
+
+
+			    pData.SetFloat( m_pTrackerData->GetBarycenter().X() );
+			    tracker_data_message.Add( pData );
+
+			    pData.SetFloat( m_pTrackerData->GetBarycenter().Y() );
+			    tracker_data_message.Add( pData );
+
+			    //MODebug2->Message( moText("netoscout: receiving tracker data: bx:") + (moText)FloatToStr(m_pTrackerData->GetBarycenter().X()) );
+
+                for (i = 0; i < host_name.Count(); i++)
+				{
+					//res = eventPacket[i]->AddEvent(actual);
+                    //if (eventPacket[i]->ReadyToSend())
+					{
+						SendDataMessage( i, tracker_data_message );
+						//eventPacket[i]->ClearPacket();
+						//if (!res) eventPacket[i]->AddEvent(actual);
+					}
+			    }
+
+			}
+		}
+	}
+
 }
 
 MOboolean moNetOSCOut::Finish()
@@ -246,3 +299,40 @@ void moNetOSCOut::SendEvent(int i)
     (*packetStream) << osc::EndBundle;
     transmitSockets[i]->Send( packetStream->Data(), packetStream->Size() );
 }
+
+void moNetOSCOut::SendDataMessage( int i, moDataMessage &datamessage ) {
+
+	packetStream->Clear();
+    (*packetStream) << osc::BeginBundleImmediate;
+
+    (*packetStream) << osc::BeginMessage( moText("") );
+
+    for(int i=0; i< datamessage.Count(); i++) {
+        moData data = datamessage[i];
+        switch(data.Type()) {
+            case MO_DATA_NUMBER_FLOAT:
+                (*packetStream) << data.Float();
+                break;
+            case MO_DATA_NUMBER_INT:
+                (*packetStream) << data.Int();
+                break;
+            case MO_DATA_NUMBER_LONG:
+                (*packetStream) << data.Long();
+                break;
+            case MO_DATA_NUMBER_DOUBLE:
+                (*packetStream) << data.Double();
+                break;
+            case MO_DATA_TEXT:
+                (*packetStream) << (char*)data.Text();
+                break;
+
+        }
+
+    }
+    (*packetStream) << osc::EndMessage;
+    (*packetStream) << osc::EndBundle;
+    transmitSockets[i]->Send( packetStream->Data(), packetStream->Size() );
+
+
+}
+

@@ -71,7 +71,8 @@ moFontManager::Init() {
 		//completepath = m_pResourceManager->GetDataMan()->GetDataPath() + moText("/");
 		completepath = moText("../../art/fonts/Tuffy.ttf");
 
-		pFont->Init( MO_FONT_TRANSLUCENT, completepath, 16 );
+		pFont->Init( MO_FONT_OUTLINE, completepath, 16 );
+
 
 		//pFont->Init( MO_FONT_SOLID, completepath, 16 );
 
@@ -121,6 +122,9 @@ moFontManager::GetFont( moText p_fontname, bool create, moFontType p_fonttype, M
     pFont = NULL;
 
     if (! (p_fontname.Trim().Length() == 0)) {
+
+        if (p_fontname.Trim()==moText("Default") || p_fontname.Trim()==moText("default")) return m_Fonts.Get(0);
+
         for(int i=0; i< (int)m_Fonts.Count(); i++) {
 
                 pFont = m_Fonts.Get(i);
@@ -132,8 +136,15 @@ moFontManager::GetFont( moText p_fontname, bool create, moFontType p_fonttype, M
 
         }
 
-        if (create)
-            pFont = LoadFont( p_fontname, p_fonttype, p_fontsize );
+        if (create) {
+
+            moText	completepath;
+
+            completepath = m_pResourceManager->GetDataMan()->GetDataPath() + moSlash;
+            completepath+= moText(p_fontname);
+
+            pFont = LoadFont( completepath, p_fonttype, p_fontsize );
+        }
     } else MODebug2->Error(moText("FontManager:: empty string"));
     return pFont;
 }
@@ -183,7 +194,7 @@ moFontManager::GetFont( moValue& p_value, bool create ) {
 }
 
 moFont*
-moFontManager::LoadFont( moText p_fontname, moFontType p_fonttype, MOfloat p_fontsize ) {
+moFontManager::LoadFont( moText p_fontname_path, moFontType p_fonttype, MOfloat p_fontsize ) {
 
     moFont *pFont = NULL;
     moTexture* p_Texture = NULL;
@@ -193,21 +204,16 @@ moFontManager::LoadFont( moText p_fontname, moFontType p_fonttype, MOfloat p_fon
 
 	if (pFont) {
 
-		moText	completepath;
-
-		completepath = m_pResourceManager->GetDataMan()->GetDataPath() + moSlash;
-		completepath+= moText(p_fontname);
-
     if ( p_fonttype == MO_FONT_GLBUILD ) {
-        idx = m_pResourceManager->GetTextureMan()->GetTextureMOId( p_fontname, true );
+        idx = m_pResourceManager->GetTextureMan()->GetTextureMOId( p_fontname_path, true );
         if (idx>-1) p_Texture = (moTexture*) m_pResourceManager->GetTextureMan()->GetTexture(idx);
         if (p_Texture)
-          pFont->Init( p_fonttype, completepath, p_fontsize, p_Texture->GetGLId() );
-        MODebug2->Push( moText("Loaded Bitmap Font: ") + (moText)completepath );
-    } else if ( pFont->Init( p_fonttype, completepath, p_fontsize) ) {
-        MODebug2->Push( moText("Loaded FreeType Font: ") + (moText)completepath );
+          pFont->Init( p_fonttype, p_fontname_path, p_fontsize, p_Texture->GetGLId() );
+        MODebug2->Push( moText("Loaded Bitmap Font: ") + (moText)p_fontname_path );
+    } else if ( pFont->Init( p_fonttype, p_fontname_path, p_fontsize) ) {
+        MODebug2->Push( moText("Loaded FreeType Font: ") + (moText)p_fontname_path );
     } else {
-        MODebug2->Push( moText("Error: font: ") + (moText)completepath );
+        MODebug2->Push( moText("Error: font: ") + (moText)p_fontname_path );
         return NULL;
     }
 
@@ -383,7 +389,7 @@ moFont::Draw( MOfloat x, MOfloat y, moText& text, moFontSize p_fontsize, MOint s
     FTFont* FF = (FTFont*) m_pFace;
     if (FF) {
         SetSize(p_fontsize);
-        FF->Render( text );
+        FF->Render( text, text.Length(), FTPoint(x,y) );
     }
 
     else {

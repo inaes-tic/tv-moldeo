@@ -67,7 +67,6 @@ class moMobItemData : public wxTreeItemData {
 class moProjectTreeCtrl : public wxTreeCtrl {
 
 	public:
-		//SDL_Surface *p_s;
 
 		moProjectTreeCtrl( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style );
 		void OnActivate(wxTreeEvent &event);

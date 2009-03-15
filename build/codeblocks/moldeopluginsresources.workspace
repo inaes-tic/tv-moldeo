@@ -2,7 +2,7 @@
 <CodeBlocks_workspace_file>
 	<Workspace title="Moldeo">
 		<Project filename="..\..\plugins\Resources\TrackerKLT\trackerklt.cbp" />
-		<Project filename="..\..\plugins\Resources\TrackerGpuKLT\trackergpuklt.cbp" />
+		<Project filename="..\..\plugins\Resources\TrackerGpuKLT\trackergpuklt.cbp" active="1" />
 		<Project filename="..\..\plugins\Resources\TrackerGpuKLT2\trackergpuklt2.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>

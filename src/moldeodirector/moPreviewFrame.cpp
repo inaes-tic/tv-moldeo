@@ -7,6 +7,8 @@
 #include <wx/string.h>
 //*)
 
+#include <wx/display.h>
+
 //(*IdInit(moPreviewFrame)
 const long moPreviewFrame::TOOLPLAY = wxNewId();
 const long moPreviewFrame::TOOLPAUSE = wxNewId();
@@ -24,8 +26,8 @@ END_EVENT_TABLE()
 moPreviewFrame::moPreviewFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
 	//(*Initialize(moPreviewFrame)
-	Create(parent, wxID_ANY, _("Moldeo output"), wxDefaultPosition, wxDefaultSize, wxSTAY_ON_TOP|wxDEFAULT_FRAME_STYLE, _T("wxID_ANY"));
-	SetClientSize(wxSize(400,300));
+	Create(parent, wxID_ANY, _("Moldeo output"), wxDefaultPosition, wxDefaultSize, wxNO_BORDER, _T("wxID_ANY"));
+	SetClientSize(wxSize(800,600));
 	SetForegroundColour(wxColour(255,255,255));
 	SetBackgroundColour(wxColour(0,0,0));
 	ToolBar1 = new wxToolBar(this, ID_TOOLBAR1, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxNO_BORDER, _T("ID_TOOLBAR1"));
@@ -39,6 +41,8 @@ moPreviewFrame::moPreviewFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos
 	Connect(wxID_ANY,wxEVT_CLOSE_WINDOW,(wxObjectEventFunction)&moPreviewFrame::OnClose);
 	//*)
 	m_pGLCanvas = NULL;
+	ToolBar1->Hide();
+
 }
 
 moPreviewFrame::~moPreviewFrame()
@@ -52,7 +56,7 @@ void moPreviewFrame::Init( moIDirectorActions* pActionsHandler, wxGLContext* p_p
     SetNextActionHandler( pActionsHandler);
 
     if (!m_pGLCanvas)
-        m_pGLCanvas = new moGLCanvas( this, p_pGLContext, -1, wxPoint(0,0), wxSize(800,600), 0, wxT("moGLCanvas"));
+        m_pGLCanvas = new moGLCanvas( this, p_pGLContext, -1, wxPoint(0,0), wxSize(1024,768), 0, wxT("moGLCanvas"));
 
     if (m_pGLCanvas)
         m_pGLCanvas->Init( this );
@@ -65,12 +69,33 @@ moPreviewFrame::OnToolClick( wxCommandEvent &event) {
 
     if ( event.GetId() == TOOLPLAY) {
         ShowMessage( moText("Play") );
+        //ToolBar1->Hide();
+        //SetClientSize(wxSize(1024,768));
     } else if (event.GetId() == TOOLPAUSE) {
         ShowMessage( moText("Pause") );
+        //ToolBar1->Hide();
+
     } else if (event.GetId() == TOOLFULLSCREEN) {
         ShowMessage( moText("Fullscreen") );
         FullScreen();
     }
+
+    //wxDisplay thisDisplay(0);
+    //wxDisplay theOtherDisplay(1);
+
+    //thisDisplay.GetFromWindow(this);
+
+    //wxRect client = thisDisplay.GetClientArea();
+    //wxRect client2 = theOtherDisplay.GetClientArea();
+
+    //wxString clientareastr;
+    //wxString clientareastr2;
+
+    //clientareastr.Printf(" area: %d,%d,%d,%d", client.GetLeft(), client.GetTop(), client.GetWidth(), client.GetHeight() );
+    //clientareastr2.Printf(" area: %d,%d,%d,%d", client2.GetLeft(), client2.GetTop(), client2.GetWidth(), client2.GetHeight() );
+
+   ///wxMessageBox(thisDisplay.GetName() + clientareastr);
+   //wxMessageBox(theOtherDisplay.GetName() + clientareastr2 );
 
 
 }

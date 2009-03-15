@@ -11,17 +11,19 @@
 			<default>1</default>
 			<pos>0,0</pos>
 			<size>32,32</size>
+			<handler function="OnBitmapButtonPlayClick" entry="EVT_BUTTON" />
 		</object>
 		<object class="wxBitmapButton" name="ID_BITMAPBUTTONPAUSE" variable="BitmapButtonPause" member="yes">
 			<bitmap>../../doc/icons/pause32.png</bitmap>
 			<default>1</default>
 			<pos>32,0</pos>
 			<size>32,32</size>
+			<handler function="OnBitmapButtonPauseClick" entry="EVT_BUTTON" />
 		</object>
 		<object class="wxBitmapButton" name="ID_BITMAPBUTTONFULLSCREEN" variable="ButtonFullSCreen" member="yes">
 			<bitmap>../../doc/icons/fullscreen32.png</bitmap>
 			<default>1</default>
-			<pos>96,0</pos>
+			<pos>272,0</pos>
 			<size>32,32</size>
 			<handler function="OnButtonFullSCreenClick" entry="EVT_BUTTON" />
 		</object>
@@ -42,6 +44,14 @@
 			<bitmap>../../doc/icons/savesession32.png</bitmap>
 			<pos>64,0</pos>
 			<size>32,32</size>
+			<handler function="OnBitmapButtonSaveSessionClick" entry="EVT_BUTTON" />
+		</object>
+		<object class="wxBitmapButton" name="ID_BITMAPBUTTONSTOP" variable="BitmapButtonStop" member="yes">
+			<bitmap>..\..\art\icons\stop32.png</bitmap>
+			<default>1</default>
+			<pos>96,0</pos>
+			<size>32,32</size>
+			<handler function="OnBitmapButtonStopClick" entry="EVT_BUTTON" />
 		</object>
 	</object>
 </wxsmith>

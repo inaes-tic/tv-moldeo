@@ -55,17 +55,6 @@ class moTrackerGpuKLTSystemData : public moTrackerSystemData
 
 		GpuKLT_FeatureList*	m_FeatureList;
 
-		moVideoFormat	m_VideoFormat;
-
-        int GetFeaturesCount() {
-            return m_Features.Count();
-        }
-        moTrackerFeature* GetFeature(int i) {
-            return m_Features.Get(i);
-        }
-        moTrackerFeatureArray& GetFeatures() {
-            return m_Features;
-        }
 };
 
 class moTrackerGpuKLTSystem : public moAbstract
@@ -103,6 +92,7 @@ public:
 
 	void NewData( moVideoSample* p_pVideoSample );
 	moTrackerGpuKLTSystemData*	GetData() {	return &m_TrackerSystemData; }
+
 private:
 	moText m_Name;
 	moText m_Live;

@@ -89,8 +89,9 @@ class LIBMOLDEO_API moBucket {
         /**
         *   @param size tamaño del buffer de memoria, en bytes
         *   @param pbuf puntero de dónde copiar los datos al nuevo espacio de memoria
+        *   @param setvalue valor con el que fijar el buffer recien creado
         */
-        void SetBuffer( MOlong size , MOubyte *pbuf );
+        void SetBuffer( MOlong size , MOubyte *pbuf);
 
         /// Copia al espacio de memoria los valores de otro espacio de memoria
         /**
@@ -116,6 +117,14 @@ class LIBMOLDEO_API moBucket {
         *   No liberará memoria si no fue alojada anteriormente.
         */
 		void EmptyBucket();//free the bucket's buffer
+
+        /// Habilita el buffer en memoria con el valor prefijado
+        /**
+        *   @param size tamaño del buffer de memoria, en bytes
+        *   @param setvalue valor con el que fijar el buffer recien creado
+        */
+        void BuildBucket( MOlong size , int setvalue );
+
 
 	protected:
 		MOlong	m_lBufferSize;///< tamaño del espacio en memoria (buffer)

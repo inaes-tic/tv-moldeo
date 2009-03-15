@@ -199,7 +199,7 @@ moEffectLights::GetDefinition( moConfigDefinition *p_configdefinition ) {
 	p_configdefinition = moEffect::GetDefinition( p_configdefinition );
 	p_configdefinition->Add( moText("number"), MO_PARAM_NUMERIC, LIGHTS_NUMBER, moValue( "60", "NUM").Ref() );
 	p_configdefinition->Add( moText("blending"), MO_PARAM_BLENDING, LIGHTS_BLENDING, moValue( "0", "NUM").Ref() );
-	p_configdefinition->Add( moText("texture"), MO_PARAM_TEXTURE, LIGHTS_TEXTURE, moValue( "icons/star.tga", "TXT") );
+	p_configdefinition->Add( moText("texture"), MO_PARAM_TEXTURE, LIGHTS_TEXTURE, moValue( "default", "TXT") );
 
 	p_configdefinition->Add( moText("factorx"), MO_PARAM_FUNCTION, LIGHTS_FACTORX, moValue( "0.0", "FUNCTION").Ref() );
 	p_configdefinition->Add( moText("factory"), MO_PARAM_FUNCTION, LIGHTS_FACTORY, moValue( "0.0", "FUNCTION").Ref() );

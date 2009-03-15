@@ -56,17 +56,6 @@ class moTrackerKLTSystemData : public moTrackerSystemData
 		KLT_FeatureList	m_FeatureList;
 		KLT_FeatureTable m_FeatureTable;
 
-		moVideoFormat	m_VideoFormat;
-
-        int GetFeaturesCount() {
-            return m_Features.Count();
-        }
-        moTrackerFeature* GetFeature(int i) {
-            return m_Features.Get(i);
-        }
-        moTrackerFeatureArray& GetFeatures() {
-            return m_Features;
-        }
 };
 
 class moTrackerKLTSystem : public moAbstract

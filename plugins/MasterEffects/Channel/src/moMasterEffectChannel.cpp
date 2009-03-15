@@ -290,7 +290,7 @@ moMasterEffectChannel::Interaction( moIODeviceManager *IODeviceManager ) {
 						if(m_SelectedArray[e]==MO_ON && m_Selected!=(MOint)e)
 							if(m_pEffectManager->AllEffects().Get(e)!=NULL)
 							{
-								m_pEffectManager->AllEffects().Get(e)->state.tempo.BeatPulse(SDL_GetTicks());
+								m_pEffectManager->AllEffects().Get(e)->state.tempo.BeatPulse(moGetTicksAbsolute());
 								//OJO
 								//if(m_pEffectManager->AllEffects().Get(e)->state.tempo.beatpulsecount==0)
 								m_pEffectManager->AllEffects().Get(e)->state.synchronized = MO_DEACTIVATED;
@@ -299,7 +299,7 @@ moMasterEffectChannel::Interaction( moIODeviceManager *IODeviceManager ) {
 					if(m_Selected>-1) {
 						if(m_pEffectManager->AllEffects().Get(m_Selected)!=NULL)
 						{
-							m_pEffectManager->AllEffects().Get(m_Selected)->state.tempo.BeatPulse(SDL_GetTicks());
+							m_pEffectManager->AllEffects().Get(m_Selected)->state.tempo.BeatPulse(moGetTicksAbsolute());
 							//OJO
 							//if(m_pEffectManager->AllEffects().Get(e)->state.tempo.beatpulsecount==0)
 							m_pEffectManager->AllEffects().Get(m_Selected)->state.synchronized = MO_DEACTIVATED;

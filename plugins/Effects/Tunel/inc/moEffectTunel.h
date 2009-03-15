@@ -38,6 +38,27 @@
 #define TUNELSLIDES     36
 #define TEXTURE_SPEED   0.5
 
+class ajCoord {
+public:
+   MOfloat X, Y, Z;     //coord
+   MOfloat XN, YN, ZN;  //coord news
+   MOfloat INCX, INCY, INCZ;  //coord news
+   MOfloat NX,NY,NZ;    //normal
+   MOfloat U,V;         //text
+   MOint I,J;           //raster
+   MOtexture Texture;   //texture
+   MOfloat Scalef;
+};
+
+class ajQuad {
+public:
+	ajCoord A;
+	ajCoord B;
+	ajCoord C;
+	ajCoord D;
+};
+
+
 enum moTunelParamIndex {
 	TUNEL_ALPHA,
 	TUNEL_COLOR,

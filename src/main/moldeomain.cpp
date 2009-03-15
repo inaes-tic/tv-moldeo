@@ -7,6 +7,34 @@
 #include <string.h>
 #include <time.h>
 
+/*OSX*/
+#ifdef MO_MACOSX
+  #include "SDL.h"
+  #include "SDL_thread.h"
+  #include "SDL_mutex.h"
+  #include "SDL_net.h"
+  #include "SDL_image.h"
+#endif
+
+/*LINUX*/
+#ifdef MO_LINUX
+	#include <SDL/SDL.h>
+	#include <SDL/SDL_thread.h>
+	#include <SDL/SDL_mutex.h>
+	#include <SDL/SDL_net.h>
+	#include <SDL/SDL_image.h>
+	#include <SDL/SDL_syswm.h>
+#endif
+
+/*WINDOWS*/
+#ifdef MO_WIN32
+	#include <SDL.h>
+	#include <SDL_thread.h>
+	#include <SDL_mutex.h>
+	#include <SDL_syswm.h>
+#endif
+
+
 #ifdef MO_WIN32
 
 #include "../../Build/vcres/resource.h"
@@ -222,7 +250,7 @@ typedef enum {
 
 	/*Empieza la Lola!!*/
 	SDL_ShowCursor(0);
-	//SDL_WM_GrabInput(SDL_GRAB_ON);
+	SDL_WM_GrabInput(SDL_GRAB_ON);
 
     #ifdef MO_DIRECTSHOW
 	    CoInitialize(NULL);

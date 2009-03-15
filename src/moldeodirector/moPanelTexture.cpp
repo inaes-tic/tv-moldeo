@@ -159,8 +159,10 @@ void moPanelTexture::LoadImage() {
 
                   wxBitmap NewBitmap;
 
+
                   if ( mFileName.FileExists() ) {
-                      NewBitmap = wxBitmap(wxImage( moText2Wx(tname) ).Rescale( 128, 80 ));
+                      if (pTextDescriptor.GetType()==MO_TYPE_TEXTURE)
+                        NewBitmap = wxBitmap(wxImage( moText2Wx(tname) ).Rescale( 128, 80 ));
                   } else {
                       NewBitmap = wxBitmap(wxImage(_T("../../art/icons/imageempty.png")).Rescale(128,80) );
                   }

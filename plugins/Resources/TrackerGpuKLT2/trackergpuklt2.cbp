@@ -89,7 +89,6 @@
 			<Add directory=".\lib" />
 		</Linker>
 		<Unit filename="inc\moTrackerGpuKLT2.h" />
-		<Unit filename="src\gpuklt\GL\klt_for_video.cpp" />
 		<Unit filename="src\gpuklt\GL\v3d_gpubase.cpp" />
 		<Unit filename="src\gpuklt\GL\v3d_gpubase.h" />
 		<Unit filename="src\gpuklt\GL\v3d_gpuklt.cpp" />

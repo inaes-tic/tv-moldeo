@@ -36,6 +36,23 @@ moDefineDynamicArray(moSoundArray)
 moDefineDynamicArray(moSoundEffectArray)
 moDefineDynamicArray(moSoundBufferArray)
 
+#ifdef MO_WIN32
+    #include "Framework.h"
+    #include "CWaves.h"
+#endif
+
+#ifdef MO_LINUX
+    #include <AL/al.h>
+    #include <AL/alut.h>
+    #include <AL/alext.h>
+#endif
+
+#ifdef MO_MACOSX
+    #include <al.h>
+    #include <alut.h>
+    //#include <alext.h>
+#endif
+
 moSound::moSound() {
 	pData = NULL;
 }

@@ -62,10 +62,17 @@ public:
 	void ResetMasterEffect( MOint p_n ) {}
 	void ResetIODevice( MOint p_n ) {}
 
-
 	void SetDirectorCore( moDirectorCore* p_pDirectorCore );
 
 	moMoldeoObject* GetObject( moMobDescriptor p_MobDesc );
+
+
+//================================================================
+// Effects states
+//================================================================
+
+    moDirectorStatus AddPreconfig( moMobDescriptor p_MobDesc, moPreconfigDescriptor p_PreConfDesc );
+
 
 //================================================================
 //Project
@@ -74,6 +81,11 @@ public:
     moDirectorStatus ConsoleLoop();
     moDirectorStatus SetView( int x, int y, int w, int h );
 
+	moDirectorStatus Play();
+	moDirectorStatus Stop();
+	moDirectorStatus Pause();
+	moDirectorStatus Seek( MOulong p_timecode );
+	moDirectorStatus SaveSession();
 
 	moDirectorStatus NewProject( moProjectDescriptor p_projectdescriptor );
 	moDirectorStatus OpenProject( moProjectDescriptor p_projectdescriptor );

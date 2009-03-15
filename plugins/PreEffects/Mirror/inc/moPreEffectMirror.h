@@ -34,16 +34,36 @@
 
 #include "moPrePlugin.h"
 
+class ajCoord {
+public:
+   MOfloat X, Y, Z;     //coord
+   MOfloat XN, YN, ZN;  //coord news
+   MOfloat INCX, INCY, INCZ;  //coord news
+   MOfloat NX,NY,NZ;    //normal
+   MOfloat U,V;         //text
+   MOint I,J;           //raster
+   MOtexture Texture;   //texture
+   MOfloat Scalef;
+};
+
+class ajQuad {
+public:
+	ajCoord A;
+	ajCoord B;
+	ajCoord C;
+	ajCoord D;
+};
+
 enum moMirrorIndex {
     MIRROR_ALPHA,
 	MIRROR_SYNCRO,
 	MIRROR_PHASE,
 	MIRROR_COLOR,
+	MIRROR_BLENDING,
 	MIRROR_POLYGONMODE,
 	MIRROR_RADIUS,
 	MIRROR_ABERRATION,
-	MIRROR_CONFIGURATION,
-	MIRROR_BLENDING
+	MIRROR_CONFIGURATION
 };
 
 class moPreEffectMirror : public moPreEffect

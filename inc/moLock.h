@@ -40,12 +40,13 @@
 #ifndef __MO_LOCK_H
 #define __MO_LOCK_H
 
-typedef void moMutex;
-
 /// implementación de bloqueo de ejecución, para el manejo asincrónico, primera versión basda en SDL_mutex
 /**
  * Revisar.
  */
+
+typedef  void* moBoostMutex;
+typedef  void* moBoostLock;
 
 class LIBMOLDEO_API moLock {
 
@@ -58,7 +59,8 @@ class LIBMOLDEO_API moLock {
 		bool Unlock();
 
 	private:
-		moMutex *m_lock;
+		moBoostMutex m_mutex;
+		moBoostLock m_lock;
 };
 
 #endif

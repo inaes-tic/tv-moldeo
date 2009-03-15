@@ -49,8 +49,6 @@ moDirectorCore::Init() {
 
     moText workpath = moFileManager::GetWorkPath();
 
-    Log( moText("Work path: ") + (moText)workpath );
-
 	//conffilename.
 	if ( m_Config.LoadConfig( "director.gmo" ) != MO_CONFIG_OK ) {
 	    if ( !moFileManager::FileExists( "director.gmo" ) ) {
@@ -166,6 +164,14 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
         return m_pDirectorConsole->Pause();
 	}
 
+	moDirectorStatus moDirectorCore::Stop() {
+        return m_pDirectorConsole->Stop();
+	}
+
+	moDirectorStatus moDirectorCore::Seek( MOulong p_timecode ) {
+        return m_pDirectorConsole->Seek(p_timecode);
+	}
+
 	moDirectorStatus moDirectorCore::FocusOutput() {
         return m_pUserInterface->FocusOutput();
 	}
@@ -173,6 +179,7 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
 	moDirectorStatus moDirectorCore::SaveSession() {
         return m_pDirectorConsole->SaveSession();
 	}
+
 	moDirectorStatus moDirectorCore::SaveAll() {
 	    return m_pDirectorConsole->SaveAll();
     }
@@ -185,6 +192,45 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
         return MO_DIRECTOR_STATUS_OK;
     }
 
+    void moDirectorCore::LoadPlugins( moPluginDefinitions& rPluginDefs, moText plugindir, moMoldeoObjectType mobjecttype ) {
+
+        moDirectory DirEffects;
+        bool bDebug = true;
+        moText PluginName;
+
+        //PREEFFECTS
+        DirEffects.Open( plugindir, moText("/*.dll") );
+        if (DirEffects.Exists()) {
+
+            moFile* pFile = NULL;
+            moText FileNameEnd;
+
+            pFile = DirEffects.FindFirst();
+
+            if (pFile!=NULL)
+                Log( moText("File founded") );
+
+            while(pFile!=NULL) {
+
+                FileNameEnd = pFile->GetFileName();
+                PluginName = pFile->GetFileName();
+                FileNameEnd.Right(2);
+                bDebug = ( FileNameEnd==moText("_d") );
+                #ifndef MO_WIN32
+                PluginName.Right( PluginName.Length() - 3 );
+                #endif
+                if (bDebug) PluginName.Left( PluginName.Length() - 3 );
+
+
+                if ( ( pFile->GetExtension()==moText(".dll") || pFile->GetExtension()==moText(".so") ) && !bDebug ) {
+                    rPluginDefs.Add( moPluginDefinition( PluginName, pFile->GetCompletePath(), mobjecttype ) );
+                }
+                Log( pFile->GetFileName() );
+                pFile = DirEffects.FindNext();
+            }
+        } else LogError( moText("Directory doesn´t exists:")+(moText)plugindir );
+
+    }
 
 	moApplicationDescriptor moDirectorCore::GetApplicationDescriptor() {
 
@@ -194,7 +240,6 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
         moPluginDefinitions& rPluginDefs( m_ApplicationDescriptor.GetPluginDefinitions());
 
         Log( moText("Checking plugins") );
-        Log( moText("Plugin path: ") + (moText)pluginsfullpath);
         //recorrer los plugins en busca de: dll o so
         //lo interesante sería que la definición de los plugins se complete a su vez
         //...
@@ -208,164 +253,19 @@ moDirectorCore::SetPaths( moText p_installationpath ) {
         moText PluginName;
 
         //PREEFFECTS
-        DirEffects.Open( pluginsfullpath + moText("/preeffects"), moText("/*.dll") );
-        if (DirEffects.Exists()) {
-
-            moFile* pFile = NULL;
-            moText FileNameEnd;
-
-            pFile = DirEffects.FindFirst();
-
-            if (pFile!=NULL)
-                Log( moText("File founded") );
-
-            while(pFile!=NULL) {
-
-                FileNameEnd = pFile->GetFileName();
-                PluginName = pFile->GetFileName();
-                FileNameEnd.Right(2);
-                bDebug = ( FileNameEnd==moText("_d") );
-                #ifndef MO_WIN32
-                PluginName.Right( PluginName.Length() - 3 );
-                #endif
-                if (bDebug) PluginName.Left( PluginName.Length() - 3 );
-
-
-                if ( ( pFile->GetExtension()==moText(".dll") || pFile->GetExtension()==moText(".so") || pFile->GetExtension()==moText(".dylib")) && !bDebug ) {
-                    rPluginDefs.Add( moPluginDefinition( PluginName, pFile->GetCompletePath(), MO_OBJECT_PREEFFECT ) );
-                }
-                Log( pFile->GetFileName() );
-                pFile = DirEffects.FindNext();
-            }
-        } else LogError( moText("PreEffects directory doesn´t exists:")+(moText)pluginsfullpath + moText("/preeffects") );
-
+        LoadPlugins( rPluginDefs, pluginsfullpath + moText("/preeffects"), MO_OBJECT_PREEFFECT);
 
         //EFFECTS
-        DirEffects.Open( pluginsfullpath + moText("/effects"), moText("/*.dll") );
-        if (DirEffects.Exists()) {
-
-            moFile* pFile = NULL;
-
-            pFile = DirEffects.FindFirst();
-            moText FileNameEnd;
-            moText FileNameStart;
-
-            if (pFile!=NULL)
-                Log( moText("File founded") );
-
-            while(pFile!=NULL) {
-                FileNameEnd = pFile->GetFileName();
-                PluginName = pFile->GetFileName();
-                FileNameEnd.Right(2);
-                bDebug = ( FileNameEnd==moText("_d") );
-                #ifndef MO_WIN32
-                PluginName.Right( PluginName.Length() - 3 );
-                #endif
-                if (bDebug) PluginName.Left( PluginName.Length() - 3 );
-
-                if ( ( pFile->GetExtension()==moText(".dll") || pFile->GetExtension()==moText(".so") || pFile->GetExtension()==moText(".dylib") ) && bDebug ) {
-                    rPluginDefs.Add( moPluginDefinition( PluginName, pFile->GetCompletePath(), MO_OBJECT_EFFECT ) );
-                }
-                Log( pFile->GetFileName() );
-                pFile = DirEffects.FindNext();
-            }
-        } else LogError( moText("Effects directory doesn´t exists")+DirEffects.GetCompletePath() );
-
+        LoadPlugins( rPluginDefs, pluginsfullpath + moText("/effects"), MO_OBJECT_EFFECT);
 
         //POSTEFFECTS
-        DirEffects.Open( pluginsfullpath + moText("/posteffects"), moText("/*.dll") );
-        if (DirEffects.Exists()) {
-
-            moFile* pFile = NULL;
-
-            pFile = DirEffects.FindFirst();
-            moText FileNameEnd;
-            moText FileNameStart;
-
-            if (pFile!=NULL)
-                Log( moText("File founded") );
-
-            while(pFile!=NULL) {
-                FileNameEnd = pFile->GetFileName();
-                PluginName = pFile->GetFileName();
-                FileNameEnd.Right(2);
-                bDebug = ( FileNameEnd==moText("_d") );
-                #ifndef MO_WIN32
-                PluginName.Right( PluginName.Length() - 3 );
-                #endif
-                if (bDebug) PluginName.Left( PluginName.Length() - 3 );
-
-                if ( ( pFile->GetExtension()==moText(".dll") || pFile->GetExtension()==moText(".so") || pFile->GetExtension()==moText(".dylib") ) && !bDebug ) {
-                    rPluginDefs.Add( moPluginDefinition( PluginName , pFile->GetCompletePath(), MO_OBJECT_POSTEFFECT ) );
-                }
-                Log( pFile->GetFileName() );
-                pFile = DirEffects.FindNext();
-            }
-        } else LogError( moText("Effects directory doesn´t exists")+DirEffects.GetCompletePath() );
+        LoadPlugins( rPluginDefs, pluginsfullpath + moText("/posteffects"), MO_OBJECT_POSTEFFECT);
 
         //IODEVICES
-        DirEffects.Open( pluginsfullpath + moText("/iodevices"), moText("/*.dll") );
-        if (DirEffects.Exists()) {
-
-            moFile* pFile = NULL;
-
-            pFile = DirEffects.FindFirst();
-            moText FileNameEnd;
-            moText FileNameStart;
-
-            if (pFile!=NULL)
-                Log( moText("File founded") );
-
-            while(pFile!=NULL) {
-                FileNameEnd = pFile->GetFileName();
-                PluginName = pFile->GetFileName();
-                FileNameEnd.Right(2);
-                bDebug = ( FileNameEnd==moText("_d") );
-                #ifndef MO_WIN32
-                PluginName.Right( PluginName.Length() - 3 );
-                #endif
-                if (bDebug) PluginName.Left( PluginName.Length() - 3 );
-
-                if ( ( pFile->GetExtension()==moText(".dll") || pFile->GetExtension()==moText(".so") || pFile->GetExtension()==moText(".dylib") ) && !bDebug) {
-                    rPluginDefs.Add( moPluginDefinition( PluginName, pFile->GetCompletePath(), MO_OBJECT_IODEVICE ) );
-                }
-                Log( pFile->GetFileName() );
-                pFile = DirEffects.FindNext();
-            }
-        } else LogError( moText("IODevices directory doesn´t exists")+DirEffects.GetCompletePath() );
+        LoadPlugins( rPluginDefs, pluginsfullpath + moText("/iodevices"), MO_OBJECT_IODEVICE);
 
         //RESOURCES
-        DirEffects.Open( pluginsfullpath + moText("/resources"), moText("/*.dll") );
-        if (DirEffects.Exists()) {
-
-            moFile* pFile = NULL;
-
-            pFile = DirEffects.FindFirst();
-            moText FileNameEnd;
-            moText FileNameStart;
-
-            if (pFile!=NULL)
-                Log( moText("File founded") );
-
-            while(pFile!=NULL) {
-
-                FileNameEnd = pFile->GetFileName();
-                PluginName = pFile->GetFileName();
-                FileNameEnd.Right(2);
-                bDebug = ( FileNameEnd==moText("_d") );
-                #ifndef MO_WIN32
-                PluginName.Right( PluginName.Length() - 3 );
-                #endif
-                if (bDebug) PluginName.Left( PluginName.Length() - 3 );
-
-                if ( ( pFile->GetExtension()==moText("dll") || pFile->GetExtension()==moText("so") || pFile->GetExtension()==moText(".dylib") ) && !bDebug) {
-                    rPluginDefs.Add( moPluginDefinition( PluginName, pFile->GetCompletePath(), MO_OBJECT_RESOURCE ) );
-                }
-                Log( pFile->GetFileName() );
-                pFile = DirEffects.FindNext();
-            }
-        } else LogError( moText("Resources directory doesn´t exists")+DirEffects.GetCompletePath() );
-
+        LoadPlugins( rPluginDefs, pluginsfullpath + moText("/resources"), MO_OBJECT_RESOURCE);
 
         moApplicationDescriptor pAppDes;
         pAppDes = m_ApplicationDescriptor;

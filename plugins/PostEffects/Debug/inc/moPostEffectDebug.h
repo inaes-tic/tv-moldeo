@@ -34,12 +34,16 @@
 
 #include "moPostPlugin.h"
 
-#ifndef MO_RED
-#define MO_RED      0
-#define MO_GREEN    1
-#define MO_BLUE     2
-#define MO_ALPHA    3
-#endif
+
+enum moDebugParamIndex {
+	DEBUG_ALPHA,
+	DEBUG_COLOR,
+	DEBUG_SYNC,
+	DEBUG_PHASE,
+	DEBUG_FONT,
+    DEBUG_INLET,
+	DEBUG_OUTLET
+};
 
 class moPostEffectDebug : public moPostEffect
 {
@@ -49,13 +53,6 @@ public:
     MOint font;
 
 	moTextArray	textevents;
-
-    //fx
-    MOuint Font;
-    moTextureIndex Fonts;
-
-    GLuint base; // Base Display List For The Font
-    GLuint loop; // Generic Loop Variable
 
     MOuint ticks, ticksprevious, tickselapsed;
 	MOdouble fps_current, fps_mean;
@@ -70,9 +67,9 @@ public:
 	void Update( moEventList* p_EventList );
     MOboolean Finish();
 
-    GLvoid BuildFont();
-    GLvoid glPrint(GLint, GLint, char*, int, float, float); // Where The Printing Happens
-    GLvoid KillFont();
+    moConfigDefinition *GetDefinition( moConfigDefinition *p_configdefinition );
+
+
 };
 
 class moPostEffectDebugFactory : public moPostEffectFactory

@@ -39,6 +39,7 @@
 #include "moBuckets.h"
 #include "moParam.h"
 
+
 /**
 * Los distintos tipos de accesos a los archivos soportados por el moFileManager
 */
@@ -54,6 +55,7 @@ enum moFileType {
 };
 
 #ifdef MO_WIN32
+    #include "io.h"
     #define moSlash moText("/")
     #define moThm moText("/.thm")
 #endif

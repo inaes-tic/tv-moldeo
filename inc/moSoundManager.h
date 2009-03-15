@@ -37,22 +37,7 @@
 #include "moConfig.h"
 #include "moResourceManager.h"
 
-#ifdef MO_WIN32
-    #include "Framework.h"
-    #include "CWaves.h"
-#endif
 
-#ifdef MO_LINUX
-    #include <AL/al.h>
-    #include <AL/alut.h>
-    #include <AL/alext.h>
-#endif
-
-#ifdef MO_MACOSX
-    #include <al.h>
-    //#include <alut.h>
-    //#include <alext.h>
-#endif
 
 #define NUMBUFFERS              (4)
 #define	SERVICE_UPDATE_PERIOD	(20)
@@ -103,10 +88,10 @@ struct LIBMOLDEO_API moSoundEffect : public moAbstract {
 		moSoundEffect() { m_EffectId=0; }
 		virtual ~moSoundEffect() {}
 
-		ALuint m_EffectId;
+		MOuint m_EffectId;
 
-		void SetParameterF( ALenum param, ALfloat flValue );
-		void GetParameterF( ALenum param, ALfloat* pflValue );
+		void SetParameterF( MOint param, MOfloat flValue );
+		void GetParameterF( MOint param, MOfloat* pflValue );
 
 };
 
@@ -153,7 +138,7 @@ class LIBMOLDEO_API moSound : public  moAbstract {
 		moSoundType GetType() { return m_SoundType; }
 
 		MOint	GetBufferSize() { return m_BufferSize; }
-		ALint	GetActualSample() { return m_ActualSample; }
+		MOint	GetActualSample() { return m_ActualSample; }
 
 		void Play();
 		void PlaySample( MOint sampleid );
@@ -173,27 +158,32 @@ class LIBMOLDEO_API moSound : public  moAbstract {
 		float GetVolume();
 	protected:
 
-		ALint			m_ActualSample;
-		ALint			m_OldSample;
+		MOint			m_ActualSample;
+		MOint			m_OldSample;
 
 		moFile*			m_pFile;
 		moDataManager*	m_pDataMan;
 		moFileManager*	m_pFileMan;
 
-		ALuint		    m_Buffers[NUMBUFFERS];
-		ALuint		    m_SourceId;
-		ALuint			m_BufferId;
-		ALint			m_State;
+		MOuint		    m_Buffers[NUMBUFFERS];
+		MOuint		    m_SourceId;
+		MOuint			m_BufferId;
+		MOint			m_State;
 
 
 
 		#ifdef MO_WIN32
+		/*
 		CWaves *		pWaveLoader;
 		WAVEID			WaveID;
 		ALint			iLoop;
 		ALint			iBuffersProcessed, iTotalBuffersProcessed, iQueuedBuffers;
 		WAVEFORMATEX	wfex;
+		*/
 		#endif
+
+		MOint			eBufferFormat;
+
 
 		unsigned long	ulDataSize;
 		unsigned long	ulFrequency;
@@ -201,7 +191,8 @@ class LIBMOLDEO_API moSound : public  moAbstract {
 		unsigned long	ulBufferSize;
 		unsigned long	ulBytesWritten;
 		void *			pData;
-		ALenum			eBufferFormat;
+
+
 
 		MOint			m_BufferSize;
 

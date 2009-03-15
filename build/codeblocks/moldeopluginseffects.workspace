@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_workspace_file>
 	<Workspace title="Moldeo">
-		<Project filename="..\..\plugins\Effects\Icon3D\icon3d.cbp" active="1" />
+		<Project filename="..\..\plugins\Effects\Icon3D\icon3d.cbp" />
 		<Project filename="..\..\plugins\Effects\Plane\plane.cbp" />
 		<Project filename="..\..\plugins\Effects\Tunel\tunel.cbp" />
 		<Project filename="..\..\plugins\Effects\Painter\painter.cbp" />
@@ -15,5 +15,8 @@
 		<Project filename="..\..\plugins\Effects\Image\image.cbp" />
 		<Project filename="..\..\plugins\Effects\Movie\movie.cbp" />
 		<Project filename="..\..\plugins\Effects\CubeMap\cubemap.cbp" />
+		<Project filename="..\..\plugins\Effects\ParticlesSimple\particlessimple.cbp" />
+		<Project filename="..\..\plugins\Effects\Text3D\text3d.cbp" />
+		<Project filename="..\..\plugins\Effects\Sound\sound.cbp" active="1" />
 	</Workspace>
 </CodeBlocks_workspace_file>

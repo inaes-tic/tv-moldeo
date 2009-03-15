@@ -32,7 +32,8 @@
 #include "moConfig.h"
 
 #include "moArray.cpp"
-moDefineDynamicArray(moParamIndexes)
+moDefineDynamicArray( moParamIndexes )
+
 
 #include <tinyxml.h>
 
@@ -219,6 +220,7 @@ int moConfig::LoadConfig( moText p_filename ) {
 			if (PRECONFIGS) {
 
 				moPreConfig PreConfig;
+
 				TiXmlNode* PRECONFIGNODE = PRECONFIGS->FirstChild("PRE");
 				TiXmlElement* PRECONFIG = NULL;
 				if (PRECONFIGNODE) {
@@ -228,6 +230,7 @@ int moConfig::LoadConfig( moText p_filename ) {
 
 					TiXmlElement*  PREVALUE = NULL;
 					TiXmlNode* NODE = PRECONFIG->FirstChild("P");
+					PreConfig.m_ValueIndexes.Empty();
 
 					if (NODE) {
 						PREVALUE = NODE->ToElement();
@@ -687,4 +690,57 @@ void
 moConfig::PreConfPrev() {
     if(m_PreconfActual!=-1 && m_PreconfActual>0)
         SetCurrentPreConf( --m_PreconfActual );
+}
+
+
+/// Agrega un valor
+void
+moConfig::AddValue( int paramindex,  moValue& p_value ) {
+    GetParam( paramindex ).AddValue( p_value );
+}
+
+/// Inserta un valor
+void
+moConfig::InsertValue( int paramindex,  int valueindex, moValue& p_value ) {
+    GetParam( paramindex ).GetValues().Insert( valueindex, p_value );
+}
+
+/// Fija un valor
+void
+moConfig::SetValue( int paramindex,  int valueindex, moValue& p_value ) {
+    GetParam( paramindex ).GetValue( valueindex ) = p_value;
+}
+
+/// Borra un valor
+void
+moConfig::DeleteValue( int paramindex,  int valueindex ) {
+
+    GetParam( paramindex ).DeleteValue( valueindex );
+
+}
+
+
+
+/// Agrega una pre-configuración
+void
+moConfig::AddPreconfig( moPreconfigIndexes& p_preconfindexes ) {
+    m_PreConfigs.Add( moPreConfig( p_preconfindexes ) );
+}
+
+/// Agrega una pre-configuración
+void
+moConfig::InsertPreconfig( int valueindex, moPreconfigIndexes& p_preconfindexes ) {
+    m_PreConfigs.Insert( valueindex,  moPreConfig( p_preconfindexes ) );
+}
+
+/// Agrega una pre-configuración
+void
+moConfig::SetPreconfig( int valueindex, moPreconfigIndexes& p_preconfindexes ) {
+    m_PreConfigs.Set( valueindex, moPreConfig( p_preconfindexes ) );
+}
+
+/// Borra una pre-configuración
+void
+moConfig::DeletePreconfig( int valueindex ) {
+    m_PreConfigs.Remove( valueindex );
 }

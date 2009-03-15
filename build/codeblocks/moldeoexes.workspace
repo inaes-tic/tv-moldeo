@@ -4,7 +4,7 @@
 		<Project filename="..\..\plugins\Effects\Plane\plane.cbp">
 			<Depends filename="libmoldeo.cbp" />
 		</Project>
-		<Project filename="..\..\plugins\MasterEffects\Ligia\ligia.cbp" active="1">
+		<Project filename="..\..\plugins\MasterEffects\Ligia\ligia.cbp">
 			<Depends filename="libmoldeo.cbp" />
 		</Project>
 		<Project filename="..\..\plugins\MasterEffects\Channel\channel.cbp">
@@ -53,5 +53,6 @@
 			<Depends filename="libmoldeo.cbp" />
 		</Project>
 		<Project filename="..\..\contrib\src\tinyxml\tinyxml_lib_mingw.cbp" />
+		<Project filename="..\..\plugins\Effects\Damero\damero.cbp" active="1" />
 	</Workspace>
 </CodeBlocks_workspace_file>

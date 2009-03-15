@@ -379,6 +379,17 @@ protected:
 	int m_iMethodBase;
 	//moTextHeap m_tScriptDebug;
 
+        bool                    m_bTrackerInit;
+    moVector2f              m_TrackerBarycenter;
+    long drawing_features; /// 0: nothing 1: motion  2: all
+        moTimer FeatureActivity;///start on first feature activity, ends on
+        moTimer MotionActivity;///start on first motion activity, ends on no motion
+        moTimer NoMotionActivity;///start on no motion, ends on first motion activity
+    void DrawTracker();
+            float normalf; ///width of full floor usually 100.0f
+
+
+
 };
 
 class moEffectLiveDrawing2Factory : public moEffectFactory

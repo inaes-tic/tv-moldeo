@@ -339,10 +339,15 @@ class LIBMOLDEO_API moTextureManager : public moResource
          * @return el tipo de textura.
          */
 		MOuint GetTypeForFile(moText p_filename);
+
+		int         m_preview_texture_idx;
+
+
 	protected:
 		moGLManager* m_glmanager;
 		moFBManager* m_fbmanager;
 		moTextureArray m_textures_array;
+
 
         moTexture* CreateTexture(MOuint p_type, moText p_name, moTexParam p_param = MODefTex2DParams);
 		MOboolean CreateMultipleTex(moTextureMultiple* p_tex_mult, moParam* p_param);

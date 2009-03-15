@@ -705,22 +705,34 @@ MO_LIVE_WIDTH		2
 MO_LIVE_HEIGHT		3
 MO_LIVE_BITCOUNT	4
 	*/
+	MODebug2->Message(moText("Setting preferred devices"));
 	for( MOuint i = 0; i < nvalues; i++) {
 
 		m_Config.SetCurrentValueIndex(preferreddevices, i);
 
+		MOint srcw(0),srch(0),srcbpp(0),flH(0),flV(0);
+		MOint ncount = m_Config.GetParam().GetValue().GetSubValueCount();
+
+
+		( MO_LIVE_WIDTH < ncount ) ? srcw = m_Config.GetParam().GetValue().GetSubValue(MO_LIVE_WIDTH).Int() : srcw = 0;
+		( MO_LIVE_HEIGHT < ncount ) ? srch = m_Config.GetParam().GetValue().GetSubValue(MO_LIVE_HEIGHT).Int() : srch = 0;
+		( MO_LIVE_BITCOUNT < ncount ) ? srcbpp = m_Config.GetParam().GetValue().GetSubValue(MO_LIVE_BITCOUNT).Int() : srcbpp = 0;
+		( MO_LIVE_FLIPH < ncount ) ? flH = m_Config.GetParam().GetValue().GetSubValue(MO_LIVE_FLIPH).Int() : flH = 0;
+		( MO_LIVE_FLIPV < ncount ) ? flV = m_Config.GetParam().GetValue().GetSubValue(MO_LIVE_FLIPV).Int() : flV = 0;
+
 		moVideoFormat VF;
-		moCaptureDevice CD( m_Config.GetParam().GetValue().GetSubValue(MO_LIVE_DEVICENAME).Text(), moText(""), moText("") );
+		moCaptureDevice CD( m_Config.GetParam().GetValue().GetSubValue(MO_LIVE_DEVICENAME).Text(), moText(""), moText(""), 0, srcw, srch, srcbpp, flH, flV );
 
 		CD.SetCodeName( m_Config.GetParam().GetValue().GetSubValue(MO_LIVE_LABELNAME).Text() );
 
-		VF.m_Width = m_Config.GetParam().GetValue().GetSubValue(MO_LIVE_WIDTH).Int();
-		VF.m_Height = m_Config.GetParam().GetValue().GetSubValue(MO_LIVE_HEIGHT).Int();
+		VF.m_Width = m_Config.GetParam().GetValue().GetSubValue(MO_LIVE_SCALEWIDTH).Int();
+		VF.m_Height = m_Config.GetParam().GetValue().GetSubValue(MO_LIVE_SCALEHEIGHT).Int();
 		VF.m_BitCount = m_Config.GetParam().GetValue().GetSubValue(MO_LIVE_BITCOUNT).Int();
 
 		CD.SetVideoFormat( VF );
 
 		pPreferredDevices->Add( CD );
+		MODebug2->Message(moText("Added preferred device setting: Device Name: ")+CD.GetName());
 		//for( int k = 1; k < m_Config.GetParam().GetSubCount(); k++);
 	}
 
@@ -731,10 +743,13 @@ MO_LIVE_BITCOUNT	4
 	//try to connect to all
 	m_pLiveSystems = new moLiveSystems();
 
+    MODebug2->Message(moText("Finally load live systems grabber for each device...."));
 	if ( m_pLiveSystems->LoadLiveSystems( pPreferredDevices ) ) {
 		//los inicializa...
 		for( MOuint i = 0; i < m_pLiveSystems->Count(); i++) {
+
 			moLiveSystemPtr pLS = m_pLiveSystems->Get(i);
+
 			if (pLS && pLS->GetCaptureDevice().IsPresent()) {
 				if (pLS->Init()) {
 				    MODebug2->Message( moText(pLS->GetCaptureDevice().GetName()) + " initialized");
@@ -746,7 +761,7 @@ MO_LIVE_BITCOUNT	4
 		}
 
 
-	}
+	} else MODebug2->Error(moText("Error. No livesystems loaded??...."));
 
 
 	MOuint circularbuffer = m_Config.GetParamIndex("circularbuffer");
@@ -1281,11 +1296,10 @@ moLiveSystems::LoadLiveSystems( moCaptureDevices* p_pPreferredDevices ) {
 	moText CodeStr;
 	int i;
 
-	moCaptureDevices* pCapDevs = m_pVideoFramework->LoadCaptureDevices();
-
 	//genera los descriptores de dispositivos de captura...
 	m_pVideoFramework->SetPreferredDevices( p_pPreferredDevices );
 
+	moCaptureDevices* pCapDevs = m_pVideoFramework->LoadCaptureDevices();
 
 	/**
 
@@ -1300,6 +1314,7 @@ moLiveSystems::LoadLiveSystems( moCaptureDevices* p_pPreferredDevices ) {
 			pLS->SetCodeName( CodeStr );
 
 			Add( pLS );
+			moDebugManager::Message( moText("Added LiveSystem: CodeName:") + (moText)CodeStr + moText(" Device Name:") + pCapDevs->Get(i).GetName() );
 		}
 	}
 

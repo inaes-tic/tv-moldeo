@@ -64,11 +64,17 @@ public:
     bool        Init();
 	void		SetUserInterface( moDirectorFrame* p_pUserInterface );
 	void        SetPaths( moText p_installationpath );
+    void        LoadPlugins( moPluginDefinitions& rPluginDefs, moText plugindir, moMoldeoObjectType mobjecttype );
+
 
 	moResourceManager* GetResourceManager();
+	moConsole*  GetDirectorConsole() {
+        return (moConsole*)m_pDirectorConsole;
+	}
 
 	moDirectorIODeviceManager*      GetDirectorIODeviceManager() { return m_pDirectorIODeviceManager; }
 
+    moDirectorConsole*			m_pDirectorConsole;
 public:
 
 //=========================================================================================================================
@@ -84,6 +90,9 @@ public:
 
 	moDirectorStatus Play();
 	moDirectorStatus Pause();
+	moDirectorStatus Stop();
+	moDirectorStatus Seek( MOulong p_timecode );
+
 	moDirectorStatus SaveSession();
 
 	moDirectorStatus FocusOutput();
@@ -198,7 +207,7 @@ protected:
     virtual void LoadDefinition();
 
 	moDirectorFrame*			m_pUserInterface;
-	moDirectorConsole*			m_pDirectorConsole;
+
 	moDirectorIODeviceManager*	m_pDirectorIODeviceManager;
 
     moApplicationDescriptor     m_ApplicationDescriptor;

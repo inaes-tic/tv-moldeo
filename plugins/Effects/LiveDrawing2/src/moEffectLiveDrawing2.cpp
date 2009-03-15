@@ -111,6 +111,13 @@ moEffectLiveDrawing2::Init() {
 	//icoTextures.MODebug = MODebug;
 	//icoTextures.Init(GetConfig(), moParamReference(LIVEDRAW2_ICO_TEXTURES), m_pResourceManager->GetTextureMan() );
 
+    FeatureActivity.Stop();
+    MotionActivity.Stop();
+    NoMotionActivity.Stop();
+    normalf = 10.0f;
+    drawing_features = 2;
+    m_bTrackerInit = false;
+
 	inInteractionMode = false;
 	updateParameters();
 	updateInteractionParameters();
@@ -125,7 +132,6 @@ moEffectLiveDrawing2::Init() {
 	tabletDetected = false;
 	min_pressure = 0;
     penX = penY = 0;
-	pressure = (float)min_pressure / (float)max_pressure;
 
 	icon_mode = false;
 	repeat_icon = false;
@@ -165,10 +171,10 @@ void moEffectLiveDrawing2::Draw( moTempo* tempogral,moEffectState* parentstate)
 	m_pResourceManager->GetGLMan()->SetOrthographicView(canvasWidth, canvasHeight);
 
     // Draw //
-    /*
+
 	glTranslatef(   m_Config[moR(LIVEDRAW2_TRANSLATEX)].GetData()->Fun()->Eval(state.tempo.ang),
 					m_Config[moR(LIVEDRAW2_TRANSLATEY)].GetData()->Fun()->Eval(state.tempo.ang),
-					m_Config[moR(LIVEDRAW2_TRANSLATEZ)].GetData()->Fun()->Eval(state.tempo.ang));*/
+					m_Config[moR(LIVEDRAW2_TRANSLATEZ)].GetData()->Fun()->Eval(state.tempo.ang));
 
 	glRotatef(  m_Config[moR(LIVEDRAW2_ROTATEX)].GetData()->Fun()->Eval(state.tempo.ang), 1.0, 0.0, 0.0 );
     glRotatef(  m_Config[moR(LIVEDRAW2_ROTATEY)].GetData()->Fun()->Eval(state.tempo.ang), 0.0, 1.0, 0.0 );
@@ -178,6 +184,7 @@ void moEffectLiveDrawing2::Draw( moTempo* tempogral,moEffectState* parentstate)
                 m_Config[moR(LIVEDRAW2_SCALEZ)].GetData()->Fun()->Eval(state.tempo.ang));
 
 	updateParameters();
+
 	if (!inInteractionMode) updateInteractionParameters();
 
 	if (icon_mode)
@@ -186,6 +193,29 @@ void moEffectLiveDrawing2::Draw( moTempo* tempogral,moEffectState* parentstate)
 		sel_tex = m_Config[ moParamReference(LIVEDRAW2_BACK_TEXTURES) ].GetIndexValue();
 
 	updateFlowVelocity();
+
+
+	DrawTracker();
+
+	if ( NoMotionActivity.Duration()<100 ) {
+	    inInteractionMode = true;
+
+        pressure = 0.9;
+        show_pen = true;
+
+        penX = m_TrackerBarycenter.X()*canvasWidth;
+        if(penX==0.0) penX0 = penX;
+        penX = momin(penX, canvasWidth - canvas_margin);
+        penX = momax(penX, canvas_margin);
+
+        penY = m_TrackerBarycenter.Y()*canvasHeight;
+        if(penY==0.0) penY0 = penY;
+        penY = momin(penY, canvasHeight - canvas_margin);
+        penY = momax(penY, canvas_margin);
+	} else {
+	    pressure = (float)min_pressure / (float)max_pressure;
+   	    inInteractionMode = false;
+	}
 
     if (pressure <= (float)min_pressure / (float)max_pressure) drawing = false;
 	else
@@ -214,15 +244,20 @@ void moEffectLiveDrawing2::Draw( moTempo* tempogral,moEffectState* parentstate)
 		}
 	}
 
+
 	if (flow_velocity != 0.0) displaceGestures();
 	setBlendMode();
+
+	renderGestures();
+
+
 	if (show_pen) drawPen();
 	if (show_colorbx) drawPalette();
 	if (show_timerbx) drawTimer();
 
-	renderGestures();
 
 	inInteractionMode = false;
+
 }
 
 void moEffectLiveDrawing2::Interaction( moIODeviceManager *IODeviceManager ) {
@@ -532,7 +567,7 @@ void moEffectLiveDrawing2::Interaction( moIODeviceManager *IODeviceManager ) {
 	}
 
 	if (!tabletDetected)
-	{
+	{/*
 		if (leftClicked)
 		{
 			// Cuando no hay una tableta disponible, la "presión" queda determinada por la velocidad del mouse.
@@ -552,6 +587,7 @@ void moEffectLiveDrawing2::Interaction( moIODeviceManager *IODeviceManager ) {
 			pressure = momax(pressure, (float)min_pressure / (float)max_pressure);
 		}
 		else pressure = (float)min_pressure / (float)max_pressure;
+		*/
 	}
 
 /*
@@ -577,27 +613,27 @@ moEffectLiveDrawing2::GetDefinition( moConfigDefinition *p_configdefinition ) {
 	p_configdefinition->Add( moText("shaders"), MO_PARAM_TEXT, LIVEDRAW2_SHADERS );
 	p_configdefinition->Add( moText("scripts"), MO_PARAM_TEXT, LIVEDRAW2_SCRIPTS );
 
-	p_configdefinition->Add( moText("canvas_margin"), MO_PARAM_NUMERIC, LIVEDRAW2_CANVAS_MARGIN );
-	p_configdefinition->Add( moText("min_pressure"), MO_PARAM_NUMERIC, LIVEDRAW2_MIN_PRESSURE );
-	p_configdefinition->Add( moText("max_pressure"), MO_PARAM_NUMERIC, LIVEDRAW2_MAX_PRESSURE );
+	p_configdefinition->Add( moText("canvas_margin"), MO_PARAM_NUMERIC, LIVEDRAW2_CANVAS_MARGIN, moValue("40","NUM").Ref() );
+	p_configdefinition->Add( moText("min_pressure"), MO_PARAM_NUMERIC, LIVEDRAW2_MIN_PRESSURE, moValue("16","NUM").Ref() );
+	p_configdefinition->Add( moText("max_pressure"), MO_PARAM_NUMERIC, LIVEDRAW2_MAX_PRESSURE, moValue("1024","NUM").Ref() );
 
-	p_configdefinition->Add( moText("max_thickness"), MO_PARAM_FUNCTION, LIVEDRAW2_MAX_THICKNESS );
-	p_configdefinition->Add( moText("max_line_length"), MO_PARAM_FUNCTION, LIVEDRAW2_MAX_LINE_LENGTH );
-	p_configdefinition->Add( moText("min_line_length"), MO_PARAM_FUNCTION, LIVEDRAW2_MIN_LINE_LENGTH );
+	p_configdefinition->Add( moText("max_thickness"), MO_PARAM_FUNCTION, LIVEDRAW2_MAX_THICKNESS, moValue("2.0","FUNCTION").Ref() );
+	p_configdefinition->Add( moText("max_line_length"), MO_PARAM_FUNCTION, LIVEDRAW2_MAX_LINE_LENGTH, moValue("200.0","FUNCTION").Ref() );
+	p_configdefinition->Add( moText("min_line_length"), MO_PARAM_FUNCTION, LIVEDRAW2_MIN_LINE_LENGTH, moValue("1.0","FUNCTION").Ref() );
 
-	p_configdefinition->Add( moText("flow_velocity"), MO_PARAM_FUNCTION, LIVEDRAW2_FLOW_VELOCITY );
-	p_configdefinition->Add( moText("flow_period"), MO_PARAM_FUNCTION, LIVEDRAW2_FLOW_PERIOD );
+	p_configdefinition->Add( moText("flow_velocity"), MO_PARAM_FUNCTION, LIVEDRAW2_FLOW_VELOCITY, moValue("0.0","FUNCTION").Ref() );
+	p_configdefinition->Add( moText("flow_period"), MO_PARAM_NUMERIC, LIVEDRAW2_FLOW_PERIOD, moValue("0","NUM").Ref() );
 
-	p_configdefinition->Add( moText("rotosketch_duration"), MO_PARAM_NUMERIC, LIVEDRAW2_ROTOSKETCH_DURATION );
-	p_configdefinition->Add( moText("rotosketch_start"), MO_PARAM_NUMERIC, LIVEDRAW2_ROTOSKETCH_START );
-	p_configdefinition->Add( moText("dissolve_start"), MO_PARAM_NUMERIC, LIVEDRAW2_DISSOLVE_START );
-	p_configdefinition->Add( moText("dissolve_time"), MO_PARAM_NUMERIC, LIVEDRAW2_DISSOLVE_TIME );
+	p_configdefinition->Add( moText("rotosketch_duration"), MO_PARAM_NUMERIC, LIVEDRAW2_ROTOSKETCH_DURATION, moValue("0","NUM").Ref() );
+	p_configdefinition->Add( moText("rotosketch_start"), MO_PARAM_NUMERIC, LIVEDRAW2_ROTOSKETCH_START, moValue("0","NUM").Ref() );
+	p_configdefinition->Add( moText("dissolve_start"), MO_PARAM_NUMERIC, LIVEDRAW2_DISSOLVE_START, moValue("1000","NUM").Ref() );
+	p_configdefinition->Add( moText("dissolve_time"), MO_PARAM_NUMERIC, LIVEDRAW2_DISSOLVE_TIME, moValue("5000","NUM").Ref() );
 
 	p_configdefinition->Add( moText("pen_color"), MO_PARAM_COLOR, LIVEDRAW2_PEN_COLOR );
 
-	p_configdefinition->Add( moText("color_sensibility"), MO_PARAM_FUNCTION, LIVEDRAW2_COLOR_SENSIBILITY );
+	p_configdefinition->Add( moText("color_sensibility"), MO_PARAM_FUNCTION, LIVEDRAW2_COLOR_SENSIBILITY, moValue("1.0","FUNCTION").Ref()  );
 
-	p_configdefinition->Add( moText("blending"), MO_PARAM_NUMERIC, LIVEDRAW2_BLENDING );
+	p_configdefinition->Add( moText("blending"), MO_PARAM_BLENDING, LIVEDRAW2_BLENDING );
 
 	p_configdefinition->Add( moText("translatex"), MO_PARAM_TRANSLATEX, LIVEDRAW2_TRANSLATEX );
 	p_configdefinition->Add( moText("translatey"), MO_PARAM_TRANSLATEY, LIVEDRAW2_TRANSLATEY );
@@ -821,6 +857,7 @@ void moEffectLiveDrawing2::setBlendMode()
 
 void moEffectLiveDrawing2::drawPen()
 {
+    glBindTexture(GL_TEXTURE_2D,0);
     glColor4f(pen_color_rgb[0],
               pen_color_rgb[1],
               pen_color_rgb[2],
@@ -830,16 +867,17 @@ void moEffectLiveDrawing2::drawPen()
 	float l = 1.0;
 
     glBegin(GL_QUADS);
-	    glVertex2f(penX - l, penY - l);
-	    glVertex2f(penX - l, penY + l);
-	    glVertex2f(penX + l, penY + l);
-	    glVertex2f(penX + l, penY - l);
+	    glVertex2f(penX - 4, penY - 4);
+	    glVertex2f(penX - 4, penY + 4);
+	    glVertex2f(penX + 4, penY + 4);
+	    glVertex2f(penX + 4, penY - 4);
     glEnd();
 }
 
 void moEffectLiveDrawing2::drawPalette()
 {
 	// Relleno.
+	glBindTexture(GL_TEXTURE_2D,0);
     glColor4f(pen_color_rgb[0],
               pen_color_rgb[1],
               pen_color_rgb[2],
@@ -874,6 +912,7 @@ void moEffectLiveDrawing2::drawTimer()
 void moEffectLiveDrawing2::drawTimer(float box0, float box1, float time0, float time1)
 {
 	// Fondo.
+	glBindTexture(GL_TEXTURE_2D,0);
     glColor4f(0, 0, 0, 1.0);
     glBegin(GL_QUADS);
 	    glVertex2f(box0, 0);
@@ -1180,7 +1219,7 @@ void Gesture::RenderPolygons()
 		}
 	}
 
-	int t0 = SDL_GetTicks();
+	int t0 = moGetTicks();
 	float f = 1.0;
     int t = t0 - compileTime;
 	if ((0 < dissolve_start) && (0 < dissolve_time) && (-1 < compileTime) && (t > dissolve_start))
@@ -1229,7 +1268,7 @@ void Gesture::RotosketchUpdate()
 {
 	if ((rotosketch_duration == 0) || (rotosketch_start == 0)) return;
 
-    int t = SDL_GetTicks();
+    int t = moGetTicks();
 	if ((-1 < compileTime) && (t - compileTime > rotosketch_start) && (t - lastRotosketchUpdateTime > rotosketch_duration))
 	{
 		rotsketchIndex++;
@@ -1400,7 +1439,7 @@ void Gesture::compile()
 		  ypts[2] = (int)(p2->y);
 		  ypts[3] = (int)(p2->y);
 	  }
-	  lastRotosketchUpdateTime = compileTime = SDL_GetTicks();
+	  lastRotosketchUpdateTime = compileTime = moGetTicks();
 }
 
 float Gesture::distToLast(float ix, float iy)
@@ -1634,4 +1673,173 @@ void Poly2f::SetAlpha1(float a)
 void Poly2f::SetPressure(float p)
 {
 	press = p;
+}
+
+
+
+void moEffectLiveDrawing2::DrawTracker() {
+
+    int w = m_pResourceManager->GetRenderMan()->ScreenWidth();
+    int h = m_pResourceManager->GetRenderMan()->ScreenHeight();
+
+    moTrackerSystemData* m_pTrackerData = NULL;
+
+
+    bool has_motion = false;
+    bool has_features = false;
+
+	for(int i=0; i<m_Inlets.Count(); i++) {
+		moInlet* pInlet = m_Inlets[i];
+		if (pInlet->Updated() && ( pInlet->GetConnectorLabelName()==moText("TRACKERKLT") || pInlet->GetConnectorLabelName()==moText("TRACKERGPUKLT") || pInlet->GetConnectorLabelName()==moText("TRACKERGPUKLT2")) ) {
+
+			m_pTrackerData = (moTrackerSystemData *)pInlet->GetData()->Pointer();
+			if (m_pTrackerData ) {
+				m_bTrackerInit = true;
+
+				//SelectScriptFunction("Reset");
+				//RunSelectedFunction();
+
+				//MODebug2->Push(IntToStr(TrackerId));
+
+				//MODebug2->Push(moText("Receiving:") + IntToStr(m_pTrackerData->GetFeaturesCount()) );
+				if (m_pTrackerData->GetFeaturesCount()>0) {
+                    int tw = m_pTrackerData->GetVideoFormat().m_Width;
+                    int th = m_pTrackerData->GetVideoFormat().m_Height;
+                    //MODebug2->Push(moText("vformat:")+IntToStr(tw)+moText("th")+IntToStr(th));
+
+                    m_TrackerBarycenter = moVector2f( ( ( m_pTrackerData->GetBarycenter().X() / (float) tw )),
+                                                      ( 1.0 - ( m_pTrackerData->GetBarycenter().Y() / (float) th )) );
+
+                    //MODebug2->Push(moText("Barycenter x:")+FloatToStr(m_TrackerBarycenter.X()) + moText(" y:")+FloatToStr(m_TrackerBarycenter.Y()) );
+/*
+                    glBindTexture(GL_TEXTURE_2D,0);
+                    glColor4f(0.7, 1.0, 0.5, 1.0);
+
+                    glBegin(GL_QUADS);
+                        glVertex2f((m_TrackerBarycenter.X() - 0.002)*w, (m_TrackerBarycenter.Y() - 0.002)*h);
+                        glVertex2f((m_TrackerBarycenter.X() - 0.002)*w, (m_TrackerBarycenter.Y() + 0.002)*h);
+                        glVertex2f((m_TrackerBarycenter.X() + 0.002)*w, (m_TrackerBarycenter.Y() + 0.002)*h);
+                        glVertex2f((m_TrackerBarycenter.X() + 0.002)*w, (m_TrackerBarycenter.Y() - 0.002)*h);
+                    glEnd();
+
+*/
+
+                    for (i = 0; i < m_pTrackerData->GetFeaturesCount(); i++)
+                    {
+
+                        moTrackerFeature* pF = m_pTrackerData->GetFeature(i);
+
+                        //if (pF && pF->valid) {
+
+                        float x = (pF->x / (float)tw) - 0.5;
+                        float y = -(pF->y / (float)th) + 0.5;
+                        float tr_x = (pF->tr_x / (float)tw) - 0.5;
+                        float tr_y = -(pF->tr_y / (float)th) + 0.5;
+                        float v_x = (pF->v_x / (float)tw);
+                        float v_y = -(pF->v_y / (float)th);
+                        float vel = sqrtf( v_x*v_x+v_y*v_y );
+                        int v = pF->val;
+
+
+
+                        //MODebug2->Log(moText("    x:")+FloatToStr(pF->x) + moText(" y:")+FloatToStr(pF->y) );
+/*
+                        glBindTexture(GL_TEXTURE_2D,0);
+                        glColor4f(1.0, 0.0, 0.0, 1.0);
+
+                        if (v >= 0) glColor4f(0.0, 1.0, 0.0, 1.0);
+                        else if (v == -1) glColor4f(1.0, 0.0, 1.0, 1.0);
+                        else if (v == -2) glColor4f(1.0, 0.0, 1.0, 1.0);
+                        else if (v == -3) glColor4f(1.0, 0.0, 1.0, 1.0);
+                        else if (v == -4) glColor4f(1.0, 0.0, 1.0, 1.0);
+                        else if (v == -5) glColor4f(1.0, 0.0, 1.0, 1.0);
+*/
+
+                        if ( pF->valid ) {
+                            has_features = true;
+
+                            if (drawing_features > 1 ) {
+/*
+                                glPointSize((GLfloat)2);
+                                glLineWidth((GLfloat)2.0);
+
+
+
+                                glBegin(GL_QUADS);
+                                    glVertex2f((tr_x - 0.008)*normalf, (tr_y - 0.008)*normalf);
+                                    glVertex2f((tr_x - 0.008)*normalf, (tr_y + 0.008)*normalf);
+                                    glVertex2f((tr_x + 0.008)*normalf, (tr_y + 0.008)*normalf);
+                                    glVertex2f((tr_x + 0.008)*normalf, (tr_y - 0.008)*normalf);
+                                glEnd();
+
+                                glBegin(GL_QUADS);
+                                    glVertex2f((x - 0.008)*normalf, (y - 0.008)*normalf);
+                                    glVertex2f((x - 0.008)*normalf, (y + 0.008)*normalf);
+                                    glVertex2f((x + 0.008)*normalf, (y + 0.008)*normalf);
+                                    glVertex2f((x + 0.008)*normalf, (y - 0.008)*normalf);
+                                glEnd();
+
+                                glDisable(GL_TEXTURE_2D);
+                                glColor4f(1.0, 1.0, 1.0, 1.0);
+                                glBegin(GL_LINES);
+                                    glVertex2f( x*normalf, y*normalf);
+                                    glVertex2f( tr_x*normalf, tr_y*normalf);
+                                glEnd();
+ */                           }
+
+                            if ( vel > 0.01 && vel < 0.1) {
+
+                                has_motion = true;
+
+                                if (drawing_features > 0 ) {
+  /*                                  glDisable(GL_TEXTURE_2D);
+                                    glColor4f(0.0, 0.0, 1.0, 1.0);
+                                    //glPointSize((GLfloat)10);
+                                    glLineWidth((GLfloat)10.0);
+
+                                    glBegin(GL_LINES);
+                                        glVertex2f( x*normalf, y*normalf);
+                                        glVertex2f( (x+v_x)*normalf, (y+v_y)*normalf);
+                                    glEnd();
+ */                               }
+
+                                ///ParticlesSimpleInfluence( x*normalf, y*normalf, (x+v_x)*normalf, (y+v_y)*normalf, vel*normalf );
+                            }
+
+
+                        }
+
+
+                    }
+
+                    ///post process:
+                    ///add threshold??? some number of frames for really check...
+                    if (has_motion) {
+
+                        if (!MotionActivity.Started()) {
+                            MotionActivity.Start();
+                        }
+
+                    } else {
+                        MotionActivity.Stop();
+                    }
+
+                    if (has_features) {
+
+                        if (!FeatureActivity.Started()) {
+                            FeatureActivity.Start();
+                        }
+
+                    } else {
+                        FeatureActivity.Stop();
+                    }
+
+
+                }
+
+			}
+		}
+	}
+
+
 }

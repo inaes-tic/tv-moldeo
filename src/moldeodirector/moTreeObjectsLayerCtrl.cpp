@@ -250,7 +250,7 @@ moLayersPanelCtrl::moLayersPanelCtrl( wxWindow *parent, wxWindowID id,
     m_pLayersTopCtrl->SetBackgroundColour( wxColour(70,70,70) );
 
     m_pTimelineRulerWindow = new wxWindow( TopSplitter, wxID_ANY, wxPoint(0,0), wxSize(400,13), wxNO_BORDER );
-    m_pTimelineRuler = new moTimelineRuler( m_pTimelineRulerWindow, wxID_ANY, 0, 0, 2000, wxPoint(0,0), wxSize(2000,13), wxNO_BORDER );
+    m_pTimelineRuler = new moTimelineRuler( m_pTimelineRulerWindow, wxID_ANY, 0, 0, 480, wxPoint(0,0), wxSize(480,13), wxNO_BORDER );
 
     TopSplitter->SplitVertically( m_pLayersTopCtrl, m_pTimelineRulerWindow );
 
@@ -295,7 +295,7 @@ moLayersPanelCtrl::moLayersPanelCtrl( wxWindow *parent, wxWindowID id,
 
     BottomSplitter->SetSashPosition(265);
     BottomSplitter->SetSashSize(1);
-    ScrollBar->SetScrollbar(0, 1000/100, 1000, 100, true);
+    ScrollBar->SetScrollbar(0, 1000/100, 480, 100, true);
 
 }
 

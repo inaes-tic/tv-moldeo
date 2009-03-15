@@ -388,6 +388,10 @@ void moParam::SetDefaultValue() {
                 break;
 
             case MO_PARAM_TEXTURE:
+                valuebase.SetText( "default" );
+                valuebase.SetType( MO_VALUE_TXT );
+                xvalue.AddSubValue( valuebase );
+                break;
             case MO_PARAM_3DMODEL:
             case MO_PARAM_OBJECT:
             case MO_PARAM_VIDEO:

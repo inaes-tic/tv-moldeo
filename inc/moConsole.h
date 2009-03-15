@@ -82,6 +82,14 @@
 #define MO_SCREEN_HEIGHT 600
 #define MO_SCREEN_DEPTH	32
 
+class LIBMOLDEO_API moPresetParamDefinition {
+    MOint           m_ObjectId;
+	MOint           m_ParamIndex;
+	MOint           m_ValueIndex;
+	moEffectState   m_State;
+};
+moDeclareExportedDynamicArray( moPresetParamDefinition, moPresetParams )
+
 
 enum moConsoleParamIndex {
 	CONSOLE_DEVICES,
@@ -91,7 +99,14 @@ enum moConsoleParamIndex {
 	CONSOLE_MASTEREFFECT,
 	CONSOLE_RESOURCES,
 	CONSOLE_ON,
-	CONSOLE_FULLDEBUG
+	CONSOLE_FULLDEBUG,
+	CONSOLE_SCRIPT,
+	CONSOLE_OUTPUTMODE,
+	CONSOLE_OUTPUTRESOLUTION,
+	CONSOLE_RENDERRESOLUTION,
+	CONSOLE_CLIP1,
+	CONSOLE_CLIP2,
+	CONSOLE_CLIP3
 };
 
 /// Objeto consola
@@ -237,6 +252,36 @@ class LIBMOLDEO_API moConsole : public moMoldeoObject {
 
         moEffectManager& GetEffectManager();
 
+        int GetPreset();
+        void SetPreset( int presetid );
+
+        int GetPreconf( int objectid );
+        void SetPreconf( int objectid, int preconfid );
+
+        void SetTicks( int ticksid );
+
+
+        int ScriptCalling(moLuaVirtualMachine& vm, int iFunctionNumber);
+        void HandleReturns(moLuaVirtualMachine& vm, const char *strFunc);
+        void RegisterFunctions();
+
+        int PushDebugString(moLuaVirtualMachine& vm);
+
+        int LGetObjectId( moLuaVirtualMachine& vm );
+        int LGetPreset(moLuaVirtualMachine& vm);
+        int LSetPreset(moLuaVirtualMachine& vm);
+
+        int LGetPreconf(moLuaVirtualMachine& vm);
+        int LSetPreconf(moLuaVirtualMachine& vm);
+
+        int LGetTicks(moLuaVirtualMachine& vm);
+        int LSetTicks(moLuaVirtualMachine& vm);
+
+        int LDisable(moLuaVirtualMachine& vm);
+        int LEnable(moLuaVirtualMachine& vm);
+
+        int GetObjectId( moText p_objectlabelname );
+
     protected:
 
         virtual MOulong GetTicks();
@@ -251,11 +296,15 @@ class LIBMOLDEO_API moConsole : public moMoldeoObject {
         moMoldeoObjects			m_MoldeoObjects;
         moEffectManager			m_EffectManager;
 
+        moText                  m_ConsoleScript;
+
         int idebug,iligia,iborrado;
 
         MOfloat fps_current;
         MOfloat fps_mean;
         MOint fps_count;
+
+        long m_ScriptTimecodeOffset;
 
         void LoadConnections();
 

@@ -29,20 +29,27 @@
 
 *******************************************************************************/
 
-#include "boost/date_time/posix_time/posix_time.hpp"
-
 #include "moTypes.h"
+
+#ifdef MO_WIN32
+  #include "date_time/posix_time/posix_time.hpp"
+#else
+  #include "boost/date_time/posix_time/posix_time.hpp"
+#endif
 
 using namespace boost::posix_time;
 
-
 /** ticks desde el arranque de la aplicación*/
-MOulong moGetTicks() {
 
-    ptime t(microsec_clock::local_time());
-    //return SDL_GetTicks();
-    return (MOulong)clock ();
+MOulong moGetTicksAbsolute() {
+
+    ptime t( microsec_clock::local_time() );
+
+    time_duration clockt = t.time_of_day();
+
+    return clockt.total_milliseconds();
 }
+
 
 /**devuelve un valor con distribucion uniforme 0..1
 value entre 0 y 1*/

@@ -66,6 +66,10 @@ public:
      */
     void FinishScript();
 
+    bool IsInitialized() {
+            return m_initialized;
+    }
+
     /**
      * Compila el archivo strFilename.
 	 * @param strFilename nombre del archivo de script.
@@ -155,13 +159,16 @@ public:
      */
    moLuaVirtualMachine& vm (void) { return m_vm; }
 protected:
-   bool m_initalized;
+   bool m_initialized;
    int m_nMethods;
    static moLuaVirtualMachine m_vm;
    static moLuaDebugger m_dbg;
    int m_iThisRef;
    int m_nArgs;
    const char *m_strFunctionName;
+
+   	// For indexing scripted methods.
+	int m_iMethodBase;
 };
 
 #endif

@@ -134,7 +134,7 @@ static int LuaCallback (lua_State *lua)
 //
 //============================================================================
 moScript::moScript ()
- : m_initalized(false), m_nMethods (0), m_iThisRef (0), m_nArgs (0)
+ : m_initialized(false), m_nMethods (0), m_iThisRef (0), m_nArgs (0)
 {
 }
 
@@ -154,7 +154,7 @@ moScript::moScript ()
 //============================================================================
 moScript::~moScript (void)
 {
-   if (m_initalized) FinishScript();
+   if (m_initialized) FinishScript();
 }
 
 //============================================================================
@@ -184,7 +184,7 @@ void moScript::InitScript()
       lua_pushlightuserdata (state, (void *) this);
       lua_rawseti (state, -2, 0);
 
-	  m_initalized = true;
+	  m_initialized = true;
    END_LUA_CHECK
 }
 
@@ -200,7 +200,7 @@ void moScript::FinishScript()
       lua_pushnil (state);
       lua_rawseti (state, -2, 0);
 
-      m_initalized = false;
+      m_initialized = false;
    END_LUA_CHECK
 }
 

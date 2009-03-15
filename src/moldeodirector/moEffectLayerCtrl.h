@@ -52,7 +52,6 @@ class moEffectLayerCtrl: public wxPanel, public moItemLayerCtrl
 		//(*Declarations(moEffectLayerCtrl)
 		wxCheckBox* CheckBoxOnOff;
 		moWxLevelCtrl* m_pLevelAlphaCtrl;
-		wxBitmapButton* BitmapButtonVisibility;
 		wxTextCtrl* TextCtrlLabel;
 		moWxLevelCtrl* m_pLevelSpeedCtrl;
 		moWxLevelCtrl* m_pLevelTintCtrl;
@@ -79,7 +78,6 @@ class moEffectLayerCtrl: public wxPanel, public moItemLayerCtrl
 		static const long ID_SLIDERTINT;
 		static const long ID_SLIDERTEMPO;
 		static const long ID_CHECKBOXONOFF;
-		static const long ID_BITMAPBUTTONVISIBILITY;
 		static const long ID_BITMAPBUTTONDELETE;
 		//*)
 

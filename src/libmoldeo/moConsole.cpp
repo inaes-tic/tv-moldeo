@@ -31,6 +31,18 @@
 
 #include "moConsole.h"
 
+#ifdef MO_WIN32
+  #include <SDL.h>
+#endif
+
+#ifdef MO_LINUX
+    #include <SDL/SDL.h>
+#endif
+
+#include "moArray.cpp"
+moDefineDynamicArray( moPresetParams )
+
+
 moConsole::moConsole() {
 
 	m_bIODeviceManagerDefault = true;
@@ -44,10 +56,6 @@ moConsole::moConsole() {
 moConsole::~moConsole()
 {
     Finish();
-}
-
-moEffectManager& moConsole::GetEffectManager() {
-    return m_EffectManager;
 }
 
 void moConsole::SetIODeviceManager( moIODeviceManager*	p_IODeviceManager ) {
@@ -93,6 +101,7 @@ MOboolean moConsole::Init()
 		MO_DEF_SCREEN_HEIGHT,
 		MO_DEF_RENDER_WIDTH,
 		MO_DEF_RENDER_HEIGHT );
+
 }
 
 
@@ -114,6 +123,7 @@ MOboolean moConsole::Init( moText p_datapath,
 	idebug = -1;
 	iligia = -1;
 	iborrado = -1;
+    m_ConsoleScript = moText("");
 
 	srand( time(NULL) );
 
@@ -142,6 +152,7 @@ MOboolean moConsole::Init( moText p_datapath,
 
     if (MODebug2) MODebug2->Message(moText("moConsole:: Opening Console Config Project (.mol).")  + (moText)p_consoleconfig);
 
+    this->GetDefinition();
 	verif = m_Config.LoadConfig( p_consoleconfig ) ;//este parametro debe pasarse desde fuera
 	if(verif != MO_CONFIG_OK) {
 
@@ -164,6 +175,64 @@ MOboolean moConsole::Init( moText p_datapath,
 	moDefineParamIndex( CONSOLE_RESOURCES, moText("resources") );
 	moDefineParamIndex( CONSOLE_FULLDEBUG, moText("fulldebug") );
 	moDefineParamIndex( CONSOLE_ON, moText("mastereffects_on") );
+	moDefineParamIndex( CONSOLE_SCRIPT, moText("consolescript") );
+	moDefineParamIndex( CONSOLE_OUTPUTMODE, moText("outputmode") );
+	moDefineParamIndex( CONSOLE_RENDERRESOLUTION, moText("renderresolution") );
+	moDefineParamIndex( CONSOLE_OUTPUTRESOLUTION, moText("outputresolution") );
+	moDefineParamIndex( CONSOLE_CLIP1, moText("clip1") );
+	moDefineParamIndex( CONSOLE_CLIP2, moText("clip2") );
+	moDefineParamIndex( CONSOLE_CLIP3, moText("clip3") );
+
+    //if () {
+        moText mode = m_Config[moR(CONSOLE_OUTPUTMODE)][MO_SELECTED][0].Text();
+
+        moText renderwidth = m_Config[moR(CONSOLE_RENDERRESOLUTION)][MO_SELECTED][0].Text();
+        moText renderheight = m_Config[moR(CONSOLE_RENDERRESOLUTION)][MO_SELECTED][1].Text();
+
+        moText screenwidth = m_Config[moR(CONSOLE_OUTPUTRESOLUTION)][MO_SELECTED][0].Text();
+        moText screenheight = m_Config[moR(CONSOLE_OUTPUTRESOLUTION)][MO_SELECTED][1].Text();
+
+
+        if (renderwidth!=moText("") && renderheight!=moText("")) {
+            int i_render_width = atoi(renderwidth);
+            int i_render_height = atoi(renderheight);
+
+            if ( 0<i_render_width && i_render_width<6144 ) {
+                p_render_width = i_render_width;
+            }
+
+            if ( 0<i_render_height && i_render_height<6144 ) {
+                p_render_height = i_render_height;
+            }
+        }
+
+        if (screenwidth!=moText("") && screenheight!=moText("")) {
+            int i_screenwidth = atoi(screenwidth);
+            int i_screenheight = atoi(screenheight);
+
+            if ( 0<i_screenwidth && i_screenwidth<6144 ) {
+                p_screen_width = i_screenwidth;
+            }
+
+            if ( 0<i_screenheight && i_screenheight<6144 ) {
+                p_screen_height = i_screenheight;
+            }
+        }
+/*
+        moText clip1_p1_x = m_Config[moR(CONSOLE_CLIP1)][MO_SELECTED][0].Text();
+        moText clip1_p1_x = m_Config[moR(CONSOLE_CLIP1)][MO_SELECTED][1].Text();
+
+        moText clip1_p2_x = m_Config[moR(CONSOLE_CLIP1)][MO_SELECTED][2].Text();
+        moText clip1_p2_x = m_Config[moR(CONSOLE_CLIP1)][MO_SELECTED][3].Text();
+
+        moText clip1_p3_x = m_Config[moR(CONSOLE_CLIP1)][MO_SELECTED][4].Text();
+        moText clip1_p3_x = m_Config[moR(CONSOLE_CLIP1)][MO_SELECTED][5].Text();
+
+        moText clip1_p4_x = m_Config[moR(CONSOLE_CLIP1)][MO_SELECTED][6].Text();
+        moText clip1_p4_x = m_Config[moR(CONSOLE_CLIP1)][MO_SELECTED][7].Text();
+*/
+
+    //}
 
 	// Verificar que el nro de version sea correcto //
     //...
@@ -194,6 +263,10 @@ MOboolean moConsole::Init( moText p_datapath,
     }
 
 	LoadConnections();
+
+    InitScript();
+    RegisterFunctions();
+
 
 	m_bInitialized = true;
 
@@ -766,14 +839,14 @@ void moConsole::StopMasterEffects() {
 MOulong
 moConsole::GetTicks() {
 
-	//return SDL_GetTicks();
-    return moGetTicks();
+	return moGetTicks();
+
 }
 
 void
 moConsole::GLSwapBuffers() {
 
-	//SDL_GL_SwapBuffers();
+	SDL_GL_SwapBuffers();
 }
 
 void
@@ -784,6 +857,38 @@ moConsole::Draw() {
 	moRenderManager* RenderMan = m_pResourceManager->GetRenderMan();
 
 	if (RenderMan==NULL) return;
+
+    moText cs;
+    cs = m_Config[moR(CONSOLE_SCRIPT)][MO_SELECTED][0].Text();
+
+	if ((moText)m_ConsoleScript!=cs) {
+
+        m_ConsoleScript = cs;
+        moText fullscript = m_pResourceManager->GetDataMan()->GetDataPath()+ moSlash + (moText)m_ConsoleScript;
+
+        if ( CompileFile(fullscript) ) {
+            moText toffset=moText("");
+
+            toffset = m_Config[moR(CONSOLE_SCRIPT)][MO_SELECTED][1].Text();
+            if (toffset!=moText("")) {
+                m_ScriptTimecodeOffset = atoi( toffset );
+            } else {
+                m_ScriptTimecodeOffset = 0;
+            }
+
+            SelectScriptFunction( "Init" );
+            AddFunctionParam( (int)m_ScriptTimecodeOffset );
+            RunSelectedFunction();
+
+        } else MODebug2->Error(moText("couldnt compile lua script ") + (moText)fullscript );
+	}
+
+    if (moScript::IsInitialized()) {
+        if (ScriptHasFunction("Run")) {
+            SelectScriptFunction("Run");
+            RunSelectedFunction(1);
+        }
+    }
 
 	MOswitch borrar = MO_ACTIVATED;
     MOboolean pre_effect_on = false;
@@ -1020,6 +1125,15 @@ moConsole::GetDefinition( moConfigDefinition *p_configdefinition ) {
 	p_configdefinition->Add( moText("resources"), MO_PARAM_TEXT, CONSOLE_RESOURCES );
 	p_configdefinition->Add( moText("mastereffects_on"), MO_PARAM_FUNCTION, CONSOLE_ON );
 	p_configdefinition->Add( moText("fulldebug"), MO_PARAM_FUNCTION, CONSOLE_FULLDEBUG );
+	p_configdefinition->Add( moText("consolescript"), MO_PARAM_TEXT, CONSOLE_SCRIPT );
+
+	p_configdefinition->Add( moText("outputmode"), MO_PARAM_TEXT, CONSOLE_OUTPUTMODE );
+	p_configdefinition->Add( moText("renderresolution"), MO_PARAM_TEXT, CONSOLE_RENDERRESOLUTION );
+	p_configdefinition->Add( moText("outputresolution"), MO_PARAM_TEXT, CONSOLE_OUTPUTRESOLUTION );
+	p_configdefinition->Add( moText("clip1"), MO_PARAM_TEXT, CONSOLE_CLIP1 );
+	p_configdefinition->Add( moText("clip2"), MO_PARAM_TEXT, CONSOLE_CLIP2 );
+	p_configdefinition->Add( moText("clip3"), MO_PARAM_TEXT, CONSOLE_CLIP3 );
+
 	return p_configdefinition;
 }
 
@@ -1067,4 +1181,256 @@ moConsole::ConvertKeyNameToIdx(moText& name) {
 	else if(!stricmp( name, "SDLK_PERIOD" ) ) return 38;
 	else if(!stricmp( name, "SDLK_SLASH" ) ) return 39;
 	return -1;
+}
+
+int moConsole::GetPreset() {
+
+    return 0;
+}
+
+void moConsole::SetPreset( int presetid ) {
+
+
+}
+
+int moConsole::GetPreconf( int objectid ) {
+
+        return 0;
+}
+
+void moConsole::SetPreconf( int objectid, int preconfid ) {
+    m_MoldeoObjects[objectid]->GetConfig()->SetCurrentPreConf( preconfid );
+
+}
+
+
+void moConsole::SetTicks( int ticksid ) {
+    moSetDuration( ticksid );
+}
+
+int moConsole::GetObjectId( moText p_objectlabelname ) {
+    for(int i=0; i<m_MoldeoObjects.Count(); i++) {
+
+        if (p_objectlabelname == m_MoldeoObjects[i]->GetLabelName()) {
+            return m_MoldeoObjects[i]->GetId();
+        }
+
+    }
+    return -1;
+}
+
+
+void moConsole::RegisterFunctions()
+{
+    m_iMethodBase = RegisterFunction("LGetObjectId");
+    RegisterFunction("LGetPreset");
+    RegisterFunction("LSetPreset");
+
+    RegisterFunction("LGetPreconf");
+    RegisterFunction("LSetPreconf");
+
+    RegisterFunction("LSetTicks");
+    RegisterFunction("LGetTicks");
+
+    RegisterFunction("LEnable");
+    RegisterFunction("LDisable");
+    RegisterFunction("PushDebugString");
+}
+
+int moConsole::ScriptCalling(moLuaVirtualMachine& vm, int iFunctionNumber)
+{
+    switch (iFunctionNumber - m_iMethodBase)
+    {
+        case 0:
+            return LGetObjectId(vm);
+        case 1:
+            return LGetPreset(vm);
+        case 2:
+            return LSetPreset(vm);
+
+        case 3:
+            return LGetPreconf(vm);
+        case 4:
+            return LSetPreconf(vm);
+
+        case 5:
+            return LSetTicks(vm);
+        case 6:
+            return LGetTicks(vm);
+
+        case 7:
+            return LEnable(vm);
+        case 8:
+            return LDisable(vm);
+
+        case 9:
+            return PushDebugString(vm);
+	}
+    return 0;
+}
+
+void moConsole::HandleReturns(moLuaVirtualMachine& vm, const char *strFunc)
+{
+    if (strcmp (strFunc, "Run") == 0)
+    {
+        lua_State *state = (lua_State *) vm;
+        MOint script_result = (MOint) lua_tonumber (state, 1);
+		if (script_result != 0)
+			MODebug2->Push(moText("moConsole lua script returned error code: ") + (moText)IntToStr(script_result));
+    }
+}
+
+int moConsole::PushDebugString(moLuaVirtualMachine& vm)
+{
+    lua_State *state = (lua_State *) vm;
+	if (lua_isboolean(state,1)) {
+		bool vb = lua_toboolean(state,1);
+		vb ? MODebug2->Push(moText("true")) : MODebug2->Push(moText("false"));
+	} else {
+		char *text = (char *) lua_tostring (state, 1);
+		MODebug2->Push(moText(text));
+	}
+
+    return 0;
+}
+
+int moConsole::LGetObjectId(moLuaVirtualMachine& vm)
+{
+    lua_State *state = (lua_State *) vm;
+
+    char *objectlabelname = (char *) lua_tostring (state, 1);
+
+    int objectid = -1;
+
+    objectid = this->GetObjectId( objectlabelname );
+
+    lua_pushnumber(state, (lua_Number) objectid );
+
+    if (objectid==-1) {
+        MODebug2->Error( "Object doesnt exists" );
+    }
+
+    return 1;
+}
+
+int moConsole::LGetPreset(moLuaVirtualMachine& vm)
+{
+    lua_State *state = (lua_State *) vm;
+
+    lua_pushnumber(state, (lua_Number) this->GetPreset() );
+
+    return 1;
+}
+
+int moConsole::LSetPreset(moLuaVirtualMachine& vm)
+{
+    lua_State *state = (lua_State *) vm;
+
+    MOint presetid = (MOint) lua_tonumber (state, 1);
+
+    this->SetPreset( presetid );
+
+    return 0;
+}
+
+int moConsole::LGetPreconf(moLuaVirtualMachine& vm)
+{
+    lua_State *state = (lua_State *) vm;
+
+    MOint objectid = (MOint) lua_tonumber (state, 1);
+
+    moMoldeoObject* Object = m_MoldeoObjects[objectid];
+
+    if (Object && Object->GetConfig()) {
+        lua_pushnumber(state, (lua_Number) Object->GetConfig()->GetCurrentPreConf() );
+    }
+
+    return 1;
+}
+
+int moConsole::LSetPreconf(moLuaVirtualMachine& vm)
+{
+    lua_State *state = (lua_State *) vm;
+
+    MOint objectid = (MOint) lua_tonumber (state, 1) - MO_MOLDEOOBJECTS_OFFSET_ID;
+    MOint preconfid = (MOint) lua_tonumber (state, 2);
+
+    moMoldeoObject* Object = NULL;
+
+    if ( 0<=objectid && objectid<m_MoldeoObjects.Count() )
+        Object = m_MoldeoObjects[objectid];
+
+    if (Object && Object->GetConfig()) {
+        Object->GetConfig()->SetCurrentPreConf( preconfid );
+    } else {
+        MODebug2->Error( moText("in console script: LSetPreconf : object not founded : id:")+(moText)IntToStr(objectid)+moText(" preconfid:")+(moText)IntToStr(preconfid) );
+    }
+
+    return 0;
+}
+
+int moConsole::LSetTicks(moLuaVirtualMachine& vm)
+{
+    lua_State *state = (lua_State *) vm;
+
+    MOint ticksint = (MOint) lua_tonumber (state, 1);
+
+    this->SetTicks(ticksint);
+
+    return 0;
+}
+
+int moConsole::LGetTicks(moLuaVirtualMachine& vm)
+{
+    lua_State *state = (lua_State *) vm;
+
+    lua_pushnumber(state, (lua_Number) moGetTicks() );
+
+    return 1;
+}
+
+int moConsole::LEnable(moLuaVirtualMachine& vm)
+{
+    lua_State *state = (lua_State *) vm;
+
+    MOint objectid = (MOint) lua_tonumber (state, 1) - MO_MOLDEOOBJECTS_OFFSET_ID;
+
+    moMoldeoObject* Object = NULL;
+
+    if ( 0<=objectid && objectid<m_MoldeoObjects.Count() )
+        Object = m_MoldeoObjects[objectid];
+
+    if (Object && Object->GetConfig()) {
+        if ( Object ) {
+            moEffect* pEffect = (moEffect*) Object;
+            pEffect->Enable();
+        }
+    } else {
+        MODebug2->Error( moText("in console script: LDisnable : object not founded : id:")+(moText)IntToStr(objectid));
+    }
+
+    return 0;
+}
+
+int moConsole::LDisable(moLuaVirtualMachine& vm)
+{
+    lua_State *state = (lua_State *) vm;
+
+    MOint objectid = (MOint) lua_tonumber (state, 1) - MO_MOLDEOOBJECTS_OFFSET_ID;
+
+    moMoldeoObject* Object = NULL;
+
+    if ( 0<=objectid && objectid<m_MoldeoObjects.Count() )
+        Object = m_MoldeoObjects[objectid];
+
+    if (Object && Object->GetConfig()) {
+        if ( Object ) {
+            moEffect* pEffect = (moEffect*) Object;
+            pEffect->Disable();
+        }
+    } else {
+        MODebug2->Error( moText("in console script: LEnable : object not founded : id:")+(moText)IntToStr(objectid));
+    }
+
+    return 0;
 }

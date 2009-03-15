@@ -37,6 +37,12 @@
 #include "moIODeviceManager.h"
 #include "moTypes.h"
 
+#ifdef MO_WIN32
+  #include "SDL.h"
+#else
+  #include "SDL/SDL.h"
+#endif
+
 #ifndef __MO_MOUSE_H
 #define __MO_MOUSE_H
 
@@ -63,7 +69,7 @@
 
 class  moMouseButton {
 public:
-	MOboolean pushed; 
+	MOboolean pushed;
 	SDLMod pushedmod;
 	MOboolean released;
 	SDLMod releasedmod;
@@ -93,7 +99,7 @@ public:
 		pushed = MO_TRUE;
 		pushedmod =  mod;
 		released = MO_FALSE;
-		releasedmod = KMOD_NONE;	
+		releasedmod = KMOD_NONE;
 		pressedmod = KMOD_NONE;
 	}
 
@@ -102,7 +108,7 @@ public:
 		releasedmod = mod;
 		//se soltó pero nunca se pulsó(es un error) o no coincide el mapa de keys especiales
 		if((pushed == MO_FALSE) ||(releasedmod!=pushedmod)) {
-			Init();			
+			Init();
 			return MO_FALSE;
 		} else {
 			pressed = pressed + 1;
@@ -144,7 +150,7 @@ public:
 };
 
 class  moMousePosition {
-public:	
+public:
 	MOboolean motion;//verdadero si se movio
 	MOint pos;
 	MOint mousemod;
@@ -181,18 +187,18 @@ public:
 };
 
 class  moMouse : public moIODevice {
-public:	
+public:
     moMouse();
     virtual ~moMouse();
 	MOboolean		Init();
 	MOboolean		Finish();
-    
+
     void			Update(moEventList*);
     MOswitch		GetStatus( MOdevcode);
     MOswitch		SetStatus( MOdevcode,MOswitch);
 	MOint			GetValue( MOdevcode);
     MOdevcode		GetCode( moText);
-	MOint			getMouseCod(moText);	
+	MOint			getMouseCod(moText);
 
 private:
     moConfig config;
