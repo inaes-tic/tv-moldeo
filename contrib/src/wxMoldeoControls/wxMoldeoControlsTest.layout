@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Release" />
+	<File name="wxMoldeoControlsTestApp.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="851" topLine="0" />
+	</File>
+	<File name="wxMoldeoControlsTestApp.h" open="0" top="0" tabpos="0">
+		<Cursor position="617" topLine="0" />
+	</File>
+	<File name="wxMoldeoControlsTestDialog.cpp" open="0" top="0" tabpos="1">
+		<Cursor position="2494" topLine="30" />
+	</File>
+	<File name="wxMoldeoControlsTestDialog.h" open="0" top="0" tabpos="2">
+		<Cursor position="550" topLine="0" />
+	</File>
+</CodeBlocks_layout_file>

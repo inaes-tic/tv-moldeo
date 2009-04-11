@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="wxMoldeoControls" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="Debug\libmoldeocontrolsd" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="wobjd\Debug" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="`wx-config --cflags --debug=no`" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="Release\libmoldeocontrols" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="wobj\Release" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="`wx-config --cflags --debug=no`" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<VirtualTargets>
+			<Add alias="All" targets="Debug;Release;" />
+		</VirtualTargets>
+		<Compiler>
+			<Add option="-W" />
+			<Add option="-D__WXMSW__" />
+			<Add option="-DwxUSE_SYSTEM_OPTIONS" />
+			<Add directory="." />
+			<Add directory=".." />
+			<Add directory="..\..\..\..\..\externlibs\wxWidgets\include" />
+			<Add directory="..\..\..\..\..\externlibs\wxWidgets\lib\mingw_lib\wx\include\msw-ansi-release-static-2.8" />
+		</Compiler>
+		<Linker>
+			<Add library="wx_msw-2.8" />
+			<Add library="wx_msw_gl-2.8" />
+			<Add library="wxregex-2.8" />
+			<Add library="wxexpat-2.8" />
+			<Add library="wxtiff-2.8" />
+			<Add library="wxjpeg-2.8" />
+			<Add library="wxpng-2.8" />
+			<Add library="wxzlib-2.8" />
+			<Add library="rpcrt4" />
+			<Add library="oleaut32" />
+			<Add library="ole32" />
+			<Add library="uuid" />
+			<Add library="winspool" />
+			<Add library="winmm" />
+			<Add library="shell32" />
+			<Add library="comctl32" />
+			<Add library="comdlg32" />
+			<Add library="ctl3d32" />
+			<Add library="advapi32" />
+			<Add library="wsock32" />
+			<Add library="opengl32" />
+			<Add library="glut32" />
+			<Add library="glut" />
+			<Add library="glu32" />
+			<Add library="glaux" />
+			<Add library="gdi32" />
+		</Linker>
+		<Unit filename="wxMoLevelCtrl.cpp" />
+		<Unit filename="wxMoLevelCtrl.h" />
+		<Unit filename="wxMoRotaryCtrl.cpp" />
+		<Unit filename="wxMoRotaryCtrl.h" />
+		<Unit filename="wxMoTimelineBandCtrl.cpp" />
+		<Unit filename="wxMoTimelineBandCtrl.h" />
+		<Unit filename="wxMoTimelineRulerCtrl.cpp" />
+		<Unit filename="wxMoTimelineRulerCtrl.h" />
+		<Unit filename="wxMoldeoControls.h" />
+		<Unit filename="wxMoldeoLineCtrl.cpp" />
+		<Unit filename="wxMoldeoLineCtrl.h" />
+		<Unit filename="wxMoldeoObjectCanvas.cpp" />
+		<Unit filename="wxMoldeoObjectCanvas.h" />
+		<Unit filename="wxMoldeoObjectCtrl.cpp" />
+		<Unit filename="wxMoldeoObjectCtrl.h" />
+		<Unit filename="wxMoldeoPinCtrl.cpp" />
+		<Unit filename="wxMoldeoPinCtrl.h" />
+		<Extensions>
+			<envvars />
+			<code_completion />
+			<lib_finder disable_auto="0" />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
