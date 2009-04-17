@@ -43,12 +43,12 @@ moEffectLayerCtrl::moEffectLayerCtrl(wxWindow* parent,wxWindowID id,const wxPoin
 	wxFont TextCtrlLabelFont(6,wxSWISS,wxFONTSTYLE_NORMAL,wxBOLD,false,_T("Terminal"),wxFONTENCODING_DEFAULT);
 	TextCtrlLabel->SetFont(TextCtrlLabelFont);
 	TextCtrlLabel->SetEditable( false );
-	m_pLevelAlphaCtrl = new moWxLevelCtrl(this, ID_SLIDERALPHA, 0, 0, 100, wxPoint(0,24), wxSize(56,9), 0, wxDefaultValidator, _T("ID_SLIDERALPHA"));
-	Connect(ID_SLIDERALPHA, MO_EVT_DIRECTOR_LEVEL, (wxObjectEventFunction)&moEffectLayerCtrl::OnLevelAlpha );
-	m_pLevelTintCtrl = new moWxLevelCtrl(this, ID_SLIDERTINT, 0, 0, 100, wxPoint(65,24), wxSize(56,9), 0, wxDefaultValidator, _T("ID_SLIDERTINT"));
-	Connect(ID_SLIDERTINT, MO_EVT_DIRECTOR_LEVEL, (wxObjectEventFunction)&moEffectLayerCtrl::OnLevelTint );
-	m_pLevelSpeedCtrl = new moWxLevelCtrl(this, ID_SLIDERTEMPO, 0, 0, 100, wxPoint(128,24), wxSize(56,9), 0, wxDefaultValidator, _T("ID_SLIDERTEMPO"));
-	Connect(ID_SLIDERTEMPO, MO_EVT_DIRECTOR_LEVEL, (wxObjectEventFunction)&moEffectLayerCtrl::OnLevelSpeed );
+	m_pLevelAlphaCtrl = new wxMoLevelCtrl(this, ID_SLIDERALPHA, 0, 0, 100, wxPoint(0,24), wxSize(56,9), 0, wxDefaultValidator, _T("ID_SLIDERALPHA"));
+	Connect(ID_SLIDERALPHA, wxEVT_MOLEVELCTRL, (wxObjectEventFunction)&moEffectLayerCtrl::OnLevelAlpha );
+	m_pLevelTintCtrl = new wxMoLevelCtrl(this, ID_SLIDERTINT, 0, 0, 100, wxPoint(65,24), wxSize(56,9), 0, wxDefaultValidator, _T("ID_SLIDERTINT"));
+	Connect(ID_SLIDERTINT, wxEVT_MOLEVELCTRL, (wxObjectEventFunction)&moEffectLayerCtrl::OnLevelTint );
+	m_pLevelSpeedCtrl = new wxMoLevelCtrl(this, ID_SLIDERTEMPO, 0, 0, 100, wxPoint(128,24), wxSize(56,9), 0, wxDefaultValidator, _T("ID_SLIDERTEMPO"));
+	Connect(ID_SLIDERTEMPO, wxEVT_MOLEVELCTRL, (wxObjectEventFunction)&moEffectLayerCtrl::OnLevelSpeed );
 	CheckBoxOnOff = new wxCheckBox(this, ID_CHECKBOXONOFF, wxEmptyString, wxPoint(224,6), wxSize(16,21), 0, wxDefaultValidator, _T("ID_CHECKBOXONOFF"));
 	CheckBoxOnOff->SetValue(false);
 	BitmapButtonDelete = new wxBitmapButton(this, ID_BITMAPBUTTONDELETE, wxBitmap(wxImage(_T("../../doc/icons/delete.png"))), wxPoint(240,12), wxSize(13,13), wxBU_AUTODRAW, wxDefaultValidator, _T("ID_BITMAPBUTTONDELETE"));

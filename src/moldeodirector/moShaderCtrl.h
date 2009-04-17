@@ -2,7 +2,7 @@
 #define MOSHADERCTRL_H
 
 #include "moIDirectorActions.h"
-#include "moWxLevelCtrl.h"
+#include "wxMoldeoControls.h"
 
 //(*Headers(moShaderCtrl)
 #include <wx/textctrl.h>
@@ -58,7 +58,7 @@ class moShaderCtrl: public wxPanel, public moIDirectorActions
 		void ProcessShaderValues();
 
         moValueDescriptor   m_ValueDescriptor;
-        moWxLevelCtrl*      m_pLevelShaderAlphaCtrl;
+        wxMoLevelCtrl*      m_pLevelShaderAlphaCtrl;
 
 		DECLARE_EVENT_TABLE()
 };

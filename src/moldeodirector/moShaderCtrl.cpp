@@ -47,8 +47,8 @@ moShaderCtrl::moShaderCtrl(wxWindow* parent,wxWindowID id,const wxPoint& pos,con
 	//*)
 	SetSize(pos.x, pos.y, size.x, size.y );
 
-	m_pLevelShaderAlphaCtrl =  new moWxLevelCtrl(this, ID_LEVELSHADERALPHA, 50, 0, 100, SliderShaderAlpha->GetPosition(), SliderShaderAlpha->GetSize(), 0, wxDefaultValidator, _T("ID_LEVELSHADERALPHA") );
-    Connect( ID_LEVELSHADERALPHA, MO_EVT_DIRECTOR_LEVEL, (wxObjectEventFunction)&moShaderCtrl::OnLevelShaderAlpha );
+	m_pLevelShaderAlphaCtrl =  new wxMoLevelCtrl(this, ID_LEVELSHADERALPHA, 50, 0, 100, SliderShaderAlpha->GetPosition(), SliderShaderAlpha->GetSize(), 0, wxDefaultValidator, _T("ID_LEVELSHADERALPHA") );
+    Connect( ID_LEVELSHADERALPHA, wxEVT_MOLEVELCTRL, (wxObjectEventFunction)&moShaderCtrl::OnLevelShaderAlpha );
 	if (SliderShaderAlpha) SliderShaderAlpha->Destroy();
 
 }

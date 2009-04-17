@@ -1416,11 +1416,12 @@ moDirectorStatus moDirectorConsole::ConsoleLoop() {
         Update();
         Draw();
         //Errores::: basado en moDebug, o moTextHeap
-        moText plog;
+        /*moText plog;
         for(int i =0; i < MODebug2->Count(); i++ ) {
             plog = MODebug2->Pop();
             if (plog.Trim()!=moText("")) Log( plog );
         }
+        */
     } else {
 
         moConfig dummy;

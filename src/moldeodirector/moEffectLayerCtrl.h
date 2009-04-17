@@ -12,7 +12,7 @@
 //*)
 
 #include "moIDirectorActions.h"
-#include "moWxLevelCtrl.h"
+#include "wxMoldeoControls.h"
 
 class moItemLayerCtrl : public moIDirectorActions {
 
@@ -51,10 +51,10 @@ class moEffectLayerCtrl: public wxPanel, public moItemLayerCtrl
 
 		//(*Declarations(moEffectLayerCtrl)
 		wxCheckBox* CheckBoxOnOff;
-		moWxLevelCtrl* m_pLevelAlphaCtrl;
+		wxMoLevelCtrl* m_pLevelAlphaCtrl;
 		wxTextCtrl* TextCtrlLabel;
-		moWxLevelCtrl* m_pLevelSpeedCtrl;
-		moWxLevelCtrl* m_pLevelTintCtrl;
+		wxMoLevelCtrl* m_pLevelSpeedCtrl;
+		wxMoLevelCtrl* m_pLevelTintCtrl;
 		wxBitmapButton* BitmapButtonDelete;
 		//*)
 
