@@ -1001,17 +1001,24 @@ moDirectorFrame::FocusOutput() {
 
        //wxMessageBox(thisDisplay.GetName() + clientareastr);
        //wxMessageBox(theOtherDisplay.GetName() + clientareastr2 );
+
+
        if (client2.GetWidth()!=0){
+
            outputwidth = client2.GetWidth();
            outputheight = client2.GetHeight();
            outputleft = client2.GetLeft();
            outputtop = client2.GetTop();
+
        } else {
+
             outputwidth = m_pDirectorCore->GetResourceManager()->GetRenderMan()->GetOutputConfiguration().m_OutputResolution.width;
             outputheight = m_pDirectorCore->GetResourceManager()->GetRenderMan()->GetOutputConfiguration().m_OutputResolution.height;
             outputleft = 0;
             outputtop = 0;
+
        }
+
 
     }
 

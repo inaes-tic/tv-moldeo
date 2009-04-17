@@ -13,7 +13,7 @@
 #include <wx/combobox.h>
 //*)
 
-#include "moWxLevelCtrl.h"
+#include "wxMoldeoControls.h"
 
 class moColorMotion: public wxPanel, public moIDirectorActions
 {
@@ -42,10 +42,10 @@ class moColorMotion: public wxPanel, public moIDirectorActions
 		wxSlider* SliderRed;
 		//*)
 
-		moWxLevelCtrl* m_pLevelRedCtrl;
-		moWxLevelCtrl* m_pLevelGreenCtrl;
-		moWxLevelCtrl* m_pLevelBlueCtrl;
-		moWxLevelCtrl* m_pLevelAlphaCtrl;
+		wxMoLevelCtrl* m_pLevelRedCtrl;
+		wxMoLevelCtrl* m_pLevelGreenCtrl;
+		wxMoLevelCtrl* m_pLevelBlueCtrl;
+		wxMoLevelCtrl* m_pLevelAlphaCtrl;
 
 	protected:
 

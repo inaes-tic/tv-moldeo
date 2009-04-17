@@ -100,20 +100,20 @@ moColorMotion::moColorMotion(wxWindow* parent,wxWindowID id,const wxPoint& pos,c
 	Connect(ID_COMBOBOXCOLORPRESETS,wxEVT_COMMAND_COMBOBOX_SELECTED,(wxObjectEventFunction)&moColorMotion::OnComboBoxMotionColorPresetsSelect);
 	//*)
 
-	m_pLevelRedCtrl =  new moWxLevelCtrl(Panel2, moColorMotion::ID_LEVELRED, 50, 0 , 100, SliderRed->GetPosition(), SliderRed->GetSize() , 0, wxDefaultValidator, _T("ID_LEVELRED") );
-    Connect(moColorMotion::ID_LEVELRED, MO_EVT_DIRECTOR_LEVEL, (wxObjectEventFunction)&moColorMotion::OnLevelRed );
+	m_pLevelRedCtrl =  new wxMoLevelCtrl(Panel2, moColorMotion::ID_LEVELRED, 50, 0 , 100, SliderRed->GetPosition(), SliderRed->GetSize() , 0, wxDefaultValidator, _T("ID_LEVELRED") );
+    Connect(moColorMotion::ID_LEVELRED, wxEVT_MOLEVELCTRL, (wxObjectEventFunction)&moColorMotion::OnLevelRed );
 	if (SliderRed) SliderRed->Destroy();
 
-	m_pLevelGreenCtrl =  new moWxLevelCtrl(Panel2, moColorMotion::ID_LEVELGREEN, 50, 0 , 100, SliderGreen->GetPosition(), SliderGreen->GetSize() , 0, wxDefaultValidator, _T("ID_LEVELGREEN") );
-    Connect(moColorMotion::ID_LEVELGREEN, MO_EVT_DIRECTOR_LEVEL, (wxObjectEventFunction)&moColorMotion::OnLevelGreen );
+	m_pLevelGreenCtrl =  new wxMoLevelCtrl(Panel2, moColorMotion::ID_LEVELGREEN, 50, 0 , 100, SliderGreen->GetPosition(), SliderGreen->GetSize() , 0, wxDefaultValidator, _T("ID_LEVELGREEN") );
+    Connect(moColorMotion::ID_LEVELGREEN, wxEVT_MOLEVELCTRL, (wxObjectEventFunction)&moColorMotion::OnLevelGreen );
 	if (SliderGreen) SliderGreen->Destroy();
 
-	m_pLevelBlueCtrl =  new moWxLevelCtrl(Panel2, moColorMotion::ID_LEVELBLUE, 50, 0 , 100, SliderBlue->GetPosition(), SliderBlue->GetSize() , 0, wxDefaultValidator, _T("ID_LEVELBLUE") );
-    Connect(moColorMotion::ID_LEVELBLUE, MO_EVT_DIRECTOR_LEVEL, (wxObjectEventFunction)&moColorMotion::OnLevelBlue );
+	m_pLevelBlueCtrl =  new wxMoLevelCtrl(Panel2, moColorMotion::ID_LEVELBLUE, 50, 0 , 100, SliderBlue->GetPosition(), SliderBlue->GetSize() , 0, wxDefaultValidator, _T("ID_LEVELBLUE") );
+    Connect(moColorMotion::ID_LEVELBLUE, wxEVT_MOLEVELCTRL, (wxObjectEventFunction)&moColorMotion::OnLevelBlue );
 	if (SliderBlue) SliderBlue->Destroy();
 
-	m_pLevelAlphaCtrl =  new moWxLevelCtrl(Panel2, moColorMotion::ID_LEVELALPHA, 50, 0 , 100, SliderAlpha->GetPosition(), SliderAlpha->GetSize() , 0, wxDefaultValidator, _T("ID_LEVELALPHA") );
-    Connect( moColorMotion::ID_LEVELALPHA, MO_EVT_DIRECTOR_LEVEL, (wxObjectEventFunction)&moColorMotion::OnLevelAlpha );
+	m_pLevelAlphaCtrl =  new wxMoLevelCtrl(Panel2, moColorMotion::ID_LEVELALPHA, 50, 0 , 100, SliderAlpha->GetPosition(), SliderAlpha->GetSize() , 0, wxDefaultValidator, _T("ID_LEVELALPHA") );
+    Connect( moColorMotion::ID_LEVELALPHA, wxEVT_MOLEVELCTRL, (wxObjectEventFunction)&moColorMotion::OnLevelAlpha );
 	if (SliderAlpha) SliderAlpha->Destroy();
 
 }

@@ -34,6 +34,7 @@
 					<Add library="kbool" />
 					<Add library="freetype" />
 					<Add directory="..\..\contrib\src\tinyxml\Debug" />
+					<Add directory="..\..\contrib\src\wxMoldeoControls\Debug" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -65,6 +66,7 @@
 					<Add library="kbool" />
 					<Add library="freetype" />
 					<Add directory="..\..\contrib\src\tinyxml\Release" />
+					<Add directory="..\..\contrib\src\wxMoldeoControls\Release" />
 				</Linker>
 			</Target>
 		</Build>
@@ -75,7 +77,7 @@
 			<Add option="-W" />
 			<Add option="-D__WXMSW__" />
 			<Add option="-DwxUSE_SYSTEM_OPTIONS" />
-			<Add option="-DMO_WXART2D" />
+			<Add option="-DWXART2D" />
 			<Add directory="." />
 			<Add directory=".." />
 			<Add directory=".\vdtc" />
@@ -105,6 +107,7 @@
 			<Add directory="..\..\..\..\externlibs\wxWidgets\src\expat\lib" />
 			<Add directory="..\..\..\..\externlibs\wxArt2D\thirdparty\agg2\include" />
 			<Add directory="..\..\..\..\externlibs\wxArt2D\thirdparty\kbool\include" />
+			<Add directory="..\..\contrib\src\wxMoldeoControls" />
 		</Compiler>
 		<Linker>
 			<Add library="libSDL" />
@@ -140,6 +143,7 @@
 			<Add library="glu32" />
 			<Add library="glaux" />
 			<Add library="gdi32" />
+			<Add library="moldeocontrols" />
 			<Add directory="..\..\..\..\externlibs\gstreamer\lib\glib-2.0\include" />
 			<Add directory="..\..\..\..\externlibs\tinyxml\lib" />
 			<Add directory="..\..\..\..\externlibs\SDL\lib" />
@@ -155,6 +159,7 @@
 			<Add directory="..\..\..\..\externlibs\wxwidgets\lib\mingw_lib" />
 			<Add directory="..\..\lib\mingw" />
 			<Add directory="..\..\..\..\externlibs\wxArt2D\lib" />
+			<Add directory="..\..\contrib\src\wxMoldeoControls\Release" />
 		</Linker>
 		<Unit filename="mo3dModelPanel.cpp" />
 		<Unit filename="mo3dModelPanel.h" />
@@ -225,8 +230,6 @@
 		<Unit filename="moTreeObjectsLayerCtrl.h" />
 		<Unit filename="moValueCtrl.cpp" />
 		<Unit filename="moValueCtrl.h" />
-		<Unit filename="moWxLevelCtrl.cpp" />
-		<Unit filename="moWxLevelCtrl.h" />
 		<Unit filename="moldeodirector.cpp" />
 		<Unit filename="moldeodirector.h" />
 		<Unit filename="treemultictrl\TreeMultiItemBase.cpp" />

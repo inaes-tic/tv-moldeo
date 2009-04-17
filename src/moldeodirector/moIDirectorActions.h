@@ -54,7 +54,7 @@ public:
     virtual bool OnInit();
 };
 
-///DECLARE_APP(moDirectorApp)
+DECLARE_APP(moDirectorApp)
 
 #define MO_ITEM_ID_UNDEFINED		65536
 
