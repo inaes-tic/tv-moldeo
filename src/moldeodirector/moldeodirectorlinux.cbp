@@ -45,21 +45,37 @@
 			<Add alias="All" targets="Debug;Release;" />
 		</VirtualTargets>
 		<Compiler>
-			<Add option="-Wall" />
-			<Add option="`pkg-config freetype2 --cflags`" />
-			<Add option="`wx-config --cflags --debug=no --static=no`" />
+			<Add option="-W" />
+			<Add option="`pkg-config lua5.1 --cflags`" />
+			<Add option="-I/usr/local/lib/wx/include/gtk2-ansi-release-2.8" />
+			<Add option="-I/usr/local/include/wx-2.8" />
+			<Add option="-pthread" />
+			<Add option="-D_FILE_OFFSET_BITS=64" />
+			<Add option="-D_LARGE_FILES" />
+			<Add option="-D__WXGTK__" />
 			<Add directory="../../inc" />
 			<Add directory="../../inc/3ds" />
 			<Add directory="./vdtc" />
 			<Add directory="./treemultictrl" />
 			<Add directory="../moldeodirector" />
-			<Add directory="/usr/local/wxart2d" />
-			<Add directory="/usr/local/wxart2d/agg2/include" />
+			<Add directory="../../contrib/src/wxMoldeoControls" />
 		</Compiler>
 		<Linker>
 			<Add option="`pkg-config sdl --libs`" />
 			<Add option="`pkg-config ftgl --libs`" />
-			<Add option="`wx-config --libs --debug=no --static=yes`" />
+			<Add option="-L/usr/local/lib" />
+			<Add option="-pthread" />
+			<Add option="-lwx_gtk2_richtext-2.8" />
+			<Add option="-lwx_gtk2_aui-2.8" />
+			<Add option="-lwx_gtk2_xrc-2.8" />
+			<Add option="-lwx_gtk2_qa-2.8" />
+			<Add option="-lwx_gtk2_html-2.8" />
+			<Add option="-lwx_gtk2_adv-2.8" />
+			<Add option="-lwx_gtk2_core-2.8" />
+			<Add option="-lwx_base_xml-2.8" />
+			<Add option="-lwx_base_net-2.8" />
+			<Add option="-lwx_gtk2_gl-2.8" />
+			<Add option="-lwx_base-2.8" />
 			<Add library="glut" />
 			<Add library="GLEW" />
 			<Add library="GLU" />
@@ -67,26 +83,11 @@
 			<Add library="freetype" />
 			<Add library="freeimage" />
 			<Add library="openal" />
-			<Add library="wx_gtk2-2.8" />
-			<Add library="wx_gtk2_gl-2.8" />
 			<Add library="alut" />
 			<Add library="Cg" />
 			<Add library="CgGL" />
-			<Add library="wxart2d_gtk2_general-2.8" />
-			<Add library="wxart2d_gtk2_xmlparse-2.8" />
-			<Add library="wxart2d_gtk2_curves-2.8" />
-			<Add library="wxart2d_gtk2_docview-2.8" />
-			<Add library="wxart2d_gtk2_aggdrawer-2.8" />
-			<Add library="wxart2d_gtk2_editor-2.8" />
-			<Add library="wxart2d_gtk2_canvas-2.8" />
-			<Add library="wxart2d_gtk2_canextobj-2.8" />
-			<Add library="wxart2d_gtk2_artbase-2.8" />
-			<Add library="wxart2d_gtk2_gdsio-2.8" />
-			<Add library="wxart2d_gtk2_svgio-2.8" />
-			<Add library="agg" />
-			<Add library="kbool" />
+			<Add library="../../contrib/src/wxMoldeoControls/Releaselinux/libmoldeocontrols.a" />
 			<Add directory="../../lib/" />
-			<Add directory="/usr/local/lib" />
 		</Linker>
 		<Unit filename="mo3dModelPanel.cpp" />
 		<Unit filename="mo3dModelPanel.h" />
@@ -154,8 +155,6 @@
 		<Unit filename="moTreeObjectsLayerCtrl.h" />
 		<Unit filename="moValueCtrl.cpp" />
 		<Unit filename="moValueCtrl.h" />
-		<Unit filename="moWxLevelCtrl.cpp" />
-		<Unit filename="moWxLevelCtrl.h" />
 		<Unit filename="moldeodirector.cpp" />
 		<Unit filename="treemultictrl/TreeMultiItemBase.cpp" />
 		<Unit filename="treemultictrl/TreeMultiItemBase.h" />

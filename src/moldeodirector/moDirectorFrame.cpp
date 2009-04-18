@@ -244,11 +244,11 @@ moDirectorFrame::CreateGUINotebook() {
 
     CreateGLWindows();
 
-    m_pConnectionsWindow = new moConnectionsWindow(m_pGUINotebook,wxID_ANY, wxPoint(0,0), wxSize(300,200));
-    m_pConnectionsWindow->Init(this);
+    //m_pConnectionsWindow = new moConnectionsWindow(m_pGUINotebook,wxID_ANY, wxPoint(0,0), wxSize(300,200));
+    //m_pConnectionsWindow->Init(this);
 
     m_pGUINotebook->AddPage( m_pPreviewWindow, wxT("Preview"));
-    m_pGUINotebook->AddPage( m_pConnectionsWindow, wxT("Connections"));
+    //m_pGUINotebook->AddPage( m_pConnectionsWindow, wxT("Connections"));
 }
 
 void
@@ -897,8 +897,8 @@ moDirectorFrame::CloseProject() {
                 m_pLayers->DeleteAllItems();
             if (m_pLayers2)
                 m_pLayers2->DeleteAllItems();
-            if(m_pConnectionsWindow)
-                m_pConnectionsWindow->DeleteAll();
+            //if(m_pConnectionsWindow)
+                //m_pConnectionsWindow->DeleteAll();
 
             return MO_DIRECTOR_STATUS_OK;
         }

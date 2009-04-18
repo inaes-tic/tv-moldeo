@@ -1,5 +1,7 @@
 #include "moConnectionsWindow.h"
 
+#ifdef WXART2D
+
 //(*InternalHeaders(moConnectionsWindow)
 #include <wx/intl.h>
 #include <wx/string.h>
@@ -1633,3 +1635,4 @@ void moConnectionsWindow::DeleteAll() {
         m_MoldeoCanvasObjects.Empty();
 
 }
+#endif
