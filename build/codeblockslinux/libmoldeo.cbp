@@ -53,6 +53,7 @@
 			<Add directory="../../inc/3ds" />
 			<Add directory="../../contrib/src/tinyxml/" />
 			<Add directory="/usr/include/muParser" />
+			<Add directory="/usr/include" />
 		</Compiler>
 		<Linker>
 			<Add option="`freetype-config --libs`" />
