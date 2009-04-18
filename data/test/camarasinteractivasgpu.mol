@@ -12,12 +12,33 @@
                 <D type="NUM">0</D>
                 <D type="NUM">1</D>
             </VAL>
+            <VAL>
+                <D type="TXT">mirrorg</D>
+                <D type="TXT">mir</D>
+                <D type="TXT">mir</D>
+                <D type="NUM">0</D>
+                <D type="NUM">1</D>
+            </VAL>
         </PARAM>
         <PARAM name="effect" type="TEXT">
             <VAL>
                 <D type="TXT">icon</D>
                 <D type="TXT">icam</D>
                 <D type="TXT">ICAM</D>
+                <D type="NUM">0</D>
+                <D type="NUM">1</D>
+            </VAL>
+            <VAL>
+                <D type="TXT">particlessimple</D>
+                <D type="TXT">partis</D>
+                <D type="TXT">PARTIS</D>
+                <D type="NUM">0</D>
+                <D type="NUM">1</D>
+            </VAL>
+            <VAL>
+                <D type="TXT">icon</D>
+                <D type="TXT">icam2</D>
+                <D type="TXT">icam2</D>
                 <D type="NUM">0</D>
                 <D type="NUM">1</D>
             </VAL>
@@ -46,7 +67,7 @@
                 <D type="TXT">trackergpuklt</D>
                 <D type="NUM">0</D>
                 <D type="NUM">1</D>
-            </VAL>			
+            </VAL>
         </PARAM>
         <PARAM name="mastereffects_on" type="NUM">
             <VAL>
@@ -69,7 +90,7 @@
                 <D type="TXT"></D>
                 <D type="TXT"></D>
             </VAL>
-        </PARAM>		
+        </PARAM>
     </CONFIGPARAMS>
     <PRECONFIGS>
         <PRE>
