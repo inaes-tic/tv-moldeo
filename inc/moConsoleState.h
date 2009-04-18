@@ -55,6 +55,8 @@ class LIBMOLDEO_API moConsoleState : public moAbstract
 		MOuint fps, fps0, fps1;
 
 		//especiales
+		MOswitch stereooutput;
+
 		MOswitch savescreen;
 		MOuint frame;
 
@@ -63,7 +65,7 @@ class LIBMOLDEO_API moConsoleState : public moAbstract
 		MOuint m_nPostEffects;
 		MOuint m_nMasterEffects;
 		MOuint m_nAllEffects;
-    
+
 };
 
 #endif

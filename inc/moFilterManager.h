@@ -63,7 +63,9 @@ class LIBMOLDEO_API moTrackerFeature { //de GpuKLT_Feature
     float					x,y;					 //!< Location
 	float					normx, normy;            //!< Normalized Feature Coordinates [ 0 - 1 ]
 	float					tr_x, tr_y;              //!< Feature position in the previous frame.
-	float					v_x, v_y;                //!< Feature position in the previous frame.
+	float					v_x, v_y;                //!< Speed in the actual frame.
+	float					vp_x, vp_y;              //!< Speed in the previous frame.
+	float					a_x, a_y;                //!< Acceleration in the actual frame.
 	bool				    valid;					 //!< True for a valid feature point.
 	int                     val;                     //!<Other states for valid feature point
 	moVector2fArray         track;					 //!< list of feature positions in the past frames. Forms the feature tracks in video.
@@ -100,25 +102,87 @@ moDeclareExportedDynamicArray( moTrackerFeature*, moTrackerFeatureArray )
 */
 class LIBMOLDEO_API moTrackerSystemData {
 	public:
-        virtual ~moTrackerSystemData() {}
+        moTrackerSystemData();
+        virtual ~moTrackerSystemData();
 		virtual int GetFeaturesCount();
 		virtual moVector2f GetBarycenter();
+		virtual moVector2f GetBarycenterMotion();
+		virtual moVector2f GetBarycenterAcceleration();
+		virtual moVector2f GetVariance();
+		virtual moVector2f GetMax();
+		virtual moVector2f GetMin();
+		virtual void SetMax( float x, float y );
+		virtual void SetMin( float x, float y );
+
 		virtual int GetValidFeatures();
 		virtual moTrackerFeature* GetFeature(int i);
 		virtual moTrackerFeatureArray& GetFeatures();
 
 		virtual moVideoFormat& GetVideoFormat() { return m_VideoFormat; }
-		virtual void SetBaryCenter( float b_x, float b_y) { m_Barycenter = moVector2f(b_x,b_y); }
+
+		virtual void SetBarycenter( float b_x, float b_y) { m_Barycenter = moVector2f(b_x,b_y); }
+		virtual void SetBarycenterMotion( float b_x, float b_y) { m_BarycenterMotion = moVector2f(b_x,b_y); }
+		virtual void SetBarycenterAcceleration( float b_x, float b_y) { m_BarycenterAcceleration = moVector2f(b_x,b_y); }
+
+		virtual void SetVariance( float v_x, float v_y) { m_Variance = moVector2f(v_x,v_y); }
 		virtual void SetValidFeatures( int validfeatures) { m_ValidFeatures = validfeatures; }
+
+        ///Transforma el vector de posicion (0..1) al indice de zona de la matriz cuadrada
+        virtual int PositionToZone( float x, float y );
+
+        ///Transforma el indice de zona al vector posicion
+        virtual moVector2f ZoneToPosition( int zone );
+
+
+        ///Transforma el vector de posicion (0..1) a coordenadas polares luego al indice de zona de la matriz
+        virtual int PositionToZoneC( float x, float y );
+
+        ///Transforma el indice de zona al vector posicion circular!
+        virtual moVector2f ZoneToPositionC( int zone );
+
+        virtual void SetPositionMatrix( float x, float y, int nfeatures );
+        virtual void SetPositionMatrix( moVector2f pos, int nfeatures );
+        virtual int GetPositionMatrix( float x, float y );
+        virtual int GetPositionMatrix( moVector2f pos );
+
+        virtual void SetMotionMatrix( float x, float y, int nfeatures );
+        virtual void SetMotionMatrix( moVector2f pos,  int nfeatures );
+        virtual int GetMotionMatrix( float x, float y );
+        virtual int GetMotionMatrix( moVector2f pos );
+
+        virtual void SetAccelerationMatrix( float x, float y, int nfeatures );
+        virtual void SetAccelerationMatrix( moVector2f pos,  int nfeatures );
+        virtual int GetAccelerationMatrix( float x, float y );
+        virtual int GetAccelerationMatrix( moVector2f pos );
+
+        virtual void SetPositionMatrixC( float x, float y, int nfeatures );
+        virtual int GetPositionMatrixC( float x, float y );
+        virtual void SetMotionMatrixC( float x, float y, int nfeatures );
+        virtual int GetMotionMatrixC( float x, float y );
+
+        virtual void ResetMatrix();
+
 
 	protected:
 		moVideoFormat	m_VideoFormat;
 		moTrackerFeatureArray m_Features;
 
 		moVector2f      m_Barycenter;
+		moVector2f      m_BarycenterMotion;
+		moVector2f      m_BarycenterAcceleration;
+
+		moVector2f      m_Variance;
 		int             m_ValidFeatures;
+
 		moVector2f      m_Max;
 		moVector2f      m_Min;
+
+		int             *m_PositionMatrix; ///4 x 4 zones
+		int             *m_MotionMatrix; ///4 x 4 zones
+		int             *m_AccelerationMatrix; ///4 x 4 zones
+
+		int             *m_CircularPositionMatrix; ///12 semitones, 3 levels
+		int             *m_CircularMotionMatrix; ///12 semitones, 3 levels
 
 };
 

@@ -110,6 +110,10 @@ public:
     MOint       Count() {
         return m_Debug.count;
     }
+
+    moTextHeap&     GetMessages() {
+        return m_Debug;
+    }
 private:
 
     /// Lista de mensajes

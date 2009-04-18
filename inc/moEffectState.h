@@ -138,6 +138,14 @@ class LIBMOLDEO_API moEffectState : public moAbstract
          */
 		MOswitch fulldebug;
 
+		/**
+         * 3d stereo capable: capacitado para diferenciar visión entre ojo izquierdo y derecho, profundidad
+         * descativado: -1
+         * activado: 1
+         */
+		MOswitch stereo;
+		moStereoSides stereoside;
+
 		void CSV2RGB();
 };
 

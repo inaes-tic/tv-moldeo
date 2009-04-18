@@ -344,7 +344,7 @@ class LIBMOLDEO_API moRenderManager : public moResource
 		MOint m_render_to_texture_mode;
 		MOint m_screen_width, m_screen_height;
         MOint m_render_width, m_render_height;
-        MOuint m_render_tex_moid[4];
+        MOuint m_render_tex_moid[6];
 		MOuint m_render_attach_points[4];
 		MOuint m_fbo_idx;
 
