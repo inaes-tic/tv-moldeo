@@ -157,10 +157,10 @@ using namespace std;
 /*LINUX*/
 #ifdef MO_LINUX
 
-    #include <X11/X.h>
+    #include "X11/X.h"
 
     #define MO_HANDLE Window
-    #define MO_DISPLAY Display*
+    #define MO_DISPLAY void*
 
 /*
 	#include <SDL/SDL.h>
