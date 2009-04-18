@@ -130,7 +130,7 @@ wxMoRotaryCtrl::OnPaint(wxPaintEvent& event) {
     ///TEXTO CENTRAL
     if (m_bStartDragging) {
         wxString s;
-        s.Printf("%4.2f",normalpos);
+        s.Printf(_T("%4.2f"),normalpos);
         dc.SetFont(wxFont( 8, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL ));
         dc.SetBrush( wxBrush( wxColour(255,255,255), wxSOLID ) );
         dc.SetPen( wxPen( wxColour(255,255,255), 1, wxSOLID ) );

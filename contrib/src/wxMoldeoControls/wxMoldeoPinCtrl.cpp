@@ -77,15 +77,15 @@ wxMoldeoPinCtrl::~wxMoldeoPinCtrl() {
 
 
         void wxMoldeoPinCtrl::OnEnter(wxCoord x, wxCoord y, wxDragResult def) {
-            wxMessageBox("gi");
+            wxMessageBox(_T("gi"));
         }
 
         void wxMoldeoPinCtrl::OnDragOver(wxCoord x, wxCoord y, wxDragResult def) {
-            wxMessageBox("hover");
+            wxMessageBox(_T("hover"));
         }
 
         void wxMoldeoPinCtrl::OnDrop(wxCoord x, wxCoord y, wxDragResult def) {
-            wxMessageBox("drop");
+            wxMessageBox(_T("drop"));
 
         }
 

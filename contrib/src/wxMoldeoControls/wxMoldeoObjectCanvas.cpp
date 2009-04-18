@@ -171,7 +171,7 @@ wxMoldeoObjectCanvas::OnPaint(wxPaintEvent& event) {
         dc.SetPen( wxPen( wxColour(0,0,0), 1, wxSOLID ) );
         dc.DrawLine( LineStartX, LineStartY, LineEndX, LineEndY );
 
-        deb.Printf(" mx: %i", ScreenToClient( wxGetMousePosition()).x  );
+        deb.Printf(_T(" mx: %i"), ScreenToClient( wxGetMousePosition()).x  );
         dc.DrawText( deb, 0, 0 );
     }
 
@@ -299,13 +299,13 @@ void wxMoldeoObjectCanvas::OnMouseEvent( wxMouseEvent & event ) {
     if (!event.Dragging()) {
         if (m_bStartDragging==true) {
             m_bStartDragging = false;
-            wxMessageBox("release moving");
+            wxMessageBox(_T("release moving"));
             wxWindow::ReleaseMouse();
         }
         if (!event.LeftIsDown()) {
             if (m_bLineDrawing) {
                 m_bLineDrawing = false;
-                wxMessageBox("release line drawing");
+                wxMessageBox(_T("release line drawing"));
                 wxWindow::ReleaseMouse();
             }
         }

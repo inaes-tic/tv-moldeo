@@ -160,7 +160,7 @@ wxMoTimelineBandCtrl::OnPaint(wxPaintEvent& event) {
     dc.DrawPolygon( 3, Triangle, 0, 0 );
 */
     wxString deb;
-    deb.Printf(GetName()+": %i",GetSize().GetX());
+    deb.Printf(GetName()+_T(": %i"),GetSize().GetX());
     dc.DrawText(deb,20,0);
 }
 
