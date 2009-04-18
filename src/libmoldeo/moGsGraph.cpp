@@ -317,9 +317,9 @@ moCaptureDevices* moGsFramework::LoadCaptureDevices() {
     #else
         // in linux: for v4l2src   device could be  /dev/video0   -   /dev/video1   etc...
         m_CaptureDevices.Add( moCaptureDevice( moText("Default"), moText("-"), moText("-") ) );
-        m_CaptureDevices.Add( moCaptureDevice( moText("Laptop Integrated Webcam"), moText("webcam"), moText("/dev/video0") ) );
+        //m_CaptureDevices.Add( moCaptureDevice( moText("Laptop Integrated Webcam"), moText("webcam"), moText("/dev/video0") ) );
         //m_CaptureDevices.Add( moCaptureDevice( moText(""), moText("webcam"), moText("/dev/video0") ) );
-        m_CaptureDevices.Add( moCaptureDevice( moText("DV"), moText("DV IEEE 1394"), moText("-"), 0 ) );
+        //m_CaptureDevices.Add( moCaptureDevice( moText("DV"), moText("DV IEEE 1394"), moText("-"), 0 ) );
     #endif
 
 	return &m_CaptureDevices;
@@ -733,10 +733,14 @@ moGsGraph::BuildLiveWebcamGraph( moBucketsPool *pBucketsPool, moCaptureDevice &p
                 g_object_set (G_OBJECT (m_pFileSource), "device-name", (char*)devicename, NULL);
            }
            #else
-            if (devicename==moText("DV") )
+            if (devicename==moText("DV") ) {
                 g_object_set (G_OBJECT (m_pFileSource), "port", 0, NULL);
-            else
-                g_object_set (G_OBJECT (m_pFileSource), "device-name", (char*)devicename, NULL);
+            } else {
+                devicename.ToLower();
+                if ( devicename.Length() > 0 && ( devicename!=moText("default") ) ) {
+                    g_object_set (G_OBJECT (m_pFileSource), "device-name", (char*)devicename, NULL);
+                }
+            }
            #endif
            //g_object_get (G_OBJECT (m_pFileSource), "location", &checkval, NULL);
            //GstElement *filter = gst_element_factory_make ("capsfilter", "filter");
