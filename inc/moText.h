@@ -297,7 +297,7 @@ public:
 
 	void Push(moText);
 	moText Pop();
-	moText Get(int);
+	moText Get( int x );
 	void Set(int,moText);
 };
 /*

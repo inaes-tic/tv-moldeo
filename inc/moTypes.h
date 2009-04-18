@@ -300,7 +300,7 @@ using namespace std;
 #define MO_FAIL			65535
 #define MO_UNDEFINED    -1
 
-#define MO_MAX_DEBUG	65535
+#define MO_MAX_DEBUG	256
 #define MO_MAX_TEXTURAS	512
 #define MO_MAX_MODELOS	256
 
@@ -342,6 +342,11 @@ using namespace std;
 #define MO_EFFECTS_TEX 2
 #define MO_FINAL_TEX 3
 
+//3D STEREOSCOPIC RENDER
+#define MO_LEFT_TEX 4
+#define MO_RIGHT_TEX 5
+
+
 #define MO_MAX_PRESETS 9
 #define MO_DEBUG
 
@@ -377,6 +382,12 @@ enum moPolygonModes {
    MO_POLYGONMODE_LINE = 1,
    MO_POLYGONMODE_POINT = 2,
    MO_POLYGONMODES = 3
+};
+
+enum moStereoSides {
+  MO_STEREO_NONE = 0,
+  MO_STEREO_LEFT = 1,
+  MO_STEREO_RIGHT = 2
 };
 
 //////////////////////////////////////////////////////
