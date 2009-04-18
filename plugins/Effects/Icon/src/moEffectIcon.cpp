@@ -197,7 +197,8 @@ void moEffectIcon::Draw( moTempo* tempogral, moEffectState* parentstate )
 				if (m_pTrackerData->GetFeaturesCount()>0) {
                     int tw = m_pTrackerData->GetVideoFormat().m_Width;
                     int th = m_pTrackerData->GetVideoFormat().m_Height;
-                    //MODebug2->Push(moText("vformat:")+IntToStr(tw)+moText("th")+IntToStr(th));
+
+
 
                     for (i = 0; i < m_pTrackerData->GetFeaturesCount(); i++)
                     {
@@ -206,12 +207,12 @@ void moEffectIcon::Draw( moTempo* tempogral, moEffectState* parentstate )
 
                         //if (pF && pF->valid) {
 
-                        float x = (pF->x / (float)tw) - 0.5;
-                        float y = -(pF->y / (float)th) + 0.5;
-                        float tr_x = (pF->tr_x / (float)tw) - 0.5;
-                        float tr_y = -(pF->tr_y / (float)th) + 0.5;
-                        float v_x = (pF->v_x / (float)tw);
-                        float v_y = -(pF->v_y / (float)th);
+                        float x = (pF->x) - 0.5;
+                        float y = -(pF->y) + 0.5;
+                        float tr_x = (pF->tr_x) - 0.5;
+                        float tr_y = -(pF->tr_y) + 0.5;
+                        float v_x = (pF->v_x);
+                        float v_y = -(pF->v_y);
                         float vel = sqrtf( v_x*v_x+v_y*v_y );
                         int v = pF->val;
 
@@ -245,15 +246,16 @@ void moEffectIcon::Draw( moTempo* tempogral, moEffectState* parentstate )
                                 glVertex2f((x + 0.008)*w, (y + 0.008)*h);
                                 glVertex2f((x + 0.008)*w, (y - 0.008)*h);
                             glEnd();
-
+/*
                             glDisable(GL_TEXTURE_2D);
                             glColor4f(1.0, 1.0, 1.0, 1.0);
                             glBegin(GL_LINES);
                                 glVertex2f( x*w, y*h);
                                 glVertex2f( tr_x*w, tr_y*h);
                             glEnd();
+                            */
 
-                            if ( vel > 0.001 ) {
+                            /*if ( vel > 0.001 ) {
                                 glDisable(GL_TEXTURE_2D);
                                 glColor4f(0.0, 0.0, 1.0, 1.0);
                                 //glPointSize((GLfloat)10);
@@ -262,13 +264,73 @@ void moEffectIcon::Draw( moTempo* tempogral, moEffectState* parentstate )
                                     glVertex2f( x*w, y*h);
                                     glVertex2f( x*w+v_x*w, y*h+v_y*h);
                                 glEnd();
-                            }
+                            }*/
 
 
                         }
 
 
                     }
+                    moVector2f m_TrackerBarycenter = moVector2f( m_pTrackerData->GetBarycenter().X() - 0.5,
+                                                      -m_pTrackerData->GetBarycenter().Y() + 0.5 );
+
+                    glBindTexture(GL_TEXTURE_2D,0);
+                    glColor4f(0.7, 1.0, 0.5, 1.0);
+
+                    //GL_MAX_TEXTURE_UNITS_ARB
+                    //GL_TEXTURE0_ARB
+
+                    glBegin(GL_QUADS);
+                        glVertex2f((m_TrackerBarycenter.X() - 0.02)*w, (m_TrackerBarycenter.Y() - 0.02)*h);
+                        glVertex2f((m_TrackerBarycenter.X() - 0.02)*w, (m_TrackerBarycenter.Y() + 0.02)*h);
+                        glVertex2f((m_TrackerBarycenter.X() + 0.02)*w, (m_TrackerBarycenter.Y() + 0.02)*h);
+                        glVertex2f((m_TrackerBarycenter.X() + 0.02)*w, (m_TrackerBarycenter.Y() - 0.02)*h);
+                    glEnd();
+
+                    moVector2f m_TrackerVariance = moVector2f( m_pTrackerData->GetVariance().X(),
+                                                      m_pTrackerData->GetVariance().Y());
+
+                    glLineWidth((GLfloat)4.0);
+                    glBegin(GL_LINES);
+                        glVertex2f( m_TrackerBarycenter.X()*w, m_TrackerBarycenter.Y()*h);
+                        glVertex2f( m_TrackerBarycenter.X()*w + m_TrackerVariance.X()*w*10, m_TrackerBarycenter.Y()*h+m_TrackerVariance.Y()*h*10);
+                    glEnd();
+
+                    //MODebug2->Push(moText("varianza: vx:")+FloatToStr(m_TrackerVariance.X()*w*10)+moText(" vy")+FloatToStr(m_TrackerVariance.Y()*h*10));
+
+
+                    moText matrix;
+                    int npz,nmz;
+                    int n = m_pTrackerData->GetValidFeatures();
+                    for(int z=0; z<16; z++) {
+
+                            moVector2f poscuad = m_pTrackerData->ZoneToPosition(z);
+
+                            npz = m_pTrackerData->GetPositionMatrix( poscuad );
+                            nmz = m_pTrackerData->GetMotionMatrix( poscuad );
+
+                            //matrix = matrix + moText(" ")+IntToStr(npz);
+                            poscuad = moVector2f(poscuad.X()-0.5,-poscuad.Y()+0.5);
+                            if ( npz > 0 ) {
+                                    glColor4f( 0.5+0.5*(float)z/15.0, 0.5+0.5*(float)z/15.0, 0.0, 0.25);
+                                    glBegin(GL_QUADS);
+                                        glVertex2f((poscuad.X() - 0.125)*w, (poscuad.Y() - 0.125)*h);
+                                        glVertex2f((poscuad.X() - 0.125)*w, (poscuad.Y() + 0.125)*h);
+                                        glVertex2f((poscuad.X() + 0.125)*w, (poscuad.Y() + 0.125)*h);
+                                        glVertex2f((poscuad.X() + 0.125)*w, (poscuad.Y() - 0.125)*h);
+                                    glEnd();
+                            }
+                            if ( nmz > 0 ) {
+                                    glColor4f( 0.0, 0.0, 0.5+0.5*(float)z/15.0, 0.25);
+                                    glBegin(GL_QUADS);
+                                        glVertex2f((poscuad.X() - 0.1)*w, (poscuad.Y() - 0.1)*h);
+                                        glVertex2f((poscuad.X() - 0.1)*w, (poscuad.Y() + 0.1)*h);
+                                        glVertex2f((poscuad.X() + 0.1)*w, (poscuad.Y() + 0.1)*h);
+                                        glVertex2f((poscuad.X() + 0.1)*w, (poscuad.Y() - 0.1)*h);
+                                    glEnd();
+                            }
+                    }
+                    //MODebug2->Push(moText("N:")+(moText)IntToStr(m_pTrackerData->GetValidFeatures())+moText("matrix: vx:")+(moText)matrix);
 
                 }
 
