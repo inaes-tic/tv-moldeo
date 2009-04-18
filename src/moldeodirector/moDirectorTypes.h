@@ -86,9 +86,9 @@
 //#include "sample.xpm"
 
 
-#if wxUSE_GLCANVAS
-	#include <wx/glcanvas.h>
-#endif
+#include <wx/glcanvas.h>
+
+
 
 class moGLCanvas;
 class moDirectorConsole;

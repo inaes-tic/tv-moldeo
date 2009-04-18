@@ -31,8 +31,8 @@ moConfigurationDialog::moConfigurationDialog(wxWindow* parent,wxWindowID id)
     m_pConfigurationOutput = new moConfigurationOutput(this);
     m_pConfigurationGeneral = new moConfigurationGeneral(this);
 
-    Treebook1->AddPage( m_pConfigurationGeneral, wxString("General") );
-    Treebook1->AddPage( m_pConfigurationOutput, wxString("Output") );
+    Treebook1->AddPage( m_pConfigurationGeneral, wxString(_T("General")) );
+    Treebook1->AddPage( m_pConfigurationOutput, wxString(_T("Output")) );
 
 }
 
