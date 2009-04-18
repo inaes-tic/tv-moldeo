@@ -161,6 +161,8 @@ class moMidiDevice : /*public moThread,*/ public moAbstract {
 		MOboolean		m_bActive;
 		MOboolean		m_bInit;
 
+		moDataMessage   m_DataMessage;
+
 };
 
 

@@ -133,7 +133,7 @@ void moMidiDevice::midiCallback(HMIDIIN handle, UINT uMsg, DWORD dwInstance, DWO
 			mididata.m_CC = (dwParam1>>8) & 0x000000FF;
 			mididata.m_Val = (dwParam1>>16) & 0x000000FF;
 
-			pMidiDevice->NewData( mididata );
+			if (pMidiDevice) pMidiDevice->NewData( mididata );
 
 			break;
 		}
@@ -415,8 +415,14 @@ void
 moMidiDevice::NewData( moMidiData p_mididata ) {
 
 	m_lock.Lock();
-	m_MidiDatas.Add(p_mididata);
+	if (m_DataMessage.Count()>127) m_DataMessage.Empty();
+	p_mididata.m_CC = 0;
+	//m_MidiDatas.Add(p_mididata);
+	moData pData;
+	pData.SetInt( p_mididata.m_Val );
+	m_DataMessage.Add( pData );
 	m_lock.Unlock();
+
 
 }
 
@@ -426,19 +432,22 @@ moMidiDevice::Update(moEventList *Events) {
 	MOint i;
 	moMidiData	mididata;
 
-	m_lock.Lock();
+	//m_lock.Lock();
+	/*
 	for( i=0; i < m_MidiDatas.Count(); i++ ) {
 
 		mididata = m_MidiDatas.Get( i );
 
-		MODebug2->Push(moText("MIDI Data CC:") + IntToStr(mididata.m_CC) + moText(" val:") + IntToStr(mididata.m_Val) );
+		//MODebug2->Push(moText("MIDI Data CC:") + IntToStr(mididata.m_CC) + moText(" val:") + IntToStr(mididata.m_Val) );
 
-		Events->Add( MO_IODEVICE_MIDI, (MOint)(mididata.m_Type), mididata.m_Channel, mididata.m_CC, mididata.m_Val );
+		//Events->Add( MO_IODEVICE_MIDI, (MOint)(mididata.m_Type), mididata.m_Channel, mididata.m_CC, mididata.m_Val );
 
 	}
-
-	m_MidiDatas.Empty();
-	m_lock.Unlock();
+	*/
+	MODebug2->Push(moText("MIDI n:") + IntToStr(m_DataMessage.Count()) );
+    //m_DataMessage.Empty();
+	//m_MidiDatas.Empty();
+	//m_lock.Unlock();
 
 }
 
@@ -469,7 +478,7 @@ moMidi::Init() {
     conf += moText(".cfg");
 	if (m_Config.LoadConfig(conf) != MO_CONFIG_OK ) {
 		moText text = "Couldn't load midi config";
-		MODebug2->Push(text);
+		MODebug2->Error(text);
 		return false;
 	}
 
@@ -656,7 +665,7 @@ moMidi::GetDefinition( moConfigDefinition *p_configdefinition ) {
 
 	//default: alpha, color, syncro
 	p_configdefinition = moIODevice::GetDefinition( p_configdefinition );
-	p_configdefinition->Add( moText("mididevice"), MO_PARAM_TEXT, MIDI_DEVICE, moValue( "BCR2000[02]", "TXT") );
+	p_configdefinition->Add( moText("mididevice"), MO_PARAM_TEXT, MIDI_DEVICE, moValue( "BCR2000[2]", "TXT") );
 	return p_configdefinition;
 }
 
