@@ -32,12 +32,10 @@
 			<Add alias="All" targets="Debug;Release;" />
 		</VirtualTargets>
 		<Compiler>
+			<Add option="`pkg-config lua5.1 --cflags`" />
 			<Add directory="../../../inc" />
 			<Add directory="../../../inc/3ds" />
 			<Add directory="./inc" />
-			<Add directory="/usr/include/freetype2" />
-			<Add directory="/usr/include/lua5.1/" />
-			<Add directory="/usr/include/muParser/" />
 		</Compiler>
 		<Unit filename="inc/moEffectMovie.h" />
 		<Unit filename="src/moEffectMovie.cpp" />
