@@ -70,6 +70,7 @@
 			<Add directory="..\..\..\..\..\externlibs\gstreamer\lib\glib-2.0\include" />
 		</Compiler>
 		<Linker>
+			<Add option="--enable-auto-import" />
 			<Add library="libSDL" />
 			<Add library="libSDLmain" />
 			<Add library="liblua" />
