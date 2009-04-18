@@ -2,7 +2,9 @@
 <CodeBlocks_workspace_file>
 	<Workspace title="moldeo">
 		<Project filename="../../contrib/src/tinyxml/tinyxml_lib.cbp" />
-		<Project filename="libmoldeo.cbp" />
+		<Project filename="libmoldeo.cbp">
+			<Depends filename="../../contrib/src/tinyxml/tinyxml_lib.cbp" />
+		</Project>
 		<Project filename="../../plugins/MasterEffects/Channel/channellinux.cbp" />
 		<Project filename="../../plugins/MasterEffects/MasterChannel/masterchannellinux.cbp" />
 		<Project filename="../../plugins/MasterEffects/Panel/panellinux.cbp" />
@@ -25,10 +27,12 @@
 		<Project filename="../../plugins/PreEffects/MirrorG/mirrorglinux.cbp" />
 		<Project filename="../../plugins/PostEffects/VideoWall/videowalllinux.cbp" />
 		<Project filename="../../plugins/Effects/Movie/movielinux.cbp" />
-		<Project filename="../../src/moldeodirector/moldeodirectorlinux.cbp" />
+		<Project filename="../../src/moldeodirector/moldeodirectorlinux.cbp" active="1" />
 		<Project filename="../../plugins/Effects/Text3D/text3dlinux.cbp" />
 		<Project filename="../../plugins/Effects/Text/textlinux.cbp" />
 		<Project filename="../../plugins/MasterEffects/Ligia/ligialinux.cbp" />
-		<Project filename="../../plugins/Resources/TrackerKLT/trackerkltlinux.cbp" active="1" />
+		<Project filename="../../plugins/Resources/TrackerKLT/trackerkltlinux.cbp" />
+		<Project filename="../../contrib/src/wxMoldeoControls/wxMoldeoControls linux.cbp" />
+		<Project filename="../../contrib/src/wxMoldeoControls/wxMoldeoControlsTest linux.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>
