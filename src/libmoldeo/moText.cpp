@@ -877,13 +877,17 @@ moTextHeap::Pop() {
 
 moText
 moTextHeap::Get(int x) {
-	if(x<n) return(array[x]);
+    moText ret;
+	if(0<=x && x<n) {
+	    ret = array[x];
+	    return ret;
+	}
 	else printf("moTextHeap:: Error");
 	return moText("");
 }
 
 void
-moTextHeap::Set(int x,moText T) {
+moTextHeap::Set( int x, moText T) {
 	if(x<n)  { array[x] = T; }
 	else printf("moTextHeap:: Error");
 }

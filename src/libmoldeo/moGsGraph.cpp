@@ -835,9 +835,20 @@ moGsGraph::BuildLiveWebcamGraph( moBucketsPool *pBucketsPool, moCaptureDevice &p
 
                     if (b_sourceselect) {
                         link_result = gst_element_link_many( (GstElement*) m_pFileSource, (GstElement*) m_pCapsFilterSource, (GstElement*) m_pDecoderBin, NULL );
-                    } else {
+                        ///retry with yuv
+                        if (!link_result) {
+                            if (m_pCapsFilterSource) {
+                               g_object_set (G_OBJECT (m_pCapsFilterSource), "caps", gst_caps_new_simple ("video/x-raw-yuv",
+                               "width", G_TYPE_INT, p_sourcewidth,
+                               "height", G_TYPE_INT, p_sourceheight,
+                               NULL), NULL);
+                           }
+                        }
+                        link_result = gst_element_link_many( (GstElement*) m_pFileSource, (GstElement*) m_pCapsFilterSource, (GstElement*) m_pDecoderBin, NULL );
+                     } else {
                         link_result = gst_element_link_many( (GstElement*) m_pFileSource, (GstElement*) m_pDecoderBin, NULL );
                     }
+
 
                     if (link_result) {
 

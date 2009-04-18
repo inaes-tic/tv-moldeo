@@ -935,19 +935,60 @@ moConsole::Draw() {
 			}
 		}
 
-		//Se dibujan los Effects
-		for( i=0; i<m_EffectManager.Effects().Count(); i++ ) {
-			pEffect = m_EffectManager.Effects().Get(i);
-			if(pEffect!=NULL) {
-				if(pEffect->state.on==MO_ON) {
-					    RenderMan->BeginDrawEffect();
-						pEffect->Draw(&state.tempo);
-						RenderMan->EndDrawEffect();
-				}
-			}
-		}
+        ///3D STEREOSCOPIC RENDER METHOD
+        if (state.stereooutput==MO_ACTIVATED) {
+            ///Dibujamos los efectos con capacidad stereo
 
-    	RenderMan->CopyRenderToTexture(MO_EFFECTS_TEX);
+            ///ojo izquierdo
+            for( i=0; i<m_EffectManager.Effects().Count(); i++ ) {
+                pEffect = m_EffectManager.Effects().Get(i);
+                if(pEffect!=NULL && pEffect->state.stereo==MO_ACTIVATED) {
+                    pEffect->state.stereoside = MO_STEREO_LEFT;
+                    if(pEffect->state.on==MO_ON) {
+                            RenderMan->BeginDrawEffect();
+                            pEffect->Draw(&state.tempo);
+                            RenderMan->EndDrawEffect();
+                    }
+                }
+            }
+
+            RenderMan->CopyRenderToTexture(MO_LEFT_TEX);
+
+            ///ojo derecho
+            for( i=0; i<m_EffectManager.Effects().Count(); i++ ) {
+                pEffect = m_EffectManager.Effects().Get(i);
+                if(pEffect!=NULL && pEffect->state.stereo==MO_ACTIVATED) {
+                    pEffect->state.stereoside = MO_STEREO_RIGHT;
+                    if(pEffect->state.on==MO_ON) {
+                            RenderMan->BeginDrawEffect();
+                            pEffect->Draw(&state.tempo);
+                            RenderMan->EndDrawEffect();
+                    }
+
+                    ///reset state to NONE so you can draw like always...
+                    pEffect->state.stereoside = MO_STEREO_NONE;
+                }
+            }
+
+            RenderMan->CopyRenderToTexture(MO_RIGHT_TEX);
+
+        } else {
+            ///NORMAL METHOD
+
+            //Se dibujan los Effects
+            for( i=0; i<m_EffectManager.Effects().Count(); i++ ) {
+                pEffect = m_EffectManager.Effects().Get(i);
+                if(pEffect!=NULL) {
+                    if(pEffect->state.on==MO_ON) {
+                            RenderMan->BeginDrawEffect();
+                            pEffect->Draw(&state.tempo);
+                            RenderMan->EndDrawEffect();
+                    }
+                }
+            }
+
+            RenderMan->CopyRenderToTexture(MO_EFFECTS_TEX);
+        }
 
 		//sedibujan los post Effects
 		for(i=0;i<m_EffectManager.PostEffects().Count();i++) {
