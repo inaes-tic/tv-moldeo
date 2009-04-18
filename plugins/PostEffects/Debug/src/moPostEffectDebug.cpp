@@ -212,6 +212,29 @@ void moPostEffectDebug::Draw( moTempo* tempogral,moEffectState* parentstate)
         pFont->Draw(    0.0,
                         16.0,
                         Texto);
+
+
+        moText  Final;
+
+        int cint = 0;
+        //Final = moText("Debug ");
+        //for( int i=0; i<MODebug2->Count(); i++ ) {
+        //    cint++;
+            //Final = MODebug2->GetMessages().Get(i);
+        //}
+
+        cint = MODebug2->Count();
+        //Final = Final + moText("(")+IntToStr( cint ) + moText("):");
+        //if (cint>0) Final = Final + (moText)MODebug2->GetLast();
+
+
+        /*
+        for( int i=0; i<(cint-1); i++ ) {
+            Final = MODebug2->Pop();
+        }
+        */
+        pFont->Draw( 0.0, 48.0, Final );
+
         //moText infod = moText("screen width:")+IntToStr(w)+moText(" screen height:")+IntToStr(h);
         //pFont->Draw( 0, 0, infod, m_Config[moR(TEXT_FONT)][MO_SELECTED][2].Int(), 0, 2.0, 2.0, 0.0);
     }
