@@ -204,20 +204,20 @@ moFontManager::LoadFont( moText p_fontname_path, moFontType p_fonttype, MOfloat 
 
 	if (pFont) {
 
-    if ( p_fonttype == MO_FONT_GLBUILD ) {
-        idx = m_pResourceManager->GetTextureMan()->GetTextureMOId( p_fontname_path, true );
-        if (idx>-1) p_Texture = (moTexture*) m_pResourceManager->GetTextureMan()->GetTexture(idx);
-        if (p_Texture)
-          pFont->Init( p_fonttype, p_fontname_path, p_fontsize, p_Texture->GetGLId() );
-        MODebug2->Push( moText("Loaded Bitmap Font: ") + (moText)p_fontname_path );
-    } else if ( pFont->Init( p_fonttype, p_fontname_path, p_fontsize) ) {
-        MODebug2->Push( moText("Loaded FreeType Font: ") + (moText)p_fontname_path );
-    } else {
-        MODebug2->Push( moText("Error: font: ") + (moText)p_fontname_path );
-        return NULL;
-    }
+        if ( p_fonttype == MO_FONT_GLBUILD ) {
+            idx = m_pResourceManager->GetTextureMan()->GetTextureMOId( p_fontname_path, true );
+            if (idx>-1) p_Texture = (moTexture*) m_pResourceManager->GetTextureMan()->GetTexture(idx);
+            if (p_Texture)
+              pFont->Init( p_fonttype, p_fontname_path, p_fontsize, p_Texture->GetGLId() );
+            MODebug2->Push( moText("Loaded Bitmap Font: ") + (moText)p_fontname_path );
+        } else if ( pFont->Init( p_fonttype, p_fontname_path, p_fontsize) ) {
+            MODebug2->Push( moText("Loaded FreeType Font: ") + (moText)p_fontname_path );
+        } else {
+            MODebug2->Push( moText("Error: font: ") + (moText)p_fontname_path );
+            return NULL;
+        }
 
-    AddFont(pFont);
+        AddFont(pFont);
 
 	}
 

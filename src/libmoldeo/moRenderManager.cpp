@@ -125,6 +125,10 @@ MOboolean moRenderManager::Init(MOint p_render_to_texture_mode,
 	if (m_render_tex_moid[2]==-1) m_render_tex_moid[2] = m_pTextureManager->AddTexture("effects_texture", m_render_width, m_render_height);
 	if (m_render_tex_moid[3]==-1) m_render_tex_moid[3] = m_pTextureManager->AddTexture("final_texture", m_render_width, m_render_height);
 
+	if (m_render_tex_moid[4]==-1) m_render_tex_moid[4] = m_pTextureManager->AddTexture("left_texture", m_render_width/2, m_render_height);
+	if (m_render_tex_moid[5]==-1) m_render_tex_moid[5] = m_pTextureManager->AddTexture("right_texture", m_render_width/2, m_render_height);
+
+
     m_screen_width = p_screen_width;
    	m_screen_height = p_screen_height;
 
