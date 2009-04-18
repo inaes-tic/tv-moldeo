@@ -30,6 +30,7 @@
 			<Add alias="All" targets="debug;release;" />
 		</VirtualTargets>
 		<Compiler>
+			<Add option="`pkg-config lua5.1 --cflags`" />
 			<Add directory="../../../inc" />
 			<Add directory="../../../inc/3ds" />
 			<Add directory="./inc" />
