@@ -82,18 +82,21 @@ wxMoLevelCtrl::OnPaint(wxPaintEvent& event) {
 
     ///text
     if (m_bStartDragging) {
-        wxString s;
-        s.Printf("%i",m_value);
-        dc.SetFont(wxFont( 8, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL ));
-        dc.SetTextForeground(wxColour(255,255,255));
-        dc.DrawText(s,GetSize().x/2-15,0);
+
+        //wxString s;
+
+        //s.Printf( , m_value);
+
+        //dc.SetFont(wxFont( 8, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL ));
+        //dc.SetTextForeground(wxColour(255,255,255));
+        //dc.DrawText(s,GetSize().x/2-15,0);
     }
 }
 
 
 void wxMoLevelCtrl::SetRange( int min, int max ) {
     if ( min >= max ) {
-        wxMessageBox(wxT("wxMoLevelCtrl error : min is inferior or equal to max"));
+        //wxMessageBox(_T("wxMoLevelCtrl error : min is inferior or equal to max"));
     }
 
     this->m_min = min;
