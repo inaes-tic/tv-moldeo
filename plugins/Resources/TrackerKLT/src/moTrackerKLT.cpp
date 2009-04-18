@@ -354,17 +354,32 @@ void moTrackerKLTSystem::NewData( moVideoSample* p_pVideoSample )
 	}
 
 
+    ///RESET DATA !!!!
 	m_TrackerSystemData.GetFeatures().Empty();
+	m_TrackerSystemData.ResetMatrix();
+
+
+    ///GET NEW DATA!!!!
 	moTrackerFeature* TF = NULL;
+
+	int tw = m_TrackerSystemData.GetVideoFormat().m_Width;
+    int th = m_TrackerSystemData.GetVideoFormat().m_Height;
 
 	float sumX = 0.0f,sumY = 0.0f;
 	float sumN = 0.0f;
+	float varX = 0.0f, varY = 0.0f;
+    float minX = 1.0f, minY = 1.0;
+	float maxX = 0.0f, maxY = 0.0;
+
+    float vel,acc;
 
 	for(int i=0; i<m_fl->nFeatures; i++ ) {
 	    TF = new moTrackerFeature();
         if (TF) {
-            TF->x = m_fl->feature[i]->x;
-            TF->y = m_fl->feature[i]->y;
+
+           ///NUEVA VERSION
+            TF->x = m_fl->feature[i]->x / (float)tw;
+            TF->y = m_fl->feature[i]->y / (float)th;
             TF->tr_x = TF->x;
             TF->tr_y = TF->y;
 
@@ -379,27 +394,84 @@ void moTrackerKLTSystem::NewData( moVideoSample* p_pVideoSample )
                    for(int j=0; j<4; j++) {
                        if (m_ft) {
                            if ( m_ft->feature[i][m_nCurrentFrame-j] && m_ft->feature[i][m_nCurrentFrame-j]->val>=KLT_TRACKED ) {
-                                TF->tr_x = m_ft->feature[i][m_nCurrentFrame-j]->x;
-                                TF->tr_y = m_ft->feature[i][m_nCurrentFrame-j]->y;
+                                TF->tr_x = m_ft->feature[i][m_nCurrentFrame-j]->x /  (float)tw;
+                                TF->tr_y = m_ft->feature[i][m_nCurrentFrame-j]->y /  (float)th;
                            } else break;
                        }
                    }
                }
 
+                ///CALCULATE AVERAGE FOR BARYCENTER AND VARIANCE
                sumX+= TF->x;
                sumY+= TF->y;
+
                sumN+= 1.0f;
+
+               ///maximos
+               if (TF->x>maxX) maxX = TF->x;
+               if (TF->y>maxY) maxY = TF->y;
+
+               ///minimos
+               if (TF->x<minX) minX = TF->x;
+               if (TF->y<minY) minY = TF->y;
+
+               m_TrackerSystemData.SetPositionMatrix( TF->x, TF->y, 1 );
+               m_TrackerSystemData.SetPositionMatrixC( TF->x, TF->y, 1 );
+
             }
 
-            //PROCESS VEL
+            ///CALCULATE VELOCITY AND ACCELERATION
+            TF->vp_x = TF->v_x;
+            TF->vp_y = TF->v_x;
             TF->v_x = TF->x - TF->tr_x;
             TF->v_y = TF->y - TF->tr_y;
+            TF->a_x = TF->v_x - TF->vp_x;
+            TF->a_y = TF->v_y - TF->vp_y;
+
+            vel = moVector2f( TF->v_x, TF->v_y ).Length();
+            acc = moVector2f( TF->a_x, TF->a_y ).Length();
+
+            if (vel>=0.01) m_TrackerSystemData.SetMotionMatrix( TF->x, TF->y, 1 );
+            if (vel>=0.01) m_TrackerSystemData.SetMotionMatrixC( TF->x, TF->y, 1 );
+            if (acc>=0.01) m_TrackerSystemData.SetAccelerationMatrix( TF->x, TF->y, 1 );
 
             m_TrackerSystemData.GetFeatures().Add(TF);
         }
     }
-    m_TrackerSystemData.SetBaryCenter( sumX/sumN, sumY/sumN );
+
+    moVector2f previous_B = m_TrackerSystemData.GetBarycenter();
+    moVector2f previous_BM = m_TrackerSystemData.GetBarycenterMotion();
+
+    moVector2f BarPos;
+    moVector2f BarMot;
+    moVector2f BarAcc;
+
+    BarPos = moVector2f( sumX/sumN, sumY/sumN);
+
+    BarMot = BarPos - previous_B;
+    BarAcc = BarMot - previous_BM;
+
+    m_TrackerSystemData.SetBarycenter( BarPos.X(), BarPos.Y() );
+    m_TrackerSystemData.SetBarycenterMotion( BarMot.X(), BarMot.Y() );
+    m_TrackerSystemData.SetBarycenterAcceleration( BarAcc.X(), BarAcc.Y() );
+
+    m_TrackerSystemData.SetMax( maxX, maxY );
+    m_TrackerSystemData.SetMin( minX, minY );
     m_TrackerSystemData.SetValidFeatures( (int)sumN );
+
+    ///CALCULATE VARIANCE FOR EACH COMPONENT
+    moVector2f Bar = m_TrackerSystemData.GetBarycenter();
+    for(int i=0; i<m_TrackerSystemData.GetFeatures().Count(); i++ ) {
+        TF = m_TrackerSystemData.GetFeatures().Get(i);
+        if (TF) {
+            if (TF->val>=0) {
+                varX+= moMathf::Sqr( TF->x - Bar.X() );
+                varY+= moMathf::Sqr( TF->y - Bar.Y() );
+            }
+        }
+    }
+    m_TrackerSystemData.SetVariance( varX/sumN, varY/sumN );
+
 }
 
 void moTrackerKLTSystem::CopyBufferToImg(GLubyte *p_pBuffer, unsigned char *p_img, MOuint p_RGB_mode)
