@@ -35,10 +35,15 @@
                 <D type="NUM">0</D>
                 <D type="NUM">1</D>
             </VAL>
+            <VAL>
+                <D type="TXT">particlessimple</D>
+                <D type="TXT">parts2</D>
+                <D type="TXT">parts2</D>
+                <D type="NUM">0</D>
+                <D type="NUM">1</D>
+            </VAL>
         </PARAM>
-        <PARAM name="posteffect" type="TEXT">
-
-        </PARAM>
+        <PARAM name="posteffect" type="TEXT" />
         <PARAM name="mastereffect" type="TEXT" />
         <PARAM name="resources" type="TEXT">
             <VAL>
@@ -70,8 +75,7 @@
                 <D type="TXT"></D>
                 <D type="TXT"></D>
             </VAL>
-        </PARAM>		
+        </PARAM>
     </CONFIGPARAMS>
-    <PRECONFIGS>
-    </PRECONFIGS>
+    <PRECONFIGS />
 </MOCONFIG>
