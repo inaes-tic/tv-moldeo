@@ -84,9 +84,9 @@ moEffectImageFlow::Init() {
 	updateParameters();
 
 	minx = 0.0;
-	maxx = m_pResourceManager->GetRenderMan()->RenderWidth();
+	maxx = m_pResourceManager->GetRenderMan()->ScreenWidth();
 	miny = 0.0;
-	maxy = m_pResourceManager->GetRenderMan()->RenderHeight();
+	maxy = m_pResourceManager->GetRenderMan()->ScreenHeight();
 
 	flow_mode = 0;
 	if (0 < flow_velocity0)
@@ -114,6 +114,13 @@ moEffectImageFlow::Init() {
 void moEffectImageFlow::Draw( moTempo* tempogral,moEffectState* parentstate)
 {
     PreDraw(tempogral, parentstate);
+
+	minx = 0.0;
+	maxx = m_pResourceManager->GetRenderMan()->ScreenWidth();
+	miny = 0.0;
+	maxy = m_pResourceManager->GetRenderMan()->ScreenHeight();
+
+
 
     glDisable(GL_DEPTH_TEST);
 	glClear ( GL_DEPTH_BUFFER_BIT );
