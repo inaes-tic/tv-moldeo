@@ -183,9 +183,11 @@ void moNetOSCOut::Update(moEventList *Eventos)
     // Sending over the network the events that correspond to recognized devices.
     //Eventos->Add( MO_IODEVICE_TRACKER, moGetTicks(), 112, 113, 114, 115 );
 
+/*
     actual = Eventos->First;
     while(actual != NULL)
     {
+
 		if (actual->deviceid>=0 && actual->deviceid<=MO_IODEVICE_TABLET) {
 		//if(recog_devices[actual->deviceid])
 	        for (i = 0; i < host_name.Count(); i++)
@@ -208,7 +210,7 @@ void moNetOSCOut::Update(moEventList *Eventos)
         }
         else actual = actual->next;
     }
-
+*/
 
     //inlets outlets
     moMoldeoObject::Update(Eventos);
@@ -232,25 +234,81 @@ void moNetOSCOut::Update(moEventList *Eventos)
 
 			    moData pData;
 
+                pData.SetText( moText("N") );
+                tracker_data_message.Add(pData);
 
-			    pData.SetFloat( m_pTrackerData->GetBarycenter().X() );
-			    tracker_data_message.Add( pData );
+                pData.SetInt( m_pTrackerData->GetValidFeatures() );
+                tracker_data_message.Add(pData);
+                //MODebug2->Message( moText("N:") + (moText)IntToStr( m_pTrackerData->GetValidFeatures() ) );
 
-			    pData.SetFloat( m_pTrackerData->GetBarycenter().Y() );
-			    tracker_data_message.Add( pData );
+                //if (m_pTrackerData->GetValidFeatures()>0 && m_pTrackerData->GetValidFeatures()<80) {
 
-			    //MODebug2->Message( moText("netoscout: receiving tracker data: bx:") + (moText)FloatToStr(m_pTrackerData->GetBarycenter().X()) );
+                    pData.SetText( moText("MAX") );
+                    tracker_data_message.Add(pData);
 
-                for (i = 0; i < host_name.Count(); i++)
-				{
-					//res = eventPacket[i]->AddEvent(actual);
-                    //if (eventPacket[i]->ReadyToSend())
-					{
-						SendDataMessage( i, tracker_data_message );
-						//eventPacket[i]->ClearPacket();
-						//if (!res) eventPacket[i]->AddEvent(actual);
-					}
-			    }
+                    pData.SetFloat( m_pTrackerData->GetMin().X() );
+                    tracker_data_message.Add(pData);
+                    pData.SetFloat( m_pTrackerData->GetMin().Y() );
+                    tracker_data_message.Add(pData);
+                    pData.SetFloat( m_pTrackerData->GetMax().X() );
+                    tracker_data_message.Add(pData);
+                    pData.SetFloat( m_pTrackerData->GetMax().Y() );
+                    tracker_data_message.Add(pData);
+
+                    pData.SetText( moText("BAR") );
+                    tracker_data_message.Add(pData);
+
+                    pData.SetFloat( m_pTrackerData->GetBarycenter().X() );
+                    tracker_data_message.Add(pData);
+                    pData.SetFloat( m_pTrackerData->GetBarycenter().Y() );
+                    tracker_data_message.Add(pData);
+
+                    pData.SetText( moText("VAR") );
+                    tracker_data_message.Add(pData);
+
+                    pData.SetFloat( m_pTrackerData->GetVariance().X() );
+                    tracker_data_message.Add(pData);
+
+                    pData.SetFloat( m_pTrackerData->GetVariance().Y() );
+                    tracker_data_message.Add(pData);
+
+                    pData.SetFloat( m_pTrackerData->GetVariance().Length() );
+                    tracker_data_message.Add(pData);
+
+                    pData.SetText( moText("MP") );
+                    tracker_data_message.Add(pData);
+                    for(int i=0;i<16;i++) {
+                        pData.SetInt( m_pTrackerData->GetPositionMatrix(m_pTrackerData->ZoneToPosition(i)) );
+                        tracker_data_message.Add(pData);
+                    }
+
+                    pData.SetText( moText("MM") );
+                    tracker_data_message.Add(pData);
+                    for(int i=0;i<16;i++) {
+                        pData.SetInt( m_pTrackerData->GetMotionMatrix(m_pTrackerData->ZoneToPosition(i)) );
+                        tracker_data_message.Add(pData);
+                    }
+
+                    pData.SetText( moText("MA") );
+                    tracker_data_message.Add(pData);
+                    for(int i=0;i<16;i++) {
+                        pData.SetInt( m_pTrackerData->GetAccelerationMatrix(m_pTrackerData->ZoneToPosition(i)) );
+                        tracker_data_message.Add(pData);
+                    }
+
+                    //MODebug2->Message( moText("netoscout: receiving tracker data: bx:") + (moText)FloatToStr(m_pTrackerData->GetBarycenter().X()) );
+
+                    for (i = 0; i < host_name.Count(); i++)
+                    {
+                        //res = eventPacket[i]->AddEvent(actual);
+                        //if (eventPacket[i]->ReadyToSend())
+                        {
+                            SendDataMessage( i, tracker_data_message );
+                            //eventPacket[i]->ClearPacket();
+                            //if (!res) eventPacket[i]->AddEvent(actual);
+                        }
+                    }
+               // }
 
 			}
 		}
