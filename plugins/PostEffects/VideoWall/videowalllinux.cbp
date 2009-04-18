@@ -30,12 +30,10 @@
 			<Add alias="All" targets="videowall;release;" />
 		</VirtualTargets>
 		<Compiler>
+			<Add option="`pkg-config lua5.1 --cflags`" />
 			<Add directory="../../../inc" />
 			<Add directory="../../../inc/3ds" />
 			<Add directory="./inc" />
-			<Add directory="/usr/include/freetype2" />
-			<Add directory="/usr/include/lua5.1/" />
-			<Add directory="/usr/include/muParser/" />
 		</Compiler>
 		<Unit filename="inc/moPostEffectVideoWall.h" />
 		<Unit filename="src/moPostEffectVideoWall.cpp" />
@@ -51,6 +49,7 @@
 				<lib name="gstreamer-0.10" />
 				<lib name="gstreamer-base-0.10" />
 			</lib_finder>
+			<debugger />
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>

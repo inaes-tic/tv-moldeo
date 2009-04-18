@@ -46,6 +46,7 @@
 			<Add option="-Wall" />
 			<Add option="`pkg-config sdl --cflags`" />
 			<Add option="`pkg-config ftgl --cflags`" />
+			<Add option="`pkg-config lua5.1 --cflags`" />
 			<Add directory="../../inc" />
 			<Add directory="../../inc/3ds" />
 		</Compiler>
