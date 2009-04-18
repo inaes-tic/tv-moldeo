@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Moldeo Director"
-#define MyAppVerName "Moldeo Director 0.7.2"
+#define MyAppVerName "Moldeo Director 0.7.3"
 #define MyAppPublisher "Moldeo"
 #define MyAppURL "http://www.moldeo.org/"
 #define MyAppExeName "moldeodirector.exe"
@@ -22,7 +22,7 @@ DefaultDirName={pf}\Moldeo
 DefaultGroupName=Moldeo
 LicenseFile=..\..\bin\mingw\moldeo license.txt
 OutputDir=..\..\doc\installers
-OutputBaseFilename=Moldeo Director 0.7.2 Setup
+OutputBaseFilename=Moldeo Director 0.7.3 Setup
 SetupIconFile=..\..\doc\icons\Moldeo32.ico
 Compression=lzma
 SolidCompression=yes
@@ -83,6 +83,7 @@ Source: ..\..\data\test\objetos\iconos3d\moldeologo.3ds; DestDir: {app}\data\tes
 Source: ..\..\data\test\iconos\estrellas\shine.tga; DestDir: {app}\data\test\iconos\estrellas
 Source: ..\..\data\test\iconos\estrellas\star.tga; DestDir: {app}\data\test\iconos\estrellas
 Source: ..\..\data\test\iconos\estrellas\spark.tga; DestDir: {app}\data\test\iconos\estrellas
+Source: ..\..\data\test\iconos\Moldeo_Texture_Logo.jpg;  DestDir: {app}\data\test\iconos
 Source: ..\icons\Moldeo32.ico; DestDir: {app}\doc\icons
 Source: ..\..\data\test\videomanager.cfg; DestDir: {app}\data\test
 Source: ..\..\data\test\channel0.cfg; DestDir: {app}\data\test
@@ -99,6 +100,13 @@ Source: ..\..\data\test\protconect.par; DestDir: {app}\data\test
 Source: ..\..\data\test\shadermanager.cfg; DestDir: {app}\data\test
 Source: ..\..\data\test\soundmanager.cfg; DestDir: {app}\data\test
 Source: ..\..\data\test\test.mol; DestDir: {app}\data\test
+Source: ..\..\data\test\stereo3d.mol; DestDir: {app}\data\test
+Source: ..\..\data\test\partstereo.cfg; DestDir: {app}\data\test
+Source: ..\..\data\test\planeleft.cfg; DestDir: {app}\data\test
+Source: ..\..\data\test\planeright.cfg; DestDir: {app}\data\test
+Source: ..\..\data\test\iconleft.cfg; DestDir: {app}\data\test
+Source: ..\..\data\test\iconright.cfg; DestDir: {app}\data\test
+Source: ..\..\data\test\mir3d.cfg; DestDir: {app}\data\test
 Source: ..\..\data\test\shaders\Edges.cfg; DestDir: {app}\data\test\shaders
 Source: ..\..\data\test\shaders\Edges.glsl; DestDir: {app}\data\test\shaders
 Source: ..\..\data\test\shaders\Posterize.cfg; DestDir: {app}\data\test\shaders
@@ -193,7 +201,7 @@ Source: ..\..\bin\mingw\plugins\preeffects\mirrorg.dll; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\plugins\preeffects\mirror.dll; DestDir: {app}\bin\mingw\plugins\preeffects
 Source: ..\..\bin\mingw\cgGL.dll; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\cg.dll; DestDir: {app}\bin\mingw
-Source: ..\installers\GStreamer-WinBuild-0.10.2.exe; DestDir: {app}\doc\installers; Tasks: ; Languages: 
+Source: ..\installers\GStreamer-WinBuild-0.10.3.exe; DestDir: {app}\doc\installers; Tasks: ; Languages:
 Source: ..\..\bin\mingw\glut32.dll; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\OpenAL32.dll; DestDir: {app}\bin\mingw
 Source: ..\..\data\test\brushes\brush1.tga; DestDir: {app}\data\test\brushes
