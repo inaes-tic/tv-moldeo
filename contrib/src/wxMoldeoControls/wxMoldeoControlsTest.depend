@@ -2074,12 +2074,13 @@
 
 1237848533 d:\_data\proyectos\sinestesia\svnsourceforge\trunk\0.7\contrib\src\wxmoldeocontrols\wxmorotaryctrl.h
 
-1238782131 source:d:\_data\proyectos\sinestesia\svnsourceforge\trunk\0.7\contrib\src\wxmoldeocontrols\wxmoldeocontrolstestdialog.cpp
+1240075297 source:d:\_data\proyectos\sinestesia\svnsourceforge\trunk\0.7\contrib\src\wxmoldeocontrols\wxmoldeocontrolstestdialog.cpp
 	"wxMoldeoControlsTestDialog.h"
 	<wx/settings.h>
 	<wx/font.h>
 	<wx/intl.h>
 	<wx/string.h>
+	<wx/glcanvas.h>
 
 1193991318 source:d:\_data\proyectos\sinestesia\svnsourceforge\trunk\0.7\contrib\src\wxmoldeocontrols\resource.rc
 	"wx/msw/wx.rc"
@@ -2290,4 +2291,70 @@
 1221470956 d:\_data\proyectos\sinestesia\svnsourceforge\externlibs\wxwidgets\include\wx\os2\dnd.h
 	<os2.h>
 	<pmstddlg.h>
+
+1221470894 d:\_data\proyectos\sinestesia\svnsourceforge\externlibs\wxwidgets\include\wx\glcanvas.h
+	"wx/defs.h"
+	"wx/msw/glcanvas.h"
+	"wx/x11/glcanvas.h"
+	"wx/gtk/glcanvas.h"
+	"wx/gtk1/glcanvas.h"
+	"wx/x11/glcanvas.h"
+	"wx/mac/glcanvas.h"
+	"wx/cocoa/glcanvas.h"
+	"wx/app.h"
+
+1221470936 d:\_data\proyectos\sinestesia\svnsourceforge\externlibs\wxwidgets\include\wx\msw\glcanvas.h
+	"wx/palette.h"
+	"wx/scrolwin.h"
+	"wx/msw/wrapwin.h"
+	<GL/gl.h>
+
+1221470968 d:\_data\proyectos\sinestesia\svnsourceforge\externlibs\wxwidgets\include\wx\x11\glcanvas.h
+	"wx/defs.h"
+	"wx/gdicmn.h"
+	"wx/palette.h"
+	"wx/scrolwin.h"
+	<GL/glx.h>
+
+1221470962 d:\_data\proyectos\sinestesia\svnsourceforge\externlibs\wxwidgets\include\wx\gtk\glcanvas.h
+	"wx/scrolwin.h"
+	"wx/app.h"
+	<GL/gl.h>
+	<GL/glx.h>
+	<GL/glu.h>
+
+1221470976 d:\_data\proyectos\sinestesia\svnsourceforge\externlibs\wxwidgets\include\wx\gtk1\glcanvas.h
+	"wx/scrolwin.h"
+	"wx/app.h"
+	<GL/gl.h>
+	<GL/glx.h>
+	<GL/glu.h>
+
+1221470972 d:\_data\proyectos\sinestesia\svnsourceforge\externlibs\wxwidgets\include\wx\mac\glcanvas.h
+	"wx/mac/classic/glcanvas.h"
+	"wx/mac/carbon/glcanvas.h"
+
+1221470974 d:\_data\proyectos\sinestesia\svnsourceforge\externlibs\wxwidgets\include\wx\mac\classic\glcanvas.h
+	"wx/defs.h"
+	"wx/palette.h"
+	"wx/scrolwin.h"
+	"wx/app.h"
+	<OpenGL/gl.h>
+	<AGL/agl.h>
+	<gl.h>
+	<agl.h>
+
+1221470972 d:\_data\proyectos\sinestesia\svnsourceforge\externlibs\wxwidgets\include\wx\mac\carbon\glcanvas.h
+	"wx/defs.h"
+	"wx/palette.h"
+	"wx/scrolwin.h"
+	"wx/app.h"
+	<OpenGL/gl.h>
+	<AGL/agl.h>
+	<gl.h>
+	<agl.h>
+
+1221470976 d:\_data\proyectos\sinestesia\svnsourceforge\externlibs\wxwidgets\include\wx\cocoa\glcanvas.h
+	"wx/window.h"
+	<OpenGL/gl.h>
 

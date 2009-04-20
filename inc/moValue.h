@@ -73,6 +73,8 @@ class moFont;
 class mo3DModelSceneNode;
 class moTexture;
 class moTextureFilter;
+class moTextureBuffer;
+class moVideoBuffer;
 class moTextFilterParam;
 
 /**
@@ -96,8 +98,9 @@ enum moDataType {
 	MO_DATA_VECTOR,//array of values
 	MO_DATA_IMAGESAMPLE,//pointer to an imagesample pointer
 	MO_DATA_IMAGESAMPLE_FILTERED,//pointer to a TextureFilter
+    MO_DATA_IMAGESAMPLE_TEXTUREBUFFER,//pointer to a texturebuffer pointer
 	MO_DATA_SOUNDSAMPLE,//pointer to a soundsample pointer
-	MO_DATA_VIDEOSAMPLE,//pointer to a videosample pointer
+	MO_DATA_VIDEOSAMPLE,//pointer to a videosample pointer: video buffer
 	MO_DATA_FONTPOINTER,
 	MO_DATA_3DMODELPOINTER,
 	MO_DATA_TEXT,//text,
@@ -170,6 +173,8 @@ class LIBMOLDEO_API moData {
 		*/
 		void		SetFun( moMathFunction*	p_Function );
 		void        SetTexture( moTexture*	p_Texture );
+		void        SetTextureBuffer( moTextureBuffer*	p_TextureBuffer );
+		void        SetVideoBuffer( moVideoBuffer*	p_VideoBuffer );
 		void        SetTextureFilter( moTextureFilter*	p_TextureFilter );
 		void        SetTextureFilterAlpha( moData* p_alpha );
 		void        SetTextureFilterParam( moTextFilterParam *p_filterparam );
@@ -194,6 +199,7 @@ class LIBMOLDEO_API moData {
 		MOulong		Size();
 		moMathFunction*	Fun();
 		moFont*     Font();
+		moTextureBuffer*     TextureBuffer();
 		mo3DModelSceneNode*  Model();
 		moDataMessage*  Message();
 		moDataMessages*  Messages();
@@ -212,7 +218,7 @@ class LIBMOLDEO_API moData {
 		GLint       GetGLId( MOfloat p_cycle, MOfloat p_fade=1.0, moTextFilterParam *p_filterparam = NULL );
 		GLint       GetGLId( moTempo *p_tempo, MOfloat p_fade=1.0, moTextFilterParam *p_filterparam = NULL );
 		GLint       GetGLId( MOuint p_i, MOfloat p_fade=1.0, moTextFilterParam *p_filterparam = NULL );
-		GLint       GetGLId(MOfloat p_fade=1.0, moTextFilterParam *p_filterparam = NULL );
+		GLint       GetGLId( MOfloat p_fade=1.0, moTextFilterParam *p_filterparam = NULL );
 
 	protected:
 		moDataType		m_DataType;

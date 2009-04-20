@@ -86,7 +86,8 @@ moEffectParticlesSimple::GetDefinition( moConfigDefinition *p_configdefinition )
 	p_configdefinition->Add( moText("font"), MO_PARAM_FONT, PARTICLES_FONT, moValue( "Default", "TXT", "0", "NUM", "32.0", "NUM") );
 	p_configdefinition->Add( moText("text"), MO_PARAM_TEXT, PARTICLES_TEXT, moValue( "Insert text in text parameter", "TXT") );
 
-	p_configdefinition->Add( moText("texture"), MO_PARAM_TEXTURE, PARTICLES_TEXTURE, moValue( "test", "TXT") );
+	p_configdefinition->Add( moText("texture"), MO_PARAM_TEXTURE, PARTICLES_TEXTURE, moValue( "default", "TXT") );
+	p_configdefinition->Add( moText("folders"), MO_PARAM_TEXTUREFOLDER, PARTICLES_FOLDERS, moValue( "", "TXT") );
 	p_configdefinition->Add( moText("texture_mode"), MO_PARAM_NUMERIC, PARTICLES_TEXTUREMODE, moValue( "0", "NUM").Ref() );
 
 	p_configdefinition->Add( moText("blending"), MO_PARAM_BLENDING, PARTICLES_BLENDING, moValue( "0", "NUM").Ref() );
@@ -188,6 +189,7 @@ moEffectParticlesSimple::Init()
 	moDefineParamIndex( PARTICLES_FONT, moText("font") );
 	moDefineParamIndex( PARTICLES_TEXT, moText("text") );
 	moDefineParamIndex( PARTICLES_TEXTURE, moText("texture") );
+	moDefineParamIndex( PARTICLES_FOLDERS, moText("folders") );
 	moDefineParamIndex( PARTICLES_TEXTUREMODE, moText("texture_mode") );
 	moDefineParamIndex( PARTICLES_BLENDING, moText("blending") );
 
@@ -323,6 +325,7 @@ void moEffectParticlesSimple::UpdateParameters() {
         ResetTimers();
     }
 
+    //if script is modified... recompile
 	if ((moText)m_Physics.m_ParticleScript!=m_Config[moParamReference(PARTICLES_SCRIPT)][MO_SELECTED][0].Text()) {
 
         m_Physics.m_ParticleScript = m_Config[moParamReference(PARTICLES_SCRIPT)][MO_SELECTED][0].Text();
@@ -338,6 +341,14 @@ void moEffectParticlesSimple::UpdateParameters() {
 
         }
 	}
+
+    if (moScript::IsInitialized()) {
+        if (ScriptHasFunction("RunSystem")) {
+            SelectScriptFunction("RunSystem");
+            //AddFunctionParam( (int) ( i + j*m_cols ) );
+            RunSelectedFunction(1);
+        }
+    }
 
     drawing_features = m_Config[moR(PARTICLES_DRAWINGFEATURES)][MO_SELECTED][0].Int();
     texture_mode = m_Config[moR(PARTICLES_TEXTUREMODE)][MO_SELECTED][0].Int();
@@ -374,9 +385,14 @@ void moEffectParticlesSimple::UpdateParameters() {
     m_Physics.m_EmitterType = (moParticlesSimpleEmitterType) m_Config[moR(PARTICLES_EMITTERTYPE)][MO_SELECTED][0].Int();
     m_Physics.m_AttractorType = (moParticlesSimpleAttractorType) m_Config[moR(PARTICLES_ATTRACTORTYPE)][MO_SELECTED][0].Int();
 
+    m_Physics.m_PositionVector = moVector3f(m_Config[moR(PARTICLES_RANDOMPOSITION_X)].GetData()->Fun()->Eval(state.tempo.ang),
+                                            m_Config[moR(PARTICLES_RANDOMPOSITION_Y)].GetData()->Fun()->Eval(state.tempo.ang),
+                                            m_Config[moR(PARTICLES_RANDOMPOSITION_Z)].GetData()->Fun()->Eval(state.tempo.ang));
+
     m_Physics.m_EmitterSize = moVector3f( m_Config[moR(PARTICLES_SIZEX)].GetData()->Fun()->Eval(state.tempo.ang),
                                             m_Config[moR(PARTICLES_SIZEY)].GetData()->Fun()->Eval(state.tempo.ang),
                                             m_Config[moR(PARTICLES_SIZEZ)].GetData()->Fun()->Eval(state.tempo.ang));
+
     m_Physics.m_VelocityVector =  moVector3f( m_Config[moR(PARTICLES_RANDOMVELOCITY_X)].GetData()->Fun()->Eval(state.tempo.ang),
                                             m_Config[moR(PARTICLES_RANDOMVELOCITY_Y)].GetData()->Fun()->Eval(state.tempo.ang),
                                             m_Config[moR(PARTICLES_RANDOMVELOCITY_Z)].GetData()->Fun()->Eval(state.tempo.ang));
@@ -390,7 +406,7 @@ void moEffectParticlesSimple::UpdateParameters() {
                                             m_Config[moR(PARTICLES_EMITTERVECTOR_Z)].GetData()->Fun()->Eval(state.tempo.ang));
 
     if (m_bTrackerInit) {
-        //m_Physics.m_EmitterVector = moVector3f( m_TrackerBarycenter.X()*normalf, m_TrackerBarycenter.Y()*normalf, 0.0f );
+        m_Physics.m_EmitterVector = moVector3f( m_TrackerBarycenter.X()*normalf, m_TrackerBarycenter.Y()*normalf, 0.0f );
     }
 
     m_Physics.m_AttractorVector = moVector3f( m_Config[moR(PARTICLES_ATTRACTORVECTOR_X)].GetData()->Fun()->Eval(state.tempo.ang),
@@ -417,13 +433,13 @@ void moEffectParticlesSimple::SetParticlePosition( moParticlesSimple* pParticle 
     double radius1;
     double radius2;
 
-    randomposx = (m_Physics.m_RandomPosition>0)? (0.5-moMathf::UnitRandom())*m_Physics.m_RandomPosition*m_Physics.m_PositionVector.X() : m_Physics.m_PositionVector.X();
-    randomposy = (m_Physics.m_RandomPosition>0)? (0.5-moMathf::UnitRandom())*m_Physics.m_RandomPosition*m_Physics.m_PositionVector.Y() : m_Physics.m_PositionVector.Y();
-    randomposz = (m_Physics.m_RandomPosition>0)? (0.5-moMathf::UnitRandom())*m_Physics.m_RandomPosition*m_Physics.m_PositionVector.Z() : m_Physics.m_PositionVector.Z();
+    randomposx = (m_Physics.m_RandomPosition>0.0)? (0.5-moMathf::UnitRandom())*m_Physics.m_RandomPosition*m_Physics.m_PositionVector.X() : m_Physics.m_PositionVector.X();
+    randomposy = (m_Physics.m_RandomPosition>0.0)? (0.5-moMathf::UnitRandom())*m_Physics.m_RandomPosition*m_Physics.m_PositionVector.Y() : m_Physics.m_PositionVector.Y();
+    randomposz = (m_Physics.m_RandomPosition>0.0)? (0.5-moMathf::UnitRandom())*m_Physics.m_RandomPosition*m_Physics.m_PositionVector.Z() : m_Physics.m_PositionVector.Z();
 
-    randomvelx = (m_Physics.m_RandomVelocity>0)? (0.5-moMathf::UnitRandom())*m_Physics.m_RandomVelocity*m_Physics.m_VelocityVector.X() : m_Physics.m_VelocityVector.X();
-    randomvely = (m_Physics.m_RandomVelocity>0)? (0.5-moMathf::UnitRandom())*m_Physics.m_RandomVelocity*m_Physics.m_VelocityVector.Y() : m_Physics.m_VelocityVector.Y();
-    randomvelz = (m_Physics.m_RandomVelocity>0)? (0.5-moMathf::UnitRandom())*m_Physics.m_RandomVelocity*m_Physics.m_VelocityVector.Z() : m_Physics.m_VelocityVector.Z();
+    randomvelx = (m_Physics.m_RandomVelocity>0.0)? (0.5-moMathf::UnitRandom())*m_Physics.m_RandomVelocity*m_Physics.m_VelocityVector.X() : m_Physics.m_VelocityVector.X();
+    randomvely = (m_Physics.m_RandomVelocity>0.0)? (0.5-moMathf::UnitRandom())*m_Physics.m_RandomVelocity*m_Physics.m_VelocityVector.Y() : m_Physics.m_VelocityVector.Y();
+    randomvelz = (m_Physics.m_RandomVelocity>0.0)? (0.5-moMathf::UnitRandom())*m_Physics.m_RandomVelocity*m_Physics.m_VelocityVector.Z() : m_Physics.m_VelocityVector.Z();
 
 
     pParticle->Mass = 10.0f;
@@ -673,6 +689,7 @@ void moEffectParticlesSimple::InitParticlesSimple( int p_cols, int p_rows ) {
             moParticlesSimple* pPar = new moParticlesSimple();
 
             pPar->Pos = moVector2f( (float) i, (float) j);
+            pPar->ImageProportion = 1.0;
 
             if (texture_mode==PARTICLES_TEXTUREMODE_UNIT) {
 
@@ -684,6 +701,9 @@ void moEffectParticlesSimple::InitParticlesSimple( int p_cols, int p_rows ) {
                 pPar->TCoord = moVector2f( (float) (p_cols - i) / (float) p_cols, (float) (p_rows - j) / (float) p_rows );
                 pPar->TSize = moVector2f( -1.0f / (float) p_cols, -1.0f / (float) p_rows );
 
+            } else if (texture_mode==PARTICLES_TEXTUREMODE_MANY ) {
+                pPar->TCoord = moVector2f( 0.0, 0.0 );
+                pPar->TSize = moVector2f( 1.0f, 1.0f );
             }
 
             pPar->Size = moVector2f( m_Physics.m_EmitterSize.X() / (float) p_cols, m_Physics.m_EmitterSize.Y() / (float) p_rows );
@@ -751,8 +771,46 @@ void moEffectParticlesSimple::Regenerate() {
 
                 m_Rate++;
 
-                //regenerate
                 SetParticlePosition( pPar );
+
+
+
+                //regenerate
+
+                 //moTexture* pTex = ; //m_pResourceManager->GetTextureMan()->GetTexture();
+                 ///asigna un id al azar!!!! de todos los que componen ell moTextureBuffer
+                 ///hay q pedir el moTextureBuffer
+                 moTextureBuffer* pTexBuf = m_Config[moR(PARTICLES_FOLDERS)].GetData()->TextureBuffer();
+                 //m_Config[moR(PARTICLES_TEXTURE)].GetData()->GetGLId(&state.tempo, 1, NULL );
+                 if (pTexBuf) {
+                     int nim = pTexBuf->GetImagesProcessed();
+
+                     pPar->ImageProportion = 1.0;
+
+                     if (nim>0) {
+
+                         //float frandom = moMathf::UnitRandom( (float) 2.0 ) * nim;
+                         //srand(2);
+                         int irandom = ( ::rand() * nim )/ RAND_MAX;
+
+                         if (irandom>nim) irandom = nim - 1;
+
+                         pPar->GLId = pTexBuf->GetFrame( irandom );
+
+                         moTextureMemory* pTexMem = pTexBuf->GetTexture( irandom );
+
+                         if (pTexMem->GetHeight()>0) pPar->ImageProportion = (float) pTexMem->GetWidth() / (float) pTexMem->GetHeight();
+
+                         //MODebug2->Push( moText("creating particle: irandom:") + IntToStr(irandom) + moText(" count:") + IntToStr(pTexBuf->GetImagesProcessed()) + moText(" glid:") + IntToStr(pPar->GLId) );
+
+
+                     } else {
+                         //pPar->GLId = 0;
+                     }
+                     pPar->TCoord = moVector2f( 0.0, 0.0 );
+                     pPar->TSize = moVector2f( 1.0f, 1.0f );
+
+                 } else MODebug2->Error( moText("particles error creating texture") );
 
             }
 
@@ -825,6 +883,8 @@ void moEffectParticlesSimple::Regenerate() {
                 }
 
             }
+
+
 
 
         }
@@ -1242,8 +1302,9 @@ void moEffectParticlesSimple::DrawParticlesSimple( moTempo* tempogral, moEffectS
     last_tick = tempogral->ticks;
 
     //glBindTexture( GL_TEXTURE_2D, 0 );
-    glBindTexture( GL_TEXTURE_2D, m_Config[moR(PARTICLES_TEXTURE)].GetData()->GetGLId(&state.tempo, 1, NULL ) );
-
+    if (texture_mode!=PARTICLES_TEXTUREMODE_MANY ) {
+        glBindTexture( GL_TEXTURE_2D, m_Config[moR(PARTICLES_TEXTURE)].GetData()->GetGLId(&state.tempo, 1, NULL ) );
+    }
     //glColor4f(1.0,1.0,1.0,1.0);
     //glDisable( GL_CULL_FACE);
     //glDisable( GL_DEPTH_TEST);
@@ -1272,6 +1333,11 @@ void moEffectParticlesSimple::DrawParticlesSimple( moTempo* tempogral, moEffectS
 
             if (pPar->Visible) {
 
+                if (texture_mode==PARTICLES_TEXTUREMODE_MANY ) {
+                    //pPar->GLId = 22;
+                    if (pPar->GLId>0) glBindTexture( GL_TEXTURE_2D, pPar->GLId );
+                }
+
                 if (moScript::IsInitialized()) {
                     if (ScriptHasFunction("RunParticle")) {
                         SelectScriptFunction("RunParticle");
@@ -1280,7 +1346,7 @@ void moEffectParticlesSimple::DrawParticlesSimple( moTempo* tempogral, moEffectS
                     }
                 }
 
-                sizexd2 = pPar->Size.X()/2.0;
+                sizexd2 = (pPar->Size.X()* pPar->ImageProportion )/2.0;
                 sizeyd2 = pPar->Size.Y()/2.0;
                 tsizex = pPar->TSize.X();
                 tsizey = pPar->TSize.Y();

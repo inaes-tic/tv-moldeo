@@ -103,6 +103,9 @@ moParamDefinition::moParamDefinition( moText& p_name, moText& p_type ) {
 		if ( p_type == moText("TEXTURE") ) {
 			m_Type = MO_PARAM_TEXTURE;
 		} else
+		if ( p_type == moText("TEXTUREFOLDER") ) {
+			m_Type = MO_PARAM_TEXTUREFOLDER;
+		} else
 		if ( p_type == moText("FONT") ) {
 			m_Type = MO_PARAM_FONT;
 		} else
@@ -215,6 +218,9 @@ moParamDefinition::GetTypeStr() {
             break;
         case MO_PARAM_TEXTURE:
             return moText("TEXTURE");
+            break;
+        case MO_PARAM_TEXTUREFOLDER:
+            return moText("TEXTUREFOLDER");
             break;
         case MO_PARAM_FONT:
             return moText("FONT");
@@ -395,6 +401,7 @@ void moParam::SetDefaultValue() {
             case MO_PARAM_3DMODEL:
             case MO_PARAM_OBJECT:
             case MO_PARAM_VIDEO:
+            case MO_PARAM_TEXTUREFOLDER:
             case MO_PARAM_SOUND:
             case MO_PARAM_SCRIPT:
             case MO_PARAM_TEXT:

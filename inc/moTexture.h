@@ -49,6 +49,8 @@ typedef enum  {
         MO_TYPE_TEXTURE_MULTIPLE,
         MO_TYPE_MOVIE,
         MO_TYPE_VIDEOBUFFER,
+        MO_TYPE_TEXTUREMEMORY,
+        MO_TYPE_TEXTUREBUFFER,
         MO_TYPE_CIRCULARVIDEOBUFFER} moTextureType;
 
 class moFBO;
@@ -393,12 +395,94 @@ class LIBMOLDEO_API moTexture : public moAbstract {
 		MOboolean Build();
 };
 
-/*
-template class LIBMOLDEO_API moDynamicArray<moTexture*>;
-typedef moDynamicArray<moTexture*> moTextureArray;
-*/
+
 moDeclareExportedDynamicArray( moTexture*, moTextureArray)
 
+
+
+/// clase base para el manejo de una textura con su copia comprimida en memoria
+/**
+ *  Esta clase mantiene en memoria una copia comprimida de la imagen
+ *  a medida que esta imagen es requerida se aumenta el numero de referencia
+ *  cuando la cantidad de referencias llegan a cero se da de baja de la memoria de opengl
+ *  @see moTexture
+ *  @see moTextureBuffer
+ *  @see moTextureManager
+ *  @see moVideoManager
+ */
+class LIBMOLDEO_API moTextureMemory : public moTexture {
+    public:
+        /**
+         * Constructor por defecto.
+         */
+		moTextureMemory();
+        /**
+         * Destructor por defecto.
+         */
+		virtual ~moTextureMemory();
+
+        /**
+         * Inicializa propiedades básicas de la textura tales como el nombre, id, administradores y parámetros.
+         * @param p_name nombre de la textura.
+         * @param p_moid Moldeo ID de la textura.
+         * @param p_res puntero al administrador de recursos, del cual son extraidos todos los administradores que la textura necesita (GL, Data, File, etc).
+         * @param p_param parámetros de textura.
+         * @return true si la operación fue exitosa, false en caso contrario.
+         */
+		virtual MOboolean Init( moText p_name, MOuint p_moid, moResourceManager* p_res, moTexParam p_param = MODefTex2DParams);
+
+		virtual MOboolean Init( moText p_name, MOuint p_moid, moResourceManager* p_res, moText bufferformat, moBitmap* pImageResult, moTexParam p_param = MODefTex2DParams );
+
+        //virtual MOboolean BuildFromFile( moText p_filename );
+
+        //virtual MOboolean BuildFromFile( moText p_filename, moText p_bufferformat );
+
+        ///Construye la textura opengl desde el bitmap en memoria
+        virtual MOboolean BuildFromMemory();
+
+        ///Guarda el bitmap con el formato elegido en memoria, luego construye la textura opengl
+        virtual MOboolean BuildFromBitmap( moBitmap* p_bitmap, moText p_bufferformat = "JPG" );
+
+
+        ///Guarda el bitmap con el formato elegido en memoria
+        virtual MOboolean LoadFromBitmap( moBitmap* p_bitmap );
+
+
+        /**
+         * Destruye la textura openGL.
+         * @return true si la operación fue exitosa, false en caso contrario.
+         */
+		virtual MOboolean Finish();
+
+		/**
+         * Devuelve una referencia (internamente marca la referencia y asigna la imagen a la textura)
+         * Para liberar la memoria de opengl hay q desreferenciar...
+         * @return la cantidad de referencias (si es 0 es que no pudo cargar nada, asi q la referencia no sirve)
+         */
+		int  GetReference();
+
+		/**
+         * Libera una referencia a esta textura pudiendo de esta manera, liberar la memoria de opengl...
+         */
+		void  ReleaseReference();
+
+
+    private:
+
+        MOint       reference_counter;
+
+        MOint		options;
+
+        moMemory	*hmem;
+		moBitmapFormat fif;
+		//FIBITMAP *m_pImage;
+
+		MOlong m_SizeInMemory;
+
+		moText m_BufferFormat;
+		MOboolean   m_bBitmapInMemory;
+
+};
 
 #include "moTextureIndex.h"
 

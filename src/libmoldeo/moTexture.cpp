@@ -98,6 +98,7 @@ MOboolean moTexture::Finish()
 	return true;
 }
 
+
 MOboolean moTexture::BuildEmpty(MOuint p_width, MOuint p_height)
 {
 	glGenTextures(1, &m_glid);
@@ -523,6 +524,228 @@ moText  moTexture::CreateThumbnail( moText p_bufferformat, int w, int h, moText 
 }
 
 
+//===========================================
+//
+//				moTextureMemory
+//
+//===========================================
+
+moTextureMemory::moTextureMemory() : moTexture() {
+    reference_counter = 0;
+    m_SizeInMemory = 0;
+    m_bBitmapInMemory = false;
+    hmem = NULL;
+    fif = 0;
+    m_BufferFormat = moText("JPG");
+}
+
+moTextureMemory::~moTextureMemory() {
+
+}
+
+MOboolean moTextureMemory::Init( moText p_name, MOuint p_moid, moResourceManager* p_res, moTexParam p_param ) {
+
+    moTexture::Init( p_name, p_moid, p_res, p_param );
+
+}
+
+MOboolean moTextureMemory::Init( moText p_name, MOuint p_moid, moResourceManager* p_res, moText bufferformat, moBitmap* pImageResult, moTexParam p_param ) {
+
+    FIBITMAP* _pImageResult = (FIBITMAP*)pImageResult;
+
+    m_BufferFormat = bufferformat;
+
+    if (pImageResult) LoadFromBitmap(pImageResult);
+
+    return moTexture::Init( p_name, p_moid, p_res, p_param );
+}
+
+MOboolean moTextureMemory::LoadFromBitmap( moBitmap* p_bitmap ) {
+
+    if ( m_bBitmapInMemory && hmem!=NULL ) {
+        ///if there were already something , delete it! size may be different now!!!
+        reference_counter = 1;
+        ReleaseReference();
+        ///close memory
+        FreeImage_CloseMemory((FIMEMORY*)hmem);
+        hmem = NULL;
+    }
+
+    if (!hmem) {
+		hmem = FreeImage_OpenMemory();
+	}
+	if (hmem) {
+
+		if ( m_BufferFormat == moText("JPG")) {
+			fif = FIF_JPEG;
+			options = JPEG_QUALITYNORMAL;
+		} else if ( m_BufferFormat == moText("JPGSUPERB") ) {
+			fif = FIF_JPEG;
+			options = JPEG_QUALITYSUPERB;
+		} else if ( m_BufferFormat == moText("JPGBAD") ) {
+			fif = FIF_JPEG;
+			options = JPEG_QUALITYBAD;
+		} else if ( m_BufferFormat == moText("JPGAVERAGE") ) {
+			fif = FIF_JPEG;
+			options = JPEG_QUALITYAVERAGE;
+		} else if ( m_BufferFormat == moText("JPGGOOD") ) {
+			fif = FIF_JPEG;
+			options = JPEG_QUALITYGOOD;
+		} else if ( m_BufferFormat == moText("TGA") ) {
+			fif = FIF_TARGA;
+			options = 0;
+		} else if ( m_BufferFormat == moText("PNG") ) {
+			fif = FIF_PNG;
+			options = 0;
+		} else if ( m_BufferFormat == moText("XPM") ) {
+			fif = FIF_XPM;
+			options = 0;
+		} else if ( m_BufferFormat == moText("RAW") ) {
+		    fif = FIF_PPMRAW;
+		    options = 0;
+        }
+		//syntax: FreeImage_SaveToMemory(FREE_IMAGE_FORMAT fif, FIBITMAP *dib, FIMEMORY *stream, int flags FI_DEFAULT(0));
+		if ( FreeImage_SaveToMemory( (FREE_IMAGE_FORMAT)fif, (FIBITMAP *)p_bitmap, (FIMEMORY*)hmem, options ) ) {
+		    m_SizeInMemory = FreeImage_TellMemory((FIMEMORY*)hmem);
+            m_bBitmapInMemory = true;
+
+            m_width = FreeImage_GetWidth((FIBITMAP *)p_bitmap);
+            m_height = FreeImage_GetHeight((FIBITMAP *)p_bitmap);
+
+            MODebug2->Push( moText("moTextureMemory::LoadFromBitmap success: hmem:") + IntToStr((int)hmem));
+        } else m_bBitmapInMemory = false;
+
+	}
+
+	return m_bBitmapInMemory;
+
+}
+
+MOboolean moTextureMemory::BuildFromMemory() {
+
+    if (hmem!=NULL && m_glid>0) {
+        FIBITMAP *pImage;
+        //FIMEMORY	*hmem;
+
+        MOuint _format;
+
+        //MOint FrameSize =
+        FreeImage_TellMemory((FIMEMORY*)hmem);
+        FreeImage_SeekMemory( (FIMEMORY*)hmem, 0L, SEEK_SET);
+
+        //hmem = FreeImage_OpenMemory( pVideoFrame->hmem,  pVideoFrame->m_FrameSize);
+        //FreeImage_TellMemory(VideoFrame->hmem);
+        // load an image from the memory stream
+        pImage = FreeImage_LoadFromMemory( (FREE_IMAGE_FORMAT)fif, (FIMEMORY*)hmem, 0);
+
+        switch (FreeImage_GetBPP(pImage))
+        {
+            case 8: // 8 bit, indexed or grayscale
+                m_param.internal_format = GL_RGB;
+                _format = GL_LUMINANCE;
+                break;
+            case 16: // 16 bits
+                break;
+            case 24: // 24 bits
+                m_param.internal_format = GL_RGB;
+                if (FreeImage_GetBlueMask(pImage) == 0x000000FF) _format = GL_BGR;
+                else _format = GL_RGB;
+                break;
+            case 32: // 32 bits
+                m_param.internal_format = GL_RGBA;
+                if (FreeImage_GetBlueMask(pImage) == 0x000000FF) _format = GL_BGRA_EXT;
+                else _format = GL_RGBA;
+                break;
+            default:
+                m_param.internal_format = GL_RGBA;
+                _format = GL_RGBA;
+                break;
+        }
+        ///just execute this time for building the texture really in card memory
+        Build();
+        ///then apply the buffer
+        SetBuffer( m_width, m_height, FreeImage_GetBits(pImage), _format);
+        FreeImage_Unload( pImage );
+        MODebug2->Push( moText("moTextureMemory::BuildFromMemory: success: hmem:") + IntToStr((int)hmem) + moText("glid:") + IntToStr(m_glid));
+        return true;
+    } else {
+        MODebug2->Error( moText("moTextureMemory::BuildFromMemory: Error GLID or Memory never assigned. hmem:") + IntToStr((int)hmem) + moText("glid:") + IntToStr(m_glid));
+        return false;
+    }
+}
+
+
+MOboolean moTextureMemory::BuildFromBitmap( moBitmap* p_bitmap, moText p_bufferformat )
+{
+	MOboolean res = false;
+
+	m_BufferFormat = p_bufferformat;
+
+	if (p_bitmap != NULL)
+	{
+	    ///Save into memory
+        res = LoadFromBitmap( p_bitmap );
+        ///BuildFromMemory();
+
+	}
+	else {
+		if (MODebug2 != NULL) MODebug2->Error(moText("Error at image build from bitmap: [pointer is null] ") + (moText) this->GetName());
+		res = false;
+	}
+
+	return res;
+}
+
+
+int  moTextureMemory::GetReference() {
+
+
+    //si la referencia es 0:
+    //asigna la textura
+    if (this->Initialized()) {
+
+        if (reference_counter==0) {
+            if (m_bBitmapInMemory) {
+                glGenTextures(1, &m_glid);
+                CalculateSize(m_width, m_height);
+                if (BuildFromMemory()) {
+                    MODebug2->Push( moText("moTextureMemory::GetReference success: glid: ") + IntToStr(m_glid) );
+                    reference_counter++;
+                }
+            } else MODebug2->Push( moText("moTextureMemory::GetReference no bitmap in memory ") );
+        }
+    } else MODebug2->Error( moText("moTextureMemory::GetReference Error: object not initialized") );
+
+    return ((int)reference_counter);
+}
+
+void  moTextureMemory::ReleaseReference() {
+    if (reference_counter>0) {
+          reference_counter--;
+          if ( reference_counter==0 ) {
+              ///deleting texture from opengl memory
+              if (m_glid>0) {
+                glDeleteTextures(1,&m_glid);
+                m_glid = 0;
+              }
+          }
+    }
+}
+
+MOboolean moTextureMemory::Finish() {
+
+	if (hmem) {
+		FreeImage_CloseMemory( (FIMEMORY*)hmem );
+		hmem = NULL;
+	}
+
+	m_SizeInMemory = 0;
+	hmem = NULL;
+	fif = (int)FIF_UNKNOWN;
+
+    return moTexture::Finish();
+
+}
 
 //===========================================
 //
