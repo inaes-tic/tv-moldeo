@@ -35,6 +35,69 @@
 #include "moTexture.h"
 #include "moResourceManager.h"
 
+typedef moTextureMemory* moTextureFramePtr;
+
+moDeclareExportedDynamicArray(moTextureFramePtr,moTextureFrames)
+
+/// Buffer de imágenes
+/**
+    Clase que permite cargar una sucesión de imágenes de mismo formato con compresión incluída dentro
+    de un buffer de memoria y a la vez permite reproducir cada cuadro de forma independiente, descomprimiendo de memoria
+    y asignando una textura
+*/
+
+class LIBMOLDEO_API moTextureBuffer : public moAbstract {
+
+	public:
+		moTextureBuffer();
+		virtual ~moTextureBuffer();
+
+		virtual MOboolean  Init();
+		virtual MOboolean  Init( moText p_foldername, moText p_bufferformat, moResourceManager* p_pResourceManager );
+		virtual MOboolean  Finish();
+
+		virtual int GetFrame( MOuint p_i );
+
+		virtual void ReleaseFrame( MOuint p_i );
+
+		virtual moTextureMemory* GetTexture( MOuint p_i );
+
+		MOboolean UpdateImages( int maxfiles = -1 );
+
+        MOboolean	LoadCompleted();
+        int GetImagesProcessed() { return  m_ImagesProcessed; }
+
+		MOboolean LoadImage( moText p_ImageName, moBitmap* pImage, int indeximage );
+
+		moText GetBufferPath() { return m_BufferPath; }
+		moText	GetBufferFormat() { return m_BufferFormat; }
+
+		moText GetName() { return m_FolderName; }
+
+	private:
+
+		MOint m_ImagesProcessed;
+		MOboolean	m_bLoadCompleted;
+		MOint m_ActualImage;
+
+
+        moText  m_FolderName;
+		moText	m_BufferPath;
+		moText  m_BufferFormat;
+
+		moResourceManager*	m_pResourceManager;
+
+		moTextureFrames     m_Frames;
+		moDirectory*	m_pDirectory;
+
+};
+
+typedef moTextureBuffer* moTextureBufferPtr;
+
+moDeclareExportedDynamicArray(moTextureBufferPtr,moTextureBuffers)
+
+
+
 /**
 *   Administrador de texturas
 *   permite crear, modificar y eliminar recursos de texturas
@@ -100,6 +163,18 @@ class LIBMOLDEO_API moTextureManager : public moResource
 		MOint GetTextureMOId(MOuint p_glid);
 
         /**
+         * Devuelve el Moldeo ID interno del texturebuffer con nombre de carpeta p_name. Si dicho objeto no existiese y
+         * p_create_tex fuese true, entonces a nueva textura vacía es creada utilizando parámetros por defecto
+         * y el nombre provisto.
+         * @param p_name nombre utilizado para buscar el objeto.
+         * @param p_create_tex si es true y el objeto no es encontrado, entonces un nuevo objeto es creado.
+         * @return Moldeo ID.
+         */
+        MOint GetTextureBuffer( moText p_foldername, MOboolean p_create_tex = true, moText p_bufferformat = "JPGAVERAGE" );
+
+        moTextureBuffer* GetTextureBuffer( int idx );
+
+        /**
          * Agrega una textura de tipo p_type, nombre p_name y parámetros p_tex_param.
          * @param p_type tipo de la textura a crear (MO_TYPE_TEXTURE, MO_TYPE_TEXTURE_MULTIPLE, MO_TYPE_MOVIE, etc.).
          * @param p_name nombre de la textura a crear.
@@ -150,6 +225,14 @@ class LIBMOLDEO_API moTextureManager : public moResource
          * @return Moldeo ID de la nueva textura (-1 si la textura no puede ser agregada).
          */
 		MOint AddTexture(moText p_filename);
+
+        /**
+         * Agrega un texturebuffer (carpeta de texturas), leyéndolo de la carpeta p_foldername.
+         * @param p_foldername nombre de carpeta con las imágenes a cargar.
+         * @return Moldeo ID de la nueva textura (-1 si el objeto no puede ser agregado).
+         */
+        MOint AddTextureBuffer( moText p_foldername, moText p_bufferformat = "JPGAVERAGE" );
+
 
         /**
          * Elimina la textura p_moid.
@@ -340,6 +423,9 @@ class LIBMOLDEO_API moTextureManager : public moResource
          */
 		MOuint GetTypeForFile(moText p_filename);
 
+		virtual void Update(moEventList *Events);
+
+
 		int         m_preview_texture_idx;
 
 
@@ -347,6 +433,8 @@ class LIBMOLDEO_API moTextureManager : public moResource
 		moGLManager* m_glmanager;
 		moFBManager* m_fbmanager;
 		moTextureArray m_textures_array;
+
+		moTextureBuffers    m_textures_buffers;
 
 
         moTexture* CreateTexture(MOuint p_type, moText p_name, moTexParam p_param = MODefTex2DParams);

@@ -242,6 +242,13 @@ typedef moVideoFrame* moVideoFramePtr;
 
 moDeclareExportedDynamicArray(moVideoFramePtr,moVideoFrames)
 
+/// Buffer de imágenes para video
+/**
+    Clase que permite cargar una sucesión de imágenes de mismo formato con compresión incluída dentro
+    de un buffer de memoria y a la vez permite reproducir cada cuadro de forma independiente, descomprimiendo de memoria
+    y asignando una textura
+*/
+
 class LIBMOLDEO_API moVideoBuffer : public moTextureAnimated {
 
 	public:
@@ -281,6 +288,17 @@ class LIBMOLDEO_API moVideoBuffer : public moTextureAnimated {
 typedef moVideoBuffer* moVideoBufferPtr;
 
 moDeclareExportedDynamicArray(moVideoBufferPtr,moVideoBuffers)
+
+
+/// Buffer Circular de imágenes para video
+/**
+    Este buffer permite cargar de manera gradual una sucesión de imágenes
+    manteniendo siempre una cantidad fija histórica de cuadros para ser reproducidos desde la memoria.
+    El circular buffer comprime en el formato seleccionado cada cuadro.
+
+    Un uso común es el de aplicar un circularbuffer a una cámara para grabar en memoria una cantidad de cuadros
+    para ser referenciados de manera desfazada, para crear el efecto de blur por ejemplo de movimiento.
+*/
 
 class LIBMOLDEO_API moCircularVideoBuffer : public moTextureAnimated {
 

@@ -105,8 +105,33 @@ moMoldeoObject::Init() {
 
                 switch((int)param.GetParamDefinition().GetType() ) {
 
-                    case MO_PARAM_TEXTURE:
+                    case MO_PARAM_TEXTUREFOLDER:
+                        ///es una carpeta pero puede tener otros parametros
+                        ///
+                        if ( ! (valuebase.Text().Trim() == moText("")) ) {
+
+                            ///si tenemos un segundo parametro deberia ser el formato del buffer (JPG)
+
+                            idx = m_pResourceManager->GetTextureMan()->GetTextureBuffer( valuebase.Text(), true );
+                            if (idx>-1) {
+
+                                moTextureBuffer*  pTextureBuffer = m_pResourceManager->GetTextureMan()->GetTextureBuffer(idx);
+                                valuebase.SetTextureBuffer( pTextureBuffer );
+
+                            }
+
+                        }
+
+
+                        break;
+
                     case MO_PARAM_VIDEO:
+                        ///ojo aquí el video es tratado por el VideoManager si quiere ser tratado realamente
+                        /// como video y no como texturaanimada....
+
+                        break;
+
+                    case MO_PARAM_TEXTURE:
                     case MO_PARAM_FILTER:
                         if ( ! (valuebase.Text().Trim() == moText("")) ) {
                             idx = m_pResourceManager->GetTextureMan()->GetTextureMOId( valuebase.Text(), true);

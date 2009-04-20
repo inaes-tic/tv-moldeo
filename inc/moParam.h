@@ -47,6 +47,7 @@ enum moParamType {
 	MO_PARAM_PHASE,			//value type: NUM or FUNCTION
 	MO_PARAM_TEXT,			//value type: TXT or LNK
 	MO_PARAM_TEXTURE,		//value type: TXT or LNK
+	MO_PARAM_TEXTUREFOLDER,	//value type: TXT or LNK
 	MO_PARAM_FONT,          //value type: TXT or LNK
 	MO_PARAM_3DMODEL,		//value type: TXT or LNK
 	MO_PARAM_OBJECT,		//value type: TXT or LNK

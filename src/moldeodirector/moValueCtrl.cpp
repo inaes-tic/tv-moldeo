@@ -186,7 +186,7 @@ moValueCtrl::Init( moDirectorChildFrame* parent, moValueDescriptor p_valuedescri
 			break;
 		default:
 			ValueStr =(wxChar*)(char*) pValue.GetSubValue(0).Text();
-			m_pTextCtrl = new wxTextCtrl( this, -1, ValueStr,wxPoint(0,0),wxSize(300,20));
+			m_pTextCtrl = new wxTextCtrl( this, -1, ValueStr,wxPoint(20,0),wxSize(300,20));
 			xpos+=m_pTextCtrl->GetSize().x;
 			break;
 	};

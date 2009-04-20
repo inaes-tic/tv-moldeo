@@ -45,6 +45,8 @@ moRenderManager::moRenderManager() {
 	m_render_tex_moid[1] = -1;
 	m_render_tex_moid[2] = -1;
 	m_render_tex_moid[3] = -1;
+	m_render_tex_moid[4] = -1;
+	m_render_tex_moid[5] = -1;
 
     m_OutputConfiguration.m_RenderResolution.width = 0;
     m_OutputConfiguration.m_RenderResolution.height = 0;
@@ -120,13 +122,25 @@ MOboolean moRenderManager::Init(MOint p_render_to_texture_mode,
     //if (m_render_tex_moid[1]!=-1) m_pTextureManager->DeleteTexture(m_render_tex_moid[1]);
     //if (m_render_tex_moid[2]!=-1) m_pTextureManager->DeleteTexture(m_render_tex_moid[2]);
     //if (m_render_tex_moid[3]!=-1) m_pTextureManager->DeleteTexture(m_render_tex_moid[3]);
-	if (m_render_tex_moid[0]==-1) m_render_tex_moid[0] = m_pTextureManager->AddTexture("render_texture", m_render_width, m_render_height);
-	if (m_render_tex_moid[1]==-1) m_render_tex_moid[1] = m_pTextureManager->AddTexture("screen_texture", m_render_width, m_render_height);
-	if (m_render_tex_moid[2]==-1) m_render_tex_moid[2] = m_pTextureManager->AddTexture("effects_texture", m_render_width, m_render_height);
-	if (m_render_tex_moid[3]==-1) m_render_tex_moid[3] = m_pTextureManager->AddTexture("final_texture", m_render_width, m_render_height);
+	if (m_render_tex_moid[0]==-1) {
+	    m_render_tex_moid[0] = m_pTextureManager->AddTexture("render_texture", m_render_width, m_render_height);
+	}
+	if (m_render_tex_moid[1]==-1) {
+	    m_render_tex_moid[1] = m_pTextureManager->AddTexture("screen_texture", m_render_width, m_render_height);
+	}
+	if (m_render_tex_moid[2]==-1) {
+	    m_render_tex_moid[2] = m_pTextureManager->AddTexture("effects_texture", m_render_width, m_render_height);
+	}
+	if (m_render_tex_moid[3]==-1) {
+	    m_render_tex_moid[3] = m_pTextureManager->AddTexture("final_texture", m_render_width, m_render_height);
+	}
 
-	if (m_render_tex_moid[4]==-1) m_render_tex_moid[4] = m_pTextureManager->AddTexture("left_texture", m_render_width/2, m_render_height);
-	if (m_render_tex_moid[5]==-1) m_render_tex_moid[5] = m_pTextureManager->AddTexture("right_texture", m_render_width/2, m_render_height);
+	if (m_render_tex_moid[4]==-1) {
+	    m_render_tex_moid[4] = m_pTextureManager->AddTexture("left_texture", m_render_width/2, m_render_height);
+	}
+	if (m_render_tex_moid[5]==-1) {
+	    m_render_tex_moid[5] = m_pTextureManager->AddTexture("right_texture", m_render_width/2, m_render_height);
+	}
 
 
     m_screen_width = p_screen_width;
@@ -153,9 +167,12 @@ MOboolean moRenderManager::Init(MOint p_render_to_texture_mode,
 			m_pFBManager->GetFBO(m_fbo_idx)->AddTexture(m_render_width, m_render_height,
 								m_pTextureManager->GetTexParam(m_render_tex_moid[i]),
 								m_pTextureManager->GetGLId(m_render_tex_moid[i]), attach_point);
-			m_pTextureManager->GetTexture(m_render_tex_moid[i])->SetFBO(m_pFBManager->GetFBO(m_fbo_idx));
-			m_pTextureManager->GetTexture(m_render_tex_moid[i])->SetFBOAttachPoint(attach_point);
-			m_render_attach_points[i] = attach_point;
+			moTexture* pRenderTex = m_pTextureManager->GetTexture(m_render_tex_moid[i]);
+			if (pRenderTex) {
+			    pRenderTex->SetFBO(m_pFBManager->GetFBO(m_fbo_idx));
+			    pRenderTex->SetFBOAttachPoint(attach_point);
+			    m_render_attach_points[i] = attach_point;
+			}
 		}
 		m_pFBManager->GetFBO(m_fbo_idx)->AddDepthStencilBuffer();
 	} else MODebug2->Message( moText("Framebuffer objects unavailable.") );

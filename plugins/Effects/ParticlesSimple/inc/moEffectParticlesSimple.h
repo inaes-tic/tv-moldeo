@@ -74,8 +74,10 @@ enum moParticlesSimpleAttractorType {
 };
 
 enum moParticlesSimpleTextureMode {
-    PARTICLES_TEXTUREMODE_UNIT = 0,
-    PARTICLES_TEXTUREMODE_PATCH = 1
+    PARTICLES_TEXTUREMODE_UNIT = 0, /// One Texture Image for each Particle
+    PARTICLES_TEXTUREMODE_PATCH = 1, /// One Texture Image divided into many Particles
+    PARTICLES_TEXTUREMODE_MANY = 2, /// Many Textures Image for each Particle
+    PARTICLES_TEXTUREMODE_MULTITEX = 3 /// Many Textures Image for Many Particles
 };
 
 enum moParticlesCreationMethod {
@@ -93,7 +95,8 @@ enum moParticlesRandomMethod {
 enum moParticlesOrientationMode {
     PARTICLES_ORIENTATIONMODE_FIXED=0,
     PARTICLES_ORIENTATIONMODE_CAMERA=1,
-    PARTICLES_ORIENTATIONMODE_MOTION=2
+    PARTICLES_ORIENTATIONMODE_MOTION=2,
+    PARTICLES_ORIENTATIONMODE_ACCELERATION=3
 };
 
 enum moParticlesSimpleParamIndex {
@@ -105,6 +108,7 @@ enum moParticlesSimpleParamIndex {
 	PARTICLES_FONT,
 	PARTICLES_TEXT,
 	PARTICLES_TEXTURE,
+	PARTICLES_FOLDERS,
 	PARTICLES_TEXTUREMODE,
 	PARTICLES_BLENDING,
 	PARTICLES_TIMETOREVELATION,
@@ -248,27 +252,62 @@ class moParticlesSimple : public moAbstract {
 
   public:
 
+    ///Position absolute
     moVector3f  Pos3d;
+
+    ///Speed or Velocity vector
     moVector3f  Velocity;
+
+    ///Self force (propulsion) of the particle
     moVector3f  Force;
 
+    ///Particles Vectors
+
+    ///position relative to grid...
     moVector2f  Pos;//relativo a una grilla
+
+    ///texture coordinate
     moVector2f  TCoord;
+
+    ///particle size
     moVector2f  Size;
+
+    ///particle texture size
     moVector2f  TSize;
 
+    ///Differentials of position (speed) and velocity (acceleration)
     moVector3f  dpdt;
     moVector3f  dvdt;
 
+    ///Mass in g of the particle
     double      Mass;
+
+    ///No motion
     bool        Fixed;
+
+    ///Exists but is invisible
     bool        Visible;
 
+    ///Captured
+    /**
+        Captured by the general script, out of normal flow
+    */
+    bool        Captured;
+
+
+    ///Transparency of the particle
     double      Alpha;
+
+    ///Scale of the particle
     double      Scale;
 
+    ///Unique ID of OpenGL Texture
     MOint       GLId;///para asociar la textura al momento de la creación
 
+    ///Texture image proportion Width / Height ....
+    float       ImageProportion;
+
+    ///Age of the particle
     moTimer     Age;
 };
 

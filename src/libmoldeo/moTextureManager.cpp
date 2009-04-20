@@ -32,6 +32,11 @@
 #include "moTextureManager.h"
 #include "FreeImage.h"
 
+#include "moArray.cpp"
+moDefineDynamicArray(moTextureBuffers)
+moDefineDynamicArray(moTextureFrames)
+
+
 /**
 FreeImage error handler
 @param fif Format / Plugin responsible for the error
@@ -45,6 +50,262 @@ void FreeImageErrorHandler(FREE_IMAGE_FORMAT fif, const char *message) {
    moAbstract::MODebug2->Error(moText("FreeImage error:") + moText(message));
 
 }
+
+
+//===========================================
+//
+//				moTextureBuffer
+//
+//===========================================
+
+moTextureBuffer::moTextureBuffer() {
+
+	//m_type = MO_TYPE_TEXTUREBUFFER;
+	m_ImagesProcessed = 0;
+	m_ActualImage = 0;
+	m_pResourceManager = NULL;
+	m_pDirectory = NULL;
+	m_bLoadCompleted = false;
+
+}
+
+moTextureBuffer::~moTextureBuffer() {
+	Finish();
+}
+
+MOboolean  moTextureBuffer::Init() {
+
+	if (!m_pResourceManager)
+		return false;
+
+	return m_bInitialized;
+}
+
+MOboolean
+moTextureBuffer::Init( moText p_foldername, moText p_bufferformat, moResourceManager* p_pResourceManager ) {
+	m_pResourceManager = p_pResourceManager;
+
+	m_FolderName = p_foldername;
+	m_BufferPath = m_pResourceManager->GetDataMan()->GetDataPath() + (moText)p_foldername;
+	m_BufferFormat = p_bufferformat;
+
+
+	m_pDirectory = m_pResourceManager->GetFileMan()->GetDirectory( m_BufferPath );
+
+	if (!m_pDirectory) return false;
+
+	//BuildEmpty( width, height);
+
+	/*
+	moShaderManager* SM = m_pResourceManager->GetShaderMan();
+	moTextureManager* TM = m_pResourceManager->GetTextureMan();
+
+	m_pShaderCopy = SM->GetShader(SM->GetShaderIndex(moText("shaders/Copy.cfg"),true) );
+	*/
+	m_Frames.Init( 0, NULL);
+
+	m_bInitialized = true;
+
+	return Init();
+}
+
+MOboolean  moTextureBuffer::Finish() {
+	for(MOuint i=0; i<m_Frames.Count(); i++) {
+		moTextureMemory* pTextureMemory = m_Frames[i];
+		if (pTextureMemory)
+			pTextureMemory->Finish();
+		delete pTextureMemory;
+	}
+	m_Frames.Empty();
+	m_pResourceManager = NULL;
+	return true;
+}
+
+MOboolean
+moTextureBuffer::LoadCompleted() {
+	return m_bLoadCompleted;
+}
+
+MOboolean moTextureBuffer::UpdateImages( MOint maxfiles ) {
+
+	//carga los frames desde los archivos
+	moFile* pFile;
+
+	MOint counter = 0;
+
+	if (!m_pDirectory) return false;
+
+	if (m_ActualImage>=(MOint)m_pDirectory->GetFiles().Count()) {
+		m_bLoadCompleted = true;
+		return true;
+	}
+
+	if (m_ActualImage==0)
+		pFile = m_pDirectory->FindFirst();
+	else
+		pFile = m_pDirectory->Find(m_ActualImage);
+
+	if (pFile)
+	do {
+		if ( pFile->GetType()==MO_FILETYPE_LOCAL && pFile->Exists()) {
+
+			//LOAD AND UNCOMPRESS IMAGE
+			FREE_IMAGE_FORMAT fif;
+			fif = FreeImage_GetFileType( pFile->GetCompletePath(), 0);
+
+			if( fif == FIF_UNKNOWN ) {
+				// try to guess the file format from the file extension
+				fif = FreeImage_GetFIFFromFilename(pFile->GetCompletePath());
+			}
+
+			if( (fif != FIF_UNKNOWN) && FreeImage_FIFSupportsReading(fif) ) {
+				//decodificamos el archivo
+				FIBITMAP* pImage;
+				pImage = FreeImage_Load( fif, pFile->GetCompletePath(), 0);
+
+				//ONCE LOADED SAVE ON EVERY VIDEOBUFFER
+				if (pImage) {
+
+					//for(MOuint b = 0; b<m_VideoBuffers.Count(); b++) {
+
+						//moVideoBuffer* pVideoBuffer = m_VideoBuffers[b];
+
+						//if (pVideoBuffer)
+                    //LoadImage(  , pImage, m_ActualImage );
+                    MODebug2->Push( moText("moTextureBuffer::UpdateImages > Trying to load image:") +  (moText)pFile->GetCompletePath() );
+                    if ( LoadImage( m_FolderName + moSlash + pFile->GetFileName() , pImage, m_ActualImage ) ) {
+                        m_ImagesProcessed++;
+                    }
+
+					//}
+					FreeImage_Unload(pImage);
+					pImage = NULL;
+
+				}
+			}
+		}
+
+		m_ActualImage++;
+		counter++;
+		if (counter==maxfiles && maxfiles!=(-1))
+			break;
+
+	} while ( (pFile = m_pDirectory->FindNext()) );
+
+	return true;
+}
+
+
+MOboolean
+moTextureBuffer::LoadImage( moText p_ImageName, moBitmap* pImage, int indeximage  ) {
+
+    MOboolean res = false;
+    FIBITMAP* _pImage = (FIBITMAP*)pImage;
+	FIBITMAP* pImageResult = NULL;
+	FIBITMAP* pImageCropped = NULL;
+	FIBITMAP* pImageScaled = NULL;
+    /*
+	if ( m_width!=FreeImage_GetWidth(_pImage) || m_height!=FreeImage_GetHeight(_pImage) ) {
+		//CROP MODE
+		pImageCropped = FreeImage_Copy( _pImage, m_XSource , m_YSource , m_XSource + m_SourceWidth , m_YSource+m_SourceHeight );
+		pImageResult = pImageCropped;
+
+	} else
+	*/
+	pImageResult = _pImage;
+
+	//RESCALE: NOTE NECESARRY HERE
+	//quizas podamos definir un máximo para el tamaño tanto ancho como alto
+	//o como proporción
+	//forzar proporcion y esas cosas....
+	/*
+	if ( m_width != m_SourceWidth || m_height != m_SourceHeight ) {
+
+		//FILTER_BOX Box, pulse, Fourier window, 1st order (constant) B-Spline
+		//FILTER_BILINEAR Bilinear filter
+		//FILTER_BSPLINE 4th order (cubic) B-Spline
+		//FILTER_BICUBIC Mitchell and Netravali's two-param cubic filter
+		//FILTER_CATMULLROM Catmull-Rom spline, Overhauser spline
+		//FILTER_LANCZOS3
+		pImageScaled = FreeImage_Rescale( pImageResult, m_width, m_height, FILTER_BICUBIC );
+		if (pImageScaled) {
+			FreeImage_Unload(pImageResult);
+			pImageResult = pImageScaled;
+		}
+	}
+	*/
+
+    moTextureMemory* pTextureMemory = NULL;
+
+    int idx = m_pResourceManager->GetTextureMan()->AddTexture( MO_TYPE_TEXTUREMEMORY, p_ImageName );
+
+	if (idx>-1) {
+	    pTextureMemory = (moTextureMemory*) m_pResourceManager->GetTextureMan()->GetTexture(idx);
+        if (pTextureMemory) {
+            if (pTextureMemory->BuildFromBitmap( pImageResult, m_BufferFormat )) {
+                MODebug2->Push( moText("moTextureBuffer::LoadImage success : ") + (moText)pTextureMemory->GetName() + moText(" width:") + IntToStr(pTextureMemory->GetWidth()) +
+                                + moText(" height:") + IntToStr(pTextureMemory->GetHeight()) );
+                m_Frames.Add(pTextureMemory);
+                res = true;
+            } else {
+                res = false;
+                MODebug2->Error( moText("moTextureBuffer::LoadImage Error loading image:")+(moText)pTextureMemory->GetName());
+            }
+        }
+	}
+
+	if (pImageResult!=_pImage)
+		FreeImage_Unload(pImageResult);
+
+	//m_nFrames = m_Frames.Count();
+	//m_fFramesPerSecond = 25.0;
+
+	return (res);
+}
+/*
+MOboolean moTextureBuffer::LoadFromVideo(  moText p_moviefile ) {
+	//
+	return true;
+}
+*/
+/*
+*/
+int moTextureBuffer::GetFrame( MOuint p_i ) {
+
+	if ( p_i<m_Frames.Count()) {
+
+		moTextureMemory* pTextureMemory = m_Frames[p_i];
+
+		//GLId = pTextureMemory->GetReference();
+		pTextureMemory->GetReference();
+		return pTextureMemory->GetGLId();
+
+    } else {
+        MODebug2->Error(moText("moTextureBuffer::GetFrame Error: p_i out of range: p_i:") + IntToStr(p_i) + moText(" count:") + IntToStr(m_Frames.Count()) );
+        return -1;
+    }
+
+}
+
+void moTextureBuffer::ReleaseFrame( MOuint p_i ) {
+
+	if ( p_i<m_Frames.Count()) {
+
+		moTextureMemory* pTextureMemory = m_Frames[p_i];
+
+		//GLId = pTextureMemory->GetReference();
+		pTextureMemory->ReleaseReference();
+    }
+}
+
+moTextureMemory* moTextureBuffer::GetTexture( MOuint p_i ) {
+    if ( p_i<m_Frames.Count()) {
+
+		moTextureMemory* pTextureMemory = m_Frames[p_i];
+		return pTextureMemory;
+    }
+}
+
 
 //===========================================
 //
@@ -63,6 +324,8 @@ moTextureManager::moTextureManager()
 
 	m_glmanager = NULL;
 	m_fbmanager = NULL;
+
+	m_textures_buffers.Init(0,NULL);
 }
 
 moTextureManager::~moTextureManager()
@@ -128,6 +391,28 @@ MOint moTextureManager::GetTextureMOId(moText p_name, MOboolean p_create_tex)
 	if (p_create_tex) return AddTexture(p_name);
 	else return -1;
 }
+
+MOint moTextureManager::GetTextureBuffer( moText p_foldername, MOboolean p_create_tex, moText p_bufferformat ) {
+
+    moTextureBuffer* ptexbuffer;
+	if (p_foldername.Trim() == moText("")) return -1;
+	for (MOuint i = 0; i < m_textures_buffers.Count(); i++)
+	{
+		ptexbuffer = m_textures_buffers[i];
+		if ((ptexbuffer != NULL) && (!stricmp(ptexbuffer->GetName(), p_foldername))) return i;
+	}
+	if (p_create_tex) return AddTextureBuffer( p_foldername, p_bufferformat );
+	else return -1;
+
+}
+
+
+moTextureBuffer* moTextureManager::GetTextureBuffer( int idx ) {
+    if (0<=idx && idx<m_textures_array.Count()) {
+        return m_textures_buffers[idx];
+    } else return NULL;
+}
+
 
 MOint moTextureManager::GetTextureMOId(MOuint p_glid)
 {
@@ -286,6 +571,27 @@ MOint moTextureManager::AddTexture(moText p_filename)
 	else return -1;
 }
 
+MOint moTextureManager::AddTextureBuffer( moText p_foldername, moText p_bufferformat ) {
+
+    moTextureBuffer* ptexbuffer = new moTextureBuffer();
+    if (ptexbuffer) {
+
+        if ( ptexbuffer->Init( p_foldername, p_bufferformat, m_pResourceManager ) ) {
+            m_textures_buffers.Add( ptexbuffer );
+            MODebug2->Push( moText("TextureBuffer created:") + (moText)p_foldername + moText(" idx:") +IntToStr((m_textures_buffers.Count() - 1)) );
+            return (m_textures_buffers.Count() - 1);
+        } else {
+            MODebug2->Error( moText("moTextureManager::AddTextureBuffer Error: Initializing texturebuffer: ") + (moText)p_foldername );
+        }
+
+    } else {
+        MODebug2->Error( moText("moTextureManager::AddTextureBuffer Error: Creating texturebuffer: ") + (moText)p_foldername );
+    }
+
+    return -1;
+
+}
+
 MOboolean moTextureManager::DeleteTexture(MOuint p_moid)
 {
 	if (ValidTexture(p_moid))
@@ -307,11 +613,11 @@ MOuint moTextureManager::GetTypeForFile(moText p_filename)
 	begin.Left(7);
 	extension.Right(3);
 
-	if (!stricmp(extension,"tga") || !stricmp(extension,"jpg") || !stricmp(extension,"png"))
+	if (!stricmp(extension,"tga") || !stricmp(extension,"jpg") || !stricmp(extension,"png") || !stricmp(extension,"bmp") || !stricmp(extension,"tif") || !stricmp(extension,"xpm"))
 		return MO_TYPE_TEXTURE;
 	if (!stricmp(begin,"multiple"))
 		return MO_TYPE_TEXTURE_MULTIPLE;
-	if (!stricmp(extension,"avi") || !stricmp(extension,"mov") || !stricmp(extension,"mpg") || !stricmp(extension,"vob"))
+	if (!stricmp(extension,"avi") || !stricmp(extension,"mov") || !stricmp(extension,"mpg") || !stricmp(extension,"vob") || !stricmp(extension,"m2v") || !stricmp(extension,"mp4"))
 		return MO_TYPE_MOVIE;
 
 	return MO_TYPE_TEXTURE;
@@ -320,6 +626,7 @@ MOuint moTextureManager::GetTypeForFile(moText p_filename)
 moTexture* moTextureManager::CreateTexture(MOuint p_type, moText p_name, moTexParam p_param)
 {
 	moTexture* ptex;
+	moTextureMemory* ptex_mem;
 	moTextureMultiple* ptex_mult;
 	moMovie* ptex_movie;
 	moVideoBuffer* ptex_videobuffer;
@@ -330,6 +637,11 @@ moTexture* moTextureManager::CreateTexture(MOuint p_type, moText p_name, moTexPa
 	if (p_type == MO_TYPE_TEXTURE)
 	{
 		ptex = new moTexture;
+	}
+	else if (p_type == MO_TYPE_TEXTUREMEMORY)
+	{
+	    ptex_mem = new moTextureMemory;
+		ptex = (moTexture*)ptex_mem;
 	}
 	else if (p_type == MO_TYPE_TEXTURE_MULTIPLE)
 	{
@@ -389,3 +701,24 @@ MOuint moTextureManager::GetGLId(MOuint p_moid) {
 }
 
 
+void moTextureManager::Update(moEventList *Events)
+{
+
+	//if ( GetId() == MO_MOLDEOOBJECT_UNDEFINED_ID ) return;
+
+	/// Texture buffer loading routine, 10 x ,,,,
+	for(MOuint k=0; k<m_textures_buffers.Count(); k++) {
+
+
+		moTextureBuffer*	pTextureBuffer = m_textures_buffers[k];
+
+		if (pTextureBuffer && !pTextureBuffer->LoadCompleted()) {
+
+			MODebug2->Push( pTextureBuffer->GetName() + moText(":") + IntToStr(pTextureBuffer->GetImagesProcessed() ));
+			pTextureBuffer->UpdateImages( 1 );
+		}
+
+
+	}
+
+}

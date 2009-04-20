@@ -216,6 +216,18 @@ moData::SetTexture( moTexture*	p_Texture ) {
 }
 
 void
+moData::SetTextureBuffer( moTextureBuffer*	p_TextureBuffer ) {
+    m_DataType = MO_DATA_IMAGESAMPLE_TEXTUREBUFFER;
+	m_Number.m_Pointer = (MOpointer) p_TextureBuffer;
+}
+
+void
+moData::SetVideoBuffer( moVideoBuffer*	p_VideoBuffer ) {
+    m_DataType = MO_DATA_VIDEOSAMPLE;
+	m_Number.m_Pointer = (MOpointer) p_VideoBuffer;
+}
+
+void
 moData::SetTextureFilter( moTextureFilter*	p_TextureFilter ) {
     m_DataType = MO_DATA_IMAGESAMPLE_FILTERED;
 	m_Number.m_Pointer = (MOpointer) p_TextureFilter;
@@ -309,6 +321,12 @@ moFont*
 moData::Font() {
     return (moFont*) m_Number.m_Pointer;
 }
+
+moTextureBuffer*     moData::TextureBuffer() {
+    return (moTextureBuffer*) m_Number.m_Pointer;
+
+}
+
 
 mo3DModelSceneNode*
 moData::Model() {
