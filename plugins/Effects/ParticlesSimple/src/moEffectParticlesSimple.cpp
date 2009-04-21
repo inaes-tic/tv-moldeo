@@ -119,6 +119,7 @@ moEffectParticlesSimple::GetDefinition( moConfigDefinition *p_configdefinition )
 
 
 	p_configdefinition->Add( moText("attractortype"), MO_PARAM_NUMERIC, PARTICLES_ATTRACTORTYPE, moValue( "0", "NUM").Ref() );
+	p_configdefinition->Add( moText("attractormode"), MO_PARAM_NUMERIC, PARTICLES_ATTRACTORMODE, moValue( "0", "NUM").Ref() );
 	p_configdefinition->Add( moText("attractorvectorx"), MO_PARAM_FUNCTION, PARTICLES_ATTRACTORVECTOR_X, moValue( "0", "FUNCTION").Ref() );
 	p_configdefinition->Add( moText("attractorvectory"), MO_PARAM_FUNCTION, PARTICLES_ATTRACTORVECTOR_Y, moValue( "0", "FUNCTION").Ref() );
 	p_configdefinition->Add( moText("attractorvectorz"), MO_PARAM_FUNCTION, PARTICLES_ATTRACTORVECTOR_Z, moValue( "0", "FUNCTION").Ref() );
@@ -239,6 +240,7 @@ moEffectParticlesSimple::Init()
 	moDefineParamIndex( PARTICLES_EMITTERVECTOR_Z, moText("emittervectorz") );
 
 	moDefineParamIndex( PARTICLES_ATTRACTORTYPE, moText("attractortype") );
+	moDefineParamIndex( PARTICLES_ATTRACTORMODE, moText("attractormode") );
 	moDefineParamIndex( PARTICLES_ATTRACTORVECTOR_X, moText("attractorvectorx") );
 	moDefineParamIndex( PARTICLES_ATTRACTORVECTOR_Y, moText("attractorvectory") );
 	moDefineParamIndex( PARTICLES_ATTRACTORVECTOR_Z, moText("attractorvectorz") );
@@ -370,6 +372,7 @@ void moEffectParticlesSimple::UpdateParameters() {
 
     m_Physics.m_RandomMethod = (moParticlesRandomMethod) m_Config[moR(PARTICLES_RANDOMMETHOD)][MO_SELECTED][0].Int();
     m_Physics.m_CreationMethod = (moParticlesCreationMethod) m_Config[moR(PARTICLES_CREATIONMETHOD)][MO_SELECTED][0].Int();
+
     m_Physics.m_OrientationMode = (moParticlesOrientationMode) m_Config[moR(PARTICLES_ORIENTATIONMODE)][MO_SELECTED][0].Int();
 
     m_Physics.m_FadeIn = m_Config[moR(PARTICLES_FADEIN)].GetData()->Fun()->Eval(state.tempo.ang);
@@ -409,6 +412,7 @@ void moEffectParticlesSimple::UpdateParameters() {
         m_Physics.m_EmitterVector = moVector3f( m_TrackerBarycenter.X()*normalf, m_TrackerBarycenter.Y()*normalf, 0.0f );
     }
 
+    m_Physics.m_AttractorMode = (moParticlesSimpleAttractorMode) m_Config[moR(PARTICLES_ATTRACTORMODE)][MO_SELECTED][0].Int();
     m_Physics.m_AttractorVector = moVector3f( m_Config[moR(PARTICLES_ATTRACTORVECTOR_X)].GetData()->Fun()->Eval(state.tempo.ang),
                                             m_Config[moR(PARTICLES_ATTRACTORVECTOR_Y)].GetData()->Fun()->Eval(state.tempo.ang),
                                             m_Config[moR(PARTICLES_ATTRACTORVECTOR_Z)].GetData()->Fun()->Eval(state.tempo.ang));
@@ -655,29 +659,89 @@ void moEffectParticlesSimple::InitParticlesSimple( int p_cols, int p_rows ) {
 
     int i,j;
 
+    bool m_bNewImage = false;
+
 
     m_pResourceManager->GetTimeMan()->ClearByObjectId(  this->GetId() );
 
 
 
     if (m_ParticlesSimpleArray.Count()>0) {
-        for(i=0;i<m_ParticlesSimpleArray.Count();i++) {
+        /*for(i=0;i<m_ParticlesSimpleArray.Count();i++) {
             if (m_ParticlesSimpleArray[i]!=NULL) {
                 delete m_ParticlesSimpleArray[i];
                 //m_ParticlesSimple.Set(i, NULL);
             }
         }
+        */
         m_ParticlesSimpleArray.Empty();
     }
 
     if (m_ParticlesSimpleArrayTmp.Count()>0) {
-        for(i=0;i<m_ParticlesSimpleArrayTmp.Count();i++) {
+        /*for(i=0;i<m_ParticlesSimpleArrayTmp.Count();i++) {
             if (m_ParticlesSimpleArrayTmp[i]!=NULL) {
                 delete m_ParticlesSimpleArrayTmp[i];
                 //m_ParticlesSimple.Set(i, NULL);
             }
         }
+        */
         m_ParticlesSimpleArrayTmp.Empty();
+    }
+
+
+    moTextureBuffer* pTexBuf = NULL;
+    moTexture* pTextureDest = NULL;
+    moTexture* pSubSample = NULL;
+    BYTE* samplebuffer = NULL;
+    int glid = 0;
+
+    if (texture_mode==PARTICLES_TEXTUREMODE_MANY2PATCH) {
+
+        ///search in the database!!!!
+        pTexBuf = m_Config[moR(PARTICLES_FOLDERS)].GetData()->TextureBuffer();
+
+        ///primero toma la imagen que esta cargada: hay que generar una mas chica!!!!
+        ///......
+        glid = m_Config[moR(PARTICLES_TEXTURE)].GetData()->GetGLId();
+
+
+        if (glid>0) pTextureDest = (moTexture*)m_Config[moR(PARTICLES_TEXTURE)].GetData()->Pointer();
+
+        ///m_pTextureManager->GetBitmap( glid );
+        if (pTextureDest) {
+
+
+            ///levantar la textura!!! del thumbnail: y su buffer!!!
+            time_t rawtime;
+            char strbuffer[0x100];
+            struct tm * timeinfo;
+
+            time(&rawtime);
+            timeinfo = localtime ( &rawtime );
+            strftime (strbuffer,80,"%I_%M%p_",timeinfo);
+
+
+            moText datetime = strbuffer;
+
+            int idti = m_pResourceManager->GetTextureMan()->GetTextureMOId( "LIVEIN0.tga", false );
+            if (idti>-1) m_pResourceManager->GetTextureMan()->DeleteTexture(idti);
+
+            pTextureDest->CreateThumbnail( "TGA", p_cols, p_rows  );
+            //m_pResourceManager->GetFileMan()->CopyFile( moText("LIVEIN0.tga"), (moText)datetime + moText("LIVEIN0.tga") );
+
+            idti = m_pResourceManager->GetTextureMan()->AddTexture( "LIVEIN0.tga" );
+
+            if (idti>-1) {
+                    pSubSample = m_pResourceManager->GetTextureMan()->GetTexture(idti);
+                    if (pSubSample) {
+                        glid = pSubSample->GetGLId();
+                        samplebuffer = new BYTE [ pSubSample->GetWidth() * pSubSample->GetHeight() * 3];
+
+                        pSubSample->GetBuffer( samplebuffer, GL_RGB, GL_UNSIGNED_BYTE );
+
+                    }
+            }
+        }
     }
 
 
@@ -690,6 +754,8 @@ void moEffectParticlesSimple::InitParticlesSimple( int p_cols, int p_rows ) {
 
             pPar->Pos = moVector2f( (float) i, (float) j);
             pPar->ImageProportion = 1.0;
+            pPar->Color = moVector3f(1.0,1.0,1.0);
+            pPar->GLId2 = 0;
 
             if (texture_mode==PARTICLES_TEXTUREMODE_UNIT) {
 
@@ -698,12 +764,162 @@ void moEffectParticlesSimple::InitParticlesSimple( int p_cols, int p_rows ) {
 
             } else if (texture_mode==PARTICLES_TEXTUREMODE_PATCH) {
 
-                pPar->TCoord = moVector2f( (float) (p_cols - i) / (float) p_cols, (float) (p_rows - j) / (float) p_rows );
-                pPar->TSize = moVector2f( -1.0f / (float) p_cols, -1.0f / (float) p_rows );
+                pPar->TCoord = moVector2f( (float) (i) / (float) p_cols, (float) (j) / (float) p_rows );
+                pPar->TSize = moVector2f( 1.0f / (float) p_cols, 1.0f / (float) p_rows );
 
             } else if (texture_mode==PARTICLES_TEXTUREMODE_MANY ) {
                 pPar->TCoord = moVector2f( 0.0, 0.0 );
                 pPar->TSize = moVector2f( 1.0f, 1.0f );
+            } else if (texture_mode==PARTICLES_TEXTUREMODE_MANY2PATCH) {
+
+                pPar->GLId = glid;
+                pPar->GLId2 = glid;
+
+                pPar->TCoord2 = moVector2f( 0.0, 0.0 );
+                pPar->TSize2 = moVector2f( 1.0f, 1.0f );
+
+                pPar->TCoord = moVector2f( (float) (i ) / (float) p_cols, (float) (j) / (float) p_rows );
+                pPar->TSize = moVector2f( 1.0f / (float) p_cols, 1.0f / (float) p_rows );
+
+
+
+                ///calculamos la luminancia del cuadro correspondiente
+                //int x0, y0, x1, y1;
+                int lum = 0;
+                int lumindex = 0;
+                int contrast = 0;
+
+                if (pTextureDest && samplebuffer) {
+
+                    /*
+                    ///VIEJO
+                    x0 = TCoord.X() * (float) pTextureDest->GetWidth();
+                    y0 = TCoord.Y()*  (float) pTextureDest->GetHeight();
+                    x1 = (TCoord.X()+TSize.X())*(  (float) pTextureDest->GetWidth() - 1 );
+                    y1 = (TCoord.Y()+TSize.Y())*(  (float)  pTextureDest->GetHeight() - 1 );
+                    pTextureDest->CalculateLuminanceAndConstrast( x0, y0, x1, y1 );
+                    int lum = pTextureDest->GetLuminance();
+                    int contrast = pTextureDest->GetContrast();
+                    */
+
+
+
+                    lum = (samplebuffer[ (i + j*pSubSample->GetWidth() ) *3 ] + samplebuffer[ (i+1 + j*pSubSample->GetWidth() ) *3 ] + samplebuffer[ (i+2 + j*pSubSample->GetWidth() ) *3 ]) / 3;
+
+
+                    if (lum>=0) {
+
+                        pPar->Color.X() = ((float)lum )/ 255.0f;
+                        pPar->Color.Y() = ((float)lum )/ 255.0f;
+                        pPar->Color.Z() = ((float)lum )/ 255.0f;
+                        pPar->Color.X()*= pPar->Color.X();
+                        pPar->Color.Y()*= pPar->Color.Y();
+                        pPar->Color.Z()*= pPar->Color.Z();
+
+
+                        lumindex = (int)( 100.0 * (float)lum / (float)256)  - 1;
+                    }
+
+
+
+
+                }
+
+
+                //, (float)lum/256.0, (float)lum/256.0 );
+
+                 //m_Config[moR(PARTICLES_TEXTURE)].GetData()->GetGLId(&state.tempo, 1, NULL );
+
+                /*MODebug2->Push( moText("TextureDest: i:") + IntToStr(i) + moText(" j:") + IntToStr(j) + moText(" Lum:") + IntToStr(lum) + moText(" Contrast:") + IntToStr(contrast)
+                                + moText(" x0:") + IntToStr(x0)
+                                + moText(" y0:") + IntToStr(y0)
+                                + moText(" x1:") + IntToStr(x1)
+                                + moText(" y1:") + IntToStr(y1) );*/
+
+
+
+                 if (pTexBuf) {
+
+
+                     int nim = pTexBuf->GetImagesProcessed();
+
+                     pPar->ImageProportion = 1.0;
+
+
+                     if (nim>0) {
+
+                         //contrast / 2000
+
+                         moTextureFrames& pTextFrames(pTexBuf->GetBufferLevels( lumindex, 0 ) );
+
+
+                         /*
+                         //MODebug2->Push( moText("TextureDest: i:") + IntToStr(pTextFrames.Count()) );
+
+                         lum = lum / 26;
+                         contrast = contrast / 2000;
+                         */
+
+                         int nc = pTextFrames.Count();
+                         int irandom = -1;
+
+                         //for( int ir = 0; ir< nc; ir++) {
+
+                         irandom = ( ::rand() * nc )/ RAND_MAX;
+
+                        moTextureMemory* pTexMem = pTextFrames.Get( irandom );
+
+                        if (pTexMem) {
+                            pPar->GLId = 0;
+                            pTexMem->GetReference();
+                            pPar->GLId2 = pTexMem->GetGLId();
+                            pPar->pTextureMemory = pTexMem;
+                            if (pTexMem->GetHeight()>0) pPar->ImageProportion = (float) pTexMem->GetWidth() / (float) pTexMem->GetHeight();
+                        } else {
+                            pPar->GLId = glid;
+                            pPar->GLId2 = pPar->GLId;
+                            pPar->Color.X() = ((float)lum )/ 255.0f;
+                            pPar->Color.Y() = ((float)lum )/ 255.0f;
+                            pPar->Color.Z() = ((float)lum )/ 255.0f;
+                            pPar->Color.X()*= pPar->Color.X();
+                            pPar->Color.Y()*= pPar->Color.Y();
+                            pPar->Color.Z()*= pPar->Color.Z();
+                            /*
+                            irandom = ( ::rand() * nim )/ RAND_MAX;
+                            if (irandom>nim) irandom = nim - 1;
+                            pPar->GLId2 = pTexBuf->GetFrame( irandom );
+                            pTexMem = pTexBuf->GetTexture( irandom );
+                            pPar->pTextureMemory = pTexMem;
+                            if (pTexMem->GetHeight()>0) pPar->ImageProportion = (float) pTexMem->GetWidth() / (float) pTexMem->GetHeight();
+                            */
+                        }
+
+                         //}
+
+
+                         //RANDOMICO
+                         /*
+                         int irandom = ( ::rand() * nim )/ RAND_MAX;
+                         if (irandom>nim) irandom = nim - 1;
+                         if (irandom>=0) {
+
+                            pPar->GLId2 = pTexBuf->GetFrame( irandom );
+                            moTextureMemory* pTexMem = pTexBuf->GetTexture( irandom );
+                            if (pTexMem) {
+                                pPar->pTextureMemory = pTexMem;
+                                if (pTexMem->GetHeight()>0) pPar->ImageProportion = (float) pTexMem->GetWidth() / (float) pTexMem->GetHeight();
+                            }
+                         }
+                         */
+
+                         MODebug2->Push( moText("creating particle: irandom:") + IntToStr(irandom) + moText(" count:") + IntToStr(pTexBuf->GetImagesProcessed()) + moText(" glid:") + IntToStr(pPar->GLId) );
+
+                     }
+
+
+
+                 } else MODebug2->Error( moText("particles error creating texture") );
+
             }
 
             pPar->Size = moVector2f( m_Physics.m_EmitterSize.X() / (float) p_cols, m_Physics.m_EmitterSize.Y() / (float) p_rows );
@@ -742,6 +958,10 @@ void moEffectParticlesSimple::InitParticlesSimple( int p_cols, int p_rows ) {
     m_rows = p_rows;
     m_cols = p_cols;
 
+    if (pSubSample && samplebuffer) {
+        delete [] samplebuffer;
+    }
+
 }
 
 void moEffectParticlesSimple::Regenerate() {
@@ -754,11 +974,18 @@ void moEffectParticlesSimple::Regenerate() {
 
             moParticlesSimple* pPar = m_ParticlesSimpleArray[i+j*m_cols];
 
+            pPar->pTextureMemory = NULL;
+
             //KILL PARTICLE
             if ( pPar->Visible && (m_Physics.m_MaxAge>0) &&  (pPar->Age.Duration() > m_Physics.m_MaxAge) ) {
 
                 pPar->Age.Stop();
                 pPar->Visible = false;
+                if (pPar->pTextureMemory) {
+                    pPar->pTextureMemory->ReleaseReference();
+                    pPar->pTextureMemory = NULL;
+                    pPar->GLId = 0;
+                }
 
             }
 
@@ -780,37 +1007,44 @@ void moEffectParticlesSimple::Regenerate() {
                  //moTexture* pTex = ; //m_pResourceManager->GetTextureMan()->GetTexture();
                  ///asigna un id al azar!!!! de todos los que componen ell moTextureBuffer
                  ///hay q pedir el moTextureBuffer
-                 moTextureBuffer* pTexBuf = m_Config[moR(PARTICLES_FOLDERS)].GetData()->TextureBuffer();
-                 //m_Config[moR(PARTICLES_TEXTURE)].GetData()->GetGLId(&state.tempo, 1, NULL );
-                 if (pTexBuf) {
-                     int nim = pTexBuf->GetImagesProcessed();
+                 if ( texture_mode==PARTICLES_TEXTUREMODE_MANY ) {
+                     moTextureBuffer* pTexBuf = m_Config[moR(PARTICLES_FOLDERS)].GetData()->TextureBuffer();
+                     //m_Config[moR(PARTICLES_TEXTURE)].GetData()->GetGLId(&state.tempo, 1, NULL );
+                     if (pTexBuf) {
+                         int nim = pTexBuf->GetImagesProcessed();
 
-                     pPar->ImageProportion = 1.0;
+                         pPar->ImageProportion = 1.0;
 
-                     if (nim>0) {
+                         if (nim>0) {
 
-                         //float frandom = moMathf::UnitRandom( (float) 2.0 ) * nim;
-                         //srand(2);
-                         int irandom = ( ::rand() * nim )/ RAND_MAX;
+                             //float frandom = moMathf::UnitRandom( (float) 2.0 ) * nim;
+                             //srand(2);
+                             int irandom = ( ::rand() * nim )/ RAND_MAX;
 
-                         if (irandom>nim) irandom = nim - 1;
+                             if (irandom>nim) irandom = nim - 1;
 
-                         pPar->GLId = pTexBuf->GetFrame( irandom );
+                             pPar->GLId = pTexBuf->GetFrame( irandom );
 
-                         moTextureMemory* pTexMem = pTexBuf->GetTexture( irandom );
+                             moTextureMemory* pTexMem = pTexBuf->GetTexture( irandom );
+                             if (pTexMem) {
+                                pPar->pTextureMemory = pTexMem;
+                                if (pTexMem->GetHeight()>0) pPar->ImageProportion = (float) pTexMem->GetWidth() / (float) pTexMem->GetHeight();
+                              }
 
-                         if (pTexMem->GetHeight()>0) pPar->ImageProportion = (float) pTexMem->GetWidth() / (float) pTexMem->GetHeight();
-
-                         //MODebug2->Push( moText("creating particle: irandom:") + IntToStr(irandom) + moText(" count:") + IntToStr(pTexBuf->GetImagesProcessed()) + moText(" glid:") + IntToStr(pPar->GLId) );
 
 
-                     } else {
-                         //pPar->GLId = 0;
-                     }
-                     pPar->TCoord = moVector2f( 0.0, 0.0 );
-                     pPar->TSize = moVector2f( 1.0f, 1.0f );
+                             //MODebug2->Push( moText("creating particle: irandom:") + IntToStr(irandom) + moText(" count:") + IntToStr(pTexBuf->GetImagesProcessed()) + moText(" glid:") + IntToStr(pPar->GLId) );
 
-                 } else MODebug2->Error( moText("particles error creating texture") );
+
+                         } else {
+                             //pPar->GLId = 0;
+                         }
+                         pPar->TCoord = moVector2f( 0.0, 0.0 );
+                         pPar->TSize = moVector2f( 1.0f, 1.0f );
+
+                     } else MODebug2->Error( moText("PARTICLES_TEXTUREMODE_MANY particles error creating texture") );
+                 }
+
 
             }
 
@@ -1030,6 +1264,9 @@ void moEffectParticlesSimple::CalculateForces(bool tmparray)
    moVector3f f;
    double len,dx,dy,dz;
 
+   float left =  - (m_Physics.m_EmitterSize.X()) / 2.0;
+    float top =  m_Physics.m_EmitterSize.Y() / 2.0;
+
    for ( i=0; i < m_ParticlesSimpleArray.Count(); i++ ) {
        moParticlesSimple* pPar = m_ParticlesSimpleArray[i];
       pPar->Force = zero;
@@ -1040,11 +1277,34 @@ void moEffectParticlesSimple::CalculateForces(bool tmparray)
       /* Gravitation */
       switch(m_Physics.m_AttractorType) {
         case PARTICLES_ATTRACTORTYPE_POINT:
-            pPar->Force+= ( m_Physics.m_GravityCenter - pPar->Pos3d )*(m_Physics.gravitational * pPar->Mass);
+            pPar->Force = ( m_Physics.m_GravityCenter - pPar->Pos3d )*(m_Physics.gravitational * pPar->Mass);
             break;
 
-        case PARTICLES_ATTRACTORTYPE_FLOOR:
-            pPar->Force+= ( m_Physics.m_GravityCenter - pPar->Pos3d )*(m_Physics.gravitational * pPar->Mass);
+        case PARTICLES_ATTRACTORTYPE_GRID:
+            switch( m_Physics.m_AttractorMode ) {
+                case PARTICLES_ATTRACTORMODE_STICK:
+                case PARTICLES_ATTRACTORMODE_ACCELERATION:
+
+                    pPar->Destination = moVector3f(   ( left + pPar->Pos.X()*pPar->Size.X() + pPar->Size.X()/2.0 )*m_Physics.m_AttractorVector.X() ,
+                                                     ( top - pPar->Pos.Y()*pPar->Size.Y() - pPar->Size.Y()/2.0 )*m_Physics.m_AttractorVector.Y(),
+                                                        m_Physics.m_AttractorVector.Z() );
+
+                    if (m_Physics.m_AttractorMode==PARTICLES_ATTRACTORMODE_STICK && moVector3f( pPar->Destination - pPar->Pos3d ).Length() < 0.1 ) {
+                        pPar->Pos3d = pPar->Destination;
+                        pPar->Velocity = zero;
+                        pPar->Force = zero;
+                    } else pPar->Force = ( pPar->Destination - pPar->Pos3d )*(m_Physics.gravitational * pPar->Mass);
+                    break;
+                case PARTICLES_ATTRACTORMODE_LINEAR:
+                    pPar->Destination = moVector3f(   ( left + pPar->Pos.X()*pPar->Size.X() + pPar->Size.X()/2.0 )*m_Physics.m_AttractorVector.X() ,
+                                                     ( top - pPar->Pos.Y()*pPar->Size.Y() - pPar->Size.Y()/2.0 )*m_Physics.m_AttractorVector.Y(),
+                                                        m_Physics.m_AttractorVector.Z() );
+
+                    pPar->Pos3d = pPar->Pos3d + ( pPar->Destination - pPar->Pos3d) * m_Physics.gravitational;
+                    break;
+                default:
+                    break;
+            }
             break;
 
         }
@@ -1302,8 +1562,10 @@ void moEffectParticlesSimple::DrawParticlesSimple( moTempo* tempogral, moEffectS
     last_tick = tempogral->ticks;
 
     //glBindTexture( GL_TEXTURE_2D, 0 );
-    if (texture_mode!=PARTICLES_TEXTUREMODE_MANY ) {
+    if ( texture_mode!=PARTICLES_TEXTUREMODE_MANY && texture_mode!=PARTICLES_TEXTUREMODE_MANY2PATCH ) {
+
         glBindTexture( GL_TEXTURE_2D, m_Config[moR(PARTICLES_TEXTURE)].GetData()->GetGLId(&state.tempo, 1, NULL ) );
+
     }
     //glColor4f(1.0,1.0,1.0,1.0);
     //glDisable( GL_CULL_FACE);
@@ -1325,17 +1587,31 @@ void moEffectParticlesSimple::DrawParticlesSimple( moTempo* tempogral, moEffectS
     UpdateParticles( dt, 0 );
     ParticlesSimpleAnimation( tempogral, parentstate );
 
+    float idxt = 0.0;
 
     for( i = 0; i<m_cols ; i++) {
         for( j = 0; j<m_rows ; j++) {
+
+            idxt = 0.5 + (float)( i + j * m_cols ) / (float)( m_cols * m_rows * 2 );
 
             moParticlesSimple* pPar = m_ParticlesSimpleArray.Get( i + j*m_cols );
 
             if (pPar->Visible) {
 
-                if (texture_mode==PARTICLES_TEXTUREMODE_MANY ) {
+                if (texture_mode==PARTICLES_TEXTUREMODE_MANY || texture_mode==PARTICLES_TEXTUREMODE_MANY2PATCH ) {
                     //pPar->GLId = 22;
-                    if (pPar->GLId>0) glBindTexture( GL_TEXTURE_2D, pPar->GLId );
+                    if (pPar->GLId>0) {
+                        glActiveTextureARB( GL_TEXTURE0_ARB );
+                        glEnable(GL_TEXTURE_2D);
+                        //glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+                        glBindTexture( GL_TEXTURE_2D, pPar->GLId );
+                    }
+                    if (pPar->GLId2>0) {
+                        glActiveTextureARB( GL_TEXTURE1_ARB );
+                        glEnable(GL_TEXTURE_2D);
+                        //glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+                        glBindTexture( GL_TEXTURE_2D, pPar->GLId2 );
+                    }
                 }
 
                 if (moScript::IsInitialized()) {
@@ -1364,6 +1640,7 @@ void moEffectParticlesSimple::DrawParticlesSimple( moTempo* tempogral, moEffectS
                             m_Config[moR(PARTICLES_SCALEY_PARTICLE)].GetData()->Fun()->Eval(state.tempo.ang)*pPar->Scale,
                             m_Config[moR(PARTICLES_SCALEZ_PARTICLE)].GetData()->Fun()->Eval(state.tempo.ang)*pPar->Scale);
 
+
                 glColor4f(  m_Config[moR(PARTICLES_COLOR)][MO_SELECTED][MO_RED].Fun()->Eval(state.tempo.ang) *
                             m_Config[moR(PARTICLES_PARTICLECOLOR)][MO_SELECTED][MO_RED].Fun()->Eval(state.tempo.ang) * state.tintr,
 
@@ -1376,6 +1653,8 @@ void moEffectParticlesSimple::DrawParticlesSimple( moTempo* tempogral, moEffectS
                             m_Config[moR(PARTICLES_COLOR)][MO_SELECTED][MO_ALPHA].Fun()->Eval(state.tempo.ang) *
                             m_Config[moR(PARTICLES_PARTICLECOLOR)][MO_SELECTED][MO_ALPHA].Fun()->Eval(state.tempo.ang) *
                             m_Config[moR(PARTICLES_ALPHA)].GetData()->Fun()->Eval(state.tempo.ang) * state.alpha * pPar->Alpha );
+
+                glColor4f( pPar->Color.X(), pPar->Color.Y(), pPar->Color.Z(), 1.0);
 
 
                 moVector3f CO(m_Physics.m_EyeVector - pPar->Pos3d);
@@ -1431,16 +1710,35 @@ void moEffectParticlesSimple::DrawParticlesSimple( moTempo* tempogral, moEffectS
 
                 //cuadrado centrado en Pos3d....
                 glBegin(GL_QUADS);
-                    glTexCoord2f( pPar->TCoord.X(), pPar->TCoord.Y() );
+                    //glColor4f( 1.0, 0.5, 0.5, idxt );
+
+                    if (pPar->GLId2>0) {
+                        //glColor4f( 1.0, 0.5, 0.5, idxt );
+                        glMultiTexCoord2fARB( GL_TEXTURE0_ARB, pPar->TCoord.X(), pPar->TCoord.Y() );
+                        glMultiTexCoord2fARB( GL_TEXTURE1_ARB, pPar->TCoord2.X(), pPar->TCoord2.Y());
+                    } else glTexCoord2f( pPar->TCoord.X(), pPar->TCoord.Y() );
                     glVertex3f( A.X(), A.Y(), 0.0);
 
-                    glTexCoord2f( pPar->TCoord.X()+tsizex, pPar->TCoord.Y() );
+                    //glColor4f( 0.5, 1.0, 0.5, idxt );
+
+                    if (pPar->GLId2>0) {
+                        glMultiTexCoord2fARB( GL_TEXTURE0_ARB, pPar->TCoord.X()+tsizex, pPar->TCoord.Y() );
+                        glMultiTexCoord2fARB( GL_TEXTURE1_ARB, pPar->TCoord2.X()+pPar->TSize2.X(), pPar->TCoord2.Y());
+                    } else glTexCoord2f( pPar->TCoord.X()+tsizex, pPar->TCoord.Y() );
                     glVertex3f( B.X(), B.Y(), 0.0);
 
-                    glTexCoord2f( pPar->TCoord.X()+tsizex, pPar->TCoord.Y()+tsizey );
+                    //glColor4f( 0.5, 0.5, 1.0, idxt );
+                    if (pPar->GLId2>0) {
+                        glMultiTexCoord2fARB( GL_TEXTURE0_ARB, pPar->TCoord.X()+tsizex, pPar->TCoord.Y()+tsizey );
+                        glMultiTexCoord2fARB( GL_TEXTURE1_ARB, pPar->TCoord2.X()+pPar->TSize2.X(), pPar->TCoord2.Y()+pPar->TSize2.Y());
+                    } else glTexCoord2f( pPar->TCoord.X()+tsizex, pPar->TCoord.Y()+tsizey );
                     glVertex3f( C.X(), C.Y(), 0.0);
 
-                    glTexCoord2f( pPar->TCoord.X(), pPar->TCoord.Y()+tsizey );
+                    //glColor4f( 1.0, 1.0, 1.0, idxt );
+                    if (pPar->GLId2>0) {
+                        glMultiTexCoord2fARB( GL_TEXTURE0_ARB, pPar->TCoord.X(), pPar->TCoord.Y()+pPar->TSize.Y());
+                        glMultiTexCoord2fARB( GL_TEXTURE1_ARB, pPar->TCoord2.X(), pPar->TCoord2.Y()+pPar->TSize2.Y());
+                    } else glTexCoord2f( pPar->TCoord.X(), pPar->TCoord.Y()+tsizey );
                     glVertex3f( D.X(), D.Y(), 0.0);
                 glEnd();
 

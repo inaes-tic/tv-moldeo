@@ -46,6 +46,7 @@ moDeclareExportedDynamicArray(moTextureFramePtr,moTextureFrames)
     y asignando una textura
 */
 
+
 class LIBMOLDEO_API moTextureBuffer : public moAbstract {
 
 	public:
@@ -74,6 +75,8 @@ class LIBMOLDEO_API moTextureBuffer : public moAbstract {
 
 		moText GetName() { return m_FolderName; }
 
+        moTextureFrames& GetBufferLevels( int L, int C );
+
 	private:
 
 		MOint m_ImagesProcessed;
@@ -89,6 +92,10 @@ class LIBMOLDEO_API moTextureBuffer : public moAbstract {
 
 		moTextureFrames     m_Frames;
 		moDirectory*	m_pDirectory;
+
+		///max level contrast = 10
+		///max level luminance = 10
+		moTextureFrames**  m_pBufferLevels;
 
 };
 

@@ -65,19 +65,35 @@ enum moParticlesSimpleEmitterType {
 };
 
 enum moParticlesSimpleAttractorType {
-  PARTICLES_ATTRACTORTYPE_POINT = 0,
-  PARTICLES_ATTRACTORTYPE_VERTEX = 1,
-  PARTICLES_ATTRACTORTYPE_VORTEX = 2,
-  PARTICLES_ATTRACTORTYPE_DISC = 3,
-  PARTICLES_ATTRACTORTYPE_FLOOR = 4,
-  PARTICLES_ATTRACTORTYPE_STRANGE = 5
+  PARTICLES_ATTRACTORTYPE_POINT = 0, /// each particle attract diretly to the same point
+  PARTICLES_ATTRACTORTYPE_GRID = 1, /// each particle attract perp to a face of the grid
+  PARTICLES_ATTRACTORTYPE_SPHERE = 2, /// each particle attract perp to a face of the grid
+  PARTICLES_ATTRACTORTYPE_TUBE = 3, ///  each particle attract perp to a face of the grid
+  PARTICLES_ATTRACTORTYPE_JET = 4, /// each particle attract perpendicular to jet vector
+  PARTICLES_ATTRACTORTYPE_TRACKER = 5 /// each particle attract each one to a dot of the tracker
+};
+
+enum moParticlesSimpleAttractorMode {
+  PARTICLES_ATTRACTORMODE_ACCELERATION = 0, ///accelerate with no stop
+  PARTICLES_ATTRACTORMODE_STICK = 1, ///accelerate, reach and stop instantly
+  PARTICLES_ATTRACTORMODE_BOUNCE = 2, ///accelerate and bounce....(inverse direction)
+  PARTICLES_ATTRACTORMODE_BREAKS = 3, ///accelerate and breaks (generate debris on place)
+  PARTICLES_ATTRACTORMODE_BRAKE = 4,  ///accelerate then brake and slowdown slowly
+  PARTICLES_ATTRACTORMODE_LINEAR = 5 ///constant speed to attractortype
+};
+
+enum moParticlesSimpleBehaviourMode {
+  PARTICLES_BEHAVIOUR_COHESION = 0,
+  PARTICLES_BEHAVIOUR_SEPARATION = 1,
+  PARTICLES_BEHAVIOUR_AVOIDANCE = 2,
+  PARTICLES_BEHAVIOUR_ALIGNEMENT = 3
 };
 
 enum moParticlesSimpleTextureMode {
     PARTICLES_TEXTUREMODE_UNIT = 0, /// One Texture Image for each Particle
     PARTICLES_TEXTUREMODE_PATCH = 1, /// One Texture Image divided into many Particles
     PARTICLES_TEXTUREMODE_MANY = 2, /// Many Textures Image for each Particle
-    PARTICLES_TEXTUREMODE_MULTITEX = 3 /// Many Textures Image for Many Particles
+    PARTICLES_TEXTUREMODE_MANY2PATCH = 3 /// Many textures/particle to construct a patched texture one
 };
 
 enum moParticlesCreationMethod {
@@ -162,6 +178,7 @@ enum moParticlesSimpleParamIndex {
 	PARTICLES_EMITTERVECTOR_Z,
 
 	PARTICLES_ATTRACTORTYPE,
+	PARTICLES_ATTRACTORMODE,
 	PARTICLES_ATTRACTORVECTOR_X,
 	PARTICLES_ATTRACTORVECTOR_Y,
 	PARTICLES_ATTRACTORVECTOR_Z,
@@ -223,6 +240,7 @@ class moParticlesSimplePhysics : public moAbstract {
     moVector3f      m_EmitterSize;
 
     moParticlesSimpleAttractorType    m_AttractorType;
+    moParticlesSimpleAttractorMode    m_AttractorMode;
 
     moVector3f      m_EyeVector;
 
@@ -255,6 +273,9 @@ class moParticlesSimple : public moAbstract {
     ///Position absolute
     moVector3f  Pos3d;
 
+    ///Destination
+    moVector3f  Destination;
+
     ///Speed or Velocity vector
     moVector3f  Velocity;
 
@@ -268,12 +289,14 @@ class moParticlesSimple : public moAbstract {
 
     ///texture coordinate
     moVector2f  TCoord;
+    moVector2f  TCoord2;
 
     ///particle size
     moVector2f  Size;
 
     ///particle texture size
     moVector2f  TSize;
+    moVector2f  TSize2;
 
     ///Differentials of position (speed) and velocity (acceleration)
     moVector3f  dpdt;
@@ -303,9 +326,13 @@ class moParticlesSimple : public moAbstract {
 
     ///Unique ID of OpenGL Texture
     MOint       GLId;///para asociar la textura al momento de la creación
+    MOint       GLId2;
+    moTextureMemory *pTextureMemory;
 
     ///Texture image proportion Width / Height ....
     float       ImageProportion;
+
+    moVector3f  Color;
 
     ///Age of the particle
     moTimer     Age;
