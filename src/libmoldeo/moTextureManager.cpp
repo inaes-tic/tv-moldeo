@@ -74,6 +74,11 @@ moTextureBuffer::moTextureBuffer() {
         }
 	}
 
+	LevelDiagram = NULL;
+    ///size of max_luminance: 100
+    ///how many levels: 100
+    LevelDiagram = new BYTE [ 100 * 100 * 3];
+
 }
 
 moTextureBuffer::~moTextureBuffer() {
@@ -84,6 +89,8 @@ MOboolean  moTextureBuffer::Init() {
 
 	if (!m_pResourceManager)
 		return false;
+
+
 
 	return m_bInitialized;
 }
@@ -111,6 +118,16 @@ moTextureBuffer::Init( moText p_foldername, moText p_bufferformat, moResourceMan
 	*/
 	m_Frames.Init( 0, NULL);
 
+    max_luminance = 0;//100
+    min_luminance = 100;//0
+
+    max_contrast = 0;
+    min_contrast = 0;
+
+    for( int L=0; L<100*100*3; L++) {
+        LevelDiagram[L] = 0;
+    }
+
 	m_bInitialized = true;
 
 	return Init();
@@ -134,6 +151,11 @@ MOboolean  moTextureBuffer::Finish() {
         }
     }
     m_pBufferLevels = NULL;
+
+    if (LevelDiagram) {
+            delete [] LevelDiagram;
+            LevelDiagram = NULL;
+    }
 
 	m_pResourceManager = NULL;
 	return true;
@@ -231,6 +253,7 @@ moTextureBuffer::LoadImage( moText p_ImageName, moBitmap* pImage, int indeximage
 	} else
 	*/
 	pImageResult = _pImage;
+	FreeImage_AdjustContrast( pImageResult, 50 );
 
 	//RESCALE: NOTE NECESARRY HERE
 	//quizas podamos definir un máximo para el tamaño tanto ancho como alto
@@ -273,12 +296,22 @@ moTextureBuffer::LoadImage( moText p_ImageName, moBitmap* pImage, int indeximage
 
                 if (luminancelevel>=100) {
                         MODebug2->Error( moText("moTextureBuffer::LoadImage Error: luminance out of bound:")+ IntToStr(pTextureMemory->GetLuminance()) );
+                } else {
+                        if (max_luminance<luminancelevel) {
+                            max_luminance = luminancelevel;
+                        } else if (min_luminance>luminancelevel) {
+                            min_luminance = luminancelevel;
+                        }
                 }
                 if (contrastlevel>=10) {
                         MODebug2->Error( moText("moTextureBuffer::LoadImage Error: contrast out of bound:")+ IntToStr(pTextureMemory->GetContrast()) );
                 }
                 if (0<=luminancelevel && luminancelevel<100 && 0<=contrastlevel && contrastlevel<10) {
                     m_pBufferLevels[luminancelevel][contrastlevel].Add( pTextureMemory );
+                    int icc = momin( m_pBufferLevels[luminancelevel][contrastlevel].Count(), 99 );
+                    LevelDiagram[ (luminancelevel + icc*100)*3 ] = 250;
+                    LevelDiagram[ (luminancelevel+1 + icc*100)*3 ] = 250;
+                    LevelDiagram[ (luminancelevel+2 + icc*100)*3 ] = 250;
                 }
 
                 res = true;
