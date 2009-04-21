@@ -835,7 +835,7 @@ MOboolean moTextureMemory::BuildFromMemory() {
         FlipBufferVert((MOubyte *)FreeImage_GetBits(pImage), FreeImage_GetBPP(pImage) / 8 );
         SetBuffer( m_width, m_height, FreeImage_GetBits(pImage), _format);
         FreeImage_Unload( pImage );
-        MODebug2->Push( moText("moTextureMemory::BuildFromMemory: success: hmem:") + IntToStr((int)hmem) + moText("glid:") + IntToStr(m_glid));
+        //MODebug2->Push( moText("moTextureMemory::BuildFromMemory: success: hmem:") + IntToStr((int)hmem) + moText("glid:") + IntToStr(m_glid));
         return true;
     } else {
         MODebug2->Error( moText("moTextureMemory::BuildFromMemory: Error GLID or Memory never assigned. hmem:") + IntToStr((int)hmem) + moText("glid:") + IntToStr(m_glid));
@@ -878,7 +878,7 @@ int  moTextureMemory::GetReference() {
                 glGenTextures(1, &m_glid);
                 CalculateSize(m_width, m_height);
                 if (BuildFromMemory()) {
-                    MODebug2->Push( moText("moTextureMemory::GetReference success: glid: ") + IntToStr(m_glid) );
+                    //MODebug2->Push( moText("moTextureMemory::GetReference success: glid: ") + IntToStr(m_glid) );
                     reference_counter++;
                 }
             } else MODebug2->Push( moText("moTextureMemory::GetReference no bitmap in memory ") );

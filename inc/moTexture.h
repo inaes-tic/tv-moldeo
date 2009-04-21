@@ -39,6 +39,7 @@
 #include "moVideoGraph.h"
 #include "moGsGraph.h"
 #include "moDsGraph.h"
+#include "moMathVector3.h";
 
 typedef void moBitmap;
 typedef int moBitmapFormat;
@@ -369,7 +370,7 @@ class LIBMOLDEO_API moTexture : public moAbstract {
         int  GetLuminance() { return Luminance; }
         int  GetContrast() { return Contrast; }
 
-    protected:
+protected:
 
         MOboolean       m_bBuildedFromFile;
 
@@ -480,7 +481,15 @@ class LIBMOLDEO_API moTextureMemory : public moTexture {
         int GetLuminance() { return Luminance; }
 
 
+        ///0 left up, 1 right up, 2, left down, 3, righ down
+        moVector3f  GetColorMatrixCorner( int corner ) { return color_matrix[corner]; }
+        moVector3f  GetColorAverage() { return color_average; }
+
     private:
+
+        //four corners average color
+        moVector3f      color_matrix[4];
+        moVector3f      color_average;
 
         MOint       reference_counter;
 

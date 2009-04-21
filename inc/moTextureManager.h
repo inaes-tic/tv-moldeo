@@ -77,6 +77,14 @@ class LIBMOLDEO_API moTextureBuffer : public moAbstract {
 
         moTextureFrames& GetBufferLevels( int L, int C );
 
+        int max_luminance;
+        int min_luminance;
+        int max_contrast;
+        int min_contrast;
+
+        //size of max_luminance
+        BYTE*   LevelDiagram;
+
 	private:
 
 		MOint m_ImagesProcessed;
@@ -96,6 +104,8 @@ class LIBMOLDEO_API moTextureBuffer : public moAbstract {
 		///max level contrast = 10
 		///max level luminance = 10
 		moTextureFrames**  m_pBufferLevels;
+
+
 
 };
 
