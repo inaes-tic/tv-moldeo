@@ -358,7 +358,7 @@ void moTrackerKLTSystem::NewData( moVideoSample* p_pVideoSample )
 	m_TrackerSystemData.GetFeatures().Empty();
 	m_TrackerSystemData.ResetMatrix();
 
-
+/*
     ///GET NEW DATA!!!!
 	moTrackerFeature* TF = NULL;
 
@@ -471,7 +471,7 @@ void moTrackerKLTSystem::NewData( moVideoSample* p_pVideoSample )
         }
     }
     m_TrackerSystemData.SetVariance( varX/sumN, varY/sumN );
-
+*/
 }
 
 void moTrackerKLTSystem::CopyBufferToImg(GLubyte *p_pBuffer, unsigned char *p_img, MOuint p_RGB_mode)

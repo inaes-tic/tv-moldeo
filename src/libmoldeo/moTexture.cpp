@@ -64,6 +64,9 @@ moTexture::moTexture()
 	m_fbo_attach_point = MO_UNDEFINED;
 
 	m_param = MODefTex2DParams;
+
+    Luminance = -1;
+    Contrast = -1;
 }
 
 moTexture::~moTexture()
@@ -187,7 +190,7 @@ MOboolean moTexture::BuildFromFile(moText p_filename)
 		}
 
 		BuildEmpty(p_width, p_height);
-		//FlipBufferVert((MOubyte *)FreeImage_GetBits(m_pImage), FreeImage_GetBPP(m_pImage) / 8 );
+		FlipBufferVert((MOubyte *)FreeImage_GetBits(m_pImage), FreeImage_GetBPP(m_pImage) / 8 );
 		res = SetBuffer(p_width, p_height, FreeImage_GetBits(m_pImage), p_format);
 
 		FreeImage_Unload(m_pImage);
@@ -260,6 +263,106 @@ MOboolean moTexture::GetBuffer(GLvoid* p_buffer, GLenum p_format, GLenum p_type)
 	//if (m_gl != NULL) return !m_gl->CheckErrors("copying texture to buffer");
 	//else return true;
 	return true;
+}
+
+bool moTexture::CalculateLuminanceAndConstrast( int x0, int y0, int x1, int y1 ) {
+
+    FREE_IMAGE_FORMAT fif;
+    FIBITMAP* fbitmap = NULL;
+    FIBITMAP* fbitmapcopy = NULL;
+    int options = 0;
+    BYTE* tempbuffer = NULL;
+
+    if (GetHeight()==0 || GetWidth()==0) return false;
+
+    if (x0 == 0 && y0 == 0 && x1 == 0 && y1 == 0) {
+
+        tempbuffer = new BYTE [ GetHeight() * GetWidth() * 4 ];
+        if (tempbuffer==NULL) return false;
+        if (!GetBuffer( tempbuffer, GL_RGBA, GL_UNSIGNED_BYTE ) ) return false;
+        int bpp = 32;
+        int pitch = 4 * GetWidth();
+        fbitmap = FreeImage_ConvertFromRawBits( (BYTE*)tempbuffer, GetWidth(), GetHeight(), pitch, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK, false );
+        if (tempbuffer)
+                delete [] tempbuffer;
+
+    } else {
+
+        int ww = (x1 - x0 - 1);
+        int hh = (y1 - y0 - 1);
+        if (ww>0 && hh>0) {
+            tempbuffer = new BYTE [ GetHeight() * GetWidth() * 4 ];
+            if (tempbuffer==NULL) return false;
+            //glReadPixels( x0, y0, ww, hh, GL_RGBA, GL_UNSIGNED_BYTE, tempbuffer);
+            if (!GetBuffer( tempbuffer, GL_RGBA, GL_UNSIGNED_BYTE ) ) return false;
+            int bpp = 32;
+            int pitch = 4 * GetWidth();
+            fbitmap = FreeImage_ConvertFromRawBits( (BYTE*)tempbuffer, GetWidth(), GetHeight(), pitch, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK, false );
+            fbitmapcopy = FreeImage_Copy( fbitmap, x0, y0, x1, y1 );
+            FreeImage_Unload(fbitmap);
+            fbitmap = fbitmapcopy;
+            if (tempbuffer)
+                delete [] tempbuffer;
+
+        } else {
+            MODebug2->Error(moText("moTexture::CalculateLuminanceAndConstrast ") + moText("freeimage problem"));
+            return false;
+        }
+
+    }
+
+    if (fbitmap && FreeImage_GetHistogram( (FIBITMAP *)fbitmap, Histogram, FICC_BLACK )) {
+
+            ///calculate luminance
+            Luminance = 0;
+            long Total = 0;
+
+            for(int ih=0; ih <256; ih++) {
+                Total+= Histogram[ih];
+                Luminance+= Histogram[ih]*ih;
+
+            }
+
+            Luminance = Luminance / Total;
+
+            ///Calculating contrast difference or luminance variance
+            int Group[5];
+            int Totals[5];
+
+            Group[0] = 0;
+            Group[1] = 0;
+            Group[2] = 0;
+            Group[3] = 0;
+            Group[4] = 0;
+
+            Totals[0] = 0;
+            Totals[1] = 0;
+            Totals[2] = 0;
+            Totals[3] = 0;
+            Totals[4] = 0;
+
+
+            int zone = 0;
+            long dif = 0;
+            for(int ih=0; ih <256; ih++) {
+                zone = ih / 52;
+                dif = ( Histogram[ih]*(ih - Luminance)*(ih - Luminance));
+                Group[zone]+= dif;
+                Totals[zone]+= Histogram[ih];
+            }
+
+            Contrast = 0;
+            for(int z=0;z<5;z++) {
+                if (Totals[z]>0) Contrast+= Group[z] / Totals[z];
+            }
+            Contrast = Contrast / 5;
+
+            MODebug2->Push( moText("moTexture::CalculateLuminanceAndConstrast Histogram OK"));
+
+    } else MODebug2->Error( moText("moTexture::CalculateLuminanceAndConstrast Histogram error"));
+
+    if (fbitmap) FreeImage_Unload( fbitmap );
+
 }
 
 MOuint moTexture::SetFBOandAttachPoint(moFBO* p_fbo)
@@ -421,7 +524,8 @@ moText  moTexture::CreateThumbnail( moText p_bufferformat, int w, int h, moText 
 
         //old version
         //moThm
-        thumbnailfilename = (moText)m_pDataMan->GetDataPath() + moSlash + (moText)m_name + moText(".thm");
+        moFile SrcFile( m_name );
+        thumbnailfilename = (moText)m_pDataMan->GetDataPath() + moSlash + SrcFile.GetFileName();
 
         /*
         // new version:
@@ -448,23 +552,24 @@ moText  moTexture::CreateThumbnail( moText p_bufferformat, int w, int h, moText 
     if (GetHeight()==0 || GetWidth()==0)
         return moText("");
 
-    tempbuffer = new BYTE [ GetHeight() * GetWidth() * 4 ];
+    tempbuffer = new BYTE [ GetWidth() * GetHeight() * 3 ];
 
     if (tempbuffer==NULL)
         return moText("");
 
-    if (!GetBuffer( tempbuffer, GL_RGBA, GL_UNSIGNED_BYTE ) )
+    if (!GetBuffer( tempbuffer, GL_RGB, GL_UNSIGNED_BYTE ) )
         return moText("");
-/*
+
     FILE* fp;
 
     fp = fopen( thumbnailfilename ,"wb" );
-    fwrite( tempbuffer, sizeof(BYTE), m_width * m_height * 4 , fp );
+    fwrite( tempbuffer, sizeof(BYTE), GetWidth() * GetHeight() * 3 , fp );
     fclose(fp);
-    */
 
-    int bpp = 32;
-    int pitch = 4 * GetWidth();
+    //return moText("");
+
+    int bpp = 24;
+    int pitch = 3 * GetWidth();
 
 
     fbitmap = FreeImage_ConvertFromRawBits( (BYTE*)tempbuffer, GetWidth(), GetHeight(), pitch, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK, false );
@@ -474,10 +579,11 @@ moText  moTexture::CreateThumbnail( moText p_bufferformat, int w, int h, moText 
     //unsigned ppitch = FreeImage_GetPitch(fbitmap);
     //FREE_IMAGE_TYPE image_type = FreeImage_GetImageType( fbitmap );
     //BYTE *bits = (BYTE*)FreeImage_GetBits(fbitmap);
-
+/*
     FILE* fp = fopen( thumbnailfilename ,"wb" );
     fwrite( tempbuffer, sizeof(BYTE), m_width * m_height * 4 , fp );
     fclose(fp);
+    */
     //FIBITMAP* fbitmap2 = NULL;
     fbitmap = FreeImage_Rescale( fbitmap, w, h, FILTER_BICUBIC );
 
@@ -517,6 +623,10 @@ moText  moTexture::CreateThumbnail( moText p_bufferformat, int w, int h, moText 
     if (tempbuffer)
         delete [] tempbuffer;
 
+    if (fbitmap) {
+            FreeImage_Unload( fbitmap );
+    }
+
     //return ( moText("width:") + IntToStr(width) + moText("height:") + IntToStr(height) + moText("pitch") + IntToStr(ppitch) + moText("fif") + IntToStr(fif) + moText("oo") + IntToStr((int)fbitmap)  );
 
     return thumbnailfilename;
@@ -537,6 +647,9 @@ moTextureMemory::moTextureMemory() : moTexture() {
     hmem = NULL;
     fif = 0;
     m_BufferFormat = moText("JPG");
+    Luminance = -1;
+    Contrast = -1;
+
 }
 
 moTextureMemory::~moTextureMemory() {
@@ -612,7 +725,62 @@ MOboolean moTextureMemory::LoadFromBitmap( moBitmap* p_bitmap ) {
             m_width = FreeImage_GetWidth((FIBITMAP *)p_bitmap);
             m_height = FreeImage_GetHeight((FIBITMAP *)p_bitmap);
 
+            ///Calculate luminance and contrast from histogram
+
+            if (FreeImage_GetHistogram( (FIBITMAP *)p_bitmap, Histogram, FICC_BLACK )) {
+
+                ///calculate luminance
+                Luminance = 0;
+                long Total = 0;
+
+                for(int ih=0; ih <256; ih++) {
+                    Total+= Histogram[ih];
+                    Luminance+= Histogram[ih]*ih;
+
+                }
+
+                Luminance = Luminance / Total;
+
+
+
+                ///Calculating contrast difference or luminance variance
+                int Group[5];
+                int Totals[5];
+
+                Group[0] = 0;
+                Group[1] = 0;
+                Group[2] = 0;
+                Group[3] = 0;
+                Group[4] = 0;
+
+                Totals[0] = 0;
+                Totals[1] = 0;
+                Totals[2] = 0;
+                Totals[3] = 0;
+                Totals[4] = 0;
+
+
+                int zone = 0;
+                long dif = 0;
+                for(int ih=0; ih <256; ih++) {
+                    zone = ih / 52;
+                    dif = ( Histogram[ih]*(ih - Luminance)*(ih - Luminance));
+                    Group[zone]+= dif;
+                    Totals[zone]+= Histogram[ih];
+                }
+
+                Contrast = 0;
+                for(int z=0;z<5;z++) {
+                    if (Totals[z]>0) Contrast+= Group[z] / Totals[z];
+                }
+                Contrast = Contrast / 5;
+
+            } else MODebug2->Error( moText("moTextureMemory::LoadFromBitmap Histogram error"));
+
+
+
             MODebug2->Push( moText("moTextureMemory::LoadFromBitmap success: hmem:") + IntToStr((int)hmem));
+            MODebug2->Push( moText("moTextureMemory::LoadFromBitmap luminance:") + IntToStr(Luminance) + moText(" contrast:") + IntToStr(Contrast) );
         } else m_bBitmapInMemory = false;
 
 	}
@@ -664,6 +832,7 @@ MOboolean moTextureMemory::BuildFromMemory() {
         ///just execute this time for building the texture really in card memory
         Build();
         ///then apply the buffer
+        FlipBufferVert((MOubyte *)FreeImage_GetBits(pImage), FreeImage_GetBPP(pImage) / 8 );
         SetBuffer( m_width, m_height, FreeImage_GetBits(pImage), _format);
         FreeImage_Unload( pImage );
         MODebug2->Push( moText("moTextureMemory::BuildFromMemory: success: hmem:") + IntToStr((int)hmem) + moText("glid:") + IntToStr(m_glid));

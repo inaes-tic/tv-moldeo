@@ -66,6 +66,13 @@ moTextureBuffer::moTextureBuffer() {
 	m_pResourceManager = NULL;
 	m_pDirectory = NULL;
 	m_bLoadCompleted = false;
+	m_pBufferLevels = new moTextureFrames* [100];
+	for( int i=0; i<100; i++ ) {
+	    m_pBufferLevels[i] = new moTextureFrames [10];
+	    for( int j = 0; j<10; j++ ) {
+            m_pBufferLevels[i][j].Init( 0 , NULL );
+        }
+	}
 
 }
 
@@ -117,6 +124,17 @@ MOboolean  moTextureBuffer::Finish() {
 		delete pTextureMemory;
 	}
 	m_Frames.Empty();
+
+	for(int j=0 ; j<100; j++) {
+        if (m_pBufferLevels[j]!=NULL) {
+            for(int k=0 ; k<10; k++) {
+                m_pBufferLevels[j][k].Empty();
+            }
+            delete [] m_pBufferLevels[j];
+        }
+    }
+    m_pBufferLevels = NULL;
+
 	m_pResourceManager = NULL;
 	return true;
 }
@@ -243,9 +261,26 @@ moTextureBuffer::LoadImage( moText p_ImageName, moBitmap* pImage, int indeximage
 	    pTextureMemory = (moTextureMemory*) m_pResourceManager->GetTextureMan()->GetTexture(idx);
         if (pTextureMemory) {
             if (pTextureMemory->BuildFromBitmap( pImageResult, m_BufferFormat )) {
-                MODebug2->Push( moText("moTextureBuffer::LoadImage success : ") + (moText)pTextureMemory->GetName() + moText(" width:") + IntToStr(pTextureMemory->GetWidth()) +
+                MODebug2->Push( moText("moTextureBuffer::LoadImage success : ") + (moText)pTextureMemory->GetName()
+                                + moText(" width:") + IntToStr(pTextureMemory->GetWidth()) +
                                 + moText(" height:") + IntToStr(pTextureMemory->GetHeight()) );
                 m_Frames.Add(pTextureMemory);
+
+                int contrastlevel = pTextureMemory->GetContrast() / 2000;
+                int luminancelevel = (int)((float)pTextureMemory->GetLuminance() / (float)2.55);
+
+                contrastlevel = 0;
+
+                if (luminancelevel>=100) {
+                        MODebug2->Error( moText("moTextureBuffer::LoadImage Error: luminance out of bound:")+ IntToStr(pTextureMemory->GetLuminance()) );
+                }
+                if (contrastlevel>=10) {
+                        MODebug2->Error( moText("moTextureBuffer::LoadImage Error: contrast out of bound:")+ IntToStr(pTextureMemory->GetContrast()) );
+                }
+                if (0<=luminancelevel && luminancelevel<100 && 0<=contrastlevel && contrastlevel<10) {
+                    m_pBufferLevels[luminancelevel][contrastlevel].Add( pTextureMemory );
+                }
+
                 res = true;
             } else {
                 res = false;
@@ -268,6 +303,19 @@ MOboolean moTextureBuffer::LoadFromVideo(  moText p_moviefile ) {
 	return true;
 }
 */
+
+moTextureFrames&  moTextureBuffer::GetBufferLevels( int L, int C ) {
+
+    if (0<=L && L<100 && 0<=C && C<10) {
+        return m_pBufferLevels[L][C];
+    } else {
+        //devolvemos el oscuro
+        return m_pBufferLevels[0][0];
+    }
+
+}
+
+
 /*
 */
 int moTextureBuffer::GetFrame( MOuint p_i ) {
@@ -286,6 +334,7 @@ int moTextureBuffer::GetFrame( MOuint p_i ) {
     }
 
 }
+
 
 void moTextureBuffer::ReleaseFrame( MOuint p_i ) {
 
@@ -319,8 +368,8 @@ moTextureManager::moTextureManager()
 	SetResourceType( MO_RESOURCETYPE_TEXTURE );
 	SetName("Texture Manager");
 
-  // In your main program ...
-  FreeImage_SetOutputMessage(FreeImageErrorHandler);
+    // In your main program ...
+    FreeImage_SetOutputMessage(FreeImageErrorHandler);
 
 	m_glmanager = NULL;
 	m_fbmanager = NULL;

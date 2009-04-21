@@ -364,6 +364,11 @@ class LIBMOLDEO_API moTexture : public moAbstract {
         */
         moText  CreateThumbnail( moText p_bufferformat, int w, int h, moText newfilename = moText("") );
 
+        bool  CalculateLuminanceAndConstrast( int x0 = 0, int y0 = 0, int x1 = 0, int y1 = 0 );
+
+        int  GetLuminance() { return Luminance; }
+        int  GetContrast() { return Contrast; }
+
     protected:
 
         MOboolean       m_bBuildedFromFile;
@@ -393,6 +398,10 @@ class LIBMOLDEO_API moTexture : public moAbstract {
 		void CalculateSize(MOuint p_width, MOuint p_height);
 		MOuint NextPowerOf2(MOuint p_seed);
 		MOboolean Build();
+
+		int Luminance;
+		int Contrast;
+		DWORD Histogram[256];
 };
 
 
@@ -466,6 +475,10 @@ class LIBMOLDEO_API moTextureMemory : public moTexture {
          */
 		void  ReleaseReference();
 
+        int GetContrast() { return Contrast; }
+
+        int GetLuminance() { return Luminance; }
+
 
     private:
 
@@ -481,6 +494,15 @@ class LIBMOLDEO_API moTextureMemory : public moTexture {
 
 		moText m_BufferFormat;
 		MOboolean   m_bBitmapInMemory;
+
+        ///average luminance
+		MOint   Luminance;
+
+		///average contrast
+		MOint   Contrast;
+
+		///Histogram
+		DWORD Histogram[256];
 
 };
 
