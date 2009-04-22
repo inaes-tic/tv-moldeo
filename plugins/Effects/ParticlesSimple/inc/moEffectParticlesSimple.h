@@ -445,6 +445,8 @@ class moEffectParticlesSimple : public moEffect
         long texture_mode;
 
     ///internal
+        moTimer MotionTimer;
+
         moTimer TimerFullRevelation; ///begins on first motion activity!!!!
         moTimer TimerFullRestoration;///begins on full revelation finished....
         moTimer TimerOfRevelation; ///begins on revealing all

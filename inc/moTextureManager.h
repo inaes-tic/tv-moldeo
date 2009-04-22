@@ -83,7 +83,7 @@ class LIBMOLDEO_API moTextureBuffer : public moAbstract {
         int min_contrast;
 
         //size of max_luminance
-        BYTE*   LevelDiagram;
+        MObyte*   LevelDiagram;
 
 	private:
 
