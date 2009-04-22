@@ -402,7 +402,7 @@ protected:
 
 		int Luminance;
 		int Contrast;
-		DWORD Histogram[256];
+		moDWord Histogram[256];
 };
 
 
@@ -511,7 +511,7 @@ class LIBMOLDEO_API moTextureMemory : public moTexture {
 		MOint   Contrast;
 
 		///Histogram
-		DWORD Histogram[256];
+		moDWord Histogram[256];
 
 };
 

@@ -694,6 +694,7 @@ void moEffectParticlesSimple::InitParticlesSimple( int p_cols, int p_rows ) {
     moTexture* pSubSample = NULL;
     BYTE* samplebuffer = NULL;
     int glid = 0;
+    int glidori = 0;
 
     if (texture_mode==PARTICLES_TEXTUREMODE_MANY2PATCH) {
 
@@ -703,6 +704,7 @@ void moEffectParticlesSimple::InitParticlesSimple( int p_cols, int p_rows ) {
         ///primero toma la imagen que esta cargada: hay que generar una mas chica!!!!
         ///......
         glid = m_Config[moR(PARTICLES_TEXTURE)].GetData()->GetGLId();
+        glidori = glid;
 
 
         if (glid>0) pTextureDest = (moTexture*)m_Config[moR(PARTICLES_TEXTURE)].GetData()->Pointer();
@@ -772,7 +774,7 @@ void moEffectParticlesSimple::InitParticlesSimple( int p_cols, int p_rows ) {
                 pPar->TSize = moVector2f( 1.0f, 1.0f );
             } else if (texture_mode==PARTICLES_TEXTUREMODE_MANY2PATCH) {
 
-                pPar->GLId = glid;
+                pPar->GLId = glidori;
                 pPar->GLId2 = glid;
 
                 pPar->TCoord2 = moVector2f( 0.0, 0.0 );
@@ -870,7 +872,7 @@ void moEffectParticlesSimple::InitParticlesSimple( int p_cols, int p_rows ) {
                         moTextureMemory* pTexMem = pTextFrames.Get( irandom );
 
                         if (pTexMem) {
-                            pPar->GLId = 0;
+                            pPar->GLId = glid;
                             pTexMem->GetReference();
                             pPar->GLId2 = pTexMem->GetGLId();
                             pPar->pTextureMemory = pTexMem;
