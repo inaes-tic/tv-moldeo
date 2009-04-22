@@ -77,7 +77,7 @@ moTextureBuffer::moTextureBuffer() {
 	LevelDiagram = NULL;
     ///size of max_luminance: 100
     ///how many levels: 100
-    LevelDiagram = new BYTE [ 100 * 100 * 3];
+    LevelDiagram = new MObyte [ 100 * 100 * 3];
 
 }
 
@@ -254,6 +254,7 @@ moTextureBuffer::LoadImage( moText p_ImageName, moBitmap* pImage, int indeximage
 	*/
 	pImageResult = _pImage;
 	FreeImage_AdjustContrast( pImageResult, 50 );
+	FreeImage_AdjustBrightness( pImageResult, 50 );
 
 	//RESCALE: NOTE NECESARRY HERE
 	//quizas podamos definir un máximo para el tamaño tanto ancho como alto

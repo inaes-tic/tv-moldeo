@@ -311,7 +311,7 @@ bool moTexture::CalculateLuminanceAndConstrast( int x0, int y0, int x1, int y1 )
 
     }
 
-    if (fbitmap && FreeImage_GetHistogram( (FIBITMAP *)fbitmap, Histogram, FICC_BLACK )) {
+    if (fbitmap && FreeImage_GetHistogram( (FIBITMAP *)fbitmap, (DWORD*)Histogram, FICC_BLACK )) {
 
             ///calculate luminance
             Luminance = 0;
@@ -727,7 +727,7 @@ MOboolean moTextureMemory::LoadFromBitmap( moBitmap* p_bitmap ) {
 
             ///Calculate luminance and contrast from histogram
 
-            if (FreeImage_GetHistogram( (FIBITMAP *)p_bitmap, Histogram, FICC_BLACK )) {
+            if (FreeImage_GetHistogram( (FIBITMAP *)p_bitmap, (DWORD*)Histogram, FICC_BLACK )) {
 
                 ///calculate luminance
                 Luminance = 0;
