@@ -233,9 +233,13 @@ void moNetOSCOut::Update(moEventList *Eventos)
 			    moDataMessage tracker_data_message;
 
 			    moData pData;
+/*
+                pData.SetText( moText("speak") );
+                tracker_data_message.Add(pData);
 
                 pData.SetText( moText("N") );
                 tracker_data_message.Add(pData);
+                */
 
                 pData.SetInt( m_pTrackerData->GetValidFeatures() );
                 tracker_data_message.Add(pData);
@@ -295,6 +299,26 @@ void moNetOSCOut::Update(moEventList *Eventos)
                         pData.SetInt( m_pTrackerData->GetAccelerationMatrix(m_pTrackerData->ZoneToPosition(i)) );
                         tracker_data_message.Add(pData);
                     }
+
+                    pData.SetText( moText("VEL") );
+                    tracker_data_message.Add(pData);
+
+                    pData.SetFloat( m_pTrackerData->GetBarycenterMotion().Length() );
+                    tracker_data_message.Add(pData);
+                    pData.SetFloat( m_pTrackerData->GetBarycenterMotion().X() );
+                    tracker_data_message.Add(pData);
+                    pData.SetFloat( m_pTrackerData->GetBarycenterMotion().Y() );
+                    tracker_data_message.Add(pData);
+
+                    pData.SetText( moText("ACC") );
+                    tracker_data_message.Add(pData);
+
+                    pData.SetFloat( m_pTrackerData->GetBarycenterAcceleration().Length() );
+                    tracker_data_message.Add(pData);
+                    pData.SetFloat( m_pTrackerData->GetBarycenterAcceleration().X() );
+                    tracker_data_message.Add(pData);
+                    pData.SetFloat( m_pTrackerData->GetBarycenterAcceleration().Y() );
+                    tracker_data_message.Add(pData);
 
                     //MODebug2->Message( moText("netoscout: receiving tracker data: bx:") + (moText)FloatToStr(m_pTrackerData->GetBarycenter().X()) );
 

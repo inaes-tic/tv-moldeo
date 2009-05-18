@@ -436,7 +436,7 @@ Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}; Filen
 
 [Run]
 Filename: {app}\bin\mingw\globals.bat; WorkingDir: {app}\bin\mingw
-Filename: {app}\doc\installers\GStreamer-WinBuild-0.10.2.exe; Flags: postinstall
+Filename: {app}\doc\installers\GStreamer-WinBuild-0.10.3.exe; Flags: postinstall
 Filename: {app}\bin\mingw\{#MyAppExeName}; Description: {cm:LaunchProgram,{#MyAppName}}; Flags: nowait postinstall skipifsilent; Tasks: ; Languages: 
 
 [Dirs]

@@ -123,7 +123,9 @@ moFontManager::GetFont( moText p_fontname, bool create, moFontType p_fonttype, M
 
     if (! (p_fontname.Trim().Length() == 0)) {
 
-        if (p_fontname.Trim()==moText("Default") || p_fontname.Trim()==moText("default")) return m_Fonts.Get(0);
+        if (p_fontname.Trim()==moText("Default") || p_fontname.Trim()==moText("default")) {
+            return m_Fonts.Get(0);
+        }
 
         for(int i=0; i< (int)m_Fonts.Count(); i++) {
 
@@ -142,6 +144,12 @@ moFontManager::GetFont( moText p_fontname, bool create, moFontType p_fonttype, M
 
             completepath = m_pResourceManager->GetDataMan()->GetDataPath() + moSlash;
             completepath+= moText(p_fontname);
+
+            moFile fname( completepath );
+            if (!fname.Exists()) {
+                    MODebug2->Error(moText("moFontManager: filename does't exists: ") + (moText)completepath );
+                    completepath = moText("../../art/fonts/") + moText(p_fontname);
+            }
 
             pFont = LoadFont( completepath, p_fonttype, p_fontsize );
         }

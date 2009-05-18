@@ -729,6 +729,8 @@ MO_LIVE_BITCOUNT	4
 		VF.m_Height = m_Config.GetParam().GetValue().GetSubValue(MO_LIVE_SCALEHEIGHT).Int();
 		VF.m_BitCount = m_Config.GetParam().GetValue().GetSubValue(MO_LIVE_BITCOUNT).Int();
 
+		VF.m_ColorMode = (moColorMode)m_Config.GetParam().GetValue().GetSubValue(MO_LIVE_COLORMODE).Int();
+
 		CD.SetVideoFormat( VF );
 
 		pPreferredDevices->Add( CD );

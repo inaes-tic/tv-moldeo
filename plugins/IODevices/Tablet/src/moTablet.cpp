@@ -97,6 +97,8 @@ MOboolean moTablet::Init()
 		return false;
 	}
 
+	moMoldeoObject::Init();
+
 	//levantamos los codes definidos
 	coparam = m_Config.GetParamIndex("code");
 	m_Config.SetCurrentParamIndex(coparam);
@@ -369,9 +371,9 @@ void moTablet::Update(moEventList *Events)
 			Codes[tabletcode].state = true;
 			Codes[tabletcode].AddValueToArray(Pen[tabletcode].value);
 
-			#ifdef _DEBUG
-            MODebug2->Push( moText(" motion x: ") + IntToStr(Pen[tabletcode].value) );
-            #endif
+			//#ifdef MO_DEBUG
+            //MODebug2->Push( moText(" motion x: ") + IntToStr(Pen[tabletcode].value) );
+            //#endif
 		}
 
 		if (t_pkYNew != pkYOld)
@@ -381,9 +383,9 @@ void moTablet::Update(moEventList *Events)
 			Codes[tabletcode].state = true;
 			Codes[tabletcode].AddValueToArray(Pen[tabletcode].value);
 
-			#ifdef _DEBUG
-			MODebug2->Push( moText(" motion y: ") + IntToStr(Pen[tabletcode].value) );
-			#endif
+			//#ifdef MO_DEBUG
+			//MODebug2->Push( moText(" motion y: ") + IntToStr(Pen[tabletcode].value) );
+			//#endif
 		}
 
 		if (t_pkZNew != pkZOld)

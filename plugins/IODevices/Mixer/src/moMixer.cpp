@@ -115,6 +115,7 @@ moMixer::Init() {
 		return false;
 	}
 
+    moMoldeoObject::Init();
 
 	//levantamos los codes definidos
 	coparam = m_Config.GetParamIndex("code");

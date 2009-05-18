@@ -157,8 +157,13 @@ class LIBMOLDEO_API moTrackerSystemData {
 
         virtual void SetPositionMatrixC( float x, float y, int nfeatures );
         virtual int GetPositionMatrixC( float x, float y );
+        virtual int GetPositionMatrixC( moVector2f pos );
+        virtual int GetPositionMatrixC( int zone );
+
         virtual void SetMotionMatrixC( float x, float y, int nfeatures );
         virtual int GetMotionMatrixC( float x, float y );
+        virtual int GetMotionMatrixC( moVector2f pos );
+        virtual int GetMotionMatrixC( int zone );
 
         virtual void ResetMatrix();
 

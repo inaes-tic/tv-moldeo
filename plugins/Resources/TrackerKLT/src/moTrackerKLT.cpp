@@ -384,7 +384,7 @@ void moTrackerKLTSystem::NewData( moVideoSample* p_pVideoSample )
 
             //MODebug2->Log( moText("table: x:") + FloatToStr(m_ft->feature[i][0]->x) + moText("table: y:") + FloatToStr(m_ft->feature[i][0]->y ));
 
-            TF->val = m_fl->feature[i]->val;
+            TF->val = m_fl->fNewDataeature[i]->val;
             TF->valid = (m_fl->feature[i]->val >= KLT_TRACKED);
 
 
@@ -415,7 +415,7 @@ void moTrackerKLTSystem::NewData( moVideoSample* p_pVideoSample )
                if (TF->y<minY) minY = TF->y;
 
                m_TrackerSystemData.SetPositionMatrix( TF->x, TF->y, 1 );
-               m_TrackerSystemData.SetPositionMatrixC( TF->x, TF->y, 1 );
+
 
             }
 
@@ -431,7 +431,6 @@ void moTrackerKLTSystem::NewData( moVideoSample* p_pVideoSample )
             acc = moVector2f( TF->a_x, TF->a_y ).Length();
 
             if (vel>=0.01) m_TrackerSystemData.SetMotionMatrix( TF->x, TF->y, 1 );
-            if (vel>=0.01) m_TrackerSystemData.SetMotionMatrixC( TF->x, TF->y, 1 );
             if (acc>=0.01) m_TrackerSystemData.SetAccelerationMatrix( TF->x, TF->y, 1 );
 
             m_TrackerSystemData.GetFeatures().Add(TF);
@@ -459,6 +458,7 @@ void moTrackerKLTSystem::NewData( moVideoSample* p_pVideoSample )
     m_TrackerSystemData.SetValidFeatures( (int)sumN );
 
     ///CALCULATE VARIANCE FOR EACH COMPONENT
+
     moVector2f Bar = m_TrackerSystemData.GetBarycenter();
     for(int i=0; i<m_TrackerSystemData.GetFeatures().Count(); i++ ) {
         TF = m_TrackerSystemData.GetFeatures().Get(i);
@@ -470,6 +470,20 @@ void moTrackerKLTSystem::NewData( moVideoSample* p_pVideoSample )
         }
     }
     m_TrackerSystemData.SetVariance( varX/sumN, varY/sumN );
+
+
+    ///CALCULATE CIRCULAR MATRIX
+    for(int i=0; i<m_TrackerSystemData.GetFeatures().Count(); i++ ) {
+        TF = m_TrackerSystemData.GetFeatures().Get(i);
+        if (TF) {
+            if (TF->val>=0) {
+                m_TrackerSystemData.SetPositionMatrixC( TF->x, TF->y, 1 );
+                vel = moVector2f( TF->v_x, TF->v_y ).Length();
+                //acc = moVector2f( TF->a_x, TF->a_y ).Length();
+                if (vel>=0.01) m_TrackerSystemData.SetMotionMatrixC( TF->x, TF->y, 1 );
+            }
+        }
+    }
 
 }
 

@@ -103,6 +103,43 @@ bool moDirectorApp::OnInit()
 	m_pDirectorFrame->Init();
     cout << "Success!!! rock and roll!!" << endl;
 
+    moText config;
+
+   	while( argc > 1 ) {
+		--argc;
+		if( argv[argc-1] &&(strcmp(argv[argc-1], "-mol") == 0) ) {
+			config = argv[argc];
+			--argc;
+		} else {
+			printf( "Usage: %s [-mol]\n", argv[0]);
+			exit(1);
+		}
+    }
+
+
+    if (config!=moText("")) {
+        moProjectDescriptor ProjectDescriptor;
+
+        wxFileName	FileName( moText2Wx(config) );
+
+        wxString path = FileName.GetPath();
+        #ifdef MO_WIN32
+            path+= "\\";
+        #else
+            path+= _T("/");
+        #endif
+        wxString name = FileName.GetFullName();
+        const char *cfilepath = (char*)path.c_str();
+        const char *cfilename = (char*)name.c_str();
+
+        ProjectDescriptor.Set( moText((char*)cfilepath), moText((char*)cfilename) );
+
+        moDirectorStatus mStatus = m_pDirectorFrame->OpenProject( ProjectDescriptor );
+
+
+    }
+
+
 
     // success: wxApp::OnRun() will be called which will enter the main message
     // loop and the application will run. If we returned false here, the

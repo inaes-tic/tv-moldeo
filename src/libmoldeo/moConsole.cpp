@@ -365,7 +365,7 @@ moConsole::LoadIODevices() {
 				pdevice->SetResourceManager( m_pResourceManager );
 				pdevice->Init();
 			} else MODebug2->Error( moText("moConsole:: Couldn't load a device:") + moText(fxname));
-		}
+		} else MODebug2->Error( moText("moConsole:: Couldn't create the device:") + moText(fxname));
 		m_Config.NextValue();
 
     }
@@ -1275,6 +1275,16 @@ void moConsole::RegisterFunctions()
 
     RegisterFunction("LEnable");
     RegisterFunction("LDisable");
+
+    RegisterFunction("LGetParam");
+    RegisterFunction("LSetParam");
+
+    RegisterFunction("LGetValue");
+    RegisterFunction("LSetValue");
+
+    RegisterFunction("LGetState");
+    RegisterFunction("LSetState");
+
     RegisterFunction("PushDebugString");
 }
 
@@ -1305,6 +1315,22 @@ int moConsole::ScriptCalling(moLuaVirtualMachine& vm, int iFunctionNumber)
             return LDisable(vm);
 
         case 9:
+            return LGetParam(vm);
+        case 10:
+            return LSetParam(vm);
+
+
+        case 11:
+            return LGetValue(vm);
+        case 12:
+            return LSetValue(vm);
+
+        case 13:
+            return LGetState(vm);
+        case 14:
+            return LSetState(vm);
+
+        case 15:
             return PushDebugString(vm);
 	}
     return 0;
@@ -1384,6 +1410,8 @@ int moConsole::LGetPreconf(moLuaVirtualMachine& vm)
 
     if (Object && Object->GetConfig()) {
         lua_pushnumber(state, (lua_Number) Object->GetConfig()->GetCurrentPreConf() );
+    } else {
+        MODebug2->Error( moText("in console script: LGetPreconf : object not founded : id:")+(moText)IntToStr(objectid));
     }
 
     return 1;
@@ -1437,17 +1465,26 @@ int moConsole::LEnable(moLuaVirtualMachine& vm)
     MOint objectid = (MOint) lua_tonumber (state, 1) - MO_MOLDEOOBJECTS_OFFSET_ID;
 
     moMoldeoObject* Object = NULL;
+    moEffect* pEffect = NULL;
 
     if ( 0<=objectid && objectid<m_MoldeoObjects.Count() )
         Object = m_MoldeoObjects[objectid];
 
     if (Object && Object->GetConfig()) {
-        if ( Object ) {
-            moEffect* pEffect = (moEffect*) Object;
-            pEffect->Enable();
+        switch ( Object->GetType() ) {
+            case MO_OBJECT_EFFECT:
+            case MO_OBJECT_PREEFFECT:
+            case MO_OBJECT_POSTEFFECT:
+            case MO_OBJECT_MASTEREFFECT:
+                pEffect = (moEffect*) Object;
+                //pEffect->Enable();
+                pEffect->TurnOn();
+                break;
+            default:
+                break;
         }
     } else {
-        MODebug2->Error( moText("in console script: LDisnable : object not founded : id:")+(moText)IntToStr(objectid));
+        MODebug2->Error( moText("in console script: LEnable : object not founded : id:")+(moText)IntToStr(objectid));
     }
 
     return 0;
@@ -1460,18 +1497,155 @@ int moConsole::LDisable(moLuaVirtualMachine& vm)
     MOint objectid = (MOint) lua_tonumber (state, 1) - MO_MOLDEOOBJECTS_OFFSET_ID;
 
     moMoldeoObject* Object = NULL;
+    moEffect* pEffect = NULL;
 
     if ( 0<=objectid && objectid<m_MoldeoObjects.Count() )
         Object = m_MoldeoObjects[objectid];
 
     if (Object && Object->GetConfig()) {
-        if ( Object ) {
-            moEffect* pEffect = (moEffect*) Object;
-            pEffect->Disable();
+        switch ( Object->GetType() ) {
+            case MO_OBJECT_EFFECT:
+            case MO_OBJECT_PREEFFECT:
+            case MO_OBJECT_POSTEFFECT:
+            case MO_OBJECT_MASTEREFFECT:
+                pEffect = (moEffect*) Object;
+                //pEffect->Enable();
+                pEffect->TurnOff();
+                break;
+            default:
+                break;
         }
     } else {
-        MODebug2->Error( moText("in console script: LEnable : object not founded : id:")+(moText)IntToStr(objectid));
+        MODebug2->Error( moText("in console script: LDisable : object not founded : id:")+(moText)IntToStr(objectid));
     }
 
     return 0;
 }
+
+
+int moConsole::LSetParam(moLuaVirtualMachine& vm) {
+
+    lua_State *state = (lua_State *) vm;
+
+    MOint objectid = (MOint) lua_tonumber (state, 1) - MO_MOLDEOOBJECTS_OFFSET_ID;
+    MOint paramid = (MOint) lua_tonumber (state, 2);
+    MOint valueid = (MOint) lua_tonumber (state, 3);
+
+    moMoldeoObject* Object = NULL;
+
+    if ( 0<=objectid && objectid<m_MoldeoObjects.Count() )
+        Object = m_MoldeoObjects[objectid];
+
+    if (Object && Object->GetConfig()) {
+        //Object->GetConfig()->SetCurrentParamIndex( paramid );
+        Object->GetConfig()->SetCurrentValueIndex( paramid, valueid );
+    } else {
+        MODebug2->Error( moText("in console script: LSetParam : object not founded : id:")+(moText)IntToStr(objectid) );
+    }
+
+    return 0;
+
+}
+
+int moConsole::LGetParam(moLuaVirtualMachine& vm) {
+
+    lua_State *state = (lua_State *) vm;
+
+    MOint objectid = (MOint) lua_tonumber (state, 1) - MO_MOLDEOOBJECTS_OFFSET_ID;
+    char *text = (char *) lua_tostring (state, 2);
+
+    moMoldeoObject* Object = m_MoldeoObjects[objectid];
+
+    if (Object && Object->GetConfig()) {
+        lua_pushnumber(state, (lua_Number) Object->GetConfig()->GetParamIndex(text) );
+    }
+
+    return 1;
+
+}
+
+int moConsole::LSetValue(moLuaVirtualMachine& vm) {
+    return 0;
+}
+
+
+int moConsole::LGetValue(moLuaVirtualMachine& vm) {
+    return 0;
+}
+
+int moConsole::LSetState(moLuaVirtualMachine& vm) {
+
+    lua_State *state = (lua_State *) vm;
+
+    MOint objectid = (MOint) lua_tonumber (state, 1) - MO_MOLDEOOBJECTS_OFFSET_ID;
+
+    moMoldeoObject* Object = m_MoldeoObjects[objectid];
+    moEffect*       pEffect = NULL;
+
+    moEffectState fxstate;
+
+
+    if (Object && Object->GetConfig()) {
+
+        switch (Object->GetType()) {
+            case MO_OBJECT_EFFECT:
+            case MO_OBJECT_PREEFFECT:
+            case MO_OBJECT_POSTEFFECT:
+            case MO_OBJECT_MASTEREFFECT:
+                fxstate = pEffect->state;
+                fxstate.alpha = (MOint) lua_tonumber (state, 2);
+                fxstate.tint = (MOint) lua_tonumber (state, 3);
+                fxstate.tintr = (MOint) lua_tonumber (state, 4);
+                fxstate.tintg = (MOint) lua_tonumber (state, 5);
+                fxstate.tintb = (MOint) lua_tonumber (state, 6);
+                fxstate.tempo.ang = (MOint) lua_tonumber (state, 7);
+
+                pEffect->state = fxstate;
+                break;
+            default:
+                break;
+        }
+
+    } else {
+        MODebug2->Error( moText("in console script: LSetState : object not founded : id:")+(moText)IntToStr(objectid) );
+    }
+
+    return 0;
+
+}
+
+int moConsole::LGetState(moLuaVirtualMachine& vm) {
+    lua_State *state = (lua_State *) vm;
+
+    MOint objectid = (MOint) lua_tonumber (state, 1) - MO_MOLDEOOBJECTS_OFFSET_ID;
+
+    moMoldeoObject* Object = m_MoldeoObjects[objectid];
+    moEffect*       pEffect = NULL;
+
+
+    if (Object && Object->GetConfig()) {
+
+        switch (Object->GetType()) {
+            case MO_OBJECT_EFFECT:
+            case MO_OBJECT_PREEFFECT:
+            case MO_OBJECT_POSTEFFECT:
+            case MO_OBJECT_MASTEREFFECT:
+                lua_pushnumber(state, (lua_Number) pEffect->state.alpha );
+                lua_pushnumber(state, (lua_Number) pEffect->state.tint );
+                lua_pushnumber(state, (lua_Number) pEffect->state.tintr );
+                lua_pushnumber(state, (lua_Number) pEffect->state.tintg );
+                lua_pushnumber(state, (lua_Number) pEffect->state.tintb );
+                lua_pushnumber(state, (lua_Number) pEffect->state.tempo.ang );
+                break;
+            default:
+                break;
+        }
+
+        MODebug2->Push( moText("in console script: LGetState : alpha")+(moText)FloatToStr(pEffect->state.alpha) );
+    } else {
+        MODebug2->Error( moText("in console script: LGetState : object not founded : id:")+(moText)IntToStr(objectid) );
+    }
+
+    return 6;
+}
+

@@ -145,6 +145,8 @@ protected:
 	MOulong GetTicks();
 	void GLSwapBuffers();
 
+    bool previewreset;
+    bool previewreset2;
 
 protected:
 

@@ -691,8 +691,10 @@ moGsGraph::BuildLiveWebcamGraph( moBucketsPool *pBucketsPool, moCaptureDevice &p
     MOint p_forceheight;
     MOint p_forceflipH;
     MOint p_forceflipV;
+    moText colormode;
 
     devicename = p_capdev.GetName();
+    ( p_capdev.GetVideoFormat().m_ColorMode==YUV ) ? colormode = moText("video/x-raw-yuv") : colormode = moText("video/x-raw-rgb");
     p_sourcewidth = p_capdev.GetSourceWidth();
     p_sourceheight = p_capdev.GetSourceHeight();
     p_sourcebpp = p_capdev.GetSourceBpp();
@@ -751,20 +753,24 @@ moGsGraph::BuildLiveWebcamGraph( moBucketsPool *pBucketsPool, moCaptureDevice &p
            res = gst_bin_add (GST_BIN (m_pGstPipeline), (GstElement*) m_pFileSource );
 
            if (b_sourceselect) {
+               MODebug2->Message(moText("moGsGraph:: sourceselect:") + (moText)colormode + moText(" ") + IntToStr(p_sourcewidth) + moText("X") + IntToStr(p_sourceheight)+ moText(" bpp:") + IntToStr(p_sourcebpp));
                m_pCapsFilterSource = gst_element_factory_make ("capsfilter", "filtsource");
+
                if (m_pCapsFilterSource) {
-                   g_object_set (G_OBJECT (m_pCapsFilterSource), "caps", gst_caps_new_simple ("video/x-raw-rgb",
+                   g_object_set (G_OBJECT (m_pCapsFilterSource), "caps", gst_caps_new_simple ( colormode,
                    "width", G_TYPE_INT, p_sourcewidth,
                    "height", G_TYPE_INT, p_sourceheight,
+                   NULL), NULL);
+                   //depth=(int)24, red_mask=(int)16711680, green_mask=(int)65280, blue_mask=(int)255, endianness=(int)4321
+                   /*
                    "bpp", G_TYPE_INT, p_sourcebpp,
-                   "depth", G_TYPE_INT, 24,
+                    "depth", G_TYPE_INT, 24,
                    "red_mask",G_TYPE_INT, 255,
                    "green_mask",G_TYPE_INT, 65280,
                    "blue_mask",G_TYPE_INT, 16711680,
-                   "endianness", G_TYPE_INT, 4321,
-                   NULL), NULL);
-                   //depth=(int)24, red_mask=(int)16711680, green_mask=(int)65280, blue_mask=(int)255, endianness=(int)4321
-                   res = gst_bin_add (GST_BIN (m_pGstPipeline), (GstElement*) m_pCapsFilterSource );
+                   "endianness", G_TYPE_INT, 4321
+                   */
+                   //res = gst_bin_add (GST_BIN (m_pGstPipeline), (GstElement*) m_pCapsFilterSource );
                }
            }
 
@@ -780,12 +786,12 @@ moGsGraph::BuildLiveWebcamGraph( moBucketsPool *pBucketsPool, moCaptureDevice &p
                     m_pCapsFilter2 = gst_element_factory_make ("capsfilter", "filt2");
                     if (m_pCapsFilter2) {
                         if (b_forcevideoscale) {
-                            g_object_set (G_OBJECT (m_pCapsFilter2), "caps", gst_caps_new_simple ("video/x-raw-rgb",
+                            g_object_set (G_OBJECT (m_pCapsFilter2), "caps", gst_caps_new_simple (colormode,
                                 "width", G_TYPE_INT, p_forcewidth,
                                 "height", G_TYPE_INT, p_forceheight,
                                 NULL), NULL);
                         } else {
-                            g_object_set (G_OBJECT (m_pCapsFilter2), "caps", gst_caps_new_simple ("video/x-raw-rgb",
+                            g_object_set (G_OBJECT (m_pCapsFilter2), "caps", gst_caps_new_simple (colormode,
                                 "width", G_TYPE_INT, 240,
                                 "height", G_TYPE_INT, 160,
                                 NULL), NULL);
@@ -842,13 +848,15 @@ moGsGraph::BuildLiveWebcamGraph( moBucketsPool *pBucketsPool, moCaptureDevice &p
                         ///retry with yuv
                         if (!link_result) {
                             if (m_pCapsFilterSource) {
+                               MODebug2->Message(moText("moGsGraph:: retrying with YUV"));
                                g_object_set (G_OBJECT (m_pCapsFilterSource), "caps", gst_caps_new_simple ("video/x-raw-yuv",
                                "width", G_TYPE_INT, p_sourcewidth,
                                "height", G_TYPE_INT, p_sourceheight,
                                NULL), NULL);
                            }
                         }
-                        link_result = gst_element_link_many( (GstElement*) m_pFileSource, (GstElement*) m_pCapsFilterSource, (GstElement*) m_pDecoderBin, NULL );
+                        //link_result = gst_element_link_many( (GstElement*) m_pFileSource, (GstElement*) m_pCapsFilterSource, (GstElement*) m_pDecoderBin, NULL );
+                        link_result = gst_element_link_many( (GstElement*) m_pFileSource, (GstElement*) m_pDecoderBin, NULL );
                      } else {
                         link_result = gst_element_link_many( (GstElement*) m_pFileSource, (GstElement*) m_pDecoderBin, NULL );
                     }
