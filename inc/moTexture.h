@@ -39,7 +39,7 @@
 #include "moVideoGraph.h"
 #include "moGsGraph.h"
 #include "moDsGraph.h"
-#include "moMathVector3.h";
+#include "moMathVector3.h"
 
 typedef void moBitmap;
 typedef int moBitmapFormat;

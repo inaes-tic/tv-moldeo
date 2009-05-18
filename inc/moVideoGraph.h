@@ -91,6 +91,17 @@ enum moVideoMode {
 	CGA = 64000, //320x200
 	MOVIDEOMODE_UNKNOWN
 };
+
+
+/// Formatos de codificacion de color
+/**
+*   enumeración de formatos de color
+*/
+enum moColorMode {
+    YUV = 0,
+    RGB = 1
+};
+
 /**
 typedef enum {
   GST_STATE_VOID_PENDING        = 0,
@@ -159,6 +170,7 @@ class LIBMOLDEO_API moVideoFormat {
 		}
 
 		moVideoMode	m_VideoMode;/** modo de video, ver: moVideoMode */
+		moColorMode m_ColorMode;
 		MOuint m_Height;/** alto en pixels */
 		MOuint m_Width;/** ancho en pixels */
 		MOuint m_BitRate; /** tasa en bits por segundos*/
