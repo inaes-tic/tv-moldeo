@@ -83,8 +83,8 @@ moDirectorFrame::moDirectorFrame(const wxString& title)
     clientareastr.Printf(" area: %d,%d,%d,%d", client.GetLeft(), client.GetTop(), client.GetWidth(), client.GetHeight() );
     clientareastr2.Printf(" area: %d,%d,%d,%d", client2.GetLeft(), client2.GetTop(), client2.GetWidth(), client2.GetHeight() );
 
-   wxMessageBox(thisDisplay.GetName() + clientareastr);
-   wxMessageBox(theOtherDisplay.GetName() + clientareastr2 );
+   //wxMessageBox(thisDisplay.GetName() + clientareastr);
+   //wxMessageBox(theOtherDisplay.GetName() + clientareastr2 );
 
     wxFrame::Create(NULL, wxID_ANY, title, wxPoint(0,0), wxSize(1024,768));
 

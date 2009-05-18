@@ -61,7 +61,8 @@ enum moParticlesSimpleEmitterType {
   PARTICLES_EMITTERTYPE_TUBE = 2,
   PARTICLES_EMITTERTYPE_JET = 3,
   PARTICLES_EMITTERTYPE_POINT = 4,
-  PARTICLES_EMITTERTYPE_TRACKER = 5
+  PARTICLES_EMITTERTYPE_TRACKER = 5,
+  PARTICLES_EMITTERTYPE_TRACKER2 = 6
 };
 
 enum moParticlesSimpleAttractorType {
@@ -264,6 +265,8 @@ class moParticlesSimplePhysics : public moAbstract {
     moText  m_ParticleScript;
 
 
+
+
 };
 
 class moParticlesSimple : public moAbstract {
@@ -365,11 +368,18 @@ class moEffectParticlesSimple : public moEffect
         void Draw(moTempo*, moEffectState* parentstate = NULL);
         MOboolean Finish();
 
+        void ReInit();
+        void Shot( moText source = moText("") );
+
         void Interaction( moIODeviceManager * );
+        void Update( moEventList * p_eventlist);
         moConfigDefinition * GetDefinition( moConfigDefinition *p_configdefinition );
 
         int ScriptCalling(moLuaVirtualMachine& vm, int iFunctionNumber);
         void HandleReturns(moLuaVirtualMachine& vm, const char *strFunc);
+
+
+        void TrackParticle( int partid );
 
 
     private:
@@ -381,7 +391,7 @@ class moEffectParticlesSimple : public moEffect
         void RestoringAll();
 
 
-        void InitParticlesSimple( int p_cols, int p_rows );
+        void InitParticlesSimple( int p_cols, int p_rows , bool p_forced = true  );
 
         void CalculateForces( bool tmparray = false );
         void CalculateDerivatives( bool tmparray = false, double dt = 0.0 );
@@ -416,6 +426,13 @@ class moEffectParticlesSimple : public moEffect
         int LUpdateParticleVelocity( moLuaVirtualMachine& vm );
 
         int LUpdateForce( moLuaVirtualMachine& vm );
+
+
+        int LShot(moLuaVirtualMachine& vm);
+        int LReInit(moLuaVirtualMachine& vm);
+
+        int GetFeature(moLuaVirtualMachine& vm);
+
 
         int PushDebugString(moLuaVirtualMachine& vm);
 
@@ -462,6 +479,13 @@ class moEffectParticlesSimple : public moEffect
 
         long    last_tick;
 
+        //special for script
+        moTexture* pTextureDest;
+        moTexture* pSubSample;
+        BYTE* samplebuffer;
+
+        int glidori;
+        int glid;
 
 };
 

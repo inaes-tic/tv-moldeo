@@ -253,8 +253,8 @@ moTextureBuffer::LoadImage( moText p_ImageName, moBitmap* pImage, int indeximage
 	} else
 	*/
 	pImageResult = _pImage;
-	FreeImage_AdjustContrast( pImageResult, 50 );
-	FreeImage_AdjustBrightness( pImageResult, 50 );
+	FreeImage_AdjustContrast( pImageResult, 10 );
+	FreeImage_AdjustBrightness( pImageResult, 60 );
 
 	//RESCALE: NOTE NECESARRY HERE
 	//quizas podamos definir un máximo para el tamaño tanto ancho como alto

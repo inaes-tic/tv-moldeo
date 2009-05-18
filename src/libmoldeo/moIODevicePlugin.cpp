@@ -195,7 +195,7 @@ LIBMOLDEO_API moIODevice* moNewIODevice(moText effect_name, moIODevicePluginsArr
     #if defined(_WIN32)
     complete_name = moText("plugins/iodevices/") + (moText)effect_name;
 		#ifdef _DEBUG
-		complete_name+= moText("d");
+		complete_name+= moText("_d");
 		#endif
     complete_name += moText(".dll");
     #else

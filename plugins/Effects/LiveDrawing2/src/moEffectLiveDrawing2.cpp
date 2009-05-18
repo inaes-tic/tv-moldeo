@@ -185,7 +185,8 @@ void moEffectLiveDrawing2::Draw( moTempo* tempogral,moEffectState* parentstate)
 
 	updateParameters();
 
-	if (!inInteractionMode) updateInteractionParameters();
+	//if (!inInteractionMode)
+	updateInteractionParameters();
 
 	if (icon_mode)
 		sel_tex = m_Config[ moParamReference(LIVEDRAW2_ICO_TEXTURES) ].GetIndexValue();
@@ -195,26 +196,30 @@ void moEffectLiveDrawing2::Draw( moTempo* tempogral,moEffectState* parentstate)
 	updateFlowVelocity();
 
 
-	DrawTracker();
+	//DrawTracker();
 
-	if ( NoMotionActivity.Duration()<100 ) {
-	    inInteractionMode = true;
 
-        pressure = 0.9;
-        show_pen = true;
+	//CODIGO PARA EL LASER!!!!
+	if (m_bTrackerInit ) {/*
+        if ( NoMotionActivity.Duration()<100 ) {
+            inInteractionMode = true;
 
-        penX = m_TrackerBarycenter.X()*canvasWidth;
-        if(penX==0.0) penX0 = penX;
-        penX = momin(penX, canvasWidth - canvas_margin);
-        penX = momax(penX, canvas_margin);
+            pressure = 0.9;
+            show_pen = true;
 
-        penY = m_TrackerBarycenter.Y()*canvasHeight;
-        if(penY==0.0) penY0 = penY;
-        penY = momin(penY, canvasHeight - canvas_margin);
-        penY = momax(penY, canvas_margin);
-	} else {
-	    pressure = (float)min_pressure / (float)max_pressure;
-   	    inInteractionMode = false;
+            penX = m_TrackerBarycenter.X()*canvasWidth;
+            if(penX==0.0) penX0 = penX;
+            penX = momin(penX, canvasWidth - canvas_margin);
+            penX = momax(penX, canvas_margin);
+
+            penY = m_TrackerBarycenter.Y()*canvasHeight;
+            if(penY==0.0) penY0 = penY;
+            penY = momin(penY, canvasHeight - canvas_margin);
+            penY = momax(penY, canvas_margin);
+        } else {
+            pressure = (float)min_pressure / (float)max_pressure;
+            inInteractionMode = false;
+        }*/
 	}
 
     if (pressure <= (float)min_pressure / (float)max_pressure) drawing = false;
@@ -291,6 +296,7 @@ void moEffectLiveDrawing2::Interaction( moIODeviceManager *IODeviceManager ) {
 						penX = (float) IODeviceManager->IODevices().Get(did)->GetValue(cid, nval - 1);
 						penX = momin(penX, canvasWidth - canvas_margin);
 						penX = momax(penX, canvas_margin);
+						//MODebug2->Push(IntToStr(penX));
 					}
 					tabletDetected = true;
 				}
@@ -567,7 +573,7 @@ void moEffectLiveDrawing2::Interaction( moIODeviceManager *IODeviceManager ) {
 	}
 
 	if (!tabletDetected)
-	{/*
+	{
 		if (leftClicked)
 		{
 			// Cuando no hay una tableta disponible, la "presión" queda determinada por la velocidad del mouse.
@@ -587,7 +593,7 @@ void moEffectLiveDrawing2::Interaction( moIODeviceManager *IODeviceManager ) {
 			pressure = momax(pressure, (float)min_pressure / (float)max_pressure);
 		}
 		else pressure = (float)min_pressure / (float)max_pressure;
-		*/
+
 	}
 
 /*
@@ -685,7 +691,7 @@ void moEffectLiveDrawing2::initShaders()
     moText shader_fn = m_Config[moR(LIVEDRAW2_SHADERS)].GetData()->Text();
 	if (shader_fn != moText(""))
 	{
-		MODebug->Push("Loading livedrawing shader...");
+		MODebug2->Push("Loading livedrawing shader...");
 		moShaderGLSL* pglsl;
 		line_shader = m_pResourceManager->GetShaderMan()->AddShader(shader_fn);
 		pglsl = (moShaderGLSL*)m_pResourceManager->GetShaderMan()->GetShader(line_shader);
@@ -1196,12 +1202,27 @@ void Gesture::AddPoly()
 void Gesture::RenderPolygons()
 {
 	Poly2f* p = polygons;
+	int texw = 1;
+	int texh = 1;
 
-	glBindTexture(GL_TEXTURE_2D, datatexture->GetGLId( &(state->tempo), 1, NULL ) );
-	moTexture* pTexture = (moTexture*) datatexture->Pointer();
-	int texw = pTexture->GetWidth();
-	int texh = pTexture->GetHeight();
-	float icof = 0.0;
+	if (datatexture!=NULL) {
+
+	    moTexture* pTexture = (moTexture*) datatexture->Pointer();
+	    if (pTexture!=NULL) {
+            glEnable(GL_TEXTURE_2D);
+            glBindTexture(GL_TEXTURE_2D, datatexture->GetGLId( &(state->tempo), 1, NULL ) );
+            texw = pTexture->GetWidth();
+            texh = pTexture->GetHeight();
+	    } else {
+            glDisable(GL_TEXTURE_2D);
+            glBindTexture(GL_TEXTURE_2D, 0 );
+        }
+	} else {
+	    glDisable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, 0 );
+    }
+
+    float icof = 0.0;
 
 	if (line_shader != NULL)
 	{

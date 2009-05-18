@@ -66,6 +66,31 @@ void moMidiFactory::Destroy(moIODevice* fx) {
 //========================
 
 
+		moMidiData::moMidiData() {
+		    	m_Type = MOMIDI_ROTARY;
+                m_Channel = 0;
+                m_CC = 0;
+                m_Val = 0;
+		}
+
+		moMidiData::~moMidiData() {
+
+        }
+
+moMidiData& moMidiData::operator =( const moMidiData& mididata)
+{
+	m_Type = mididata.m_Type;
+	m_Channel = mididata.m_Channel;
+	m_CC = mididata.m_CC;
+	m_Val = mididata.m_Val;
+    return *this;
+}
+
+void
+moMidiData::Copy( const moMidiData& mididata ) {
+    (*this) = mididata;
+}
+
 moMidiDevice::moMidiDevice() {
 	SysXFlag = 0;
 	m_DeviceId = -1;
@@ -414,14 +439,20 @@ moMidiDevice::Init( moText devicetext ) {
 void
 moMidiDevice::NewData( moMidiData p_mididata ) {
 
-	m_lock.Lock();
-	if (m_DataMessage.Count()>127) m_DataMessage.Empty();
-	p_mididata.m_CC = 0;
-	//m_MidiDatas.Add(p_mididata);
+	//m_lock.Lock();
+	/*if (m_DataMessage.Count()>127) m_DataMessage.Empty();
+	//p_mididata.m_CC = 0;
 	moData pData;
 	pData.SetInt( p_mididata.m_Val );
 	m_DataMessage.Add( pData );
-	m_lock.Unlock();
+	*/
+
+	if (m_MidiDatas.Count()>127) m_MidiDatas.Empty();
+	m_MidiDatas.Add(p_mididata);
+
+
+
+	//m_lock.Unlock();
 
 
 }
@@ -433,20 +464,25 @@ moMidiDevice::Update(moEventList *Events) {
 	moMidiData	mididata;
 
 	//m_lock.Lock();
-	/*
+
+
 	for( i=0; i < m_MidiDatas.Count(); i++ ) {
 
 		mididata = m_MidiDatas.Get( i );
 
-		//MODebug2->Push(moText("MIDI Data CC:") + IntToStr(mididata.m_CC) + moText(" val:") + IntToStr(mididata.m_Val) );
+		MODebug2->Push(moText("MIDI Data CC:") + IntToStr(mididata.m_CC) + moText(" val:") + IntToStr(mididata.m_Val) );
 
-		//Events->Add( MO_IODEVICE_MIDI, (MOint)(mididata.m_Type), mididata.m_Channel, mididata.m_CC, mididata.m_Val );
+		Events->Add( MO_IODEVICE_MIDI, (MOint)(mididata.m_Type), mididata.m_Channel, mididata.m_CC, mididata.m_Val );
 
 	}
-	*/
-	MODebug2->Push(moText("MIDI n:") + IntToStr(m_DataMessage.Count()) );
+	m_MidiDatas.Empty();
+
+
+	//mididata = m_MidiDatas.Get( m_MidiDatas.Count()-1 );
+	//moData pData = m_DataMessage.Get(m_DataMessage.Count()-1);
+	//MODebug2->Push(moText("MIDI n:") + IntToStr(m_DataMessage.Count()) + moText(" code:") + IntToStr(pData.Int()) );
     //m_DataMessage.Empty();
-	//m_MidiDatas.Empty();
+
 	//m_lock.Unlock();
 
 }
@@ -481,6 +517,8 @@ moMidi::Init() {
 		MODebug2->Error(text);
 		return false;
 	}
+
+	moMoldeoObject::Init();
 
 	moDefineParamIndex( MIDI_DEVICE, moText("mididevice") );
 
@@ -636,6 +674,7 @@ moMidi::Update(moEventList *Events) {
 	}
 
 	//m_Codes
+
 	actual = Events->First;
 	//recorremos todos los events y parseamos el resultado
 	//borrando aquellos que ya usamos
@@ -645,17 +684,18 @@ moMidi::Update(moEventList *Events) {
 		if(actual->deviceid == MO_IODEVICE_MIDI) {
 
 			moMidiDataCode pcode = m_Codes.Get( actual->reservedvalue1 );
-			tempval = actual->reservedvalue2;
+			//tempval = actual->reservedvalue2;
 			//calculamos la diferencia y modificamos el valor del evento...
-			actual->reservedvalue2 = (tempval - pcode.mididata.m_Val) * 8;
+			//actual->reservedvalue2 = (tempval - pcode.mididata.m_Val) * 8;
 			//actual->reservedvalue2 = ( tempval - 64)*4;
 			//guardamos el valor actual para calcular la proxima
-			pcode.mididata.m_Val = tempval;
+			pcode.mididata.m_Val = actual->reservedvalue2;
 			m_Codes.Set( actual->reservedvalue1, pcode );
 
 			actual = actual->next;
 		} else actual = actual->next;//no es nuestro pasamos al next
 	}
+
 
 
 }

@@ -126,6 +126,7 @@ moKeyboard::Init() {
 		return false;
 	}
 
+    moMoldeoObject::Init();
 
 
 	//levantamos los codes definidos

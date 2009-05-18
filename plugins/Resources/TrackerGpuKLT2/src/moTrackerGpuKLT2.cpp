@@ -390,8 +390,8 @@ void moTrackerGpuKLT2System::NewData( moVideoSample* p_pVideoSample )
 
     } // end for (i)
 
-    if (sumN>0.0f) m_TrackerSystemData.SetBaryCenter( sumX/sumN, sumY/sumN );
-    else  m_TrackerSystemData.SetBaryCenter( 0, 0 );
+    if (sumN>0.0f) m_TrackerSystemData.SetBarycenter( sumX/sumN, sumY/sumN );
+    else  m_TrackerSystemData.SetBarycenter( 0, 0 );
     m_TrackerSystemData.SetValidFeatures( (int)sumN );
 }
 

@@ -9,6 +9,8 @@ moDirectorConsole::moDirectorConsole() {
 
 	m_pDirectorCore = NULL;
 	m_timerticks = 0;
+	previewreset = false;
+	previewreset2 = false;
 
 }
 
@@ -30,7 +32,7 @@ moDirectorConsole::SetDirectorCore( moDirectorCore* p_pDirectorCore ) {
 	m_pDirectorCore = p_pDirectorCore;
 	SetNextActionHandler((moIDirectorActions*)m_pDirectorCore);
     m_timer.SetOwner( this, TICKS_ID);
-	m_timer.Start(10);
+	m_timer.Start(5);
 }
 
 moMoldeoObject*
@@ -179,9 +181,24 @@ moDirectorConsole::OpenProject( moProjectDescriptor p_projectdescriptor )  {//lo
 
         }
 
+        previewreset = false;
 
 
 		//m_timer.Start();
+		moText mode = m_Config[moR(CONSOLE_OUTPUTMODE)][MO_SELECTED][0].Text();
+
+		if (mode==moText("AUTOPLAY")) {
+            this->Play();
+            m_pDirectorCore->ProjectPreview();
+            //primera vez pone al tamaño del output definido en el config
+            m_pDirectorCore->FocusOutput();
+            //dos veces para posicionar la ventana en el segundo display
+            m_pDirectorCore->FocusOutput();
+
+            previewreset = true;
+        }
+
+
         return MO_DIRECTOR_STATUS_OK;
 	} else {
         LogError(moText("Couldn't init Console with current project"));
@@ -1421,6 +1438,22 @@ moDirectorStatus moDirectorConsole::ConsoleLoop() {
             plog = MODebug2->Pop();
             if (plog.Trim()!=moText("")) Log( plog );
         }
+
+        if (previewreset2 && ( moGetTicks() % 1000) == 0 ) {
+            m_pDirectorCore->ProjectPreview();
+            //wxMessageBox("preview reset 2");
+            moStopTimer();
+            moStartTimer();
+            previewreset2 = false;
+        }
+		if ( previewreset && ( moGetTicks() % 1000) == 0) {
+            m_pDirectorCore->ProjectPreview();
+            //wxMessageBox("preview reset 1");
+            previewreset = false;
+            previewreset2 = true;
+		}
+
+
 
     } else {
 

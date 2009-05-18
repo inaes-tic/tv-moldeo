@@ -176,7 +176,7 @@ void moShaderGLSL::linkProgram()
     m_VertErrorCode = progLinkSuccess;
     m_FragErrorCode = progLinkSuccess;
     if (!progLinkSuccess)
-		if (MODebug != NULL) MODebug->Push(moText("Shader program could not be linked"));
+		if (MODebug2 != NULL) MODebug2->Error(moText("Shader program could not be linked"));
 }
 
 void moShaderGLSL::printInfoLog(GLhandleARB obj)
@@ -192,7 +192,7 @@ void moShaderGLSL::printInfoLog(GLhandleARB obj)
         infoLog = (char *)malloc(infologLength);
         glGetInfoLogARB(obj, infologLength, &charsWritten, infoLog);
 		moText msg = moText(infoLog);
-        if (MODebug != NULL) MODebug->Push(msg);
+        if (MODebug2 != NULL) MODebug2->Push(msg);
         free(infoLog);
     }
 }

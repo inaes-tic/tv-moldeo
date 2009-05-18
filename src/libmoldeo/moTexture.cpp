@@ -104,7 +104,9 @@ MOboolean moTexture::Finish()
 
 MOboolean moTexture::BuildEmpty(MOuint p_width, MOuint p_height)
 {
-	glGenTextures(1, &m_glid);
+	if (m_glid<=0) {
+	    glGenTextures(1, &m_glid);
+	}
 	CalculateSize(p_width, p_height);
 	return Build();
 }
@@ -177,12 +179,12 @@ MOboolean moTexture::BuildFromFile(moText p_filename)
 				break;
 			case 24: // 24 bits
 				m_param.internal_format = GL_RGB;
-				if (FreeImage_GetBlueMask(m_pImage) == 0x000000FF) p_format = GL_BGR;
+				if (FreeImage_GetBlueMask(m_pImage) != 0x000000FF) p_format = GL_BGR;
 				else p_format = GL_RGB;
 				break;
 			case 32: // 32 bits
 				m_param.internal_format = GL_RGBA;
-				if (FreeImage_GetBlueMask(m_pImage) == 0x000000FF) p_format = GL_BGRA_EXT;
+				if (FreeImage_GetBlueMask(m_pImage) != 0x000000FF) p_format = GL_BGRA_EXT;
 				else p_format = GL_RGBA;
 				break;
 			default:
@@ -562,9 +564,11 @@ moText  moTexture::CreateThumbnail( moText p_bufferformat, int w, int h, moText 
 
     FILE* fp;
 
+/*
     fp = fopen( thumbnailfilename ,"wb" );
     fwrite( tempbuffer, sizeof(BYTE), GetWidth() * GetHeight() * 3 , fp );
     fclose(fp);
+    */
 
     //return moText("");
 
@@ -572,7 +576,7 @@ moText  moTexture::CreateThumbnail( moText p_bufferformat, int w, int h, moText 
     int pitch = 3 * GetWidth();
 
 
-    fbitmap = FreeImage_ConvertFromRawBits( (BYTE*)tempbuffer, GetWidth(), GetHeight(), pitch, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK, false );
+    fbitmap = FreeImage_ConvertFromRawBits( (BYTE*)tempbuffer, GetWidth(), GetHeight(), pitch, bpp, 0x0000FF, 0x00FF00, 0xFF0000, false );
 
     //unsigned width = FreeImage_GetWidth(fbitmap);
     //unsigned height = FreeImage_GetHeight(fbitmap);
@@ -581,9 +585,10 @@ moText  moTexture::CreateThumbnail( moText p_bufferformat, int w, int h, moText 
     //BYTE *bits = (BYTE*)FreeImage_GetBits(fbitmap);
 /*
     FILE* fp = fopen( thumbnailfilename ,"wb" );
-    fwrite( tempbuffer, sizeof(BYTE), m_width * m_height * 4 , fp );
+    fwrite( FreeImage_, sizeof(BYTE), m_width * m_height * 3 , fp );
     fclose(fp);
     */
+
     //FIBITMAP* fbitmap2 = NULL;
     fbitmap = FreeImage_Rescale( fbitmap, w, h, FILTER_BICUBIC );
 

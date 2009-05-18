@@ -2074,44 +2074,11 @@
 
 1237848533 d:\_data\proyectos\sinestesia\svnsourceforge\trunk\0.7\contrib\src\wxmoldeocontrols\wxmorotaryctrl.h
 
-1240075297 source:d:\_data\proyectos\sinestesia\svnsourceforge\trunk\0.7\contrib\src\wxmoldeocontrols\wxmoldeocontrolstestdialog.cpp
-	"wxMoldeoControlsTestDialog.h"
-	<wx/settings.h>
-	<wx/font.h>
-	<wx/intl.h>
-	<wx/string.h>
-	<wx/glcanvas.h>
-
-1193991318 source:d:\_data\proyectos\sinestesia\svnsourceforge\trunk\0.7\contrib\src\wxmoldeocontrols\resource.rc
-	"wx/msw/wx.rc"
-
-1221470938 d:\_data\proyectos\sinestesia\svnsourceforge\externlibs\wxwidgets\include\wx\msw\wx.rc
-	<winresrc.h>
-	<windows.h>
-	"wx/msw/wince/wince.rc"
-	"wx/msw/rcdefs.h"
-
-1221470938 d:\_data\proyectos\sinestesia\svnsourceforge\externlibs\wxwidgets\include\wx\msw\wince\wince.rc
-	<commctrl.h>
-	"wx/msw/wince/smartphone.rc"
-
-1221470938 d:\_data\proyectos\sinestesia\svnsourceforge\externlibs\wxwidgets\include\wx\msw\wince\smartphone.rc
-	<aygshell.h>
-	"wx/msw/wince/resources.h"
-
-1221470938 d:\_data\proyectos\sinestesia\svnsourceforge\externlibs\wxwidgets\include\wx\msw\wince\resources.h
-
-1221470936 d:\_data\proyectos\sinestesia\svnsourceforge\externlibs\wxwidgets\include\wx\msw\rcdefs.h
-
 1237522111 d:\_data\proyectos\sinestesia\svnsourceforge\trunk\0.7\contrib\src\wxmoldeocontrols\wxmotimelinerulerctrl.h
 	"wx/timer.h"
 
 1237532243 d:\_data\proyectos\sinestesia\svnsourceforge\trunk\0.7\contrib\src\wxmoldeocontrols\wxmotimelinebandctrl.h
 	"wx/timer.h"
-
-1221470894 d:\_data\proyectos\sinestesia\svnsourceforge\externlibs\wxwidgets\include\wx\settings.h
-	"wx/colour.h"
-	"wx/font.h"
 
 1238709903 d:\_data\proyectos\sinestesia\svnsourceforge\trunk\0.7\contrib\src\wxmoldeocontrols\wxmoldeoobjectctrl.h
 	"wx/timer.h"
@@ -2119,15 +2086,6 @@
 1238825343 d:\_data\proyectos\sinestesia\svnsourceforge\trunk\0.7\contrib\src\wxmoldeocontrols\wxmoldeopinctrl.h
 	"wx/timer.h"
 	"wx/dnd.h"
-
-1238737549 d:\_data\proyectos\sinestesia\svnsourceforge\trunk\0.7\contrib\src\wxmoldeocontrols\wxmoldeolinectrl.h
-	"wx/timer.h"
-	"wx/bitmap.h"
-
-1238717669 d:\_data\proyectos\sinestesia\svnsourceforge\trunk\0.7\contrib\src\wxmoldeocontrols\wxmoldeoobjectcanvas.h
-	"wx/timer.h"
-	"wx/scrolwin.h"
-	"wxMoldeoLineCtrl.h"
 
 1221470894 d:\_data\proyectos\sinestesia\svnsourceforge\externlibs\wxwidgets\include\wx\dnd.h
 	"wx/defs.h"
@@ -2292,6 +2250,27 @@
 	<os2.h>
 	<pmstddlg.h>
 
+1238737549 d:\_data\proyectos\sinestesia\svnsourceforge\trunk\0.7\contrib\src\wxmoldeocontrols\wxmoldeolinectrl.h
+	"wx/timer.h"
+	"wx/bitmap.h"
+
+1238717669 d:\_data\proyectos\sinestesia\svnsourceforge\trunk\0.7\contrib\src\wxmoldeocontrols\wxmoldeoobjectcanvas.h
+	"wx/timer.h"
+	"wx/scrolwin.h"
+	"wxMoldeoLineCtrl.h"
+
+1240075297 source:d:\_data\proyectos\sinestesia\svnsourceforge\trunk\0.7\contrib\src\wxmoldeocontrols\wxmoldeocontrolstestdialog.cpp
+	"wxMoldeoControlsTestDialog.h"
+	<wx/settings.h>
+	<wx/font.h>
+	<wx/intl.h>
+	<wx/string.h>
+	<wx/glcanvas.h>
+
+1221470894 d:\_data\proyectos\sinestesia\svnsourceforge\externlibs\wxwidgets\include\wx\settings.h
+	"wx/colour.h"
+	"wx/font.h"
+
 1221470894 d:\_data\proyectos\sinestesia\svnsourceforge\externlibs\wxwidgets\include\wx\glcanvas.h
 	"wx/defs.h"
 	"wx/msw/glcanvas.h"
@@ -2357,4 +2336,25 @@
 1221470976 d:\_data\proyectos\sinestesia\svnsourceforge\externlibs\wxwidgets\include\wx\cocoa\glcanvas.h
 	"wx/window.h"
 	<OpenGL/gl.h>
+
+1193991318 source:d:\_data\proyectos\sinestesia\svnsourceforge\trunk\0.7\contrib\src\wxmoldeocontrols\resource.rc
+	"wx/msw/wx.rc"
+
+1221470938 d:\_data\proyectos\sinestesia\svnsourceforge\externlibs\wxwidgets\include\wx\msw\wx.rc
+	<winresrc.h>
+	<windows.h>
+	"wx/msw/wince/wince.rc"
+	"wx/msw/rcdefs.h"
+
+1221470938 d:\_data\proyectos\sinestesia\svnsourceforge\externlibs\wxwidgets\include\wx\msw\wince\wince.rc
+	<commctrl.h>
+	"wx/msw/wince/smartphone.rc"
+
+1221470938 d:\_data\proyectos\sinestesia\svnsourceforge\externlibs\wxwidgets\include\wx\msw\wince\smartphone.rc
+	<aygshell.h>
+	"wx/msw/wince/resources.h"
+
+1221470938 d:\_data\proyectos\sinestesia\svnsourceforge\externlibs\wxwidgets\include\wx\msw\wince\resources.h
+
+1221470936 d:\_data\proyectos\sinestesia\svnsourceforge\externlibs\wxwidgets\include\wx\msw\rcdefs.h
 

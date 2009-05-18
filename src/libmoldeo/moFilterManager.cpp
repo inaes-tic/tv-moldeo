@@ -106,7 +106,7 @@ void moTrackerSystemData::ResetMatrix() {
         m_AccelerationMatrix[i] = 0;
     }
 
-    for(int i=0; i<32;i++) {
+    for(int i=0; i<36;i++) {
         m_CircularMotionMatrix[i] = 0;
         m_CircularPositionMatrix[i] = 0;
     }
@@ -147,19 +147,19 @@ int moTrackerSystemData::PositionToZoneC( float x, float y )  {
         } else if( PosRePos.X() < 0 ) {
             Teta = atan( PosRePos.Y() / PosRePos.X() ) + moMathf::PI;
         } else if (PosRePos.X() == 0 && PosRePos.Y() > 0) {
-            Teta = moMathf::PI / 2;
+            Teta = moMathf::PI / 2.0;
         } else if (PosRePos.X() == 0 && PosRePos.Y() < 0) {
-            Teta = 3 * moMathf::PI / 2;
+            Teta = 3.0 * moMathf::PI / 2.0;
         }
 
         Radius = PosRePos.Length();
 
         MaxCuad = ( m_Max - m_Min ) ;
-        MaxRadius = fabs( MaxCuad.Length() ); ///&????
+        MaxRadius = fabs( MaxCuad.Length() / 2.0); ///&????
         ( MaxRadius > 0 ) ? MaxRadius = MaxRadius : MaxRadius = 1.5; ///sqrt(2)
 
-        float i = floor( Teta / moMathf::TWO_PI * (float) 11.999999 );
-        float j = floor( Radius / MaxRadius * (float) 2.999999 );
+        float i = floor( (Teta / moMathf::TWO_PI ) * (float) 11.999999 );
+        float j = floor( ( Radius / MaxRadius ) * (float) 2.999999 );
 
         return ( (int)i + ((int)j)*12 );
 }
@@ -179,11 +179,11 @@ moVector2f moTrackerSystemData::ZoneToPositionC( int zone ) {
         PosRePos = moVector2f( m_Barycenter.X(), m_Barycenter.Y() );
 
         MaxCuad = ( m_Max - m_Min ) ;
-        MaxRadius = fabs( MaxCuad.Length() ); ///&????
+        MaxRadius = fabs( MaxCuad.Length() / 2.0 ); ///&????
         ( MaxRadius > 0 ) ? MaxRadius = MaxRadius : MaxRadius = 1.5; ///sqrt(2)
 
-        Teta = ( moMathf::TWO_PI * i ) / 12.0;
-        Radius = ( MaxRadius * j ) / 3.0;
+        Teta = ( moMathf::TWO_PI * i ) / 12.0  - moMathf::TWO_PI / 24.0;
+        Radius = ( MaxRadius * (j+1) ) / 3.0;
 
         float x,y;
 
@@ -274,6 +274,15 @@ int moTrackerSystemData::GetPositionMatrixC( float x, float y ) {
     return m_CircularPositionMatrix[PositionToZoneC(x,y)];
 }
 
+int moTrackerSystemData::GetPositionMatrixC( moVector2f pos ) {
+    return m_CircularPositionMatrix[PositionToZoneC(pos.X(),pos.Y())];
+}
+
+int moTrackerSystemData::GetPositionMatrixC( int zone ) {
+    return m_CircularPositionMatrix[zone];
+}
+
+
 void moTrackerSystemData::SetMotionMatrixC( float x, float y, int nfeatures ) {
     m_CircularMotionMatrix[PositionToZoneC(x,y)]+=1;
 }
@@ -282,6 +291,12 @@ int moTrackerSystemData::GetMotionMatrixC( float x, float y ) {
     return m_CircularMotionMatrix[PositionToZoneC(x,y)];
 }
 
+int moTrackerSystemData::GetMotionMatrixC( moVector2f pos ) {
+    return m_CircularMotionMatrix[PositionToZoneC(pos.X(),pos.Y())];
+}
+int moTrackerSystemData::GetMotionMatrixC( int zone ) {
+    return m_CircularMotionMatrix[zone];
+}
 
 /*!
 \fn moTrackerFeature::moTrackerFeature()

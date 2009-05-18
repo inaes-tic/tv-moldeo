@@ -78,6 +78,12 @@ enum moEncoderType {
 
 class moMidiData {
 	public:
+		moMidiData();
+		virtual ~moMidiData();
+
+		moMidiData& operator = ( const moMidiData& mididata);
+		void Copy( const moMidiData& mididata );
+
 
 		moEncoderType	m_Type;
 		MOint	m_Channel;

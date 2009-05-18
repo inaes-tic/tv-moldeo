@@ -280,6 +280,15 @@ class LIBMOLDEO_API moConsole : public moMoldeoObject {
         int LDisable(moLuaVirtualMachine& vm);
         int LEnable(moLuaVirtualMachine& vm);
 
+        int LSetParam(moLuaVirtualMachine& vm);
+        int LGetParam(moLuaVirtualMachine& vm);
+
+        int LSetValue(moLuaVirtualMachine& vm);
+        int LGetValue(moLuaVirtualMachine& vm);
+
+        int LSetState(moLuaVirtualMachine& vm);
+        int LGetState(moLuaVirtualMachine& vm);
+
         int GetObjectId( moText p_objectlabelname );
 
     protected:

@@ -2,7 +2,7 @@
 <CodeBlocks_workspace_file>
 	<Workspace title="Moldeo">
 		<Project filename="..\..\plugins\IODevices\Serial\serial.cbp" />
-		<Project filename="..\..\plugins\IODevices\Tablet\tablet.cbp" />
+		<Project filename="..\..\plugins\IODevices\Tablet\tablet.cbp" active="1" />
 		<Project filename="..\..\plugins\IODevices\TabletAsync\tabletasync.cbp" />
 		<Project filename="..\..\plugins\IODevices\Midi\midi.cbp" />
 		<Project filename="..\..\plugins\IODevices\Keyboard\keyboard.cbp" />
