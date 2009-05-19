@@ -482,7 +482,7 @@ class moEffectParticlesSimple : public moEffect
         //special for script
         moTexture* pTextureDest;
         moTexture* pSubSample;
-        BYTE* samplebuffer;
+        MObyte* samplebuffer;
 
         int glidori;
         int glid;
