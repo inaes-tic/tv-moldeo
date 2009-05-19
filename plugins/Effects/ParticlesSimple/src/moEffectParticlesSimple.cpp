@@ -433,7 +433,7 @@ void moEffectParticlesSimple::Shot( moText source ) {
                     pSubSample = m_pResourceManager->GetTextureMan()->GetTexture(idti);
                     if (pSubSample) {
                         glid = pSubSample->GetGLId();
-                        samplebuffer = new BYTE [ pSubSample->GetWidth() * pSubSample->GetHeight() * 3];
+                        samplebuffer = new MObyte [ pSubSample->GetWidth() * pSubSample->GetHeight() * 3];
 
                         pSubSample->GetBuffer( samplebuffer, GL_RGB, GL_UNSIGNED_BYTE );
 
