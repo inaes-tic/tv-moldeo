@@ -621,10 +621,10 @@ void moDirectorFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void moDirectorFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxString msg;
-    msg.Printf( _T("This is the About dialog of the minimal sample.\n")
+    msg.Printf( _T("This is the About dialog of Moldeo Director.\n")
                 _T("Welcome to %s"), wxVERSION_STRING);
 
-    wxMessageBox(msg, _T("About Minimal"), wxOK | wxICON_INFORMATION, this);
+    wxMessageBox(msg, _T("About Moldeo Director"), wxOK | wxICON_INFORMATION, this);
 }
 
 
