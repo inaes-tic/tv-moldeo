@@ -100,6 +100,7 @@ bool moDirectorApp::OnInit()
    cout << "Setting Top Window..." << endl;
    SetTopWindow(m_pDirectorFrame);
 
+	m_pDirectorFrame->Maximize();
 	m_pDirectorFrame->Init();
     cout << "Success!!! rock and roll!!" << endl;
 
