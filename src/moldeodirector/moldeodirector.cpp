@@ -22,6 +22,11 @@
 // static object for many reasons) and also implements the accessor function
 // wxGetApp() which will return the reference of the right type(i.e. MyApp and
 // not wxApp)
+//(*AppHeaders
+#include <wx/image.h>
+#include <wx/config.h>
+//*)
+
 IMPLEMENT_APP(moDirectorApp)
 
 // ============================================================================
@@ -35,12 +40,40 @@ IMPLEMENT_APP(moDirectorApp)
 // 'Main program' equivalent: the program execution "starts" here
 bool moDirectorApp::OnInit()
 {
+	//(*AppInitialize
+	bool wxsOK = true;
+	//*)
+	wxInitAllImageHandlers();
+//  Check next line: Gustavo 05/20/2009
+//	return wxsOK;
+
 
 	moDirectorCore*			m_pDirectorCore = NULL;
 	moDirectorFrame*		m_pDirectorFrame = NULL;
 
 	SetAppName("Moldeo Director");
 
+// Check only one instance running
+
+	const wxString name = wxString::Format(wxT("MoldeoDirector-%s"),
+            wxGetUserId().c_str());
+    m_checker = new wxSingleInstanceChecker(name);
+    if (m_checker->IsAnotherRunning())
+        {
+            wxLogError(_("Program already running, aborting."));
+            return false;
+        }
+
+
+
+    // Check configuration file
+    /*
+    wxString str;
+    wxFileConfig configuration(wxT("MoldeoDirector"),wxT("Moldeo"),wxT(wxGetCwd()));
+
+    configuration.Read(wxT("General/File1"), &str);
+    wxMessageBox(wxT(str),wxT("Moldeo Director"));
+    */
     // created initially)
    cout << "Image Handlers..." << endl;
 #if wxUSE_SYSTEM_OPTIONS

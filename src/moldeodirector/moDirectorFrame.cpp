@@ -4,6 +4,7 @@
 #include "moNewEffectDialog.h"
 
 #include <wx/display.h>
+#include "wx/tipdlg.h"
 
 DEFINE_EVENT_TYPE(wxEVT_MY_EVENT)
 
@@ -47,9 +48,12 @@ BEGIN_EVENT_TABLE(moDirectorFrame, wxFrame)
 	EVT_MENU( MODIRECTOR_QUIT,  moDirectorFrame::OnQuit )
     EVT_MENU( MODIRECTOR_ABOUT, moDirectorFrame::OnAbout )
 
+    EVT_MENU( MODIRECTOR_PREFERENCES, moDirectorFrame::OnEditPreferences )
+
 	EVT_MENU( MODIRECTOR_PROJECT_PREVIEW, moDirectorFrame::OnProjectPreview )
 	EVT_MENU( MODIRECTOR_PROJECT_PREVIEW_FULLSCREEN, moDirectorFrame::OnProjectPreviewFullscreen )
 	EVT_MENU( MODIRECTOR_FULLSCREEN, moDirectorFrame::OnFullscreen )
+	EVT_MENU( MODIRECTOR_LOG, moDirectorFrame::OnViewLog )
 	EVT_MENU( MODIRECTOR_CONFIGURATION, moDirectorFrame::OnConfiguration )
 
 	EVT_KEY_DOWN( moDirectorFrame::OnKeyDown )
@@ -85,7 +89,6 @@ moDirectorFrame::moDirectorFrame(const wxString& title)
 
    //wxMessageBox(thisDisplay.GetName() + clientareastr);
    //wxMessageBox(theOtherDisplay.GetName() + clientareastr2 );
-
     wxFrame::Create(NULL, wxID_ANY, title, wxPoint(0,0), wxSize(1024,768));
 
     m_cForeground = wxColour(255,255,255);
@@ -133,12 +136,15 @@ moDirectorFrame::moDirectorFrame(const wxString& title)
 	fileMenu->Append(MODIRECTOR_QUIT, _T("E&xit\tAlt-X"), _T("Quit this program"));
 	//EDIT
 	wxMenu *editMenu = new wxMenu;
-
+    editMenu->AppendSeparator();
+    editMenu->Append( MODIRECTOR_PREFERENCES, _T("Prefere&nces"), _T("Application preferences"));
 	//VIEW
 	wxMenu *viewMenu = new wxMenu;
 	viewMenu->Append( MODIRECTOR_FULLSCREEN, _T("&Interface Fullscreen\tAlt-F11"), _T("Interface Fullscreen"));
 	viewMenu->Append( MODIRECTOR_PROJECT_PREVIEW, _T("&Preview\tAlt-P"), _T("View frame preview"));
 	viewMenu->Append( MODIRECTOR_PROJECT_PREVIEW_FULLSCREEN, _T("&Toggle Preview Fullscreen\tAlt-Return"), _T("Frame preview fullscreen"));
+    viewMenu->AppendSeparator();
+    viewMenu->Append( MODIRECTOR_LOG, _T("View &Log\tAlt-L"), _T("View log window"));
 
 	//OPTIONS
 	wxMenu *optionsMenu = new wxMenu;
@@ -188,8 +194,6 @@ moDirectorFrame::moDirectorFrame(const wxString& title)
 	FrameManager.AddPane( m_pInspectorNotebook, wxAuiPaneInfo().Name(wxT("inspector")).CenterPane().Hide().Caption(wxT("Inspector")).CaptionVisible().Floatable().Movable().Dockable());
 	FrameManager.AddPane( m_pLayersPanelCtrl,   wxAuiPaneInfo().Name(wxT("layers")).CenterPane().Hide().Caption(wxT("Layers")).CaptionVisible().Floatable().Movable().Dockable());
 	FrameManager.AddPane( m_pLogTextCtrl,       wxAuiPaneInfo().Name(wxT("log")).CenterPane().Hide().Caption(wxT("Log")).CaptionVisible().Floatable().Movable().Dockable());
-
-
 
 	FrameManager.AddPane( m_pGUINotebook, wxAuiPaneInfo().Name(wxT("preview")).Caption(wxT("Console")).CaptionVisible().Floatable().Movable().Dockable().MaximizeButton().MinimizeButton().Resizable(true));
 
@@ -374,7 +378,7 @@ moDirectorFrame::CreateLayerControls() {
 void
 moDirectorFrame::CreateInspector() {
 
-	m_pInspectorNotebook = new wxAuiNotebook( this, wxID_ANY, wxPoint(0,0), wxSize(300,200), wxBORDER_NONE | wxAUI_NB_TAB_SPLIT | wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_TAB_MOVE  );
+	m_pInspectorNotebook = new wxAuiNotebook( this, wxID_ANY, wxPoint(0,0), wxSize(300,300), wxBORDER_NONE | wxAUI_NB_TAB_SPLIT | wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_TAB_MOVE  );
 	m_pInspectorNotebook->SetForegroundColour(m_cForeground);
     m_pInspectorNotebook->SetBackgroundColour(m_cBackground);
 
@@ -930,6 +934,11 @@ moDirectorFrame::OnFullscreen( wxCommandEvent& event ) {
         ShowFullScreen( false);
     }
 
+}
+
+void
+moDirectorFrame::OnViewLog(wxCommandEvent& event) {
+    wxMessageBox(wxT("Selected View Log"),wxT("Moldeo Director"));
 }
 
 void
@@ -1499,4 +1508,17 @@ moDirectorFrame::LogError( moText p_message ) {
 
 	//wxMessageBox(w);
 
+}
+
+void
+moDirectorFrame::ShowTip() {
+    int s_index = rand() % 5;
+    wxMessageBox(wxT("Entro"),wxT("Moldeo Director"));
+    wxTipProvider *moTipProvider = wxCreateFileTipProvider(wxT("tips.txt"), s_index);
+    wxShowTip(this,moTipProvider,true);
+    delete moTipProvider;
+}
+
+void moDirectorFrame::OnEditPreferences(wxCommandEvent& event) {
+    wxMessageBox(wxT("Preferences - Functionality to be implemented"),wxT("Moldeo Director"));
 }

@@ -121,7 +121,7 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 	void OnClose(wxCloseEvent& event);
-
+    void OnEditPreferences(wxCommandEvent& event);
 
 	void OnNewEffect( wxCommandEvent& event );
 
@@ -133,6 +133,7 @@ public:
 	void OnProjectPreview( wxCommandEvent& event );
 	void OnProjectPreviewFullscreen( wxCommandEvent& event );
 	void OnFullscreen( wxCommandEvent& event );
+	void OnViewLog( wxCommandEvent& event );
 
 	void OnConfiguration( wxCommandEvent& event );
 
@@ -183,6 +184,9 @@ public:
 
 	void Log( moText p_message );
 	void LogError( moText p_message );
+
+//SHOW TIP
+    void ShowTip();
 
 private:
 
@@ -275,10 +279,13 @@ enum
 	MODIRECTOR_CLOSEALL = 9943,
 	MODIRECTOR_OPENMOB = 9944,
 
+    MODIRECTOR_PREFERENCES = 9960,
+
 	MODIRECTOR_PROJECT_PREVIEW = 9980,
 	MODIRECTOR_PROJECT_PREVIEW_FULLSCREEN = 9981,
 	MODIRECTOR_FULLSCREEN = 9982,
 	MODIRECTOR_CONFIGURATION = 9983,
+	MODIRECTOR_LOG = 9984,
 	MODIRECTOR_COMMAND = 9990
 
 };
