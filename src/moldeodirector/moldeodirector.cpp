@@ -25,6 +25,7 @@
 //(*AppHeaders
 #include <wx/image.h>
 #include <wx/config.h>
+
 //*)
 
 IMPLEMENT_APP(moDirectorApp)

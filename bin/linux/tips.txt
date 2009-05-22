@@ -1,0 +1,2 @@
+You can switch to Full Screen View by pressing ALT + ENTER
+You can test cameras by selecting the Interactive Cameras project

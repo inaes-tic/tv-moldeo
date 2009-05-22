@@ -231,11 +231,9 @@ moDirectorFrame::moDirectorFrame(const wxString& title)
 	FrameManager.Update();
 
     int s_index = rand() % 5;
-    wxMessageBox(wxT("Entro"),wxT("Moldeo Director"));
     wxTipProvider *moTipProvider = wxCreateFileTipProvider(wxT("tips.txt"), s_index);
     wxShowTip(this,moTipProvider,true);
     delete moTipProvider;
-
 
 }
 
