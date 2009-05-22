@@ -181,3 +181,7 @@ bool moDirectorApp::OnInit()
     return true;
 }
 
+int moDirectorApp::OnExit() {
+    delete m_checker;
+    return 0;
+}

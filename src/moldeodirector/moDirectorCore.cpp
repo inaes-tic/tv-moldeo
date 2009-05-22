@@ -58,6 +58,7 @@ moDirectorCore::Init() {
            	m_Config.GetParam(moText("installationpath")).GetValue(0).GetSubValue(0).SetText( m_ApplicationDescriptor.GetInstallationFullPath() );
            	if (m_Config.SaveConfig()!=MO_CONFIG_OK)
                 return false;
+
 	    } else return false;
 	}
 
@@ -71,6 +72,11 @@ moDirectorCore::Init() {
     moDefineParamIndex( CORE_SPLASHSCREEN, moText("splashscreen") );
     moDefineParamIndex( CORE_3DLOGO, moText("3dlogo") );
 
+/*
+    wxString file1;
+    m_Config.GetParam(moText("project1")).GetValue(0).GetSubValue(0).SetText( file1 );
+    wxMessageBox(wxT(file1),wxT("Moldeo Director"));
+*/
 	return true;
 }
 

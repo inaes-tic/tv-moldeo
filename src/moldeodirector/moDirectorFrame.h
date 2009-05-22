@@ -186,7 +186,7 @@ public:
 	void LogError( moText p_message );
 
 //SHOW TIP
-    void ShowTip();
+//    virtual void ShowTip();
 
 private:
 
