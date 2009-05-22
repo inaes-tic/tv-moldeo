@@ -230,6 +230,13 @@ moDirectorFrame::moDirectorFrame(const wxString& title)
 
 	FrameManager.Update();
 
+    int s_index = rand() % 5;
+    wxMessageBox(wxT("Entro"),wxT("Moldeo Director"));
+    wxTipProvider *moTipProvider = wxCreateFileTipProvider(wxT("tips.txt"), s_index);
+    wxShowTip(this,moTipProvider,true);
+    delete moTipProvider;
+
+
 }
 
 moDirectorFrame::~moDirectorFrame() {
@@ -1509,7 +1516,7 @@ moDirectorFrame::LogError( moText p_message ) {
 	//wxMessageBox(w);
 
 }
-
+/*
 void
 moDirectorFrame::ShowTip() {
     int s_index = rand() % 5;
@@ -1518,7 +1525,7 @@ moDirectorFrame::ShowTip() {
     wxShowTip(this,moTipProvider,true);
     delete moTipProvider;
 }
-
+*/
 void moDirectorFrame::OnEditPreferences(wxCommandEvent& event) {
     wxMessageBox(wxT("Preferences - Functionality to be implemented"),wxT("Moldeo Director"));
 }
