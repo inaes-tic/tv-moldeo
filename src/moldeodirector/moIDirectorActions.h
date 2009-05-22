@@ -35,6 +35,7 @@
 #define _MO_DIRECTORACTIONS_
 
 #include "moDirectorTypes.h"
+#include <wx/snglinst.h>
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -52,6 +53,7 @@ public:
     // initialization(doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
     virtual bool OnInit();
+    wxSingleInstanceChecker* m_checker;
 };
 
 DECLARE_APP(moDirectorApp)
