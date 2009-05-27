@@ -46,6 +46,7 @@ public:
 
     moPreEffectErase();
     virtual ~moPreEffectErase();
+	moConfigDefinition * GetDefinition( moConfigDefinition *p_configdefinition );
 
     MOboolean Init();
     void Draw(moTempo*, moEffectState* = NULL);

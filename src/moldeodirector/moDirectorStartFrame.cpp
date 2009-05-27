@@ -93,7 +93,7 @@ void moDirectorStartFrame::OnLinkClicked(wxHtmlLinkEvent& event) {
         return;
     }
 
-    if(href.IsSameAs(_T("http://moldeo.computaciongrafica.com/"))
+    if(href.IsSameAs(_T("http://www.moldeo.org/"))
     || href.StartsWith(_T("http")))
     {
         //wxTextDataObject *data = new wxTextDataObject(revInfo);
