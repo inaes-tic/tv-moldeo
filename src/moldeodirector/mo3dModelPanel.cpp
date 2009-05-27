@@ -38,9 +38,7 @@ mo3dModelPanel::~mo3dModelPanel()
 
 void
 mo3dModelPanel::Inspect( moValueDescriptor p_ValueDescriptor ) {
-
     Log("3d model inspect");
-
 }
 
 void

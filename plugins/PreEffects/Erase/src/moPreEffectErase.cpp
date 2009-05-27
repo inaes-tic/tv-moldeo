@@ -95,3 +95,15 @@ MOboolean moPreEffectErase::Finish()
     return PreFinish();
 }
 
+moConfigDefinition *
+moPreEffectErase::GetDefinition( moConfigDefinition *p_configdefinition ) {
+
+	p_configdefinition = moMoldeoObject::GetDefinition(p_configdefinition);
+	p_configdefinition->Add( moText("alpha"), MO_PARAM_ALPHA );
+	p_configdefinition->Add( moText("color"), MO_PARAM_COLOR, -1, moValue( "0.0", "FUNCTION", "0.0","FUNCTION","0.0","FUNCTION","0.0","FUNCTION") );
+	p_configdefinition->Add( moText("syncro"), MO_PARAM_SYNC );
+	p_configdefinition->Add( moText("phase"), MO_PARAM_PHASE );
+
+
+	return p_configdefinition;
+}

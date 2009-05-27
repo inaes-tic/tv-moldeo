@@ -202,9 +202,9 @@ moDirectorFrame::moDirectorFrame(const wxString& title)
 
 
 	//CENTER PANE
-	FrameManager.GetPane(wxT("preview")).Show().Center().Top().Layer(0).Row(0).Position(0).MinSize(400,370);
+	FrameManager.GetPane(wxT("preview")).Show().Center().Top().Layer(0).Row(0).Position(0).MinSize(300,370);
 	FrameManager.GetPane(wxT("layers")).Show().Center().Top().Layer(0).Row(1).Position(0).MinSize(300,150);
-	FrameManager.GetPane(wxT("log")).Show().Center().Layer(0).Row(2).Position(0).MinSize(400,50).BestSize(300,50);
+	FrameManager.GetPane(wxT("log")).Show().Center().Layer(0).Row(2).Position(0).MinSize(300,50).BestSize(300,50);
 
 	//RIGHT PANE
 	FrameManager.GetPane(wxT("inspector")).Show().Right().Layer(1).Row(0).Position(0);
@@ -383,7 +383,7 @@ moDirectorFrame::CreateLayerControls() {
 void
 moDirectorFrame::CreateInspector() {
 
-	m_pInspectorNotebook = new wxAuiNotebook( this, wxID_ANY, wxPoint(0,0), wxSize(300,300), wxBORDER_NONE | wxAUI_NB_TAB_SPLIT | wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_TAB_MOVE  );
+	m_pInspectorNotebook = new wxAuiNotebook( this, wxID_ANY, wxPoint(0,0), wxSize(400,300), wxBORDER_NONE | wxAUI_NB_TAB_SPLIT | wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_TAB_MOVE  );
 	m_pInspectorNotebook->SetForegroundColour(m_cForeground);
     m_pInspectorNotebook->SetBackgroundColour(m_cBackground);
 
@@ -395,10 +395,10 @@ moDirectorFrame::CreateInspector() {
 
     m_pColorMotion =  new moColorMotion( m_pInspectorNotebook, wxID_ANY );
     m_pColorMotion->SetNextActionHandler( this );
-
+/*
     m_pFunctionPanel =  new moFunctionPanel( m_pInspectorNotebook, wxID_ANY );
     m_pFunctionPanel->SetNextActionHandler( this );
-
+*/
     m_pShadersPanel = new moShadersPanel( m_pInspectorNotebook, wxID_ANY );
     m_pShadersPanel->SetNextActionHandler( this );
 
@@ -408,15 +408,15 @@ moDirectorFrame::CreateInspector() {
 	m_pInspectorNotebook->AddPage( m_pPanelTexture, wxT("Texture") );
 	m_pInspectorNotebook->AddPage( m_pColorMotion , wxT("Color") );
 	m_pInspectorNotebook->AddPage( m_pObjectMotion, wxT("Motion") );
-	m_pInspectorNotebook->AddPage( m_pFunctionPanel, wxT("Function") );
+//	m_pInspectorNotebook->AddPage( m_pFunctionPanel, wxT("Function") );
 	m_pInspectorNotebook->AddPage( m_p3dModelPanel , wxT("3d Model") );
 	m_pInspectorNotebook->AddPage( m_pShadersPanel , wxT("Shader") );
-
+/*
 	m_pInspectorNotebook->AddPage( new wxPanel(m_pInspectorNotebook,wxID_ANY) , wxT("Sound") );
 	m_pInspectorNotebook->AddPage( new wxPanel(m_pInspectorNotebook,wxID_ANY) , wxT("Font") );
 	m_pInspectorNotebook->AddPage( new wxTextCtrl(m_pInspectorNotebook,wxID_ANY) , wxT("Script") );
 	m_pInspectorNotebook->AddPage( new wxTextCtrl(m_pInspectorNotebook,wxID_ANY) , wxT("Text") );
-
+*/
 
 }
 
