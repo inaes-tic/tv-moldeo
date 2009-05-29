@@ -56,7 +56,7 @@ wxMoldeoControlsTestDialog::wxMoldeoControlsTestDialog(wxWindow* parent,wxWindow
 	StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("Moldeo Controls"), wxPoint(8,8), wxDefaultSize, 0, _T("ID_STATICTEXT1"));
 	wxFont StaticText1Font(20,wxSWISS,wxFONTSTYLE_NORMAL,wxBOLD,false,_T("Arial"),wxFONTENCODING_DEFAULT);
 	StaticText1->SetFont(StaticText1Font);
-	//Button1 = new wxButton(this, ID_BUTTON1, _T("Close"), wxPoint(440,424), wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON1"));
+	Button1 = new wxButton(this, ID_BUTTON1, _("Close"), wxPoint(440,424), wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON1"));
 	Slider4 = new wxMoRotaryCtrl(this, ID_SLIDER4, 0, 0, 100, wxPoint(152,112), wxSize(32,32), 0, wxDefaultValidator, _T("ID_SLIDER4"));
 	Slider5 = new wxMoRotaryCtrl(this, ID_SLIDER5, 0, 0, 100, wxPoint(192,112), wxSize(32,32), 0, wxDefaultValidator, _T("ID_SLIDER5"));
 	Slider3 = new wxMoRotaryCtrl(this, ID_SLIDER3, 0, 0, 100, wxPoint(232,112), wxSize(56,56), 0, wxDefaultValidator, _T("ID_SLIDER3"));
@@ -68,7 +68,7 @@ wxMoldeoControlsTestDialog::wxMoldeoControlsTestDialog(wxWindow* parent,wxWindow
 	SpinCtrl2->SetValue(_T("0"));
 	SpinCtrl1 = new wxSpinCtrl(this, ID_SPINCTRL1, _T("0"), wxPoint(240,64), wxSize(53,21), 0, 0, 100, 0, _T("ID_SPINCTRL1"));
 	SpinCtrl1->SetValue(_T("0"));
-	//Button2 = new wxButton(this, ID_BUTTON2, _T("Label"), wxPoint(352,424), wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON2"));
+	Button2 = new wxButton(this, ID_BUTTON2, _("Label"), wxPoint(352,424), wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON2"));
 	StaticText5 = new wxStaticText(this, ID_STATICTEXT5, _("wxMoTimelineRulerCtrl"), wxPoint(8,168), wxDefaultSize, 0, _T("ID_STATICTEXT5"));
 	StaticText6 = new wxStaticText(this, ID_STATICTEXT6, _("wxMoldeoObjectCanvas"), wxPoint(464,16), wxDefaultSize, 0, _T("ID_STATICTEXT6"));
 	StaticText4 = new wxStaticText(this, ID_STATICTEXT4, _("wxMoTimelineBandCtrl"), wxPoint(8,224), wxDefaultSize, 0, _T("ID_STATICTEXT4"));
@@ -82,7 +82,7 @@ wxMoldeoControlsTestDialog::wxMoldeoControlsTestDialog(wxWindow* parent,wxWindow
 	Pin1 = new wxMoldeoPinCtrl(Effect3, ID_PIN1, 0, 0, 100, wxPoint(72,32), wxSize(112,24), 0, wxDefaultValidator, _T("ID_PIN1"));
 	Panel1 = new wxMoldeoObjectCanvas(this, ID_PANEL2, wxPoint(32,304), wxSize(368,88), wxTAB_TRAVERSAL, _T("ID_PANEL2"));
 	Panel2 = new wxMoldeoObjectCtrl(Panel1, ID_PANEL3, wxPoint(24,24), wxSize(120,48), wxTAB_TRAVERSAL, _T("ID_PANEL3"));
-
+	
 	Connect(ID_BUTTON1,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&wxMoldeoControlsTestDialog::OnButton1Click);
 	Connect(ID_SPINCTRL2,wxEVT_COMMAND_SPINCTRL_UPDATED,(wxObjectEventFunction)&wxMoldeoControlsTestDialog::OnSpinCtrl1Change);
 	Connect(ID_SPINCTRL1,wxEVT_COMMAND_SPINCTRL_UPDATED,(wxObjectEventFunction)&wxMoldeoControlsTestDialog::OnSpinCtrl1Change);

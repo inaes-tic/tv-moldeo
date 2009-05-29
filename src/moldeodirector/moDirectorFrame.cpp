@@ -38,6 +38,17 @@ BEGIN_EVENT_TABLE(moDirectorFrame, wxFrame)
 	EVT_MENU( MODIRECTOR_CLOSEPROJECT, moDirectorFrame::OnCloseProject )
 	EVT_MENU( MODIRECTOR_SAVEPROJECT, moDirectorFrame::OnSaveProject )
 
+// Examples Submenu
+	EVT_MENU( MODIRECTOR_EXAMPLE_SIMPLE, moDirectorFrame::OnExampleSimple )
+	EVT_MENU( MODIRECTOR_EXAMPLE_CAMERA, moDirectorFrame::OnExampleCamera )
+	EVT_MENU( MODIRECTOR_EXAMPLE_INTERACTIVE_CAMERA, moDirectorFrame::OnExampleInteractiveCamera )
+	EVT_MENU( MODIRECTOR_EXAMPLE_INTERACTIVE_CAMERA_GPU, moDirectorFrame::OnExampleInteractiveCameraGPU )
+	EVT_MENU( MODIRECTOR_EXAMPLE_INTERACTIVE_CAMERA_GPU_KLT2, moDirectorFrame::OnExampleInteractiveCameraGPUKLT2 )
+	EVT_MENU( MODIRECTOR_EXAMPLE_CAMERA_CIRCULAR_BUFFER, moDirectorFrame::OnExampleCameraCircularBuffer )
+
+// End Examples Submenu
+
+
 	EVT_MENU( MODIRECTOR_SAVEMOB, moDirectorFrame::OnSaveMob )
 	EVT_MENU( MODIRECTOR_CLOSEMOB, moDirectorFrame::OnCloseMob )
 	EVT_MENU( MODIRECTOR_OPENMOB, moDirectorFrame::OnOpenMob )
@@ -114,10 +125,24 @@ moDirectorFrame::moDirectorFrame(const wxString& title)
 	wxMenu *iodevicesMenu = new wxMenu;
 	wxMenu *parameterMenu = new wxMenu;
 
+	//Examples Menu
+	wxMenu *examplesMenu = new wxMenu;
+	examplesMenu->Append( MODIRECTOR_EXAMPLE_SIMPLE, _T("Simple Project"), _T("Simple Moldeo project"));
+	examplesMenu->Append( MODIRECTOR_EXAMPLE_CAMERA, _T("Cameras"), _T("Simple cameras project"));
+	examplesMenu->Append( MODIRECTOR_EXAMPLE_INTERACTIVE_CAMERA, _T("Interactive Cameras"), _T("Simple cameras with tracking project"));
+	examplesMenu->Append( MODIRECTOR_EXAMPLE_INTERACTIVE_CAMERA_GPU, _T("Interactive Cameras GPU"), _T("Simple cameras with tracking project"));
+	examplesMenu->Append( MODIRECTOR_EXAMPLE_INTERACTIVE_CAMERA_GPU_KLT2, _T("Interactive Cameras GPU KLT2"), _T("Simple cameras with tracking project"));
+	examplesMenu->Append( MODIRECTOR_EXAMPLE_CAMERA_CIRCULAR_BUFFER, _T("Camera with Circular Buffer"), _T("Simple cameras with tracking project"));
+
+	//File Menu
+
 	fileMenu->Append( MODIRECTOR_NEWPROJECT, _T("&New Project\tAlt-N"), _T("Create a new project"));
 	fileMenu->Append( MODIRECTOR_OPENPROJECT, _T("&Open Project\tAlt-O"), _T("Open an existing project"));
 	fileMenu->Append( MODIRECTOR_CLOSEPROJECT, _T("&Close Project"), _T("Close the current project"));
 	fileMenu->Append( MODIRECTOR_CLOSEMOB, _T("&Close Mob"), _T("Close the current mob file"));
+
+    fileMenu->AppendSeparator();
+    fileMenu->AppendSubMenu( examplesMenu, _T("Examples"), _T("Moldeo sample projects"));
 
     fileMenu->AppendSeparator();
     fileMenu->Append( MODIRECTOR_SAVEPROJECT, _T("Save Project\tCtrl-S"), _T("Save the current project"));
@@ -174,7 +199,7 @@ moDirectorFrame::moDirectorFrame(const wxString& title)
 #if wxUSE_STATUSBAR
     // create a status bar just for fun(by default with 1 pane only)
     CreateStatusBar(2);
-    SetStatusText(_T("Welcome to wxWidgets!"));
+    SetStatusText(_T("Welcome to Moldeo Director!"));
 #endif // wxUSE_STATUSBAR
 
     CreateDataBook();
@@ -1526,5 +1551,70 @@ moDirectorFrame::ShowTip() {
 }
 */
 void moDirectorFrame::OnEditPreferences(wxCommandEvent& event) {
-    wxMessageBox(wxT("Preferences - Functionality to be implemented"),wxT("Moldeo Director"));
+    wxMessageBox(wxT("On Edit Preferences - Functionality to be implemented"),wxT("Moldeo Director"));
 }
+
+void moDirectorFrame::OnExampleSimple(wxCommandEvent& event) {
+	moProjectDescriptor ProjectDescriptor;
+	moDirectorStatus	mStatus;
+
+	wxString text = "../../data/test/test.mol";
+	wxMessageBox(text);
+    ProjectDescriptor.Set( moText("../../data/test/"), moText("test.mol") );
+    mStatus = OpenProject( ProjectDescriptor );
+}
+
+void moDirectorFrame::OnExampleCamera(wxCommandEvent& event) {
+	moProjectDescriptor ProjectDescriptor;
+	moDirectorStatus	mStatus;
+
+	wxString text = "../../data/test/camaras.mol";
+	wxMessageBox(text);
+    ProjectDescriptor.Set( moText("../../data/test/"), moText("camaras.mol") );
+    mStatus = OpenProject( ProjectDescriptor );
+}
+
+void moDirectorFrame::OnExampleInteractiveCamera(wxCommandEvent& event) {
+	moProjectDescriptor ProjectDescriptor;
+	moDirectorStatus	mStatus;
+
+	wxString text = "../../data/test/camarasinteractivas.mol";
+	wxMessageBox(text);
+    ProjectDescriptor.Set( moText("../../data/test/"), moText("camarasinteractivas.mol") );
+    mStatus = OpenProject( ProjectDescriptor );
+
+}
+
+void moDirectorFrame::OnExampleInteractiveCameraGPU(wxCommandEvent& event) {
+	moProjectDescriptor ProjectDescriptor;
+	moDirectorStatus	mStatus;
+
+	wxString text = "../../data/test/camarasinteractivasgpu.mol";
+	wxMessageBox(text);
+    ProjectDescriptor.Set( moText("../../data/test/"), moText("camarasinteractivasgpu.mol") );
+    mStatus = OpenProject( ProjectDescriptor );
+
+}
+
+void moDirectorFrame::OnExampleInteractiveCameraGPUKLT2(wxCommandEvent& event) {
+	moProjectDescriptor ProjectDescriptor;
+	moDirectorStatus	mStatus;
+
+	wxString text = "../../data/test/camarasinteractivasgpuklt2.mol";
+	wxMessageBox(text);
+    ProjectDescriptor.Set( moText("../../data/test/"), moText("camarasinteractivasgpuklt2.mol") );
+    mStatus = OpenProject( ProjectDescriptor );
+
+}
+
+void moDirectorFrame::OnExampleCameraCircularBuffer(wxCommandEvent& event) {
+	moProjectDescriptor ProjectDescriptor;
+	moDirectorStatus	mStatus;
+
+	wxString text = "../../data/test/camarascircular.mol";
+	wxMessageBox(text);
+    ProjectDescriptor.Set( moText("../../data/test/"), moText("camarascircular.mol") );
+    mStatus = OpenProject( ProjectDescriptor );
+
+}
+

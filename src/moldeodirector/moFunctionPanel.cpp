@@ -85,6 +85,7 @@ moFunctionPanel::Inspect( moValueDescriptor p_ValueDescriptor ) {
         case MO_PARAM_SYNC:
         case MO_PARAM_PHASE:
         case MO_PARAM_FUNCTION:
+            // Linea gustavo
             FunctionTextCtrl->ChangeValue( (wxChar*)(char*)p_ValueDescriptor.GetValue().GetSubValue(0).Text() );
             break;
         default:

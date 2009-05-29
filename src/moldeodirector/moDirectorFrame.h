@@ -130,6 +130,14 @@ public:
 	void OnCloseProject( wxCommandEvent& event );
 	void OnSaveProject( wxCommandEvent& event );
 
+    // Examples submenu
+	void OnExampleSimple( wxCommandEvent& event );
+	void OnExampleCamera( wxCommandEvent& event );
+	void OnExampleInteractiveCamera( wxCommandEvent& event );
+	void OnExampleInteractiveCameraGPU( wxCommandEvent& event );
+	void OnExampleInteractiveCameraGPUKLT2( wxCommandEvent& event );
+	void OnExampleCameraCircularBuffer( wxCommandEvent& event );
+    // End examples submenu
 	void OnProjectPreview( wxCommandEvent& event );
 	void OnProjectPreviewFullscreen( wxCommandEvent& event );
 	void OnFullscreen( wxCommandEvent& event );
@@ -267,6 +275,8 @@ enum
 	MODIRECTOR_CLOSEPROJECT = 9915,
 	MODIRECTOR_SAVEPROJECT = 9916,
 
+    MODIRECTOR_EXAMPLES = 9917,
+
 	MODIRECTOR_NEWPREEFFECT = 9926,
 	MODIRECTOR_NEWEFFECT = 9927,
 	MODIRECTOR_NEWPOSTEFFECT = 9928,
@@ -286,7 +296,14 @@ enum
 	MODIRECTOR_FULLSCREEN = 9982,
 	MODIRECTOR_CONFIGURATION = 9983,
 	MODIRECTOR_LOG = 9984,
-	MODIRECTOR_COMMAND = 9990
+	MODIRECTOR_COMMAND = 9990,
+
+	MODIRECTOR_EXAMPLE_SIMPLE = 10010,
+    MODIRECTOR_EXAMPLE_CAMERA = 10020,
+	MODIRECTOR_EXAMPLE_INTERACTIVE_CAMERA = 10030,
+    MODIRECTOR_EXAMPLE_INTERACTIVE_CAMERA_GPU = 10040,
+    MODIRECTOR_EXAMPLE_INTERACTIVE_CAMERA_GPU_KLT2 = 10050,
+    MODIRECTOR_EXAMPLE_CAMERA_CIRCULAR_BUFFER = 10060
 
 };
 
