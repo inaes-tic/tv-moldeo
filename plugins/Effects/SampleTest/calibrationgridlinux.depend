@@ -1,0 +1,764 @@
+# depslib dependency file v1.0
+1244138937 source:/media/DATA/workmoldeo/srcmoldeo/plugins/PostEffects/CalibrationGrid/inc/moCalibrationGrid.h
+	"moPostPlugin.h"
+
+1240344734 /media/DATA/workmoldeo/srcmoldeo/inc/moPostPlugin.h
+	"moBasePlugin.h"
+	"moPostEffect.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moBasePlugin.h
+	"moText.h"
+	<windows.h>
+	<dlfcn.h>
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moText.h
+	"moTypes.h"
+	"moArray.h"
+	<stdio.h>
+	<string.h>
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moTypes.h
+	<math.h>
+	<limits.h>
+	<iostream>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<float.h>
+	<time.h>
+	<string>
+	<vector>
+	<fstream>
+	"SDL.h"
+	"SDL_thread.h"
+	"SDL_mutex.h"
+	"SDL_net.h"
+	"SDL_image.h"
+	<GL/glew.h>
+	"OpenGL/gl.h"
+	"OpenGL/glu.h"
+	"OpenGL/glext.h"
+	"GLUT/glut.h"
+	"X11/X.h"
+	<SDL/SDL.h>
+	<SDL/SDL_thread.h>
+	<SDL/SDL_mutex.h>
+	<SDL/SDL_net.h>
+	<SDL/SDL_image.h>
+	<SDL/SDL_syswm.h>
+	<GL/glew.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<GL/glext.h>
+	<GL/glut.h>
+	<windows.h>
+	<SDL.h>
+	<SDL_thread.h>
+	<SDL_mutex.h>
+	<SDL_syswm.h>
+	<GL/glew.h>
+	"GL/gl.h"
+	"GL/glu.h"
+	"GL/glext.h"
+	"GL/glut.h"
+	"port/stricmp.h"
+	"port/stricmp.h"
+	"moTempo.h"
+
+1235099159 /usr/include/SDL/SDL.h
+	"SDL_main.h"
+	"SDL_stdinc.h"
+	"SDL_audio.h"
+	"SDL_cdrom.h"
+	"SDL_cpuinfo.h"
+	"SDL_endian.h"
+	"SDL_error.h"
+	"SDL_events.h"
+	"SDL_loadso.h"
+	"SDL_mutex.h"
+	"SDL_rwops.h"
+	"SDL_thread.h"
+	"SDL_timer.h"
+	"SDL_video.h"
+	"SDL_version.h"
+	"begin_code.h"
+	"close_code.h"
+
+1235099159 /usr/include/SDL/SDL_main.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+	"begin_code.h"
+	"close_code.h"
+
+1235099159 /usr/include/SDL/SDL_stdinc.h
+	"SDL_config.h"
+	<sys/types.h>
+	<stdio.h>
+	<stdlib.h>
+	<stddef.h>
+	<stdarg.h>
+	<stdlib.h>
+	<malloc.h>
+	<stddef.h>
+	<stdarg.h>
+	<memory.h>
+	<string.h>
+	<strings.h>
+	<inttypes.h>
+	<stdint.h>
+	<ctype.h>
+	<iconv.h>
+	"begin_code.h"
+	<alloca.h>
+	<malloc.h>
+	<malloc.h>
+	<malloc.h>
+	<stdlib.h>
+	"close_code.h"
+
+1235099159 /usr/include/SDL/SDL_config.h
+	"SDL_platform.h"
+	<stdarg.h>
+
+1235099159 /usr/include/SDL/SDL_platform.h
+
+1235099159 /usr/include/SDL/begin_code.h
+
+1235099159 /usr/include/SDL/close_code.h
+
+1235099159 /usr/include/SDL/SDL_audio.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_endian.h"
+	"SDL_mutex.h"
+	"SDL_thread.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1235099159 /usr/include/SDL/SDL_error.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1235099159 /usr/include/SDL/SDL_endian.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1235099159 /usr/include/SDL/SDL_mutex.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1235099159 /usr/include/SDL/SDL_thread.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_mutex.h"
+	"begin_code.h"
+	<process.h>
+	"close_code.h"
+
+1235099159 /usr/include/SDL/SDL_rwops.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1235099159 /usr/include/SDL/SDL_cdrom.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1235099159 /usr/include/SDL/SDL_cpuinfo.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1235099159 /usr/include/SDL/SDL_events.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_active.h"
+	"SDL_keyboard.h"
+	"SDL_mouse.h"
+	"SDL_joystick.h"
+	"SDL_quit.h"
+	"begin_code.h"
+	"close_code.h"
+
+1235099159 /usr/include/SDL/SDL_active.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1235099159 /usr/include/SDL/SDL_keyboard.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_keysym.h"
+	"begin_code.h"
+	"close_code.h"
+
+1235099159 /usr/include/SDL/SDL_keysym.h
+
+1235099159 /usr/include/SDL/SDL_mouse.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1235099159 /usr/include/SDL/SDL_video.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1235099159 /usr/include/SDL/SDL_joystick.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1235099159 /usr/include/SDL/SDL_quit.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+
+1235099159 /usr/include/SDL/SDL_loadso.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1235099159 /usr/include/SDL/SDL_timer.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1235099159 /usr/include/SDL/SDL_version.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1193837800 /usr/include/SDL/SDL_net.h
+	"SDL.h"
+	"SDL_endian.h"
+	"SDL_version.h"
+	"begin_code.h"
+	"close_code.h"
+
+1202785916 /usr/include/SDL/SDL_image.h
+	"SDL.h"
+	"SDL_version.h"
+	"begin_code.h"
+	"close_code.h"
+
+1235099159 /usr/include/SDL/SDL_syswm.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_version.h"
+	"begin_code.h"
+	<X11/Xlib.h>
+	<X11/Xatom.h>
+	<microwin/nano-X.h>
+	<windows.h>
+	<sys/neutrino.h>
+	<Ph.h>
+	"close_code.h"
+
+1240344724 /media/DATA/workmoldeo/srcmoldeo/inc/port/stricmp.h
+	<string>
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moTempo.h
+	"moTypes.h"
+	"moMath.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moMath.h
+	"moTypes.h"
+	"moAbstract.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moAbstract.h
+	"moTypes.h"
+	"moText.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moArray.h
+	"moTypes.h"
+	"moArray.h"
+	"moArray.cpp"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moArray.cpp
+	"moArray.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moPostEffect.h
+	"moEffect.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moEffect.h
+	"moAbstract.h"
+	"moArray.h"
+	"moMathFunctionIndex.h"
+	"moIODeviceManager.h"
+	"moConfig.h"
+	"moEffectState.h"
+	"moPreConfig.h"
+	"moPresets.h"
+	"moMotion.h"
+	"moText.h"
+	"moMoldeoObject.h"
+	"moResourceManager.h"
+	"moRenderManager.h"
+	"moMathManager.h"
+	"moTextureManager.h"
+	"moFontManager.h"
+	"moSoundManager.h"
+	"moScriptManager.h"
+	"mo3dModelManager.h"
+	"moRenderManager.h"
+	"moGUIManager.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moMathFunctionIndex.h
+	"moTypes.h"
+	"moAbstract.h"
+	"moConfig.h"
+	"moParam.h"
+	"moMathManager.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moConfig.h
+	"moTypes.h"
+	"moText.h"
+	"moParam.h"
+	"moArray.h"
+	"moPreConfig.h"
+
+1240344734 /media/DATA/workmoldeo/srcmoldeo/inc/moParam.h
+	"moTypes.h"
+	"moText.h"
+	"moValue.h"
+
+1240344734 /media/DATA/workmoldeo/srcmoldeo/inc/moValue.h
+	"moTypes.h"
+	"moText.h"
+	"moArray.h"
+	"moMathFunction.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moMathFunction.h
+	"moTypes.h"
+	"moArray.h"
+	"moAbstract.h"
+	"moMath.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moPreConfig.h
+	"moTypes.h"
+	"moValue.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moMathManager.h
+	"moTypes.h"
+	"moText.h"
+	"moConfig.h"
+	"moLock.h"
+	"moResourceManager.h"
+	"moMath.h"
+	"moMathFunction.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moLock.h
+	"moTypes.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moResourceManager.h
+	"moTypes.h"
+	"moArray.h"
+	"moMoldeoObject.h"
+	"moParam.h"
+	"moResourcePlugin.h"
+	"moDebugManager.h"
+	"moNetManager.h"
+	"moFileManager.h"
+	"moFontManager.h"
+	"moGUIManager.h"
+	"moScriptManager.h"
+	"mo3dModelManager.h"
+	"moShaderManager.h"
+	"moFilterManager.h"
+	"moTimeManager.h"
+	"moDataManager.h"
+	"moTextureManager.h"
+	"moVideoManager.h"
+	"moFBManager.h"
+	"moGLManager.h"
+	"moRenderManager.h"
+	"moMathManager.h"
+	"moSoundManager.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moMoldeoObject.h
+	"moTypes.h"
+	"moText.h"
+	"moAbstract.h"
+	"moScript.h"
+	"moEventList.h"
+	"moConfig.h"
+	"moArray.h"
+	"moConnectors.h"
+	"moResourceManager.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moScript.h
+	"moLuaBase.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moLuaBase.h
+	"moTypes.h"
+	"moText.h"
+	<lua.h>
+	<lauxlib.h>
+	<lualib.h>
+
+1218029412 /usr/include/lua5.1//lua.h
+	<stdarg.h>
+	<stddef.h>
+	"luaconf.h"
+
+1238408465 /usr/include/lua5.1//luaconf.h
+	<limits.h>
+	<stddef.h>
+	<unistd.h>
+	<io.h>
+	<stdio.h>
+	<stdio.h>
+	<readline/readline.h>
+	<readline/history.h>
+	<assert.h>
+	<math.h>
+	<unistd.h>
+
+1198760545 /usr/include/lua5.1//lauxlib.h
+	<stddef.h>
+	<stdio.h>
+	"lua.h"
+
+1198760545 /usr/include/lua5.1//lualib.h
+	"lua.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moEventList.h
+	"moTypes.h"
+	"moValue.h"
+	"moAbstract.h"
+	"moLock.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moConnectors.h
+	"moTypes.h"
+	"moText.h"
+	"moAbstract.h"
+	"moEventList.h"
+	"moConfig.h"
+	"moArray.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moResourcePlugin.h
+	"moBasePlugin.h"
+	"moResourceManager.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moDebugManager.h
+	"moTypes.h"
+	"moAbstract.h"
+	"moText.h"
+	"moParam.h"
+	"moResourceManager.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moNetManager.h
+	"moTypes.h"
+	"moText.h"
+	"moConfig.h"
+	"moLock.h"
+	"moResourceManager.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moFileManager.h
+	"moTypes.h"
+	"moAbstract.h"
+	"moText.h"
+	"moResourceManager.h"
+	"moBuckets.h"
+	"moParam.h"
+	"io.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moBuckets.h
+	"moTypes.h"
+	"moLock.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moFontManager.h
+	"moTypes.h"
+	"moAbstract.h"
+	"moArray.h"
+	"moResourceManager.h"
+	"moText.h"
+	"moParam.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moGUIManager.h
+	"mo3dModelManager.h"
+	"moResourceManager.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/mo3dModelManager.h
+	"moTypes.h"
+	"moResourceManager.h"
+	"moConfig.h"
+	"moParam.h"
+	"moTextureManager.h"
+	"moEffectState.h"
+	"moMathVector.h"
+	"moMathVector3.h"
+	"3ds/3ds.h"
+
+1242682931 /media/DATA/workmoldeo/srcmoldeo/inc/moTextureManager.h
+	"moTexture.h"
+	"moResourceManager.h"
+
+1242682932 /media/DATA/workmoldeo/srcmoldeo/inc/moTexture.h
+	"moTypes.h"
+	"moText.h"
+	"moParam.h"
+	"moBuckets.h"
+	"moVideoGraph.h"
+	"moGsGraph.h"
+	"moDsGraph.h"
+	"moMathVector3.h"
+	"moTextureIndex.h"
+	"moFBO.h"
+	"moGLManager.h"
+	"moTextureFilter.h"
+
+1242682932 /media/DATA/workmoldeo/srcmoldeo/inc/moVideoGraph.h
+	"moTypes.h"
+	"moText.h"
+	"moBuckets.h"
+	"moArray.h"
+	"moAbstract.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moGsGraph.h
+	"moConfig.h"
+	"moTypes.h"
+	"moThread.h"
+	"moBuckets.h"
+	"moVideoGraph.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moThread.h
+	"moTypes.h"
+	"moLock.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moDsGraph.h
+	"moTypes.h"
+	"streams.h"
+	"qedit.h"
+	"dvdmedia.h"
+	"moVideoGraph.h"
+
+1240344734 /media/DATA/workmoldeo/srcmoldeo/inc/moMathVector3.h
+	"moMath.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moTextureIndex.h
+	"moTypes.h"
+	"moAbstract.h"
+	"moConfig.h"
+	"moParam.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moFBO.h
+	"moTypes.h"
+	"moGLManager.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moGLManager.h
+	"moTypes.h"
+	"moText.h"
+	"moFBO.h"
+	"moResourceManager.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moTextureFilter.h
+	"moTypes.h"
+	"moAbstract.h"
+	"moConfig.h"
+	"moParam.h"
+	"moShader.h"
+	"moShaderGLSL.h"
+	"moTextFilterParam.h"
+	"moVideoManager.h"
+	"moVideoManager.h"
+	"moShaderManager.h"
+	"moTextureManager.h"
+	"moGLManager.h"
+	"moRenderManager.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moShader.h
+	"moTypes.h"
+	"moAbstract.h"
+	"moConfig.h"
+	"moArray.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moShaderGLSL.h
+	"moShader.h"
+
+1240344734 /media/DATA/workmoldeo/srcmoldeo/inc/moTextFilterParam.h
+	"moShader.h"
+	"moShaderGLSL.h"
+
+1242682932 /media/DATA/workmoldeo/srcmoldeo/inc/moVideoManager.h
+	"moGsGraph.h"
+	"moDsGraph.h"
+	"moFBO.h"
+	"moTexture.h"
+	"moVideoGraph.h"
+	"moIODeviceManager.h"
+	"moResourceManager.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moIODeviceManager.h
+	"moTypes.h"
+	"moText.h"
+	"moMoldeoObject.h"
+	"moDeviceCode.h"
+	"moEventList.h"
+	"moRenderManager.h"
+	"moIODevicePlugin.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moDeviceCode.h
+	"moTypes.h"
+	"moAbstract.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moRenderManager.h
+	"moTypes.h"
+	"moText.h"
+	"moLock.h"
+	"moResourceManager.h"
+	"moMathVector.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moMathVector.h
+	"moMath.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moIODevicePlugin.h
+	"moTypes.h"
+	"moArray.h"
+	"moBasePlugin.h"
+	"moIODeviceManager.h"
+
+1240344734 /media/DATA/workmoldeo/srcmoldeo/inc/moShaderManager.h
+	"moTypes.h"
+	"moAbstract.h"
+	"moText.h"
+	"moParam.h"
+	"moConfig.h"
+	"moShader.h"
+	"moShaderGLSL.h"
+	"moResourceManager.h"
+	"moGLManager.h"
+	"moFBManager.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moFBManager.h
+	"moTypes.h"
+	"moText.h"
+	"moLock.h"
+	"moFBO.h"
+	"moTexture.h"
+	"moResourceManager.h"
+	"moGLManager.h"
+
+1240344734 /media/DATA/workmoldeo/srcmoldeo/inc/moEffectState.h
+	"moTypes.h"
+	"moAbstract.h"
+
+1240344725 /media/DATA/workmoldeo/srcmoldeo/inc/3ds/3ds.h
+	"mo3dModelManager.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moScriptManager.h
+	"moTypes.h"
+	"moAbstract.h"
+	"moText.h"
+	"moParam.h"
+	"moLuaBase.h"
+	"moLunaClasses.h"
+	"moResourceManager.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moLunaClasses.h
+	"moLuna.h"
+	"moMath.h"
+	"moMathFunction.h"
+	"moP5.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moLuna.h
+	"lua.h"
+	"lauxlib.h"
+	"lualib.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moP5.h
+	"moAbstract.h"
+
+1242682932 /media/DATA/workmoldeo/srcmoldeo/inc/moFilterManager.h
+	"moTypes.h"
+	"moAbstract.h"
+	"moText.h"
+	"moVideoGraph.h"
+	"moResourceManager.h"
+	"moBuckets.h"
+	"moParam.h"
+	"moMathVector.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moTimeManager.h
+	"moTypes.h"
+	"moText.h"
+	"moConfig.h"
+	"moLock.h"
+	"moResourceManager.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moDataManager.h
+	"moTypes.h"
+	"moActions.h"
+	"moEventList.h"
+	"moText.h"
+	"moConfig.h"
+	"moLock.h"
+	"moResourceManager.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moActions.h
+	"moTypes.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moSoundManager.h
+	"moTypes.h"
+	"moText.h"
+	"moConfig.h"
+	"moResourceManager.h"
+
+1240344735 /media/DATA/workmoldeo/srcmoldeo/inc/moPresets.h
+	"moTypes.h"
+	"moConfig.h"
+	"moEffectState.h"
+
+1240344734 /media/DATA/workmoldeo/srcmoldeo/inc/moMotion.h
+	"moParam.h"
+	"moTypes.h"
+
+1244492338 source:/media/DATA/workmoldeo/srcmoldeo/plugins/PostEffects/CalibrationGrid/src/moCalibrationGrid.cpp
+	"moCalibrationGrid.h"
+
+1244141982 /media/DATA/workmoldeo/srcmoldeo/plugins/PostEffects/CalibrationGrid/inc/moCalibrationGrid.h
+	"moPostPlugin.h"
+
+1218029412 /usr/include/lua5.1/lua.h
+	<stdarg.h>
+	<stddef.h>
+	"luaconf.h"
+
+1238408465 /usr/include/lua5.1/luaconf.h
+	<limits.h>
+	<stddef.h>
+	<unistd.h>
+	<io.h>
+	<stdio.h>
+	<stdio.h>
+	<readline/readline.h>
+	<readline/history.h>
+	<assert.h>
+	<math.h>
+	<unistd.h>
+
+1198760545 /usr/include/lua5.1/lauxlib.h
+	<stddef.h>
+	<stdio.h>
+	"lua.h"
+
+1198760545 /usr/include/lua5.1/lualib.h
+	"lua.h"
+
