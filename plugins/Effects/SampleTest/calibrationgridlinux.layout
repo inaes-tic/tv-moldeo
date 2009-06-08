@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="All" />
+	<File name="inc/moCalibrationGrid.h" open="0" top="0" tabpos="1">
+		<Cursor position="2416" topLine="39" />
+	</File>
+	<File name="src/moCalibrationGrid.cpp" open="0" top="0" tabpos="1">
+		<Cursor position="3486" topLine="93" />
+	</File>
+</CodeBlocks_layout_file>
