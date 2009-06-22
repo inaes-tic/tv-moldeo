@@ -711,6 +711,7 @@ moDirectorFrame::OnOpenProject(wxCommandEvent& event) {
                 ProjectDescriptor.Set( moText((char*)cfilepath), moText((char*)cfilename) );
 
                 mStatus = OpenProject( ProjectDescriptor );
+                SetTitle(wxT(name)+wxT(" - Moldeo Director"));
 
             }
 
@@ -735,6 +736,8 @@ moDirectorFrame::OnOpenProject(wxCommandEvent& event) {
         ProjectDescriptor.Set( moText((char*)cfilepath), moText((char*)cfilename) );
 
         mStatus = OpenProject( ProjectDescriptor );
+        SetTitle(wxT(name)+wxT(" - Moldeo Director"));
+
 
     }
 
@@ -1562,6 +1565,8 @@ void moDirectorFrame::OnExampleSimple(wxCommandEvent& event) {
 	wxMessageBox(text);
     ProjectDescriptor.Set( moText("../../data/test/"), moText("test.mol") );
     mStatus = OpenProject( ProjectDescriptor );
+    SetTitle(wxT("test.mol - Moldeo Director"));
+
 }
 
 void moDirectorFrame::OnExampleCamera(wxCommandEvent& event) {
@@ -1572,6 +1577,8 @@ void moDirectorFrame::OnExampleCamera(wxCommandEvent& event) {
 	wxMessageBox(text);
     ProjectDescriptor.Set( moText("../../data/test/"), moText("camaras.mol") );
     mStatus = OpenProject( ProjectDescriptor );
+    SetTitle(wxT("camaras.mol - Moldeo Director"));
+
 }
 
 void moDirectorFrame::OnExampleInteractiveCamera(wxCommandEvent& event) {
@@ -1582,6 +1589,7 @@ void moDirectorFrame::OnExampleInteractiveCamera(wxCommandEvent& event) {
 	wxMessageBox(text);
     ProjectDescriptor.Set( moText("../../data/test/"), moText("camarasinteractivas.mol") );
     mStatus = OpenProject( ProjectDescriptor );
+    SetTitle(wxT("camarasinteractivas.mol - Moldeo Director"));
 
 }
 
@@ -1593,6 +1601,7 @@ void moDirectorFrame::OnExampleInteractiveCameraGPU(wxCommandEvent& event) {
 	wxMessageBox(text);
     ProjectDescriptor.Set( moText("../../data/test/"), moText("camarasinteractivasgpu.mol") );
     mStatus = OpenProject( ProjectDescriptor );
+    SetTitle(wxT("camarasinteractivasgpu.mol - Moldeo Director"));
 
 }
 
@@ -1604,6 +1613,7 @@ void moDirectorFrame::OnExampleInteractiveCameraGPUKLT2(wxCommandEvent& event) {
 	wxMessageBox(text);
     ProjectDescriptor.Set( moText("../../data/test/"), moText("camarasinteractivasgpuklt2.mol") );
     mStatus = OpenProject( ProjectDescriptor );
+    SetTitle(wxT("camarasinteractivasgpuklt2.mol - Moldeo Director"));
 
 }
 
@@ -1615,6 +1625,7 @@ void moDirectorFrame::OnExampleCameraCircularBuffer(wxCommandEvent& event) {
 	wxMessageBox(text);
     ProjectDescriptor.Set( moText("../../data/test/"), moText("camarascircular.mol") );
     mStatus = OpenProject( ProjectDescriptor );
+    SetTitle(wxT("camarascircular.mol - Moldeo Director"));
 
 }
 
