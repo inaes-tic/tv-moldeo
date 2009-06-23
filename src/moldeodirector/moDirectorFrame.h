@@ -87,6 +87,7 @@ class moDataNotebook : public wxAuiNotebook {
     moProjectTreeCtrl*      m_pProjectTreeCtrl;
     moProjectTreeCtrl*      m_pIODevicesTreeCtrl;
     moProjectTreeCtrl*      m_pResourcesTreeCtrl;
+	wxTextCtrl*			    m_pLogTextCtrl;
 
 };
 

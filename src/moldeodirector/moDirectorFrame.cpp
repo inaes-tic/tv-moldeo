@@ -210,16 +210,16 @@ moDirectorFrame::moDirectorFrame(const wxString& title)
     CreateFilesBook();
 
 
-	m_pLogTextCtrl = CreateTextCtrl();
-	m_pLogTextCtrl->SetForegroundColour(m_cForeground);
-    m_pLogTextCtrl->SetBackgroundColour(m_cBackground);
+//	m_pLogTextCtrl = CreateTextCtrl();
+//	m_pLogTextCtrl->SetForegroundColour(m_cForeground);
+//    m_pLogTextCtrl->SetBackgroundColour(m_cBackground);
 
 
 	FrameManager.AddPane( m_pDataNotebook,      wxAuiPaneInfo().Name(wxT("explorer")).Caption(wxT("Explorer")).CenterPane().Hide().CaptionVisible().Floatable().Movable().Dockable());
 	FrameManager.AddPane( m_pFilesBook,         wxAuiPaneInfo().Name(wxT("filesbook")).CenterPane().Hide().Caption(wxT("Parameters")).CaptionVisible().Floatable().Movable().Dockable());
 	FrameManager.AddPane( m_pInspectorNotebook, wxAuiPaneInfo().Name(wxT("inspector")).CenterPane().Hide().Caption(wxT("Inspector")).CaptionVisible().Floatable().Movable().Dockable());
 	FrameManager.AddPane( m_pLayersPanelCtrl,   wxAuiPaneInfo().Name(wxT("layers")).CenterPane().Hide().Caption(wxT("Layers")).CaptionVisible().Floatable().Movable().Dockable());
-	FrameManager.AddPane( m_pLogTextCtrl,       wxAuiPaneInfo().Name(wxT("log")).CenterPane().Hide().Caption(wxT("Log")).CaptionVisible().Floatable().Movable().Dockable());
+//	FrameManager.AddPane( m_pLogTextCtrl,       wxAuiPaneInfo().Name(wxT("log")).CenterPane().Hide().Caption(wxT("Log")).CaptionVisible().Floatable().Movable().Dockable());
 
 	FrameManager.AddPane( m_pGUINotebook, wxAuiPaneInfo().Name(wxT("preview")).Caption(wxT("Console")).CaptionVisible().Floatable().Movable().Dockable().MaximizeButton().MinimizeButton().Resizable(true));
 
@@ -230,7 +230,7 @@ moDirectorFrame::moDirectorFrame(const wxString& title)
 	//CENTER PANE
 	FrameManager.GetPane(wxT("preview")).Show().Center().Top().Layer(0).Row(0).Position(0).MinSize(300,370);
 	FrameManager.GetPane(wxT("layers")).Show().Center().Top().Layer(0).Row(1).Position(0).MinSize(300,150);
-	FrameManager.GetPane(wxT("log")).Show().Center().Layer(0).Row(2).Position(0).MinSize(300,50).BestSize(300,50);
+//	FrameManager.GetPane(wxT("log")).Show().Center().Layer(0).Row(2).Position(0).MinSize(300,50).BestSize(300,50);
 
 	//RIGHT PANE
 	FrameManager.GetPane(wxT("inspector")).Show().Right().Layer(1).Row(0).Position(0);
@@ -294,6 +294,8 @@ moDirectorFrame::CreateDataBook() {
 		m_pDataNotebook->SetForegroundColour(m_cForeground);
         m_pDataNotebook->SetBackgroundColour(m_cBackground);
 
+        m_pDataNotebook->m_pLogTextCtrl = CreateTextCtrl();
+
 		m_pDataNotebook->m_pVirtualDirTreeCtrl = new wxVirtualDirTreeCtrl(m_pDataNotebook, wxID_ANY, wxPoint(0,0), wxSize(300,377),wxTR_DEFAULT_STYLE | wxNO_BORDER | wxBORDER_NONE );
 		m_pDataNotebook->m_pVirtualDirTreeCtrl->SetForegroundColour(m_cForeground);
         m_pDataNotebook->m_pVirtualDirTreeCtrl->SetBackgroundColour(m_cBackground);
@@ -321,6 +323,9 @@ moDirectorFrame::CreateDataBook() {
 		m_pDataNotebook->GetPage(2)->SetBackgroundColour(m_cBackground);
 		m_pDataNotebook->AddPage( m_pDataNotebook->m_pVirtualDirTreeCtrl, wxT("Data") );
 		m_pDataNotebook->GetPage(3)->SetBackgroundColour(m_cBackground);
+		m_pDataNotebook->AddPage( m_pDataNotebook->m_pLogTextCtrl, wxT("Log") );
+		m_pDataNotebook->GetPage(4)->SetBackgroundColour(m_cBackground);
+
 	}
 
 
@@ -1524,9 +1529,9 @@ moDirectorFrame::Log( moText p_message ) {
 
 	wxString  w =(wxChar*)(char*)p_message;
 
-	m_pLogTextCtrl->SetDefaultStyle( wxTextAttr( wxColour( 50, 255, 50 )) );
+	m_pDataNotebook->m_pLogTextCtrl->SetDefaultStyle( wxTextAttr( wxColour( 50, 255, 50 )) );
 
-	m_pLogTextCtrl->AppendText(w + wxT("\n"));
+	m_pDataNotebook->m_pLogTextCtrl->AppendText(w + wxT("\n"));
 
 }
 
@@ -1536,9 +1541,9 @@ moDirectorFrame::LogError( moText p_message ) {
 
 	wxString  w =(wxChar*)(char*)p_message;
 
-	m_pLogTextCtrl->SetDefaultStyle( wxTextAttr( wxColour(255,0,0) ) );
+	m_pDataNotebook->m_pLogTextCtrl->SetDefaultStyle( wxTextAttr( wxColour(255,0,0) ) );
 
-	m_pLogTextCtrl->AppendText(w + wxT("\n"));
+	m_pDataNotebook->m_pLogTextCtrl->AppendText(w + wxT("\n"));
 
 	//wxMessageBox(w);
 
