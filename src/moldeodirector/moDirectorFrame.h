@@ -142,7 +142,6 @@ public:
 	void OnProjectPreview( wxCommandEvent& event );
 	void OnProjectPreviewFullscreen( wxCommandEvent& event );
 	void OnFullscreen( wxCommandEvent& event );
-	void OnViewLog( wxCommandEvent& event );
 
 	void OnConfiguration( wxCommandEvent& event );
 

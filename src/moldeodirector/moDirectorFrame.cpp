@@ -64,7 +64,6 @@ BEGIN_EVENT_TABLE(moDirectorFrame, wxFrame)
 	EVT_MENU( MODIRECTOR_PROJECT_PREVIEW, moDirectorFrame::OnProjectPreview )
 	EVT_MENU( MODIRECTOR_PROJECT_PREVIEW_FULLSCREEN, moDirectorFrame::OnProjectPreviewFullscreen )
 	EVT_MENU( MODIRECTOR_FULLSCREEN, moDirectorFrame::OnFullscreen )
-	EVT_MENU( MODIRECTOR_LOG, moDirectorFrame::OnViewLog )
 	EVT_MENU( MODIRECTOR_CONFIGURATION, moDirectorFrame::OnConfiguration )
 
 	EVT_KEY_DOWN( moDirectorFrame::OnKeyDown )
@@ -169,8 +168,6 @@ moDirectorFrame::moDirectorFrame(const wxString& title)
 	viewMenu->Append( MODIRECTOR_FULLSCREEN, _T("&Interface Fullscreen\tAlt-F11"), _T("Interface Fullscreen"));
 	viewMenu->Append( MODIRECTOR_PROJECT_PREVIEW, _T("&Preview\tAlt-P"), _T("View frame preview"));
 	viewMenu->Append( MODIRECTOR_PROJECT_PREVIEW_FULLSCREEN, _T("&Toggle Preview Fullscreen\tAlt-Return"), _T("Frame preview fullscreen"));
-    viewMenu->AppendSeparator();
-    viewMenu->Append( MODIRECTOR_LOG, _T("View &Log\tAlt-L"), _T("View log window"));
 
 	//OPTIONS
 	wxMenu *optionsMenu = new wxMenu;
@@ -975,10 +972,6 @@ moDirectorFrame::OnFullscreen( wxCommandEvent& event ) {
 
 }
 
-void
-moDirectorFrame::OnViewLog(wxCommandEvent& event) {
-    wxMessageBox(wxT("Selected View Log"),wxT("Moldeo Director"));
-}
 
 void
 moDirectorFrame::OnConfiguration( wxCommandEvent& event ) {
