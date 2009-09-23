@@ -96,7 +96,7 @@ void moConsole::InitResources( moResourceManager *pResourceManager,
 
 MOboolean moConsole::Init()
 {
-	return Init( moText("data"), moText("data/console.mol"), NULL, MO_RENDER_TO_TEXTURE_FBSCREEN,
+	return Init( moText("data"), moText("data/console.mol"), NULL, NULL, RENDERMANAGER_MODE_NORMAL,
 		MO_DEF_SCREEN_WIDTH,
 		MO_DEF_SCREEN_HEIGHT,
 		MO_DEF_RENDER_WIDTH,
@@ -109,7 +109,7 @@ MOboolean moConsole::Init( moText p_datapath,
 						  moText p_consoleconfig,
 						  moIODeviceManager* p_pIODeviceManager,
 						 moResourceManager*  p_pResourceManager,
-					  MOint p_render_to_texture_mode,
+					  moRenderManagerMode p_render_to_texture_mode,
 					  MOint p_screen_width, MOint p_screen_height,
 					  MOint p_render_width, MOint p_render_height,
                       MO_HANDLE p_OpWindowHandle,
@@ -1250,7 +1250,8 @@ void moConsole::SetTicks( int ticksid ) {
 }
 
 int moConsole::GetObjectId( moText p_objectlabelname ) {
-    for(int i=0; i<m_MoldeoObjects.Count(); i++) {
+    int i;
+    for(i=0; i<m_MoldeoObjects.Count(); i++) {
 
         if (p_objectlabelname == m_MoldeoObjects[i]->GetLabelName()) {
             return m_MoldeoObjects[i]->GetId();
@@ -1284,6 +1285,8 @@ void moConsole::RegisterFunctions()
 
     RegisterFunction("LGetState");
     RegisterFunction("LSetState");
+
+    RegisterFunction("LGetDeviceCode");
 
     RegisterFunction("PushDebugString");
 }
@@ -1331,6 +1334,9 @@ int moConsole::ScriptCalling(moLuaVirtualMachine& vm, int iFunctionNumber)
             return LSetState(vm);
 
         case 15:
+            return LGetDeviceCode(vm);
+
+        case 16:
             return PushDebugString(vm);
 	}
     return 0;
@@ -1649,3 +1655,27 @@ int moConsole::LGetState(moLuaVirtualMachine& vm) {
     return 6;
 }
 
+int moConsole::LGetDeviceCode(moLuaVirtualMachine& vm)
+{
+    lua_State *state = (lua_State *) vm;
+
+    MOint objectid = (MOint) lua_tonumber (state, 1) - MO_MOLDEOOBJECTS_OFFSET_ID;
+    MOint devicecode = (MOint) lua_tonumber (state, 2);
+    MOint codevalue = -1;
+
+    moMoldeoObject* Object = m_MoldeoObjects[objectid];
+
+    if (Object && Object->GetConfig()) {
+        if (Object->GetType()==MO_OBJECT_IODEVICE) {
+            moIODevice* pDevice = (moIODevice*) Object;
+            if (pDevice->GetStatus(devicecode)) {
+                codevalue = pDevice->GetValue( devicecode );
+            }
+        }
+        lua_pushnumber(state, (lua_Number) codevalue );
+    } else {
+        MODebug2->Error( moText("in console script: LGetDeviceCode : object not founded : id:")+(moText)IntToStr(objectid));
+    }
+
+    return 1;
+}

@@ -382,7 +382,7 @@ moResourceManager::Init( const moText& p_datapath,
 	MORenderMan = (moRenderManager*) GetResourceByType( MO_RESOURCETYPE_RENDER );
 	if (MORenderMan)  {
         if (MODebug2) MODebug2->Message(moText("moResourceManager:: Initializing Render Man Resource."));
-	    if (!MORenderMan->Init( p_render_to_texture_mode, p_screen_width, p_screen_height, p_render_width, p_render_height ))
+	    if (!MORenderMan->Init( (moRenderManagerMode)p_render_to_texture_mode, p_screen_width, p_screen_height, p_render_width, p_render_height ))
             MODebug2->Error(moText("moResourceManager:: Render Man Initialization Error."));
 	} else {
 	    MODebug2->Error(moText("moResourceManager:: Render Man Creation Error."));
