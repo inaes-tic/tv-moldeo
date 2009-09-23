@@ -32,7 +32,7 @@ moDirectorConsole::SetDirectorCore( moDirectorCore* p_pDirectorCore ) {
 	m_pDirectorCore = p_pDirectorCore;
 	SetNextActionHandler((moIDirectorActions*)m_pDirectorCore);
     m_timer.SetOwner( this, TICKS_ID);
-	m_timer.Start(5);
+	m_timer.Start(10);
 }
 
 moMoldeoObject*
@@ -130,7 +130,8 @@ moDirectorConsole::OpenProject( moProjectDescriptor p_projectdescriptor )  {//lo
               p_projectdescriptor.GetFullConfigName(),
               m_pIODeviceManager,
               m_pResourceManager,
-              0,//render to texture
+              RENDERMANAGER_MODE_NORMAL,
+              //MO_RENDER_TO_TEXTURE_FBOBJECT,//render to texture: MO_RENDER_TO_TEXTURE_FBSCREEN
               400,300,400,300,
               /*MO_DEF_SCREEN_WIDTH, MO_DEF_SCREEN_HEIGHT,
               MO_DEF_RENDER_WIDTH, MO_DEF_RENDER_HEIGHT,*/
@@ -1349,7 +1350,7 @@ moDirectorConsole::SetView( int x, int y, int w, int h ) {
             if (m_pResourceManager->Initialized()) {
             		if (m_pResourceManager->GetRenderMan()) {
 						m_pResourceManager->GetRenderMan()->Finish();
-						m_pResourceManager->GetRenderMan()->Init( 0, w, h, w, h);
+						m_pResourceManager->GetRenderMan()->Init( RENDERMANAGER_MODE_NORMAL, w, h, w, h);
 						Log("moDirectorConsole::SetView Render Manager Resized");
 					}
 
