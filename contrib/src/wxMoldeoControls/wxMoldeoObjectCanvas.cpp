@@ -17,7 +17,7 @@ DEFINE_EVENT_TYPE( wxEVT_MOLDEOOBJECT )
 
 const long wxMoldeoObjectCanvas::TIMELINETIMER_ID = 1;
 
-BEGIN_EVENT_TABLE( wxMoldeoObjectCanvas, wxControl )
+BEGIN_EVENT_TABLE( wxMoldeoObjectCanvas, wxPanel )
     EVT_TIMER( wxMoldeoObjectCanvas::TIMELINETIMER_ID, wxMoldeoObjectCanvas::OnTimer)
     EVT_PAINT( wxMoldeoObjectCanvas::OnPaint )
     EVT_MOUSE_EVENTS( wxMoldeoObjectCanvas::OnMouseEvent )
