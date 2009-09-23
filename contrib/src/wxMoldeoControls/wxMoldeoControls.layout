@@ -2,13 +2,13 @@
 <CodeBlocks_layout_file>
 	<ActiveTarget name="All" />
 	<File name="wxMoLevelCtrl.cpp" open="0" top="0" tabpos="2">
-		<Cursor position="3272" topLine="90" />
+		<Cursor position="977" topLine="15" />
 	</File>
 	<File name="wxMoLevelCtrl.h" open="0" top="0" tabpos="0">
 		<Cursor position="673" topLine="0" />
 	</File>
 	<File name="wxMoRotaryCtrl.cpp" open="0" top="0" tabpos="3">
-		<Cursor position="1152" topLine="18" />
+		<Cursor position="228" topLine="0" />
 	</File>
 	<File name="wxMoRotaryCtrl.h" open="0" top="0" tabpos="4">
 		<Cursor position="1790" topLine="42" />
@@ -25,17 +25,14 @@
 	<File name="wxMoldeoLineCtrl.h" open="0" top="0" tabpos="5">
 		<Cursor position="227" topLine="0" />
 	</File>
-	<File name="wxMoldeoObjectCanvas.cpp" open="0" top="0" tabpos="4">
-		<Cursor position="5022" topLine="159" />
-	</File>
-	<File name="wxMoldeoObjectCanvas.h" open="0" top="0" tabpos="0">
-		<Cursor position="380" topLine="0" />
+	<File name="wxMoldeoObjectCanvas.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="374" topLine="12" />
 	</File>
 	<File name="wxMoldeoObjectCtrl.cpp" open="0" top="0" tabpos="1">
-		<Cursor position="1740" topLine="231" />
+		<Cursor position="451" topLine="7" />
 	</File>
 	<File name="wxMoldeoObjectCtrl.h" open="0" top="0" tabpos="0">
-		<Cursor position="1097" topLine="25" />
+		<Cursor position="383" topLine="0" />
 	</File>
 	<File name="wxMoldeoPinCtrl.cpp" open="0" top="0" tabpos="2">
 		<Cursor position="9552" topLine="325" />

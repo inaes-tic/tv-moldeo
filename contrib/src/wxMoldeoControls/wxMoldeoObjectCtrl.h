@@ -47,6 +47,8 @@ class wxMoldeoObjectCtrl : public wxPanel {
         void OnCaptureChangedEvent( wxMouseCaptureChangedEvent& event );
         void OnEraseBackground(wxEraseEvent& event);
 
+    public:
+
         DECLARE_EVENT_TABLE()
 
 };
