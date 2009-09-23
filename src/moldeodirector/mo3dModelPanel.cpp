@@ -12,6 +12,7 @@ const long mo3dModelPanel::ID_PANEL3DMODEL = wxNewId();
 const long mo3dModelPanel::ID_LISTCTRL3DMODEL = wxNewId();
 //*)
 
+
 BEGIN_EVENT_TABLE(mo3dModelPanel,wxPanel)
 	//(*EventTable(mo3dModelPanel)
 	//*)
