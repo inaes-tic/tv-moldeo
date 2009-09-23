@@ -165,7 +165,7 @@ class LIBMOLDEO_API moConsole : public moMoldeoObject {
 						moText p_consoleconfig,
 						moIODeviceManager* p_pIODeviceManager = NULL,
 						moResourceManager *p_pResourceManager = NULL,
-		               MOint p_render_to_texture_mode = MO_RENDER_TO_TEXTURE_FBSCREEN,
+            moRenderManagerMode p_render_to_texture_mode = RENDERMANAGER_MODE_NORMAL,
 					   MOint p_screen_width = MO_DEF_SCREEN_WIDTH, MOint p_screen_height = MO_DEF_SCREEN_HEIGHT,
 					   MOint p_render_width = MO_DEF_RENDER_WIDTH, MOint p_render_height = MO_DEF_RENDER_HEIGHT,
 					   MO_HANDLE p_OpWindowHandle  = 0,
@@ -289,7 +289,10 @@ class LIBMOLDEO_API moConsole : public moMoldeoObject {
         int LSetState(moLuaVirtualMachine& vm);
         int LGetState(moLuaVirtualMachine& vm);
 
+        int LGetDeviceCode(moLuaVirtualMachine& vm);
+
         int GetObjectId( moText p_objectlabelname );
+
 
     protected:
 

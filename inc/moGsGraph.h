@@ -220,6 +220,8 @@ private:
     moGstElement          *m_pIdentity; /** "identity" */
 
     moGstElement          *m_pVideoScale;
+    moGstElement          *m_pVideoDeinterlace;
+    moGstElement          *m_pColorSpaceInterlace;/** "ffmpegcolorspace for deinterlace" */
 
     moGstElement          *m_pDecoderBin;/** "decodebin" */
     moGstElement          *m_pFakeSink; /** "fakesink" */

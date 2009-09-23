@@ -45,6 +45,29 @@
 #define MO_RENDER_TO_TEXTURE_FBSCREEN 0
 #define MO_RENDER_TO_TEXTURE_FBOBJECT 1
 
+typedef void moVdpDevice;
+typedef void moVdpDecoder;
+typedef void moVdpVideoMixer;
+typedef void moVdpPresentationQueueDisplay;
+typedef void moVdpPresentationQueue;
+
+typedef void moVdpVideoSurface;
+typedef void moVdpOutputSurface;
+typedef void moVdpBitmapSurface;
+
+typedef void moVdpTime;
+typedef void moVdpPictureInfo;
+typedef void moVdpBitstreamBuffer;
+
+
+enum moRenderManagerMode {
+
+  RENDERMANAGER_MODE_NORMAL=0,
+  RENDERMANAGER_MODE_FRAMEBUFFER=1,
+  RENDERMANAGER_MODE_VDPAU=2
+
+};
+
 enum moRenderOutputMode {
 
     MO_RENDER_OUTPUT_MODE_NORMAL, ///rsolution ouput to display output
@@ -63,6 +86,7 @@ class LIBMOLDEO_API moResolution {
 
 };
 
+
 class LIBMOLDEO_API moRenderClip {
 
     public:
@@ -72,14 +96,18 @@ class LIBMOLDEO_API moRenderClip {
 
 };
 
+moDeclareExportedDynamicArray( moRenderClip*, moRenderClips)
+
+
 class LIBMOLDEO_API moDisplayOutput {
 
   public:
         moResolution    m_DisplayResolution;
-        int             m_renderclip;/// 1, 2 or 3
+        int             m_renderclip;/// index to corresponding render clip
 
 };
 
+moDeclareExportedDynamicArray( moDisplayOutput*, moDisplayOutputs)
 
 
 class LIBMOLDEO_API moRenderOutputConfiguration {
@@ -95,13 +123,9 @@ class LIBMOLDEO_API moRenderOutputConfiguration {
 
         ///normal output need this
 
-        moRenderClip  Clip1;///clip or section of render resolution
-        moRenderClip  Clip2;///clip or section of render resolution
-        moRenderClip  Clip3;///clip or section of render resolution
+        moRenderClips  Clips;///clip or section of render resolution
 
-        moDisplayOutput Output1;///each with diff resolution or not
-        moDisplayOutput Output2;///each with diff resolution or not
-        moDisplayOutput Output3;///each with diff resolution or not
+        moDisplayOutputs Output1;///each with diff resolution or not
 
 };
 
@@ -155,7 +179,7 @@ class LIBMOLDEO_API moRenderManager : public moResource
          * @param p_render_height alto de render.
          * @return el resultado de la operación: true o false.
          */
-		virtual MOboolean Init( MOint p_render_to_texture_mode,
+		virtual MOboolean Init( moRenderManagerMode p_render_to_texture_mode,
 			      MOint p_screen_width, MOint p_screen_height,
 				  MOint p_render_width, MOint p_render_height);
         /**
@@ -181,7 +205,7 @@ class LIBMOLDEO_API moRenderManager : public moResource
          * Establece el modo de render (MO_RENDER_TO_TEXTURE_FBOBJECT o MO_RENDER_TO_TEXTURE_FBSCREEN).
          * @param p_render_to_texture_mode nuevo modo de render.
          */
-		void SetRenderToTexMode(MOint p_render_to_texture_mode);
+		void SetRenderToTexMode( moRenderManagerMode p_render_to_texture_mode);
         /**
          * Devuelve el modo de render utilizado en este momento.
          * @return el modo de render actual.
@@ -329,6 +353,8 @@ class LIBMOLDEO_API moRenderManager : public moResource
 
 	protected:
 
+    moVdpDevice*     m_pVdpDevice;
+
 		moLock					m_RenderLock;
 
 		MOboolean				m_saved_screen;
@@ -341,10 +367,10 @@ class LIBMOLDEO_API moRenderManager : public moResource
 
         moBucketsPool*           m_pFramesPool;
 
-		MOint m_render_to_texture_mode;
+		moRenderManagerMode m_render_to_texture_mode;
 		MOint m_screen_width, m_screen_height;
         MOint m_render_width, m_render_height;
-        MOuint m_render_tex_moid[6];
+        MOint m_render_tex_moid[6];
 		MOuint m_render_attach_points[4];
 		MOuint m_fbo_idx;
 
