@@ -293,7 +293,7 @@ typedef enum {
 	MoldeoSession = new moConsole();
 
 	if ( MoldeoSession->Init( data, config, NULL, NULL,
-		                render_to_fbo,
+		                (moRenderManagerMode)render_to_fbo,
 		                screen_width, screen_height,
 						render_width, render_height,
 						(MO_HANDLE)g_hwnd , (MO_DISPLAY)g_hdisp )) {
