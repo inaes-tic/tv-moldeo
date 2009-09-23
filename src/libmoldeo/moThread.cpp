@@ -48,14 +48,14 @@ bool moThread::CreateThread() {
     thread* pthread;
     //pthread = new thread( boost::bind( moThread::InitialThreadFunction, (void*)this ) );
     //m_handleThread = (void*) pthread;
-	//m_handleThread = SDL_CreateThread( InitialThreadFunction,(void*)this);
+	//m_handleThread = (SDL_Thread *)SDL_CreateThread( InitialThreadFunction,(void*)this);
 
 	return(m_handleThread!=NULL);
 }
 
 bool moThread::KillThread() {
 	if(ThreadExists()) {
-		//SDL_KillThread( m_handleThread );//SDL_WaitThread ???
+		//SDL_KillThread( (SDL_Thread *) m_handleThread );//SDL_WaitThread ???
 		//thread* pthread = (thread*)m_handleThread;
 		//delete pthread;
 		m_handleThread=NULL;

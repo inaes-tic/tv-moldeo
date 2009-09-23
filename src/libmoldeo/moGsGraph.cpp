@@ -25,7 +25,7 @@
 
   Authors:
   Fabricio Costa
-  AndrÃ©s Colubri
+  Andrés Colubri
 
 *******************************************************************************/
 
@@ -383,6 +383,9 @@ moGsGraph::moGsGraph() {
     m_pBucketsPool = NULL;
     m_pVideoScale = NULL;
 
+    m_pVideoDeinterlace = NULL;
+    m_pColorSpaceInterlace = NULL;
+
     m_pAudioConverter = NULL;
     m_pAudioSink = NULL;
 
@@ -424,7 +427,7 @@ bool
 moGsGraph::InitGraph() {
 
     //opner en el main de la consola...
-    //inicializaciÃ³n de la libreria gstreamer
+    //inicialización de la libreria gstreamer
     guint major, minor, micro, nano;
     //GError *errores;
 
@@ -456,7 +459,7 @@ moGsGraph::InitGraph() {
     m_pGstBus = gst_pipeline_get_bus (GST_PIPELINE (m_pGstPipeline));
     //gst_bus_add_watch (m_pGstBus, moGsGraph::bus_call, NULL);
     gst_object_unref (m_pGstBus);
-    //fin inicializaciÃ³n
+    //fin inicialización
 
 
 /*
@@ -677,8 +680,14 @@ moGsGraph::BuildLiveWebcamGraph( moBucketsPool *pBucketsPool, moCaptureDevice &p
     bool b_sourceselect = false;
     bool b_forcevideoscale = false;
     bool b_forcevideoflip = false;
+
+    bool b_forcevideointerlace = false;
+
     //gchar* checkval;
     bool res = false;
+    GstPadLinkReturn ret_padlink;
+
+    moGstElement* m_pColorSpaceSource = NULL;
 
     moGstElement* m_pCapsFilterSource = NULL;
     moGstElement* m_pCapsFilter2 = NULL;
@@ -752,11 +761,66 @@ moGsGraph::BuildLiveWebcamGraph( moBucketsPool *pBucketsPool, moCaptureDevice &p
 
            res = gst_bin_add (GST_BIN (m_pGstPipeline), (GstElement*) m_pFileSource );
 
+           GstIterator* iterator = NULL;
+           iterator = gst_element_iterate_src_pads( (GstElement*) m_pFileSource );
+
+           gpointer item;
+           GstCaps* itemcaps = NULL;
+
+           GstPad* srcpad = NULL;
+           GstPad* sinkpad = NULL;
+
+           moText padname;
+           moText icapsstr;
+
+           bool done = FALSE;
+           while (!done) {
+             switch (gst_iterator_next (iterator, &item)) {
+               case GST_ITERATOR_OK:
+                 //... use/change item here...
+
+                 srcpad = (GstPad*)item;
+                 padname = gst_object_get_name((GstObject*) srcpad );
+
+                 MODebug2->Message( moText("filesrc src pad: checking caps: ") + (moText)padname );
+
+                 itemcaps = gst_pad_get_caps( srcpad );
+                 if (itemcaps) {
+
+                     icapsstr = moText( gst_caps_to_string(itemcaps) );
+                     MODebug2->Message(icapsstr);
+                 }
+                 //gst_object_unref (item);
+
+                 break;
+               case GST_ITERATOR_RESYNC:
+                 //...rollback changes to items...
+                 gst_iterator_resync (iterator);
+                 break;
+               case GST_ITERATOR_ERROR:
+                 //...wrong parameters were given...
+                 done = TRUE;
+                 break;
+               case GST_ITERATOR_DONE:
+                 done = TRUE;
+                 break;
+             }
+           }
+           gst_iterator_free (iterator);
+
+
+
            if (b_sourceselect) {
                MODebug2->Message(moText("moGsGraph:: sourceselect:") + (moText)colormode + moText(" ") + IntToStr(p_sourcewidth) + moText("X") + IntToStr(p_sourceheight)+ moText(" bpp:") + IntToStr(p_sourcebpp));
                m_pCapsFilterSource = gst_element_factory_make ("capsfilter", "filtsource");
 
                if (m_pCapsFilterSource) {
+
+									  m_pColorSpaceSource = gst_element_factory_make ("ffmpegcolorspace", "colorsource");
+									  if (m_pCapsFilterSource) {
+									  	res = gst_bin_add (GST_BIN (m_pGstPipeline), (GstElement*) m_pColorSpaceSource );
+									  }
+
                    g_object_set (G_OBJECT (m_pCapsFilterSource), "caps", gst_caps_new_simple ( colormode,
                    "width", G_TYPE_INT, p_sourcewidth,
                    "height", G_TYPE_INT, p_sourceheight,
@@ -770,7 +834,8 @@ moGsGraph::BuildLiveWebcamGraph( moBucketsPool *pBucketsPool, moCaptureDevice &p
                    "blue_mask",G_TYPE_INT, 16711680,
                    "endianness", G_TYPE_INT, 4321
                    */
-                   //res = gst_bin_add (GST_BIN (m_pGstPipeline), (GstElement*) m_pCapsFilterSource );
+                   res = gst_bin_add (GST_BIN (m_pGstPipeline), (GstElement*) m_pCapsFilterSource );
+
                }
            }
 
@@ -786,12 +851,12 @@ moGsGraph::BuildLiveWebcamGraph( moBucketsPool *pBucketsPool, moCaptureDevice &p
                     m_pCapsFilter2 = gst_element_factory_make ("capsfilter", "filt2");
                     if (m_pCapsFilter2) {
                         if (b_forcevideoscale) {
-                            g_object_set (G_OBJECT (m_pCapsFilter2), "caps", gst_caps_new_simple (colormode,
+                            g_object_set (G_OBJECT (m_pCapsFilter2), "caps", gst_caps_new_simple ( colormode,
                                 "width", G_TYPE_INT, p_forcewidth,
                                 "height", G_TYPE_INT, p_forceheight,
                                 NULL), NULL);
                         } else {
-                            g_object_set (G_OBJECT (m_pCapsFilter2), "caps", gst_caps_new_simple (colormode,
+                            g_object_set (G_OBJECT (m_pCapsFilter2), "caps", gst_caps_new_simple ( colormode,
                                 "width", G_TYPE_INT, 240,
                                 "height", G_TYPE_INT, 160,
                                 NULL), NULL);
@@ -801,6 +866,22 @@ moGsGraph::BuildLiveWebcamGraph( moBucketsPool *pBucketsPool, moCaptureDevice &p
                     }
 
 
+               }
+           }
+
+            b_forcevideointerlace = true;
+           if (b_forcevideointerlace) {
+               m_pColorSpaceInterlace = gst_element_factory_make ("ffmpegcolorspace", "colordeinterlace");
+               if (m_pColorSpaceInterlace) {
+                    res = gst_bin_add (GST_BIN (m_pGstPipeline), (GstElement*) m_pColorSpaceInterlace );
+               }
+
+
+               m_pVideoDeinterlace = gst_element_factory_make ("ffdeinterlace", "deinterlace");
+               if (m_pVideoDeinterlace) {
+                    int  tff = 2;//bottom field first
+                    //g_object_set (G_OBJECT (m_pVideoDeinterlace), "tff", &tff, NULL);
+                    res = gst_bin_add (GST_BIN (m_pGstPipeline), (GstElement*) m_pVideoDeinterlace );
                }
            }
 
@@ -844,19 +925,7 @@ moGsGraph::BuildLiveWebcamGraph( moBucketsPool *pBucketsPool, moCaptureDevice &p
                      res = gst_bin_add (GST_BIN (m_pGstPipeline), (GstElement*) m_pFakeSink );
 
                     if (b_sourceselect) {
-                        link_result = gst_element_link_many( (GstElement*) m_pFileSource, (GstElement*) m_pCapsFilterSource, (GstElement*) m_pDecoderBin, NULL );
-                        ///retry with yuv
-                        if (!link_result) {
-                            if (m_pCapsFilterSource) {
-                               MODebug2->Message(moText("moGsGraph:: retrying with YUV"));
-                               g_object_set (G_OBJECT (m_pCapsFilterSource), "caps", gst_caps_new_simple ("video/x-raw-yuv",
-                               "width", G_TYPE_INT, p_sourcewidth,
-                               "height", G_TYPE_INT, p_sourceheight,
-                               NULL), NULL);
-                           }
-                        }
-                        //link_result = gst_element_link_many( (GstElement*) m_pFileSource, (GstElement*) m_pCapsFilterSource, (GstElement*) m_pDecoderBin, NULL );
-                        link_result = gst_element_link_many( (GstElement*) m_pFileSource, (GstElement*) m_pDecoderBin, NULL );
+                        link_result = gst_element_link_many( (GstElement*) m_pFileSource, (GstElement*) m_pColorSpaceSource, (GstElement*) m_pCapsFilterSource, (GstElement*) m_pDecoderBin, NULL );
                      } else {
                         link_result = gst_element_link_many( (GstElement*) m_pFileSource, (GstElement*) m_pDecoderBin, NULL );
                     }
@@ -865,9 +934,19 @@ moGsGraph::BuildLiveWebcamGraph( moBucketsPool *pBucketsPool, moCaptureDevice &p
                     if (link_result) {
 
                         if (b_forcevideoscale) {
-                            link_result = gst_element_link_many( (GstElement*) m_pVideoScale, (GstElement*)m_pCapsFilter2, (GstElement*) m_pColorSpace, (GstElement*) m_pCapsFilter, (GstElement*) m_pFakeSink, NULL );
+                            if (b_forcevideointerlace)
+                                link_result = gst_element_link_many( (GstElement*) m_pVideoScale, (GstElement*)m_pCapsFilter2, (GstElement*) m_pColorSpaceInterlace, (GstElement*) m_pVideoDeinterlace, (GstElement*) m_pColorSpace, (GstElement*) m_pCapsFilter, (GstElement*) m_pFakeSink, NULL );
+                            else
+                                link_result = gst_element_link_many( (GstElement*) m_pVideoScale, (GstElement*)m_pCapsFilter2, (GstElement*) m_pColorSpace, (GstElement*) m_pCapsFilter, (GstElement*) m_pFakeSink, NULL );
+
+                            //old deinterlace
+                            //link_result = gst_element_link_many( (GstElement*) m_pVideoDeinterlace, (GstElement*) m_pVideoScale, (GstElement*)m_pCapsFilter2, (GstElement*) m_pColorSpace, (GstElement*) m_pCapsFilter, (GstElement*) m_pFakeSink, NULL );
                         } else {
-                            link_result = gst_element_link_many( (GstElement*) m_pColorSpace, (GstElement*) m_pCapsFilter, (GstElement*) m_pFakeSink, NULL );
+                            //link_result = gst_element_link_many( (GstElement*) m_pVideoDeinterlace, (GstElement*) m_pColorSpace, (GstElement*) m_pCapsFilter, (GstElement*) m_pFakeSink, NULL );
+                            if (b_forcevideointerlace)
+                                link_result = gst_element_link_many( (GstElement*) m_pColorSpaceInterlace, (GstElement*) m_pVideoDeinterlace, (GstElement*)m_pColorSpace, (GstElement*) m_pCapsFilter, (GstElement*) m_pFakeSink, NULL );
+                            else
+                                link_result = gst_element_link_many( (GstElement*) m_pColorSpace, (GstElement*) m_pCapsFilter, (GstElement*) m_pFakeSink, NULL );
                         }
 
                         if (link_result) {
@@ -1054,7 +1133,15 @@ moGsGraph::cb_newpad ( moGstElement *decodebin, moGstPad *pad, moGBoolean last, 
 
             //MODebug2->Push(moText("moGsGraph::cb_newpad: video pad created"));
             if (pGsGraph->m_pVideoScale==NULL) {
-                videopad = gst_element_get_pad ( (GstElement*)pGsGraph->m_pColorSpace, "sink");
+                //version directa a videoscale
+                if (!(GstElement*)pGsGraph->m_pColorSpaceInterlace) {
+                    videopad = gst_element_get_pad ( (GstElement*)pGsGraph->m_pColorSpace, "sink");
+                } else {
+                    videopad = gst_element_get_pad ( (GstElement*)pGsGraph->m_pColorSpaceInterlace, "sink");
+                }
+                //version con deinterlace
+                //videopad = gst_element_get_pad ( (GstElement*)pGsGraph->m_pVideoDeinterlace, "sink");
+
                 GstPad* srcRGB = gst_element_get_pad ( (GstElement*)pGsGraph->m_pColorSpace, "src");
                 //bool res = gst_pad_set_caps( gst_element_get_pad ( pGsGraph->m_pColorSpace, "src"), gst_caps_new_simple ("video/x-raw-rgb","bpp", G_TYPE_INT, 24, NULL)  );
                 padlink = gst_pad_link( Gpad, videopad );
@@ -1067,9 +1154,15 @@ moGsGraph::cb_newpad ( moGstElement *decodebin, moGstPad *pad, moGBoolean last, 
                 }
             } else {
                 //version 2 con videoscale
+
+                //version directa a videoscale
                 videopad = gst_element_get_pad ( (GstElement*)pGsGraph->m_pVideoScale, "sink");
+
+                //version con deinterlace
+                //videopad = gst_element_get_pad ( (GstElement*)pGsGraph->m_pVideoDeinterlace, "sink");
                 GstPad* srcRGB = gst_element_get_pad ( (GstElement*)pGsGraph->m_pColorSpace, "src");
                 //bool res = gst_pad_set_caps( gst_element_get_pad ( pGsGraph->m_pColorSpace, "src"), gst_caps_new_simple ("video/x-raw-rgb","bpp", G_TYPE_INT, 24, NULL)  );
+
                 padlink = gst_pad_link( Gpad, videopad );
 
                 if (padlink==GST_PAD_LINK_OK) {

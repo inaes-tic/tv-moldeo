@@ -179,12 +179,12 @@ MOboolean moTexture::BuildFromFile(moText p_filename)
 				break;
 			case 24: // 24 bits
 				m_param.internal_format = GL_RGB;
-				if (FreeImage_GetBlueMask(m_pImage) != 0x000000FF) p_format = GL_BGR;
+				if (FreeImage_GetRedMask(m_pImage) == 0x0000FF) p_format = GL_BGR;
 				else p_format = GL_RGB;
 				break;
 			case 32: // 32 bits
 				m_param.internal_format = GL_RGBA;
-				if (FreeImage_GetBlueMask(m_pImage) != 0x000000FF) p_format = GL_BGRA_EXT;
+				if (FreeImage_GetBlueMask(m_pImage) == 0x000000FF) p_format = GL_BGRA_EXT;
 				else p_format = GL_RGBA;
 				break;
 			default:
@@ -269,10 +269,10 @@ MOboolean moTexture::GetBuffer(GLvoid* p_buffer, GLenum p_format, GLenum p_type)
 
 bool moTexture::CalculateLuminanceAndConstrast( int x0, int y0, int x1, int y1 ) {
 
-    FREE_IMAGE_FORMAT fif;
+    //FREE_IMAGE_FORMAT fif;
     FIBITMAP* fbitmap = NULL;
     FIBITMAP* fbitmapcopy = NULL;
-    int options = 0;
+    //configint options = 0;
     BYTE* tempbuffer = NULL;
 
     if (GetHeight()==0 || GetWidth()==0) return false;
@@ -784,8 +784,8 @@ MOboolean moTextureMemory::LoadFromBitmap( moBitmap* p_bitmap ) {
 
 
 
-            MODebug2->Push( moText("moTextureMemory::LoadFromBitmap success: hmem:") + IntToStr((int)hmem));
-            MODebug2->Push( moText("moTextureMemory::LoadFromBitmap luminance:") + IntToStr(Luminance) + moText(" contrast:") + IntToStr(Contrast) );
+            //MODebug2->Push( moText("moTextureMemory::LoadFromBitmap success: hmem:") + IntToStr((int)hmem));
+            //MODebug2->Push( moText("moTextureMemory::LoadFromBitmap luminance:") + IntToStr(Luminance) + moText(" contrast:") + IntToStr(Contrast) );
         } else m_bBitmapInMemory = false;
 
 	}
@@ -843,7 +843,7 @@ MOboolean moTextureMemory::BuildFromMemory() {
         //MODebug2->Push( moText("moTextureMemory::BuildFromMemory: success: hmem:") + IntToStr((int)hmem) + moText("glid:") + IntToStr(m_glid));
         return true;
     } else {
-        MODebug2->Error( moText("moTextureMemory::BuildFromMemory: Error GLID or Memory never assigned. hmem:") + IntToStr((int)hmem) + moText("glid:") + IntToStr(m_glid));
+        //MODebug2->Error( moText("moTextureMemory::BuildFromMemory: Error GLID or Memory never assigned. hmem:") + IntToStr((int)hmem) + moText("glid:") + IntToStr(m_glid));
         return false;
     }
 }

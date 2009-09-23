@@ -30,6 +30,15 @@
 *******************************************************************************/
 
 #include "moRenderManager.h"
+#include "moEffect.h"
+
+#ifdef MO_LINUX
+#include "vdpau/vdpau.h"
+#endif
+
+#include "moArray.cpp"
+moDefineDynamicArray( moRenderClips )
+moDefineDynamicArray( moDisplayOutputs )
 
 moRenderManager::moRenderManager() {
 
@@ -40,6 +49,8 @@ moRenderManager::moRenderManager() {
 	m_pGLManager = NULL;
 	m_pFBManager = NULL;
 	m_pTextureManager = NULL;
+
+	m_pVdpDevice = NULL;
 
 	m_render_tex_moid[0] = -1;
 	m_render_tex_moid[1] = -1;
@@ -85,7 +96,7 @@ moRenderOutputConfiguration moRenderManager::GetOutputConfiguration() {
 
 }
 
-MOboolean moRenderManager::Init(MOint p_render_to_texture_mode,
+MOboolean moRenderManager::Init( moRenderManagerMode p_render_to_texture_mode,
 						   MOint p_screen_width, MOint p_screen_height,
 						   MOint p_render_width, MOint p_render_height)
 {
@@ -96,6 +107,7 @@ MOboolean moRenderManager::Init(MOint p_render_to_texture_mode,
 		// Problem: glewInit failed, something is seriously wrong.
 		MODebug2->Error(moText("GLEW Error: ")+ moText((char*)glewGetErrorString(err)));
 	}
+
     MODebug2->Message( moText("Using GLEW ") + moText((char*)glewGetString(GLEW_VERSION)));
     MODebug2->Message( moText("GLEW_ARB_texture_non_power_of_two: ") + moText(IntToStr(GLEW_ARB_texture_non_power_of_two)) );
     MODebug2->Message( moText("GLEW_ARB_color_buffer_float: ") + moText(IntToStr(GLEW_ARB_color_buffer_float))) ;
@@ -103,9 +115,20 @@ MOboolean moRenderManager::Init(MOint p_render_to_texture_mode,
     MODebug2->Message( moText("GLEW_ARB_imaging: ") + moText(IntToStr(GLEW_ARB_imaging))) ;
     MODebug2->Message( moText("GLEW_ARB_shading_language_100: ") + moText(IntToStr(GLEW_ARB_shading_language_100))) ;
 
-
-
 	m_render_to_texture_mode = p_render_to_texture_mode;
+
+  MODebug2->Message(moText("Setting Render Manager Mode to:")+ IntToStr(m_render_to_texture_mode));
+
+#ifdef MO_LINUX
+	if ( m_render_to_texture_mode == RENDERMANAGER_MODE_VDPAU ) {
+
+	  m_pVdpDevice = new VdpDevice();
+	  if (m_pVdpDevice!=NULL) {
+        MODebug2->Message("VDPAU Device Created Succesfully!!!");
+    }
+
+  }
+#endif
 
 	if (m_pResourceManager){
 		m_pGLManager = m_pResourceManager->GetGLMan();
@@ -200,7 +223,7 @@ MOboolean moRenderManager::RenderResEqualScreenRes()
     return (m_screen_width == m_render_width) && (m_screen_height == m_render_height);
 }
 
-void moRenderManager::SetRenderToTexMode(MOint p_render_to_texture_mode)
+void moRenderManager::SetRenderToTexMode( moRenderManagerMode p_render_to_texture_mode)
 {
     m_render_to_texture_mode = p_render_to_texture_mode;
 }
