@@ -244,6 +244,10 @@ moResourceManager::Init( const moText& p_datapath,
 	if ( GetResourceByType( MO_RESOURCETYPE_GL )==NULL )
 		AddResource( new moGLManager() );
 
+	if ( GetResourceByType( MO_RESOURCETYPE_DECODER )==NULL )
+		AddResource( new moDecoderManager() );
+
+
 	if ( GetResourceByType( MO_RESOURCETYPE_RENDER )==NULL )
 		AddResource( new moRenderManager() );
 
@@ -379,6 +383,16 @@ moResourceManager::Init( const moText& p_datapath,
 	    MODebug2->Error(moText("moResourceManager:: Texture Man Creation Error."));
     }
 
+	MODecoderMan = (moDecoderManager*)  GetResourceByType( MO_RESOURCETYPE_DECODER );
+	if (MODecoderMan)  {
+        if (MODebug2) MODebug2->Message(moText("moDecoderMan:: Initializing Decoder Manager Resource."));
+	    if (!MODecoderMan->Init())
+            MODebug2->Error(moText("moDecoderMan:: Decoder Manager Initialization Error."));
+	} else {
+	    MODebug2->Error(moText("moDecoderMan:: Decoder Manager Creation Error."));
+  }
+
+
 	MORenderMan = (moRenderManager*) GetResourceByType( MO_RESOURCETYPE_RENDER );
 	if (MORenderMan)  {
         if (MODebug2) MODebug2->Message(moText("moResourceManager:: Initializing Render Man Resource."));
@@ -502,6 +516,7 @@ moResourceManager::Finish() {
 	MOVideoMan = NULL;
 	MOModelMan = NULL;
 	MODebugMan = NULL;
+	MODecoderMan = NULL;
 
 	m_Resources.Empty();
 

@@ -32,10 +32,6 @@
 #include "moRenderManager.h"
 #include "moEffect.h"
 
-#ifdef MO_LINUX
-#include "vdpau/vdpau.h"
-#endif
-
 #include "moArray.cpp"
 moDefineDynamicArray( moRenderClips )
 moDefineDynamicArray( moDisplayOutputs )
@@ -50,7 +46,8 @@ moRenderManager::moRenderManager() {
 	m_pFBManager = NULL;
 	m_pTextureManager = NULL;
 
-	m_pVdpDevice = NULL;
+	m_pDecoderManager = NULL;
+
 
 	m_render_tex_moid[0] = -1;
 	m_render_tex_moid[1] = -1;
@@ -119,16 +116,14 @@ MOboolean moRenderManager::Init( moRenderManagerMode p_render_to_texture_mode,
 
   MODebug2->Message(moText("Setting Render Manager Mode to:")+ IntToStr(m_render_to_texture_mode));
 
-#ifdef MO_LINUX
 	if ( m_render_to_texture_mode == RENDERMANAGER_MODE_VDPAU ) {
 
-	  m_pVdpDevice = new VdpDevice();
-	  if (m_pVdpDevice!=NULL) {
-        MODebug2->Message("VDPAU Device Created Succesfully!!!");
+	  m_pDecoderManager = m_pResourceManager->GetDecoderMan();
+	  if (m_pDecoderManager!=NULL) {
+        MODebug2->Message("Decoder Manager Acquired.");
     }
 
   }
-#endif
 
 	if (m_pResourceManager){
 		m_pGLManager = m_pResourceManager->GetGLMan();
