@@ -78,6 +78,7 @@ enum moResourceType {
 	MO_RESOURCETYPE_XML,
 	MO_RESOURCETYPE_DB,
 	MO_RESOURCETYPE_DYNAMICENGINE,
+	MO_RESOURCETYPE_DECODER,
 
 	/*RESERVED*/
 	MO_RESOURCETYPE_RESERVED1,
@@ -180,6 +181,8 @@ class	moScriptManager;
 class	moTextureManager;
 class	moSoundManager;
 class	mo3dModelManager;
+class moDecoderManager;
+
 
 #include "moResourcePlugin.h"
 
@@ -408,6 +411,14 @@ class LIBMOLDEO_API moResourceManager : public moAbstract {
          */
 		moDebugManager*			GetDebugMan() { return MODebugMan; }
 
+
+        /**
+         * crea un nuevo recurso
+         *
+         *
+         */
+		moDecoderManager*			GetDecoderMan() { return MODecoderMan; }
+
 	private:
 
 		//predefined managers
@@ -429,6 +440,8 @@ class LIBMOLDEO_API moResourceManager : public moAbstract {
 		moSoundManager*			MOSoundMan;
 		mo3dModelManager*		MOModelMan;
 		moDebugManager*			MODebugMan;
+		moDecoderManager*			MODecoderMan;
+
 
 		moResources				m_Resources;
 
@@ -455,5 +468,7 @@ class LIBMOLDEO_API moResourceManager : public moAbstract {
 #include "moRenderManager.h"
 #include "moMathManager.h"
 #include "moSoundManager.h"
+#include "moDecoderManager.h"
+
 
 #endif
