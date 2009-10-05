@@ -49,6 +49,7 @@
 			<Add option="`pkg-config muparser --cflags`" />
 			<Add option="`pkg-config lua5.1 --cflags`" />
 			<Add option="-DMO_GSTREAMER" />
+			<Add option="-DMO_VDPAU" />
 			<Add directory="../../inc" />
 			<Add directory="../../inc/3ds" />
 			<Add directory="../../contrib/src/tinyxml/" />
@@ -62,6 +63,7 @@
 			<Add option="`pkg-config muparser --libs`" />
 			<Add library="freeimage" />
 			<Add library="libboost_filesystem-mt" />
+			<Add library="vdpau" />
 		</Linker>
 		<Unit filename="../../inc/3ds/3ds.h" />
 		<Unit filename="../../inc/mo3dModelManager.h" />
@@ -76,6 +78,7 @@
 		<Unit filename="../../inc/moConsoleState.h" />
 		<Unit filename="../../inc/moDataManager.h" />
 		<Unit filename="../../inc/moDebugManager.h" />
+		<Unit filename="../../inc/moDecoderManager.h" />
 		<Unit filename="../../inc/moDeviceCode.h" />
 		<Unit filename="../../inc/moDsGraph.h" />
 		<Unit filename="../../inc/moEffect.h" />
@@ -151,6 +154,7 @@
 		<Unit filename="../../inc/moTimeManager.h" />
 		<Unit filename="../../inc/moTypes.h" />
 		<Unit filename="../../inc/moValue.h" />
+		<Unit filename="../../inc/moVdpauGraph.h" />
 		<Unit filename="../../inc/moVideoGraph.h" />
 		<Unit filename="../../inc/moVideoManager.h" />
 		<Unit filename="../../inc/moXmlConfig.h" />
@@ -165,6 +169,7 @@
 		<Unit filename="../../src/libmoldeo/moConsoleState.cpp" />
 		<Unit filename="../../src/libmoldeo/moDataManager.cpp" />
 		<Unit filename="../../src/libmoldeo/moDebugManager.cpp" />
+		<Unit filename="../../src/libmoldeo/moDecoderManager.cpp" />
 		<Unit filename="../../src/libmoldeo/moDeviceCode.cpp" />
 		<Unit filename="../../src/libmoldeo/moDsGraph.cpp" />
 		<Unit filename="../../src/libmoldeo/moEffect.cpp" />
@@ -237,6 +242,7 @@
 		<Unit filename="../../src/libmoldeo/moTimeManager.cpp" />
 		<Unit filename="../../src/libmoldeo/moTypes.cpp" />
 		<Unit filename="../../src/libmoldeo/moValue.cpp" />
+		<Unit filename="../../src/libmoldeo/moVdpauGraph.cpp" />
 		<Unit filename="../../src/libmoldeo/moVideoGraph.cpp" />
 		<Unit filename="../../src/libmoldeo/moVideoManager.cpp" />
 		<Unit filename="../../src/libmoldeo/moXmlConfig.cpp" />
