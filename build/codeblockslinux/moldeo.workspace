@@ -7,8 +7,8 @@
 		</Project>
 		<Project filename="../../contrib/src/wxMoldeoControls/wxMoldeoControls linux.cbp" />
 		<Project filename="../../contrib/src/wxMoldeoControls/wxMoldeoControlsTest linux.cbp" />
-		<Project filename="../../plugins/MasterEffects/Channel/channellinux.cbp" />
 		<Project filename="../../src/moldeodirector/moldeodirectorlinux.cbp" />
+		<Project filename="../../plugins/MasterEffects/Channel/channellinux.cbp" />
 		<Project filename="../../src/main/moldeo_linux_sdl.cbp" />
 		<Project filename="../../plugins/MasterEffects/MasterChannel/masterchannellinux.cbp" />
 		<Project filename="../../plugins/MasterEffects/Panel/panellinux.cbp" />

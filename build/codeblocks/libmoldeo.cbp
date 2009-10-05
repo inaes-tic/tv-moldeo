@@ -66,6 +66,8 @@
 			<Add alias="All" targets="debug;release;" />
 		</VirtualTargets>
 		<Compiler>
+			<Add option="-march=nocona" />
+			<Add option="-O3" />
 			<Add option="-DGST_DISABLE_LOADSAVE" />
 			<Add option="-DGST_DISABLE_REGISTRY" />
 			<Add directory="..\..\inc" />
@@ -89,6 +91,7 @@
 			<Add directory="C:\gstreamer\include\gstreamer-0.10" />
 			<Add directory="C:\gstreamer\include\glib-2.0" />
 			<Add directory="..\..\..\..\externlibs\FTGL\include" />
+			<Add directory="C:\gstreamer\lib\glib-2.0\include" />
 		</Compiler>
 		<Linker>
 			<Add library="libSDL" />
@@ -149,6 +152,7 @@
 		<Unit filename="..\..\inc\moConsoleState.h" />
 		<Unit filename="..\..\inc\moDataManager.h" />
 		<Unit filename="..\..\inc\moDebugManager.h" />
+		<Unit filename="..\..\inc\moDecoderManager.h" />
 		<Unit filename="..\..\inc\moDeviceCode.h" />
 		<Unit filename="..\..\inc\moDsGraph.h">
 			<Option target="debug" />
@@ -389,6 +393,7 @@
 		<Unit filename="..\..\src\libmoldeo\moConsoleState.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moDataManager.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moDebugManager.cpp" />
+		<Unit filename="..\..\src\libmoldeo\moDecoderManager.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moDeviceCode.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moDsGraph.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moEffect.cpp" />
