@@ -45,21 +45,6 @@
 #define MO_RENDER_TO_TEXTURE_FBSCREEN 0
 #define MO_RENDER_TO_TEXTURE_FBOBJECT 1
 
-typedef void moVdpDevice;
-typedef void moVdpDecoder;
-typedef void moVdpVideoMixer;
-typedef void moVdpPresentationQueueDisplay;
-typedef void moVdpPresentationQueue;
-
-typedef void moVdpVideoSurface;
-typedef void moVdpOutputSurface;
-typedef void moVdpBitmapSurface;
-
-typedef void moVdpTime;
-typedef void moVdpPictureInfo;
-typedef void moVdpBitstreamBuffer;
-
-
 enum moRenderManagerMode {
 
   RENDERMANAGER_MODE_NORMAL=0,
@@ -353,15 +338,15 @@ class LIBMOLDEO_API moRenderManager : public moResource
 
 	protected:
 
-    moVdpDevice*     m_pVdpDevice;
-
 		moLock					m_RenderLock;
 
 		MOboolean				m_saved_screen;
 
 		moTextureManager*       m_pTextureManager;
-        moGLManager*			m_pGLManager;
+    moGLManager*			m_pGLManager;
 		moFBManager*			m_pFBManager;
+
+		moDecoderManager*   m_pDecoderManager;
 
 		moRenderOutputConfiguration m_OutputConfiguration;
 
