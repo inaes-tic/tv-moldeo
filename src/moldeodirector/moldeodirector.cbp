@@ -139,7 +139,6 @@
 			<Add library="wsock32" />
 			<Add library="opengl32" />
 			<Add library="glut32" />
-			<Add library="glut" />
 			<Add library="glu32" />
 			<Add library="glaux" />
 			<Add library="gdi32" />

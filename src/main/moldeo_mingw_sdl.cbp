@@ -17,7 +17,7 @@
 					<Add library="libmoldeo" />
 					<Add library="gle" />
 					<Add library="glut32" />
-					<Add library="glut" />
+					<Add library="glut32" />
 					<Add library="glaux" />
 					<Add library="opengl32" />
 				</Linker>
@@ -37,7 +37,7 @@
 					<Add library="libmoldeod" />
 					<Add library="gled" />
 					<Add library="glut32" />
-					<Add library="glut" />
+					<Add library="glut32" />
 					<Add library="glaux" />
 					<Add library="opengl32" />
 				</Linker>

@@ -69,7 +69,7 @@ class moBoostHandleFunctions {
     public:
 
 #ifdef MO_WIN32
-        void HandleRead( const system::error_code& e,
+        void HandleRead( const boost::system::error_code& e,
                         std::size_t bytes_transferred ) {
 
                 moNetConnection* pConnection;
