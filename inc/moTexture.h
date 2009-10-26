@@ -179,6 +179,8 @@ class LIBMOLDEO_API moTexture : public moAbstract {
          */
 		void SetFileMan(moFileManager* p_fileman) { m_pFileMan = p_fileman; }
 
+
+
         /**
          * Utiliza p_fbo como nuevo objeto de Framebuffer para la textura.
          * @param p_fbo puntero al FBO.
@@ -206,6 +208,11 @@ class LIBMOLDEO_API moTexture : public moAbstract {
          * @return índice del punto de attachement (0 para GL_COLOR_ATTACHMENT0_EXT, 1 para GL_COLOR_ATTACHMENT1_EXT, etc.).
          */
 		MOuint GetFBOAttachPoint() { return m_fbo_attach_point; }
+
+
+
+
+
 
         /**
          * Devuelve el tipo de píxel de la textura.

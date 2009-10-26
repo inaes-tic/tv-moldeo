@@ -240,6 +240,7 @@ protected:
 	moShader* m_shader;
 	moRenderManager* m_renderman;
 	moGLManager* m_glman;
+	moFBO* m_dest_fbo;
 
 	moText          m_TextureFilterLabelName;//must be unique
 
@@ -268,6 +269,7 @@ protected:
 	void RestoreGLConf();
 	void BindDestFBO();
 	void UnbindDestFBO();
+	void BindDestTexToFBO();
 
 	void BindSrcTex(MOuint p_i);
 	void BindSrcTex(MOfloat p_cycle);

@@ -117,6 +117,38 @@ class LIBMOLDEO_API moRenderOutputConfiguration {
 
 
 
+// Funcionalidad necesaria:
+// * mecanismo para render stereo: las 4 texturas estan duplicadas, y se dibuja en cada una de ellas de manera alternada
+// (cada efecto tiene que dibujar dos veces, una para la vista R y otra para la vista L). O sea que el rendermanager
+// necesita una variable de canal (la idea de canal puede abstraerse del contexto de rendereado stereo y tener n canales).
+// Cuando se esta renderando un canal, las referencias a las texturas MO_RENDER_TEX, MO_SCREEN_TEX, etc. deben regresar
+// la textura del canal activo.
+// * Clipping y filtering de cada textura final (L y R), a una (o unas) texturas de OUTPUT. Esto para deformacion y
+// proyeccion sobre superficies no planas (planetarios digitales, etc). Tambien para postprocessing de la imagen final.
+
+
+// Dos maneras para render stereo:
+
+
+// 1) se cambia R o L cuando se dibuja cada efecto
+// Loop de dibujo estereo:
+//   por cada efecto
+//    for mode = R to L do
+//         beginDraw()
+//            efecto dibuja cuadro R o L
+//         endDraw()
+
+
+// 2) Se hace todo el render de todos los efectos primero para un canal y luego para el otro.
+// Loop de dibujo estereo:
+//   for mode = R to L do
+//     por cada efecto
+//         beginDraw()
+//            efecto dibuja cuadro R o L
+//         endDraw()
+
+
+
 /**
  * Clase que implementa el administrador de render. Este administrador crea 4 texturas que son utilizadas para
  * guardar estadios sucesivos en cada iteración de dibujo:
@@ -343,7 +375,7 @@ class LIBMOLDEO_API moRenderManager : public moResource
 		MOboolean				m_saved_screen;
 
 		moTextureManager*       m_pTextureManager;
-    moGLManager*			m_pGLManager;
+        moGLManager*			m_pGLManager;
 		moFBManager*			m_pFBManager;
 
 		moDecoderManager*   m_pDecoderManager;

@@ -536,6 +536,10 @@ MOboolean moTextureFilter::Init(moGLManager* p_glman, moRenderManager* p_renderm
 
     m_DefParams->getParamIDs(pglsl);
 
+
+    idx = m_fbman->CreateFBO();
+    m_dest_fbo = m_fbman->GetFBO(idx);
+
 	return true;
 }
 
@@ -679,6 +683,11 @@ void moTextureFilter::RestoreGLConf()
 
 void moTextureFilter::BindDestFBO()
 {
+    m_glman->PushFramebuffer();
+    m_glman->SetFramebuffer(m_dest_fbo);
+
+
+/*
 	moFBO* fbo = m_dest_tex[0]->GetFBO();
 	if (fbo != NULL)
 	{
@@ -708,12 +717,21 @@ void moTextureFilter::BindDestFBO()
 
 		glDrawBuffers(n, m_draw_buffers);
 	}
+	*/
 }
 
 void moTextureFilter::UnbindDestFBO()
 {
+    glman->PopFramebuffer();
+    /*
 	moFBO* fbo = m_dest_tex[0]->GetFBO();
 	if (fbo != NULL) fbo->Unbind();
+	*/
+}
+
+void moTextureFilter::BindDestTexToFBO()
+{
+    m_dest_fbo->SetDrawBuffers(&m_dest_tex);
 }
 
 void moTextureFilter::BindSrcTex(MOuint p_i)

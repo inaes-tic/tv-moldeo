@@ -107,16 +107,118 @@ MOboolean moFBO::AddDepthStencilBuffer()
 	else return false;
 }
 
-void moFBO::Bind()
+void moFBO::setDrawBuffers(const moTextureIndex &p_dest_tex)
 {
-	m_gl->SaveFBOState();
-	m_gl->SetCurrentFBO(m_fbo);
+    m_num_color_attach_points = p_dest_tex.Count();
+
+    moTexture* ptex;
+    for (int i = 0; i < numDrawBuffersInUse; i++)
+    {
+        ptex = p_dest_tex[i];
+        glFramebufferTexture2DEXT(GL.GL_FRAMEBUFFER_EXT, m_attach_points_array[i], ptex->GetTexTarget(), ptex->GetGLId(), 0);
+    }
+
+    CheckStatus();
+
+    glDrawBuffers(numDrawBuffersInUse, m_attach_points_array);
 }
 
+void moFBO::Bind()
+{
+//	m_gl->SaveFBOState();
+//	m_gl->SetCurrentFBO(m_fbo);
+    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_fbo);
+}
+
+/*
 void moFBO::Unbind()
 {
 	m_gl->RestoreFBOState();
 }
+*/
+
+void moFBO::ClearAttachements()
+{
+	if (m_num_color_attach_points > 0)
+	{
+		Bind();
+		for (MOuint i = 0; i < m_num_color_attach_points; i++)
+			glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT,
+			    	 					m_attach_points_array[i],
+					    				m_target, 0, 0);
+		Unbind();
+	}
+}
+
+MOuint moFBO::CheckStatus()
+{
+	if (MODebug != NULL) MODebug->Push("Framebuffer status: ");
+	GLenum status;
+	status = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
+	switch (status)
+	{
+		case GL_FRAMEBUFFER_COMPLETE_EXT:
+			if (MODebug != NULL) MODebug->Push("GL_FRAMEBUFFER_COMPLETE_EXT");
+			break;
+		case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
+			if (MODebug != NULL) MODebug->Push("GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT");
+			break;
+		case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
+			if (MODebug != NULL) MODebug->Push("GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT");
+			break;
+//		case GL_FRAMEBUFFER_INCOMPLETE_DUPLICATE_ATTACHMENT_EXT:
+//			if (MODebug != NULL) MODebug->Push("GL_FRAMEBUFFER_INCOMPLETE_DUPLICATE_ATTACHMENT_EXT");
+//			break;
+		case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
+			if (MODebug != NULL) MODebug->Push("GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT");
+			break;
+		case GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT:
+			if (MODebug != NULL) MODebug->Push("GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT");
+			break;
+		case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
+			if (MODebug != NULL) MODebug->Push("GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT");
+			break;
+		case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:
+			if (MODebug != NULL) MODebug->Push("GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT");
+   			break;
+		case GL_FRAMEBUFFER_UNSUPPORTED_EXT:
+			if (MODebug != NULL) MODebug->Push("GL_FRAMEBUFFER_UNSUPPORTED_EXT");
+			break;
+		default:
+			if (MODebug != NULL) MODebug->Push("Unknown error");
+			break;
+	}
+	return status;
+}
+
+MOboolean moFBO::IsValidTexture(MOuint p_width, MOuint p_height, const moTexParam& p_param)
+{
+	if (m_num_color_attach_points == 0) return true;
+	else
+		return (m_target == p_param.target) && (m_internal_format == p_param.internal_format) &&
+			   (m_width == p_width) && (m_height == p_height);
+}
+
+void moFBO::InitAttachPointsArray()
+{
+	for (MOuint i = 0; i < MO_MAX_COLOR_ATTACHMENTS_EXT; i++)
+		m_attach_points_array[i] = GL_COLOR_ATTACHMENT0_EXT + i;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void moFBO::SetReadTexture(MOuint p_attach_point)
 {
@@ -253,70 +355,3 @@ MOuint moFBO::AttachTexture(MOuint p_width, MOuint p_height, const moTexParam& p
 	return status;
 }
 
-void moFBO::ClearAttachements()
-{
-	if (m_num_color_attach_points > 0)
-	{
-		Bind();
-		for (MOuint i = 0; i < m_num_color_attach_points; i++)
-			glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT,
-			    	 					m_attach_points_array[i],
-					    				m_target, 0, 0);
-		Unbind();
-	}
-}
-
-MOuint moFBO::CheckStatus()
-{
-	if (MODebug != NULL) MODebug->Push("Framebuffer status: ");
-	GLenum status;
-	status = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
-	switch (status)
-	{
-		case GL_FRAMEBUFFER_COMPLETE_EXT:
-			if (MODebug != NULL) MODebug->Push("GL_FRAMEBUFFER_COMPLETE_EXT");
-			break;
-		case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
-			if (MODebug != NULL) MODebug->Push("GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT");
-			break;
-		case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
-			if (MODebug != NULL) MODebug->Push("GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT");
-			break;
-//		case GL_FRAMEBUFFER_INCOMPLETE_DUPLICATE_ATTACHMENT_EXT:
-//			if (MODebug != NULL) MODebug->Push("GL_FRAMEBUFFER_INCOMPLETE_DUPLICATE_ATTACHMENT_EXT");
-//			break;
-		case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
-			if (MODebug != NULL) MODebug->Push("GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT");
-			break;
-		case GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT:
-			if (MODebug != NULL) MODebug->Push("GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT");
-			break;
-		case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
-			if (MODebug != NULL) MODebug->Push("GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT");
-			break;
-		case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:
-			if (MODebug != NULL) MODebug->Push("GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT");
-   			break;
-		case GL_FRAMEBUFFER_UNSUPPORTED_EXT:
-			if (MODebug != NULL) MODebug->Push("GL_FRAMEBUFFER_UNSUPPORTED_EXT");
-			break;
-		default:
-			if (MODebug != NULL) MODebug->Push("Unknown error");
-			break;
-	}
-	return status;
-}
-
-MOboolean moFBO::IsValidTexture(MOuint p_width, MOuint p_height, const moTexParam& p_param)
-{
-	if (m_num_color_attach_points == 0) return true;
-	else
-		return (m_target == p_param.target) && (m_internal_format == p_param.internal_format) &&
-			   (m_width == p_width) && (m_height == p_height);
-}
-
-void moFBO::InitAttachPointsArray()
-{
-	for (MOuint i = 0; i < MO_MAX_COLOR_ATTACHMENTS_EXT; i++)
-		m_attach_points_array[i] = GL_COLOR_ATTACHMENT0_EXT + i;
-}
