@@ -136,7 +136,14 @@ class LIBMOLDEO_API moRenderOutput {
         /**
          * Destructor por defecto.
          */
-		virtual ~moRenderManager();
+		virtual ~moRenderOutput();
+
+		// config con los parametros de la grilla de salida.
+		// Init(moConfig* p_cfg, MOuint p_param_idx);
+
+	protected:
+
+	    moTexturedGrid m_grid;
 
 };
 

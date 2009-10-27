@@ -93,7 +93,9 @@ moRenderOutputConfiguration moRenderManager::GetOutputConfiguration() {
 
 }
 
-MOboolean moRenderManager::Init( moRenderManagerMode p_render_to_texture_mode,
+MOboolean moRenderManager::Init( MOint p_num_channels,
+
+//moRenderManagerMode p_render_to_texture_mode,
 						   MOint p_screen_width, MOint p_screen_height,
 						   MOint p_render_width, MOint p_render_height)
 {
@@ -178,6 +180,8 @@ MOboolean moRenderManager::Init( moRenderManagerMode p_render_to_texture_mode,
 	    m_pGLManager->SetFrameBufferObjectActive();
         MODebug2->Message( moText("Using framebuffer_object: creating one fbo per predefined textures (4). ") );
 		m_fbo_idx = m_pFBManager->CreateFBO();
+
+
 		MOuint attach_point;
 		for (int i = 0; i < 4; i++)
 		{
@@ -259,6 +263,11 @@ void moRenderManager::EndUpdateObject()
 
 void moRenderManager::BeginDraw()
 {
+    SetDestTexInFBO();
+	BindDestFBO();
+
+
+
 	//if (IsRenderToFBOEnabled())
 	//	m_pFBManager->BindFBO(m_fbo_idx, m_render_attach_points[0]);
 }
@@ -279,6 +288,9 @@ void moRenderManager::EndDrawEffect()
 
 void moRenderManager::EndDraw()
 {
+
+	UnbindDestFBO();
+
     ///add last frame to bucket pool
 /*
     moBucket *pbucket=NULL;
@@ -314,6 +326,33 @@ void moRenderManager::EndDraw()
 //	if (IsRenderToFBOEnabled())
 //		m_pFBManager->UnbindFBO();
 }
+
+
+void moRenderManager::SetDestTexInFBO()
+{
+    if (-1 < m_dest_fbo)
+    {
+        moTexture* ptex;
+        moFBO* pfbo = m_fbman->GetFBO(m_fbo_idx);
+        pfbo->SetNumDrawTextures(1);
+            ptex = obtener textura i (i es MO_FINAL_TEX, MO_EFFECTS_TEX, etc) del canal j;
+            pfbo->SetDrawTexture(ptex->GetTexTarget(), ptex->GetGLId(), 0);
+
+    }
+}
+
+void moTextureFilter::BindDestFBO()
+{
+    m_glman->PushFBO();
+    m_glman->SetFBO(m_fbo_idx);
+}
+
+void moTextureFilter::UnbindDestFBO()
+{
+    m_glman->PopFBO();
+}
+
+
 
 void moRenderManager::DrawTexture(MOint p_resolution, MOint p_tex_num)
 {
