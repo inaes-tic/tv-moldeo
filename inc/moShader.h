@@ -39,116 +39,9 @@
 #include "moAbstract.h"
 #include "moConfig.h"
 #include "moArray.h"
-
-#define MO_MAX_TEXTURE_UNITS 4
+#include "moTexturedGrid.h"
 
 typedef enum { MO_SHADER_GLSL, MO_SHADER_CG } moShaderLanguage;
-
-/**
- * Esta clase define una grilla 2D donde mapear y distorsionar texturas. La grilla
- * está definida por el número de divisiones (número de puntos - 1) a lo largo de las direcciones X e Y.
- * En principio, el delta en el espacio de coordenadas de texturas entre un punto de la grilla y el
- * siguiente es igual a 1 / divisiones, pero este delta puede ser modificado para que adopte un valor
- * arbitrario dx, dy a lo largo de cada dirección. Asimismo, como se pueden aplicar texturas múltiples
- * sobre un a misma grilla, de pueden definir varios deltas (dx_i, dy_i) con i = 1... n, donde n es el
- * número de texturas (o capas) que se aplican sobre la grilla.
- * Por abuso de terminología, la palabra shader denota a veces el programa de shader completo (incluyendo
- * los estadios de vértices, geometría y fragmentos), mientras que otras veces denota solamente a un estadio
- * particular (shader de vértices, shader de fragmentos, etc.).
- */
-class LIBMOLDEO_API moTexturedGrid : public moAbstract
-{
-public:
-    /**
-     * El constructor por defecto de la clase.
-     */
-	moTexturedGrid();
-    /**
-     * El destructor por defecto de la clase.
-     */
-	virtual ~moTexturedGrid();
-
-    /**
-     * Método de inicialización de la grilla.
-     * @param p_size_x número de puntos en la dirección X.
-     * @param p_size_y número de puntos en la dirección Y.
-     * @param p_num_layers número de capas.
-     * @param p_grid_dx deltas para las texturas en la dirección de X.
-     * @param p_grid_dy deltas para las texturas  en la dirección de Y.
-     * @return true si la operación fue exitosa, false en caso contrario.
-     */
-	virtual MOboolean Init(MOint p_size_x, MOint p_size_y, MOint p_num_layers, const MOfloat p_grid_dx[], const MOfloat p_grid_dy[]);
-    /**
-     * Método de inicialización.
-     * @param p_cfg puntero al objeto de configuración que contiene los parámetros de la grilla.
-     * @param p_param_idx índice de los parámetros de la grilla en el objeto de configuración.
-     * @return true si la operación fue exitosa, false en caso contrario.
-     */
-	virtual MOboolean Init(moConfig* p_cfg, MOuint p_param_idx);
-    /**
-     * Método de finalización.
-     * @return true si la operación fue exitosa, false en caso contrario.
-     */
-	virtual MOboolean Finish();
-
-    /**
-     * Crea una grilla de 1x1 con una sola capa de textura.
-     */
-	void Set1QuadGrid();
-
-    /**
-     * Dibuja la grilla con ancho w y alto w, aplicando las capas hasta la número l.
-     * @param w ancho con el que se dibuja la grilla.
-     * @param h alto con el que se dibuja la grilla.
-     * @param l número de capas de textura a aplicar.
-     */
-	void Draw(MOint w, MOint h, MOint l);
-
-    /**
-     * Devuelve el número de puntos en la dirección X.
-     * @return número de puntos.
-     */
-	MOint GetWidth() { return m_size_x; }
-    /**
-     * Devuelve el número de puntos en la dirección Y.
-     * @return número de puntos.
-     */
-	MOint GetHeight() { return m_size_y; }
-    /**
-     * Devuelve el punto (i, j) en la capa i. La capa 0 corresponde a las coordenadas de la
-     * grilla propiamente dicha. Las coordenadas de las capas subsiguientes son los deltas de
-     * de las texturas.
-     * @param layer capa de donde se requiere el punto.
-     * @param i índice del punto en la dirección X.
-     * @param j índice del punto en la dirección Y.
-     * @param x en esta variable pasada por referencia se devuelve la coordenada X del punto.
-     * @param y en esta variable pasada por referencia se devuelve la coordenada Y del punto.
-     */
-	void GetPoint(MOint layer, MOint i, MOint j, MOfloat &x, MOfloat &y);
-    /**
-     * Establece las coordenadas de texturas hasta la capa l, para el punto (i, j) de la grilla.
-     * @param i índice del punto de la grilla a lo largo de la dirección X.
-     * @param j índice del punto de la grilla a lo largo de la dirección Y.
-     * @param l número de capas de textura a establecer las coordenadas.
-     */
-	void SetTexCoord(MOint i, MOint j, MOint l);
-
-    /**
-     * Copia los datos desde la grilla p_src_grid.
-     * @param p_src_grid grilla fuente para la copia.
-     * @return referencia a esta grilla.
-     */
-	moTexturedGrid &operator = (const moTexturedGrid &p_src_grid);
-protected:
-	// Number of points in the grid, along each direction.
-	MOint m_size_x;
-	MOint m_size_y;
-
-	// The layer 0 stores the actual grid, the other layers store the texture coordinates.
-	MOint m_num_layers;
-	MOfloat m_grid_dx[MO_MAX_TEXTURE_UNITS + 1];
-	MOfloat m_grid_dy[MO_MAX_TEXTURE_UNITS + 1];
-};
 
 /**
  * Clase base para encapsular shaders de OpenGL. Un programa de shaders tiene tres etapas:
@@ -159,6 +52,9 @@ protected:
  * Un programa de shader no necesita tener estas tres etapas definidas. Puede consistir sólo en un shader
  * de fragmentos, con lo cual los estadios de vértices y geometría utilizan la funcionalidad por defecto
  * ofrecida por OpenGL en el pipeline gráfico por defecto.
+ * Por abuso de terminología, la palabra shader denota a veces el programa de shader completo (incluyendo
+ * los estadios de vértices, geometría y fragmentos), mientras que otras veces denota solamente a un estadio
+ * particular (shader de vértices, shader de fragmentos, etc.).
  */
 class LIBMOLDEO_API moShader : public moAbstract
 {
@@ -302,6 +198,5 @@ template class LIBMOLDEO_API moDynamicArray<moShader*>;
 typedef moDynamicArray<moShader*> moShaderArray;
 */
 moDeclareExportedDynamicArray( moShader*, moShaderArray)
-
 
 #endif

@@ -97,7 +97,6 @@ MOboolean moRenderManager::Init( moRenderManagerMode p_render_to_texture_mode,
 						   MOint p_screen_width, MOint p_screen_height,
 						   MOint p_render_width, MOint p_render_height)
 {
-
 	GLenum err = glewInit();
 	if (GLEW_OK != err)
 	{

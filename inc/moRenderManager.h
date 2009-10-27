@@ -117,6 +117,30 @@ class LIBMOLDEO_API moRenderOutputConfiguration {
 
 
 
+
+class LIBMOLDEO_API moRenderChannel {
+
+    public:
+        MOint m_render_tex_moid[4];
+
+};
+
+class LIBMOLDEO_API moRenderOutput {
+
+    public:
+        /**
+         * Constructor por defecto.
+         */
+		moRenderOutput();
+
+        /**
+         * Destructor por defecto.
+         */
+		virtual ~moRenderManager();
+
+};
+
+
 // Funcionalidad necesaria:
 // * mecanismo para render stereo: las 4 texturas estan duplicadas, y se dibuja en cada una de ellas de manera alternada
 // (cada efecto tiene que dibujar dos veces, una para la vista R y otra para la vista L). O sea que el rendermanager
@@ -154,7 +178,7 @@ class LIBMOLDEO_API moRenderOutputConfiguration {
  * guardar estadios sucesivos en cada iteración de dibujo:
  * 1) textura de render, identificada con MO_RENDER_TEX, donde se almacena el resultado del render luego de aplicar
  * cada efecto. Es decir, luego de aplicar el efecto i, esta textura contiene el render incluyendo la textura i
- * inclusive. Sin embargo, esta textura es sólo utilizada cuando se está usando el mode de render a FBO fuera de pantalla.
+ * inclusive. Sin embargo, esta textura es sólo utilizada cuando se está usando el modo de render a FBO fuera de pantalla.
  * 2) textura de pantalla, identificada con MO_SCREEN_TEX, donde se almacena el estado actual del render cuando se
  * ejecuta la función SaveScreen.
  * 3) textura de efectos, identificada con MO_EFFECTS_TEX, donde se almancena el resultado del render luego
