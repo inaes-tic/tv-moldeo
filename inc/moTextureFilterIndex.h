@@ -189,7 +189,6 @@ protected:
 	MOint LoadSourceTexture(moText& name, moTextureArray& src_tex, MOboolean first_tex, MOuint& dest_width, MOuint& dest_height);
 	MOint LoadDestTexResolution(const moText& name, MOuint& dest_width, MOuint& dest_height);
 	MOint LoadDestTexture(const moText& name, moTextureArray& dest_tex, MOuint dest_width, MOuint dest_height);
-	void SetupDestTexFBO();
 };
 
 

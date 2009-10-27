@@ -60,8 +60,6 @@ moTexture::moTexture()
 	m_gl = NULL;
 	m_pDataMan = NULL;
 	m_pFileMan = NULL;
-	m_fbo = NULL;
-	m_fbo_attach_point = MO_UNDEFINED;
 
 	m_param = MODefTex2DParams;
 
@@ -367,15 +365,6 @@ bool moTexture::CalculateLuminanceAndConstrast( int x0, int y0, int x1, int y1 )
 
 }
 
-MOuint moTexture::SetFBOandAttachPoint(moFBO* p_fbo)
-{
-	MOuint AttachPt;
-	SetFBO(p_fbo);
-	p_fbo->AddTexture(GetWidth(), GetHeight(), GetTexParam(), GetGLId(), AttachPt);
-	SetFBOAttachPoint(AttachPt);
-	return AttachPt;
-}
-
 MOuint moTexture::GetDataWidth()
 {
 	if ((m_gl != NULL) && m_gl->RectTexture(m_param.target)) return m_width;
@@ -416,9 +405,6 @@ void moTexture::CopyFromTex(moTexture* p_src_tex, MOboolean p_copy_glid, MOboole
 	{
 	    m_gl = p_src_tex->m_gl;
 
-	    m_fbo = p_src_tex->m_fbo;
-	    m_fbo_attach_point = p_src_tex->m_fbo_attach_point;
-
 	    if (p_copy_type) m_type = p_src_tex->m_type;
 	    if (p_copy_moid) m_moid = p_src_tex->m_moid;
 	    if (p_copy_glid) m_glid = p_src_tex->m_glid;
@@ -436,9 +422,6 @@ void moTexture::CopyFromTex(moTexture* p_src_tex, MOboolean p_copy_glid, MOboole
 moTexture &moTexture::operator = (const moTexture &p_src_tex)
 {
 	m_gl = p_src_tex.m_gl;
-
-	m_fbo = p_src_tex.m_fbo;
-	m_fbo_attach_point = p_src_tex.m_fbo_attach_point;
 
 	m_type = p_src_tex.m_type;
 	m_moid = p_src_tex.m_moid;
@@ -985,6 +968,8 @@ MOboolean moTextureAnimated::Finish()
 
 void
 moTextureAnimated::SetInterpolation( MOuint p_FrameJump, MOuint p_InterpolationTime ) {
+/*
+REVISAR USO DE FBOs EN ESTE CODIGO...
 
 	m_FrameJump = p_FrameJump;
 	m_InterpolationTime = p_InterpolationTime;
@@ -1043,6 +1028,7 @@ moTextureAnimated::SetInterpolation( MOuint p_FrameJump, MOuint p_InterpolationT
         m_pCopyEnd->Init( m_pResourceManager->GetGLMan(), m_pResourceManager->GetRenderMan(), m_srcend, m_dstend, m_pShaderCopy );
         m_pInterpolator->Init(  m_pResourceManager->GetGLMan(), m_pResourceManager->GetRenderMan(), m_srcinterpol, m_dstinterpol, m_pShaderInterpolate  );
     }
+    */
 }
 
 MOboolean

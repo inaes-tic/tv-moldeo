@@ -356,15 +356,6 @@ moResourceManager::Init( const moText& p_datapath,
 	    MODebug2->Error(moText("moResourceManager:: Time Man Creation Error."));
     }
 
-	MOGLMan = (moGLManager*) GetResourceByType( MO_RESOURCETYPE_GL );
-	if (MOGLMan)  {
-        if (MODebug2) MODebug2->Message(moText("moResourceManager:: Initializing GL Man Resource."));
-	    if (!MOGLMan->Init())
-            MODebug2->Error(moText("moResourceManager:: GL Man Initialization Error."));
-	} else {
-	    MODebug2->Error(moText("moResourceManager:: GL Man Creation Error."));
-    }
-
 	MOFBMan = (moFBManager*) GetResourceByType( MO_RESOURCETYPE_FB );
 	if (MOFBMan)  {
         if (MODebug2) MODebug2->Message(moText("moResourceManager:: Initializing FrameBuffer Man Resource."));
@@ -372,6 +363,15 @@ moResourceManager::Init( const moText& p_datapath,
             MODebug2->Error(moText("moResourceManager:: FrameBuffer Man Initialization Error."));
 	} else {
 	    MODebug2->Error(moText("moResourceManager:: FrameBuffer Man Creation Error."));
+    }
+
+	MOGLMan = (moGLManager*) GetResourceByType( MO_RESOURCETYPE_GL );
+	if (MOGLMan)  {
+        if (MODebug2) MODebug2->Message(moText("moResourceManager:: Initializing GL Man Resource."));
+	    if (!MOGLMan->Init(MOFBMan))
+            MODebug2->Error(moText("moResourceManager:: GL Man Initialization Error."));
+	} else {
+	    MODebug2->Error(moText("moResourceManager:: GL Man Creation Error."));
     }
 
 	MOTextureMan = (moTextureManager*)  GetResourceByType( MO_RESOURCETYPE_TEXTURE );

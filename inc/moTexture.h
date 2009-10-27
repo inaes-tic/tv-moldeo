@@ -179,41 +179,6 @@ class LIBMOLDEO_API moTexture : public moAbstract {
          */
 		void SetFileMan(moFileManager* p_fileman) { m_pFileMan = p_fileman; }
 
-
-
-        /**
-         * Utiliza p_fbo como nuevo objeto de Framebuffer para la textura.
-         * @param p_fbo puntero al FBO.
-         */
-		void SetFBO(moFBO* p_fbo) { m_fbo = p_fbo; }
-        /**
-         * Utiliza p_fbo como nuevo objeto de Framebuffer para la textura, además de generar un nuevo
-         * punto de attachement de la textura en el FBO.
-         * @param p_fbo puntero al FBO.
-         * @return índice del punto de attachement (0 para GL_COLOR_ATTACHMENT0_EXT, 1 para GL_COLOR_ATTACHMENT1_EXT, etc.).
-         */
-		MOuint SetFBOandAttachPoint(moFBO* p_fbo);
-        /**
-         * Utiliza p_fbo_attach_point como nuevo punto de attachement para la textura.
-         * @param p_fbo_attach_point índice del nuevo punto de attachement (0 para GL_COLOR_ATTACHMENT0_EXT, 1 para GL_COLOR_ATTACHMENT1_EXT, etc.).
-         */
-		void SetFBOAttachPoint(MOuint p_fbo_attach_point) { m_fbo_attach_point = p_fbo_attach_point; }
-        /**
-         * Devuelve el FBO actualmente asociado a la textura.
-         * @return puntero al FBO.
-         */
-		moFBO* GetFBO() { return m_fbo; }
-        /**
-         * Devuelve el punto de attachement de la textura.
-         * @return índice del punto de attachement (0 para GL_COLOR_ATTACHMENT0_EXT, 1 para GL_COLOR_ATTACHMENT1_EXT, etc.).
-         */
-		MOuint GetFBOAttachPoint() { return m_fbo_attach_point; }
-
-
-
-
-
-
         /**
          * Devuelve el tipo de píxel de la textura.
          * @return tipo de píxel (GL_UNSIGNED_BYTE, GL_FLOAT, etc.).
@@ -386,9 +351,6 @@ protected:
 		moFileManager*	m_pFileMan;
         moGLManager* m_gl;
 		moResourceManager*	m_pResourceManager;
-
-		moFBO* m_fbo;
-		MOuint m_fbo_attach_point;
 
 		MOuint m_type;
         MOint m_moid;

@@ -489,13 +489,14 @@ void moBrightContMatrix::ContrastMatrix()
 //
 //===========================================
 
-MOboolean moTextureFilter::Init(moGLManager* p_glman, moRenderManager* p_renderman, moTextureArray &p_src_tex, moTextureArray &p_dest_tex, moShader *p_shader, moTextFilterParam *p_params)
+MOboolean moTextureFilter::Init(moGLManager* p_glman, moFBManager* p_fbman, moRenderManager* p_renderman, moTextureArray &p_src_tex, moTextureArray &p_dest_tex, moShader *p_shader, moTextFilterParam *p_params)
 {
-	MOuint i;
+	MOuint i, fboidx;
 	moText uname;
 
 	m_glman = p_glman;
 	m_renderman = p_renderman;
+	m_fbman = p_fbman;
 
 	m_use_screen_tex = false;
 	for (i = 0; i < p_src_tex.Count(); i++)
@@ -506,7 +507,6 @@ MOboolean moTextureFilter::Init(moGLManager* p_glman, moRenderManager* p_renderm
 	for (i = 0; i < p_dest_tex.Count(); i++) {
 	    m_dest_tex.Add(p_dest_tex[i]);
 	}
-	CheckDestTexAttachStatus();
 
 	m_shader = p_shader;
 	moShaderGLSL* pglsl = (moShaderGLSL*)m_shader;
@@ -536,9 +536,7 @@ MOboolean moTextureFilter::Init(moGLManager* p_glman, moRenderManager* p_renderm
 
     m_DefParams->getParamIDs(pglsl);
 
-
-    idx = m_fbman->CreateFBO();
-    m_dest_fbo = m_fbman->GetFBO(idx);
+    m_dest_fbo = m_fbman->CreateFBO();
 
 	return true;
 }
@@ -562,6 +560,7 @@ void moTextureFilter::Apply(MOuint p_i, MOfloat p_fade, moTextFilterParam *p_par
 
 	if (m_use_screen_tex) m_renderman->SaveScreen();
 
+    SetDestTexInFBO();
 	BindDestFBO();
 
 	pglsl->StartShader();
@@ -587,6 +586,7 @@ void moTextureFilter::Apply(MOfloat p_cycle, MOfloat p_fade, moTextFilterParam *
 
 	if (m_use_screen_tex) m_renderman->SaveScreen();
 
+    SetDestTexInFBO();
 	BindDestFBO();
 
 	pglsl->StartShader();
@@ -612,6 +612,7 @@ void moTextureFilter::Apply(moTempo *p_tempo, MOfloat p_fade, moTextFilterParam 
 
 	if (m_use_screen_tex) m_renderman->SaveScreen();
 
+    SetDestTexInFBO();
 	BindDestFBO();
 
 	pglsl->StartShader();
@@ -683,55 +684,28 @@ void moTextureFilter::RestoreGLConf()
 
 void moTextureFilter::BindDestFBO()
 {
-    m_glman->PushFramebuffer();
-    m_glman->SetFramebuffer(m_dest_fbo);
-
-
-/*
-	moFBO* fbo = m_dest_tex[0]->GetFBO();
-	if (fbo != NULL)
-	{
-		// Attach destination textures to attachements points of fbo (0, 1, 2, etc)...
-		moTexture* ptex;
-
-		fbo->Bind();
-
-		if (m_reattach_dest_tex) fbo->ClearAttachements();
-
-		GLsizei n = m_dest_tex.Count();
-		int i, j;
-		for (i = 0; i < n; i++)
-		{
-			ptex = m_dest_tex[i];
-			if (m_reattach_dest_tex)
-			{
-				fbo->AttachTexture(ptex->GetWidth(), ptex->GetHeight(), ptex->GetTexParam(), ptex->GetGLId(), i);
-				m_draw_buffers[i] = fbo->GetColorAttachPoint(i);
-			}
-			else
-			{
-				j = ptex->GetFBOAttachPoint();
-				m_draw_buffers[i] = fbo->GetColorAttachPoint(j);
-			}
-		}
-
-		glDrawBuffers(n, m_draw_buffers);
-	}
-	*/
+    m_glman->PushFBO();
+    m_glman->SetFBO(m_dest_fbo);
 }
 
 void moTextureFilter::UnbindDestFBO()
 {
-    glman->PopFramebuffer();
-    /*
-	moFBO* fbo = m_dest_tex[0]->GetFBO();
-	if (fbo != NULL) fbo->Unbind();
-	*/
+    m_glman->PopFBO();
 }
 
-void moTextureFilter::BindDestTexToFBO()
+void moTextureFilter::SetDestTexInFBO()
 {
-    m_dest_fbo->SetDrawBuffers(&m_dest_tex);
+    if (-1 < m_dest_fbo)
+    {
+        moTexture* ptex;
+        moFBO* pfbo = m_fbman->GetFBO(m_dest_fbo);
+        pfbo->SetNumDrawTextures(m_dest_tex.Count());
+        for (int i = 0; i < m_dest_tex.Count(); i++)
+        {
+            ptex = m_dest_tex[i];
+            pfbo->SetDrawTexture(ptex->GetTexTarget(), ptex->GetGLId(), i);
+        }
+    }
 }
 
 void moTextureFilter::BindSrcTex(MOuint p_i)
@@ -770,13 +744,3 @@ void moTextureFilter::UnbindSrcTex()
 	}
 }
 
-void moTextureFilter::CheckDestTexAttachStatus()
-{
-	m_reattach_dest_tex = false;
-	for (MOuint i = 0; i < m_dest_tex.Count(); i++)
-		if ((int)m_dest_tex[i]->GetFBOAttachPoint() == MO_UNDEFINED)
-		{
-			m_reattach_dest_tex = true;
-			break;
-		}
-}

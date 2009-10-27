@@ -414,20 +414,6 @@ class LIBMOLDEO_API moTextureManager : public moResource
         GLint GetWrapT(MOuint p_moid) { return ValidTexture(p_moid) ? m_textures_array[p_moid]->GetWrapT() : MO_UNDEFINED; }
 
         /**
-         * Devuelve el FBO actualmente asociado a la textura con Moldeo ID p_moid.
-         * @param p_moid Moldeo ID de la textura.
-         * @return puntero al FBO.
-         */
-        moFBO* GetFBO(MOuint p_moid) { return ValidTexture(p_moid) ? m_textures_array[p_moid]->GetFBO() : NULL; }
-
-        /**
-         * Devuelve el punto de attachement de la textura con Moldeo ID p_moid.
-         * @param p_moid Moldeo ID de la textura.
-         * @return índice del punto de attachement (0 para GL_COLOR_ATTACHMENT0_EXT, 1 para GL_COLOR_ATTACHMENT1_EXT, etc.).
-         */
-        MOint GetFBOAttachPoint(MOuint p_moid) { return ValidTexture(p_moid) ? m_textures_array[p_moid]->GetFBOAttachPoint() : MO_UNDEFINED; }
-
-        /**
          * Valida el Moldeo ID provisto.
          * @param p_moid Moldeo ID a validar.
          * @return true si la textura existe, false en caso contrario.

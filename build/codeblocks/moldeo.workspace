@@ -5,10 +5,10 @@
 		<Project filename="libmoldeo.cbp">
 			<Depends filename="..\..\contrib\src\tinyxml\tinyxml_lib_mingw.cbp" />
 		</Project>
-		<Project filename="..\..\src\main\moldeo_mingw_sdl.cbp" active="1">
+		<Project filename="..\..\src\main\moldeo_mingw_sdl.cbp">
 			<Depends filename="libmoldeo.cbp" />
 		</Project>
-		<Project filename="..\..\src\moldeodirector\moldeodirector.cbp">
+		<Project filename="..\..\src\moldeodirector\moldeodirector.cbp" active="1">
 			<Depends filename="libmoldeo.cbp" />
 		</Project>
 		<Project filename="..\..\plugins\Effects\Icon3D\icon3d.cbp">
@@ -121,5 +121,6 @@
 		</Project>
 		<Project filename="..\..\plugins\Effects\Text3D\text3d.cbp" />
 		<Project filename="..\..\plugins\Effects\Lights\lights.cbp" />
+		<Project filename="..\..\contrib\src\wxMoldeoControls\wxMoldeoControls.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>

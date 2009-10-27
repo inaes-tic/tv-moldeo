@@ -178,7 +178,7 @@ public:
      * @param p_params puntero al objeto de parámetros a utilizar en este filtro.
      * @return true si la operación fue exitosa, false en caso contrario.
      */
-	virtual MOboolean Init(moGLManager* p_glman, moRenderManager* p_renderman, moTextureArray &p_src_tex, moTextureArray &p_dest_tex, moShader *p_shader, moTextFilterParam *p_params = NULL);
+	virtual MOboolean Init(moGLManager* p_glman, moFBManager* p_fbman, moRenderManager* p_renderman, moTextureArray &p_src_tex, moTextureArray &p_dest_tex, moShader *p_shader, moTextFilterParam *p_params = NULL);
     /**
      * Método de finalización.
      * @return true si la operación fue exitosa, false en caso contrario.
@@ -220,15 +220,6 @@ public:
 
 	moShader* GetShader() { return m_shader; }
 
-
-    /**
-     * Verifica que todas las texturas de destino estén asociadas a lo búfers de color del mismo FBO. En caso
-     * contrario, las mismas serán re-asociadas (utilizando el FBO de la primera textura de destino) en el
-     * momento de aplicar el filtro.
-     */
-	void CheckDestTexAttachStatus();
-
-
     void      SetTextureFilterLabelName( moText p_text ) {
         m_TextureFilterLabelName = p_text;
     }
@@ -240,7 +231,9 @@ protected:
 	moShader* m_shader;
 	moRenderManager* m_renderman;
 	moGLManager* m_glman;
-	moFBO* m_dest_fbo;
+	moFBManager* m_fbman;
+
+	MOuint m_dest_fbo;
 
 	moText          m_TextureFilterLabelName;//must be unique
 
@@ -270,6 +263,7 @@ protected:
 	void BindDestFBO();
 	void UnbindDestFBO();
 	void BindDestTexToFBO();
+	void SetDestTexInFBO();
 
 	void BindSrcTex(MOuint p_i);
 	void BindSrcTex(MOfloat p_cycle);

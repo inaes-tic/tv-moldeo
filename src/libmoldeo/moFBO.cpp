@@ -44,6 +44,9 @@ moFBO::moFBO()
 {
 	m_gl = NULL;
 	m_fbo = 0;
+	m_is_screen_fbo = false;
+
+
 	m_num_color_attach_points = 0;
     m_has_depth_buffer = m_has_stencil_buffer = false;
 	m_width = 0;
@@ -55,15 +58,22 @@ moFBO::~moFBO()
 	Finish();
 }
 
-MOboolean  moFBO::Init(moGLManager* p_gl)
+MOboolean  moFBO::Init(moGLManager* p_gl, MOboolean p_is_screen_fbo)
 {
 	m_gl = p_gl;
-	glGenFramebuffersEXT(1, &m_fbo);
+	m_is_screen_fbo = p_is_screen_fbo;
+
+	if (m_is_screen_fbo) m_fbo = 0;
+	else glGenFramebuffersEXT(1, &m_fbo);
+
+
 	m_num_color_attach_points = 0;
     m_has_depth_buffer = m_has_stencil_buffer = false;
 	m_width = 0;
 	m_height = 0;
     InitAttachPointsArray();
+
+
 	return (m_gl!=NULL);
 }
 
@@ -75,79 +85,13 @@ MOboolean moFBO::Finish()
 		m_has_depth_buffer = false;
 		m_has_stencil_buffer = false;
 	}
+
     if (0 < m_fbo)
 	{
 		glDeleteFramebuffersEXT(1, &m_fbo);
 		m_fbo = 0;
 	}
 	return true;
-}
-
-MOboolean moFBO::AddDepthStencilBuffer()
-{
-	if (!m_has_depth_buffer && !m_has_stencil_buffer && (0 < m_width) && (0 < m_height))
-	{
-		glGenTextures(1, &m_DepthStencilTex);
-		glBindTexture(GL_TEXTURE_2D, m_DepthStencilTex);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8_EXT,
-					 m_width, m_height, 0, GL_DEPTH_STENCIL_EXT,
-					 GL_UNSIGNED_INT_24_8_EXT, NULL);
-
-		Bind();
-		glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT,
-			                      GL_DEPTH_ATTACHMENT_EXT,
-				                  GL_TEXTURE_2D, m_DepthStencilTex, 0);
-	    Unbind();
-
-		m_has_depth_buffer = true;
-		m_has_stencil_buffer = true;
-		return true;
-	}
-	else return false;
-}
-
-void moFBO::setDrawBuffers(const moTextureIndex &p_dest_tex)
-{
-    m_num_color_attach_points = p_dest_tex.Count();
-
-    moTexture* ptex;
-    for (int i = 0; i < numDrawBuffersInUse; i++)
-    {
-        ptex = p_dest_tex[i];
-        glFramebufferTexture2DEXT(GL.GL_FRAMEBUFFER_EXT, m_attach_points_array[i], ptex->GetTexTarget(), ptex->GetGLId(), 0);
-    }
-
-    CheckStatus();
-
-    glDrawBuffers(numDrawBuffersInUse, m_attach_points_array);
-}
-
-void moFBO::Bind()
-{
-//	m_gl->SaveFBOState();
-//	m_gl->SetCurrentFBO(m_fbo);
-    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_fbo);
-}
-
-/*
-void moFBO::Unbind()
-{
-	m_gl->RestoreFBOState();
-}
-*/
-
-void moFBO::ClearAttachements()
-{
-	if (m_num_color_attach_points > 0)
-	{
-		Bind();
-		for (MOuint i = 0; i < m_num_color_attach_points; i++)
-			glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT,
-			    	 					m_attach_points_array[i],
-					    				m_target, 0, 0);
-		Unbind();
-	}
 }
 
 MOuint moFBO::CheckStatus()
@@ -191,12 +135,25 @@ MOuint moFBO::CheckStatus()
 	return status;
 }
 
-MOboolean moFBO::IsValidTexture(MOuint p_width, MOuint p_height, const moTexParam& p_param)
+
+void moFBO::Bind()
 {
-	if (m_num_color_attach_points == 0) return true;
-	else
-		return (m_target == p_param.target) && (m_internal_format == p_param.internal_format) &&
-			   (m_width == p_width) && (m_height == p_height);
+    CheckStatus();
+
+    glDrawBuffers(m_num_color_attach_points, m_attach_points_array);
+
+    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_fbo);
+}
+
+void moFBO::SetDrawTexture(MOuint p_target, MOuint p_glid, MOuint p_attach_point)
+{
+    m_tex_glid_array[p_attach_point] = p_glid;
+    glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, m_attach_points_array[p_attach_point], p_target, p_glid, 0);
+}
+
+void moFBO::SetNumDrawTextures(MOuint p_num)
+{
+    m_num_color_attach_points = p_num;
 }
 
 void moFBO::InitAttachPointsArray()
@@ -204,154 +161,3 @@ void moFBO::InitAttachPointsArray()
 	for (MOuint i = 0; i < MO_MAX_COLOR_ATTACHMENTS_EXT; i++)
 		m_attach_points_array[i] = GL_COLOR_ATTACHMENT0_EXT + i;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-void moFBO::SetReadTexture(MOuint p_attach_point)
-{
-	if (p_attach_point < m_num_color_attach_points)
-		m_gl->SetCurrentReadBuffer(m_attach_points_array[p_attach_point]);
-}
-
-void moFBO::SetDrawTexture(MOuint p_attach_point)
-{
-	if (p_attach_point < m_num_color_attach_points)
-	    m_gl->SetCurrentDrawBuffer(m_attach_points_array[p_attach_point]);
-}
-
-void moFBO::SetReadTexture(MOuint p_glid, MOuint p_width, MOuint p_height, const moTexParam& p_param, MOuint p_attach_point)
-{
-    MOint i = GetColorAttachPointIndex(p_glid);
-	if (i == -1) AttachTexture(p_width, p_height, p_param, p_glid, p_attach_point);
-	else p_attach_point = (MOuint)i;
-	SetReadTexture(p_attach_point);
-}
-
-void moFBO::SetDrawTexture(MOuint p_glid, MOuint p_width, MOuint p_height, const moTexParam& p_param, MOuint p_attach_point)
-{
-    MOint i = GetColorAttachPointIndex(p_glid);
-	if (i == -1) AttachTexture(p_width, p_height, p_param, p_glid, p_attach_point);
-	else p_attach_point = (MOuint)i;
-	SetDrawTexture(p_attach_point);
-}
-
-MOint moFBO::GetColorAttachPoint(MOuint p_attach_point)
-{
-    if (p_attach_point < m_num_color_attach_points)
-		return m_attach_points_array[p_attach_point];
-	else return -1;
-}
-
-MOint moFBO::GetTextureGLId(MOuint p_attach_point)
-{
-	if (p_attach_point < m_num_color_attach_points)
-		return m_tex_glid_array[p_attach_point];
-	else return -1;
-}
-
-MOint moFBO::GetColorAttachPointIndex(MOuint p_glid)
-{
-    for (MOuint i = 0; i < m_num_color_attach_points; i++)
-        if (m_tex_glid_array[i] == p_glid) return i;
-	return -1;
-}
-
-MOuint moFBO::AddTexture(MOuint p_width, MOuint p_height, const moTexParam& p_param, MOuint p_glid, MOuint &p_attach_point)
-{
-	bool valid_tex;
-	MOuint status;
-	if (m_num_color_attach_points < MO_MAX_COLOR_ATTACHMENTS_EXT)
-	{
-		if (m_num_color_attach_points == 0)
-		{
-			m_target = p_param.target;
-			m_internal_format = p_param.internal_format;
-			m_width = p_width;
-			m_height = p_height;
-			valid_tex = true;
-		}
-		else
-		{
-			valid_tex = (m_target == p_param.target) && (m_internal_format == p_param.internal_format) &&
-						(m_width == p_width) && (m_height == p_height);
-		}
-
-		if (!valid_tex)
-		{
-			status = MO_FRAMEBUFFER_INVALID_TEX;
-			return status;
-		}
-
-		Bind();
-		glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT,
-									m_attach_points_array[m_num_color_attach_points],
-									m_target, p_glid, 0);
-		status = CheckStatus();
-		Unbind();
-
-		if (status == GL_FRAMEBUFFER_COMPLETE_EXT)
-		{
-			m_tex_glid_array[m_num_color_attach_points] = p_glid;
-			p_attach_point = m_num_color_attach_points;
-			m_num_color_attach_points++;
-		}
-	}
-	else status = MO_FRAMEBUFFER_FULL;
-	return status;
-}
-
-MOuint moFBO::AttachTexture(MOuint p_width, MOuint p_height, const moTexParam& p_param, MOuint p_glid, MOuint p_attach_point)
-{
-	bool valid_tex;
-	MOuint status;
-	if (p_attach_point < MO_MAX_COLOR_ATTACHMENTS_EXT)
-	{
-		if (m_num_color_attach_points == 0)
-		{
-			m_target = p_param.target;
-			m_internal_format = p_param.internal_format;
-			m_width = p_width;
-			m_height = p_height;
-			valid_tex = true;
-		}
-		else
-		{
-			valid_tex = (m_target == p_param.target) && (m_internal_format == p_param.internal_format) &&
-						(m_width == p_width) && (m_height == p_height);
-		}
-
-		if (!valid_tex)
-		{
-			status = MO_FRAMEBUFFER_INVALID_TEX;
-			return status;
-		}
-
-		Bind();
-		glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT,
-									m_attach_points_array[p_attach_point],
-									m_target, p_glid, 0);
-		status = CheckStatus();
-		Unbind();
-
-		if (status == GL_FRAMEBUFFER_COMPLETE_EXT)
-		{
-			m_tex_glid_array[p_attach_point] = p_glid;
-		}
-	}
-	else status = MO_FRAMEBUFFER_FULL;
-	return status;
-}
-

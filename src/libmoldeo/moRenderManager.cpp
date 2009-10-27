@@ -182,6 +182,7 @@ MOboolean moRenderManager::Init( moRenderManagerMode p_render_to_texture_mode,
 		MOuint attach_point;
 		for (int i = 0; i < 4; i++)
 		{
+		    /*
 			m_pFBManager->GetFBO(m_fbo_idx)->AddTexture(m_render_width, m_render_height,
 								m_pTextureManager->GetTexParam(m_render_tex_moid[i]),
 								m_pTextureManager->GetGLId(m_render_tex_moid[i]), attach_point);
@@ -190,9 +191,11 @@ MOboolean moRenderManager::Init( moRenderManagerMode p_render_to_texture_mode,
 			    pRenderTex->SetFBO(m_pFBManager->GetFBO(m_fbo_idx));
 			    pRenderTex->SetFBOAttachPoint(attach_point);
 			    m_render_attach_points[i] = attach_point;
+
 			}
+			  */
 		}
-		m_pFBManager->GetFBO(m_fbo_idx)->AddDepthStencilBuffer();
+		//m_pFBManager->GetFBO(m_fbo_idx)->AddDepthStencilBuffer();
 	} else MODebug2->Message( moText("Framebuffer objects unavailable.") );
 	return true;
 }
@@ -257,8 +260,8 @@ void moRenderManager::EndUpdateObject()
 
 void moRenderManager::BeginDraw()
 {
-	if (IsRenderToFBOEnabled())
-		m_pFBManager->BindFBO(m_fbo_idx, m_render_attach_points[0]);
+	//if (IsRenderToFBOEnabled())
+	//	m_pFBManager->BindFBO(m_fbo_idx, m_render_attach_points[0]);
 }
 
 void moRenderManager::BeginDrawEffect()
@@ -308,8 +311,9 @@ void moRenderManager::EndDraw()
     }
 
 */
-	if (IsRenderToFBOEnabled())
-		m_pFBManager->UnbindFBO();
+
+//	if (IsRenderToFBOEnabled())
+//		m_pFBManager->UnbindFBO();
 }
 
 void moRenderManager::DrawTexture(MOint p_resolution, MOint p_tex_num)
@@ -366,16 +370,16 @@ void moRenderManager::CopyRenderToTexture(MOint p_tex_num)
 		if (IsRenderToFBOEnabled())
 		{
 		    m_pFBManager->BindFBO(m_fbo_idx);
-			m_pFBManager->SetReadTexture(m_render_attach_points[0]);
+//			m_pFBManager->SetReadTexture(m_render_attach_points[0]);
 		}
-		else m_pFBManager->BindScreenFB();
+		//else m_pFBManager->BindScreenFB();
 
 		glBindTexture(GL_TEXTURE_2D, m_pTextureManager->GetGLId(m_render_tex_moid[p_tex_num]));
 		glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, m_render_width, m_render_height, 0);
 		glBindTexture(GL_TEXTURE_2D, 0);
 
-		if (IsRenderToFBOEnabled()) m_pFBManager->UnbindFBO();
-		else m_pFBManager->UnbindScreenFB();
+	//	if (IsRenderToFBOEnabled()) m_pFBManager->UnbindFBO();
+	//	else m_pFBManager->UnbindScreenFB();
 	}
 }
 

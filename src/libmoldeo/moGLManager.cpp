@@ -42,10 +42,7 @@ moGLManager::moGLManager()
 	m_gpu_vendor_code = 0;
 	m_gpu_ventor_string = moText("");
 
-	m_current_fbo = m_previous_fbo = 0;
 
-	m_current_read_buffer = m_current_draw_buffer = 0;
-	m_previous_read_buffer = m_previous_draw_buffer = 0;
 	m_bFrameBufferObjectActive = false;
 }
 
@@ -54,13 +51,16 @@ moGLManager::~moGLManager()
 	Finish();
 }
 
-MOboolean moGLManager::Init()
+MOboolean moGLManager::Init(moFBManager* p_fbman)
 {
 	QueryGPUVendorString();
-	m_current_fbo = 0;
+
+    m_fbman = p_fbman;
+    m_screen_fbo = m_fbman->CreateFBO(true);
+    m_current_fbo = m_screen_fbo;
+
 	m_bFrameBufferObjectActive = false;
-	glGetIntegerv(GL_DRAW_BUFFER, &m_current_draw_buffer);
-	glGetIntegerv(GL_READ_BUFFER, &m_current_read_buffer);
+
 	return true;
 }
 
@@ -188,7 +188,6 @@ void moGLManager::SaveGLState()
 	// For more info about the GL attributes, see apendix B of the Red Book:
 	// http://cs-sdl.sourceforge.net/index.php/Red_Book_Appendix_B
 
-	SaveFramebuffer();
     glPushAttrib(GL_ALL_ATTRIB_BITS);
 	SaveGLMatrices();
 }
@@ -209,16 +208,8 @@ void moGLManager::SaveView()
 	SaveGLMatrices();
 }
 
-void moGLManager::SaveFramebuffer()
-{
-	m_saved_fbo = m_current_fbo;
-	m_saved_read_buffer = m_current_read_buffer;
-	m_saved_draw_buffer = m_current_draw_buffer;
-}
-
 void moGLManager::RestoreGLState()
 {
-	RestoreFramebuffer();
 	RestoreGLMatrices();
     glPopAttrib();
 }
@@ -237,19 +228,6 @@ void moGLManager::RestoreView()
 {
 	RestoreGLMatrices();
 	glPopAttrib();
-}
-
-void moGLManager::RestoreFramebuffer()
-{
-    m_current_fbo = m_saved_fbo;
-    if (m_bFrameBufferObjectActive) glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_current_fbo);
-
-	m_current_read_buffer = m_saved_read_buffer;
-	if (m_bFrameBufferObjectActive) glReadBuffer(m_current_read_buffer);
-
-	m_current_draw_buffer = m_saved_draw_buffer;
-	if (m_bFrameBufferObjectActive) glDrawBuffer(m_current_draw_buffer);
-
 }
 
 moTexParam moGLManager::BuildFPTexParam(MOboolean p_16bits, MOushort p_num_components)
@@ -326,35 +304,24 @@ MOboolean moGLManager::MipMapTexture(GLint p_min_filter)
 			(p_min_filter == GL_LINEAR_MIPMAP_LINEAR);
 }
 
-void moGLManager::SetCurrentFBO(MOuint m_fbo)
+void moGLManager::PushFBO()
 {
-	m_current_fbo = m_fbo;
-	if (m_bFrameBufferObjectActive) glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_current_fbo);
+    m_fbo_stack.push(m_current_fbo);
 }
 
-void moGLManager::SetCurrentReadBuffer(MOint p_buffer)
+void moGLManager::SetFBO(MOuint p_fbo)
 {
-	m_current_read_buffer = p_buffer;
-	if (m_bFrameBufferObjectActive) glReadBuffer(m_current_read_buffer);
+    m_current_fbo = p_fbo;
+
+    m_fbman->BindFBO(m_current_fbo);
 }
 
-void moGLManager::SetCurrentDrawBuffer(MOint p_buffer)
+void moGLManager::PopFBO()
 {
-	m_current_draw_buffer = p_buffer;
-	if (m_bFrameBufferObjectActive) glDrawBuffer(m_current_draw_buffer);
+    if (!m_fbo_stack.empty())
+    {
+        m_current_fbo = m_fbo_stack.top();
+        m_fbman->BindFBO(m_current_fbo);
+        m_fbo_stack.pop();
+    }
 }
-
-void moGLManager::SaveFBOState()
-{
-	m_previous_fbo = m_current_fbo;
-	m_previous_read_buffer = m_current_read_buffer;
-	m_previous_draw_buffer = m_current_draw_buffer;
-}
-
-void moGLManager::RestoreFBOState()
-{
-	SetCurrentFBO(m_previous_fbo);
-	SetCurrentReadBuffer(m_previous_read_buffer);
-	SetCurrentDrawBuffer(m_previous_draw_buffer);
-}
-

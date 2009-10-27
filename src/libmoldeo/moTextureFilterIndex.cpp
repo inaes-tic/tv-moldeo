@@ -230,7 +230,7 @@ MOuint moTextureFilterIndex::LoadFilter(moValue* p_value) {
     if (error_code == 0)
     {
         pfilter = new moTextureFilter();
-        pfilter->Init(m_glman, m_renderman, src_tex, dest_tex, pshader);
+        pfilter->Init(m_glman, m_fbman, m_renderman, src_tex, dest_tex, pshader);
         pfilter->SetTextureFilterLabelName( MakeTextureFilterLabelName( p_value ) );
         Add(pfilter);
     }
@@ -248,8 +248,6 @@ MOuint moTextureFilterIndex::LoadFilter(moValue* p_value) {
         else
             MODebug2->Message("Unknown error in creating filter.");
     }
-
-	SetupDestTexFBO();
 
 	return m_filters_array.Count();
 
@@ -314,7 +312,7 @@ MOuint moTextureFilterIndex::LoadFilters(moParam* p_param)
 		if (error_code == 0)
 		{
 			pfilter = new moTextureFilter();
-			pfilter->Init(m_glman, m_renderman, src_tex, dest_tex, pshader);
+			pfilter->Init(m_glman, m_fbman, m_renderman, src_tex, dest_tex, pshader);
 			Add(pfilter);
 		}
 		else
@@ -334,8 +332,6 @@ MOuint moTextureFilterIndex::LoadFilters(moParam* p_param)
 
 		p_param->NextValue();
 	}
-
-	SetupDestTexFBO();
 
 	return m_filters_array.Count();
 
@@ -400,7 +396,7 @@ MOuint moTextureFilterIndex::LoadFilters(moConfig* p_cfg, MOuint p_param_idx)
 		if (error_code == 0)
 		{
 			pfilter = new moTextureFilter();
-			pfilter->Init(m_glman, m_renderman, src_tex, dest_tex, pshader);
+			pfilter->Init(m_glman, m_fbman, m_renderman, src_tex, dest_tex, pshader);
 			Add(pfilter);
 		}
 		else
@@ -420,8 +416,6 @@ MOuint moTextureFilterIndex::LoadFilters(moConfig* p_cfg, MOuint p_param_idx)
 
 		p_cfg->NextValue();
 	}
-
-	SetupDestTexFBO();
 
 	return m_filters_array.Count();
 }
@@ -482,7 +476,7 @@ MOuint moTextureFilterIndex::LoadFilters(moTextArray* p_filters_str)
 		if (error_code == 0)
 		{
 			pfilter = new moTextureFilter();
-			pfilter->Init(m_glman, m_renderman, src_tex, dest_tex, pshader);
+			pfilter->Init(m_glman, m_fbman, m_renderman, src_tex, dest_tex, pshader);
 			Add(pfilter);
 		}
 		else
@@ -502,8 +496,6 @@ MOuint moTextureFilterIndex::LoadFilters(moTextArray* p_filters_str)
 
 		j++;
 	}
-
-	SetupDestTexFBO();
 
 	return m_filters_array.Count();
 }
@@ -579,133 +571,4 @@ MOint moTextureFilterIndex::LoadDestTexture( const moText& name, moTextureArray&
 		}
 		else return 4;
 	}
-}
-
-// Checks if all the destination textures can be assigned to the same fbo, to avoid context changes.
-// This implementation is very simple, it not all the textures cannot be assigned to a single fbo,
-// then the textures of each filter have their own fbo.
-void moTextureFilterIndex::SetupDestTexFBO()
-{
-	MOuint i, j;
-	MOint idx, total_tex_count;
-	moTextureIndex* dest_tex;
-	moTexture* ptex;
-    GLenum target0;
-    GLint internal_format0;
-	MOuint width0, height0;
-	MOboolean first_tex, test, compatible_tex;
-	moFBO* pfbo;
-	MOuint attach_pt;
-
-	// First, checks if all the destination textures would be compatible with each other to be in the same
-	// fbo.
-	total_tex_count = 0;
-	first_tex = true;
-	compatible_tex = true;
-	for (i = 0; i < m_filters_array.Count(); i++)
-	{
-		dest_tex = m_filters_array[i]->GetDestTex();
-
-		total_tex_count += dest_tex->Count();
-		for (j = 0; j < dest_tex->Count(); j++)
-		{
-			ptex = dest_tex->GetTexture(j);
-
-			if (first_tex)
-			{
-				// Getting parameters of first texture.
-				target0 = ptex->GetTexParam().target;
-				internal_format0 = ptex->GetTexParam().internal_format;
-			    width0 = ptex->GetWidth();
-				height0 = ptex->GetHeight();
-			}
-			else
-			{
-				// Comparing current texture with the parameters of the first one.
-				test = (target0 == ptex->GetTexParam().target) &&
-						(internal_format0 == ptex->GetTexParam().internal_format) &&
-						(width0 == ptex->GetWidth()) && (height0 == ptex->GetHeight());
-				if (!test)
-				{
-					compatible_tex = false;
-					break;
-				}
-			}
-
-			first_tex = false;
-		}
-	}
-
-	if (compatible_tex)
-	{
-		// All the textures can be assigned to the same fbo.
-		idx = m_fbman->CreateFBO();
-		pfbo = m_fbman->GetFBO(idx);
-
-		if (pfbo == NULL) return;
-
-		if (total_tex_count <= MO_MAX_COLOR_ATTACHMENTS_EXT)
-		{
-			// All the destination textures can be assigned to the available attachement points of the fbo.
-			// This is the optimal scenario.
-			for (i = 0; i < m_filters_array.Count(); i++)
-			{
-				dest_tex = m_filters_array[i]->GetDestTex();
-				for (j = 0; j < dest_tex->Count(); j++)
-				{
-					ptex = dest_tex->GetTexture(j);
-					ptex->SetFBO(pfbo);
-					pfbo->AddTexture(ptex->GetWidth(), ptex->GetHeight(),
-								     ptex->GetTexParam(),
-								     ptex->GetGLId(), attach_pt);
-					ptex->SetFBOAttachPoint(attach_pt);
-				}
-			}
-		}
-		else
-		{
-			// There are not enough attachement points in the fbo for all the textures. So, all the textures
-			// will be assigned to the same attachment point (the first one), and they will be reattached as
-			// needed.
-			for (i = 0; i < m_filters_array.Count(); i++)
-			{
-				dest_tex = m_filters_array[i]->GetDestTex();
-				for (j = 0; j < dest_tex->Count(); j++)
-				{
-					ptex = dest_tex->GetTexture(j);
-					ptex->SetFBO(pfbo);
-				}
-			}
-		}
-	}
-	else
-	{
-		// Creating a different fbo for each filter.
-		for (i = 0; i < m_filters_array.Count(); i++)
-		{
-			dest_tex = m_filters_array[i]->GetDestTex();
-
-			idx = -1;
-			pfbo = NULL;
-			for (j = 0; j < dest_tex->Count(); j++)
-			{
-				ptex = dest_tex->GetTexture(j);
-
-				if (j == 0)	idx = m_fbman->CreateFBO();
-				pfbo = m_fbman->GetFBO(idx);
-
-				if (pfbo != NULL)
-				{
-					ptex->SetFBO(pfbo);
-					pfbo->AddTexture(ptex->GetWidth(), ptex->GetHeight(),
-								     ptex->GetTexParam(),
-								     ptex->GetGLId(), attach_pt);
-					ptex->SetFBOAttachPoint(attach_pt);
-				}
-			}
-		}
-	}
-
-	for (i = 0; i < m_filters_array.Count(); i++)
-		m_filters_array[i]->CheckDestTexAttachStatus();
 }

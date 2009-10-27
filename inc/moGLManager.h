@@ -41,6 +41,10 @@
 #include "moText.h"
 #include "moFBO.h"
 
+#include <stack>
+using namespace std;
+
+
 #include "moResourceManager.h"
 
 /// manejador de operaciones comunes de Open GL
@@ -62,9 +66,10 @@ class LIBMOLDEO_API moGLManager : public moResource
 
         /**
          * Inicializador.
-         * @ true o false de acuerdo con el resultado de la operación.
+         * @param p_fbman es el Framebuffer manager.
+         * @return true o false de acuerdo con el resultado de la operación.
          */
-		virtual MOboolean Init();
+		virtual MOboolean Init(moFBManager* p_fbman);
         /**
          * Finalizador.
          * @return true o false de acuerdo con el resultado de la operación.
@@ -143,10 +148,6 @@ class LIBMOLDEO_API moGLManager : public moResource
          */
 		void SaveView();
         /**
-         * Guarda el framebuffer actual y los búfers de escritura y lectura.
-         */
-		void SaveFramebuffer();
-        /**
          * Restaura el estado de OpenGL que fue guardado anteriormente con SaveGLState.
          */
 		void RestoreGLState();
@@ -159,11 +160,6 @@ class LIBMOLDEO_API moGLManager : public moResource
          * SaveView.
          */
 		void RestoreView();
-        /**
-         * Restaura el framebuffer actual y los búfers de escritura y lectura, guardada anteriormente con
-         * SaveFramebuffer.
-         */
-		void RestoreFramebuffer();
 
         /**
          * Construye los parámetros de una textura de punto flotante de acuerdo con las opciones pasadas a la
@@ -192,52 +188,41 @@ class LIBMOLDEO_API moGLManager : public moResource
          */
 		MOboolean MipMapTexture(GLint p_min_filter);
 
-        /**
-         * Establece m_fbo como nuevo FBO.
-         * @param m_fbo identificador OpenGL del FBO.
-         */
-		void SetCurrentFBO(MOuint m_fbo);
-        /**
-         * Devuelve el FBO activo en este momento.
-         * @return identificador OpenGL del FBO.
-         */
-		MOuint GetCurrentFBO() { return m_current_fbo; }
 
         /**
-         * Establece p_buffer como nuevo búfer de lectura.
-         * @param p_buffer búfer de lectura.
+         * Coloca el FBO actual en la pila de FBOs.
          */
-		void SetCurrentReadBuffer(MOint p_buffer);
+        void PushFBO();
         /**
-         * Devuelve el búfer de lectura activo en este momento.
-         * @return búfer de lectura.
+         * Establece p_fbo como el nuevo FBO corriente (y lo activa).
+         * @param p_fbo índice del nuevo FBO.
          */
-		MOint GetCurrentReadBuffer() { return m_current_read_buffer; }
+        void SetFBO(MOuint p_fbo);
         /**
-         * Establece p_buffer como nuevo búfer de escritura.
-         * @param p_buffer búfer de escritura.
+         * Obtiene el FBO corriente de la pila de FBOs (y lo activa).
          */
-		void SetCurrentDrawBuffer(MOint p_buffer);
-        /**
-         * Devuelve el búfer de escritura activo en este momento.
-         * @return búfer de escritura.
-         */
-		MOint GetCurrentDrawBuffer() { return m_current_draw_buffer; }
-        /**
-         * Guarda el FBO y los búfers de escritura y lectura activos en este momento.
-         */
-		void SaveFBOState();
-        /**
-         * Restaura el FBO y los búfers de escritura y lectura guardados con SaveFBOState.
-         */
-		void RestoreFBOState();
+        void PopFBO();
+
+
+
 
 		void SetFrameBufferObjectActive( bool active = true );
+
+
+
 
     private:
 		MOuint m_gpu_vendor_code;
 		moText m_gpu_ventor_string;
 
+		stack<MOuint> m_fbo_stack;
+        moFBManager* m_fbman;
+        MOuint m_screen_fbo;
+        MOuint m_current_fbo;
+
+		void QueryGPUVendorString();
+
+/*
 		MOuint m_current_fbo;
 		MOint m_current_read_buffer;
 		MOint m_current_draw_buffer;
@@ -247,10 +232,9 @@ class LIBMOLDEO_API moGLManager : public moResource
 		MOuint m_saved_fbo;
 		MOint m_saved_read_buffer;
 		MOint m_saved_draw_buffer;
+		*/
 
 		bool    m_bFrameBufferObjectActive;
-
-		void QueryGPUVendorString();
 };
 
 
