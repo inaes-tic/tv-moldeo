@@ -968,22 +968,13 @@ MOboolean moTextureAnimated::Finish()
 
 void
 moTextureAnimated::SetInterpolation( MOuint p_FrameJump, MOuint p_InterpolationTime ) {
-/*
-REVISAR USO DE FBOs EN ESTE CODIGO...
-
 	m_FrameJump = p_FrameJump;
 	m_InterpolationTime = p_InterpolationTime;
 
-	int m_idx;
-    moFBO* m_pFBO;
 	moTexture* m_pTex;
 
 	moShaderManager* SM = m_pResourceManager->GetShaderMan();
 	moTextureManager* TM = m_pResourceManager->GetTextureMan();
-	moFBManager* FM = m_pResourceManager->GetFBMan();
-
-	m_idx = FM->CreateFBO();
-	m_pFBO = FM->GetFBO(m_idx);
 
 	m_pShaderCopy = SM->GetShader(SM->GetShaderIndex(moText("shaders/Copy.cfg"),true) );
 	m_pShaderInterpolate = SM->GetShader(SM->GetShaderIndex(moText("shaders/TexInterpolator.cfg"),true) );
@@ -998,7 +989,6 @@ REVISAR USO DE FBOs EN ESTE CODIGO...
 	m_pTex = TM->GetTexture(idxstart);
 	m_dststart.Empty();
 	m_dststart.Add(m_pTex);
-	m_pTex->SetFBOandAttachPoint(m_pFBO);
 
 	//copia del frame B
 	m_srcend.Empty();
@@ -1007,7 +997,6 @@ REVISAR USO DE FBOs EN ESTE CODIGO...
     m_pTex = TM->GetTexture(idxend);
 	m_dstend.Empty();
 	m_dstend.Add(m_pTex);
-	m_pTex->SetFBOandAttachPoint(m_pFBO);
 
 	//interpolacion con fuente A y B
 	m_srcinterpol.Empty();
@@ -1017,18 +1006,16 @@ REVISAR USO DE FBOs EN ESTE CODIGO...
     m_pTex = (moTexture*)this;
 	m_dstinterpol.Empty();
 	m_dstinterpol.Add(m_pTex);
-	m_pTex->SetFBOandAttachPoint(m_pFBO);
     if (!(m_pCopyStart && m_pCopyEnd && m_pInterpolator)) {
         if (!m_pInterpolator) m_pInterpolator = new moTextureFilter();
         if (m_pCopyStart) m_pCopyStart = new moTextureFilter();
         if (m_pCopyEnd) m_pCopyEnd = new moTextureFilter();
     }
     if (m_pCopyStart && m_pCopyEnd && m_pInterpolator) {
-        m_pCopyStart->Init( m_pResourceManager->GetGLMan(), m_pResourceManager->GetRenderMan(), m_srcstart, m_dststart, m_pShaderCopy );
-        m_pCopyEnd->Init( m_pResourceManager->GetGLMan(), m_pResourceManager->GetRenderMan(), m_srcend, m_dstend, m_pShaderCopy );
-        m_pInterpolator->Init(  m_pResourceManager->GetGLMan(), m_pResourceManager->GetRenderMan(), m_srcinterpol, m_dstinterpol, m_pShaderInterpolate  );
+        m_pCopyStart->Init( m_pResourceManager->GetGLMan(), m_pResourceManager->GetFBMan(), m_pResourceManager->GetRenderMan(), m_srcstart, m_dststart, m_pShaderCopy );
+        m_pCopyEnd->Init( m_pResourceManager->GetGLMan(), m_pResourceManager->GetFBMan(), m_pResourceManager->GetRenderMan(), m_srcend, m_dstend, m_pShaderCopy );
+        m_pInterpolator->Init(  m_pResourceManager->GetGLMan(), m_pResourceManager->GetFBMan(), m_pResourceManager->GetRenderMan(), m_srcinterpol, m_dstinterpol, m_pShaderInterpolate  );
     }
-    */
 }
 
 MOboolean
