@@ -171,17 +171,29 @@ public:
 	void SetGrid(moTexturedGrid p_grid) { m_grid = p_grid; }
 
     /**
+     * Devuelve el objeto clipping de textura utilizado por este shader.
+     * @return objeto de clipping de textura.
+     */
+	moTextureClip GetClip() { return m_clip; }
+    /**
+     * Establece el objeto de clipping de textura a utilizar por este shader.
+     * @param m_grid nuevo objeto de grilla 2D.
+     */
+	void SetClip(moTextureClip p_clip) { m_clip = p_clip; }
+
+    /**
      * Dibuja la grilla asociada a este shader con ancho w y alto w, aplicando las capas hasta la número l.
      * @param w ancho con el que se dibuja la grilla.
      * @param h alto con el que se dibuja la grilla.
      * @param l número de capas de textura a aplicar.
      */
-	void DrawGrid(MOint w, MOint h, MOint l) { m_grid.Draw(w, h, l); }
+	void DrawGrid(MOint w, MOint h, MOint l) { m_grid.Draw(w, h, l, m_clip); }
 protected:
 	MOuint m_type;
 	moText m_name;
 
 	moTexturedGrid m_grid;
+	moTextureClip m_clip;
 
     MOboolean m_Active;
     MOint m_VertErrorCode;

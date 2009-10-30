@@ -102,9 +102,13 @@ MOboolean moTexture::Finish()
 
 MOboolean moTexture::BuildEmpty(MOuint p_width, MOuint p_height)
 {
-	if (m_glid<=0) {
-	    glGenTextures(1, &m_glid);
+	if (0 < m_glid) {
+        glDeleteTextures(1, &m_glid);
+		m_glid = 0;
 	}
+
+	glGenTextures(1, &m_glid);
+
 	CalculateSize(p_width, p_height);
 	return Build();
 }

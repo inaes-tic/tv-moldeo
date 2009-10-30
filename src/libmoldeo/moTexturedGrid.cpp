@@ -35,6 +35,34 @@
 
 //===========================================
 //
+//				moTextureClip
+//
+//===========================================
+
+moTextureClip::moTextureClip()
+{
+    s0 = 0.0;
+    s1 = 1.0;
+
+    t0 = 0.0;
+    t1 = 1.0;
+}
+
+void moTextureClip::SetEntireTexClip()
+{
+}
+
+moTextureClip &moTextureClip::operator = (const moTextureClip &p_src_clip)
+{
+    s0 = p_src_clip.s0;
+    s1 = p_src_clip.s1;
+    t0 = p_src_clip.t0;
+    t1 = p_src_clip.t1;
+	return *this;
+}
+
+//===========================================
+//
 //				moTexturedGrid
 //
 //===========================================
@@ -141,7 +169,7 @@ void moTexturedGrid::GetPoint(MOint layer, MOint i, MOint j, MOfloat &x, MOfloat
 	}
 }
 
-void moTexturedGrid::Draw(MOint w, MOint h, MOint l)
+void moTexturedGrid::Draw(MOint w, MOint h, MOint l, const moTextureClip &clip)
 {
 	float x0, y0, x1, y1;
 
@@ -156,50 +184,24 @@ void moTexturedGrid::Draw(MOint w, MOint h, MOint l)
 				x0 *= w; y0 *= h;
 				x1 *= w; y1 *= h;
 
-				SetTexCoord(i, j, l);
+				SetTexCoord(i, j, l, clip);
 				glVertex2f(x0, y0);
 
-				SetTexCoord(i, j + 1, l);
+				SetTexCoord(i, j + 1, l, clip);
 				glVertex2f(x1, y1);
 			}
 		glEnd();
 	}
 }
 
-void moTexturedGrid::Draw(MOint w, MOint h, MOint l, MOint i, MOint j)
-{
-    float x0, y0, x1, y1, x2, y2, x3, y3;
-    glBegin(GL_QUADS);
-	    GetPoint(0, i, j, x0, y0);
-        GetPoint(0, i, j + 1, x1, y1);
-	    GetPoint(0, i + 1, j + 1, x2, y2);
-        GetPoint(0, i + 1, j, x3, y3);
-
-        x0 *= w; y0 *= h;
-        x1 *= w; y1 *= h;
-
-        SetTexCoord(i, j, l);
-        glVertex2f(x0, y0);
-
-        SetTexCoord(i, j + 1, l);
-        glVertex2f(x1, y1);
-
-        SetTexCoord(i + 1, j + 1, l);
-        glVertex2f(x2, y2);
-
-        SetTexCoord(i + 1, j, l);
-        glVertex2f(x3, y3);
-    glEnd();
-}
-
-void moTexturedGrid::SetTexCoord(MOint i, MOint j, MOint l)
+void moTexturedGrid::SetTexCoord(MOint i, MOint j, MOint l, const moTextureClip &clip)
 {
 	float s, t;
 	for (int k = 1; k <= l; k++)
 	{
-		GetPoint(k, i, j, s, t);
-        glMultiTexCoord2fARB(GL_TEXTURE0_ARB + k - 1, s, t);
-	}
+        GetPoint(k, i, j, s, t);
+        glMultiTexCoord2fARB(GL_TEXTURE0_ARB + k - 1, clip.s0 + s / (clip.s1 - clip.s0), clip.t0 + t / (clip.t1 - clip.t0));
+    }
 }
 
 moTexturedGrid &moTexturedGrid::operator = (const moTexturedGrid &p_src_grid)

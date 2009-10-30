@@ -40,6 +40,26 @@
 
 #define MO_MAX_TEXTURE_UNITS 4
 
+
+/**
+ * Esta clase define una subregión rectangular en el espacio ST de coordenadas de texturas.
+ */
+class LIBMOLDEO_API moTextureClip
+{
+public:
+    moTextureClip();
+
+    moTextureClip &operator = (const moTextureClip &p_src_clip);
+
+    MOboolean Init(MOfloat s0, MOfloat s1, MOfloat t0, MOfloat t1);
+    MOboolean Init(moConfig* p_cfg, MOuint p_param_idx);
+
+    void SetEntireTexClip();
+
+    MOfloat s0, s1;
+    MOfloat t0, t1;
+};
+
 /**
  * Esta clase define una grilla 2D donde mapear y distorsionar texturas. La grilla
  * está definida por el número de divisiones (número de puntos - 1) a lo largo de las direcciones X e Y.
@@ -90,22 +110,14 @@ public:
 	void Set1QuadGrid();
 
     /**
-     * Dibuja la grilla con ancho w y alto w, aplicando las capas hasta la número l.
+     * Dibuja la grilla con ancho w y alto w, aplicando las capas hasta la número l y haciendo
+     * el clipping the coordenadas de texturas indicado en clip.
      * @param w ancho con el que se dibuja la grilla.
      * @param h alto con el que se dibuja la grilla.
      * @param l número de capas de textura a aplicar.
+     * @param clip que define la región del espacio ST a utilizar.
      */
-	void Draw(MOint w, MOint h, MOint l);
-
-    /**
-     * Dibuja solamente la celda (i, j) de la la grilla con ancho w y alto w, aplicando las capas hasta la número l.
-     * @param w ancho con el que se dibuja la grilla.
-     * @param h alto con el que se dibuja la grilla.
-     * @param l número de capas de textura a aplicar.
-     * @param i indice en x de la celda a dibujar.
-     * @param j indice en y de la celda a dibujar.
-     */
-    void Draw(MOint w, MOint h, MOint l, MOint i, MOint j);
+	void Draw(MOint w, MOint h, MOint l, const moTextureClip &clip);
 
     /**
      * Devuelve el número de puntos en la dirección X.
@@ -129,12 +141,14 @@ public:
      */
 	void GetPoint(MOint layer, MOint i, MOint j, MOfloat &x, MOfloat &y);
     /**
-     * Establece las coordenadas de texturas hasta la capa l, para el punto (i, j) de la grilla.
+     * Establece las coordenadas de texturas hasta la capa l, para el punto (i, j) de la grilla,
+     * haciendo el clipping especificado.
      * @param i índice del punto de la grilla a lo largo de la dirección X.
      * @param j índice del punto de la grilla a lo largo de la dirección Y.
      * @param l número de capas de textura a establecer las coordenadas.
+     * @param clip que define la región del espacio ST a utilizar.
      */
-	void SetTexCoord(MOint i, MOint j, MOint l);
+	void SetTexCoord(MOint i, MOint j, MOint l, const moTextureClip &clip);
 
     /**
      * Copia los datos desde la grilla p_src_grid.

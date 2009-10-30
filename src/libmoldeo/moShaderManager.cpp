@@ -149,6 +149,11 @@ MOint moShaderManager::AddShader(moText p_filename)
 	if (grid_idx == MO_PARAM_NOT_FOUND)	tex_grid.Set1QuadGrid();
 	else tex_grid.Init(&config, grid_idx);
 
+	MOint clip_idx = config.GetParamIndex("clip");
+	moTextureClip tex_clip;
+	if (clip_idx == MO_PARAM_NOT_FOUND) tex_clip.SetEntireTexClip();
+	else tex_clip.Init(&config, clip_idx);
+
 	return AddShader(config.GetParam(type_idx).GetValue().GetSubValue().Int(), p_filename, vertex_fn, fragment_fn, tex_grid);
 }
 

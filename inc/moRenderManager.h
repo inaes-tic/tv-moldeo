@@ -121,6 +121,8 @@ class LIBMOLDEO_API moRenderOutputConfiguration {
 class LIBMOLDEO_API moRenderChannel {
 
     public:
+
+
         MOint m_render_tex_moid[4];
 
 };

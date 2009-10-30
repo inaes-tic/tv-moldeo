@@ -358,6 +358,7 @@
 		<Unit filename="..\..\inc\moTextureManager.h">
 			<Option target="debug" />
 		</Unit>
+		<Unit filename="..\..\inc\moTexturedGrid.h" />
 		<Unit filename="..\..\inc\moThread.h">
 			<Option target="debug" />
 		</Unit>
@@ -461,6 +462,7 @@
 		<Unit filename="..\..\src\libmoldeo\moTextureFilterIndex.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moTextureIndex.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moTextureManager.cpp" />
+		<Unit filename="..\..\src\libmoldeo\moTexturedGrid.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moThread.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moTimeManager.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moTypes.cpp" />

@@ -1,1 +1,307 @@
 # depslib dependency file v1.0
+1256670823 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moshader.cpp
+	"moShader.h"
+	"moArray.cpp"
+
+1256928114 c:\devel\moldeo\svn\branches\newgl\inc\moshader.h
+	"moTypes.h"
+	"moAbstract.h"
+	"moConfig.h"
+	"moArray.h"
+	"moTexturedGrid.h"
+
+1254776590 c:\devel\moldeo\svn\branches\newgl\inc\motypes.h
+	<math.h>
+	<limits.h>
+	<iostream>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<float.h>
+	<time.h>
+	<string>
+	<vector>
+	<fstream>
+	"SDL.h"
+	"SDL_thread.h"
+	"SDL_mutex.h"
+	"SDL_net.h"
+	"SDL_image.h"
+	<GL/glew.h>
+	"OpenGL/gl.h"
+	"OpenGL/glu.h"
+	"OpenGL/glext.h"
+	"GLUT/glut.h"
+	"X11/X.h"
+	<SDL/SDL.h>
+	<SDL/SDL_thread.h>
+	<SDL/SDL_mutex.h>
+	<SDL/SDL_net.h>
+	<SDL/SDL_image.h>
+	<SDL/SDL_syswm.h>
+	<GL/glew.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<GL/glext.h>
+	<GL/glut.h>
+	<windows.h>
+	<SDL.h>
+	<SDL_thread.h>
+	<SDL_mutex.h>
+	<SDL_syswm.h>
+	<GL/glew.h>
+	"GL/gl.h"
+	"GL/glu.h"
+	"GL/glext.h"
+	"GL/glut.h"
+	"port/stricmp.h"
+	"port/stricmp.h"
+	"moTempo.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl.h
+	"SDL_main.h"
+	"SDL_types.h"
+	"SDL_getenv.h"
+	"SDL_error.h"
+	"SDL_rwops.h"
+	"SDL_timer.h"
+	"SDL_audio.h"
+	"SDL_cdrom.h"
+	"SDL_joystick.h"
+	"SDL_events.h"
+	"SDL_video.h"
+	"SDL_byteorder.h"
+	"SDL_version.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_main.h
+	"SDL_types.h"
+	"begin_code.h"
+	"close_code.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_types.h
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\begin_code.h
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\close_code.h
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_getenv.h
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_error.h
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_rwops.h
+	<stdio.h>
+	"SDL_types.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_timer.h
+	"SDL_main.h"
+	"SDL_types.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_audio.h
+	<stdio.h>
+	"SDL_main.h"
+	"SDL_types.h"
+	"SDL_error.h"
+	"SDL_rwops.h"
+	"SDL_byteorder.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_byteorder.h
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_cdrom.h
+	"SDL_types.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_joystick.h
+	"SDL_types.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_events.h
+	"SDL_types.h"
+	"SDL_active.h"
+	"SDL_keyboard.h"
+	"SDL_mouse.h"
+	"SDL_joystick.h"
+	"SDL_quit.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_active.h
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_keyboard.h
+	"SDL_types.h"
+	"SDL_keysym.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_keysym.h
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_mouse.h
+	"SDL_types.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_video.h
+	<stdio.h>
+	"SDL_types.h"
+	"SDL_mutex.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_mutex.h
+	"SDL_main.h"
+	"SDL_types.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_quit.h
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_version.h
+	"SDL_types.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_thread.h
+	"SDL_main.h"
+	"SDL_types.h"
+	"SDL_mutex.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225308 c:\devel\moldeo\svn\externlibs\sdl_net\include\sdl_net.h
+	"SDL.h"
+	"SDL_endian.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_endian.h
+	<stdio.h>
+	"SDL_types.h"
+	"SDL_rwops.h"
+	"SDL_byteorder.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225242 c:\devel\moldeo\svn\externlibs\sdl_image\include\sdl_image.h
+	"SDL.h"
+	"begin_code.h"
+	"close_code.h"
+
+1192542092 c:\devel\moldeo\svn\externlibs\glew\include\gl\glew.h
+	<stddef.h>
+	<OpenGL/glu.h>
+	<GL/glu.h>
+
+1150225242 c:\devel\moldeo\svn\externlibs\opengl\include\gl\glu.h
+	<GL/gl.h>
+
+1150225242 c:\devel\moldeo\svn\externlibs\opengl\include\gl\gl.h
+
+1201709872 c:\devel\moldeo\svn\externlibs\cg\include\gl\glext.h
+	<windows.h>
+	<stddef.h>
+	<inttypes.h>
+	<inttypes.h>
+	<inttypes.h>
+	<stdint.h>
+	<sys/types.h>
+	<stdint.h>
+	<inttypes.h>
+
+1201709874 c:\devel\moldeo\svn\externlibs\cg\include\gl\glut.h
+	<windows.h>
+	<stddef.h>
+	<GL/gl.h>
+	<GL/glu.h>
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_syswm.h
+	"SDL_version.h"
+	"begin_code.h"
+	<X11/Xlib.h>
+	<X11/Xatom.h>
+	<microwin/nano-X.h>
+	<windows.h>
+	<sys/neutrino.h>
+	<Ph.h>
+	"close_code.h"
+
+1254776565 c:\devel\moldeo\svn\branches\newgl\inc\port\stricmp.h
+	<string>
+
+1254776590 c:\devel\moldeo\svn\branches\newgl\inc\motempo.h
+	"moTypes.h"
+	"moMath.h"
+
+1254776590 c:\devel\moldeo\svn\branches\newgl\inc\momath.h
+	"moTypes.h"
+	"moAbstract.h"
+
+1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moabstract.h
+	"moTypes.h"
+	"moText.h"
+
+1254776590 c:\devel\moldeo\svn\branches\newgl\inc\motext.h
+	"moTypes.h"
+	"moArray.h"
+	<stdio.h>
+	<string.h>
+
+1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moarray.h
+	"moTypes.h"
+	"moArray.h"
+	"moArray.cpp"
+
+1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moarray.cpp
+	"moArray.h"
+
+1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moconfig.h
+	"moTypes.h"
+	"moText.h"
+	"moParam.h"
+	"moArray.h"
+	"moPreConfig.h"
+
+1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moparam.h
+	"moTypes.h"
+	"moText.h"
+	"moValue.h"
+
+1254776590 c:\devel\moldeo\svn\branches\newgl\inc\movalue.h
+	"moTypes.h"
+	"moText.h"
+	"moArray.h"
+	"moMathFunction.h"
+
+1254776590 c:\devel\moldeo\svn\branches\newgl\inc\momathfunction.h
+	"moTypes.h"
+	"moArray.h"
+	"moAbstract.h"
+	"moMath.h"
+
+1254776590 c:\devel\moldeo\svn\branches\newgl\inc\mopreconfig.h
+	"moTypes.h"
+	"moValue.h"
+
+1256928013 c:\devel\moldeo\svn\branches\newgl\inc\motexturedgrid.h
+	"moTypes.h"
+	"moAbstract.h"
+	"moConfig.h"
+
