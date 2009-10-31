@@ -27,7 +27,8 @@
   Andres Colubri
 
   Description:
-  Clase para definr una grilla texturada.
+  Clases para definir una región de clipping en el esapcio de coordenadas de
+  textura ST, y una grilla texturada.
 
 *******************************************************************************/
 
@@ -42,14 +43,65 @@
 moTextureClip::moTextureClip()
 {
     s0 = 0.0;
-    s1 = 1.0;
+    s1 = 0.0;
 
     t0 = 0.0;
-    t1 = 1.0;
+    t1 = 0.0;
+}
+
+moTextureClip::~moTextureClip()
+{
+	Finish();
+}
+
+MOboolean moTextureClip::Init(MOfloat s0, MOfloat s1, MOfloat t0, MOfloat t1)
+{
+    this->s0 = s0;
+    this->s1 = s1;
+
+    this->t0 = t0;
+    this->t1 = t1;
+}
+
+MOboolean moTextureClip::Init(moConfig* p_cfg, MOuint p_param_idx)
+{
+	moParam* param;
+	MOuint count = p_cfg->GetParam(p_param_idx).GetValue().GetSubValueCount();
+
+	p_cfg->SetCurrentParamIndex(p_param_idx);
+	p_cfg->FirstValue();
+	for (MOuint i = 0; i < count; i++)
+	{
+		param = &p_cfg->GetParam();
+		if (i == 0)
+		{
+			s0 = param->GetValue().GetSubValue(0).Float();
+			s1 = param->GetValue().GetSubValue(1).Float();
+		}
+		else if (i == 1)
+		{
+			t0 = param->GetValue().GetSubValue(0).Float();
+			t1 = param->GetValue().GetSubValue(1).Float();
+		}
+
+		p_cfg->NextValue();
+	}
+
+	return true;
+}
+
+MOboolean moTextureClip::Finish()
+{
+	return true;
 }
 
 void moTextureClip::SetEntireTexClip()
 {
+    s0 = 0.0;
+    s1 = 1.0;
+
+    t0 = 0.0;
+    t1 = 1.0;
 }
 
 moTextureClip &moTextureClip::operator = (const moTextureClip &p_src_clip)
@@ -169,7 +221,7 @@ void moTexturedGrid::GetPoint(MOint layer, MOint i, MOint j, MOfloat &x, MOfloat
 	}
 }
 
-void moTexturedGrid::Draw(MOint w, MOint h, MOint l, const moTextureClip &clip)
+void moTexturedGrid::Draw(MOint w, MOint h, MOint l, moTextureClip &clip)
 {
 	float x0, y0, x1, y1;
 
@@ -194,13 +246,13 @@ void moTexturedGrid::Draw(MOint w, MOint h, MOint l, const moTextureClip &clip)
 	}
 }
 
-void moTexturedGrid::SetTexCoord(MOint i, MOint j, MOint l, const moTextureClip &clip)
+void moTexturedGrid::SetTexCoord(MOint i, MOint j, MOint l, moTextureClip &clip)
 {
 	float s, t;
 	for (int k = 1; k <= l; k++)
 	{
         GetPoint(k, i, j, s, t);
-        glMultiTexCoord2fARB(GL_TEXTURE0_ARB + k - 1, clip.s0 + s / (clip.s1 - clip.s0), clip.t0 + t / (clip.t1 - clip.t0));
+        glMultiTexCoord2fARB(GL_TEXTURE0_ARB + k - 1, clip.MapS(s), clip.MapT(t));
     }
 }
 

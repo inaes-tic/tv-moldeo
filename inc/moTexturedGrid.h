@@ -27,7 +27,8 @@
   Andres Colubri
 
   Description:
-  Clase para definr una grilla texturada.
+  Clases para definir una región de clipping en el esapcio de coordenadas de
+  textura ST, y una grilla texturada.
 
 *******************************************************************************/
 
@@ -40,22 +41,93 @@
 
 #define MO_MAX_TEXTURE_UNITS 4
 
-
 /**
  * Esta clase define una subregión rectangular en el espacio ST de coordenadas de texturas.
  */
 class LIBMOLDEO_API moTextureClip
 {
 public:
+    /**
+     * El constructor por defecto de la clase.
+     */
     moTextureClip();
+    /**
+     * El destructor por defecto de la clase.
+     */
+	virtual ~moTextureClip();
 
-    moTextureClip &operator = (const moTextureClip &p_src_clip);
-
+    /**
+     * Método de inicialización del clip.
+     * @param s0 es la coordenada S de textura donde comienza la región de clipping.
+     * @param s1 es la coordenada S de textura donde termina la región de clipping.
+     * @param t0 es la coordenada T de textura donde comienza la región de clipping.
+     * @param t1 es la coordenada T de textura donde termina la región de clipping.
+     * @return true si la operación fue exitosa, false en caso contrario.
+     */
     MOboolean Init(MOfloat s0, MOfloat s1, MOfloat t0, MOfloat t1);
+    /**
+     * Método de inicialización.
+     * @param p_cfg puntero al objeto de configuración que contiene los parámetros de la grilla.
+     * @param p_param_idx índice de los parámetros de la grilla en el objeto de configuración.
+     * @return true si la operación fue exitosa, false en caso contrario.
+     */
     MOboolean Init(moConfig* p_cfg, MOuint p_param_idx);
 
+    /**
+     * Método de finalización.
+     * @return true si la operación fue exitosa, false en caso contrario.
+     */
+	virtual MOboolean Finish();
+
+    /**
+     * Sets the clipping region to cover the entire texture plane [0,1]x[0,1].
+     */
     void SetEntireTexClip();
 
+    /**
+     * Devuelve el valor inicial de clipping en la coordenada S.
+     * @return s0.
+     */
+    MOfloat GetS0() { return s0; }
+    /**
+     * Devuelve el valor final de clipping en la coordenada S.
+     * @return s1.
+     */
+    MOfloat GetS1() { return s1; }
+
+    /**
+     * Devuelve el valor inicial de clipping en la coordenada T.
+     * @return t0.
+     */
+    MOfloat GetT0() { return t0; }
+    /**
+     * Devuelve el valor final de clipping en la coordenada T.
+     * @return t1.
+     */
+    MOfloat GetT1() { return t1; }
+
+    /**
+     * Mapea el valor de coordenada de textura s en [0, 1] a la
+     * región de clipping [s0, s1].
+     * @param s en [0, 1]
+     * @return valor mapeado a [s0, s1]
+     */
+    MOfloat MapS(MOfloat s) { s0 + s / (s1 - s0); }
+    /**
+     * Mapea el valor de coordenada de textura t en [0, 1] a la
+     * región de clipping [t0, t1].
+     * @param t en [0, 1]
+     * @return valor mapeado a [t0, t1]
+     */
+    MOfloat MapT(MOfloat t) { t0 + t / (t1 - t0); }
+
+    /**
+     * Copia los datos desde el clip p_src_clip
+     * @param p_src_clip clip fuente para la copia.
+     * @return referencia a este clip.
+     */
+    moTextureClip &operator = (const moTextureClip &p_src_clip);
+protected:
     MOfloat s0, s1;
     MOfloat t0, t1;
 };
@@ -117,7 +189,7 @@ public:
      * @param l número de capas de textura a aplicar.
      * @param clip que define la región del espacio ST a utilizar.
      */
-	void Draw(MOint w, MOint h, MOint l, const moTextureClip &clip);
+	void Draw(MOint w, MOint h, MOint l, moTextureClip &clip);
 
     /**
      * Devuelve el número de puntos en la dirección X.
@@ -148,7 +220,7 @@ public:
      * @param l número de capas de textura a establecer las coordenadas.
      * @param clip que define la región del espacio ST a utilizar.
      */
-	void SetTexCoord(MOint i, MOint j, MOint l, const moTextureClip &clip);
+	void SetTexCoord(MOint i, MOint j, MOint l, moTextureClip &clip);
 
     /**
      * Copia los datos desde la grilla p_src_grid.

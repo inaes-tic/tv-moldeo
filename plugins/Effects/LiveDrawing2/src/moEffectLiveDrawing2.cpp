@@ -222,6 +222,8 @@ void moEffectLiveDrawing2::Draw( moTempo* tempogral,moEffectState* parentstate)
         }*/
 	}
 
+     MODebug2->Push( moText("Current pressure = ") + FloatToStr(pressure) );
+
     if (pressure <= (float)min_pressure / (float)max_pressure) drawing = false;
 	else
 		if (!drawing)
