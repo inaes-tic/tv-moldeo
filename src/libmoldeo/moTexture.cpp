@@ -1091,7 +1091,7 @@ moTextureAnimated::NeedsInterpolation() {
 
 MOint
 moTextureAnimated::Interpolate() {
-	moTextFilterParam filterparam;
+	moTextureFilterParam filterparam;
 	if ( m_pShaderCopy && m_pShaderInterpolate && m_bInterpolation) {
 		if (m_bInterpolating) {
 			MOuint m_ActualTime = moGetTicks();

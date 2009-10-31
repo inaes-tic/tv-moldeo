@@ -489,7 +489,7 @@ void moBrightContMatrix::ContrastMatrix()
 //
 //===========================================
 
-MOboolean moTextureFilter::Init(moGLManager* p_glman, moFBManager* p_fbman, moRenderManager* p_renderman, moTextureArray &p_src_tex, moTextureArray &p_dest_tex, moShader *p_shader, moTextFilterParam *p_params)
+MOboolean moTextureFilter::Init(moGLManager* p_glman, moFBManager* p_fbman, moRenderManager* p_renderman, moTextureArray &p_src_tex, moTextureArray &p_dest_tex, moShader *p_shader, moTextureFilterParam *p_params)
 {
 	MOuint i, fboidx;
 	moText uname;
@@ -531,7 +531,7 @@ MOboolean moTextureFilter::Init(moGLManager* p_glman, moFBManager* p_fbman, moRe
     uname = moText("fade_const");
     m_fade_const = pglsl->GetUniformID(uname);
 
-    if (p_params == NULL) m_DefParams = new moTextFilterParam();
+    if (p_params == NULL) m_DefParams = new moTextureFilterParam();
     else m_DefParams = p_params;
 
     m_DefParams->getParamIDs(pglsl);
@@ -551,7 +551,7 @@ MOboolean moTextureFilter::Finish()
 	return true;
 }
 
-void moTextureFilter::Apply(MOuint p_i, MOfloat p_fade, moTextFilterParam *p_params)
+void moTextureFilter::Apply(MOuint p_i, MOfloat p_fade, moTextureFilterParam *p_params)
 {
 	MOint w = m_dest_tex[0]->GetWidth();
 	MOint h = m_dest_tex[0]->GetHeight();
@@ -577,7 +577,7 @@ void moTextureFilter::Apply(MOuint p_i, MOfloat p_fade, moTextFilterParam *p_par
 	RestoreGLConf();
 }
 
-void moTextureFilter::Apply(MOfloat p_cycle, MOfloat p_fade, moTextFilterParam *p_params)
+void moTextureFilter::Apply(MOfloat p_cycle, MOfloat p_fade, moTextureFilterParam *p_params)
 {
 	MOint w = m_dest_tex[0]->GetWidth();
 	MOint h = m_dest_tex[0]->GetHeight();
@@ -603,7 +603,7 @@ void moTextureFilter::Apply(MOfloat p_cycle, MOfloat p_fade, moTextFilterParam *
 	RestoreGLConf();
 }
 
-void moTextureFilter::Apply(moTempo *p_tempo, MOfloat p_fade, moTextFilterParam *p_params)
+void moTextureFilter::Apply(moTempo *p_tempo, MOfloat p_fade, moTextureFilterParam *p_params)
 {
 	MOint w = m_dest_tex[0]->GetWidth();
 	MOint h = m_dest_tex[0]->GetHeight();
@@ -629,7 +629,7 @@ void moTextureFilter::Apply(moTempo *p_tempo, MOfloat p_fade, moTextFilterParam 
 	RestoreGLConf();
 }
 
-void moTextureFilter::SetupShader(MOint w, MOint h, moTempo *p_tempo, MOfloat p_fade, moTextFilterParam *p_params)
+void moTextureFilter::SetupShader(MOint w, MOint h, moTempo *p_tempo, MOfloat p_fade, moTextureFilterParam *p_params)
 {
 	for (MOuint i = 0; i < m_src_tex.Count(); i++)
 	{

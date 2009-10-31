@@ -6,16 +6,16 @@
 
 /**
  * Esta clase almacena los parámetros de un filtro. Hay 6 parámetros pre-definidos:
- * tres números flotsntes, y tres matrices (2x2, 3x3 and 4x4). Estos parámetros
+ * tres números flotantes, y tres matrices (2x2, 3x3 and 4x4). Estos parámetros
  * deben corresponder a los parámetros uniformes definidos en el código del shader.
  */
-class moTextFilterParam
+class moTextureFilterParam
 {
 public:
     /**
      * Constructor por defecto.
      */
-    moTextFilterParam()
+    moTextureFilterParam()
     {
         par_flt1 = par_flt2 = par_flt3 = 0.0;
         par_mat2 = new MOfloat[2 * 2];
@@ -29,7 +29,7 @@ public:
     /**
      * Destructor por defecto.
      */
-    ~moTextFilterParam()
+    ~moTextureFilterParam()
     {
         if (par_mat2 != NULL)
         {
@@ -80,7 +80,7 @@ public:
      * Copia los IDs de los parámetros uniformes a params.
      * @param p_params puntero a los parámetros donde se copiarán los IDs.
      */
-    void CopyDefParamIDs(moTextFilterParam *p_params)
+    void CopyDefParamIDs(moTextureFilterParam *p_params)
     {
         if (p_params != NULL)
         {

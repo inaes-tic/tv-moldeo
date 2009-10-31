@@ -1,6 +1,6 @@
-#include "moTextFilterParam.h"
+#include "moTextureFilterParam.h"
 
-void moTextFilterParam::setParamValues()
+void moTextureFilterParam::setParamValues()
 	{
         if (-1 < m_par_flt1) glUniform1fARB(m_par_flt1, par_flt1);
         if (-1 < m_par_flt2) glUniform1fARB(m_par_flt2, par_flt2);

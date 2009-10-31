@@ -276,7 +276,7 @@ moData::SetTextureFilterAlpha( moData* p_alpha ) {
 }
 
 void
-moData::SetTextureFilterParam( moTextFilterParam *p_filterparam ) {
+moData::SetTextureFilterParam( moTextureFilterParam *p_filterparam ) {
     m_bFilteredParams = true;
     m_pFilterParam = p_filterparam;
 
@@ -659,7 +659,7 @@ moData::GetData() {
 }
 
 GLint
-moData::GetGLId( MOfloat p_cycle, MOfloat p_fade, moTextFilterParam *p_filterparam ) {
+moData::GetGLId( MOfloat p_cycle, MOfloat p_fade, moTextureFilterParam *p_filterparam ) {
 
     moTexture*	Texture = NULL;
 
@@ -697,7 +697,7 @@ moData::GetGLId( MOfloat p_cycle, MOfloat p_fade, moTextFilterParam *p_filterpar
 }
 
 GLint
-moData::GetGLId( moTempo *p_tempo, MOfloat p_fade, moTextFilterParam *p_filterparam ) {
+moData::GetGLId( moTempo *p_tempo, MOfloat p_fade, moTextureFilterParam *p_filterparam ) {
 
     moTexture*	Texture = NULL;
 
@@ -736,7 +736,7 @@ moData::GetGLId( moTempo *p_tempo, MOfloat p_fade, moTextFilterParam *p_filterpa
 }
 
 GLint
-moData::GetGLId( MOuint p_i , MOfloat p_fade, moTextFilterParam *p_filterparam ) {
+moData::GetGLId( MOuint p_i , MOfloat p_fade, moTextureFilterParam *p_filterparam ) {
 
     moTexture*	Texture = NULL;
 
@@ -776,7 +776,7 @@ moData::GetGLId( MOuint p_i , MOfloat p_fade, moTextFilterParam *p_filterparam )
 }
 
 GLint
-moData::GetGLId(MOfloat p_fade, moTextFilterParam *p_filterparam ) {
+moData::GetGLId(MOfloat p_fade, moTextureFilterParam *p_filterparam ) {
 
     moTexture*	Texture = NULL;
 

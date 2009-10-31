@@ -47,7 +47,7 @@ class moShaderManager;
 #define GLUM    ((float) (0.6094))
 #define BLUM    ((float) (0.0820))
 
-#include "moTextFilterParam.h"
+#include "moTextureFilterParam.h"
 
 // Base class to implement color transformation matrices.
 class LIBMOLDEO_API moColorMatrix
@@ -178,7 +178,7 @@ public:
      * @param p_params puntero al objeto de parámetros a utilizar en este filtro.
      * @return true si la operación fue exitosa, false en caso contrario.
      */
-	virtual MOboolean Init(moGLManager* p_glman, moFBManager* p_fbman, moRenderManager* p_renderman, moTextureArray &p_src_tex, moTextureArray &p_dest_tex, moShader *p_shader, moTextFilterParam *p_params = NULL);
+	virtual MOboolean Init(moGLManager* p_glman, moFBManager* p_fbman, moRenderManager* p_renderman, moTextureArray &p_src_tex, moTextureArray &p_dest_tex, moShader *p_shader, moTextureFilterParam *p_params = NULL);
     /**
      * Método de finalización.
      * @return true si la operación fue exitosa, false en caso contrario.
@@ -191,21 +191,21 @@ public:
      * @param p_fade constante de "fading" utilizada para mezclar el resultado del filtro.
      * @param p_params parámetros del filtro.
      */
-	void Apply(MOuint p_i, MOfloat p_fade = 1.0, moTextFilterParam *p_params = NULL);
+	void Apply(MOuint p_i, MOfloat p_fade = 1.0, moTextureFilterParam *p_params = NULL);
     /**
      * Aplica el filtro sobre las texturas de orígen y escribiendo el resutlado en las texturas de destino.
      * @param p_cycle fracción del ciclo entre 0.0 y 1.0 a utilizar en las texturas de orígen (en el caso de que sean animadas).
      * @param p_fade constante de "fading" utilizada para mezclar el resultado del filtro.
      * @param p_params parámetros del filtro.
      */
-	void Apply(MOfloat p_cycle, MOfloat p_fade = 1.0, moTextFilterParam *p_params = NULL);
+	void Apply(MOfloat p_cycle, MOfloat p_fade = 1.0, moTextureFilterParam *p_params = NULL);
     /**
      * Aplica el filtro sobre las texturas de orígen y escribiendo el resutlado en las texturas de destino.
      * @param p_tempo tempo a utilizar en las texturas de orígen (en el caso de que sean animadas).
      * @param p_fade constante de "fading" utilizada para mezclar el resultado del filtro.
      * @param p_params parámetros del filtro.
      */
-	void Apply(moTempo *p_tempo, MOfloat p_fade = 1.0, moTextFilterParam *p_params = NULL);
+	void Apply(moTempo *p_tempo, MOfloat p_fade = 1.0, moTextureFilterParam *p_params = NULL);
 
     /**
      * Devuelve el puntero a la lista de texturas de orígen.
@@ -244,7 +244,7 @@ protected:
 	GLint m_fade_const;
 	GLint m_dest_tex_size;
 
-	moTextFilterParam *m_DefParams;
+	moTextureFilterParam *m_DefParams;
 
 	// Texture indices.
 	moTextureIndex m_src_tex;
@@ -257,7 +257,7 @@ protected:
 	MOboolean m_use_screen_tex;
 	MOboolean m_reattach_dest_tex;
 
-	void SetupShader(MOint w, MOint h, moTempo *p_tempo, MOfloat p_fade, moTextFilterParam *p_params);
+	void SetupShader(MOint w, MOint h, moTempo *p_tempo, MOfloat p_fade, moTextureFilterParam *p_params);
 	void SetGLConf(MOint w, MOint h);
 	void RestoreGLConf();
 	void BindDestFBO();

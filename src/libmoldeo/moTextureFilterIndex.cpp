@@ -105,22 +105,22 @@ MOint moTextureFilterIndex::Add(moTextureFilter* p_filter)
 	return idx;
 }
 
-void moTextureFilterIndex::Apply(MOuint p_idx, MOuint p_i, MOfloat p_fade, moTextFilterParam *p_params)
+void moTextureFilterIndex::Apply(MOuint p_idx, MOuint p_i, MOfloat p_fade, moTextureFilterParam *p_params)
 {
 	if (ValidIndex(p_idx)) m_filters_array[p_idx]->Apply(p_i, p_fade, p_params);
 }
 
-void moTextureFilterIndex::Apply(MOuint p_idx, MOfloat p_cycle, MOfloat p_fade, moTextFilterParam *p_params)
+void moTextureFilterIndex::Apply(MOuint p_idx, MOfloat p_cycle, MOfloat p_fade, moTextureFilterParam *p_params)
 {
 	if (ValidIndex(p_idx)) m_filters_array[p_idx]->Apply(p_cycle, p_fade, p_params);
 }
 
-void moTextureFilterIndex::Apply(MOuint p_idx, moTempo *p_tempo, MOfloat p_fade, moTextFilterParam *p_params)
+void moTextureFilterIndex::Apply(MOuint p_idx, moTempo *p_tempo, MOfloat p_fade, moTextureFilterParam *p_params)
 {
 	if (ValidIndex(p_idx)) m_filters_array[p_idx]->Apply(p_tempo, p_fade, p_params);
 }
 
-void moTextureFilterIndex::Apply(moTempo *p_tempo, MOfloat p_fade, moTextFilterParam *p_params)
+void moTextureFilterIndex::Apply(moTempo *p_tempo, MOfloat p_fade, moTextureFilterParam *p_params)
 {
 	for (MOuint i = 0; i < m_filters_array.Count(); i++) m_filters_array[i]->Apply(p_tempo, p_fade, p_params);
 }

@@ -75,7 +75,7 @@ class moTexture;
 class moTextureFilter;
 class moTextureBuffer;
 class moVideoBuffer;
-class moTextFilterParam;
+class moTextureFilterParam;
 
 /**
 *   moDataType
@@ -177,7 +177,7 @@ class LIBMOLDEO_API moData {
 		void        SetVideoBuffer( moVideoBuffer*	p_VideoBuffer );
 		void        SetTextureFilter( moTextureFilter*	p_TextureFilter );
 		void        SetTextureFilterAlpha( moData* p_alpha );
-		void        SetTextureFilterParam( moTextFilterParam *p_filterparam );
+		void        SetTextureFilterParam( moTextureFilterParam *p_filterparam );
 		void        SetFont( moFont*	p_Font );
 		void        SetModel( mo3DModelSceneNode*    p_Model );
 		void        SetMessage( moDataMessage*  p_datamessage );
@@ -215,10 +215,10 @@ class LIBMOLDEO_API moData {
 		moText      TypeToText();
 		moDataType  TextToType( moText texttype );
 
-		GLint       GetGLId( MOfloat p_cycle, MOfloat p_fade=1.0, moTextFilterParam *p_filterparam = NULL );
-		GLint       GetGLId( moTempo *p_tempo, MOfloat p_fade=1.0, moTextFilterParam *p_filterparam = NULL );
-		GLint       GetGLId( MOuint p_i, MOfloat p_fade=1.0, moTextFilterParam *p_filterparam = NULL );
-		GLint       GetGLId( MOfloat p_fade=1.0, moTextFilterParam *p_filterparam = NULL );
+		GLint       GetGLId( MOfloat p_cycle, MOfloat p_fade=1.0, moTextureFilterParam *p_filterparam = NULL );
+		GLint       GetGLId( moTempo *p_tempo, MOfloat p_fade=1.0, moTextureFilterParam *p_filterparam = NULL );
+		GLint       GetGLId( MOuint p_i, MOfloat p_fade=1.0, moTextureFilterParam *p_filterparam = NULL );
+		GLint       GetGLId( MOfloat p_fade=1.0, moTextureFilterParam *p_filterparam = NULL );
 
 	protected:
 		moDataType		m_DataType;
@@ -229,7 +229,7 @@ class LIBMOLDEO_API moData {
 		bool            m_bFilteredAlpha;
 		bool            m_bFilteredParams;
 		MOfloat         m_AlphaFilter;
-        moTextFilterParam*  m_pFilterParam;
+        moTextureFilterParam*  m_pFilterParam;
         moData*         m_pAlphaFilter;
 /*
 		MOint			m_IndexValueInterpolating;//Indice del valor desde el cual se interpola;
