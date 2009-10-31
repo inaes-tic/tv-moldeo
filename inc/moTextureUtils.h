@@ -1,6 +1,6 @@
 /*******************************************************************************
 
-                                 moShader.h
+                                moTextureUtils.h
 
   ****************************************************************************
   *                                                                          *
@@ -21,7 +21,7 @@
   *                                                                          *
   ****************************************************************************
 
-  Copyright (C) 2006 Fabricio Costa
+  Copyright (C) 2009 Andres Colubri
 
   Authors:
   Andres Colubri
@@ -32,8 +32,8 @@
 
 *******************************************************************************/
 
-#ifndef __MO_TEXTUREDGRID_H__
-#define __MO_TEXTUREDGRID_H__
+#ifndef __MO_TEXTUREUTILS_H__
+#define __MO_TEXTUREUTILS_H__
 
 #include "moTypes.h"
 #include "moAbstract.h"

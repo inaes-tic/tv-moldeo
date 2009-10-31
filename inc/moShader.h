@@ -39,7 +39,7 @@
 #include "moAbstract.h"
 #include "moConfig.h"
 #include "moArray.h"
-#include "moTexturedGrid.h"
+#include "moTextureUtils.h"
 
 typedef enum { MO_SHADER_GLSL, MO_SHADER_CG } moShaderLanguage;
 
