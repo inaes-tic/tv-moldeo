@@ -342,23 +342,20 @@
 		<Unit filename="..\..\inc\moText.h">
 			<Option target="debug" />
 		</Unit>
-		<Unit filename="..\..\inc\moTextFilterParam.h" />
 		<Unit filename="..\..\inc\moTexture.h">
 			<Option target="debug" />
 		</Unit>
 		<Unit filename="..\..\inc\moTextureFilter.h">
 			<Option target="debug" />
 		</Unit>
-		<Unit filename="..\..\inc\moTextureFilterIndex.h">
-			<Option target="debug" />
-		</Unit>
+		<Unit filename="..\..\inc\moTextureFilterIndex.h" />
 		<Unit filename="..\..\inc\moTextureIndex.h">
 			<Option target="debug" />
 		</Unit>
 		<Unit filename="..\..\inc\moTextureManager.h">
 			<Option target="debug" />
 		</Unit>
-		<Unit filename="..\..\inc\moTexturedGrid.h" />
+		<Unit filename="..\..\inc\moTextureUtils.h" />
 		<Unit filename="..\..\inc\moThread.h">
 			<Option target="debug" />
 		</Unit>
@@ -456,13 +453,13 @@
 		<Unit filename="..\..\src\libmoldeo\moSoundManager.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moTempo.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moText.cpp" />
-		<Unit filename="..\..\src\libmoldeo\moTextFilterParam.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moTexture.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moTextureFilter.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moTextureFilterIndex.cpp" />
+		<Unit filename="..\..\src\libmoldeo\moTextureFilterParam.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moTextureIndex.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moTextureManager.cpp" />
-		<Unit filename="..\..\src\libmoldeo\moTexturedGrid.cpp" />
+		<Unit filename="..\..\src\libmoldeo\moTextureUtils.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moThread.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moTimeManager.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moTypes.cpp" />
