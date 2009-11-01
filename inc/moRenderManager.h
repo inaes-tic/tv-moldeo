@@ -115,7 +115,7 @@ class LIBMOLDEO_API moRenderOutputConfiguration {
 };
 
 
-
+//class moTextureFilterIndex;
 
 
 class LIBMOLDEO_API moRenderChannel {
@@ -124,6 +124,7 @@ class LIBMOLDEO_API moRenderChannel {
 
 
         MOint m_render_tex_moid[4];
+//        moTextureFilterIndex test;
 
 };
 
@@ -427,5 +428,7 @@ class LIBMOLDEO_API moRenderManager : public moResource
 		MOboolean ValidSourceTexNum(MOint p_tex_num) { return (0 <= p_tex_num) && (p_tex_num < 4); }
 		MOboolean ValidDestTexNum(MOint p_tex_num) { return (0 < p_tex_num) && (p_tex_num < 4); }
 };
+
+//#include "moTextureFilterIndex.h"
 
 #endif
