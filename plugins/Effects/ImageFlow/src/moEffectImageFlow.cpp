@@ -170,31 +170,31 @@ void moEffectImageFlow::Draw( moTempo* tempogral,moEffectState* parentstate)
 
 		glBindTexture(GL_TEXTURE_2D, tex0);
         glBegin(GL_QUADS);
-            glTexCoord2f(t, 0.0);
+            glTexCoord2f(t, 1.0);
             glVertex2f(minx, miny);
 
-            glTexCoord2f(t, 1.0);
+            glTexCoord2f(t, 0.0);
             glVertex2f(minx, maxy);
 
-            glTexCoord2f(1.0, 1.0);
+            glTexCoord2f(1.0, 0.0);
             glVertex2f(flow_coord, maxy);
 
-            glTexCoord2f(1.0, 0.0);
+            glTexCoord2f(1.0, 1.0);
             glVertex2f(flow_coord, miny);
 		glEnd();
 
 		glBindTexture(GL_TEXTURE_2D, tex1);
         glBegin(GL_QUADS);
-            glTexCoord2f(0.0, 0.0);
+            glTexCoord2f(0.0, 1.0);
             glVertex2f(flow_coord, miny);
 
-            glTexCoord2f(0.0, 1.0);
+            glTexCoord2f(0.0, 0.0);
             glVertex2f(flow_coord, maxy);
 
-		    glTexCoord2f(t, 1.0);
+		    glTexCoord2f(t, 0.0);
             glVertex2f(maxx, maxy);
 
-            glTexCoord2f(t, 0.0);
+            glTexCoord2f(t, 1.0);
             glVertex2f(maxx, miny);
 		glEnd();
 		glBindTexture(GL_TEXTURE_2D, 0);
