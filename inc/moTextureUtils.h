@@ -21,7 +21,7 @@
   *                                                                          *
   ****************************************************************************
 
-  Copyright (C) 2009 Andres Colubri
+  Copyright(C) 2006 Fabricio Costa
 
   Authors:
   Andres Colubri

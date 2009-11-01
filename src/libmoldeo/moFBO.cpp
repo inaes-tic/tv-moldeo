@@ -42,7 +42,6 @@ moDefineDynamicArray(moFBOArray)
 
 moFBO::moFBO()
 {
-	m_gl = NULL;
 	m_fbo = 0;
 	m_is_screen_fbo = false;
 
@@ -58,14 +57,12 @@ moFBO::~moFBO()
 	Finish();
 }
 
-MOboolean  moFBO::Init(moGLManager* p_gl, MOboolean p_is_screen_fbo)
+MOboolean  moFBO::Init(MOboolean p_is_screen_fbo)
 {
-	m_gl = p_gl;
 	m_is_screen_fbo = p_is_screen_fbo;
 
 	if (m_is_screen_fbo) m_fbo = 0;
 	else glGenFramebuffersEXT(1, &m_fbo);
-
 
 	m_num_color_attach_points = 0;
     m_has_depth_buffer = m_has_stencil_buffer = false;
@@ -74,7 +71,7 @@ MOboolean  moFBO::Init(moGLManager* p_gl, MOboolean p_is_screen_fbo)
     InitAttachPointsArray();
 
 
-	return (m_gl!=NULL);
+	return true;
 }
 
 MOboolean moFBO::Finish()

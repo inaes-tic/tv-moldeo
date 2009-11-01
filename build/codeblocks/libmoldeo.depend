@@ -1,16 +1,16 @@
 # depslib dependency file v1.0
-1256670823 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moshader.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moshader.cpp
 	"moShader.h"
 	"moArray.cpp"
 
-1256928114 c:\devel\moldeo\svn\branches\newgl\inc\moshader.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\moshader.h
 	"moTypes.h"
 	"moAbstract.h"
 	"moConfig.h"
 	"moArray.h"
-	"moTexturedGrid.h"
+	"moTextureUtils.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\motypes.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\motypes.h
 	<math.h>
 	<limits.h>
 	<iostream>
@@ -243,60 +243,60 @@
 	<Ph.h>
 	"close_code.h"
 
-1254776565 c:\devel\moldeo\svn\branches\newgl\inc\port\stricmp.h
+1257072491 c:\devel\moldeo\svn\branches\newgl\inc\port\stricmp.h
 	<string>
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\motempo.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\motempo.h
 	"moTypes.h"
 	"moMath.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\momath.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\momath.h
 	"moTypes.h"
 	"moAbstract.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moabstract.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\moabstract.h
 	"moTypes.h"
 	"moText.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\motext.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\motext.h
 	"moTypes.h"
 	"moArray.h"
 	<stdio.h>
 	<string.h>
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moarray.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\moarray.h
 	"moTypes.h"
 	"moArray.h"
 	"moArray.cpp"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moarray.cpp
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\moarray.cpp
 	"moArray.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moconfig.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\moconfig.h
 	"moTypes.h"
 	"moText.h"
 	"moParam.h"
 	"moArray.h"
 	"moPreConfig.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moparam.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\moparam.h
 	"moTypes.h"
 	"moText.h"
 	"moValue.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\movalue.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\movalue.h
 	"moTypes.h"
 	"moText.h"
 	"moArray.h"
 	"moMathFunction.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\momathfunction.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\momathfunction.h
 	"moTypes.h"
 	"moArray.h"
 	"moAbstract.h"
 	"moMath.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\mopreconfig.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\mopreconfig.h
 	"moTypes.h"
 	"moValue.h"
 
@@ -305,13 +305,13 @@
 	"moAbstract.h"
 	"moConfig.h"
 
-1254776346 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\3ds\3ds.cpp
+1257072404 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\3ds\3ds.cpp
 	"3ds/3ds.h"
 
-1254776565 c:\devel\moldeo\svn\branches\newgl\inc\3ds\3ds.h
+1257072491 c:\devel\moldeo\svn\branches\newgl\inc\3ds\3ds.h
 	"mo3dModelManager.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\mo3dmodelmanager.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\mo3dmodelmanager.h
 	"moTypes.h"
 	"moResourceManager.h"
 	"moConfig.h"
@@ -322,7 +322,7 @@
 	"moMathVector3.h"
 	"3ds/3ds.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moresourcemanager.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\moresourcemanager.h
 	"moTypes.h"
 	"moArray.h"
 	"moMoldeoObject.h"
@@ -348,7 +348,7 @@
 	"moSoundManager.h"
 	"moDecoderManager.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\momoldeoobject.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\momoldeoobject.h
 	"moTypes.h"
 	"moText.h"
 	"moAbstract.h"
@@ -359,10 +359,10 @@
 	"moConnectors.h"
 	"moResourceManager.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moscript.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\moscript.h
 	"moLuaBase.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moluabase.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\moluabase.h
 	"moTypes.h"
 	"moText.h"
 	<lua.h>
@@ -395,16 +395,16 @@
 1135710720 c:\devel\moldeo\svn\externlibs\lua\include\lualib.h
 	"lua.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moeventlist.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\moeventlist.h
 	"moTypes.h"
 	"moValue.h"
 	"moAbstract.h"
 	"moLock.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\molock.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\molock.h
 	"moTypes.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moconnectors.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\moconnectors.h
 	"moTypes.h"
 	"moText.h"
 	"moAbstract.h"
@@ -412,30 +412,30 @@
 	"moConfig.h"
 	"moArray.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moresourceplugin.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\moresourceplugin.h
 	"moBasePlugin.h"
 	"moResourceManager.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\mobaseplugin.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\mobaseplugin.h
 	"moText.h"
 	<windows.h>
 	<dlfcn.h>
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\modebugmanager.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\modebugmanager.h
 	"moTypes.h"
 	"moAbstract.h"
 	"moText.h"
 	"moParam.h"
 	"moResourceManager.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\monetmanager.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\monetmanager.h
 	"moTypes.h"
 	"moText.h"
 	"moConfig.h"
 	"moLock.h"
 	"moResourceManager.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\mofilemanager.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\mofilemanager.h
 	"moTypes.h"
 	"moAbstract.h"
 	"moText.h"
@@ -444,11 +444,11 @@
 	"moParam.h"
 	"io.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\mobuckets.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\mobuckets.h
 	"moTypes.h"
 	"moLock.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\mofontmanager.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\mofontmanager.h
 	"moTypes.h"
 	"moAbstract.h"
 	"moArray.h"
@@ -456,11 +456,11 @@
 	"moText.h"
 	"moParam.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moguimanager.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\moguimanager.h
 	"mo3dModelManager.h"
 	"moResourceManager.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moscriptmanager.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\moscriptmanager.h
 	"moTypes.h"
 	"moAbstract.h"
 	"moText.h"
@@ -469,21 +469,21 @@
 	"moLunaClasses.h"
 	"moResourceManager.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\molunaclasses.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\molunaclasses.h
 	"moLuna.h"
 	"moMath.h"
 	"moMathFunction.h"
 	"moP5.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moluna.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\moluna.h
 	"lua.h"
 	"lauxlib.h"
 	"lualib.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\mop5.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\mop5.h
 	"moAbstract.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moshadermanager.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\moshadermanager.h
 	"moTypes.h"
 	"moAbstract.h"
 	"moText.h"
@@ -495,21 +495,21 @@
 	"moGLManager.h"
 	"moFBManager.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moshaderglsl.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\moshaderglsl.h
 	"moShader.h"
 
-1256601120 c:\devel\moldeo\svn\branches\newgl\inc\moglmanager.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\moglmanager.h
 	"moTypes.h"
 	"moText.h"
 	"moFBO.h"
 	<stack>
 	"moResourceManager.h"
 
-1256605641 c:\devel\moldeo\svn\branches\newgl\inc\mofbo.h
+1257073826 c:\devel\moldeo\svn\branches\newgl\inc\mofbo.h
 	"moTypes.h"
 	"moGLManager.h"
 
-1256606940 c:\devel\moldeo\svn\branches\newgl\inc\mofbmanager.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\mofbmanager.h
 	"moTypes.h"
 	"moText.h"
 	"moLock.h"
@@ -518,7 +518,7 @@
 	"moResourceManager.h"
 	"moGLManager.h"
 
-1256606255 c:\devel\moldeo\svn\branches\newgl\inc\motexture.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\motexture.h
 	"moTypes.h"
 	"moText.h"
 	"moParam.h"
@@ -532,48 +532,48 @@
 	"moGLManager.h"
 	"moTextureFilter.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\movideograph.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\movideograph.h
 	"moTypes.h"
 	"moText.h"
 	"moBuckets.h"
 	"moArray.h"
 	"moAbstract.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\mogsgraph.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\mogsgraph.h
 	"moConfig.h"
 	"moTypes.h"
 	"moThread.h"
 	"moBuckets.h"
 	"moVideoGraph.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\mothread.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\mothread.h
 	"moTypes.h"
 	"moLock.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\modsgraph.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\modsgraph.h
 	"moTypes.h"
 	"streams.h"
 	"qedit.h"
 	"dvdmedia.h"
 	"moVideoGraph.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\momathvector3.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\momathvector3.h
 	"moMath.h"
 
-1256602542 c:\devel\moldeo\svn\branches\newgl\inc\motextureindex.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\motextureindex.h
 	"moTypes.h"
 	"moAbstract.h"
 	"moConfig.h"
 	"moParam.h"
 
-1256607384 c:\devel\moldeo\svn\branches\newgl\inc\motexturefilter.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\motexturefilter.h
 	"moTypes.h"
 	"moAbstract.h"
 	"moConfig.h"
 	"moParam.h"
 	"moShader.h"
 	"moShaderGLSL.h"
-	"moTextFilterParam.h"
+	"moTextureFilterParam.h"
 	"moVideoManager.h"
 	"moVideoManager.h"
 	"moShaderManager.h"
@@ -585,7 +585,7 @@
 	"moShader.h"
 	"moShaderGLSL.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\movideomanager.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\movideomanager.h
 	"moGsGraph.h"
 	"moDsGraph.h"
 	"moFBO.h"
@@ -594,7 +594,7 @@
 	"moIODeviceManager.h"
 	"moResourceManager.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moiodevicemanager.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\moiodevicemanager.h
 	"moTypes.h"
 	"moText.h"
 	"moMoldeoObject.h"
@@ -603,31 +603,31 @@
 	"moRenderManager.h"
 	"moIODevicePlugin.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\modevicecode.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\modevicecode.h
 	"moTypes.h"
 	"moAbstract.h"
 
-1256917590 c:\devel\moldeo\svn\branches\newgl\inc\morendermanager.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\morendermanager.h
 	"moTypes.h"
 	"moText.h"
 	"moLock.h"
 	"moResourceManager.h"
 	"moMathVector.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\momathvector.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\momathvector.h
 	"moMath.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moiodeviceplugin.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\moiodeviceplugin.h
 	"moTypes.h"
 	"moArray.h"
 	"moBasePlugin.h"
 	"moIODeviceManager.h"
 
-1256606362 c:\devel\moldeo\svn\branches\newgl\inc\motexturemanager.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\motexturemanager.h
 	"moTexture.h"
 	"moResourceManager.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\mofiltermanager.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\mofiltermanager.h
 	"moTypes.h"
 	"moAbstract.h"
 	"moText.h"
@@ -637,14 +637,14 @@
 	"moParam.h"
 	"moMathVector.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\motimemanager.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\motimemanager.h
 	"moTypes.h"
 	"moText.h"
 	"moConfig.h"
 	"moLock.h"
 	"moResourceManager.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\modatamanager.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\modatamanager.h
 	"moTypes.h"
 	"moActions.h"
 	"moEventList.h"
@@ -653,10 +653,10 @@
 	"moLock.h"
 	"moResourceManager.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moactions.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\moactions.h
 	"moTypes.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\momathmanager.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\momathmanager.h
 	"moTypes.h"
 	"moText.h"
 	"moConfig.h"
@@ -665,13 +665,13 @@
 	"moMath.h"
 	"moMathFunction.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\mosoundmanager.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\mosoundmanager.h
 	"moTypes.h"
 	"moText.h"
 	"moConfig.h"
 	"moResourceManager.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\modecodermanager.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\modecodermanager.h
 	"moTypes.h"
 	"moText.h"
 	"moLock.h"
@@ -681,33 +681,33 @@
 	"moResourceManager.h"
 	"moGLManager.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moeffectstate.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\moeffectstate.h
 	"moTypes.h"
 	"moAbstract.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mo3dmodelmanager.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mo3dmodelmanager.cpp
 	"mo3dModelManager.h"
 	"moArray.cpp"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moabstract.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moabstract.cpp
 	"moAbstract.h"
 
-1255461085 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moactions.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moactions.cpp
 	"moActions.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moarcball.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moarcball.cpp
 	"moTypes.h"
 	<stdio.h>
 	"math.h"
 	"moArcBall.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moarcball.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\moarcball.h
 	"moTypes.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mobuckets.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mobuckets.cpp
 	"moBuckets.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moconfig.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moconfig.cpp
 	"moConfig.h"
 	"moArray.cpp"
 	<tinyxml.h>
@@ -727,17 +727,17 @@
 	<assert.h>
 	<string.h>
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moconnectors.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moconnectors.cpp
 	"moConnectors.h"
 	"moArray.cpp"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moconsole.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moconsole.cpp
 	"moConsole.h"
 	<SDL.h>
 	<SDL/SDL.h>
 	"moArray.cpp"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moconsole.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\moconsole.h
 	"moTypes.h"
 	"moText.h"
 	"moResourceManager.h"
@@ -748,7 +748,7 @@
 	"moIODevicePlugin.h"
 	"moIODeviceManager.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moeffectmanager.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\moeffectmanager.h
 	"moTypes.h"
 	"moArray.h"
 	"moEffect.h"
@@ -762,7 +762,7 @@
 	"moPrePlugin.h"
 	"moMasterPlugin.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moeffect.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\moeffect.h
 	"moAbstract.h"
 	"moArray.h"
 	"moMathFunctionIndex.h"
@@ -785,74 +785,74 @@
 	"moRenderManager.h"
 	"moGUIManager.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\momathfunctionindex.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\momathfunctionindex.h
 	"moTypes.h"
 	"moAbstract.h"
 	"moConfig.h"
 	"moParam.h"
 	"moMathManager.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\mopresets.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\mopresets.h
 	"moTypes.h"
 	"moConfig.h"
 	"moEffectState.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\momotion.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\momotion.h
 	"moParam.h"
 	"moTypes.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moposteffect.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\moposteffect.h
 	"moEffect.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\mopreeffect.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\mopreeffect.h
 	"moEffect.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\momastereffect.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\momastereffect.h
 	"moEffect.h"
 	"moConsoleState.h"
 	"moEffectManager.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moconsolestate.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\moconsolestate.h
 	"moTypes.h"
 	"moAbstract.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\mosceneeffect.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\mosceneeffect.h
 	"moConsole.h"
 	"moPlugin.h"
 	"moMasterEffect.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moplugin.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\moplugin.h
 	"moBasePlugin.h"
 	"moEffect.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\mosequenceeffect.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\mosequenceeffect.h
 	"moConsole.h"
 	"moPlugin.h"
 	"moMasterEffect.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\mopostplugin.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\mopostplugin.h
 	"moBasePlugin.h"
 	"moPostEffect.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\mopreplugin.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\mopreplugin.h
 	"moBasePlugin.h"
 	"moPreEffect.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\momasterplugin.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\momasterplugin.h
 	"moBasePlugin.h"
 	"moMasterEffect.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moconsolestate.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moconsolestate.cpp
 	"moConsoleState.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\modatamanager.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\modatamanager.cpp
 	"moDataManager.h"
 	"moArray.cpp"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\modebugmanager.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\modebugmanager.cpp
 	"moDebugManager.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\modecodermanager.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\modecodermanager.cpp
 	"moDecoderManager.h"
 	"moVdpauGraph.h"
 	"vdpau/vdpau.h"
@@ -860,41 +860,41 @@
 	<X11/Xlib.h>
 	<X11/Xutil.h>
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\movdpaugraph.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\movdpaugraph.h
 	"moConfig.h"
 	"moTypes.h"
 	"moThread.h"
 	"moBuckets.h"
 	"moVideoGraph.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\modevicecode.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\modevicecode.cpp
 	"moDeviceCode.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\modsgraph.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\modsgraph.cpp
 	"moDsGraph.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moeffect.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moeffect.cpp
 	"moEffect.h"
 	"moArray.cpp"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moeffectmanager.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moeffectmanager.cpp
 	"moEffectManager.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moeffectstate.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moeffectstate.cpp
 	"moEffectState.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moeventlist.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moeventlist.cpp
 	"moEventList.h"
 	"moArray.cpp"
 
-1256606923 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mofbmanager.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mofbmanager.cpp
 	"moFBManager.h"
 
-1256605636 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mofbo.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mofbo.cpp
 	"moFBO.h"
 	"moArray.cpp"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mofilemanager.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mofilemanager.cpp
 	<boost/filesystem.hpp>
 	"moFileManager.h"
 	"moArray.cpp"
@@ -3033,11 +3033,11 @@
 	<boost/config/abi_prefix.hpp>
 	<boost/config/abi_suffix.hpp>
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mofiltermanager.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mofiltermanager.cpp
 	"moFilterManager.h"
 	"moArray.cpp"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mofontmanager.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mofontmanager.cpp
 	"moFontManager.h"
 	"FTGL/ftgl.h"
 	"moArray.cpp"
@@ -3134,14 +3134,14 @@
 1210533812 c:\devel\moldeo\svn\externlibs\ftgl\include\ftgl\ftsimplelayout.h
 	<FTGL/ftgl.h>
 
-1256605751 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moglmanager.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moglmanager.cpp
 	"moGLManager.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moguimanager.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moguimanager.cpp
 	"moGUIManager.h"
 	"moArray.cpp"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mogsgraph.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mogsgraph.cpp
 	<gst/gst.h>
 	"moGsGraph.h"
 	<gst/gst.h>
@@ -3786,19 +3786,19 @@
 
 1232550664 c:\gstreamer\include\gstreamer-0.10\gst\gstcompat.h
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moiodevicemanager.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moiodevicemanager.cpp
 	"moIODeviceManager.h"
 	<SDL.h>
 	<SDL/SDL.h>
 	<SDL/SDL.h>
 	"moArray.cpp"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moiodeviceplugin.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moiodeviceplugin.cpp
 	"moIODevicePlugin.h"
 	"moArray.cpp"
 	<iostream>
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\molock.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\molock.cpp
 	"moLock.h"
 	"boost/thread/mutex.hpp"
 	"boost/thread/locks.hpp"
@@ -5083,58 +5083,58 @@
 	<boost/config/abi_prefix.hpp>
 	<boost/config/abi_suffix.hpp>
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moluabase.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moluabase.cpp
 	"moLuaBase.h"
 	<assert.h>
 	<string.h>
 	<stdio.h>
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\molunaclasses.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\molunaclasses.cpp
 	"moLunaClasses.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momastereffect.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momastereffect.cpp
 	"moMasterEffect.h"
 	"moArray.cpp"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momasterplugin.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momasterplugin.cpp
 	"moMasterPlugin.h"
 	"moArray.cpp"
 	"port/stricmp.h"
 	<iostream>
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momath.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momath.cpp
 	"moMath.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momathcurve.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momathcurve.cpp
 	"moMathCurve.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\momathcurve.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\momathcurve.h
 	"moMathVector.h"
 	"moMathVector3.h"
 	"moMathVector4.h"
 	"moMathNumericalAnalysis.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\momathvector4.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\momathvector4.h
 	"moMath.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\momathnumericalanalysis.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\momathnumericalanalysis.h
 	"moMath.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momathdmatrix.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momathdmatrix.cpp
 	"moMathDMatrix.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\momathdmatrix.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\momathdmatrix.h
 	"moMathDVector.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\momathdvector.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\momathdvector.h
 	"moMath.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momathdvector.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momathdvector.cpp
 	"moMathDVector.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momathfft.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momathfft.cpp
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momathfunction.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momathfunction.cpp
 	"muParser.h"
 	<cstdarg>
 	"moMathFunction.h"
@@ -5215,65 +5215,65 @@
 	"muParserError.h"
 	"muParserToken.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momathfunctionindex.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momathfunctionindex.cpp
 	"moMathFunctionIndex.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momathmanager.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momathmanager.cpp
 	"moMathManager.h"
 	"moMathVector3.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momathmatrix.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momathmatrix.cpp
 	"moMathMatrix.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\momathmatrix.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\momathmatrix.h
 	"moMathVector.h"
 	"moMathVector3.h"
 	"moMathVector4.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momathnumericalanalysis.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momathnumericalanalysis.cpp
 	"moMathNumericalAnalysis.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momathpolynomial.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momathpolynomial.cpp
 	"moMathPolynomial.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\momathpolynomial.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\momathpolynomial.h
 	"moMath.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momathquaternion.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momathquaternion.cpp
 	"moMathQuaternion.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\momathquaternion.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\momathquaternion.h
 	"moMathMatrix.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momathvector.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momathvector.cpp
 	"moMathVector.h"
 	"moArray.cpp"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momathvector3.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momathvector3.cpp
 	"moMathVector3.h"
 	"moArray.cpp"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momathvector4.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momathvector4.cpp
 	"moMathVector4.h"
 	"moArray.cpp"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momoldeoobject.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momoldeoobject.cpp
 	"moMoldeoObject.h"
 	"moTextureFilterIndex.h"
 	"moArray.cpp"
 
-1256606575 c:\devel\moldeo\svn\branches\newgl\inc\motexturefilterindex.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\motexturefilterindex.h
 	"moTypes.h"
 	"moAbstract.h"
 	"moConfig.h"
 	"moTextureFilter.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momotion.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\momotion.cpp
 	<stdlib.h>
 	<math.h>
 	"moMotion.h"
 
-1255460458 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\monetmanager.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\monetmanager.cpp
 	<asio.hpp>
 	"moNetManager.h"
 	"moArray.cpp"
@@ -8324,68 +8324,68 @@
 	<boost/bind/arg.hpp>
 	<boost/config.hpp>
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mop5.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mop5.cpp
 	"moP5.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moparam.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moparam.cpp
 	"moParam.h"
 	"moArray.cpp"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moplugin.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moplugin.cpp
 	"moPlugin.h"
 	"moArray.cpp"
 	"port/stricmp.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moposteffect.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moposteffect.cpp
 	"moPostEffect.h"
 	"moArray.cpp"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mopostplugin.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mopostplugin.cpp
 	"moPostPlugin.h"
 	"moArray.cpp"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mopreconfig.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mopreconfig.cpp
 	"moPreConfig.h"
 	"moArray.cpp"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mopreeffect.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mopreeffect.cpp
 	"moPreEffect.h"
 	"moArray.cpp"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mopreplugin.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mopreplugin.cpp
 	"moPrePlugin.h"
 	"moArray.cpp"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mopresets.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mopresets.cpp
 	"moPresets.h"
 
-1256607261 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moresourcemanager.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moresourcemanager.cpp
 	"moResourceManager.h"
 	"moArray.cpp"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moresourceplugin.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moresourceplugin.cpp
 	"moResourcePlugin.h"
 	"port/stricmp.h"
 	<iostream>
 	"moArray.cpp"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mosceneeffect.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mosceneeffect.cpp
 	"moSceneEffect.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moscript.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moscript.cpp
 	<assert.h>
 	"moScript.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moscriptmanager.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moscriptmanager.cpp
 	"moScriptManager.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mosequenceeffect.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mosequenceeffect.cpp
 	"moSequenceEffect.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moshadercg.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moshadercg.cpp
 	"moShaderCG.h"
 
-1254776590 c:\devel\moldeo\svn\branches\newgl\inc\moshadercg.h
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\moshadercg.h
 	"moShader.h"
 	<cg.h>
 	<cgGL.h>
@@ -8417,10 +8417,10 @@
 	<OpenGL/gl.h>
 	<GL/gl.h>
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moshaderglsl.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moshaderglsl.cpp
 	"moShaderGLSL.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mosoundmanager.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mosoundmanager.cpp
 	"moSoundManager.h"
 	"moArray.cpp"
 	"Framework.h"
@@ -8431,7 +8431,7 @@
 	<al.h>
 	<alut.h>
 
-1254776570 c:\devel\moldeo\svn\branches\newgl\inc\openal\framework.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\openal\framework.h
 	<Windows.h>
 	<stdio.h>
 	<io.h>
@@ -8454,34 +8454,34 @@
 1203528877 c:\devel\moldeo\svn\externlibs\openal\include\xram.h
 	<al.h>
 
-1254776570 c:\devel\moldeo\svn\branches\newgl\inc\openal\cwaves.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\openal\cwaves.h
 	"moTypes.h"
 	<mmsystem.h>
 	<ks.h>
 	<ksmedia.h>
 	<stdio.h>
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\motempo.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\motempo.cpp
 	"moTempo.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\motext.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\motext.cpp
 	"moText.h"
 	"moArray.cpp"
 
 1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\motextfilterparam.cpp
 	"moTextFilterParam.h"
 
-1256607401 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\motexturefilter.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\motexturefilter.cpp
 	"moTextureFilter.h"
 	"moArray.cpp"
 
-1256606665 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\motexturefilterindex.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\motexturefilterindex.cpp
 	"moTextureFilterIndex.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\motextureindex.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\motextureindex.cpp
 	"moTexture.h"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\motexturemanager.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\motexturemanager.cpp
 	"moTextureManager.h"
 	"FreeImage.h"
 	"moArray.cpp"
@@ -8490,7 +8490,7 @@
 	<wchar.h>
 	<inttypes.h>
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mothread.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\mothread.cpp
 	"moThread.h"
 	"boost/thread/thread.hpp"
 
@@ -8576,11 +8576,11 @@
 	<boost/config/abi_prefix.hpp>
 	<boost/config/abi_suffix.hpp>
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\motimemanager.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\motimemanager.cpp
 	"moTimeManager.h"
 	"moArray.cpp"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\motypes.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\motypes.cpp
 	"moTypes.h"
 	"date_time/posix_time/posix_time.hpp"
 	"boost/date_time/posix_time/posix_time.hpp"
@@ -8746,25 +8746,25 @@
 	"boost/date_time/time_parsing.hpp"
 	"boost/date_time/posix_time/posix_time_types.hpp"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\movalue.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\movalue.cpp
 	"moValue.h"
 	"moTexture.h"
 	"moTextureFilter.h"
 	"moArray.cpp"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\movideograph.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\movideograph.cpp
 	"moVideoGraph.h"
 	"moArray.cpp"
 
-1254776373 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\movideomanager.cpp
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\movideomanager.cpp
 	"moVideoManager.h"
 	"moArray.cpp"
 	"FreeImage.h"
 
-1254776350 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\openal\cwaves.cpp
+1257072419 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\openal\cwaves.cpp
 	"CWaves.h"
 
-1254776350 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\openal\framework.cpp
+1257072419 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\openal\framework.cpp
 	"moTypes.h"
 	<windows.h>
 	<stdio.h>
@@ -8772,21 +8772,50 @@
 	"CWaves.h"
 	"aldlist.h"
 
-1254776570 c:\devel\moldeo\svn\branches\newgl\inc\openal\aldlist.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\openal\aldlist.h
 	<vector>
 	<string>
 	"LoadOAL.h"
 
-1254776570 c:\devel\moldeo\svn\branches\newgl\inc\openal\loadoal.h
+1257072502 c:\devel\moldeo\svn\branches\newgl\inc\openal\loadoal.h
 	<al.h>
 	<alc.h>
 
-1254776350 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\openal\loadoal.cpp
+1257072419 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\openal\loadoal.cpp
 	"windows.h"
 	"LoadOAL.h"
 
-1254776350 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\openal\aldlist.cpp
+1257072419 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\openal\aldlist.cpp
 	"aldlist.h"
 	<windows.h>
 	"alc.h"
+
+1257073876 c:\devel\moldeo\svn\branches\newgl\inc\motextureutils.h
+	"moTypes.h"
+	"moAbstract.h"
+	"moConfig.h"
+
+1257072503 c:\devel\moldeo\svn\branches\newgl\inc\motexturefilterparam.h
+	"moShader.h"
+	"moShaderGLSL.h"
+
+1257073549 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\morendermanager.cpp
+	"moRenderManager.h"
+	"moEffect.h"
+	"moArray.cpp"
+
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\moshadermanager.cpp
+	"moShaderManager.h"
+	"moTextureFilterIndex.h"
+
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\motexture.cpp
+	"moTexture.h"
+	"FreeImage.h"
+	"moArray.cpp"
+
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\motexturefilterparam.cpp
+	"moTextureFilterParam.h"
+
+1257072435 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\motextureutils.cpp
+	"moTextureUtils.h"
 

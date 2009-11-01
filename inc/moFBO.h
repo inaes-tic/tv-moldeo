@@ -39,9 +39,6 @@
 #define MO_MAX_FBO_STACK_SIZE 10
 #define MO_MAX_COLOR_ATTACHMENTS_EXT GL_MAX_COLOR_ATTACHMENTS_EXT
 
-
-class moGLManager;
-
 /**
  * Clase que encapsula un FrameBuffer Object (FBO) de OpenGL. Este tipo de objeto facilita enormemente
  * las operaciones de render a textura. Varias texturas pueden ser asociadas (attached) como búfers de color
@@ -64,12 +61,11 @@ class LIBMOLDEO_API moFBO : public moAbstract
 		virtual ~moFBO();
 
         /**
-         * Initicializa el FBO utilizando p_gl como adminstrador de OpenGL.
-         * @param p_gl puntero al administrador de OpenGL.
+         * Inicializa el FBO utilizando p_gl como adminstrador de OpenGL.
          * @param p_is_screen_fbo true si este FBO representa el framebuffer de la pantalla.
          * @return true si la operación fue exitosa, false en caso contrario.
          */
-		virtual MOboolean Init(moGLManager* p_gl, MOboolean p_is_screen_fbo);
+		virtual MOboolean Init(MOboolean p_is_screen_fbo);
         /**
          * Finaliza el FBO.
          * @return true si la operación fue exitosa, false en caso contrario.
@@ -108,8 +104,6 @@ class LIBMOLDEO_API moFBO : public moAbstract
 
 
     private:
-		moGLManager* m_gl;
-
 		MOuint m_fbo;
 
         MOboolean m_is_screen_fbo;

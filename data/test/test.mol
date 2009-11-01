@@ -85,6 +85,20 @@
                 <D type="TXT"></D>
             </VAL>
         </PARAM>
+
+
+        <PARAM name="renderchannel" type="TEXT">
+            <VAL>
+                <D type="TXT">monochannel</D>
+                <D type="TXT">monochannel</D>
+                <D type="NUM">0</D>
+            </VAL>
+        </PARAM>
+
+
+
+
+
         <PARAM name="outputmode" type="TEXT">
             <VAL>
                 <D type="TXT"></D>
@@ -117,6 +131,9 @@
                 <D type="TXT"></D>
             </VAL>
         </PARAM>
+
+
+
     </CONFIGPARAMS>
     <PRECONFIGS />
 </MOCONFIG>

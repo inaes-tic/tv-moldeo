@@ -93,11 +93,9 @@ moRenderOutputConfiguration moRenderManager::GetOutputConfiguration() {
 
 }
 
-MOboolean moRenderManager::Init( MOint p_num_channels,
-
-//moRenderManagerMode p_render_to_texture_mode,
-						   MOint p_screen_width, MOint p_screen_height,
-						   MOint p_render_width, MOint p_render_height)
+MOboolean moRenderManager::Init(moRenderManagerMode p_render_to_texture_mode,
+			      MOint p_screen_width, MOint p_screen_height,
+				  MOint p_render_width, MOint p_render_height)
 {
 	GLenum err = glewInit();
 	if (GLEW_OK != err)
@@ -263,8 +261,8 @@ void moRenderManager::EndUpdateObject()
 
 void moRenderManager::BeginDraw()
 {
-    SetDestTexInFBO();
-	BindDestFBO();
+//    SetDestTexInFBO();
+//	BindDestFBO();
 
 
 
@@ -289,7 +287,7 @@ void moRenderManager::EndDrawEffect()
 void moRenderManager::EndDraw()
 {
 
-	UnbindDestFBO();
+//	UnbindDestFBO();
 
     ///add last frame to bucket pool
 /*
@@ -327,7 +325,7 @@ void moRenderManager::EndDraw()
 //		m_pFBManager->UnbindFBO();
 }
 
-
+/*
 void moRenderManager::SetDestTexInFBO()
 {
     if (-1 < m_dest_fbo)
@@ -351,7 +349,7 @@ void moTextureFilter::UnbindDestFBO()
 {
     m_glman->PopFBO();
 }
-
+*/
 
 
 void moRenderManager::DrawTexture(MOint p_resolution, MOint p_tex_num)

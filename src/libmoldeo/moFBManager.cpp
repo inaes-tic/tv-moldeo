@@ -68,7 +68,7 @@ MOboolean moFBManager::Finish()
 MOuint moFBManager::CreateFBO(MOboolean p_screen_fbo)
 {
 	moFBO* new_fbo = new moFBO();
-	new_fbo->Init(m_glmanager, p_screen_fbo);
+	new_fbo->Init(p_screen_fbo);
 	m_fbo_array.Add(new_fbo);
 	return m_fbo_array.Count() - 1;
 }
