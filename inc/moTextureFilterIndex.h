@@ -54,7 +54,7 @@ public:
      */
 	virtual ~moTextureFilterIndex();
 
-/**
+    /**
      * Método de inicialización.
      * @param p_param_idx índice en el objeto de configuración donde se encuentran los filtros.
      * @param moGLManager puntero al administrador OpenGL.
@@ -66,7 +66,7 @@ public:
      */
     virtual MOboolean Init( moParam* p_param, moGLManager* p_glman, moFBManager* p_fbman, moShaderManager* p_shaman, moTextureManager* p_texman, moRenderManager* p_renderman);
 
-/**
+    /**
      * Método de inicialización.
      * @param moGLManager puntero al administrador OpenGL.
      * @param moFBManager puntero al administrador de Framebuffers.

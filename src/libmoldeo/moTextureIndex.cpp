@@ -25,13 +25,11 @@
 
   Authors:
   Fabricio Costa
-  Andrés Colubri#include "moTextureManager.h"
+  Andrés Colubri
 
 *******************************************************************************/
 
-
 #include "moTexture.h"
-
 
 MOint moTextureIndex::Add(moText p_name, moTextureManager* p_tex_man) // Returns the index of the newly added texture.
 {

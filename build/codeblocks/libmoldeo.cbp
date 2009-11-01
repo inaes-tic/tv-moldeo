@@ -349,6 +349,7 @@
 			<Option target="debug" />
 		</Unit>
 		<Unit filename="..\..\inc\moTextureFilterIndex.h" />
+		<Unit filename="..\..\inc\moTextureFilterManager.h" />
 		<Unit filename="..\..\inc\moTextureIndex.h">
 			<Option target="debug" />
 		</Unit>
@@ -456,6 +457,7 @@
 		<Unit filename="..\..\src\libmoldeo\moTexture.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moTextureFilter.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moTextureFilterIndex.cpp" />
+		<Unit filename="..\..\src\libmoldeo\moTextureFilterManager.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moTextureFilterParam.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moTextureIndex.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moTextureManager.cpp" />

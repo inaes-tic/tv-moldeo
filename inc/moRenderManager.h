@@ -124,6 +124,7 @@ class LIBMOLDEO_API moRenderChannel {
 
 
         MOint m_render_tex_moid[4];
+        moTextureIndex test;
 //        moTextureFilterIndex test;
 
 };
