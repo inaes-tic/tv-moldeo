@@ -145,6 +145,7 @@
 		<Unit filename="..\..\inc\moArray.h" />
 		<Unit filename="..\..\inc\moBasePlugin.h" />
 		<Unit filename="..\..\inc\moBuckets.h" />
+		<Unit filename="..\..\inc\moColorMatrices.h" />
 		<Unit filename="..\..\inc\moConfig.h" />
 		<Unit filename="..\..\inc\moConnectors.h" />
 		<Unit filename="..\..\inc\moConsole.h" />
@@ -177,6 +178,7 @@
 		<Unit filename="..\..\inc\moFBO.h">
 			<Option target="debug" />
 		</Unit>
+		<Unit filename="..\..\inc\moFile.h" />
 		<Unit filename="..\..\inc\moFileManager.h">
 			<Option target="debug" />
 		</Unit>
@@ -345,6 +347,7 @@
 		<Unit filename="..\..\inc\moTexture.h">
 			<Option target="debug" />
 		</Unit>
+		<Unit filename="..\..\inc\moTextureBuffer.h" />
 		<Unit filename="..\..\inc\moTextureFilter.h">
 			<Option target="debug" />
 		</Unit>
@@ -385,6 +388,7 @@
 		<Unit filename="..\..\src\libmoldeo\moActions.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moArcBall.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moBuckets.cpp" />
+		<Unit filename="..\..\src\libmoldeo\moColorMatrices.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moConfig.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moConnectors.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moConsole.cpp" />
@@ -400,6 +404,7 @@
 		<Unit filename="..\..\src\libmoldeo\moEventList.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moFBManager.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moFBO.cpp" />
+		<Unit filename="..\..\src\libmoldeo\moFile.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moFileManager.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moFilterManager.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moFontManager.cpp" />
@@ -455,6 +460,7 @@
 		<Unit filename="..\..\src\libmoldeo\moTempo.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moText.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moTexture.cpp" />
+		<Unit filename="..\..\src\libmoldeo\moTextureBuffer.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moTextureFilter.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moTextureFilterIndex.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moTextureFilterManager.cpp" />
