@@ -97,6 +97,7 @@ moResourceManager::moResourceManager() {
 		MOGLMan = NULL;
 		MORenderMan = NULL;
 		MOShaderMan = NULL;
+		MOTextureFilterMan = NULL;
 		MOMathMan = NULL;
 		MOFontMan = NULL;
 		MOGuiMan = NULL;
@@ -237,6 +238,9 @@ moResourceManager::Init( const moText& p_datapath,
 
 	if ( GetResourceByType( MO_RESOURCETYPE_SHADER ) == NULL )
 		AddResource( new moShaderManager() );
+
+	if ( GetResourceByType( MO_RESOURCETYPE_TEXTUREFILTER ) == NULL )
+		AddResource( new moTextureFilterManager() );
 
 	if ( GetResourceByType( MO_RESOURCETYPE_FB )==NULL )
 		AddResource( new moFBManager() );
@@ -416,6 +420,15 @@ moResourceManager::Init( const moText& p_datapath,
         if (MODebug2) MODebug2->Message(moText("moResourceManager:: Initializing Shsder Man Resource."));
 	    if (!MOShaderMan->Init())
             MODebug2->Error(moText("moResourceManager:: Shader Man Initialization Error."));
+	} else {
+	    MODebug2->Error(moText("moResourceManager:: Shader Man Creation Error."));
+    }
+
+	MOTextureFilterMan = (moTextureFilterManager*) GetResourceByType( MO_RESOURCETYPE_TEXTUREFILTER );
+	if (MOShaderMan)  {
+        if (MODebug2) MODebug2->Message(moText("moResourceManager:: Initializing Texture Filter Man Resource."));
+	    if (!MOTextureFilterMan->Init())
+            MODebug2->Error(moText("moResourceManager:: Texture Filter Man Initialization Error."));
 	} else {
 	    MODebug2->Error(moText("moResourceManager:: Shader Man Creation Error."));
     }

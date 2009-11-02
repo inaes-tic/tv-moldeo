@@ -35,9 +35,9 @@
 #include "moGsGraph.h"
 #include "moDsGraph.h"
 
-#include "moFBO.h"
 #include "moTexture.h"
 #include "moVideoGraph.h"
+#include "moResourceManager.h"
 
 
 //RESOLUTION

@@ -37,6 +37,8 @@
 #include "moConfig.h"
 #include "moParam.h"
 
+#include "moTexture.h"
+
 class moTextureManager;
 
 /**

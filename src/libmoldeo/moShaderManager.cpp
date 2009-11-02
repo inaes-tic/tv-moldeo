@@ -30,7 +30,6 @@
 *******************************************************************************/
 
 #include "moShaderManager.h"
-#include "moTextureFilterIndex.h"
 
 moShaderManager::moShaderManager()
 {
@@ -40,7 +39,6 @@ moShaderManager::moShaderManager()
 
 	m_glmanager = NULL;
 	m_fbmanager = NULL;
-	m_pTextureFilterIndex = NULL;
 }
 
 MOboolean moShaderManager::Init()
@@ -50,31 +48,13 @@ MOboolean moShaderManager::Init()
 		m_fbmanager = m_pResourceManager->GetFBMan();
 	} else return false;
 
-    m_pTextureFilterIndex = new moTextureFilterIndex();
-
 	m_shaders_array.Init(0, NULL);
-
-	moText confignamecompleto = m_pResourceManager->GetDataMan()->GetDataPath();
-	confignamecompleto +=  moText("/") + (const moText)GetConfigName();
-    confignamecompleto +=  moText(".cfg");
-
-	if(m_Config.LoadConfig(confignamecompleto) == MO_CONFIG_OK ) {
-        //carga los filtros que se ejecutaran sistematicamente
-        m_pTextureFilterIndex->Init( &m_Config, 0, m_glmanager, m_fbmanager, this, m_pResourceManager->GetTextureMan(), m_pResourceManager->GetRenderMan());
-    } else {
-        m_pTextureFilterIndex->Init( m_glmanager, m_fbmanager, this, m_pResourceManager->GetTextureMan(), m_pResourceManager->GetRenderMan());
-    }
 
 	return (m_glmanager && m_fbmanager);
 }
 
 MOboolean moShaderManager::Finish()
 {
-    if (m_pTextureFilterIndex) {
-        delete m_pTextureFilterIndex;
-        m_pTextureFilterIndex = NULL;
-    }
-
 	m_shaders_array.Finish();
 
 	m_glmanager = NULL;
@@ -83,7 +63,7 @@ MOboolean moShaderManager::Finish()
 	return true;
 }
 
-MOint moShaderManager::GetFilterMOId(moText p_name, MOboolean p_create_shader)
+MOint moShaderManager::GetShaderMOId(moText p_name, MOboolean p_create_shader)
 {
 	moShader* pshader;
 	for (MOuint i = 0; i < m_shaders_array.Count(); i++)

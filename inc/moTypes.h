@@ -352,6 +352,10 @@ using namespace std;
 
 #define OLD_CONFIG	0
 
+#define MO_FRAMEBUFFER_FULL 0
+#define MO_FRAMEBUFFER_INVALID_TEX 1
+#define MO_MAX_FBO_STACK_SIZE 10
+#define MO_MAX_COLOR_ATTACHMENTS_EXT GL_MAX_COLOR_ATTACHMENTS_EXT
 
 //////////////////////////////////////////////////////
 // Parametros mas comunes usados en varios Effects ///

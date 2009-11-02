@@ -29,7 +29,6 @@
 
 *******************************************************************************/
 
-
 #ifndef __MO_TEXTUREFILTER_MANAGER_H
 #define __MO_TEXTUREFILTER_MANAGER_H
 

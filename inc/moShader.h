@@ -205,10 +205,6 @@ protected:
     moText LoadShaderSource(moText p_fn);
 };
 
-/*
-template class LIBMOLDEO_API moDynamicArray<moShader*>;
-typedef moDynamicArray<moShader*> moShaderArray;
-*/
 moDeclareExportedDynamicArray( moShader*, moShaderArray)
 
 #endif

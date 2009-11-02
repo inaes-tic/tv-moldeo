@@ -54,19 +54,16 @@ typedef enum  {
         MO_TYPE_TEXTUREBUFFER,
         MO_TYPE_CIRCULARVIDEOBUFFER} moTextureType;
 
-class moFBO;
-class moTexture;
 class moGLManager;
 class moDataManager;
 class moFile;
 class moFileManager;
 class moResourceManager;
 
-
 /// clase base para el manejo de una textura
 /**
  * Clase que encapsula una textura openGL y provee funcionalidades básicas tales como copiar contenidos desde o hacia
- * búfer, leer desde un archivo, manejar el FBO al cual pueda estar asociada la textura, etc.
+ * búfer, leer desde un archivo, etc.
  *  @see moTextureManager
  *  @see moVideoManager
  */
@@ -484,10 +481,9 @@ class LIBMOLDEO_API moTextureMemory : public moTexture {
 
 };
 
-#include "moTextureIndex.h"
-
-class moShader;
-class moTextureFilter;
+//#include "moTextureIndex.h"
+//class moShader;
+//class moTextureFilter;
 
 /// una textura asociada a una animación de cuadros
 /**
@@ -621,8 +617,8 @@ class LIBMOLDEO_API moTextureAnimated : public  moTexture
 		moTextureArray		m_srcinterpol,m_dstinterpol;
 
 		//interpolation shaders
-		moShader*			m_pShaderCopy;
-		moShader*			m_pShaderInterpolate;
+		//moShader*			m_pShaderCopy;
+		//moShader*			m_pShaderInterpolate;
 
 		//interpolation parameters
 		MOuint				m_FrameJump;/* salto entre el cuadro inicial y final mínimo, para resolver la interpolación*/
@@ -803,9 +799,5 @@ class LIBMOLDEO_API moMovie : public moTextureAnimated
         moVideoGraph*	m_pGraph;
 
 };
-
-#include "moFBO.h"
-#include "moGLManager.h"
-#include "moTextureFilter.h"
 
 #endif

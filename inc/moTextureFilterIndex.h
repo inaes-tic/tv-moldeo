@@ -38,6 +38,12 @@
 
 #include "moTextureFilter.h"
 
+class moGLManager;
+class moFBManager;
+class moShaderManager;
+class moTextureManager;
+class moRenderManager;
+
 /**
  * Clase que encapsula una lista de punteros a objetos moTextureFilter. La utilidad de esta clase es que
  * permite definir un subconjunto de filtros de textura y accederlos de manera directa.
@@ -158,24 +164,26 @@ public:
      * @return número de filtros.
      */
 	MOint Count() { return m_filters_array.Count(); }
+
     /**
      * Devuelve un puntero al filtro con índice p_idx.
      * @param p_idx índice de filtro.
      * @return puntero al filtro requerido.
      */
-	moTextureFilter* operator [](MOuint p_idx) { return m_filters_array[p_idx]; }
 	moTextureFilter* Get(MOuint p_idx) { return m_filters_array[p_idx]; }
+
+
+    moTextureFilter* operator [](MOuint p_idx) { return m_filters_array[p_idx]; }
 
 	MOuint LoadFilter(moValue* p_value);
 	MOuint LoadFilters(moParam* p_param);
 	MOuint LoadFilters(moConfig* p_cfg, MOuint p_param_idx);
 	MOuint LoadFilters(moTextArray* p_filters_str);
 
+
+
     MOint TextureFilterExists( moValue* p_value );
-
-
     moText MakeTextureFilterLabelName( moValue* p_value );
-
 protected:
 	moGLManager* m_glman;
 	moFBManager* m_fbman;
@@ -190,6 +198,5 @@ protected:
 	MOint LoadDestTexResolution(const moText& name, MOuint& dest_width, MOuint& dest_height);
 	MOint LoadDestTexture(const moText& name, moTextureArray& dest_tex, MOuint dest_width, MOuint dest_height);
 };
-
 
 #endif

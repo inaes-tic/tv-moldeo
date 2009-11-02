@@ -41,11 +41,6 @@
 #include "moShaderGLSL.h"
 
 #include "moResourceManager.h"
-#include "moGLManager.h"
-#include "moFBManager.h"
-
-
-class moTextureFilterIndex;
 
 /**
  * Clase que implementa un administrador de shaders.
@@ -134,17 +129,9 @@ public:
      * @return puntero al shader solicitado.
      */
 	moShader* GetShader(MOuint p_idx) { return m_shaders_array[p_idx]; }
-
-	moTextureFilterIndex*   GetTextureFilterIndex() {
-	    return m_pTextureFilterIndex;
-    }
-
 private:
 	moGLManager* m_glmanager;
 	moFBManager* m_fbmanager;
-
-    // Para que es este texture filter index????
-	moTextureFilterIndex*    m_pTextureFilterIndex;
 
 	moShaderArray m_shaders_array;
 };

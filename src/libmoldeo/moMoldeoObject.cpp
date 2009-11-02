@@ -133,6 +133,8 @@ moMoldeoObject::Init() {
 
                     case MO_PARAM_TEXTURE:
                     case MO_PARAM_FILTER:
+
+/*
                         if ( ! (valuebase.Text().Trim() == moText("")) ) {
                             idx = m_pResourceManager->GetTextureMan()->GetTextureMOId( valuebase.Text(), true);
                             if (idx>-1) {
@@ -157,6 +159,8 @@ moMoldeoObject::Init() {
                             MODebug2->Error( moText(" VALUE BASE EMPTY: ")+ valuebase.Text() + moText(" Param name:") +param.GetParamDefinition().GetName() );
                         }
                         break;
+*/
+
 
                     case MO_PARAM_FONT:
 

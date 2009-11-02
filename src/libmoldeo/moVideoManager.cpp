@@ -31,7 +31,6 @@
 
 #include "moVideoManager.h"
 
-
 #include "moArray.cpp"
 moDefineDynamicArray(moCircularVideoBuffers)
 moDefineDynamicArray(moVideoFrames)

@@ -36,112 +36,18 @@
 #include "moAbstract.h"
 #include "moConfig.h"
 #include "moParam.h"
+
+#include "moTexture.h"
+#include "moTextureIndex.h"
 #include "moShader.h"
 #include "moShaderGLSL.h"
+#include "moTextureFilterParam.h"
 
 class moGLManager;
 class moRenderManager;
 class moShaderManager;
+class moFBManager;
 
-#define RLUM    ((float) (0.3086))
-#define GLUM    ((float) (0.6094))
-#define BLUM    ((float) (0.0820))
-
-#include "moTextureFilterParam.h"
-
-// Base class to implement color transformation matrices.
-class LIBMOLDEO_API moColorMatrix
-{
-public:
-	moColorMatrix();
-	virtual ~moColorMatrix();
-
-	virtual void Init();
-	virtual void Finish();
-
-	void Copy(moColorMatrix& p_mat);
-	void Multiply(moColorMatrix& p_mat);
-	void SetZero() { ZeroMatrix(); }
-	void SetIndentity() { IdentityMatrix(); }
-
-	MOfloat* GetMatrixPointer() { return m_Matrix; }
-protected:
-	MOfloat m_Matrix[16];
-	MOfloat m_MatrixChg[16];
-	MOfloat m_MatrixTemp[16];
-
-	int MatIdx(int i, int j) { return j * 4 + i; }
-
-	void ZeroMatrix();
-	void IdentityMatrix();
-
-	void SetXRotateMatrix(float rs, float rc);
-	void SetYRotateMatrix(float rs, float rc);
-	void SetZRotateMatrix(float rs, float rc);
-    void SetZShearMatrix(float dx, float dy);
-    void XFormPoint(float &tx, float &ty, float &tz);
-
-	void ApplyChgMatrix();
-};
-
-// Class that generates a Hue/Staturation/Intensity matrix
-// Based on the Hue/Saturation/Intensity Filter for VirtualDub
-// written by Donald A. Graft
-// Some useful explanations on Matrix Operations for Image Processing
-// can be found here:
-// http://www.graficaobscura.com/matrix/index.html
-class LIBMOLDEO_API moHueSatIntMatrix : public moColorMatrix
-{
-public:
-	moHueSatIntMatrix();
-	~moHueSatIntMatrix();
-
-	void Init(MOboolean p_PreserveLuminance = true,
-			MOfloat p_min_int = 0.0, MOfloat p_max_int = 2.0,
-			MOfloat p_min_sat = 0.0, MOfloat p_max_sat = 2.0,
-			MOfloat p_min_hue = 0.0, MOfloat p_max_hue = 2 * moMathf::PI);
-	void Finish();
-
-	// Updates the matrix using the provided intensity, saturation and
-	// hue values (all in [0, 1]).
-	void Update(MOfloat p_int, MOfloat p_sat, MOfloat p_hue);
-protected:
-	MOboolean m_PreserveLuminance;
-	MOfloat m_int, m_sat, m_hue;
-	MOfloat m_min_int, m_max_int;
-	MOfloat m_min_sat, m_max_sat;
-	MOfloat m_min_hue, m_max_hue;
-
-	void IntensityMatrix();
-	void SaturateMatrix();
-	void HueRotateMatrix();
-	void SimpleHueRotateMatrix();
-};
-
-// Class that generates a Brightness/Contrast matrix.
-class LIBMOLDEO_API moBrightContMatrix : public moColorMatrix
-{
-public:
-	moBrightContMatrix();
-	~moBrightContMatrix();
-
-	void Init(MOfloat p_min_bright = 0.0, MOfloat p_max_bright = 2.0,
-			  MOfloat p_min_cont = 0.0, MOfloat p_max_cont = 2.0);
-	void Finish();
-
-	void Update(MOfloat p_bright, MOfloat p_cont);
-protected:
-	MOfloat m_bright, m_cont;
-	MOfloat m_min_bright, m_max_bright;
-	MOfloat m_min_cont, m_max_cont;
-
-	void BrightnessMatrix();
-	void ContrastMatrix();
-};
-
-class moTextureIndex;
-
-#include "moVideoManager.h"
 /**
  * Esta clase define un filtro 2D para aplicar en texturas. Un filtro es básicamente
  * un programa de shader (escrito en CG o GLSL) con un conjunto de predefinido de parámetros
@@ -276,11 +182,5 @@ protected:
 };
 
 moDeclareExportedDynamicArray( moTextureFilter*, moTextureFilterArray)
-
-#include "moVideoManager.h"
-#include "moShaderManager.h"
-#include "moTextureManager.h"
-#include "moGLManager.h"
-#include "moRenderManager.h"
 
 #endif

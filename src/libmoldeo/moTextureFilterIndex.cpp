@@ -30,6 +30,7 @@
 *******************************************************************************/
 
 #include "moTextureFilterIndex.h"
+#include "moResourceManager.h"
 
 moTextureFilterIndex::moTextureFilterIndex()
 {
@@ -167,6 +168,8 @@ MOint moTextureFilterIndex::TextureFilterExists( moValue* p_value ) {
     }
     return -1;
 }
+
+
 
 MOuint moTextureFilterIndex::LoadFilter(moValue* p_value) {
 

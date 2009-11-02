@@ -35,8 +35,8 @@
 #include "moTypes.h"
 #include "moText.h"
 #include "moLock.h"
+
 #include "moFBO.h"
-#include "moTexture.h"
 #include "moResourceManager.h"
 
 /**
@@ -98,7 +98,5 @@ class LIBMOLDEO_API moFBManager : public moResource
 
 		moFBOArray m_fbo_array;
 };
-
-#include "moGLManager.h"
 
 #endif

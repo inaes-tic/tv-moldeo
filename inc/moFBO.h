@@ -34,11 +34,6 @@
 
 #include "moTypes.h"
 
-#define MO_FRAMEBUFFER_FULL 0
-#define MO_FRAMEBUFFER_INVALID_TEX 1
-#define MO_MAX_FBO_STACK_SIZE 10
-#define MO_MAX_COLOR_ATTACHMENTS_EXT GL_MAX_COLOR_ATTACHMENTS_EXT
-
 /**
  * Clase que encapsula un FrameBuffer Object (FBO) de OpenGL. Este tipo de objeto facilita enormemente
  * las operaciones de render a textura. Varias texturas pueden ser asociadas (attached) como búfers de color
@@ -128,12 +123,6 @@ class LIBMOLDEO_API moFBO : public moAbstract
 
 };
 
-/*
-template class LIBMOLDEO_API moDynamicArray<moFBO*>;
-typedef moDynamicArray<moFBO*> moFBOArray;
-*/
 moDeclareExportedDynamicArray( moFBO*, moFBOArray)
-
-#include "moGLManager.h"
 
 #endif

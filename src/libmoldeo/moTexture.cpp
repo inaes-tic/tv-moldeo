@@ -31,6 +31,7 @@
 
 #include "moTexture.h"
 #include "FreeImage.h"
+#include "moResourceManager.h"
 
 #include "moArray.cpp"
 moDefineDynamicArray(moTextureArray)
@@ -924,8 +925,9 @@ moTextureAnimated::moTextureAnimated() : moTexture()
 	m_nFrames = 0;
 	m_InterpolationTime = 0;
 	m_bInterpolation = false;
-	m_pShaderCopy = NULL;
-	m_pShaderInterpolate = NULL;
+
+	//m_pShaderCopy = NULL;
+	//m_pShaderInterpolate = NULL;
 }
 
 moTextureAnimated::~moTextureAnimated()
@@ -944,8 +946,10 @@ MOboolean moTextureAnimated::Init(moText p_name, MOuint p_moid, moResourceManage
 	m_InterpolationTime = 0;
 	m_bInterpolation = false;
 	m_bInterpolating = false;
-	m_pShaderCopy = NULL;
-	m_pShaderInterpolate = NULL;
+
+	//m_pShaderCopy = NULL;
+	//m_pShaderInterpolate = NULL;
+
 	m_pCopyStart = NULL;
 	m_pCopyEnd = NULL;
 	m_pInterpolator = NULL;
@@ -972,6 +976,7 @@ MOboolean moTextureAnimated::Finish()
 
 void
 moTextureAnimated::SetInterpolation( MOuint p_FrameJump, MOuint p_InterpolationTime ) {
+    /*
 	m_FrameJump = p_FrameJump;
 	m_InterpolationTime = p_InterpolationTime;
 
@@ -1021,6 +1026,7 @@ moTextureAnimated::SetInterpolation( MOuint p_FrameJump, MOuint p_InterpolationT
         m_pCopyEnd->Init( m_pResourceManager->GetGLMan(), m_pResourceManager->GetFBMan(), m_pResourceManager->GetRenderMan(), m_srcend, m_dstend, m_pShaderCopy );
         m_pInterpolator->Init(  m_pResourceManager->GetGLMan(), m_pResourceManager->GetFBMan(), m_pResourceManager->GetRenderMan(), m_srcinterpol, m_dstinterpol, m_pShaderInterpolate  );
     }
+    */
 }
 
 MOboolean
@@ -1035,6 +1041,8 @@ moTextureAnimated::IsInterpolationActive() {
 
 MOboolean
 moTextureAnimated::ActivateInterpolation( MOboolean activate ) {
+    return false;
+    /*
 	if (m_pShaderCopy && m_pShaderInterpolate && activate) {
 		m_bInterpolation = true;
 	} else {
@@ -1042,6 +1050,7 @@ moTextureAnimated::ActivateInterpolation( MOboolean activate ) {
 		m_bInterpolating = false;
 	}
 	return m_bInterpolation;
+	*/
 }
 
 
@@ -1060,6 +1069,10 @@ moTextureAnimated::NeedsInterpolation() {
 	// !!!chequear que el next y el previous esten correctamente fijados
 	//MODebug->Push( moText("Pr:")+IntToStr(m_FramePrevious)+moText("Nxt:")+IntToStr(m_FrameNext) );
 
+
+	return false;
+
+/*
 	if (!m_bInterpolation)
 		return false;
 	if (!m_bInterpolating) {
@@ -1087,11 +1100,13 @@ moTextureAnimated::NeedsInterpolation() {
 		}
 	}
 	return m_bInterpolating;
+	*/
 }
 
 
 MOint
 moTextureAnimated::Interpolate() {
+    /*
 	moTextureFilterParam filterparam;
 	if ( m_pShaderCopy && m_pShaderInterpolate && m_bInterpolation) {
 		if (m_bInterpolating) {
@@ -1105,6 +1120,7 @@ moTextureAnimated::Interpolate() {
 			return 1;
 		}
 	}
+	*/
 	return 0;
 }
 

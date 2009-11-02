@@ -369,6 +369,14 @@ class LIBMOLDEO_API moResourceManager : public moAbstract {
          *
          *
          */
+		moTextureFilterManager*	GetTextureFilterMan() { return MOTextureFilterMan; }
+
+
+        /**
+         * crea un nuevo recurso
+         *
+         *
+         */
 		moFontManager*			GetFontMan() { return MOFontMan; }
 
         /**
@@ -434,6 +442,7 @@ class LIBMOLDEO_API moResourceManager : public moAbstract {
 		moGLManager*			MOGLMan;
 		moRenderManager*		MORenderMan;
 		moShaderManager*		MOShaderMan;
+		moTextureFilterManager* MOTextureFilterMan;
 		moMathManager*			MOMathMan;
 		moFontManager*			MOFontMan;
 		moGUIManager*			MOGuiMan;
@@ -442,7 +451,7 @@ class LIBMOLDEO_API moResourceManager : public moAbstract {
 		moSoundManager*			MOSoundMan;
 		mo3dModelManager*		MOModelMan;
 		moDebugManager*			MODebugMan;
-		moDecoderManager*			MODecoderMan;
+		moDecoderManager*		MODecoderMan;
 
 
 		moResources				m_Resources;
@@ -460,11 +469,11 @@ class LIBMOLDEO_API moResourceManager : public moAbstract {
 #include "mo3dModelManager.h"
 
 #include "moShaderManager.h"
-#include "moTextureFilterManager.h"
 #include "moFilterManager.h"
 #include "moTimeManager.h"
 #include "moDataManager.h"
 #include "moTextureManager.h"
+#include "moTextureFilterManager.h"
 #include "moVideoManager.h"
 #include "moFBManager.h"
 #include "moGLManager.h"

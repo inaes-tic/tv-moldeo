@@ -29,7 +29,8 @@
 
 *******************************************************************************/
 
-#include "moTexture.h"
+#include "moTextureIndex.h"
+#include "moResourceManager.h"
 
 MOint moTextureIndex::Add(moText p_name, moTextureManager* p_tex_man) // Returns the index of the newly added texture.
 {
