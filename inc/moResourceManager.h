@@ -69,6 +69,7 @@ enum moResourceType {
 	MO_RESOURCETYPE_GL,
 	MO_RESOURCETYPE_FB,
 	MO_RESOURCETYPE_SHADER,
+	MO_RESOURCETYPE_TEXTUREFILTER,
 	MO_RESOURCETYPE_SCRIPT,
 	MO_RESOURCETYPE_MATH,
 	MO_RESOURCETYPE_DEBUG,
@@ -179,6 +180,7 @@ class	moFontManager;
 class	moGUIManager;
 class	moScriptManager;
 class	moTextureManager;
+class   moTextureFilterManager;
 class	moSoundManager;
 class	mo3dModelManager;
 class moDecoderManager;
@@ -458,6 +460,7 @@ class LIBMOLDEO_API moResourceManager : public moAbstract {
 #include "mo3dModelManager.h"
 
 #include "moShaderManager.h"
+#include "moTextureFilterManager.h"
 #include "moFilterManager.h"
 #include "moTimeManager.h"
 #include "moDataManager.h"

@@ -83,7 +83,7 @@ MOboolean moShaderManager::Finish()
 	return true;
 }
 
-MOint moShaderManager::GetShaderIndex(moText p_name, MOboolean p_create_shader)
+MOint moShaderManager::GetFilterMOId(moText p_name, MOboolean p_create_shader)
 {
 	moShader* pshader;
 	for (MOuint i = 0; i < m_shaders_array.Count(); i++)

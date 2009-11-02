@@ -50,7 +50,6 @@ class moTextureFilterIndex;
 /**
  * Clase que implementa un administrador de shaders.
  */
-
 class LIBMOLDEO_API moShaderManager : public moResource
 {
 public:
@@ -58,7 +57,7 @@ public:
      * El constructor por defecto de la clase.
      */
 	moShaderManager();
-    
+
 	/**
      * El destructor por defecto de la clase.
      */
@@ -88,7 +87,7 @@ public:
      * @param p_create_shader si es true intenta crear el shader si el mismo no es encontrado.
      * @return índice del shader.
      */
-	MOint GetShaderIndex(moText p_name, MOboolean p_create_shader);
+	MOint GetShaderMOId(moText p_name, MOboolean p_create_shader);
     /**
      * Agrega un shader de tipo p_type (MO_SHADER_GLSL o MO_SHADER_CG) en blanco, es decir, sin vértices
      * de fragmentos o vértices asociados al mismo.
@@ -144,6 +143,7 @@ private:
 	moGLManager* m_glmanager;
 	moFBManager* m_fbmanager;
 
+    // Para que es este texture filter index????
 	moTextureFilterIndex*    m_pTextureFilterIndex;
 
 	moShaderArray m_shaders_array;

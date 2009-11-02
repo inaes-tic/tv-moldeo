@@ -502,7 +502,7 @@ MOuint moTextureFilterIndex::LoadFilters(moTextArray* p_filters_str)
 
 MOint moTextureFilterIndex::LoadShader(moText& name, moShader **pshader)
 {
-	MOint idx = m_shaman->GetShaderIndex(name, true);
+	MOint idx = m_shaman->GetShaderMOId(name, true);
 	if (-1 < idx)
 	{
 		*pshader = m_shaman->GetShader(idx);

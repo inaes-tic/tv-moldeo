@@ -217,7 +217,10 @@ public:
      * @return puntero a la lista de texturas de destino.
      */
 	moTextureIndex* GetDestTex() { return &m_dest_tex; }
-
+    /**
+     * Devuelve el puntero al shader que define este filtro.
+     * @return puntero al shader.
+     */
 	moShader* GetShader() { return m_shader; }
 
     void      SetTextureFilterLabelName( moText p_text ) {

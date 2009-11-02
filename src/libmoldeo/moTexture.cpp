@@ -979,9 +979,10 @@ moTextureAnimated::SetInterpolation( MOuint p_FrameJump, MOuint p_InterpolationT
 
 	moShaderManager* SM = m_pResourceManager->GetShaderMan();
 	moTextureManager* TM = m_pResourceManager->GetTextureMan();
+	moTextureFilterManager* TFM = m_pResourceManager->GetTextureFilterMan();
 
-	m_pShaderCopy = SM->GetShader(SM->GetShaderIndex(moText("shaders/Copy.cfg"),true) );
-	m_pShaderInterpolate = SM->GetShader(SM->GetShaderIndex(moText("shaders/TexInterpolator.cfg"),true) );
+	m_pShaderCopy = SM->GetShader(SM->GetShaderMOId(moText("shaders/Copy.cfg"),true) );
+	m_pShaderInterpolate = SM->GetShader(SM->GetShaderMOId(moText("shaders/TexInterpolator.cfg"),true) );
 
 	MOint idxstart = TM->AddTexture( moText(this->m_name)+moText("copyStart"), m_width, m_height);
 	MOint idxend = TM->AddTexture(moText(this->m_name)+moText("copyEnd"), m_width, m_height);

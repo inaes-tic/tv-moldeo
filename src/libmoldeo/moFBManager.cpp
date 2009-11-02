@@ -65,7 +65,7 @@ MOboolean moFBManager::Finish()
 	return true;
 }
 
-MOuint moFBManager::CreateFBO(MOboolean p_screen_fbo)
+MOint moFBManager::AddFBO(MOboolean p_screen_fbo)
 {
 	moFBO* new_fbo = new moFBO();
 	new_fbo->Init(p_screen_fbo);

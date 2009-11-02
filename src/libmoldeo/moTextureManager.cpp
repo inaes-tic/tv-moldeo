@@ -114,7 +114,7 @@ moTextureBuffer::Init( moText p_foldername, moText p_bufferformat, moResourceMan
 	moShaderManager* SM = m_pResourceManager->GetShaderMan();
 	moTextureManager* TM = m_pResourceManager->GetTextureMan();
 
-	m_pShaderCopy = SM->GetShader(SM->GetShaderIndex(moText("shaders/Copy.cfg"),true) );
+	m_pShaderCopy = SM->GetShader(SM->GetShaderMOId(moText("shaders/Copy.cfg"),true) );
 	*/
 	m_Frames.Init( 0, NULL);
 

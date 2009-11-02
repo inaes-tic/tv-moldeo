@@ -56,7 +56,7 @@ MOboolean moGLManager::Init(moFBManager* p_fbman)
 	QueryGPUVendorString();
 
     m_fbman = p_fbman;
-    m_screen_fbo = m_fbman->CreateFBO(true);
+    m_screen_fbo = m_fbman->AddFBO(true);
     m_current_fbo = m_screen_fbo;
 
 	m_bFrameBufferObjectActive = false;

@@ -415,6 +415,9 @@ class LIBMOLDEO_API moRenderManager : public moResource
 
 		moDecoderManager*   m_pDecoderManager;
 
+
+		moTextureFilterManager* m_pTexFilManager;
+
 		moRenderOutputConfiguration m_OutputConfiguration;
 
         moBucketsPool*           m_pFramesPool;

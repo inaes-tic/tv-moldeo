@@ -73,7 +73,7 @@ class LIBMOLDEO_API moFBManager : public moResource
          * Agrega un nuevo FBO.
          * @return índice del nuevo FBO.
          */
-        MOuint CreateFBO(MOboolean p_screen_fbo = false);
+        MOint AddFBO(MOboolean p_screen_fbo = false);
         /**
          * Elimina el FBO con índice p_fbo.
          * @param p_fbo índice del FBO a eliminar.

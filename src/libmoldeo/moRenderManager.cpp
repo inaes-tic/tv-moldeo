@@ -134,6 +134,13 @@ MOboolean moRenderManager::Init(moRenderManagerMode p_render_to_texture_mode,
 	m_render_width = p_render_width;
    	m_render_height = p_render_height;
 
+/*
+   	moTextureArray p_src_tex;
+   	moTextureArray p_dest_tex;
+   	moShader *p_shader;
+   	m_pTexFilManager->AddFilter(p_src_tex, p_dest_tex, p_shader);
+*/
+
 
     //if (m_render_tex_moid[0]!=-1) m_pTextureManager->DeleteTexture(m_render_tex_moid[0]);
     //if (m_render_tex_moid[1]!=-1) m_pTextureManager->DeleteTexture(m_render_tex_moid[1]);
@@ -177,7 +184,7 @@ MOboolean moRenderManager::Init(moRenderManagerMode p_render_to_texture_mode,
 	{
 	    m_pGLManager->SetFrameBufferObjectActive();
         MODebug2->Message( moText("Using framebuffer_object: creating one fbo per predefined textures (4). ") );
-		m_fbo_idx = m_pFBManager->CreateFBO();
+		m_fbo_idx = m_pFBManager->AddFBO();
 
 
 		MOuint attach_point;

@@ -536,7 +536,7 @@ MOboolean moTextureFilter::Init(moGLManager* p_glman, moFBManager* p_fbman, moRe
 
     m_DefParams->getParamIDs(pglsl);
 
-    m_dest_fbo = m_fbman->CreateFBO();
+    m_dest_fbo = m_fbman->AddFBO();
 
 	return true;
 }
