@@ -44,6 +44,11 @@ moTextureFilterManager::moTextureFilterManager()
 	m_texmanager = NULL;
 }
 
+moTextureFilterManager::~moTextureFilterManager()
+{
+	Finish();
+}
+
 MOboolean moTextureFilterManager::Init()
 {
 	if (m_pResourceManager){
@@ -80,7 +85,7 @@ MOint moTextureFilterManager::GetTextureFilterMOid(moTextArray p_src_tex_names, 
 	for (MOuint i = 0; i < m_filters_array.Count(); i++)
 	{
 		pfilter = m_filters_array[i];
-		if (pshader == NULL) continue;
+		if (pfilter == NULL) continue;
 
         srctex = pfilter->GetSrcTex();
         destex = pfilter->GetDestTex();
@@ -91,7 +96,7 @@ MOint moTextureFilterManager::GetTextureFilterMOid(moTextArray p_src_tex_names, 
         {
             diff = false;
             for (MOuint j = 0; j < p_src_tex_names.Count(); j++)
-                if (stricmp(p_src_tex_names[j], srctex->GetTexture(j)->GetName()))
+                if (p_src_tex_names[j] != srctex->GetTexture(j)->GetName())
                 {
                     diff = true;
                     break;
@@ -104,7 +109,7 @@ MOint moTextureFilterManager::GetTextureFilterMOid(moTextArray p_src_tex_names, 
         {
             diff = false;
             for (MOuint j = 0; j < p_dest_tex_names.Count(); j++)
-                if (stricmp(p_dest_tex_names[j], destex->GetTexture(j)->GetName()))
+                if (p_dest_tex_names[j] != destex->GetTexture(j)->GetName())
                 {
                     diff = true;
                     break;
@@ -113,11 +118,24 @@ MOint moTextureFilterManager::GetTextureFilterMOid(moTextArray p_src_tex_names, 
         }
         else continue;
 
-		if (!stricmp(pshader->GetName(), p_shader_name)) found = true;
+		if (pshader->GetName() != p_shader_name) found = true;
 
         if (found) return i;
 	}
 	if (p_create_filter) return AddTextureFilter(p_src_tex_names, p_dest_tex_names, p_shader_name);
+	else return -1;
+}
+
+MOint moTextureFilterManager::GetTextureFilterMOid(moText p_name, MOboolean p_create_filter)
+{
+	moTextureFilter* pfilter;
+	for (MOuint i = 0; i < m_filters_array.Count(); i++)
+	{
+		pfilter = m_filters_array[i];
+		if (pfilter == NULL) continue;
+        if (pfilter->GetName() == p_name) return i;
+	}
+	if (p_create_filter) return AddTextureFilter(p_name);
 	else return -1;
 }
 
@@ -128,7 +146,8 @@ MOint moTextureFilterManager::AddTextureFilter(moTextArray p_src_tex_names, moTe
 	MOuint dest_width, dest_height;
 	MOuint i;
 	MOint error_code;
-
+    moText name = "";
+    moText sep = "";
     error_code = 0;
 
     src_tex.Empty();
@@ -142,16 +161,8 @@ MOint moTextureFilterManager::AddTextureFilter(moTextArray p_src_tex_names, moTe
              PrintErrorMsg(error_code);
              return -1;
         }
-    }
-
-    for (i = 0; i < p_src_tex_names.Count(); i++)
-    {
-        error_code = LoadDestTexture(p_dest_tex_names[i], dest_tex, dest_width, dest_height);
-        if (0 < error_code)
-        {
-             PrintErrorMsg(error_code);
-             return -1;
-        }
+        name += (moText)sep + (moText)p_src_tex_names[i];
+        sep = moText("|");
     }
 
     error_code = LoadShader(p_shader_name, &pshader);
@@ -160,11 +171,23 @@ MOint moTextureFilterManager::AddTextureFilter(moTextArray p_src_tex_names, moTe
          PrintErrorMsg(error_code);
          return -1;
     }
+    name += (moText)sep + (moText)p_shader_name;
 
-    return AddTextureFilter(src_tex, dest_tex, pshader, p_params);
+    for (i = 0; i < p_dest_tex_names.Count(); i++)
+    {
+        error_code = LoadDestTexture(p_dest_tex_names[i], dest_tex, dest_width, dest_height);
+        if (0 < error_code)
+        {
+             PrintErrorMsg(error_code);
+             return -1;
+        }
+        name += (moText)sep + (moText)p_dest_tex_names[i];
+    }
+
+    return AddTextureFilter(name, src_tex, dest_tex, pshader, p_params);
 }
 
-MOint moTextureFilterManager::AddTextureFilter(moTextureArray &p_src_tex, moTextureArray &p_dest_tex, moShader *p_shader, moTextureFilterParam *p_params)
+MOint moTextureFilterManager::AddTextureFilter(moText p_name, moTextureArray &p_src_tex, moTextureArray &p_dest_tex, moShader *p_shader, moTextureFilterParam *p_params)
 {
     moTextureFilter* pfilter = new moTextureFilter();
     if (pfilter != NULL)
@@ -172,9 +195,72 @@ MOint moTextureFilterManager::AddTextureFilter(moTextureArray &p_src_tex, moText
         pfilter->Init(m_glmanager, m_fbmanager, m_rendermanager, p_src_tex, p_dest_tex, p_shader);
 
         m_filters_array.Add(pfilter);
-        return m_filters_array.Count() - 1;
+        pfilter->SetMOId(m_filters_array.Count() - 1);
+        pfilter->SetName(p_name);
+        return pfilter->GetMOId();
     }
     else return -1;
+}
+
+MOint moTextureFilterManager::AddTextureFilter(moText p_name)
+{
+	MOuint i, j;
+	MOint error_code;
+
+	MOboolean reading_src_tex;
+
+	moTextureFilter *pfilter;
+	moTextureArray src_tex, dest_tex;
+	moShader *pshader;
+
+	MOuint dest_width, dest_height;
+	moText name, extension, left, tmp;
+
+    reading_src_tex = true;
+
+    error_code = 0;
+    src_tex.Empty();
+    dest_tex.Empty();
+    tmp =  p_name;
+    j = 0;
+    while (tmp != moText(""))
+    {
+        name = tmp.Scan(moText("|"));
+        name = name.Trim();
+
+        extension = name;
+        extension.Right(3);
+
+        if (extension == moText("cfg"))
+        {
+			reading_src_tex = false;
+			error_code = LoadShader(name, &pshader);
+		}
+		else if (reading_src_tex)
+		{
+			// Loading source textures...
+			error_code = LoadSourceTexture(name, src_tex, j == 0, dest_width, dest_height);
+		}
+		else
+		{
+			// Creating destination textures...
+			left = name;
+			left.Left(3);
+			if (left == moText("res:")) error_code = LoadDestTexResolution(name, dest_width, dest_height);
+			else error_code = LoadDestTexture(name, dest_tex, dest_width, dest_height);
+		}
+        j++;
+    }
+
+	if (error_code == 0)
+	{
+	    return AddTextureFilter(p_name, src_tex, dest_tex, pshader);
+	}
+	else
+	{
+		PrintErrorMsg(error_code);
+        return -1;
+	}
 }
 
 void moTextureFilterManager::Apply(MOuint p_idx, MOuint p_i, MOfloat p_fade, moTextureFilterParam *p_params)

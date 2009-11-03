@@ -50,7 +50,7 @@ class LIBMOLDEO_API moTextureFilterManager : public moResource
         /**
          * Destructor genérico de la clase.
          */
-		~moTextureFilterManager() {}
+		~moTextureFilterManager();
 
         /**
          * Método de inicialización.
@@ -78,18 +78,45 @@ class LIBMOLDEO_API moTextureFilterManager : public moResource
          */
 	    MOint GetTextureFilterMOid(moTextArray p_src_tex_names, moTextArray p_dest_tex_names, moText p_shader_name, MOboolean p_create_filter);
 
+        /**
+         * Devuelve el filtro de textura con el nombre especificado. Si dicho filtro no existe y p_create_filter es
+         * verdadero, entonces a nuevo filtro es creado con la información provista en p_name:
+         * @param p_name cadena de texto que contiene el nombre del filtro.
+         * @param p_create_filter si es true entonces un nuevo filtro es creado si no existe uno con los parametros especificados.
+         * @return índice del filtro buscado.
+         */
+        MOint GetTextureFilterMOid(moText p_name, MOboolean p_create_filter);
+
+        /**
+         * Agrega un filtro de textura conformado por un grupo de texturas de entrada, un shader y un grupo de
+         * texturas de salida.
+         * @param p_src_tex_names array con los nombres de las texturas fuente o de entrada.
+         * @param p_dest_tex_names array con los nombres de las texturas destino o de salida.
+         * @param p_shader_name nombre del shader que opera sobre estas texturas.
+         * @param p_params parametros del filtro (opcional).
+         * @return índice del nuevo filtro.
+         */
         MOint AddTextureFilter(moTextArray p_src_tex_names, moTextArray p_dest_tex_names, moText p_shader_name, moTextureFilterParam *p_params = NULL);
 
         /**
          * Agrega un filtro de textura conformado por un grupo de texturas de entrada, un shader y un grupo de
          * texturas de salida.
+         * @param p_name es el nombre del filtro de texturas.
          * @param p_src_tex array de texturas fuente o de entrada.
          * @param p_dest_tex array de texturas destino o de salida.
          * @param p_shader puntero al shader que opera sobre estas texturas.
          * @param p_params parametros del filtro (opcional).
          * @return índice del nuevo filtro.
          */
-		MOint AddTextureFilter(moTextureArray &p_src_tex, moTextureArray &p_dest_tex, moShader *p_shader, moTextureFilterParam *p_params = NULL);
+		MOint AddTextureFilter(moText p_name, moTextureArray &p_src_tex, moTextureArray &p_dest_tex, moShader *p_shader, moTextureFilterParam *p_params = NULL);
+
+        /**
+         * Agrega un filtro de textura utilizando la información del nombre, que debe contener el nombre
+         * de las texturas de entrada, el shader y las texturas de salida, separadas por el carácter '|'.
+         * @param p_name es el nombre del filtro de texturas.
+         * @return índice del nuevo filtro.
+         */
+        MOint AddTextureFilter(moText p_name);
 
         /**
          * Aplica el filtro p_idx sobre sus texturas de orígen y escribiendo el resultado en sus texturas de destino.
@@ -116,11 +143,18 @@ class LIBMOLDEO_API moTextureFilterManager : public moResource
          */
 	    void Apply(MOuint p_idx, moTempo *p_tempo, MOfloat p_fade = 1.0, moTextureFilterParam *p_params = NULL);
 
-       /**
-        * Elimina el filtro de textura con índice p_idx.
-        * @param p_idx índice del filtro a eliminar.
-        * @return true si la operación fue exitosa, false en caso contrario.
-        */
+        /**
+         * Devuelve el nombre del filtro de textura con índice p_idx.
+         * @param p_idx índice del filtro.
+         * @return el nombre del filtro.
+         */
+        moText GetName(MOuint p_idx) { return ValidIndex(p_idx) ? m_filters_array[p_idx]->GetName() : moText(""); }
+
+        /**
+         * Elimina el filtro de textura con índice p_idx.
+         * @param p_idx índice del filtro a eliminar.
+         * @return true si la operación fue exitosa, false en caso contrario.
+         */
 	    MOboolean DeleteTextureFilter(MOint p_idx);
 
         /**

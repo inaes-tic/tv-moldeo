@@ -42,50 +42,34 @@ moTextureFilterIndex::~moTextureFilterIndex()
 	Finish();
 }
 
-MOboolean moTextureFilterIndex::Init( moGLManager* p_glman, moFBManager* p_fbman, moShaderManager* p_shaman, moTextureManager* p_texman, moRenderManager* p_renderman)
+MOboolean moTextureFilterIndex::Init(moTextureFilterManager* p_texfilterman)
 {
-	m_glman = p_glman;
-	m_fbman = p_fbman;
-	m_shaman = p_shaman;
-	m_texman = p_texman;
-	m_renderman = p_renderman;
+	m_texfilterman = p_texfilterman;
 
 	return true;
 }
 
-MOboolean moTextureFilterIndex::Init( moParam* p_param, moGLManager* p_glman, moFBManager* p_fbman, moShaderManager* p_shaman, moTextureManager* p_texman, moRenderManager* p_renderman)
+MOboolean moTextureFilterIndex::Init( moParam* p_param, moTextureFilterManager* p_texfilterman)
 {
-	m_glman = p_glman;
-	m_fbman = p_fbman;
-	m_shaman = p_shaman;
-	m_texman = p_texman;
-	m_renderman = p_renderman;
+	m_texfilterman = p_texfilterman;
 
 	MOuint res = LoadFilters(p_param);
 
 	return 0 < res;
 }
 
-MOboolean moTextureFilterIndex::Init(moConfig* p_cfg, MOuint p_param_idx, moGLManager* p_glman, moFBManager* p_fbman, moShaderManager* p_shaman, moTextureManager* p_texman, moRenderManager* p_renderman)
+MOboolean moTextureFilterIndex::Init(moConfig* p_cfg, MOuint p_param_idx, moTextureFilterManager* p_texfilterman)
 {
-	m_glman = p_glman;
-	m_fbman = p_fbman;
-	m_shaman = p_shaman;
-	m_texman = p_texman;
-	m_renderman = p_renderman;
+	m_texfilterman = p_texfilterman;
 
 	MOuint res = LoadFilters(p_cfg, p_param_idx);
 
 	return 0 < res;
 }
 
-MOboolean moTextureFilterIndex::Init(moTextArray* p_filters_str, moGLManager* p_glman, moFBManager* p_fbman, moShaderManager* p_shaman, moTextureManager* p_texman, moRenderManager* p_renderman)
+MOboolean moTextureFilterIndex::Init(moTextArray* p_filters_str, moTextureFilterManager* p_texfilterman)
 {
-	m_glman = p_glman;
-	m_fbman = p_fbman;
-	m_shaman = p_shaman;
-	m_texman = p_texman;
-	m_renderman = p_renderman;
+	m_texfilterman = p_texfilterman;
 
 	MOuint res = LoadFilters(p_filters_str);
 
@@ -140,221 +124,84 @@ MOboolean moTextureFilterIndex::ValidIndex(MOuint p_idx)
 	}
 }
 
-moText
-moTextureFilterIndex::MakeTextureFilterLabelName( moValue* p_value ) {
-
-    moText  TextureFilterLabelName = "";
-    moText sep = "";
-    for(int i=0; i < 3; i++) {
-        TextureFilterLabelName+= (moText)sep + (moText)p_value->GetSubValue(i).Text();
-        sep = moText("::");
-    }
-    return TextureFilterLabelName;
-}
-
-
-MOint moTextureFilterIndex::TextureFilterExists( moValue* p_value ) {
-
-    moText  TextureFilterLabelName = MakeTextureFilterLabelName( p_value );
-
-    moTextureFilter*    pTextureFilter;
-
-    for( MOuint f=0; f < m_filters_array.Count(); f++ ) {
-
-        pTextureFilter = m_filters_array[f];
-        if ( pTextureFilter->GetTextureFilterLabelName() == TextureFilterLabelName ) {
-            return f;
-        }
-    }
-    return -1;
-}
-
-
-
 MOuint moTextureFilterIndex::LoadFilter(moValue* p_value) {
 
-	MOuint j;
-	MOint error_code;
+    int j;
 	MOuint nFilterParts;
-
-	MOboolean reading_src_tex;
-
-	moTextureFilter *pfilter;
-	moTextureArray src_tex, dest_tex;
-	moShader *pshader;
-
-	MOuint dest_width, dest_height;
-	moText name, extension, left;
-
-    MOint idx = TextureFilterExists(p_value);
-
-    if ( idx != -1)
-        return (idx+1);
+	moTextureFilter* pfilter;
+    moText name = "";
+    moText sep = "";
 
     nFilterParts = p_value->GetSubValueCount();
-    reading_src_tex = true;
-
-    error_code = 0;
-    src_tex.Empty();
-    dest_tex.Empty();
-
     for (j = 0; j < nFilterParts; j++)
     {
         if ( p_value->GetSubValue(j).GetData()->Type()==MO_DATA_TEXT ||
         p_value->GetSubValue(j).GetData()->Type()==MO_DATA_IMAGESAMPLE ||
         p_value->GetSubValue(j).GetData()->Type()==MO_DATA_IMAGESAMPLE_FILTERED ) {
-
-            name = p_value->GetSubValue(j).Text();
-
-            extension = name;
-            extension.Right(3);
-
-            if (extension == moText("cfg"))
-            {
-                reading_src_tex = false;
-                error_code = LoadShader(name, &pshader);
-            }
-            else if (reading_src_tex)
-            {
-                // Loading source textures...
-                error_code = LoadSourceTexture(name, src_tex, j == 0, dest_width, dest_height);
-            }
-            else
-            {
-                // Creating destination textures...
-                left = name;
-                left.Left(3);
-                if (left == moText("res:")) error_code = LoadDestTexResolution(name, dest_width, dest_height);
-                else error_code = LoadDestTexture(name, dest_tex, dest_width, dest_height);
-            }
+            name += (moText)sep + (moText)p_value->GetSubValue(j).Text();
+            sep = moText("|");
         }
     }
 
-    if (error_code == 0)
+    MOint idx = m_texfilterman->GetTextureFilterMOid(name, true);
+    if (-1 < idx)
     {
-        pfilter = new moTextureFilter();
-        pfilter->Init(m_glman, m_fbman, m_renderman, src_tex, dest_tex, pshader);
-        pfilter->SetTextureFilterLabelName( MakeTextureFilterLabelName( p_value ) );
-        Add(pfilter);
-    }
-    else
-    {
-        // Print some error message...
-        if (error_code == 1)
-            MODebug2->Message("Error in creating filter: cannot load shader");
-        else if (error_code == 2)
-            MODebug2->Message("Error in creating filter: cannot load source texture");
-        else if (error_code == 3)
-            MODebug2->Message("Error in creating filter: cannot read resolution of destination texture");
-        else if (error_code == 4)
-            MODebug2->Message("Error in creating filter: cannot create destination texture");
-        else
-            MODebug2->Message("Unknown error in creating filter.");
-    }
+        pfilter = m_texfilterman->GetTextureFilter(idx);
+        if (pfilter != NULL) Add(pfilter);
 
+    }
 	return m_filters_array.Count();
-
 }
 
 MOuint moTextureFilterIndex::LoadFilters(moParam* p_param)
 {
-
-	MOuint i, j;
-	MOint error_code;
+	MOuint i, j, idx;
 	MOuint nFilters, nFilterParts;
+	moTextureFilter* pfilter;
+	moText part;
+    moText name = "";
+    moText sep = "";
 
-	MOboolean reading_src_tex;
 	moParam* param = p_param;
 
-	moTextureFilter *pfilter;
-	moTextureArray src_tex, dest_tex;
-	moShader *pshader;
-
-	MOuint dest_width, dest_height;
-	moText name, extension, left;
-
 	nFilters = p_param->GetValuesCount();
-
 	p_param->FirstValue();
 	for (i = 0; i < nFilters; i++)
 	{
 		param = p_param;
 		nFilterParts = param->GetValue().GetSubValueCount();
-		reading_src_tex = true;
 
-		error_code = 0;
-		src_tex.Empty();
-		dest_tex.Empty();
+        name = "";
+        sep = "";
 		for (j = 0; j < nFilterParts; j++)
 		{
-			name = param->GetValue().GetSubValue(j).Text();
-
-			extension = name;
-			extension.Right(3);
-
-			if (extension == moText("cfg"))
-			{
-				reading_src_tex = false;
-				error_code = LoadShader(name, &pshader);
-			}
-			else if (reading_src_tex)
-			{
-				// Loading source textures...
-				error_code = LoadSourceTexture(name, src_tex, j == 0, dest_width, dest_height);
-			}
-			else
-			{
-				// Creating destination textures...
-				left = name;
-				left.Left(3);
-				if (left == moText("res:")) error_code = LoadDestTexResolution(name, dest_width, dest_height);
-				else error_code = LoadDestTexture(name, dest_tex, dest_width, dest_height);
-			}
+			part = param->GetValue().GetSubValue(j).Text();
+            name += (moText)sep + (moText)part;
+            sep = moText("|");
 		}
 
-		if (error_code == 0)
-		{
-			pfilter = new moTextureFilter();
-			pfilter->Init(m_glman, m_fbman, m_renderman, src_tex, dest_tex, pshader);
-			Add(pfilter);
-		}
-		else
-		{
-			// Print some error message...
-			if (error_code == 1)
-				MODebug->Push("Error in creating filter: cannot load shader");
-			else if (error_code == 2)
-				MODebug->Push("Error in creating filter: cannot load source texture");
-			else if (error_code == 3)
-				MODebug->Push("Error in creating filter: cannot read resolution of destination texture");
-			else if (error_code == 4)
-				MODebug->Push("Error in creating filter: cannot create destination texture");
-			else
-				MODebug->Push("Unknown error in creating filter.");
-		}
+        idx = m_texfilterman->GetTextureFilterMOid(name, true);
+        if (-1 < idx)
+        {
+            pfilter = m_texfilterman->GetTextureFilter(idx);
+            if (pfilter != NULL) Add(pfilter);
+        }
 
 		p_param->NextValue();
 	}
 
 	return m_filters_array.Count();
-
 }
 
 MOuint moTextureFilterIndex::LoadFilters(moConfig* p_cfg, MOuint p_param_idx)
 {
-	MOuint i, j;
-	MOint error_code;
+	MOuint i, j, idx;
 	MOuint nFilters, nFilterParts;
-
-	MOboolean reading_src_tex;
+	moTextureFilter* pfilter;
+	moText part;
+    moText name = "";
+    moText sep = "";
 	moParam* param;
-
-	moTextureFilter *pfilter;
-	moTextureArray src_tex, dest_tex;
-	moShader *pshader;
-
-	MOuint dest_width, dest_height;
-	moText name, extension, left;
 
 	nFilters = p_cfg->GetParam(p_param_idx).GetValuesCount();
 
@@ -364,58 +211,22 @@ MOuint moTextureFilterIndex::LoadFilters(moConfig* p_cfg, MOuint p_param_idx)
 	{
 		param = &p_cfg->GetParam();
 		nFilterParts = param->GetValue().GetSubValueCount();
-		reading_src_tex = true;
 
-		error_code = 0;
-		src_tex.Empty();
-		dest_tex.Empty();
+        name = "";
+        sep = "";
 		for (j = 0; j < nFilterParts; j++)
 		{
-			name = param->GetValue().GetSubValue(j).Text();
-
-			extension = name;
-			extension.Right(3);
-
-			if (extension == moText("cfg"))
-			{
-				reading_src_tex = false;
-				error_code = LoadShader(name, &pshader);
-			}
-			else if (reading_src_tex)
-			{
-				// Loading source textures...
-				error_code = LoadSourceTexture(name, src_tex, j == 0, dest_width, dest_height);
-			}
-			else
-			{
-				// Creating destination textures...
-				left = name;
-				left.Left(3);
-				if (left == moText("res:")) error_code = LoadDestTexResolution(name, dest_width, dest_height);
-				else error_code = LoadDestTexture(name, dest_tex, dest_width, dest_height);
-			}
+			part = param->GetValue().GetSubValue(j).Text();
+            name += (moText)sep + (moText)part;
+            sep = moText("|");
 		}
 
-		if (error_code == 0)
-		{
-			pfilter = new moTextureFilter();
-			pfilter->Init(m_glman, m_fbman, m_renderman, src_tex, dest_tex, pshader);
-			Add(pfilter);
-		}
-		else
-		{
-			// Print some error message...
-			if (error_code == 1)
-				MODebug->Push("Error in creating filter: cannot load shader");
-			else if (error_code == 2)
-				MODebug->Push("Error in creating filter: cannot load source texture");
-			else if (error_code == 3)
-				MODebug->Push("Error in creating filter: cannot read resolution of destination texture");
-			else if (error_code == 4)
-				MODebug->Push("Error in creating filter: cannot create destination texture");
-			else
-				MODebug->Push("Unknown error in creating filter.");
-		}
+        idx = m_texfilterman->GetTextureFilterMOid(name, true);
+        if (-1 < idx)
+        {
+            pfilter = m_texfilterman->GetTextureFilter(idx);
+            if (pfilter != NULL) Add(pfilter);
+        }
 
 		p_cfg->NextValue();
 	}
@@ -425,153 +236,22 @@ MOuint moTextureFilterIndex::LoadFilters(moConfig* p_cfg, MOuint p_param_idx)
 
 MOuint moTextureFilterIndex::LoadFilters(moTextArray* p_filters_str)
 {
-	MOuint i, j;
-	MOint error_code;
+	MOuint i, idx;
+    moText name;
+	moTextureFilter* pfilter;
 	MOuint nFilters;
-
-	MOboolean reading_src_tex;
-
-	moTextureFilter *pfilter;
-	moTextureArray src_tex, dest_tex;
-	moShader *pshader;
-
-	MOuint dest_width, dest_height;
-	moText name, extension, left, tmp;
 
 	nFilters = p_filters_str->Count();
 	for (i = 0; i < nFilters; i++)
 	{
-		reading_src_tex = true;
-
-		error_code = 0;
-		src_tex.Empty();
-		dest_tex.Empty();
-		tmp = p_filters_str->Get(i);
-		j = 0;
-		while (tmp != moText(""))
-		{
-			name = tmp.Scan(moText(" "));
-			name = name.Trim();
-
-			extension = name;
-			extension.Right(3);
-
-			if (extension == moText("cfg"))
-			{
-				reading_src_tex = false;
-				error_code = LoadShader(name, &pshader);
-			}
-			else if (reading_src_tex)
-			{
-				// Loading source textures...
-				error_code = LoadSourceTexture(name, src_tex, j == 0, dest_width, dest_height);
-			}
-			else
-			{
-				// Creating destination textures...
-				left = name;
-				left.Left(3);
-				if (left == moText("res:")) error_code = LoadDestTexResolution(name, dest_width, dest_height);
-				else error_code = LoadDestTexture(name, dest_tex, dest_width, dest_height);
-			}
-		}
-
-		if (error_code == 0)
-		{
-			pfilter = new moTextureFilter();
-			pfilter->Init(m_glman, m_fbman, m_renderman, src_tex, dest_tex, pshader);
-			Add(pfilter);
-		}
-		else
-		{
-			// Print some error message...
-			if (error_code == 1)
-				MODebug->Push("Error in creating filter: cannot load shader");
-			else if (error_code == 2)
-				MODebug->Push("Error in creating filter: cannot load source texture");
-			else if (error_code == 3)
-				MODebug->Push("Error in creating filter: cannot read resolution of destination texture");
-			else if (error_code == 4)
-				MODebug->Push("Error in creating filter: cannot create destination texture");
-			else
-				MODebug->Push("Unknown error in creating filter.");
-		}
-
-		j++;
+		name = p_filters_str->Get(i);
+		idx = m_texfilterman->GetTextureFilterMOid(name, true);
+        if (-1 < idx)
+        {
+            pfilter = m_texfilterman->GetTextureFilter(idx);
+            if (pfilter != NULL) Add(pfilter);
+        }
 	}
 
 	return m_filters_array.Count();
-}
-
-MOint moTextureFilterIndex::LoadShader(moText& name, moShader **pshader)
-{
-	MOint idx = m_shaman->GetShaderMOId(name, true);
-	if (-1 < idx)
-	{
-		*pshader = m_shaman->GetShader(idx);
-		return 0;
-	}
-	return 1;
-}
-
-MOint moTextureFilterIndex::LoadSourceTexture(moText& name, moTextureArray& src_tex, MOboolean first_tex, MOuint& dest_width, MOuint& dest_height)
-{
-	MOint idx = m_texman->GetTextureMOId(name, true);
-	if (-1 < idx)
-	{
-		moTexture* ptex = m_texman->GetTexture(idx);
-		src_tex.Add(ptex);
-		if (first_tex)
-		{
-			// By default, the resolution of the destination textures is the same
-			// as the source textures.
-			dest_width = ptex->GetWidth();
-			dest_height = ptex->GetHeight();
-		}
-		return 0;
-	}
-	return 2;
-}
-
-MOint moTextureFilterIndex::LoadDestTexResolution( const moText& name, MOuint& dest_width, MOuint& dest_height)
-{
-	moText tmp_width, tmp_height;
-	MOint l;
-
-	tmp_height = name;
-	tmp_height.Scan(moText("x"));
-	l = tmp_height.Length();
-	tmp_height.Mid(1, l - 1);
-
-	tmp_width = name;
-	tmp_width.Mid(4, tmp_width.Length() - l - 4);
-
-	dest_width = atoi(tmp_width);
-	dest_height = atoi(tmp_height);
-
-	return 0;
-}
-
-MOint moTextureFilterIndex::LoadDestTexture( const moText& name, moTextureArray& dest_tex, MOuint dest_width, MOuint dest_height)
-{
-	moTexture* ptex;
-	MOint idx = m_texman->GetTextureMOId(name, false);
-	if (-1 < idx)
-	{
-		// The destination texture already exists...
-		ptex = m_texman->GetTexture(idx);
-		dest_tex.Add(ptex);
-		return 0;
-	}
-	else
-	{
-		idx = m_texman->AddTexture(name, dest_width, dest_height);
-		if (-1 < idx)
-		{
-			ptex = m_texman->GetTexture(idx);
-			dest_tex.Add(ptex);
-			return 0;
-		}
-		else return 4;
-	}
 }

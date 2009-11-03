@@ -59,18 +59,12 @@ class LIBMOLDEO_API moTextureFilter : public moAbstract
 {
 public:
     /**
-     * El constructor por defecto de la clase.
+     * El constructor por defecto del filtro.
      */
-	moTextureFilter()
-	{
-		m_glman = NULL;
-		m_renderman = NULL;
-		m_shader = NULL;
-		m_DefParams = NULL;
-        m_TextureFilterLabelName = moText("");
-	}
+	moTextureFilter();
+
     /**
-     * El destructor por defecto de la clase.
+     * El destructor por defecto del filtro.
      */
 	virtual ~moTextureFilter() { Finish(); }
 
@@ -90,6 +84,27 @@ public:
      * @return true si la operación fue exitosa, false en caso contrario.
      */
 	virtual MOboolean Finish();
+
+    /**
+     * Devuelve el identificador Moldeo del filtro.
+     * @return Moldeo ID del filtro.
+     */
+    MOuint GetMOId() { return m_moid; }
+    /**
+     * Utiliza p_moid como nuevo Moldeo ID del filtro.
+     * @param p_moid nuevo Moldeo ID.
+     */
+    void SetMOId(MOuint p_moid) { m_moid = p_moid; }
+    /**
+     * Devuelve el nombre del filtro
+     * @return nombre del filtro.
+     */
+    moText GetName() { return m_name; }
+    /**
+     * Utiliza p_name como nuevo nombre del filtro.
+     * @param p_name nuevo nombre del filtro.
+     */
+    void SetName(moText p_name) { m_name = p_name; }
 
     /**
      * Aplica el filtro sobre las texturas de orígen y escribiendo el resutlado en las texturas de destino.
@@ -129,13 +144,6 @@ public:
      */
 	moShader* GetShader() { return m_shader; }
 
-    void      SetTextureFilterLabelName( moText p_text ) {
-        m_TextureFilterLabelName = p_text;
-    }
-    moText      GetTextureFilterLabelName() {
-        return m_TextureFilterLabelName;
-    }
-
 protected:
 	moShader* m_shader;
 	moRenderManager* m_renderman;
@@ -144,7 +152,8 @@ protected:
 
 	MOuint m_dest_fbo;
 
-	moText          m_TextureFilterLabelName;//must be unique
+    MOint m_moid;
+    moText m_name;
 
 	// Shader parameters.
 	GLint m_src_tex_unit[MO_MAX_TEXTURE_UNITS];

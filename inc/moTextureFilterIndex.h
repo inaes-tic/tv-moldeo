@@ -38,11 +38,7 @@
 
 #include "moTextureFilter.h"
 
-class moGLManager;
-class moFBManager;
-class moShaderManager;
-class moTextureManager;
-class moRenderManager;
+class moTextureFilterManager;
 
 /**
  * Clase que encapsula una lista de punteros a objetos moTextureFilter. La utilidad de esta clase es que
@@ -63,50 +59,33 @@ public:
     /**
      * Método de inicialización.
      * @param p_param_idx índice en el objeto de configuración donde se encuentran los filtros.
-     * @param moGLManager puntero al administrador OpenGL.
-     * @param moFBManager puntero al administrador de Framebuffers.
-     * @param moShaderManager puntero al administrador de shaders.
-     * @param moTextureManager puntero al administrador de texturas.
-     * @param moRenderManager puntero al administrador de render.
+     * @param p_texfilterman puntero al administrador de filtros de textura.
      * @return resultado de la operación: true si fue exitosa, false en caso contrario.
      */
-    virtual MOboolean Init( moParam* p_param, moGLManager* p_glman, moFBManager* p_fbman, moShaderManager* p_shaman, moTextureManager* p_texman, moRenderManager* p_renderman);
+    virtual MOboolean Init( moParam* p_param, moTextureFilterManager* p_texfilterman);
 
     /**
      * Método de inicialización.
-     * @param moGLManager puntero al administrador OpenGL.
-     * @param moFBManager puntero al administrador de Framebuffers.
-     * @param moShaderManager puntero al administrador de shaders.
-     * @param moTextureManager puntero al administrador de texturas.
-     * @param moRenderManager puntero al administrador de render.
+     * @param p_texfilterman puntero al administrador de filtros de textura.
      * @return resultado de la operación: true si fue exitosa, false en caso contrario.
      */
-	virtual MOboolean Init(moGLManager* p_glman, moFBManager* p_fbman, moShaderManager* p_shaman, moTextureManager* p_texman, moRenderManager* p_renderman);
+	virtual MOboolean Init(moTextureFilterManager* p_texfilterman);
 
     /**
      * Método de inicialización.
      * @param p_cfg puntero al objeto de configuración de Moldeo donde se especifica la lista de filtros.
      * @param p_param_idx índice en el objeto de configuración donde se encuentran los filtros.
-     * @param moGLManager puntero al administrador OpenGL.
-     * @param moFBManager puntero al administrador de Framebuffers.
-     * @param moShaderManager puntero al administrador de shaders.
-     * @param moTextureManager puntero al administrador de texturas.
-     * @param moRenderManager puntero al administrador de render.
+     * @param p_texfilterman puntero al administrador de filtros de textura.
      * @return resultado de la operación: true si fue exitosa, false en caso contrario.
      */
-
-	virtual MOboolean Init(moConfig* p_cfg, MOuint p_param_idx, moGLManager* p_glman, moFBManager* p_fbman, moShaderManager* p_shaman, moTextureManager* p_texman, moRenderManager* p_renderman);
+	virtual MOboolean Init(moConfig* p_cfg, MOuint p_param_idx, moTextureFilterManager* p_texfilterman);
     /**
      * Método de inicialización.
      * @param p_filters_str lista de expresiones que definen los filtros a agregar.
-     * @param moGLManager puntero al administrador OpenGL.
-     * @param moFBManager puntero al administrador de Framebuffers.
-     * @param moShaderManager puntero al administrador de shaders.
-     * @param moTextureManager puntero al administrador de texturas.
-     * @param moRenderManager puntero al administrador de render.
+     * @param p_texfilterman puntero al administrador de filtros de textura.
      * @return resultado de la operación: true si fue exitosa, false en caso contrario.
      */
-	virtual MOboolean Init(moTextArray* p_filters_str, moGLManager* p_glman, moFBManager* p_fbman, moShaderManager* p_shaman, moTextureManager* p_texman, moRenderManager* p_renderman);
+	virtual MOboolean Init(moTextArray* p_filters_str, moTextureFilterManager* p_texfilterman);
     /**
      * Método de finalización.
      * @return resultado de la operación: true si fue exitosa, false en caso contrario.
@@ -172,31 +151,24 @@ public:
      */
 	moTextureFilter* Get(MOuint p_idx) { return m_filters_array[p_idx]; }
 
-
+    /**
+     * Devuelve un puntero al filtro con índice p_idx.
+     * @param p_idx índice de filtro.
+     * @return puntero al filtro requerido.
+     */
     moTextureFilter* operator [](MOuint p_idx) { return m_filters_array[p_idx]; }
+protected:
+	moTextureFilterManager* m_texfilterman;
+
+	moTextureFilterArray m_filters_array;
 
 	MOuint LoadFilter(moValue* p_value);
 	MOuint LoadFilters(moParam* p_param);
 	MOuint LoadFilters(moConfig* p_cfg, MOuint p_param_idx);
+
+	// Nota importante: los elementos del nombre de un filtro deben estar separados por '|' no por
+	// espacios!!!
 	MOuint LoadFilters(moTextArray* p_filters_str);
-
-
-
-    MOint TextureFilterExists( moValue* p_value );
-    moText MakeTextureFilterLabelName( moValue* p_value );
-protected:
-	moGLManager* m_glman;
-	moFBManager* m_fbman;
-	moShaderManager* m_shaman;
-	moTextureManager* m_texman;
-	moRenderManager* m_renderman;
-
-	moTextureFilterArray m_filters_array;
-
-	MOint LoadShader(moText& name, moShader **pshader);
-	MOint LoadSourceTexture(moText& name, moTextureArray& src_tex, MOboolean first_tex, MOuint& dest_width, MOuint& dest_height);
-	MOint LoadDestTexResolution(const moText& name, MOuint& dest_width, MOuint& dest_height);
-	MOint LoadDestTexture(const moText& name, moTextureArray& dest_tex, MOuint dest_width, MOuint dest_height);
 };
 
 #endif

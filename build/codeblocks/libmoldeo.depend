@@ -550,7 +550,7 @@
 	"moParam.h"
 	"moTexture.h"
 
-1257197361 c:\devel\moldeo\svn\branches\newgl\inc\motexturefilter.h
+1257241043 c:\devel\moldeo\svn\branches\newgl\inc\motexturefilter.h
 	"moTypes.h"
 	"moAbstract.h"
 	"moConfig.h"
@@ -5242,7 +5242,7 @@
 	"moTextureFilterIndex.h"
 	"moArray.cpp"
 
-1257197848 c:\devel\moldeo\svn\branches\newgl\inc\motexturefilterindex.h
+1257246855 c:\devel\moldeo\svn\branches\newgl\inc\motexturefilterindex.h
 	"moTypes.h"
 	"moAbstract.h"
 	"moConfig.h"
@@ -8475,14 +8475,14 @@
 	"moResourceManager.h"
 	"moArray.cpp"
 
-1257197859 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\motexturefilterindex.cpp
+1257247140 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\motexturefilterindex.cpp
 	"moTextureFilterIndex.h"
 	"moResourceManager.h"
 
-1257198033 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\motexturefiltermanager.cpp
+1257243541 source:c:\devel\moldeo\svn\branches\newgl\src\libmoldeo\motexturefiltermanager.cpp
 	"moTextureFilterManager.h"
 
-1257197975 c:\devel\moldeo\svn\branches\newgl\inc\motexturefiltermanager.h
+1257245025 c:\devel\moldeo\svn\branches\newgl\inc\motexturefiltermanager.h
 	"moTextureFilter.h"
 	"moResourceManager.h"
 

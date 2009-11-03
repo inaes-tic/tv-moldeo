@@ -41,6 +41,17 @@ moDefineDynamicArray(moTextureFilterArray)
 //
 //===========================================
 
+moTextureFilter::moTextureFilter()
+{
+    m_glman = NULL;
+    m_renderman = NULL;
+    m_shader = NULL;
+    m_DefParams = NULL;
+
+    SetName(moText(""));
+    m_moid = -1;
+}
+
 MOboolean moTextureFilter::Init(moGLManager* p_glman, moFBManager* p_fbman, moRenderManager* p_renderman, moTextureArray &p_src_tex, moTextureArray &p_dest_tex, moShader *p_shader, moTextureFilterParam *p_params)
 {
 	MOuint i, fboidx;
