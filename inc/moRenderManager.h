@@ -37,14 +37,9 @@
 #include "moLock.h"
 #include "moResourceManager.h"
 
-#include "moMathVector.h"
 
-#define MO_RENDER_RESOLUTION 0
-#define MO_SCREEN_RESOLUTION 1
 
-#define MO_RENDER_TO_TEXTURE_FBSCREEN 0
-#define MO_RENDER_TO_TEXTURE_FBOBJECT 1
-
+/*
 enum moRenderManagerMode {
 
   RENDERMANAGER_MODE_NORMAL=0,
@@ -60,16 +55,6 @@ enum moRenderOutputMode {
 
 };
 
-class LIBMOLDEO_API moResolution {
-
-  public:
-
-        int width;
-        int height;
-        int aspect;
-
-
-};
 
 
 class LIBMOLDEO_API moRenderClip {
@@ -113,74 +98,8 @@ class LIBMOLDEO_API moRenderOutputConfiguration {
         moDisplayOutputs Output1;///each with diff resolution or not
 
 };
+*/
 
-
-//class moTextureFilterIndex;
-
-
-class LIBMOLDEO_API moRenderChannel {
-
-    public:
-
-
-        MOint m_render_tex_moid[4];
-        moTextureIndex test;
-//        moTextureFilterIndex test;
-
-};
-
-class LIBMOLDEO_API moRenderOutput {
-
-    public:
-        /**
-         * Constructor por defecto.
-         */
-		moRenderOutput();
-
-        /**
-         * Destructor por defecto.
-         */
-		virtual ~moRenderOutput();
-
-		// config con los parametros de la grilla de salida.
-		// Init(moConfig* p_cfg, MOuint p_param_idx);
-
-	protected:
-
-	    moTexturedGrid m_grid;
-
-};
-
-
-// Funcionalidad necesaria:
-// * mecanismo para render stereo: las 4 texturas estan duplicadas, y se dibuja en cada una de ellas de manera alternada
-// (cada efecto tiene que dibujar dos veces, una para la vista R y otra para la vista L). O sea que el rendermanager
-// necesita una variable de canal (la idea de canal puede abstraerse del contexto de rendereado stereo y tener n canales).
-// Cuando se esta renderando un canal, las referencias a las texturas MO_RENDER_TEX, MO_SCREEN_TEX, etc. deben regresar
-// la textura del canal activo.
-// * Clipping y filtering de cada textura final (L y R), a una (o unas) texturas de OUTPUT. Esto para deformacion y
-// proyeccion sobre superficies no planas (planetarios digitales, etc). Tambien para postprocessing de la imagen final.
-
-
-// Dos maneras para render stereo:
-
-
-// 1) se cambia R o L cuando se dibuja cada efecto
-// Loop de dibujo estereo:
-//   por cada efecto
-//    for mode = R to L do
-//         beginDraw()
-//            efecto dibuja cuadro R o L
-//         endDraw()
-
-
-// 2) Se hace todo el render de todos los efectos primero para un canal y luego para el otro.
-// Loop de dibujo estereo:
-//   for mode = R to L do
-//     por cada efecto
-//         beginDraw()
-//            efecto dibuja cuadro R o L
-//         endDraw()
 
 
 

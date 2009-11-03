@@ -256,6 +256,7 @@ void moTextureFilter::UnbindDestFBO()
     m_glman->PopFBO();
 }
 
+// TODO: opcion para renderear con un fbo externo...
 void moTextureFilter::SetDestTexInFBO()
 {
     if (-1 < m_dest_fbo)

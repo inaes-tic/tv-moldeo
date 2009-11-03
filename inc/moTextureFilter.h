@@ -48,6 +48,9 @@ class moRenderManager;
 class moShaderManager;
 class moFBManager;
 
+// TODO: opcion para renderear con un fbo externo (esto es necesario para optimizar el manejo de
+// FBOs en los renderchannels...
+
 /**
  * Esta clase define un filtro 2D para aplicar en texturas. Un filtro es básicamente
  * un programa de shader (escrito en CG o GLSL) con un conjunto de predefinido de parámetros

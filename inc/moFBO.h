@@ -108,19 +108,6 @@ class LIBMOLDEO_API moFBO : public moAbstract
         MOuint m_tex_glid_array[MO_MAX_COLOR_ATTACHMENTS_EXT];
 
         void InitAttachPointsArray();
-
-
-
-
-		GLenum m_target;
-        GLint m_internal_format;
-		MOuint m_width;
-		MOuint m_height;
-
-		MOboolean m_has_depth_buffer;
-		MOboolean m_has_stencil_buffer;
-		MOuint m_DepthStencilTex;
-
 };
 
 moDeclareExportedDynamicArray( moFBO*, moFBOArray)
