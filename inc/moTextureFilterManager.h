@@ -78,7 +78,7 @@ class LIBMOLDEO_API moTextureFilterManager : public moResource
          */
 	    MOint GetTextureFilterMOid(moTextArray p_src_tex_names, moTextArray p_dest_tex_names, moText p_shader_name, MOboolean p_create_filter);
 
-        MOint AddTextureFilter(moTextArray p_src_tex_names, moTextArray p_dest_tex_names, moText p_shader_name);
+        MOint AddTextureFilter(moTextArray p_src_tex_names, moTextArray p_dest_tex_names, moText p_shader_name, moTextureFilterParam *p_params = NULL);
 
         /**
          * Agrega un filtro de textura conformado por un grupo de texturas de entrada, un shader y un grupo de
@@ -90,7 +90,6 @@ class LIBMOLDEO_API moTextureFilterManager : public moResource
          * @return índice del nuevo filtro.
          */
 		MOint AddTextureFilter(moTextureArray &p_src_tex, moTextureArray &p_dest_tex, moShader *p_shader, moTextureFilterParam *p_params = NULL);
-
 
         /**
          * Aplica el filtro p_idx sobre sus texturas de orígen y escribiendo el resultado en sus texturas de destino.
@@ -144,11 +143,19 @@ class LIBMOLDEO_API moTextureFilterManager : public moResource
          */
         moTextureFilter* GetTextureFilter(MOuint p_idx) { return m_filters_array[p_idx]; }
     private:
-	    moGLManager*     m_glmanager;
-	    moFBManager*     m_fbmanager;
-	    moRenderManager* m_rendermanager;
+	    moTextureManager* m_texmanager;
+        moShaderManager*  m_shadermanager;
+	    moGLManager*      m_glmanager;
+	    moFBManager*      m_fbmanager;
+	    moRenderManager*  m_rendermanager;
 
         moTextureFilterArray m_filters_array;
+
+	    MOint LoadShader(moText& name, moShader **pshader);
+	    MOint LoadSourceTexture(moText& name, moTextureArray& src_tex, MOboolean first_tex, MOuint& dest_width, MOuint& dest_height);
+	    MOint LoadDestTexResolution(const moText& name, MOuint& dest_width, MOuint& dest_height);
+	    MOint LoadDestTexture(const moText& name, moTextureArray& dest_tex, MOuint dest_width, MOuint dest_height);
+	    void PrintErrorMsg(MOint error_code);
 };
 
 #endif

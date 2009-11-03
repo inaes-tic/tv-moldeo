@@ -40,6 +40,8 @@ moTextureFilterManager::moTextureFilterManager()
 	m_glmanager = NULL;
 	m_fbmanager = NULL;
 	m_rendermanager = NULL;
+	m_shadermanager = NULL;
+	m_texmanager = NULL;
 }
 
 MOboolean moTextureFilterManager::Init()
@@ -48,6 +50,8 @@ MOboolean moTextureFilterManager::Init()
 		m_glmanager = m_pResourceManager->GetGLMan();
 		m_fbmanager = m_pResourceManager->GetFBMan();
 		m_rendermanager = m_pResourceManager->GetRenderMan();
+		m_shadermanager = m_pResourceManager->GetShaderMan();
+		m_texmanager = m_pResourceManager->GetTextureMan();
 	} else return false;
 
 	m_filters_array.Init(0, NULL);
@@ -60,6 +64,8 @@ MOboolean moTextureFilterManager::Finish()
 	m_glmanager = NULL;
 	m_fbmanager = NULL;
 	m_rendermanager = NULL;
+	m_shadermanager = NULL;
+	m_texmanager = NULL;
 
 	return true;
 }
@@ -115,9 +121,47 @@ MOint moTextureFilterManager::GetTextureFilterMOid(moTextArray p_src_tex_names, 
 	else return -1;
 }
 
-MOint moTextureFilterManager::AddTextureFilter(moTextArray p_src_tex_names, moTextArray p_dest_tex_names, moText p_shader_name)
+MOint moTextureFilterManager::AddTextureFilter(moTextArray p_src_tex_names, moTextArray p_dest_tex_names, moText p_shader_name, moTextureFilterParam *p_params)
 {
-    return 0;
+	moTextureArray src_tex, dest_tex;
+	moShader *pshader;
+	MOuint dest_width, dest_height;
+	MOuint i;
+	MOint error_code;
+
+    error_code = 0;
+
+    src_tex.Empty();
+    dest_tex.Empty();
+
+    for (i = 0; i < p_src_tex_names.Count(); i++)
+    {
+        error_code = LoadSourceTexture(p_src_tex_names[i], src_tex, i == 0, dest_width, dest_height);
+        if (0 < error_code)
+        {
+             PrintErrorMsg(error_code);
+             return -1;
+        }
+    }
+
+    for (i = 0; i < p_src_tex_names.Count(); i++)
+    {
+        error_code = LoadDestTexture(p_dest_tex_names[i], dest_tex, dest_width, dest_height);
+        if (0 < error_code)
+        {
+             PrintErrorMsg(error_code);
+             return -1;
+        }
+    }
+
+    error_code = LoadShader(p_shader_name, &pshader);
+    if (0 < error_code)
+    {
+         PrintErrorMsg(error_code);
+         return -1;
+    }
+
+    return AddTextureFilter(src_tex, dest_tex, pshader, p_params);
 }
 
 MOint moTextureFilterManager::AddTextureFilter(moTextureArray &p_src_tex, moTextureArray &p_dest_tex, moShader *p_shader, moTextureFilterParam *p_params)
@@ -170,4 +214,92 @@ MOboolean moTextureFilterManager::ValidIndex(MOuint p_idx)
 		MODebug2->Error(text);
 		return false;
 	}
+}
+
+MOint moTextureFilterManager::LoadShader(moText& name, moShader **pshader)
+{
+	MOint idx = m_shadermanager->GetShaderMOId(name, true);
+	if (-1 < idx)
+	{
+		*pshader = m_shadermanager->GetShader(idx);
+		return 0;
+	}
+	return 1;
+}
+
+MOint moTextureFilterManager::LoadSourceTexture(moText& name, moTextureArray& src_tex, MOboolean first_tex, MOuint& dest_width, MOuint& dest_height)
+{
+	MOint idx = m_texmanager->GetTextureMOId(name, true);
+	if (-1 < idx)
+	{
+		moTexture* ptex = m_texmanager->GetTexture(idx);
+		src_tex.Add(ptex);
+		if (first_tex)
+		{
+			// By default, the resolution of the destination textures is the same
+			// as the source textures.
+			dest_width = ptex->GetWidth();
+			dest_height = ptex->GetHeight();
+		}
+		return 0;
+	}
+	return 2;
+}
+
+MOint moTextureFilterManager::LoadDestTexResolution( const moText& name, MOuint& dest_width, MOuint& dest_height)
+{
+	moText tmp_width, tmp_height;
+	MOint l;
+
+	tmp_height = name;
+	tmp_height.Scan(moText("x"));
+	l = tmp_height.Length();
+	tmp_height.Mid(1, l - 1);
+
+	tmp_width = name;
+	tmp_width.Mid(4, tmp_width.Length() - l - 4);
+
+	dest_width = atoi(tmp_width);
+	dest_height = atoi(tmp_height);
+
+	return 0;
+}
+
+MOint moTextureFilterManager::LoadDestTexture( const moText& name, moTextureArray& dest_tex, MOuint dest_width, MOuint dest_height)
+{
+	moTexture* ptex;
+	MOint idx = m_texmanager->GetTextureMOId(name, false);
+	if (-1 < idx)
+	{
+		// The destination texture already exists...
+		ptex = m_texmanager->GetTexture(idx);
+		dest_tex.Add(ptex);
+		return 0;
+	}
+	else
+	{
+		idx = m_texmanager->AddTexture(name, dest_width, dest_height);
+		if (-1 < idx)
+		{
+			ptex = m_texmanager->GetTexture(idx);
+			dest_tex.Add(ptex);
+			return 0;
+		}
+		else return 4;
+	}
+}
+
+void moTextureFilterManager::PrintErrorMsg(MOint error_code)
+{
+    // Print some error message...
+    if (error_code == 1)
+        MODebug->Push("Error in creating filter: cannot load shader");
+    else if (error_code == 2)
+        MODebug->Push("Error in creating filter: cannot load source texture");
+    else if (error_code == 3)
+        MODebug->Push("Error in creating filter: cannot read resolution of destination texture");
+    else if (error_code == 4)
+        MODebug->Push("Error in creating filter: cannot create destination texture");
+    else
+        MODebug->Push("Unknown error in creating filter.");
 }
