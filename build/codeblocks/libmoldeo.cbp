@@ -302,6 +302,7 @@
 		<Unit filename="..\..\inc\moPresets.h">
 			<Option target="debug" />
 		</Unit>
+		<Unit filename="..\..\inc\moRenderChannel.h" />
 		<Unit filename="..\..\inc\moRenderManager.h">
 			<Option target="debug" />
 		</Unit>
@@ -445,6 +446,7 @@
 		<Unit filename="..\..\src\libmoldeo\moPreEffect.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moPrePlugin.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moPresets.cpp" />
+		<Unit filename="..\..\src\libmoldeo\moRenderChannel.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moRenderManager.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moResourceManager.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moResourcePlugin.cpp" />
