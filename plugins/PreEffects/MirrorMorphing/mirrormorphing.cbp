@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<!DOCTYPE CodeBlocks_project_file>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="1"/>
+	<Project>
+		<Option title="mirrormorphing"/>
+		<Option makefile="Makefile"/>
+		<Option makefile_is_custom="0"/>
+		<Option compiler="0"/>
+		<Build>
+			<Target title="debug">
+				<Option output="..\..\..\bin\mingw\plugins\preeffects\mirrormorphing_d.dll"/>
+				<Option working_dir="."/>
+				<Option object_output=".objsd"/>
+				<Option deps_output=".depsd"/>
+				<Option type="3"/>
+				<Option compiler="0"/>
+				<Option createDefFile="1"/>
+				<Option createStaticLib="1"/>
+				<Compiler>
+					<Add option="-g"/>
+				</Compiler>
+				<Linker>
+					<Add library="libtinyxmld"/>
+					<Add library="glew_sharedd"/>
+					<Add library="libfreetype235MT_D"/>
+					<Add library="libmuparserd"/>
+					<Add library="libgled"/>
+					<Add library="libopengl32"/>
+					<Add library="libglut32"/>
+					<Add library="libglut"/>
+					<Add library="libglu32"/>
+					<Add library="libglaux"/>
+					<Add library="libmoldeod"/>
+				</Linker>
+			</Target>
+			<Target title="release">
+				<Option output="..\..\..\bin\mingw\plugins\preeffects\mirrormorphing.dll"/>
+				<Option working_dir="."/>
+				<Option object_output=".objs"/>
+				<Option deps_output=".deps"/>
+				<Option type="3"/>
+				<Option compiler="0"/>
+				<Option createDefFile="1"/>
+				<Option createStaticLib="1"/>
+				<Linker>
+					<Add library="libtinyxml"/>
+					<Add library="glew_shared"/>
+					<Add library="libfreetype235MT"/>
+					<Add library="libmuparser"/>
+					<Add library="libgle"/>
+					<Add library="libopengl32"/>
+					<Add library="libglut32"/>
+					<Add library="libglut"/>
+					<Add library="libglu32"/>
+					<Add library="libglaux"/>
+					<Add library="libmoldeo"/>
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add directory=".\inc"/>
+			<Add directory="..\..\..\inc"/>
+			<Add directory="..\..\..\inc\openal"/>
+			<Add directory="..\..\..\inc\3dsd"/>
+			<Add directory="..\..\..\..\..\externlibs\glew\include"/>
+			<Add directory="..\..\..\..\..\externlibs\opengl\include"/>
+			<Add directory="..\..\..\..\..\externlibs\opentnl\include"/>
+			<Add directory="..\..\..\..\..\externlibs\openal\include"/>
+			<Add directory="..\..\..\..\..\externlibs\freeimage\include"/>
+			<Add directory="..\..\..\..\..\externlibs\freetype\include"/>
+			<Add directory="..\..\..\..\..\externlibs\lua\include"/>
+			<Add directory="..\..\..\..\..\externlibs\muparser\include"/>
+			<Add directory="..\..\..\..\..\externlibs\SDL\include"/>
+			<Add directory="..\..\..\..\..\externlibs\SDL_image\include"/>
+			<Add directory="..\..\..\..\..\externlibs\SDL_net\include"/>
+		</Compiler>
+		<Linker>
+			<Add library="libSDL"/>
+			<Add library="libSDLmain"/>
+			<Add library="liblua"/>
+			<Add library="cg"/>
+			<Add library="cgGL"/>
+			<Add library="OpenAL32"/>
+			<Add library="EFX-Util"/>
+			<Add library="FreeImage"/>
+			<Add directory="..\..\..\..\..\externlibs\tinyxml\lib"/>
+			<Add directory="..\..\..\..\..\externlibs\SDL\lib"/>
+			<Add directory="..\..\..\..\..\externlibs\glew\lib"/>
+			<Add directory="..\..\..\..\..\externlibs\lua\lib"/>
+			<Add directory="..\..\..\..\..\externlibs\muparser\lib"/>
+			<Add directory="..\..\..\..\..\externlibs\freetype\lib"/>
+			<Add directory="..\..\..\..\..\externlibs\cg\lib"/>
+			<Add directory="..\..\..\..\..\externlibs\openal\libs\win32"/>
+			<Add directory="..\..\..\..\..\externlibs\opengl\lib"/>
+			<Add directory="..\..\..\..\..\externlibs\freeimage\lib"/>
+			<Add directory="..\..\..\lib\mingw"/>
+		</Linker>
+		<Unit filename="inc\moPreEffectMirrorMorphing.h">
+			<Option compilerVar=""/>
+			<Option compile="0"/>
+			<Option link="0"/>
+			<Option target="debug"/>
+			<Option target="release"/>
+		</Unit>
+		<Unit filename="src\moPreEffectMirrorMorphing.cpp">
+			<Option compilerVar="CPP"/>
+			<Option target="debug"/>
+			<Option target="release"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

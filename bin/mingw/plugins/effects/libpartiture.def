@@ -1,0 +1,3 @@
+EXPORTS
+    CreateEffectFactory @1
+    DestroyEffectFactory @2

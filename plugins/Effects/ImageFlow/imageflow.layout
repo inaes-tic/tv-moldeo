@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="All" />
+	<File name="inc\moEffectImageFlow.h" open="0" top="0" tabpos="1">
+		<Cursor position="0" topLine="0" />
+	</File>
+	<File name="src\moEffectImageFlow.cpp" open="0" top="0" tabpos="2">
+		<Cursor position="5290" topLine="138" />
+	</File>
+</CodeBlocks_layout_file>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_workspace_file>
+	<Workspace title="Workspace">
+		<Project filename="../../contrib/src/tinyxml/tinyxml_lib_osx.cbp" />
+		<Project filename="libmoldeo.macports.cbp" />
+		<Project filename="../../src/moldeodirector/moldeodirector_osx_leopard.cbp" active="1" />
+		<Project filename="testwx/testwx.cbp" />
+		<Project filename="../../plugins/PreEffects/Erase/eraseosxleopard.cbp" />
+		<Project filename="../../plugins/Effects/Icon/iconosxleopard.cbp" />
+	</Workspace>
+</CodeBlocks_workspace_file>

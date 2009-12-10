@@ -1,0 +1,794 @@
+# depslib dependency file v1.0
+1257081837 source:c:\devel\moldeo\svn\branches\newgl0\src\main\moldeomain.cpp
+	"moConsole.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+	"SDL.h"
+	"SDL_thread.h"
+	"SDL_mutex.h"
+	"SDL_net.h"
+	"SDL_image.h"
+	<SDL/SDL.h>
+	<SDL/SDL_thread.h>
+	<SDL/SDL_mutex.h>
+	<SDL/SDL_net.h>
+	<SDL/SDL_image.h>
+	<SDL/SDL_syswm.h>
+	<SDL.h>
+	<SDL_thread.h>
+	<SDL_mutex.h>
+	<SDL_syswm.h>
+	"../../Build/vcres/resource.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\moconsole.h
+	"moTypes.h"
+	"moText.h"
+	"moResourceManager.h"
+	"moEffectManager.h"
+	"moConfig.h"
+	"moPresets.h"
+	"moConsoleState.h"
+	"moIODevicePlugin.h"
+	"moIODeviceManager.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\motypes.h
+	<math.h>
+	<limits.h>
+	<iostream>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<float.h>
+	<time.h>
+	<string>
+	<vector>
+	<fstream>
+	"SDL.h"
+	"SDL_thread.h"
+	"SDL_mutex.h"
+	"SDL_net.h"
+	"SDL_image.h"
+	<GL/glew.h>
+	"OpenGL/gl.h"
+	"OpenGL/glu.h"
+	"OpenGL/glext.h"
+	"GLUT/glut.h"
+	"X11/X.h"
+	<SDL/SDL.h>
+	<SDL/SDL_thread.h>
+	<SDL/SDL_mutex.h>
+	<SDL/SDL_net.h>
+	<SDL/SDL_image.h>
+	<SDL/SDL_syswm.h>
+	<GL/glew.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<GL/glext.h>
+	<GL/glut.h>
+	<windows.h>
+	<SDL.h>
+	<SDL_thread.h>
+	<SDL_mutex.h>
+	<SDL_syswm.h>
+	<GL/glew.h>
+	"GL/gl.h"
+	"GL/glu.h"
+	"GL/glext.h"
+	"GL/glut.h"
+	"port/stricmp.h"
+	"port/stricmp.h"
+	"moTempo.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl.h
+	"SDL_main.h"
+	"SDL_types.h"
+	"SDL_getenv.h"
+	"SDL_error.h"
+	"SDL_rwops.h"
+	"SDL_timer.h"
+	"SDL_audio.h"
+	"SDL_cdrom.h"
+	"SDL_joystick.h"
+	"SDL_events.h"
+	"SDL_video.h"
+	"SDL_byteorder.h"
+	"SDL_version.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_main.h
+	"SDL_types.h"
+	"begin_code.h"
+	"close_code.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_types.h
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\begin_code.h
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\close_code.h
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_getenv.h
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_error.h
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_rwops.h
+	<stdio.h>
+	"SDL_types.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_timer.h
+	"SDL_main.h"
+	"SDL_types.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_audio.h
+	<stdio.h>
+	"SDL_main.h"
+	"SDL_types.h"
+	"SDL_error.h"
+	"SDL_rwops.h"
+	"SDL_byteorder.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_byteorder.h
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_cdrom.h
+	"SDL_types.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_joystick.h
+	"SDL_types.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_events.h
+	"SDL_types.h"
+	"SDL_active.h"
+	"SDL_keyboard.h"
+	"SDL_mouse.h"
+	"SDL_joystick.h"
+	"SDL_quit.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_active.h
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_keyboard.h
+	"SDL_types.h"
+	"SDL_keysym.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_keysym.h
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_mouse.h
+	"SDL_types.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_video.h
+	<stdio.h>
+	"SDL_types.h"
+	"SDL_mutex.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_mutex.h
+	"SDL_main.h"
+	"SDL_types.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_quit.h
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_version.h
+	"SDL_types.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_thread.h
+	"SDL_main.h"
+	"SDL_types.h"
+	"SDL_mutex.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225308 c:\devel\moldeo\svn\externlibs\sdl_net\include\sdl_net.h
+	"SDL.h"
+	"SDL_endian.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_endian.h
+	<stdio.h>
+	"SDL_types.h"
+	"SDL_rwops.h"
+	"SDL_byteorder.h"
+	"begin_code.h"
+	"close_code.h"
+
+1150225242 c:\devel\moldeo\svn\externlibs\sdl_image\include\sdl_image.h
+	"SDL.h"
+	"begin_code.h"
+	"close_code.h"
+
+1192542092 c:\devel\moldeo\svn\externlibs\glew\include\gl\glew.h
+	<stddef.h>
+	<OpenGL/glu.h>
+	<GL/glu.h>
+
+1150225242 c:\devel\moldeo\svn\externlibs\opengl\include\gl\glu.h
+	<GL/gl.h>
+
+1150225242 c:\devel\moldeo\svn\externlibs\opengl\include\gl\gl.h
+
+1150225242 c:\devel\moldeo\svn\externlibs\opengl\include\gl\glext.h
+	<windows.h>
+
+1203567661 c:\devel\moldeo\svn\externlibs\opengl\include\gl\glut.h
+	<windows.h>
+	<GL/gl.h>
+	<GL/glu.h>
+
+1150225236 c:\devel\moldeo\svn\externlibs\sdl\include\sdl_syswm.h
+	"SDL_version.h"
+	"begin_code.h"
+	<X11/Xlib.h>
+	<X11/Xatom.h>
+	<microwin/nano-X.h>
+	<windows.h>
+	<sys/neutrino.h>
+	<Ph.h>
+	"close_code.h"
+
+1257081879 c:\devel\moldeo\svn\branches\newgl0\inc\port\stricmp.h
+	<string>
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\motempo.h
+	"moTypes.h"
+	"moMath.h"
+
+1257081882 c:\devel\moldeo\svn\branches\newgl0\inc\momath.h
+	"moTypes.h"
+	"moAbstract.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\moabstract.h
+	"moTypes.h"
+	"moText.h"
+
+1257081882 c:\devel\moldeo\svn\branches\newgl0\inc\motext.h
+	"moTypes.h"
+	"moArray.h"
+	<stdio.h>
+	<string.h>
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\moarray.h
+	"moTypes.h"
+	"moArray.h"
+	"moArray.cpp"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\moarray.cpp
+	"moArray.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\moresourcemanager.h
+	"moTypes.h"
+	"moArray.h"
+	"moMoldeoObject.h"
+	"moParam.h"
+	"moResourcePlugin.h"
+	"moDebugManager.h"
+	"moNetManager.h"
+	"moFileManager.h"
+	"moFontManager.h"
+	"moGUIManager.h"
+	"moScriptManager.h"
+	"mo3dModelManager.h"
+	"moShaderManager.h"
+	"moFilterManager.h"
+	"moTimeManager.h"
+	"moDataManager.h"
+	"moTextureManager.h"
+	"moVideoManager.h"
+	"moFBManager.h"
+	"moGLManager.h"
+	"moRenderManager.h"
+	"moMathManager.h"
+	"moSoundManager.h"
+	"moDecoderManager.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\momoldeoobject.h
+	"moTypes.h"
+	"moText.h"
+	"moAbstract.h"
+	"moScript.h"
+	"moEventList.h"
+	"moConfig.h"
+	"moArray.h"
+	"moConnectors.h"
+	"moResourceManager.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\moscript.h
+	"moLuaBase.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\moluabase.h
+	"moTypes.h"
+	"moText.h"
+	<lua.h>
+	<lauxlib.h>
+	<lualib.h>
+
+1174673550 c:\devel\moldeo\svn\externlibs\lua\include\lua.h
+	<stdarg.h>
+	<stddef.h>
+	"luaconf.h"
+
+1174708914 c:\devel\moldeo\svn\externlibs\lua\include\luaconf.h
+	<limits.h>
+	<stddef.h>
+	<unistd.h>
+	<io.h>
+	<stdio.h>
+	<stdio.h>
+	<readline/readline.h>
+	<readline/history.h>
+	<assert.h>
+	<math.h>
+	<unistd.h>
+
+1144877474 c:\devel\moldeo\svn\externlibs\lua\include\lauxlib.h
+	<stddef.h>
+	<stdio.h>
+	"lua.h"
+
+1135710720 c:\devel\moldeo\svn\externlibs\lua\include\lualib.h
+	"lua.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\moeventlist.h
+	"moTypes.h"
+	"moValue.h"
+	"moAbstract.h"
+	"moLock.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\movalue.h
+	"moTypes.h"
+	"moText.h"
+	"moArray.h"
+	"moMathFunction.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\momathfunction.h
+	"moTypes.h"
+	"moArray.h"
+	"moAbstract.h"
+	"moMath.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\molock.h
+	"moTypes.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\moconfig.h
+	"moTypes.h"
+	"moText.h"
+	"moParam.h"
+	"moArray.h"
+	"moPreConfig.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\moparam.h
+	"moTypes.h"
+	"moText.h"
+	"moValue.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\mopreconfig.h
+	"moTypes.h"
+	"moValue.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\moconnectors.h
+	"moTypes.h"
+	"moText.h"
+	"moAbstract.h"
+	"moEventList.h"
+	"moConfig.h"
+	"moArray.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\moresourceplugin.h
+	"moBasePlugin.h"
+	"moResourceManager.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\mobaseplugin.h
+	"moText.h"
+	<windows.h>
+	<dlfcn.h>
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\modebugmanager.h
+	"moTypes.h"
+	"moAbstract.h"
+	"moText.h"
+	"moParam.h"
+	"moResourceManager.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\monetmanager.h
+	"moTypes.h"
+	"moText.h"
+	"moConfig.h"
+	"moLock.h"
+	"moResourceManager.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\mofilemanager.h
+	"moTypes.h"
+	"moAbstract.h"
+	"moText.h"
+	"moResourceManager.h"
+	"moBuckets.h"
+	"moParam.h"
+	"io.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\mobuckets.h
+	"moTypes.h"
+	"moLock.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\mofontmanager.h
+	"moTypes.h"
+	"moAbstract.h"
+	"moArray.h"
+	"moResourceManager.h"
+	"moText.h"
+	"moParam.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\moguimanager.h
+	"mo3dModelManager.h"
+	"moResourceManager.h"
+
+1257081882 c:\devel\moldeo\svn\branches\newgl0\inc\mo3dmodelmanager.h
+	"moTypes.h"
+	"moResourceManager.h"
+	"moConfig.h"
+	"moParam.h"
+	"moTextureManager.h"
+	"moEffectState.h"
+	"moMathVector.h"
+	"moMathVector3.h"
+	"3ds/3ds.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\motexturemanager.h
+	"moTexture.h"
+	"moResourceManager.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\motexture.h
+	"moTypes.h"
+	"moText.h"
+	"moParam.h"
+	"moBuckets.h"
+	"moVideoGraph.h"
+	"moGsGraph.h"
+	"moDsGraph.h"
+	"moMathVector3.h"
+	"moTextureIndex.h"
+	"moFBO.h"
+	"moGLManager.h"
+	"moTextureFilter.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\movideograph.h
+	"moTypes.h"
+	"moText.h"
+	"moBuckets.h"
+	"moArray.h"
+	"moAbstract.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\mogsgraph.h
+	"moConfig.h"
+	"moTypes.h"
+	"moThread.h"
+	"moBuckets.h"
+	"moVideoGraph.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\mothread.h
+	"moTypes.h"
+	"moLock.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\modsgraph.h
+	"moTypes.h"
+	"streams.h"
+	"qedit.h"
+	"dvdmedia.h"
+	"moVideoGraph.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\momathvector3.h
+	"moMath.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\motextureindex.h
+	"moTypes.h"
+	"moAbstract.h"
+	"moConfig.h"
+	"moParam.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\mofbo.h
+	"moTypes.h"
+	"moGLManager.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\moglmanager.h
+	"moTypes.h"
+	"moText.h"
+	"moFBO.h"
+	"moResourceManager.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\motexturefilter.h
+	"moTypes.h"
+	"moAbstract.h"
+	"moConfig.h"
+	"moParam.h"
+	"moShader.h"
+	"moShaderGLSL.h"
+	"moTextFilterParam.h"
+	"moVideoManager.h"
+	"moVideoManager.h"
+	"moShaderManager.h"
+	"moTextureManager.h"
+	"moGLManager.h"
+	"moRenderManager.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\moshader.h
+	"moTypes.h"
+	"moAbstract.h"
+	"moConfig.h"
+	"moArray.h"
+
+1257081882 c:\devel\moldeo\svn\branches\newgl0\inc\moshaderglsl.h
+	"moShader.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\motextfilterparam.h
+	"moShader.h"
+	"moShaderGLSL.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\movideomanager.h
+	"moGsGraph.h"
+	"moDsGraph.h"
+	"moFBO.h"
+	"moTexture.h"
+	"moVideoGraph.h"
+	"moIODeviceManager.h"
+	"moResourceManager.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\moiodevicemanager.h
+	"moTypes.h"
+	"moText.h"
+	"moMoldeoObject.h"
+	"moDeviceCode.h"
+	"moEventList.h"
+	"moRenderManager.h"
+	"moIODevicePlugin.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\modevicecode.h
+	"moTypes.h"
+	"moAbstract.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\morendermanager.h
+	"moTypes.h"
+	"moText.h"
+	"moLock.h"
+	"moResourceManager.h"
+	"moMathVector.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\momathvector.h
+	"moMath.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\moiodeviceplugin.h
+	"moTypes.h"
+	"moArray.h"
+	"moBasePlugin.h"
+	"moIODeviceManager.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\moshadermanager.h
+	"moTypes.h"
+	"moAbstract.h"
+	"moText.h"
+	"moParam.h"
+	"moConfig.h"
+	"moShader.h"
+	"moShaderGLSL.h"
+	"moResourceManager.h"
+	"moGLManager.h"
+	"moFBManager.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\mofbmanager.h
+	"moTypes.h"
+	"moText.h"
+	"moLock.h"
+	"moFBO.h"
+	"moTexture.h"
+	"moResourceManager.h"
+	"moGLManager.h"
+
+1257081880 c:\devel\moldeo\svn\branches\newgl0\inc\moeffectstate.h
+	"moTypes.h"
+	"moAbstract.h"
+
+1257081880 c:\devel\moldeo\svn\branches\newgl0\inc\3ds\3ds.h
+	"mo3dModelManager.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\moscriptmanager.h
+	"moTypes.h"
+	"moAbstract.h"
+	"moText.h"
+	"moParam.h"
+	"moLuaBase.h"
+	"moLunaClasses.h"
+	"moResourceManager.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\molunaclasses.h
+	"moLuna.h"
+	"moMath.h"
+	"moMathFunction.h"
+	"moP5.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\moluna.h
+	"lua.h"
+	"lauxlib.h"
+	"lualib.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\mop5.h
+	"moAbstract.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\mofiltermanager.h
+	"moTypes.h"
+	"moAbstract.h"
+	"moText.h"
+	"moVideoGraph.h"
+	"moResourceManager.h"
+	"moBuckets.h"
+	"moParam.h"
+	"moMathVector.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\motimemanager.h
+	"moTypes.h"
+	"moText.h"
+	"moConfig.h"
+	"moLock.h"
+	"moResourceManager.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\modatamanager.h
+	"moTypes.h"
+	"moActions.h"
+	"moEventList.h"
+	"moText.h"
+	"moConfig.h"
+	"moLock.h"
+	"moResourceManager.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\moactions.h
+	"moTypes.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\momathmanager.h
+	"moTypes.h"
+	"moText.h"
+	"moConfig.h"
+	"moLock.h"
+	"moResourceManager.h"
+	"moMath.h"
+	"moMathFunction.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\mosoundmanager.h
+	"moTypes.h"
+	"moText.h"
+	"moConfig.h"
+	"moResourceManager.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\modecodermanager.h
+	"moTypes.h"
+	"moText.h"
+	"moLock.h"
+	"moFBO.h"
+	"moTexture.h"
+	"moVideoGraph.h"
+	"moResourceManager.h"
+	"moGLManager.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\moeffectmanager.h
+	"moTypes.h"
+	"moArray.h"
+	"moEffect.h"
+	"moPostEffect.h"
+	"moPreEffect.h"
+	"moMasterEffect.h"
+	"moSceneEffect.h"
+	"moSequenceEffect.h"
+	"moPlugin.h"
+	"moPostPlugin.h"
+	"moPrePlugin.h"
+	"moMasterPlugin.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\moeffect.h
+	"moAbstract.h"
+	"moArray.h"
+	"moMathFunctionIndex.h"
+	"moIODeviceManager.h"
+	"moConfig.h"
+	"moEffectState.h"
+	"moPreConfig.h"
+	"moPresets.h"
+	"moMotion.h"
+	"moText.h"
+	"moMoldeoObject.h"
+	"moResourceManager.h"
+	"moRenderManager.h"
+	"moMathManager.h"
+	"moTextureManager.h"
+	"moFontManager.h"
+	"moSoundManager.h"
+	"moScriptManager.h"
+	"mo3dModelManager.h"
+	"moRenderManager.h"
+	"moGUIManager.h"
+
+1257081882 c:\devel\moldeo\svn\branches\newgl0\inc\momathfunctionindex.h
+	"moTypes.h"
+	"moAbstract.h"
+	"moConfig.h"
+	"moParam.h"
+	"moMathManager.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\mopresets.h
+	"moTypes.h"
+	"moConfig.h"
+	"moEffectState.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\momotion.h
+	"moParam.h"
+	"moTypes.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\moposteffect.h
+	"moEffect.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\mopreeffect.h
+	"moEffect.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\momastereffect.h
+	"moEffect.h"
+	"moConsoleState.h"
+	"moEffectManager.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\moconsolestate.h
+	"moTypes.h"
+	"moAbstract.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\mosceneeffect.h
+	"moConsole.h"
+	"moPlugin.h"
+	"moMasterEffect.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\moplugin.h
+	"moBasePlugin.h"
+	"moEffect.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\mosequenceeffect.h
+	"moConsole.h"
+	"moPlugin.h"
+	"moMasterEffect.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\mopostplugin.h
+	"moBasePlugin.h"
+	"moPostEffect.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\mopreplugin.h
+	"moBasePlugin.h"
+	"moPreEffect.h"
+
+1257081881 c:\devel\moldeo\svn\branches\newgl0\inc\momasterplugin.h
+	"moBasePlugin.h"
+	"moMasterEffect.h"
+
+1257081748 c:\devel\moldeo\svn\branches\newgl0\build\vcres\resource.h
+

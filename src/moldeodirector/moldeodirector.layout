@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="All" />
+	<File name="moDirectorCore.cpp" open="0" top="0" tabpos="5">
+		<Cursor position="1751" topLine="46" />
+	</File>
+	<File name="moDirectorCore.h" open="0" top="0" tabpos="3">
+		<Cursor position="634" topLine="0" />
+	</File>
+	<File name="moDirectorFrame.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="23602" topLine="578" />
+	</File>
+	<File name="moDirectorFrame.h" open="0" top="0" tabpos="7">
+		<Cursor position="3766" topLine="149" />
+	</File>
+	<File name="moEffectLayerCtrl.cpp" open="0" top="0" tabpos="6">
+		<Cursor position="73" topLine="0" />
+	</File>
+	<File name="moGLCanvas.cpp" open="0" top="0" tabpos="4">
+		<Cursor position="2011" topLine="66" />
+	</File>
+	<File name="moGLCanvas.h" open="0" top="0" tabpos="8">
+		<Cursor position="1981" topLine="30" />
+	</File>
+	<File name="moldeodirector.cpp" open="0" top="0" tabpos="1">
+		<Cursor position="1843" topLine="48" />
+	</File>
+	<File name="moldeodirector.h" open="0" top="0" tabpos="2">
+		<Cursor position="35" topLine="0" />
+	</File>
+</CodeBlocks_layout_file>

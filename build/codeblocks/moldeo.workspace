@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_workspace_file>
+	<Workspace title="Moldeo">
+		<Project filename="..\..\contrib\src\tinyxml\tinyxml_lib_mingw.cbp" />
+		<Project filename="libmoldeo.cbp">
+			<Depends filename="..\..\contrib\src\tinyxml\tinyxml_lib_mingw.cbp" />
+		</Project>
+		<Project filename="..\..\src\main\moldeo_mingw_sdl.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\src\moldeodirector\moldeodirector.cbp" active="1">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\Effects\Icon3D\icon3d.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\Effects\Plane\plane.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\Effects\Tunel\tunel.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\PreEffects\Mirror\mirror.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\PreEffects\MirrorG\mirrorg.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\PostEffects\VideoWall\videowall.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\Effects\Painter\painter.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\IODevices\Tablet\tablet.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\Effects\LiveDrawing2\livedrawing2.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\PostEffects\VideoWallMorphing\videowallmorphing.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\IODevices\Serial\serial.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\Effects\Partiture\partiture.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\Effects\Text\text.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\Effects\ImageFlow\imageflow.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\IODevices\TabletAsync\tabletasync.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\Effects\Draw\draw.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\IODevices\Midi\midi.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\MasterEffects\Ligia\ligia.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\MasterEffects\Channel\channel.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\MasterEffects\MasterChannel\masterchannel.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\MasterEffects\Panel\panel.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\MasterEffects\PresetPanel\presetpanel.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\IODevices\Keyboard\keyboard.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\IODevices\Mouse\mouse.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\IODevices\Mixer\mixer.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\Effects\Icon\icon.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\Effects\Image\image.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\PostEffects\Debug\debug.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\PreEffects\Erase\erase.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\Effects\Movie\movie.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\Effects\CubeMap\cubemap.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\IODevices\NetOscIn\netoscin.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\IODevices\NetOscOut\netoscout.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\Resources\TrackerKLT\trackerklt.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\Resources\TrackerGpuKLT\trackergpuklt.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\Resources\TrackerGpuKLT2\trackergpuklt2.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\Effects\Text3D\text3d.cbp" />
+		<Project filename="..\..\plugins\Effects\Lights\lights.cbp" />
+		<Project filename="..\..\contrib\src\wxMoldeoControls\wxMoldeoControls.cbp" />
+	</Workspace>
+</CodeBlocks_workspace_file>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_workspace_file>
+	<Workspace title="Moldeo">
+		<Project filename="..\..\plugins\PostEffects\VideoWall\videowall.cbp" />
+		<Project filename="..\..\plugins\PostEffects\VideoWallMorphing\videowallmorphing.cbp" />
+		<Project filename="..\..\plugins\PostEffects\Debug\debug.cbp" />
+		<Project filename="..\..\plugins\PostEffects\PostProcess2d\postprocess2d.cbp" active="1" />
+	</Workspace>
+</CodeBlocks_workspace_file>

@@ -1,0 +1,470 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "channel"=..\..\plugins\MasterEffects\Channel\channel.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmoldeo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "cubemap"=..\..\plugins\Effects\CubeMap\cubemap.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmoldeo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "debug"=..\..\plugins\PostEffects\Debug\debug.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmoldeo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "erase"=..\..\plugins\PreEffects\Erase\erase.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmoldeo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "grid"=..\..\plugins\Effects\Grid\grid.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmoldeo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "icon"=..\..\plugins\Effects\Icon\icon.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmoldeo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "icon3d"=..\..\plugins\Effects\Icon3D\icon3d.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmoldeo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "image"=..\..\plugins\Effects\Image\image.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmoldeo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "libmoldeo"=.\libmoldeo.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "lightpercussion"=..\..\plugins\Effects\LightPercussion\lightpercussion.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmoldeo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "lights"=..\..\plugins\Effects\Lights\lights.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmoldeo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "ligia"=..\..\plugins\MasterEffects\Ligia\ligia.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmoldeo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "masterchannel"=..\..\plugins\MasterEffects\MasterChannel\masterchannel.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmoldeo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "mirror"=..\..\plugins\PreEffects\Mirror\mirror.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmoldeo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "mirrorg"=..\..\plugins\PreEffects\MirrorG\mirrorg.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmoldeo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "mirrormorphing"=..\..\plugins\PreEffects\MirrorMorphing\mirrormorphing.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "moldeo"=.\moldeo.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmoldeo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "moldeodirector"=.\moldeodirector.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmoldeo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "movie"=..\..\plugins\Effects\Movie\movie.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmoldeo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "paint"=..\..\plugins\Effects\Paint\paint.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "panel"=..\..\plugins\MasterEffects\Panel\panel.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmoldeo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "plane"=..\..\plugins\Effects\Plane\plane.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmoldeo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "presetpanel"=..\..\plugins\MasterEffects\PresetPanel\presetpanel.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmoldeo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "protein"=..\..\plugins\Effects\Protein\protein.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmoldeo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "regularsolid"=..\..\plugins\Effects\RegularSolid\regularsolid.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmoldeo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "scene3d"=..\..\plugins\Effects\Scene3D\scene3d.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmoldeo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "text"=..\..\plugins\Effects\Text\text.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmoldeo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "tunel"=..\..\plugins\Effects\Tunel\tunel.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmoldeo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "videopanel"=..\..\plugins\PostEffects\VideoPanel\videopanel.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "videowall"=..\..\plugins\PostEffects\VideoWall\videowall.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmoldeo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "videowallmorphing"=..\..\plugins\PostEffects\VideoWallMorphing\videowallmorphing.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmoldeo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+

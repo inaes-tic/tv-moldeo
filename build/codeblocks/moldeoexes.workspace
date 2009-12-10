@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_workspace_file>
+	<Workspace title="Moldeo">
+		<Project filename="..\..\plugins\Effects\Plane\plane.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\MasterEffects\Ligia\ligia.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\MasterEffects\Channel\channel.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\MasterEffects\MasterChannel\masterchannel.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\MasterEffects\Panel\panel.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\MasterEffects\PresetPanel\presetpanel.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\IODevices\Keyboard\keyboard.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\IODevices\Mouse\mouse.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\IODevices\Mixer\mixer.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\Effects\Icon\icon.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\Effects\Image\image.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\PostEffects\Debug\debug.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\PreEffects\Erase\erase.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\plugins\Effects\Movie\movie.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="libmoldeo.cbp">
+			<Depends filename="..\..\contrib\src\tinyxml\tinyxml_lib_mingw.cbp" />
+		</Project>
+		<Project filename="..\..\src\main\moldeo_mingw_sdl.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\src\moldeodirector\moldeodirector.cbp">
+			<Depends filename="libmoldeo.cbp" />
+		</Project>
+		<Project filename="..\..\contrib\src\tinyxml\tinyxml_lib_mingw.cbp" />
+		<Project filename="..\..\plugins\Effects\Damero\damero.cbp" active="1" />
+	</Workspace>
+</CodeBlocks_workspace_file>

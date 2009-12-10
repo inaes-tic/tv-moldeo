@@ -1,0 +1,3 @@
+EXPORTS
+    CreatePostEffectFactory @1
+    DestroyPostEffectFactory @2

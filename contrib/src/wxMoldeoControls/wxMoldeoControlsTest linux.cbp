@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="wxMoldeoControlsTest" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/wxMoldeoControlsTest" prefix_auto="1" extension_auto="1" />
+				<Option object_output="objlinux/Debug/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/wxMoldeoControlsTest" prefix_auto="1" extension_auto="1" />
+				<Option object_output="objlinux/Release/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add directory="../../../../../../externlibs/wxWidgets/lib/mingw_lib/wx/include/msw-ansi-release-static-2.8" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<VirtualTargets>
+			<Add alias="All" targets="Debug;Release;" />
+		</VirtualTargets>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-I/usr/local/lib/wx/include/gtk2-ansi-release-2.8" />
+			<Add option="-I/usr/local/include/wx-2.8" />
+			<Add option="-pthread" />
+			<Add option="-D_FILE_OFFSET_BITS=64" />
+			<Add option="-D_LARGE_FILES" />
+			<Add option="-D__WXGTK__" />
+			<Add directory="../wxMoldeoControls" />
+		</Compiler>
+		<Linker>
+			<Add option="-L/usr/local/lib" />
+			<Add option="-pthread" />
+			<Add option="-lwx_gtk2_richtext-2.8" />
+			<Add option="-lwx_gtk2_aui-2.8" />
+			<Add option="-lwx_gtk2_xrc-2.8" />
+			<Add option="-lwx_gtk2_qa-2.8" />
+			<Add option="-lwx_gtk2_html-2.8" />
+			<Add option="-lwx_gtk2_adv-2.8" />
+			<Add option="-lwx_gtk2_core-2.8" />
+			<Add option="-lwx_base_xml-2.8" />
+			<Add option="-lwx_base_net-2.8" />
+			<Add option="-lwx_gtk2_gl-2.8" />
+			<Add option="-lwx_base-2.8" />
+			<Add library="Releaselinux/libmoldeocontrols.a" />
+		</Linker>
+		<Unit filename="resource.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
+		<Unit filename="wxMoldeoControlsTestApp.cpp" />
+		<Unit filename="wxMoldeoControlsTestApp.h" />
+		<Unit filename="wxMoldeoControlsTestDialog.cpp" />
+		<Unit filename="wxMoldeoControlsTestDialog.h" />
+		<Unit filename="wxsmith/wxMoldeoControlsTestDialog.wxs" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+			<wxsmith version="1">
+				<gui name="wxWidgets" src="wxMoldeoControlsTestApp.cpp" main="wxMoldeoControlsTestDialog" init_handlers="necessary" language="CPP" />
+				<resources>
+					<wxDialog wxs="wxsmith/wxMoldeoControlsTestDialog.wxs" src="wxMoldeoControlsTestDialog.cpp" hdr="wxMoldeoControlsTestDialog.h" name="wxMoldeoControlsTestDialog" language="CPP" />
+				</resources>
+			</wxsmith>
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

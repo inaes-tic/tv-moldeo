@@ -1,0 +1,3 @@
+EXPORTS
+    CreatePreEffectFactory @1
+    DestroyPreEffectFactory @2

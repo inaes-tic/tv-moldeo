@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Release" />
+	<File name="wxMoLevelCtrl.cpp" open="0" top="0" tabpos="2">
+		<Cursor position="977" topLine="15" />
+	</File>
+	<File name="wxMoLevelCtrl.h" open="0" top="0" tabpos="0">
+		<Cursor position="673" topLine="0" />
+	</File>
+	<File name="wxMoRotaryCtrl.cpp" open="0" top="0" tabpos="3">
+		<Cursor position="228" topLine="0" />
+	</File>
+	<File name="wxMoRotaryCtrl.h" open="0" top="0" tabpos="4">
+		<Cursor position="1790" topLine="42" />
+	</File>
+	<File name="wxMoTimelineBandCtrl.cpp" open="0" top="0" tabpos="1">
+		<Cursor position="6910" topLine="246" />
+	</File>
+	<File name="wxMoldeoControls.h" open="0" top="0" tabpos="0">
+		<Cursor position="714" topLine="12" />
+	</File>
+	<File name="wxMoldeoLineCtrl.cpp" open="0" top="0" tabpos="3">
+		<Cursor position="2633" topLine="79" />
+	</File>
+	<File name="wxMoldeoLineCtrl.h" open="0" top="0" tabpos="5">
+		<Cursor position="227" topLine="0" />
+	</File>
+	<File name="wxMoldeoObjectCanvas.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="374" topLine="12" />
+	</File>
+	<File name="wxMoldeoObjectCtrl.cpp" open="0" top="0" tabpos="1">
+		<Cursor position="451" topLine="7" />
+	</File>
+	<File name="wxMoldeoObjectCtrl.h" open="0" top="0" tabpos="0">
+		<Cursor position="383" topLine="0" />
+	</File>
+	<File name="wxMoldeoPinCtrl.cpp" open="0" top="0" tabpos="2">
+		<Cursor position="9552" topLine="325" />
+	</File>
+	<File name="wxMoldeoPinCtrl.h" open="0" top="0" tabpos="6">
+		<Cursor position="512" topLine="0" />
+	</File>
+</CodeBlocks_layout_file>
