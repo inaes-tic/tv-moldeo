@@ -2,12 +2,12 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="sampletest" />
+		<Option title="calibrationgrid" />
 		<Option pch_mode="0" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="debug">
-				<Option output="..\..\..\bin\mingw\plugins\effects\sampletest_d.dll" prefix_auto="0" extension_auto="0" />
+				<Option output="..\..\..\bin\mingw\plugins\posteffects\calibrationgrid_d.dll" prefix_auto="0" extension_auto="0" />
 				<Option object_output=".wobjsd" />
 				<Option deps_output=".depsd" />
 				<Option type="3" />
@@ -27,7 +27,7 @@
 				</Linker>
 			</Target>
 			<Target title="release">
-				<Option output="..\..\..\bin\mingw\plugins\effects\sampletest.dll" prefix_auto="0" extension_auto="0" />
+				<Option output="..\..\..\bin\mingw\plugins\posteffects\calibrationgrid.dll" prefix_auto="0" extension_auto="0" />
 				<Option object_output=".wobjs" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -61,8 +61,8 @@
 			<Add directory="..\..\..\lib\opengl" />
 			<Add directory="..\..\..\lib\mingw" />
 		</Linker>
-		<Unit filename="inc\moEffectSampleTest.h" />
-		<Unit filename="src\moEffectSampleTest.cpp" />
+		<Unit filename="inc\moCalibrationGrid.h" />
+		<Unit filename="src\moCalibrationGrid.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />

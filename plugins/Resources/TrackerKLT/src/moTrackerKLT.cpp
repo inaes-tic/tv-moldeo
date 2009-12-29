@@ -384,7 +384,7 @@ void moTrackerKLTSystem::NewData( moVideoSample* p_pVideoSample )
 
             //MODebug2->Log( moText("table: x:") + FloatToStr(m_ft->feature[i][0]->x) + moText("table: y:") + FloatToStr(m_ft->feature[i][0]->y ));
 
-            TF->val = m_fl->fNewDataeature[i]->val;
+            TF->val = m_fl->feature[i]->val;
             TF->valid = (m_fl->feature[i]->val >= KLT_TRACKED);
 
 

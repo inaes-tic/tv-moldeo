@@ -177,14 +177,29 @@ MOboolean moConsole::Init( moText p_datapath,
 	moDefineParamIndex( CONSOLE_ON, moText("mastereffects_on") );
 	moDefineParamIndex( CONSOLE_SCRIPT, moText("consolescript") );
 	moDefineParamIndex( CONSOLE_OUTPUTMODE, moText("outputmode") );
-	moDefineParamIndex( CONSOLE_RENDERRESOLUTION, moText("renderresolution") );
 	moDefineParamIndex( CONSOLE_OUTPUTRESOLUTION, moText("outputresolution") );
+	moDefineParamIndex( CONSOLE_RENDERMODE, moText("rendermode") );
+	moDefineParamIndex( CONSOLE_RENDERRESOLUTION, moText("renderresolution") );
 	moDefineParamIndex( CONSOLE_CLIP1, moText("clip1") );
 	moDefineParamIndex( CONSOLE_CLIP2, moText("clip2") );
 	moDefineParamIndex( CONSOLE_CLIP3, moText("clip3") );
 
     //if () {
         moText mode = m_Config[moR(CONSOLE_OUTPUTMODE)][MO_SELECTED][0].Text();
+
+        moText rendermode = m_Config[moR(CONSOLE_RENDERMODE)][MO_SELECTED][0].Text();
+        if ( rendermode != moText("") ) {
+            if (rendermode==moText("RENDERMANAGER_MODE_NORMAL")) {
+                MODebug2->Message("moConsole :: Render Mode forced to RENDERMANAGER_MODE_NORMAL");
+                p_render_to_texture_mode = RENDERMANAGER_MODE_NORMAL;
+            } else if (rendermode==moText("RENDERMANAGER_MODE_FRAMEBUFFER")) {
+                MODebug2->Message("moConsole :: Render Mode forced to RENDERMANAGER_MODE_FRAMEBUFFER");
+                p_render_to_texture_mode = RENDERMANAGER_MODE_FRAMEBUFFER;
+            } else if (rendermode==moText("RENDERMANAGER_MODE_VDPAU")) {
+                MODebug2->Message("moConsole :: Render Mode forced to RENDERMANAGER_MODE_VDPAU");
+                p_render_to_texture_mode = RENDERMANAGER_MODE_VDPAU;
+            }
+        }
 
         moText renderwidth = m_Config[moR(CONSOLE_RENDERRESOLUTION)][MO_SELECTED][0].Text();
         moText renderheight = m_Config[moR(CONSOLE_RENDERRESOLUTION)][MO_SELECTED][1].Text();
@@ -357,15 +372,23 @@ moConsole::LoadIODevices() {
 		fxname = m_Config.GetParam().GetValue().GetSubValue(MO_CFG_EFFECT).Text();
 		cfname = m_Config.GetParam().GetValue().GetSubValue(MO_CFG_EFFECT_CONFIG).Text();
 		lblname = m_Config.GetParam().GetValue().GetSubValue(MO_CFG_EFFECT_LABEL).Text();
-		pdevice = m_pIODeviceManager->NewIODevice( fxname, cfname, lblname,  MO_OBJECT_IODEVICE, devices, i );
-		if (pdevice) {
-			m_MoldeoObjects.Add( (moMoldeoObject*) pdevice );
-			pdevice->SetResourceManager( m_pResourceManager );
-			if(pdevice!=NULL) {
-				pdevice->SetResourceManager( m_pResourceManager );
-				pdevice->Init();
-			} else MODebug2->Error( moText("moConsole:: Couldn't load a device:") + moText(fxname));
-		} else MODebug2->Error( moText("moConsole:: Couldn't create the device:") + moText(fxname));
+
+        moText completecfname = m_pResourceManager->GetDataMan()->GetDataPath() + moSlash + (moText)cfname+ moText(".cfg");
+        moFile FullCF( completecfname );
+
+        if ( FullCF.Exists() ) {
+            pdevice = m_pIODeviceManager->NewIODevice( fxname, cfname, lblname,  MO_OBJECT_IODEVICE, devices, i );
+            if (pdevice) {
+                m_MoldeoObjects.Add( (moMoldeoObject*) pdevice );
+                pdevice->SetResourceManager( m_pResourceManager );
+                if(pdevice!=NULL) {
+                    pdevice->SetResourceManager( m_pResourceManager );
+                    pdevice->Init();
+                } else MODebug2->Error( moText("moConsole:: Couldn't load a device:") + moText(fxname));
+            } else MODebug2->Error( moText("moConsole:: Couldn't create the device:") + moText(fxname));
+		} else {
+		    MODebug2->Error(moText("moConsole::LoadMasterEffects Error: Config File doesn't exist : ") + (moText)completecfname);
+        }
 		m_Config.NextValue();
 
     }
@@ -409,17 +432,25 @@ moConsole::LoadMasterEffects() {
 			fxname = m_Config.GetParam().GetValue().GetSubValue(MO_CFG_EFFECT).Text();
 			cfname = m_Config.GetParam().GetValue().GetSubValue(MO_CFG_EFFECT_CONFIG).Text();
 			lblname = m_Config.GetParam().GetValue().GetSubValue(MO_CFG_EFFECT_LABEL).Text();
-			pmastereffect = (moMasterEffect*)m_EffectManager.NewEffect( fxname, cfname, lblname,  MO_OBJECT_MASTEREFFECT, mtfx, i);
-			if (pmastereffect) {
-				m_MoldeoObjects.Add( (moMoldeoObject*) pmastereffect );
-				pmastereffect->SetResourceManager( m_pResourceManager );
-				pmastereffect->Set( &m_EffectManager, &state );
-				if( pmastereffect->GetName() == moText("ligia") ) {
-							iligia=i;
-							pmastereffect->Init();
-							//pmastereffect->state.on = MO_ON;
-				}
-			} else MODebug2->Error( moText("moConsole:: Couldn't load Master Effect:") + moText(fxname));
+
+            moText completecfname = m_pResourceManager->GetDataMan()->GetDataPath() + moSlash + (moText)cfname+ moText(".cfg");
+			moFile FullCF( completecfname );
+
+			if ( FullCF.Exists() ) {
+                pmastereffect = (moMasterEffect*)m_EffectManager.NewEffect( fxname, cfname, lblname,  MO_OBJECT_MASTEREFFECT, mtfx, i);
+                if (pmastereffect) {
+                    m_MoldeoObjects.Add( (moMoldeoObject*) pmastereffect );
+                    pmastereffect->SetResourceManager( m_pResourceManager );
+                    pmastereffect->Set( &m_EffectManager, &state );
+                    if( pmastereffect->GetName() == moText("ligia") ) {
+                                iligia=i;
+                                pmastereffect->Init();
+                                //pmastereffect->state.on = MO_ON;
+                    }
+                } else MODebug2->Error( moText("moConsole:: Couldn't load Master Effect:") + moText(fxname));
+			} else {
+			    MODebug2->Error(moText("moConsole::LoadMasterEffects Error: Config File doesn't exist : ") + (moText)completecfname);
+            }
 			m_Config.NextValue();
 		}
 	}
@@ -467,24 +498,34 @@ moConsole::LoadPreEffects() {
 			fxname = m_Config.GetParam().GetValue().GetSubValue(MO_CFG_EFFECT).Text();
 			cfname = m_Config.GetParam().GetValue().GetSubValue(MO_CFG_EFFECT_CONFIG).Text();
 			lblname = m_Config.GetParam().GetValue().GetSubValue(MO_CFG_EFFECT_LABEL).Text();
-			ppreeffect = (moPreEffect*)m_EffectManager.NewEffect( fxname, cfname, lblname,  MO_OBJECT_PREEFFECT, prfx, i);
-			if (ppreeffect) {
-				m_MoldeoObjects.Add( (moMoldeoObject*) ppreeffect );
-				ppreeffect->SetResourceManager( m_pResourceManager );
-				if ( ppreeffect->GetName() == moText("erase") ) {
-					iborrado = i;
-					if (ppreeffect->Init()) {
-						MOint pre,on;
-						MOint paramindex, valueindex;
-                        paramindex = ppreeffect->GetMobDefinition().GetMobIndex().GetParamIndex();
-                        valueindex = ppreeffect->GetMobDefinition().GetMobIndex().GetValueIndex();
-						pre = m_Config.GetParam(paramindex  ).GetValue( valueindex ).GetSubValue(MO_CFG_EFFECT_PRE).Int();
-						on = m_Config.GetParam( paramindex ).GetValue( valueindex ).GetSubValue(MO_CFG_EFFECT_ON).Int();
-						if (pre>=0) ppreeffect->GetConfig()->SetCurrentPreConf(pre);
-						if (on>0) ppreeffect->state.on = true;
-					}
-				}
-            } else MODebug2->Error( moText("moConsole:: Couldn't load Pre Effect:") + moText(fxname));			m_Config.NextValue();
+
+
+            moText completecfname = m_pResourceManager->GetDataMan()->GetDataPath() + moSlash + (moText)cfname + moText(".cfg");
+			moFile FullCF( completecfname );
+
+			if ( FullCF.Exists() ) {
+
+                ppreeffect = (moPreEffect*)m_EffectManager.NewEffect( fxname, cfname, lblname,  MO_OBJECT_PREEFFECT, prfx, i);
+                if (ppreeffect) {
+                    m_MoldeoObjects.Add( (moMoldeoObject*) ppreeffect );
+                    ppreeffect->SetResourceManager( m_pResourceManager );
+                    if ( ppreeffect->GetName() == moText("erase") ) {
+                        iborrado = i;
+                        if (ppreeffect->Init()) {
+                            MOint pre,on;
+                            MOint paramindex, valueindex;
+                            paramindex = ppreeffect->GetMobDefinition().GetMobIndex().GetParamIndex();
+                            valueindex = ppreeffect->GetMobDefinition().GetMobIndex().GetValueIndex();
+                            pre = m_Config.GetParam(paramindex  ).GetValue( valueindex ).GetSubValue(MO_CFG_EFFECT_PRE).Int();
+                            on = m_Config.GetParam( paramindex ).GetValue( valueindex ).GetSubValue(MO_CFG_EFFECT_ON).Int();
+                            if (pre>=0) ppreeffect->GetConfig()->SetCurrentPreConf(pre);
+                            if (on>0) ppreeffect->state.on = true;
+                        }
+                    }
+                } else MODebug2->Error( moText("moConsole:: Couldn't load Pre Effect:") + moText(fxname));			m_Config.NextValue();
+			} else {
+			    MODebug2->Error(moText("moConsole::LoadPreEffects Error: Config File doesn't exist : ") + (moText)completecfname);
+            }
 		}
 	}
 
@@ -528,17 +569,25 @@ moConsole::LoadEffects() {
 			fxname = m_Config.GetParam().GetValue().GetSubValue(MO_CFG_EFFECT).Text();
 			cfname = m_Config.GetParam().GetValue().GetSubValue(MO_CFG_EFFECT_CONFIG).Text();
 			lblname = m_Config.GetParam().GetValue().GetSubValue(MO_CFG_EFFECT_LABEL).Text();
-			if ((moText)fxname!=moText("nil")) {
-                peffect = (moEffect*)m_EffectManager.NewEffect( fxname, cfname, lblname,  MO_OBJECT_EFFECT, efx, i);
-                if (peffect) {
+
+			moText completecfname = m_pResourceManager->GetDataMan()->GetDataPath() + moSlash + (moText)cfname+ moText(".cfg");
+			moFile FullCF( completecfname );
+
+			if ( FullCF.Exists() ) {
+                if ((moText)fxname!=moText("nil")) {
+                    peffect = (moEffect*)m_EffectManager.NewEffect( fxname, cfname, lblname,  MO_OBJECT_EFFECT, efx, i);
+                    if (peffect) {
+                        m_MoldeoObjects.Add( (moMoldeoObject*) peffect );
+                        peffect->SetResourceManager( m_pResourceManager );
+                    }
+                } else {
+                    peffect = NULL;
+                    m_EffectManager.Effects().Add(peffect);
+                    m_EffectManager.AllEffects().Add(peffect);
                     m_MoldeoObjects.Add( (moMoldeoObject*) peffect );
-                    peffect->SetResourceManager( m_pResourceManager );
                 }
 			} else {
-			    peffect = NULL;
-			    m_EffectManager.Effects().Add(peffect);
-			    m_EffectManager.AllEffects().Add(peffect);
-			    m_MoldeoObjects.Add( (moMoldeoObject*) peffect );
+			    MODebug2->Error(moText("moConsole::LoadEffects Error: Config File doesn't exist : ") + (moText)completecfname);
             }
 			m_Config.NextValue();
 		}
@@ -586,16 +635,25 @@ moConsole::LoadPostEffects() {
 			fxname = m_Config.GetParam().GetValue().GetSubValue(MO_CFG_EFFECT).Text();
 			cfname = m_Config.GetParam().GetValue().GetSubValue(MO_CFG_EFFECT_CONFIG).Text();
 			lblname = m_Config.GetParam().GetValue().GetSubValue(MO_CFG_EFFECT_LABEL).Text();
-			posteffect = (moPostEffect*)m_EffectManager.NewEffect( fxname, cfname, lblname,  MO_OBJECT_POSTEFFECT, ptfx , i );
-			if (posteffect) {
-				m_MoldeoObjects.Add( (moMoldeoObject*) posteffect );
-				posteffect->SetResourceManager( m_pResourceManager );
-				if(posteffect->GetName() == moText("debug")) {
-						idebug = i;
-						posteffect->Init();
-						posteffect->state.on = MO_ON;
-				}
-			} else MODebug2->Error( moText("moConsole:: Couldn't load Post Effect:") + moText(fxname));
+
+            moText completecfname = m_pResourceManager->GetDataMan()->GetDataPath() + moSlash + (moText)cfname+ moText(".cfg");
+			moFile FullCF( completecfname );
+
+			if ( FullCF.Exists() ) {
+
+                posteffect = (moPostEffect*)m_EffectManager.NewEffect( fxname, cfname, lblname,  MO_OBJECT_POSTEFFECT, ptfx , i );
+                if (posteffect) {
+                    m_MoldeoObjects.Add( (moMoldeoObject*) posteffect );
+                    posteffect->SetResourceManager( m_pResourceManager );
+                    if(posteffect->GetName() == moText("debug")) {
+                            idebug = i;
+                            posteffect->Init();
+                            posteffect->state.on = MO_ON;
+                    }
+                } else MODebug2->Error( moText("moConsole:: Couldn't load Post Effect:") + moText(fxname));
+			} else {
+			    MODebug2->Error(moText("moConsole::LoadPostEffects Error: Config File doesn't exist : ") + (moText)completecfname);
+			}
 			m_Config.NextValue();
 		}
 	}
@@ -861,12 +919,18 @@ moConsole::Draw() {
     moText cs;
     cs = m_Config[moR(CONSOLE_SCRIPT)][MO_SELECTED][0].Text();
 
+
 	if ((moText)m_ConsoleScript!=cs) {
 
         m_ConsoleScript = cs;
         moText fullscript = m_pResourceManager->GetDataMan()->GetDataPath()+ moSlash + (moText)m_ConsoleScript;
 
+        MODebug2->Message(moText("Console script loading : ") + (moText)fullscript );
+
         if ( CompileFile(fullscript) ) {
+
+            MODebug2->Message(moText("Console script loaded : ") + (moText)fullscript );
+
             moText toffset=moText("");
 
             toffset = m_Config[moR(CONSOLE_SCRIPT)][MO_SELECTED][1].Text();
@@ -1169,8 +1233,11 @@ moConsole::GetDefinition( moConfigDefinition *p_configdefinition ) {
 	p_configdefinition->Add( moText("consolescript"), MO_PARAM_TEXT, CONSOLE_SCRIPT );
 
 	p_configdefinition->Add( moText("outputmode"), MO_PARAM_TEXT, CONSOLE_OUTPUTMODE );
-	p_configdefinition->Add( moText("renderresolution"), MO_PARAM_TEXT, CONSOLE_RENDERRESOLUTION );
 	p_configdefinition->Add( moText("outputresolution"), MO_PARAM_TEXT, CONSOLE_OUTPUTRESOLUTION );
+
+	p_configdefinition->Add( moText("rendermode"), MO_PARAM_TEXT, CONSOLE_RENDERMODE );
+	p_configdefinition->Add( moText("renderresolution"), MO_PARAM_TEXT, CONSOLE_RENDERRESOLUTION );
+
 	p_configdefinition->Add( moText("clip1"), MO_PARAM_TEXT, CONSOLE_CLIP1 );
 	p_configdefinition->Add( moText("clip2"), MO_PARAM_TEXT, CONSOLE_CLIP2 );
 	p_configdefinition->Add( moText("clip3"), MO_PARAM_TEXT, CONSOLE_CLIP3 );
@@ -1261,6 +1328,20 @@ int moConsole::GetObjectId( moText p_objectlabelname ) {
     return -1;
 }
 
+int moConsole::GetDirectoryFileCount( moText p_path ) {
+    int i;
+    moDirectory* pDir;
+    pDir = NULL;
+    moText completepath;
+    completepath = m_pResourceManager->GetDataMan()->GetDataPath() + (moText)p_path;
+    pDir = m_pResourceManager->GetFileMan()->GetDirectory(completepath);
+    if (pDir) {
+        pDir->Update();
+        return pDir->GetFiles().Count();
+    }
+
+    return -1;
+}
 
 void moConsole::RegisterFunctions()
 {
@@ -1287,6 +1368,9 @@ void moConsole::RegisterFunctions()
     RegisterFunction("LSetState");
 
     RegisterFunction("LGetDeviceCode");
+    RegisterFunction("LGetDeviceCodeId");
+
+    RegisterFunction("LGetDirectoryFileCount");
 
     RegisterFunction("PushDebugString");
 }
@@ -1335,8 +1419,11 @@ int moConsole::ScriptCalling(moLuaVirtualMachine& vm, int iFunctionNumber)
 
         case 15:
             return LGetDeviceCode(vm);
-
         case 16:
+            return LGetDeviceCodeId(vm);
+        case 17:
+            return LGetDirectoryFileCount(vm);
+        case 18:
             return PushDebugString(vm);
 	}
     return 0;
@@ -1358,10 +1445,10 @@ int moConsole::PushDebugString(moLuaVirtualMachine& vm)
     lua_State *state = (lua_State *) vm;
 	if (lua_isboolean(state,1)) {
 		bool vb = lua_toboolean(state,1);
-		vb ? MODebug2->Push(moText("true")) : MODebug2->Push(moText("false"));
+		vb ? MODebug2->Message(moText("true")) : MODebug2->Push(moText("false"));
 	} else {
 		char *text = (char *) lua_tostring (state, 1);
-		MODebug2->Push(moText(text));
+		MODebug2->Message( moText("Lua script running ") + moText(m_ConsoleScript) + moText(" : ") + moText(text));
 	}
 
     return 0;
@@ -1380,7 +1467,7 @@ int moConsole::LGetObjectId(moLuaVirtualMachine& vm)
     lua_pushnumber(state, (lua_Number) objectid );
 
     if (objectid==-1) {
-        MODebug2->Error( "Object doesnt exists" );
+        MODebug2->Error( moText("Object doesnt exists: ")+(moText)objectlabelname );
     }
 
     return 1;
@@ -1678,4 +1765,46 @@ int moConsole::LGetDeviceCode(moLuaVirtualMachine& vm)
     }
 
     return 1;
+}
+
+int moConsole::LGetDeviceCodeId(moLuaVirtualMachine& vm)
+{
+    lua_State *state = (lua_State *) vm;
+
+    MOint objectid = (MOint) lua_tonumber (state, 1) - MO_MOLDEOOBJECTS_OFFSET_ID;
+    char *devicecodestr = (char *) lua_tostring (state, 2);
+    MOint devicecode = -1;
+
+    moMoldeoObject* Object = m_MoldeoObjects[objectid];
+
+    if (Object && Object->GetConfig()) {
+        if (Object->GetType()==MO_OBJECT_IODEVICE) {
+            moIODevice* pDevice = (moIODevice*) Object;
+            devicecode = pDevice->GetCode(devicecodestr);
+        }
+        lua_pushnumber(state, (lua_Number) devicecode );
+    } else {
+        MODebug2->Error( moText("in console script: LGetDeviceCodeId : object not founded : id:")+(moText)IntToStr(objectid));
+    }
+
+    return 1;
+}
+
+int moConsole::LGetDirectoryFileCount(moLuaVirtualMachine& vm) {
+    lua_State *state = (lua_State *) vm;
+
+    char *pathname = (char *) lua_tostring (state, 1);
+
+    int filecount = -1;
+
+    filecount = this->GetDirectoryFileCount( pathname );
+
+    lua_pushnumber(state, (lua_Number) filecount );
+
+    if (filecount==-1) {
+        MODebug2->Error( moText("console lua script: Directory doesn't exist") );
+    }
+
+    return 1;
+
 }

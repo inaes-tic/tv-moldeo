@@ -888,6 +888,7 @@ public:
 //================================================================
 //MOB Moldeo Object
 //================================================================
+    virtual moDirectorStatus ImportMob( moText p_filename ) { return MO_ACTIONHANDLER(ImportMob(p_filename)); }
 
     /// Abre un MOB ya existente desde un archivo de configuración
 	virtual moDirectorStatus OpenMob( moMobDescriptor p_MobDesc ) { return MO_ACTIONHANDLER(OpenMob(p_MobDesc)); }

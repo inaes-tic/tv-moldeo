@@ -52,6 +52,7 @@ BEGIN_EVENT_TABLE(moDirectorFrame, wxFrame)
 	EVT_MENU( MODIRECTOR_SAVEMOB, moDirectorFrame::OnSaveMob )
 	EVT_MENU( MODIRECTOR_CLOSEMOB, moDirectorFrame::OnCloseMob )
 	EVT_MENU( MODIRECTOR_OPENMOB, moDirectorFrame::OnOpenMob )
+	EVT_MENU( MODIRECTOR_IMPORTMOB, moDirectorFrame::OnImportMob )
 
 	EVT_MENU( MODIRECTOR_SAVEALL, moDirectorFrame::OnSaveAll )
 	EVT_MENU( MODIRECTOR_CLOSEALL, moDirectorFrame::OnCloseAll )
@@ -103,7 +104,7 @@ moDirectorFrame::moDirectorFrame(const wxString& title)
     wxFrame::Create(NULL, wxID_ANY, title, wxPoint(0,0), wxSize(1024,768));
 
     m_cForeground = wxColour(255,255,255);
-    m_cBackground = wxColour(80,80,80);
+    m_cBackground = wxColour(0,0,0);
 
     // set the frame icon
     //SetIcon(wxICON(sample));
@@ -152,6 +153,7 @@ moDirectorFrame::moDirectorFrame(const wxString& title)
     fileMenu->Append(MODIRECTOR_NEWPREEFFECT, _T("Add P&reEffect\tAlt-W"), _T("Add a new pre-effect"));
 	fileMenu->Append(MODIRECTOR_NEWEFFECT, _T("Add &Effect\tAlt-E"), _T("Add a new effect"));
 	fileMenu->Append(MODIRECTOR_NEWPOSTEFFECT, _T("Add P&ostEffect\tAlt-R"), _T("Add a new post-effect"));
+    fileMenu->Append(MODIRECTOR_IMPORTMOB, _T("Import &Moldeo Object from config file\tAlt-E"), _T("Import Mob"));
 
     fileMenu->AppendSeparator();
     fileMenu->Append(MODIRECTOR_NEWIODEVICE, _T("Add IODevice"), _T("Add IODevice"));
@@ -221,12 +223,12 @@ moDirectorFrame::moDirectorFrame(const wxString& title)
 	FrameManager.AddPane( m_pGUINotebook, wxAuiPaneInfo().Name(wxT("preview")).Caption(wxT("Console")).CaptionVisible().Floatable().Movable().Dockable().MaximizeButton().MinimizeButton().Resizable(true));
 
 	//LEFT PANE
-	FrameManager.GetPane(wxT("explorer")).Show().Left().Layer(1).Row(0).Position(0).MinSize(200,370).BestSize(300,370);
+	FrameManager.GetPane(wxT("explorer")).Show().Left().Layer(1).Row(0).Position(0).MinSize(0,370).BestSize(300,370);
 
 
 	//CENTER PANE
-	FrameManager.GetPane(wxT("preview")).Show().Center().Top().Layer(0).Row(0).Position(0).MinSize(300,370);
-	FrameManager.GetPane(wxT("layers")).Show().Center().Top().Layer(0).Row(1).Position(0).MinSize(300,150);
+	FrameManager.GetPane(wxT("preview")).Show().Center().Top().Layer(0).Row(0).Position(0).MinSize(0,370).BestSize(50,370);
+	FrameManager.GetPane(wxT("layers")).Show().Center().Top().Layer(0).Row(1).Position(0).MinSize(300,250);
 //	FrameManager.GetPane(wxT("log")).Show().Center().Layer(0).Row(2).Position(0).MinSize(300,50).BestSize(300,50);
 
 	//RIGHT PANE
@@ -251,12 +253,15 @@ moDirectorFrame::moDirectorFrame(const wxString& title)
 
     //m_pInspectorNotebook->SetArtProvider(pTabArt);
 
-	FrameManager.Update();
 
+
+	FrameManager.Update();
+/*
     int s_index = rand() % 5;
     wxTipProvider *moTipProvider = wxCreateFileTipProvider(wxT("tips.txt"), s_index);
     wxShowTip(this,moTipProvider,true);
     delete moTipProvider;
+    */
 
 }
 
@@ -292,6 +297,9 @@ moDirectorFrame::CreateDataBook() {
         m_pDataNotebook->SetBackgroundColour(m_cBackground);
 
         m_pDataNotebook->m_pLogTextCtrl = CreateTextCtrl();
+        wxFont* pLogFont = new wxFont( 13, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
+        m_pDataNotebook->m_pLogTextCtrl->SetFont( *pLogFont );
+        //m_pDataNotebook->m_pLogTextCtrl->SetInsertionPoint(0);
 
 		m_pDataNotebook->m_pVirtualDirTreeCtrl = new wxVirtualDirTreeCtrl(m_pDataNotebook, wxID_ANY, wxPoint(0,0), wxSize(300,377),wxTR_DEFAULT_STYLE | wxNO_BORDER | wxBORDER_NONE );
 		m_pDataNotebook->m_pVirtualDirTreeCtrl->SetForegroundColour(m_cForeground);
@@ -312,16 +320,18 @@ moDirectorFrame::CreateDataBook() {
         m_pDataNotebook->m_pResourcesTreeCtrl->SetBackgroundColour(m_cBackground);
 		m_pDataNotebook->m_pResourcesTreeCtrl->SetDirectorFrame( this );
 
-		m_pDataNotebook->AddPage( m_pDataNotebook->m_pProjectTreeCtrl, wxT("Project") );
-		m_pDataNotebook->GetPage(0)->SetBackgroundColour(m_cBackground);
-		m_pDataNotebook->AddPage( m_pDataNotebook->m_pIODevicesTreeCtrl, wxT("IODevices") );
-		m_pDataNotebook->GetPage(1)->SetBackgroundColour(m_cBackground);
-        m_pDataNotebook->AddPage( m_pDataNotebook->m_pResourcesTreeCtrl, wxT("Resources") );
-		m_pDataNotebook->GetPage(2)->SetBackgroundColour(m_cBackground);
-		m_pDataNotebook->AddPage( m_pDataNotebook->m_pVirtualDirTreeCtrl, wxT("Data") );
-		m_pDataNotebook->GetPage(3)->SetBackgroundColour(m_cBackground);
 		m_pDataNotebook->AddPage( m_pDataNotebook->m_pLogTextCtrl, wxT("Log") );
+		m_pDataNotebook->GetPage(0)->SetBackgroundColour(m_cBackground);
+
+		m_pDataNotebook->AddPage( m_pDataNotebook->m_pProjectTreeCtrl, wxT("Project") );
+		m_pDataNotebook->GetPage(1)->SetBackgroundColour(m_cBackground);
+		m_pDataNotebook->AddPage( m_pDataNotebook->m_pIODevicesTreeCtrl, wxT("IODevices") );
+		m_pDataNotebook->GetPage(2)->SetBackgroundColour(m_cBackground);
+        m_pDataNotebook->AddPage( m_pDataNotebook->m_pResourcesTreeCtrl, wxT("Resources") );
+		m_pDataNotebook->GetPage(3)->SetBackgroundColour(m_cBackground);
+		m_pDataNotebook->AddPage( m_pDataNotebook->m_pVirtualDirTreeCtrl, wxT("Data") );
 		m_pDataNotebook->GetPage(4)->SetBackgroundColour(m_cBackground);
+
 
 	}
 
@@ -618,7 +628,7 @@ wxTextCtrl* moDirectorFrame::CreateTextCtrl()
 {
 
     return new wxTextCtrl(this,-1, wxT(""),
-                          wxPoint(0,0), wxSize(150,90),
+                          wxPoint(0,0), wxSize(500,90),
                           wxNO_BORDER | wxTE_MULTILINE | wxTE_RICH);
 }
 
@@ -786,6 +796,64 @@ moDirectorFrame::OnNewEffect( wxCommandEvent& event ) {
         moMobDefinition pMobDefinition = pNewEffectDialog->GetMobDefinition();
 
         NewMob( moMobDescriptor( pMobDefinition ) );
+
+    }
+
+}
+
+void
+moDirectorFrame::OnImportMob( wxCommandEvent& event ) {
+
+    wxFileDialog* pFileDialog = NULL;
+	moMobDescriptor MobDescriptor;
+	moProjectDescriptor ProjectDescriptor;
+	moDirectorStatus	mStatus;
+
+    ProjectDescriptor = GetProject();
+
+
+	//open browser window
+	if ( event.GetString()==_T("") ) {
+
+        pFileDialog = new wxFileDialog( this );
+
+        if(pFileDialog) {
+
+            pFileDialog->SetWildcard(wxT("Config files (*.cfg)|*.cfg|All files (*.*)|*.*"));
+
+            if( pFileDialog->ShowModal() == wxID_OK ) {
+
+                wxFileName	FileName( pFileDialog->GetPath() );
+
+                wxString path = FileName.GetPath();
+                #ifdef MO_WIN32
+                    path+= "\\";
+                #else
+                    path+= _T("/");
+                #endif
+                wxString fullpath = FileName.GetFullPath();
+
+                mStatus = ImportMob( moWx2Text(fullpath) );
+
+            }
+
+        }
+
+	} else {
+
+	    Log( moText("Direct importing..") + moWx2Text(event.GetString()));
+
+        wxFileName	FileName( event.GetString() );
+
+        wxString path = FileName.GetPath();
+        #ifdef MO_WIN32
+            path+= "\\";
+        #else
+            path+= _T("/");
+        #endif
+        wxString fullpath = FileName.GetFullPath();
+
+        mStatus = ImportMob( moWx2Text(fullpath) );
 
     }
 
@@ -1028,20 +1096,25 @@ moDirectorFrame::FocusOutput() {
     {
         wxDisplay thisDisplay(0);
         wxDisplay theOtherDisplay(1);
+        wxDisplay theOther2Display(2);
 
         thisDisplay.GetFromWindow(this);
 
         wxRect client = thisDisplay.GetClientArea();
         wxRect client2 = theOtherDisplay.GetClientArea();
+        wxRect client3 = theOther2Display.GetClientArea();
 
         wxString clientareastr;
         wxString clientareastr2;
+        wxString clientareastr3;
 
         clientareastr.Printf(" area: %d,%d,%d,%d", client.GetLeft(), client.GetTop(), client.GetWidth(), client.GetHeight() );
         clientareastr2.Printf(" area: %d,%d,%d,%d", client2.GetLeft(), client2.GetTop(), client2.GetWidth(), client2.GetHeight() );
+        clientareastr3.Printf(" area: %d,%d,%d,%d", client3.GetLeft(), client3.GetTop(), client3.GetWidth(), client3.GetHeight() );
 
        //wxMessageBox(thisDisplay.GetName() + clientareastr);
        //wxMessageBox(theOtherDisplay.GetName() + clientareastr2 );
+       //wxMessageBox(theOther2Display.GetName() + clientareastr3 );
 
 
        if (client2.GetWidth()!=0){
@@ -1522,9 +1595,14 @@ moDirectorFrame::Log( moText p_message ) {
 
 	wxString  w =(wxChar*)(char*)p_message;
 
-	m_pDataNotebook->m_pLogTextCtrl->SetDefaultStyle( wxTextAttr( wxColour( 50, 255, 50 )) );
+    if (m_pDataNotebook->m_pLogTextCtrl->GetNumberOfLines()>10000) {
+        m_pDataNotebook->m_pLogTextCtrl->Clear();
+    }
 
+	m_pDataNotebook->m_pLogTextCtrl->SetDefaultStyle( wxTextAttr( wxColour( 50, 255, 50 )) );
 	m_pDataNotebook->m_pLogTextCtrl->AppendText(w + wxT("\n"));
+
+	m_pDataNotebook->m_pLogTextCtrl->ShowPosition(m_pDataNotebook->m_pLogTextCtrl->GetLastPosition());
 
 }
 
@@ -1534,10 +1612,14 @@ moDirectorFrame::LogError( moText p_message ) {
 
 	wxString  w =(wxChar*)(char*)p_message;
 
-	m_pDataNotebook->m_pLogTextCtrl->SetDefaultStyle( wxTextAttr( wxColour(255,0,0) ) );
+    if (m_pDataNotebook->m_pLogTextCtrl->GetNumberOfLines()>10000) {
+        m_pDataNotebook->m_pLogTextCtrl->Clear();
+    }
 
+	m_pDataNotebook->m_pLogTextCtrl->SetDefaultStyle( wxTextAttr( wxColour(255,0,0) ) );
 	m_pDataNotebook->m_pLogTextCtrl->AppendText(w + wxT("\n"));
 
+    m_pDataNotebook->m_pLogTextCtrl->ShowPosition(m_pDataNotebook->m_pLogTextCtrl->GetLastPosition());
 	//wxMessageBox(w);
 
 }

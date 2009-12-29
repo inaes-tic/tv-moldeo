@@ -174,7 +174,7 @@ MOboolean moRenderManager::Init( moRenderManagerMode p_render_to_texture_mode,
     m_pGLManager->SetMoldeoGLState();
 	m_pGLManager->SetPerspectiveView(m_screen_width, m_screen_height);
 
-	if (GLEW_EXT_framebuffer_object)
+	if (GLEW_EXT_framebuffer_object && (m_render_to_texture_mode == RENDERMANAGER_MODE_FRAMEBUFFER || m_render_to_texture_mode==RENDERMANAGER_MODE_VDPAU))
 	{
 	    m_pGLManager->SetFrameBufferObjectActive();
         MODebug2->Message( moText("Using framebuffer_object: creating one fbo per predefined textures (4). ") );
@@ -210,7 +210,7 @@ MOboolean moRenderManager::Finish()
 
 MOboolean moRenderManager::IsRenderToFBOEnabled()
 {
-    return (m_render_to_texture_mode == MO_RENDER_TO_TEXTURE_FBOBJECT) && GLEW_EXT_framebuffer_object;
+    return (m_render_to_texture_mode == RENDERMANAGER_MODE_FRAMEBUFFER) && GLEW_EXT_framebuffer_object;
 }
 
 MOboolean moRenderManager::RenderResEqualScreenRes()

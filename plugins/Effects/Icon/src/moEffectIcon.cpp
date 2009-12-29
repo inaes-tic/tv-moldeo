@@ -331,6 +331,7 @@ void moEffectIcon::Draw( moTempo* tempogral, moEffectState* parentstate )
                             //matrix = matrix + moText(" ")+IntToStr(npz);
                             poscuad = moVector2f(poscuad.X()-0.5,-poscuad.Y()+0.5);
                             if ( npz > 0 ) {
+                                    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
                                     glColor4f( 0.5+0.5*(float)z/15.0, 0.5+0.5*(float)z/15.0, 0.0, 0.25);
                                     glBegin(GL_QUADS);
                                         glVertex2f((poscuad.X() - 0.125)*w, (poscuad.Y() - 0.125)*h);
@@ -340,6 +341,7 @@ void moEffectIcon::Draw( moTempo* tempogral, moEffectState* parentstate )
                                     glEnd();
                             }
                             if ( nmz > 0 ) {
+                                    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
                                     glColor4f( 0.0, 0.0, 0.5+0.5*(float)z/15.0, 0.25);
                                     glBegin(GL_QUADS);
                                         glVertex2f((poscuad.X() - 0.1)*w, (poscuad.Y() - 0.1)*h);
@@ -381,8 +383,10 @@ void moEffectIcon::Draw( moTempo* tempogral, moEffectState* parentstate )
                             p4 = moVector2f(p4.X()-0.5,-p4.Y()+0.5);
                            if ( npz == 0 ) {
                                     glColor4f( 0.3+0.2*(float)cc/35.0, 0.3+0.2*(float)cc/35.0, 0.2, 0.15);
+                                    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
                            } else {
                                glColor4f( 0.0, 0.7+0.3*(float)cc/35.0, 0.0, 0.75);
+                               glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 
                             }
 

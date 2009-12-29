@@ -142,7 +142,23 @@ MOboolean moNetOSCOut::Init()
 
 	for(i = 0; i < n_hosts; i++)
 	{
-		transmitSockets[i] = new UdpTransmitSocket( IpEndpointName( host_name[i], host_port[i] ) );
+	    unsigned long ii = GetHostByName(host_name[i]);
+
+	        char buffer[100];
+            snprintf(buffer, 100, "%lu", ii); // Memory-safe version of sprintf.
+
+            moText str = buffer;
+
+	    //MODebug2->Message( moText("moNetOscOut:: host: ") + moText(host_name[i]) + moText(" ip int:") + (moText)str );
+
+
+
+	    IpEndpointName ipendpointname( ii, host_port[i] ) ;
+
+
+		transmitSockets[i] = new UdpTransmitSocket( ipendpointname );
+
+
 	    eventPacket[i] = new moEventPacket(sendInterval, maxEventNum);
 	}
 
@@ -243,7 +259,7 @@ void moNetOSCOut::Update(moEventList *Eventos)
 
                 pData.SetInt( m_pTrackerData->GetValidFeatures() );
                 tracker_data_message.Add(pData);
-                //MODebug2->Message( moText("N:") + (moText)IntToStr( m_pTrackerData->GetValidFeatures() ) );
+
 
                 //if (m_pTrackerData->GetValidFeatures()>0 && m_pTrackerData->GetValidFeatures()<80) {
 
@@ -321,12 +337,13 @@ void moNetOSCOut::Update(moEventList *Eventos)
                     tracker_data_message.Add(pData);
 
                     //MODebug2->Message( moText("netoscout: receiving tracker data: bx:") + (moText)FloatToStr(m_pTrackerData->GetBarycenter().X()) );
-
+                    //MODebug2->Push( moText("N:") + (moText)IntToStr( m_pTrackerData->GetValidFeatures() ) );
                     for (i = 0; i < host_name.Count(); i++)
                     {
                         //res = eventPacket[i]->AddEvent(actual);
                         //if (eventPacket[i]->ReadyToSend())
                         {
+                            //MODebug2->Push( moText("I:") + (moText)IntToStr( i ) );
                             SendDataMessage( i, tracker_data_message );
                             //eventPacket[i]->ClearPacket();
                             //if (!res) eventPacket[i]->AddEvent(actual);
@@ -389,8 +406,8 @@ void moNetOSCOut::SendDataMessage( int i, moDataMessage &datamessage ) {
 
     (*packetStream) << osc::BeginMessage( moText("") );
 
-    for(int i=0; i< datamessage.Count(); i++) {
-        moData data = datamessage[i];
+    for(int j=0; j< datamessage.Count(); j++) {
+        moData data = datamessage[j];
         switch(data.Type()) {
             case MO_DATA_NUMBER_FLOAT:
                 (*packetStream) << data.Float();
@@ -413,8 +430,9 @@ void moNetOSCOut::SendDataMessage( int i, moDataMessage &datamessage ) {
     }
     (*packetStream) << osc::EndMessage;
     (*packetStream) << osc::EndBundle;
-    transmitSockets[i]->Send( packetStream->Data(), packetStream->Size() );
+    if (transmitSockets[i]) transmitSockets[i]->Send( packetStream->Data(), packetStream->Size() );
 
+    //MODebug2->Push(moText("sending"));
 
 }
 

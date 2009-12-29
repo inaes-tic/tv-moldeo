@@ -201,7 +201,7 @@ moEffect::LoadCodes(moIODeviceManager *consolaesarray) {
 			if((accioncod>=0) &&(accioncod<ncodes)) {
 				if(coddisp==-1) {
 				    texto += moText("\n");
-                    texto += GetName();
+                    texto += GetConfigName();
                     texto += moText(".cfg: no se encontró en ningun dispositivo el codigo de dispositivo correspondiente a: ");
                     texto += strcod;
 					MODebug2->Error(texto);

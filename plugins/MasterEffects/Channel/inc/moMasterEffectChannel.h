@@ -137,6 +137,8 @@ public:
     void Draw(moTempo*, moEffectState* parentstate = NULL);
     MOboolean Finish();
     void Interaction(moIODeviceManager *);
+    //void Update( moEventList *p_eventlist );
+
 };
 
 class moMasterEffectChannelFactory : public moMasterEffectFactory

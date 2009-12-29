@@ -103,6 +103,7 @@ enum moConsoleParamIndex {
 	CONSOLE_SCRIPT,
 	CONSOLE_OUTPUTMODE,
 	CONSOLE_OUTPUTRESOLUTION,
+	CONSOLE_RENDERMODE,
 	CONSOLE_RENDERRESOLUTION,
 	CONSOLE_CLIP1,
 	CONSOLE_CLIP2,
@@ -259,7 +260,9 @@ class LIBMOLDEO_API moConsole : public moMoldeoObject {
         void SetPreconf( int objectid, int preconfid );
 
         void SetTicks( int ticksid );
+        int GetObjectId( moText p_objectlabelname );
 
+        int GetDirectoryFileCount( moText p_path );
 
         int ScriptCalling(moLuaVirtualMachine& vm, int iFunctionNumber);
         void HandleReturns(moLuaVirtualMachine& vm, const char *strFunc);
@@ -290,8 +293,11 @@ class LIBMOLDEO_API moConsole : public moMoldeoObject {
         int LGetState(moLuaVirtualMachine& vm);
 
         int LGetDeviceCode(moLuaVirtualMachine& vm);
+        int LGetDeviceCodeId(moLuaVirtualMachine& vm);
 
-        int GetObjectId( moText p_objectlabelname );
+        int LGetDirectoryFileCount(moLuaVirtualMachine& vm);
+
+
 
 
     protected:

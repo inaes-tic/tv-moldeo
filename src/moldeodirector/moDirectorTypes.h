@@ -89,7 +89,6 @@
 #include <wx/glcanvas.h>
 
 
-
 class moGLCanvas;
 class moDirectorConsole;
 class moDirectorChildConsole;

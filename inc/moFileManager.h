@@ -54,6 +54,9 @@ enum moFileType {
 	MO_FILETYPE_UTP
 };
 
+typedef long moFileDate;
+typedef long moFileSize;
+
 #ifdef MO_WIN32
     #include "io.h"
     #define moSlash moText("/")
@@ -108,6 +111,9 @@ class LIBMOLDEO_API moFile : public moAbstract {
 		moText	GetExtension();
 		moText	GetProtocol();
 
+		moFileDate	GetDate();
+		moFileSize	GetSize();
+
 		moFileStatus GetStatus();
 
 		MOubyte* GetData();
@@ -117,6 +123,9 @@ class LIBMOLDEO_API moFile : public moAbstract {
 
 		moFileType		m_FileType;
 		moFileStatus	m_FileStatus;
+
+		moFileDate      m_FileDate;
+		moFileSize      m_FileSize;
 
 		moText		m_CompletePath;
 		moText		m_Drive;

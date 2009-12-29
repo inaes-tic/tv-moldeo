@@ -395,6 +395,21 @@ moDirectorStatus moDirectorCore::OpenMob( moMobDescriptor p_MobDesc ) {
 
 }
 
+moDirectorStatus moDirectorCore::ImportMob( moText p_filename ) {
+    /**
+    el core se fija que este archivo de configuracion no exista dentro de la
+    carpeta actual del proyecto [conflicto al querer ser incluido]
+    al menos que se trate del archivo en cuestión
+     */
+
+    //si el archivo no se encuentra dentro de la carpeta de nuestro proyecto es que lo tenemos que importar...
+
+    //si ya se encuentra dentro de nuestro proyecto simplemente lo abrimos
+
+    return m_pDirectorConsole->ImportMob( p_filename );
+
+}
+
 
 //remove from child frame List, and unload from SessionProject...
 moDirectorStatus

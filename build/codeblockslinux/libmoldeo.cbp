@@ -49,12 +49,13 @@
 			<Add option="`pkg-config muparser --cflags`" />
 			<Add option="`pkg-config lua5.1 --cflags`" />
 			<Add option="-DMO_GSTREAMER" />
-			<Add option="-DMO_VDPAU" />
+			<Add option="-DMO_VDPAU_NO" />
 			<Add directory="../../inc" />
 			<Add directory="../../inc/3ds" />
 			<Add directory="../../contrib/src/tinyxml/" />
 			<Add directory="/usr/include/muParser" />
 			<Add directory="/usr/include" />
+			<Add directory="/home/fabri/instalar/mplayer-vdpau-3532130/mplayer-vdpau" />
 		</Compiler>
 		<Linker>
 			<Add option="`freetype-config --libs`" />
@@ -64,6 +65,8 @@
 			<Add library="freeimage" />
 			<Add library="libboost_filesystem-mt" />
 			<Add library="vdpau" />
+			<Add library="avcodec" />
+			<Add directory="/home/fabri/instalar/mplayer-vdpau-3532130/mplayer-vdpau" />
 		</Linker>
 		<Unit filename="../../inc/3ds/3ds.h" />
 		<Unit filename="../../inc/mo3dModelManager.h" />

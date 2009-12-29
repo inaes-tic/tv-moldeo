@@ -215,6 +215,18 @@ MOboolean moTextureBuffer::UpdateImages( MOint maxfiles ) {
                     MODebug2->Push( moText("moTextureBuffer::UpdateImages > Trying to load image:") +  (moText)pFile->GetCompletePath() );
                     if ( LoadImage( m_FolderName + moSlash + pFile->GetFileName() , pImage, m_ActualImage ) ) {
                         m_ImagesProcessed++;
+                        if ( m_ActualImage == (m_pDirectory->GetFiles().Count()-2) ) {
+                            MODebug2->Log( moText(" ####TEXTUREBUFFER LEVEL HISTOGRAM####"));
+                            moText barra;
+                            moText nivel;
+                            barra = moText("###################################################################################");
+
+                            for(int k=0; k<100; k++) {
+                                nivel = barra;
+                                nivel.Left( m_pBufferLevels[k][0].Count() );
+                                MODebug2->Log( moText(" level:") + IntToStr(k) + (moText)nivel );
+                            }
+                        }
                     }
 
 					//}
@@ -253,8 +265,10 @@ moTextureBuffer::LoadImage( moText p_ImageName, moBitmap* pImage, int indeximage
 	} else
 	*/
 	pImageResult = _pImage;
-	FreeImage_AdjustContrast( pImageResult, 10 );
-	FreeImage_AdjustBrightness( pImageResult, 60 );
+	FreeImage_AdjustContrast( pImageResult, 0 );
+	FreeImage_AdjustBrightness( pImageResult, 0 );
+
+
 
 	//RESCALE: NOTE NECESARRY HERE
 	//quizas podamos definir un máximo para el tamaño tanto ancho como alto
@@ -285,13 +299,22 @@ moTextureBuffer::LoadImage( moText p_ImageName, moBitmap* pImage, int indeximage
 	    pTextureMemory = (moTextureMemory*) m_pResourceManager->GetTextureMan()->GetTexture(idx);
         if (pTextureMemory) {
             if (pTextureMemory->BuildFromBitmap( pImageResult, m_BufferFormat )) {
-                MODebug2->Push( moText("moTextureBuffer::LoadImage success : ") + (moText)pTextureMemory->GetName()
-                                + moText(" width:") + IntToStr(pTextureMemory->GetWidth()) +
-                                + moText(" height:") + IntToStr(pTextureMemory->GetHeight()) );
+
                 m_Frames.Add(pTextureMemory);
 
                 int contrastlevel = pTextureMemory->GetContrast() / 2000;
-                int luminancelevel = (int)((float)pTextureMemory->GetLuminance() / (float)2.55);
+                int luminancelevel = (int)((float)pTextureMemory->GetLuminance() / (float)2.56 ) - 1;
+
+                MODebug2->Message( moText("moTextureBuffer::LoadImage success : ") + (moText)pTextureMemory->GetName());
+                #ifdef _DEBUG
+                MODebug2->Message( moText("moTextureBuffer::LoadImage success : ") + (moText)pTextureMemory->GetName()
+                                + moText(" width:") + IntToStr(pTextureMemory->GetWidth())
+                                + moText(" height:") + IntToStr(pTextureMemory->GetHeight())
+                                + moText(" luminance:") + IntToStr(pTextureMemory->GetLuminance())
+                                + moText(" luminancelevel:") + IntToStr(luminancelevel) +
+                                + moText(" contrast:") + IntToStr(pTextureMemory->GetContrast())
+                                + moText(" contrastlevel:") + IntToStr(contrastlevel) );
+                #endif
 
                 contrastlevel = 0;
 
@@ -308,7 +331,9 @@ moTextureBuffer::LoadImage( moText p_ImageName, moBitmap* pImage, int indeximage
                         MODebug2->Error( moText("moTextureBuffer::LoadImage Error: contrast out of bound:")+ IntToStr(pTextureMemory->GetContrast()) );
                 }
                 if (0<=luminancelevel && luminancelevel<100 && 0<=contrastlevel && contrastlevel<10) {
+
                     m_pBufferLevels[luminancelevel][contrastlevel].Add( pTextureMemory );
+
                     int icc = momin( m_pBufferLevels[luminancelevel][contrastlevel].Count(), 99 );
                     LevelDiagram[ (luminancelevel + icc*100)*3 ] = 250;
                     LevelDiagram[ (luminancelevel+1 + icc*100)*3 ] = 250;
@@ -344,7 +369,7 @@ moTextureFrames&  moTextureBuffer::GetBufferLevels( int L, int C ) {
         return m_pBufferLevels[L][C];
     } else {
         //devolvemos el oscuro
-        return m_pBufferLevels[0][0];
+        return m_pBufferLevels[99][0];
     }
 
 }

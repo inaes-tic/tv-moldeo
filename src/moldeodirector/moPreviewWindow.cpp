@@ -64,13 +64,30 @@ moPreviewWindow::~moPreviewWindow()
 void moPreviewWindow::Init( moIDirectorActions* pActionsHandler, wxGLContext* p_pGLContext   ) {
 
     SetNextActionHandler( pActionsHandler);
+    int attribList[10];
+    int n = 0;
+
+    attribList[n++] = WX_GL_RGBA;
+    attribList[n++] = WX_GL_DOUBLEBUFFER;
+    attribList[n++] = WX_GL_DEPTH_SIZE;
+    attribList[n++] = 32;
+    //attribList[n++] = WX_GL_SAMPLES;
+    //attribList[n++] = 4;
+    attribList[n] = 0; // terminate the list
+
+
 
     if (p_pGLContext) {
-        if (m_pGLCanvas==NULL)
-            m_pGLCanvas = new moGLCanvas( this, p_pGLContext, -1, wxPoint(0,40), wxSize(400,300), 0, wxT("moGLCanvas"));
+        if (m_pGLCanvas==NULL) {
+
+            m_pGLCanvas = new moGLCanvas( this, p_pGLContext, -1, attribList, wxPoint(0,40), wxSize(400,300), 0, wxT("moGLCanvas"));
+            //m_pGLCanvas = new moGLCanvas( this, p_pGLContext, -1, NULL, wxPoint(0,40), wxSize(400,300), 0, wxT("moGLCanvas"));
+        }
     } else {
-        if (m_pGLCanvas==NULL)
-            m_pGLCanvas = new moGLCanvas( this, -1, wxPoint(0,40), wxSize(400,300), 0, wxT("moGLCanvas"));
+        if (m_pGLCanvas==NULL) {
+            m_pGLCanvas = new moGLCanvas( this, -1, attribList, wxPoint(0,40), wxSize(400,300), 0, wxT("moGLCanvas"));
+            //m_pGLCanvas = new moGLCanvas( this, -1, NULL, wxPoint(0,40), wxSize(400,300), 0, wxT("moGLCanvas"));
+        }
     }
     if (m_pGLCanvas)
         m_pGLCanvas->Init( this );

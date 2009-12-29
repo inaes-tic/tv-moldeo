@@ -23,19 +23,21 @@ moGLCanvas::moGLCanvas(wxWindow *parent,
     block = false;
     m_active = false;
 	m_pHandler = NULL;
-
+	SetCursor(wxCursor(wxCURSOR_BLANK));
 }
 
 moGLCanvas::moGLCanvas(wxWindow *parent,
     wxGLContext*    p_pGLContext,
     wxWindowID id,
-    const wxPoint& pos, const wxSize& size, long style, const wxString& name)
-    : wxGLCanvas(parent,(wxGLContext*) p_pGLContext, id, pos, size, style|wxFULL_REPAINT_ON_RESIZE, name)
+    int* attribList,
+    const wxPoint& pos, const wxSize& size, long style, const wxString& name  )
+    : wxGLCanvas(parent,(wxGLContext*) p_pGLContext, id, pos, size, style|wxFULL_REPAINT_ON_RESIZE, name, attribList)
 {
 	m_init = false;
     block = false;
     m_active = false;
 	m_pHandler = NULL;
+	SetCursor(wxCursor(wxCURSOR_BLANK));
 }
 
 moGLCanvas::moGLCanvas(wxWindow *parent,

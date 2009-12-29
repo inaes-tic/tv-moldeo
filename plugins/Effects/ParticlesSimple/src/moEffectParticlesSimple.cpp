@@ -301,6 +301,16 @@ moEffectParticlesSimple::Init()
 
     glidori  = 0;
     glid = 0;
+    original_width = 0;
+    original_height = 0;
+    original_proportion = 1.0;
+
+    midi_red = midi_green = midi_blue = 1.0;
+    midi_maxage = 1.0; //in millis
+    midi_emitionperiod = 1.0;//in millisec
+    midi_emitionrate = 1.0; // n per emitionperiod
+    midi_randomvelocity = 1.0; //inicial vel
+    midi_randommotion = 1.0; //motion dynamic
 
 	return true;
 
@@ -326,7 +336,7 @@ void moEffectParticlesSimple::ResetTimers() {
 
 }
 
-void moEffectParticlesSimple::Shot( moText source ) {
+void moEffectParticlesSimple::Shot( moText source, int shot_type, int shot_file ) {
 
     MODebug2->Push(moText("moEffectParticlesSimple::Shot: Shot activated!!!!")+ (moText)source);
 
@@ -336,6 +346,8 @@ void moEffectParticlesSimple::Shot( moText source ) {
 
     if (pSubSample && samplebuffer) {
         delete [] samplebuffer;
+        pSubSample = NULL;
+        samplebuffer = NULL;
     }
 
     glid = 0;
@@ -348,23 +360,39 @@ void moEffectParticlesSimple::Shot( moText source ) {
         ///primero toma la imagen que esta cargada: hay que generar una mas chica!!!!
         ///......
 
-        if ( source != moText("") ) {
+        if ( source != moText("")) {
             //agregado:
             //version banco de datos
             moTextureBuffer* pTexBufAltas = NULL;
+            int ichosen;
 
             int idid = m_pResourceManager->GetTextureMan()->GetTextureBuffer(moText( source ),true);
-            if (idid>-1) pTexBufAltas = m_pResourceManager->GetTextureMan()->GetTextureBuffer(idid);
+            if (idid>-1) {
+                pTexBufAltas = m_pResourceManager->GetTextureMan()->GetTextureBuffer(idid);
+                pTexBufAltas->UpdateImages(1);
+            }
             if (pTexBufAltas) {
+                pTexBufAltas->UpdateImages(1);
                 int np = pTexBufAltas->GetImagesProcessed();
                 if (np>0) {
-                    int irandom = ( ::rand() * np )/ RAND_MAX;
-                    glidori = pTexBufAltas->GetFrame(irandom);
+                    if (shot_type==0) {
+                        /** Aleatorio*/
+                        ichosen = ( ::rand() * np )/ RAND_MAX;
+                    } else {
+                        /** Secuencial (ultimo ingresado)*/
+                        if (shot_file<0) {
+                            ichosen = np - 1;
+                        } else {
+                            ichosen = shot_file;
+                        }
+                    }
+
+                    glidori = pTexBufAltas->GetFrame(ichosen);
                     glid = glidori;
                     if (glidori>0) {
-                        pTextureDest = (moTexture*) pTexBufAltas->GetTexture(irandom);
+                        pTextureDest = (moTexture*) pTexBufAltas->GetTexture(ichosen);
                     }
-                } else MODebug2->Error(  moText("no images processede yet"));
+                } else MODebug2->Error(  moText("no images processed yet"));
             }
 
         } else {
@@ -399,6 +427,12 @@ void moEffectParticlesSimple::Shot( moText source ) {
             moText alta;
             moText baja;
             moText extension;
+
+            original_width = pTextureDest->GetWidth();
+            original_height = pTextureDest->GetHeight();
+            if (original_height>0) {
+                original_proportion = (float)original_width / (float) original_height;
+            } else original_proportion = 1.0f;
 
             alta = (this->GetLabelName()) + moText("ALTA");
             baja = (this->GetLabelName()) + moText("BAJA");
@@ -492,14 +526,39 @@ void moEffectParticlesSimple::ReInit() {
 
                     ///calculamos la luminancia del cuadro correspondiente
                     //int x0, y0, x1, y1;
+                    float lumf = 0.0;
 
-                    if (pTextureDest && samplebuffer) {
+                    if (pSubSample && samplebuffer) {
 
-                        lum = (samplebuffer[ (i + j*pSubSample->GetWidth() ) *3 ] + samplebuffer[ (i+1 + j*pSubSample->GetWidth() ) *3 ] + samplebuffer[ (i+2 + j*pSubSample->GetWidth() ) *3 ]) / 3;
+                        if (pSubSample->GetWidth()!=m_cols) MODebug2->Error(moText("pSubSample width doesnt match m_cols"));
+                        if (pSubSample->GetHeight()!=m_rows) MODebug2->Error(moText("pSubSample height doesnt match m_rows"));
+
+                        int r = samplebuffer[ (i + j*pSubSample->GetWidth() ) *3 ];
+                        int g = samplebuffer[ (i+1 + j*pSubSample->GetWidth() ) *3 ];
+                        int b = samplebuffer[ (i+2 + j*pSubSample->GetWidth() ) *3 ];
+                        //MODebug2->Message(moText("r:")+IntToStr(r)+moText(" g:")+IntToStr(g)+moText(" b:")+IntToStr(b));
+
+                        lum = (r+g+b)/3;
+
+                        //lum = ( + samplebuffer[ (i+1 + j*pSubSample->GetWidth() ) *3 ] + samplebuffer[ (i+2 + j*pSubSample->GetWidth() ) *3 ] ) / 3;
+                        lum = ((lum & 1) << 7) | ((lum & 2) << 5) | ((lum & 4) << 3) | ((lum & 8) << 1) | ((lum & 16) >> 1) | ((lum & 32) >> 3) | ((lum & 64) >> 5) | ((lum & 128) >> 7);
+                        if (lum<0) lum = 0;
+                        //MODebug2->Message(moText("lum:")+IntToStr(lum));
 
                         if (lum>=0) {
+                            lum = lum*1.2;
 
-                            lumindex = (int)( 100.0 * (float)lum / (float)256)  - 1;
+                            lumf = ( 100.0 * (float)lum ) / (float)255.0;
+                            lumindex = (int) lumf;
+                            if (lumindex>99) lumindex = 99;
+                            //MODebug2->Push( moText("## Lum Index R G B ##") +IntToStr(lum)+IntToStr(r)+IntToStr(g)+IntToStr(b));
+
+                        } else {
+                            MODebug2->Message(moText("ReInit error:## lum is negative!!! ##")+IntToStr(lum)
+                                    +moText("subs: w:") + IntToStr(pSubSample->GetWidth())
+                                    +moText("subs: h:") + IntToStr(pSubSample->GetHeight())
+                            );
+                            lumindex = 99;
                         }
 
                     } else MODebug2->Push(moText("ReInit error: no texture nor samplebuffer"));
@@ -519,6 +578,7 @@ void moEffectParticlesSimple::ReInit() {
                              int irandom = -1;
 
                              irandom = ( ::rand() * nc )/ RAND_MAX;
+                             //irandom = 0;
 
                             moTextureMemory* pTexMem = pTextFrames.Get( irandom );
 
@@ -529,6 +589,9 @@ void moEffectParticlesSimple::ReInit() {
                                 pPar->pTextureMemory = pTexMem;
                                 if (pTexMem->GetHeight()>0) pPar->ImageProportion = (float) pTexMem->GetWidth() / (float) pTexMem->GetHeight();
                             } else {
+                                #ifdef _DEBUG
+                                MODebug2->Message(moText("Sample not founded: lumindex:")+IntToStr(lumindex)+moText(" irandom:")+IntToStr(irandom));
+                                #endif
                                 pPar->GLId = glidori;
                                 pPar->GLId2 = pPar->GLId;
                                 pPar->Color.X() = ((float)lum )/ 255.0f;
@@ -581,7 +644,7 @@ void moEffectParticlesSimple::ReInit() {
                 pParTmp->Force = pPar->Force;
                 pParTmp->Fixed = pPar->Fixed;
                 m_ParticlesSimpleArrayTmp.Set( i + j*m_cols, pParTmp );
-
+/*
                 MODebug2->Log( moText("Pos:") + IntToStr(i) + moText(" J:") + IntToStr(j) + moText(" lum:") + IntToStr(lum) + moText(" lumindex:") + IntToStr(lumindex) + moText(" glid:") + IntToStr(pPar->GLId) + moText(" glid2:") + IntToStr(pPar->GLId2));
                 MODebug2->Log( moText("X:") + FloatToStr(pPar->Pos3d.X()) + moText(" Y:") + FloatToStr(pPar->Pos3d.Y()) + moText(" Z:") + FloatToStr(pPar->Pos3d.Z()) );
                 MODebug2->Log( moText("VX:") + FloatToStr(pPar->Velocity.X()) + moText(" VY:") + FloatToStr(pPar->Velocity.Y()) + moText(" VZ:") + FloatToStr(pPar->Velocity.Z()) );
@@ -591,6 +654,7 @@ void moEffectParticlesSimple::ReInit() {
                 MODebug2->Log( moText("TCoord2 X:") + FloatToStr(pPar->TCoord2.X()) + moText(" TCoord2 Y:") + FloatToStr(pPar->TCoord2.Y()) );
                 MODebug2->Log( moText("Visible:") + IntToStr((int)pPar->Visible) );
                 MODebug2->Log( moText("Age:") + IntToStr((int)pPar->Age.Duration()) );
+                */
 
             } else MODebug2->Error(moText("ParticleSimple::ReInit::no particle pointer"));
         }
@@ -602,6 +666,7 @@ void moEffectParticlesSimple::ReInit() {
 
 void moEffectParticlesSimple::UpdateParameters() {
 
+
     time_tofull_restoration = m_Config[moR(PARTICLES_TIMETORESTORATION)][MO_SELECTED][0].Int();
     time_of_restoration = m_Config[moR(PARTICLES_TIMEOFRESTORATION)][MO_SELECTED][0].Int();
 
@@ -610,6 +675,7 @@ void moEffectParticlesSimple::UpdateParameters() {
 
     if (!moTimeManager::MoldeoTimer->Started()) {
         ResetTimers();
+
     }
 
     //if script is modified... recompile
@@ -620,7 +686,7 @@ void moEffectParticlesSimple::UpdateParameters() {
 
         if ( CompileFile(fullscript) ) {
 
-            MODebug2->Push(moText("ParticlesSimple script loaded ") + (moText)fullscript );
+            MODebug2->Message(moText("ParticlesSimple script loaded ") + (moText)fullscript );
 
             SelectScriptFunction( "Init" );
             //AddFunctionParam( m_FramesPerSecond );
@@ -649,10 +715,29 @@ void moEffectParticlesSimple::UpdateParameters() {
     m_Physics.gravitational = m_Config[moR(PARTICLES_GRAVITY)].GetData()->Fun()->Eval(state.tempo.ang);
     m_Physics.viscousdrag = m_Config[moR(PARTICLES_VISCOSITY)].GetData()->Fun()->Eval(state.tempo.ang);
 
+
+    /*
+    m_Physics.m_MaxAge = (int)((float)(m_Config[moR(PARTICLES_MAXAGE)][MO_SELECTED][0].Int()) * midi_maxage);
+    m_Physics.m_EmitionPeriod = (int)((float)(m_Config[moR(PARTICLES_EMITIONPERIOD)][MO_SELECTED][0].Int()) * midi_emitionperiod);
+    m_Physics.m_EmitionRate = (int)((float)(m_Config[moR(PARTICLES_EMITIONRATE)][MO_SELECTED][0].Int()) * midi_emitionrate);
+    m_Physics.m_DeathPeriod = m_Config[moR(PARTICLES_DEATHPERIOD)][MO_SELECTED][0].Float();
+*/
+
+    //emiper = (float)m_Config[moR(PARTICLES_EMITIONPERIOD)][MO_SELECTED][0].Int();
+    //emiper = emiper * midi_emitionperiod;
+    //emiperi = (long) emiper;
+    //MODebug2->Message(moText("Emiper:")+IntToStr(emiperi));
+
     m_Physics.m_MaxAge = m_Config[moR(PARTICLES_MAXAGE)][MO_SELECTED][0].Int();
+    //m_Physics.m_EmitionPeriod = emiperi;
+    //emiperi = m_Config[moR(PARTICLES_EMITIONPERIOD)][MO_SELECTED][0].Int() * midi_emitionperiod;
+    //m_Physics.m_EmitionPeriod = emiperi;
     m_Physics.m_EmitionPeriod = m_Config[moR(PARTICLES_EMITIONPERIOD)][MO_SELECTED][0].Int();
+    //m_Physics.m_EmitionPeriod = m_Config[moR(PARTICLES_EMITIONPERIOD)][MO_SELECTED][0].Int();
+    //MODebug2->Message(moText("Emiperiod:")+IntToStr(m_Physics.m_EmitionPeriod));
     m_Physics.m_EmitionRate = m_Config[moR(PARTICLES_EMITIONRATE)][MO_SELECTED][0].Int();
     m_Physics.m_DeathPeriod = m_Config[moR(PARTICLES_DEATHPERIOD)][MO_SELECTED][0].Float();
+
 
     m_Physics.m_RandomMethod = (moParticlesRandomMethod) m_Config[moR(PARTICLES_RANDOMMETHOD)][MO_SELECTED][0].Int();
     m_Physics.m_CreationMethod = (moParticlesCreationMethod) m_Config[moR(PARTICLES_CREATIONMETHOD)][MO_SELECTED][0].Int();
@@ -665,9 +750,15 @@ void moEffectParticlesSimple::UpdateParameters() {
     m_Physics.m_SizeOut = m_Config[moR(PARTICLES_SIZEOUT)].GetData()->Fun()->Eval(state.tempo.ang);
 
 
+    /*
+    m_Physics.m_RandomPosition = m_Config[moR(PARTICLES_RANDOMPOSITION)].GetData()->Fun()->Eval(state.tempo.ang);
+    m_Physics.m_RandomVelocity = m_Config[moR(PARTICLES_RANDOMVELOCITY)].GetData()->Fun()->Eval(state.tempo.ang) * midi_randomvelocity;
+    m_Physics.m_RandomMotion = m_Config[moR(PARTICLES_RANDOMMOTION)].GetData()->Fun()->Eval(state.tempo.ang) * midi_randommotion;
+    */
     m_Physics.m_RandomPosition = m_Config[moR(PARTICLES_RANDOMPOSITION)].GetData()->Fun()->Eval(state.tempo.ang);
     m_Physics.m_RandomVelocity = m_Config[moR(PARTICLES_RANDOMVELOCITY)].GetData()->Fun()->Eval(state.tempo.ang);
     m_Physics.m_RandomMotion = m_Config[moR(PARTICLES_RANDOMMOTION)].GetData()->Fun()->Eval(state.tempo.ang);
+
 
     m_Physics.m_EmitterType = (moParticlesSimpleEmitterType) m_Config[moR(PARTICLES_EMITTERTYPE)][MO_SELECTED][0].Int();
     m_Physics.m_AttractorType = (moParticlesSimpleAttractorType) m_Config[moR(PARTICLES_ATTRACTORTYPE)][MO_SELECTED][0].Int();
@@ -700,6 +791,14 @@ void moEffectParticlesSimple::UpdateParameters() {
     m_Physics.m_AttractorVector = moVector3f( m_Config[moR(PARTICLES_ATTRACTORVECTOR_X)].GetData()->Fun()->Eval(state.tempo.ang),
                                             m_Config[moR(PARTICLES_ATTRACTORVECTOR_Y)].GetData()->Fun()->Eval(state.tempo.ang),
                                             m_Config[moR(PARTICLES_ATTRACTORVECTOR_Z)].GetData()->Fun()->Eval(state.tempo.ang));
+
+    if (original_proportion!=1.0f) {
+            if (original_proportion>1.0f) {
+                m_Physics.m_AttractorVector.Y() = m_Physics.m_AttractorVector.Y() / original_proportion;
+            } else {
+                m_Physics.m_AttractorVector.X() = m_Physics.m_AttractorVector.X() * original_proportion;
+            }
+    }
 
     normalf = m_Physics.m_EmitterSize.X();
 }
@@ -791,9 +890,9 @@ void moEffectParticlesSimple::SetParticlePosition( moParticlesSimple* pParticle 
                     phi = moMathf::PI * moMathf::UnitRandom();
                     radius = moMathf::Sqrt( m_Physics.m_EmitterSize.X()*m_Physics.m_EmitterSize.X()+m_Physics.m_EmitterSize.Y()*m_Physics.m_EmitterSize.Y()) / 2.0;
                     pParticle->Pos3d = moVector3f(
-                                        (radius*moMathf::Cos(alpha)*moMathf::Sin(phi) + randomposx)*m_Physics.m_EmitterSize.X(),
-                                        (radius*moMathf::Sin(alpha)*moMathf::Sin(phi) + randomposy)*m_Physics.m_EmitterSize.Y(),
-                                        (radius*moMathf::Cos(phi) + randomposz)*m_Physics.m_EmitterSize.Z()
+                                        (radius*moMathf::Cos(alpha)*moMathf::Sin(phi) + randomposx)* m_Physics.m_EmitterVector.X(),
+                                        (radius*moMathf::Sin(alpha)*moMathf::Sin(phi) + randomposy)* m_Physics.m_EmitterVector.Y(),
+                                        (radius*moMathf::Cos(phi) + randomposz)* m_Physics.m_EmitterVector.Z()
                                         );
                     pParticle->Velocity = moVector3f( randomvelx,
                                                       randomvely,
@@ -898,8 +997,38 @@ void moEffectParticlesSimple::SetParticlePosition( moParticlesSimple* pParticle 
                                                 randomvelz);
 
             break;
+        case PARTICLES_EMITTERTYPE_SPIRAL:
+            //SPIRAL POSITION
+            switch(m_Physics.m_CreationMethod) {
+                case PARTICLES_CREATIONMETHOD_LINEAR:
+                case  PARTICLES_CREATIONMETHOD_PLANAR:
+                case  PARTICLES_CREATIONMETHOD_VOLUMETRIC:
+                    alpha = 2 * moMathf::PI * pParticle->Pos.X() / (double)m_cols;
+                    radius1 = m_Physics.m_EmitterSize.X() / 2.0;
+                    radius2 = m_Physics.m_EmitterSize.Y() / 2.0;
+                    z = m_Physics.m_EmitterSize.Z() * ( 0.5f - ( pParticle->Pos.Y() / (double)m_rows ) - (pParticle->Pos.X() / (double)(m_cols*m_rows)) );
+
+                    pParticle->Pos3d = moVector3f(  ( radius1*moMathf::Cos(alpha) + randomposx ) * m_Physics.m_EmitterVector.X(),
+                                                    ( radius1*moMathf::Sin(alpha) + randomposy ) * m_Physics.m_EmitterVector.Y(),
+                                                    ( z + randomposz ) * m_Physics.m_EmitterVector.Z() );
+
+                    pParticle->Velocity = moVector3f( randomvelx,
+                                                      randomvely,
+                                                      randomvelz );
+                    break;
+            }
+            break;
+
         case PARTICLES_EMITTERTYPE_TRACKER:
             switch(m_Physics.m_CreationMethod) {
+                case PARTICLES_CREATIONMETHOD_CENTER:
+                    if (m_pTrackerData) {
+                        pParticle->Pos3d = moVector3f( (m_pTrackerData->GetBarycenter().X() - 0.5)*normalf, (-m_pTrackerData->GetBarycenter().Y()+0.5)*normalf, 0.0 );
+                        pParticle->Pos3d+= moVector3f( randomposx, randomposy, randomposz );
+                        pParticle->Velocity = moVector3f( randomvelx, randomvely, randomvelz );
+                    }
+                    break;
+
                 case PARTICLES_CREATIONMETHOD_LINEAR:
                 case PARTICLES_CREATIONMETHOD_PLANAR:
                 case PARTICLES_CREATIONMETHOD_VOLUMETRIC:
@@ -919,14 +1048,24 @@ void moEffectParticlesSimple::SetParticlePosition( moParticlesSimple* pParticle 
                         }
 
                         np = 0;
+                        //como no encontro un feature valido para usar de generador arranca desde el primero....
+                        //error, deberia tomar el baricentro.... o tomar al azar otro...
+                        /*
+                        if (!bfounded) {
+                            pParticle->Pos3d = moVector3f( (m_pTrackerData->GetBarycenter().X() - 0.5)*normalf, (-m_pTrackerData->GetBarycenter().Y()+0.5)*normalf, 0.0 );
+                        }*/
+                        int cn=0;
                         if (!bfounded) {
                             do {
                                 pTF = m_pTrackerData->GetFeature( np );
                                 if (pTF->valid) {
                                     pParticle->Pos3d = moVector3f( (pTF->x - 0.5)*normalf, (-pTF->y+0.5)*normalf, 0.0 );
+                                    bfounded = true;
                                 }
-                                np++;
-                            } while (!pTF->valid && np < m_pTrackerData->GetFeaturesCount());
+                                np =  (int) ( moMathf::UnitRandom() * m_pTrackerData->GetFeaturesCount() );
+                                cn++;
+                            } while (!pTF->valid && np < m_pTrackerData->GetFeaturesCount() && cn<5 );
+                            if (!bfounded) pParticle->Pos3d = moVector3f( (m_pTrackerData->GetBarycenter().X() - 0.5)*normalf, (-m_pTrackerData->GetBarycenter().Y()+0.5)*normalf, 0.0 );
                         }
 
 
@@ -934,7 +1073,7 @@ void moEffectParticlesSimple::SetParticlePosition( moParticlesSimple* pParticle 
                         pParticle->Pos3d = moVector3f( 0, 0, 0 );
                     }
 
-
+                    pParticle->Pos3d+= moVector3f( randomposx, randomposy, randomposz );
 
                     pParticle->Velocity = moVector3f(   randomvelx,
                                                         randomvely,
@@ -955,7 +1094,9 @@ void moEffectParticlesSimple::InitParticlesSimple( int p_cols, int p_rows, bool 
     bool m_bNewImage = false;
 
 
-    if (texture_mode==PARTICLES_TEXTUREMODE_MANY2PATCH) Shot();
+    if (texture_mode==PARTICLES_TEXTUREMODE_MANY2PATCH) {
+        Shot();
+    }
 
     m_pResourceManager->GetTimeMan()->ClearByObjectId(  this->GetId() );
 
@@ -1029,13 +1170,17 @@ void moEffectParticlesSimple::InitParticlesSimple( int p_cols, int p_rows, bool 
                 int lumindex = 0;
                 int contrast = 0;
 
-                if (pTextureDest && samplebuffer) {
+                if (pSubSample && samplebuffer) {
 
                     lum = (samplebuffer[ (i + j*pSubSample->GetWidth() ) *3 ] + samplebuffer[ (i+1 + j*pSubSample->GetWidth() ) *3 ] + samplebuffer[ (i+2 + j*pSubSample->GetWidth() ) *3 ]) / 3;
-
+                    if (lum<0) lum = -lum;
                     if (lum>=0) {
                         lumindex = (int)( 100.0 * (float)lum / (float)256)  - 1;
+                        if (lumindex>99) lumindex = 99;
                     }
+                } else {
+                    MODebug2->Message(moText("pSubSample: ")+IntToStr((long)pSubSample) +
+                                    moText("samplebuffer: ")+IntToStr((long)samplebuffer));
                 }
 
                  if (pTexBuf) {
@@ -1121,6 +1266,8 @@ void moEffectParticlesSimple::Regenerate() {
     int i,j;
     float randommotionx,randommotiony,randommotionz;
 
+
+
     for( i=0; i<m_cols ; i++) {
         for( j=0; j<m_rows ; j++) {
 
@@ -1151,6 +1298,11 @@ void moEffectParticlesSimple::Regenerate() {
                 m_Rate++;
 
                 SetParticlePosition( pPar );
+                /*
+                if ((i+j*m_cols)%1000 == 0) {
+                    MODebug2->Push(moText("partícula en proceso - regenerando GLID ")+IntToStr(pPar->GLId)
+                    + moText(" GLID2: ") + IntToStr(pPar->GLId2) );
+                }*/
 
                 //pPar->Pos3d = moVector3f( 0, 0, 0);
 
@@ -1173,7 +1325,7 @@ void moEffectParticlesSimple::Regenerate() {
                              //srand(2);
                              int irandom = ( ::rand() * nim )/ RAND_MAX;
 
-                             if (irandom>nim) irandom = nim - 1;
+                             if (irandom>=nim) irandom = nim - 1;
 
                              pPar->GLId = pTexBuf->GetFrame( irandom );
 
@@ -1412,7 +1564,9 @@ void moEffectParticlesSimple::CalculateForces(bool tmparray)
    //moVector3f down(1.0,1.0,-1.0);
    moVector3f zero(0.0,0.0,0.0);
    moVector3f f;
+   moVector3f atdis;
    double len,dx,dy,dz;
+
 
    float left =  - (m_Physics.m_EmitterSize.X()) / 2.0;
     float top =  m_Physics.m_EmitterSize.Y() / 2.0;
@@ -1430,6 +1584,11 @@ void moEffectParticlesSimple::CalculateForces(bool tmparray)
             pPar->Force = ( m_Physics.m_AttractorVector - pPar->Pos3d )*(m_Physics.gravitational * pPar->Mass);
             break;
 
+        case PARTICLES_ATTRACTORTYPE_TRACKER:
+            if (m_pTrackerData) {
+                pPar->Force = ( moVector3f( 0.5f - m_pTrackerData->GetBarycenter().X(), 0.5f - m_pTrackerData->GetBarycenter().Y(), 0.0 ) - pPar->Pos3d )*(m_Physics.gravitational * pPar->Mass);
+            }
+            break;
         case PARTICLES_ATTRACTORTYPE_GRID:
             switch( m_Physics.m_AttractorMode ) {
                 case PARTICLES_ATTRACTORMODE_STICK:
@@ -1451,6 +1610,11 @@ void moEffectParticlesSimple::CalculateForces(bool tmparray)
                                                         m_Physics.m_AttractorVector.Z() );
 
                     pPar->Pos3d = pPar->Pos3d + ( pPar->Destination - pPar->Pos3d) * m_Physics.gravitational;
+
+                    //atdis =( pPar->Destination - pPar->Pos3d);
+                    //if ( 0.04 < atdis.Length()  && atdis.Length() < 0.05 )  {
+                        //MODebug2->Message( moText("Position reached : X:") + FloatToStr(pPar->Pos3d.X()) + moText(" Y:") + FloatToStr(pPar->Pos3d.Y()) );
+                   // }
                     break;
                 default:
                     break;
@@ -2249,6 +2413,8 @@ void moEffectParticlesSimple::Draw( moTempo* tempogral, moEffectState* parentsta
     glDisable( GL_CULL_FACE);
 	glFrontFace( GL_CCW);
 
+    //esto deberia ser parametrizable...
+	//glEnable( GL_DEPTH_TEST);
 	glDisable( GL_DEPTH_TEST);
     glShadeModel(GL_SMOOTH);
 
@@ -2403,6 +2569,87 @@ void moEffectParticlesSimple::Interaction( moIODeviceManager *IODeviceManager ) 
 		}
 	}
 
+	///MIDI CONTROLS !!!!!
+    moEvent* actual = IODeviceManager->GetEvents()->First;
+	//recorremos todos los events y parseamos el resultado
+	//borrando aquellos que ya usamos
+	MOint tempval;
+	while(actual!=NULL) {
+		//solo nos interesan los del midi q nosotros mismos generamos, para destruirlos
+		if(actual->deviceid == MO_IODEVICE_MIDI) {
+
+		    ///actual->reservedvalue1 corresponds to CC midi code : it works as a n index in m_Codes (has to be defined in param "code" in the config file...
+		    ///actual->reservedvalue2 corresponds to VAL
+
+			int CC = actual->reservedvalue1;
+			int VAL = actual->reservedvalue2;
+
+            switch (CC) {
+                case 45:
+                    if (texture_mode==PARTICLES_TEXTUREMODE_MANY2PATCH) {
+                        this->Shot( "FOTOS", 1 );
+                        this->ReInit();
+                        MODebug2->Message(moText("## Midi Shot Triggered ##"));
+                    } else {
+                        this->ReInit();
+                    }
+                    break;
+                case 81:
+                    midi_red = (float)VAL / (float) 127.0;
+                    MODebug2->Message(moText("Red:")+FloatToStr(midi_red));
+                    break;
+                case 82:
+                    midi_green = (float)VAL / (float) 127.0;
+                    MODebug2->Message(moText("Green:")+FloatToStr(midi_green));
+                    break;
+                case 83:
+                    midi_blue = (float)VAL / (float) 127.0;
+                    MODebug2->Message(moText("Blue:")+FloatToStr(midi_blue));
+                    break;
+
+                case 84:
+                    midi_maxage = (float)VAL / (float) 127.0;
+                    MODebug2->Message(moText("Maxage:")+FloatToStr(midi_maxage));
+                    break;
+                case 85:
+                    midi_emitionperiod = (float)VAL / (float) 127.0;
+                    MODebug2->Message(moText("Emition Period:")+FloatToStr(midi_emitionperiod));
+                    break;
+                case 86:
+                    midi_emitionrate = (float)VAL / (float) 127.0;
+                    break;
+                case 87:
+                    midi_randomvelocity = (float)VAL / (float) 127.0;
+                    break;
+
+                case 88:
+                    midi_randommotion = (float)VAL / (float) 127.0;
+                    break;
+
+                case 107:
+                    if (VAL==0 || VAL==127) {
+                        m_Config.PreConfPrev();
+                    }
+                    break;
+                case 108:
+                    if (VAL==0 || VAL==127) {
+                         m_Config.PreConfNext();
+                    }
+                    break;
+
+
+                default:
+                    MODebug2->Push("device in psimple!!!");
+                    MODebug2->Push(IntToStr(VAL));
+                    break;
+            }
+
+
+
+			actual = actual->next;
+		} else actual = actual->next;
+	}
+
 }
 
 void moEffectParticlesSimple::Update( moEventList *p_eventlist ) {
@@ -2425,6 +2672,12 @@ void moEffectParticlesSimple::Update( moEventList *p_eventlist ) {
         }
     }
 
+
+
+
+
+
+
 }
 
 void moEffectParticlesSimple::RegisterFunctions()
@@ -2440,8 +2693,19 @@ void moEffectParticlesSimple::RegisterFunctions()
 	RegisterFunction("UpdateForce");
 
 	RegisterFunction("GetFeature");
+
+	RegisterFunction("GetVariance");
+	RegisterFunction("GetVelocity");
+	RegisterFunction("GetAcceleration");
+	RegisterFunction("GetBarycenter");
+	RegisterFunction("GetZone");
+
 	RegisterFunction("Shot");
 	RegisterFunction("ReInit");
+
+	RegisterFunction("SetPreconf");
+	RegisterFunction("GetPreconf");
+
 	RegisterFunction("PushDebugString");
 }
 
@@ -2461,17 +2725,34 @@ int moEffectParticlesSimple::ScriptCalling(moLuaVirtualMachine& vm, int iFunctio
             return LUpdateParticlePosition(vm);
         case 5:
             return LUpdateParticleVelocity(vm);
-
         case 6:
-            return GetFeature(vm);
-        case 7:
             return LUpdateForce(vm);
+
+        case 7:
+            return GetFeature(vm);
+
         case 8:
-            return LShot(vm);
+            return GetVariance(vm);
         case 9:
+            return GetVelocity(vm);
+        case 10:
+            return GetAcceleration(vm);
+        case 11:
+            return GetBarycenter(vm);
+        case 12:
+            return GetZone(vm);
+
+        case 13:
+            return LShot(vm);
+        case 14:
             return LReInit(vm);
 
-        case 10:
+        case 15:
+            return LSetPreconf(vm);
+        case 16:
+            return LGetPreconf(vm);
+
+        case 17:
             return PushDebugString(vm);
 	}
     return 0;
@@ -2484,7 +2765,7 @@ void moEffectParticlesSimple::HandleReturns(moLuaVirtualMachine& vm, const char 
         lua_State *state = (lua_State *) vm;
         MOint script_result = (MOint) lua_tonumber (state, 1);
 		if (script_result != 0)
-			MODebug2->Push(moText("Particle script returned error code: ") + (moText)IntToStr(script_result));
+			MODebug2->Error(moText("Particle script returned error code: ") + (moText)IntToStr(script_result));
     }
 }
 
@@ -2493,10 +2774,10 @@ int moEffectParticlesSimple::PushDebugString(moLuaVirtualMachine& vm)
     lua_State *state = (lua_State *) vm;
 	if (lua_isboolean(state,1)) {
 		bool vb = lua_toboolean(state,1);
-		vb ? MODebug2->Push(moText("true")) : MODebug2->Push(moText("false"));
+		vb ? MODebug2->Message(moText("true")) : MODebug2->Push(moText("false"));
 	} else {
 		char *text = (char *) lua_tostring (state, 1);
-		MODebug2->Push(moText(text));
+		MODebug2->Message(moText(text));
 	}
 
     return 0;
@@ -2588,7 +2869,7 @@ int moEffectParticlesSimple::LSetPreconf(moLuaVirtualMachine& vm)
 
     if (this->GetConfig()) {
         this->GetConfig()->SetCurrentPreConf( preconfid );
-    }
+    } else MODebug2->Push("no debug");
 
     return 0;
 }
@@ -2602,6 +2883,13 @@ int moEffectParticlesSimple::LUpdateParticle( moLuaVirtualMachine& vm ) {
     MOint visible = (MOint) lua_tonumber (state, 3);
     MOint mass = (MOint) lua_tonumber (state, 4);
 
+    moParticlesSimple* Par = m_ParticlesSimpleArray[i];
+
+    if (Par) {
+        Par->Age.SetDuration( age);
+        Par->Visible = visible;
+        Par->Mass = mass;
+    }
 
     return 0;
 
@@ -2663,8 +2951,11 @@ int moEffectParticlesSimple::LShot( moLuaVirtualMachine& vm) {
 		vb ? MODebug2->Push(moText("true")) : MODebug2->Push(moText("false"));
 	} else {
 		char *text = (char *) lua_tostring (state, 1);
+		int shot_type = lua_tonumber (state, 2);
+		int shot_file = lua_tonumber (state, 3);
+
 		moText source_to_shot = moText(text);
-		this->Shot( source_to_shot );
+		this->Shot( source_to_shot, shot_type, shot_file );
 	}
 
     return 0;
@@ -2709,3 +3000,90 @@ int moEffectParticlesSimple::GetFeature(moLuaVirtualMachine& vm)
 
     return 3;
 }
+
+int moEffectParticlesSimple::GetVariance(moLuaVirtualMachine& vm) {
+
+   lua_State *state = (lua_State *) vm;
+
+   float x, y, L;
+
+    if (m_pTrackerData) {
+		L = m_pTrackerData->GetVariance().Length();
+		x = m_pTrackerData->GetVariance().X();
+		y = m_pTrackerData->GetVariance().Y();
+	}
+
+	lua_pushnumber(state, (lua_Number)L);
+	lua_pushnumber(state, (lua_Number)x);
+	lua_pushnumber(state, (lua_Number)y);
+	return 3;
+}
+
+int moEffectParticlesSimple::GetVelocity(moLuaVirtualMachine& vm) {
+   lua_State *state = (lua_State *) vm;
+
+   float x, y, L;
+
+    if (m_pTrackerData) {
+		L = m_pTrackerData->GetBarycenterMotion().Length();
+		x = m_pTrackerData->GetBarycenterMotion().X();
+		y = m_pTrackerData->GetBarycenterMotion().Y();
+	}
+
+	lua_pushnumber(state, (lua_Number)L);
+	lua_pushnumber(state, (lua_Number)x);
+	lua_pushnumber(state, (lua_Number)y);
+
+    return 3;
+}
+
+int moEffectParticlesSimple::GetAcceleration(moLuaVirtualMachine& vm) {
+   lua_State *state = (lua_State *) vm;
+
+   float x, y, L;
+
+    if (m_pTrackerData) {
+		L = m_pTrackerData->GetBarycenterAcceleration().Length();
+		x = m_pTrackerData->GetBarycenterAcceleration().X();
+		y = m_pTrackerData->GetBarycenterAcceleration().Y();
+	}
+
+	lua_pushnumber(state, (lua_Number)L);
+	lua_pushnumber(state, (lua_Number)x);
+	lua_pushnumber(state, (lua_Number)y);
+
+    return 3;
+}
+
+int moEffectParticlesSimple::GetBarycenter(moLuaVirtualMachine& vm) {
+   lua_State *state = (lua_State *) vm;
+
+   float x, y;
+
+    if (m_pTrackerData) {
+		x = m_pTrackerData->GetBarycenter().X();
+		y = m_pTrackerData->GetBarycenter().Y();
+	}
+
+	lua_pushnumber(state, (lua_Number)x);
+	lua_pushnumber(state, (lua_Number)y);
+	return 2;
+}
+
+int moEffectParticlesSimple::GetZone(moLuaVirtualMachine& vm) {
+
+        lua_State *state = (lua_State *) vm;
+        MOint i = (MOint) lua_tonumber (state, 1);
+
+        int nitems;
+        nitems = 0;
+        if (m_pTrackerData) {
+            nitems = m_pTrackerData->GetPositionMatrix( m_pTrackerData->ZoneToPosition(i) );
+            //MODebug2->Push( moText("i:") + IntToStr(i) + moText(" nitems:") + IntToStr(nitems) );
+        }// else MODebug2->Push( moText("no tracking data"));
+
+        lua_pushnumber(state, (lua_Number)nitems);
+
+        return 1;
+}
+

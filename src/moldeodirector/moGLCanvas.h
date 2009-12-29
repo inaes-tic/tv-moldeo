@@ -38,6 +38,7 @@
 #include "moIDirectorActions.h"
 #include "moDirectorConsole.h"
 
+
 class moGLCanvas: public wxGLCanvas, public moIDirectorActions
 {
 public:
@@ -52,6 +53,7 @@ public:
     moGLCanvas(wxWindow *parent,
         wxGLContext*    p_pGLContext,
         wxWindowID id = wxID_ANY,
+        int* attribList = 0,
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = 0,
         const wxString& name = wxT("TestGLCanvas"));

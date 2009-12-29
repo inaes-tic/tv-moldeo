@@ -36,7 +36,7 @@ moDefineDynamicArray( moParamIndexes )
 
 
 #include <tinyxml.h>
-
+#include "moFileManager.h"
 
 //================================================================
 //	moConfigDefinition
@@ -403,6 +403,12 @@ int moConfig::SaveConfig( moText p_filename ) {
 
 MOboolean
 moConfig::CreateDefault( moText p_fullconfigfilename ) {
+
+    moFile cFile( p_fullconfigfilename );
+
+    /// Do not overwrite... by default
+    if (cFile.Exists())
+        return false;
 
     if (this->IsConfigLoaded())
         return false;

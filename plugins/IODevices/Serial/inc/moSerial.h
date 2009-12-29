@@ -80,19 +80,39 @@
 
 // moSerial class **************************************************
 
+enum moSerialParamIndex {
+
+  SERIAL_PORT,
+  SERIAL_BAUD,
+  SERIAL_CODE
+
+};
+
+class  moSerialCode {
+public:
+	moText strcod;
+	MOint code;
+	MOint serialcod;//mapeo type SDL
+	MOint type;//pushedr:0 ,prendedor:1, selector:2, seteador:3,...otros
+	MOint especiales;//keys especiales, como alt, caps lock, etc...
+	MOint state;//0 MO_FALSE(no esta activo el device) MO_ON(está on) MO_OFF(está off)
+	MOint value;//depende
+};
+
 class moSerial : public moIODevice
 {
     public:
         moSerial();
         virtual ~moSerial();
 
-        void Update(moEventList*);
         MOboolean Init();
         MOswitch GetStatus(MOdevcode);
         MOswitch SetStatus( MOdevcode,MOswitch);
         MOint GetValue(MOdevcode);
         MOdevcode GetCode( moText);
         MOboolean Finish();
+        void Update(moEventList *Events);
+        moConfigDefinition *GetDefinition( moConfigDefinition *p_configdefinition );
 
     private:
 
@@ -110,7 +130,7 @@ class moSerial : public moIODevice
         bool 			bVerbose;
         void 			setVerbose(bool bLoudmouth) { bVerbose = bLoudmouth; };
 
-
+        moSerialCode    *Codes;
 
     protected:
 
@@ -132,6 +152,8 @@ class moSerial : public moIODevice
         #endif
 
     void SendEvent(int i);
+
+
 };
 
 class moSerialFactory : public moIODeviceFactory {

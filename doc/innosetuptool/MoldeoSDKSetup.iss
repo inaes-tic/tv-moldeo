@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Moldeo SDK"
-#define MyAppVerName "Moldeo SDK 0.7"
+#define MyAppVerName "Moldeo SDK 0.7.6"
 #define MyAppPublisher "Moldeo"
 #define MyAppURL "http://www.moldeo.org/"
 #define MyAppExeName "moldeodirector.exe"
@@ -22,7 +22,7 @@ DefaultDirName={pf}\Moldeo
 DefaultGroupName=Moldeo
 LicenseFile=..\..\bin\mingw\moldeo license.txt
 OutputDir=..\..\doc\installers
-OutputBaseFilename=Moldeo SDK 0.7 Setup
+OutputBaseFilename=Moldeo SDK 0.7.6 Setup
 SetupIconFile=..\..\doc\icons\Moldeo32.ico
 Compression=lzma
 SolidCompression=yes

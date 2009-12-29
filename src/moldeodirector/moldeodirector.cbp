@@ -78,6 +78,10 @@
 			<Add option="-D__WXMSW__" />
 			<Add option="-DwxUSE_SYSTEM_OPTIONS" />
 			<Add option="-DWXART2D" />
+			<Add option="-DWIN32" />
+			<Add option="-D_WINDOWS" />
+			<Add option="-DNOPCH" />
+			<Add option="-D_CRT_NONSTDC_NO_DEPRECATE" />
 			<Add directory="." />
 			<Add directory=".." />
 			<Add directory=".\vdtc" />
@@ -109,9 +113,11 @@
 			<Add directory="..\..\..\..\externlibs\wxArt2D\thirdparty\kbool\include" />
 			<Add directory="..\..\contrib\src\wxMoldeoControls" />
 		</Compiler>
+		<ResourceCompiler>
+			<Add directory="..\..\..\..\externlibs\wxWidgets\include" />
+			<Add directory="..\..\art" />
+		</ResourceCompiler>
 		<Linker>
-			<Add library="libSDL" />
-			<Add library="libSDLmain" />
 			<Add library="liblua" />
 			<Add library="cg" />
 			<Add library="cgGL" />
@@ -232,6 +238,9 @@
 		<Unit filename="moValueCtrl.h" />
 		<Unit filename="moldeodirector.cpp" />
 		<Unit filename="moldeodirector.h" />
+		<Unit filename="moldeodirector.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
 		<Unit filename="treemultictrl\TreeMultiItemBase.cpp" />
 		<Unit filename="treemultictrl\TreeMultiItemBase.h" />
 		<Unit filename="treemultictrl\TreeMultiItemNode.cpp" />

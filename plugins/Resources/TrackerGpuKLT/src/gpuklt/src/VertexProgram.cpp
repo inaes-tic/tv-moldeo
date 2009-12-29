@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------
 /*! \file VertexProgram.cpp
-* \brief VertexProgram Class File. 
+* \brief VertexProgram Class File.
 *
 * GpuUrban Library Code:
 */
@@ -13,9 +13,9 @@
 //
 // Copyright Notice:
 //
-//   This code and attached libraries cannot be modified, reproduced or copied in any 
+//   This code and attached libraries cannot be modified, reproduced or copied in any
 //   form without the expressed consent of Dept. of Computer Science, UNC Chapel Hill.
-// 
+//
 //   Copyright Dept. of Computer Science, UNC Chapel Hill.
 //   All rights reserved.
 //
@@ -23,12 +23,13 @@
 
 #define _BUILDING_GPU_VIS
 
+#include <stdio.h>
 #include "VertexProgram.h"
 #include <iostream>
 
 /*!
-*	\fn VertexProgram::VertexProgram( CGcontext      vContext, 
-                                       CGprofile vProfile, 
+*	\fn VertexProgram::VertexProgram( CGcontext      vContext,
+                                       CGprofile vProfile,
                                        char     *VPsource,
 									   bool      programInFile )
 *	\brief Constructor
@@ -37,16 +38,16 @@
 *	\param VPsource : Vertex Shader CG Code.
 *	\param programInFile : If true, indicates program is to be read from file.
 */
-VertexProgram::VertexProgram( CGcontext      vContext, 
-                                       CGprofile vProfile, 
+VertexProgram::VertexProgram( CGcontext      vContext,
+                                       CGprofile vProfile,
                                        char     *VPsource,
 									   bool      programInFile )
 {
-  if (programInFile) 
+  if (programInFile)
 	  _VP = cgCreateProgramFromFile(vContext,
                                CG_SOURCE, VPsource,
                                vProfile, NULL,NULL);
-  else 
+  else
 	  _VP = cgCreateProgram(vContext, CG_SOURCE, VPsource,
 							   vProfile, NULL, NULL);
 
@@ -60,7 +61,7 @@ VertexProgram::VertexProgram( CGcontext      vContext,
 
 }
 
-/*! 
+/*!
 *	\fn void VertexProgram::init(char *programSource)
 *	\brief Creates the Vertex Program object
 *	\param programSource : Cg Vertex Shader source code
@@ -76,7 +77,7 @@ void VertexProgram::init(char *programSource)
 	_VPmodelViewMatrix	= cgGetNamedParameter(_VP, "ModelViewProj");
 }
 
-/*! 
+/*!
 *	\fn void VertexProgram::activate()
 *	\brief Activate the Vertex Shader
 */
@@ -88,7 +89,7 @@ void VertexProgram::activate()
 }
 
 
-/*! 
+/*!
 *	\fn void VertexProgram::setMatrices()
 *	\brief Set The Modelview Matrix Of Our Shader To Our OpenGL Modelview Matrix
 */
@@ -97,7 +98,7 @@ void VertexProgram::setMatrices()
   cgGLSetStateMatrixParameter(_VPmodelViewMatrix, CG_GL_MODELVIEW_PROJECTION_MATRIX, CG_GL_MATRIX_IDENTITY);
 }
 
-/*! 
+/*!
 *	\fn void VertexProgram::deactivate()
 *	\brief Deactivate the Vertex Shader
 */

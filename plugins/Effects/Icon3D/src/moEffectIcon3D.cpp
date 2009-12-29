@@ -109,8 +109,8 @@ MOboolean moEffectIcon3D::Init() {
 	g_ViewMode = GL_TRIANGLES;
 
 	//inicializacion de los objetos y materiales
-	Models3d.MODebug = MODebug;
-	Models3d.Init( GetConfig(), m_Config.GetParamIndex(moText("object")), m_pResourceManager->GetModelMan() );
+	//Models3d.MODebug = MODebug;
+	//Models3d.Init( GetConfig(), m_Config.GetParamIndex(moText("object")), m_pResourceManager->GetModelMan() );
 
 	return true;
 }
@@ -235,7 +235,11 @@ void moEffectIcon3D::Draw( moTempo* tempogral,moEffectState* parentstate)
 	glEnable(GL_TEXTURE_GEN_T);
 	*/
 
-	Models3d.Draw( m_Config[ moParamReference(ICON3D_OBJECT) ].GetIndexValue(), &state, GL_TRIANGLES);
+	//Models3d.Draw( m_Config[ moParamReference(ICON3D_OBJECT) ].GetIndexValue(), &state, GL_TRIANGLES);
+	mo3DModelSceneNode* pSceneNode = (mo3DModelSceneNode*) m_Config[moR(ICON3D_OBJECT)].GetData()->Pointer();
+	if (pSceneNode) {
+	    pSceneNode->Draw(&state, GL_TRIANGLES);
+    }
 
 /*
 	//END
@@ -328,7 +332,7 @@ moEffectIcon3D::GetDefinition( moConfigDefinition *p_configdefinition ) {
 	p_configdefinition->Add( moText("texture"), MO_PARAM_TEXTURE, ICON3D_TEXTURE, moValue( "default", "TXT") );
 	p_configdefinition->Add( moText("polygonmode"), MO_PARAM_POLYGONMODE, ICON3D_POLYGONMODE, moValue( "0", "NUM").Ref() );
 	p_configdefinition->Add( moText("blending"), MO_PARAM_BLENDING, ICON3D_BLENDING, moValue( "0", "NUM").Ref() );
-	p_configdefinition->Add( moText("object"), MO_PARAM_FUNCTION, ICON3D_OBJECT, moValue( "default", "TXT") );
+	p_configdefinition->Add( moText("object"), MO_PARAM_3DMODEL, ICON3D_OBJECT, moValue( "default", "TXT") );
 	p_configdefinition->Add( moText("translatex"), MO_PARAM_TRANSLATEX, ICON3D_TRANSLATEX );
 	p_configdefinition->Add( moText("translatey"), MO_PARAM_TRANSLATEY, ICON3D_TRANSLATEY );
 	p_configdefinition->Add( moText("translatez"), MO_PARAM_TRANSLATEZ, ICON3D_TRANSLATEZ );

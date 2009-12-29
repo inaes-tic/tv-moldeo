@@ -175,7 +175,31 @@ class LIBMOLDEO_API moMobDefinition
         moMoldeoObjectType GetType() {
             return m_Type;
         }
-        moText GetTypeStr() {
+
+        static moMoldeoObjectType GetStrType( moText p_Str = moText("default") ) {
+
+            if (p_Str == moText("effect")) {
+                return MO_OBJECT_EFFECT;
+            } else if (p_Str == moText("mastereffect")) {
+                return MO_OBJECT_MASTEREFFECT;
+            } else if (p_Str == moText("posteffect")) {
+                return MO_OBJECT_POSTEFFECT;
+            } else if (p_Str == moText("preeffect")) {
+                return MO_OBJECT_PREEFFECT;
+            } else if (p_Str == moText("iodevice")) {
+                return MO_OBJECT_IODEVICE;
+            } else if (p_Str == moText("resource")) {
+                return MO_OBJECT_RESOURCE;
+            }
+
+            return MO_OBJECT_UNDEFINED;
+
+        }
+
+        moText GetTypeStr( moMoldeoObjectType p_Type = MO_OBJECT_UNDEFINED ) {
+            if ( ! ( p_Type == MO_OBJECT_UNDEFINED ) ) {
+                return moText("MOB undefined");
+            }
             switch(m_Type) {
                 case MO_OBJECT_EFFECT:
                     return moText("moEffect");

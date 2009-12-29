@@ -32,7 +32,7 @@ moDirectorConsole::SetDirectorCore( moDirectorCore* p_pDirectorCore ) {
 	m_pDirectorCore = p_pDirectorCore;
 	SetNextActionHandler((moIDirectorActions*)m_pDirectorCore);
     m_timer.SetOwner( this, TICKS_ID);
-	m_timer.Start(10);
+	m_timer.Start(5);
 }
 
 moMoldeoObject*
@@ -68,7 +68,7 @@ moDirectorConsole::GetObject( moMobDescriptor p_MobDesc ) {
 
     }
     if (!pMOB)
-        LogError( moText("moDirectorConsole::GetObject pMOB is NULL > idx = ") + IntToStr(idx));
+        LogError( moText("moDirectorConsole::GetObject pMOB is NULL > idx = ") + IntToStr(idx) + moText(" Label:") + moText(p_MobDesc.GetMobDefinition().GetLabelName()) + moText(" Config:") + moText(p_MobDesc.GetMobDefinition().GetConfigName()) );
     return pMOB;
 
 }
@@ -130,8 +130,10 @@ moDirectorConsole::OpenProject( moProjectDescriptor p_projectdescriptor )  {//lo
               p_projectdescriptor.GetFullConfigName(),
               m_pIODeviceManager,
               m_pResourceManager,
-              RENDERMANAGER_MODE_NORMAL,
+              //RENDERMANAGER_MODE_FRAMEBUFFER,
+              //RENDERMANAGER_MODE_FRAMEBUFFER,
               //MO_RENDER_TO_TEXTURE_FBOBJECT,//render to texture: MO_RENDER_TO_TEXTURE_FBSCREEN
+              RENDERMANAGER_MODE_NORMAL,
               400,300,400,300,
               /*MO_DEF_SCREEN_WIDTH, MO_DEF_SCREEN_HEIGHT,
               MO_DEF_RENDER_WIDTH, MO_DEF_RENDER_HEIGHT,*/
@@ -145,7 +147,7 @@ moDirectorConsole::OpenProject( moProjectDescriptor p_projectdescriptor )  {//lo
 
 
         //========================================================================
-        //  ACTUALIZAMOS TODOS LOS VALORES: para aquellos objetos que lo necesiten
+        // $idtipodetalle ACTUALIZAMOS TODOS LOS VALORES: para aquellos objetos que lo necesiten
         //========================================================================
 
 
@@ -322,21 +324,23 @@ moMobDescriptors moDirectorConsole::GetMobDescriptors() {
 
                        	moText filename = m_pResourceManager->GetDataMan()->GetDataPath() + moSlash + (moText)tex->GetName();
 
-                        if ( moFile( filename ).Exists() ) {
-                            //filename is ok
-                            if (tex->IsBuildedFromFile()) {
-                                //maybe a movie, lets doit
-                                //maybe is a movie or you cant loadit
-                                if ( tex->GetType()!=MO_TYPE_TEXTURE || p_ResourceDescriptor.IsCreateThumbnail() ) {
-                                    //THEN CREATE THUMBNAIL
-                                    //filename = tex->CreateThumbnail( "PNG", 132, 88 );
+                        if (tex->GetType()!=MO_TYPE_VIDEOBUFFER || tex->GetType()!=MO_TYPE_CIRCULARVIDEOBUFFER) {
+                            if ( moFile( filename ).Exists() ) {
+                                //filename is ok
+                                if (tex->IsBuildedFromFile()) {
+                                    //maybe a movie, lets doit
+                                    //maybe is a movie or you cant loadit
+                                    if ( tex->GetType()!=MO_TYPE_TEXTURE || p_ResourceDescriptor.IsCreateThumbnail() ) {
+                                        //THEN CREATE THUMBNAIL
+                                        //filename = tex->CreateThumbnail( "PNG", 132, 88 );
+                                    }
                                 }
-                            }
-                        } else {
-                            //maybe is a movie or you cant loadit
-                            if ( p_ResourceDescriptor.IsCreateThumbnail() ) {
-                                //THEN CREATE THUMBNAIL
-                                //filename = tex->CreateThumbnail( moText("PNG"), 132, 88 );
+                            } else {
+                                //maybe is a movie or you cant loadit
+                                //if ( p_ResourceDescriptor.IsCreateThumbnail() ) {
+                                    //THEN CREATE THUMBNAIL
+                                    //filename = tex->CreateThumbnail( moText("PNG"), 132, 88 );
+                                //}
                             }
                         }
 
@@ -444,6 +448,62 @@ moMobDescriptors moDirectorConsole::GetMobDescriptors() {
 //================================================================
 
 	moDirectorStatus
+	moDirectorConsole::ImportMob( moText p_filename ) {
+
+	    moConfig CheckConfig;
+	    moMobDescriptor MobDescriptor;
+        moProjectDescriptor ProjectDescriptor;
+        moDirectorStatus	mStatus;
+
+        ProjectDescriptor = GetProject();
+        int result;
+
+	    result = CheckConfig.LoadConfig( p_filename );
+
+	    if ( result == MO_CONFIG_OK ) {
+
+	        //ShowMessage( p_filename + moText(" loaded") );
+
+	        moText oname = CheckConfig.GetObjectName();
+	        moText oclass = CheckConfig.GetObjectClass();
+	        moFile fname(CheckConfig.GetName());
+	        moText oconfigname = fname.GetFileName();
+	        moMoldeoObjectType otype = moMobDefinition::GetStrType( oclass );
+
+	        Log( moText("importing:") + moText(" name:") + (moText)oname + moText(" class:") + (moText)oclass + moText(" confname:") + (moText)oconfigname );
+
+            moMobDefinition MobDefinition( oname, oconfigname, otype, oconfigname );
+
+            MobDescriptor.Set( ProjectDescriptor, MobDefinition );
+
+            moText fullconfigname = m_pResourceManager->GetDataMan()->GetDataPath() + moSlash + MobDefinition.GetConfigName() + moText(".cfg");
+            moFile destname(fullconfigname);
+
+            //ShowMessage( fullconfigname + moText(" loaded") );
+
+            if (!destname.Exists()) {
+                if (moFileManager::CopyFile( p_filename, fullconfigname )) {
+                    Log( fullconfigname + moText(" copied.") );
+                }
+            } else {
+                ShowMessage( fullconfigname + moText(" exists already, just importing.") );
+            }
+
+            mStatus = NewMob( MobDescriptor );
+
+
+        } else if ( result == MO_CONFIGFILE_NOT_FOUND ) {
+
+            LogError( p_filename + moText(" not found ") );
+
+            mStatus = MO_DIRECTOR_STATUS_NOT_FOUND;
+        }
+
+        return mStatus;
+	}
+
+
+	moDirectorStatus
 	moDirectorConsole::OpenMob( moMobDescriptor p_MobDesc ) {
 
         //chequeamos que el config este cargado
@@ -507,6 +567,8 @@ moMobDescriptors moDirectorConsole::GetMobDescriptors() {
 	    moMobDefinition& pMobDef( p_MobDesc.GetMobDefinition() );
 
 	    moEffect* pEffect = NULL;
+	    moResource* pResource = NULL;
+	    MOint rid = -1;
         moMoldeoObject* pMOB = NULL;
         moMobIndex& MobIndex( p_MobDesc.GetMobDefinition().GetMobIndex() );
 
@@ -538,6 +600,37 @@ moMobDescriptors moDirectorConsole::GetMobDescriptors() {
                 pMOB = (moMoldeoObject*) m_pIODeviceManager->NewIODevice( pMobDef.GetName(), pMobDef.GetConfigName(), pMobDef.GetLabelName(), MO_OBJECT_IODEVICE, MobIndex.GetParamIndex(), MobIndex.GetValueIndex() );
                 if (pMOB) pMOB->GetConfig()->Set( pMOB->GetName(), "iodevice" );
                 break;
+            case MO_OBJECT_RESOURCE:
+                MobIndex.SetParamIndex( m_Config.GetParamIndex("resources") );
+                MobIndex.SetValueIndex( m_Config.GetParam("resources").GetValuesCount() );
+                rid = m_pResourceManager->GetResourceId( pMobDef.GetName() );
+                if(rid>-1) pResource = m_pResourceManager->GetResource(rid);
+
+                if (pResource ) {
+                    //do nothing
+                    if (pResource->GetLabelName()!=pMobDef.GetLabelName()) {
+                        pResource->SetConfigName( pMobDef.GetConfigName() );
+                        pResource->SetLabelName( pMobDef.GetLabelName() );
+                    } else LogError( moText("Resource already loaded: ") + (moText)pResource->GetLabelName() );
+                } else
+                if (m_pResourceManager->NewResource( pMobDef.GetName() )) {
+                    rid = m_pResourceManager->GetResourceId( pMobDef.GetName() );
+                    if (rid>=0) {
+                        pResource = m_pResourceManager->GetResource(rid);
+                        if (pResource) {
+                            pResource->SetConfigName( pMobDef.GetConfigName() );
+                            pResource->SetLabelName( pMobDef.GetLabelName() );
+                        }
+                    }
+                }
+                pMOB = (moMoldeoObject*) pResource;
+                pMOB->GetMobDefinition() = p_MobDesc.GetMobDefinition();
+                if (pMOB) pMOB->GetConfig()->Set( pMOB->GetName(), "resource" );
+                break;
+            default:
+                LogError(moText("NewMob: No mob type defined."));
+                return MO_DIRECTOR_STATUS_ERROR;
+                break;
         }
 
         if (pMOB) {
@@ -550,7 +643,18 @@ moMobDescriptors moDirectorConsole::GetMobDescriptors() {
 
                 pMOB->GetDefinition();
 
-                res = pMOB->GetConfig()->CreateDefault( confignamecomplete );
+                ///Creates the config file based on definition plugin
+                moFile pFile(confignamecomplete);
+
+                if (!pFile.Exists()) {
+
+                    res = pMOB->GetConfig()->CreateDefault( confignamecomplete );
+
+                } else {
+
+                    res = true;
+
+                }
 
                 if (res) {
                     pMOB->GetConfig()->UnloadConfig();
@@ -956,6 +1060,11 @@ moDirectorConsole::SetParameter( moParameterDescriptor  p_ParameterDesc ) {
         //fija el valor dentro del config y chequea de actualizar el MOB
         moConfig* pConfig;
         moMoldeoObject* pObject;
+
+
+        mo3dModel* pModel;
+        mo3DModelSceneNode* p3DModel;
+
         bool firsthaschange = false;
         bool secondhaschange = false;
         bool thirdhaschange = false;
@@ -1034,13 +1143,15 @@ moDirectorConsole::SetParameter( moParameterDescriptor  p_ParameterDesc ) {
                         break;
                     case MO_PARAM_3DMODEL:
                     case MO_PARAM_OBJECT:
-                        /*
-                        mo3dModel* pModel = m_pResourceManager->GetModelMan()->Get3dModel( Value.GetSubValue(0).Text() );
-                        mo3DModel* p3DModel = new mo3dModel(mo3dsModel);
 
-                        if (pModel)
-                            Value.GetSubValue(0).SetModel( (mo3DModel*)pModel );
-                            */
+                        pModel = m_pResourceManager->GetModelMan()->Get3dModel( Value.GetSubValue(0).Text() );
+                        p3DModel = new mo3DModelSceneNode();
+                        if (p3DModel) p3DModel->Init(pModel);
+
+                        if (pModel) {
+                            Value.GetSubValue(0).SetModel( (mo3DModelSceneNode*)pModel );
+                        }
+
                         break;
 
                     case MO_PARAM_FONT:

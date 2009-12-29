@@ -311,6 +311,10 @@ moMidiDevice::Init( moText devicetext ) {
 	/* Get the number of MIDI Out devices in this computer */
 	iNumDevs = midiInGetNumDevs();
 
+	if (iNumDevs==0) {
+	    MODebug2->Message( moText("ERROR! NO MIDI DEVICES FOUND"));
+    }
+
 	/* Go through all of those devices, displaying their names */
 	for (i = 0; i < iNumDevs; i++)
 	{
@@ -586,18 +590,19 @@ moMidi::Init() {
 
 void
 moMidi::SetValue( MOdevcode cd, MOint vl ) {
-
+    m_Codes[cd].mididata.m_Val = (int)vl;
 }
 
 void
 moMidi::SetValue( MOdevcode cd, MOfloat vl ) {
-
+    m_Codes[cd].mididata.m_Val = (int)vl;
 }
 
 
 MOswitch
 moMidi::SetStatus(MOdevcode devcode, MOswitch state) {
 
+    m_Codes[devcode].state = state;
 
 	return true;
 }
@@ -606,12 +611,12 @@ moMidi::SetStatus(MOdevcode devcode, MOswitch state) {
 //notar que el devcode es a su vez el indice dentro del array de Codes
 MOswitch
 moMidi::GetStatus(MOdevcode devcode) {
-	return -1;
+	return(m_Codes[devcode].state);
 }
 
 MOint
 moMidi::GetValue( MOdevcode devcode) {
-	return -1;
+	return(m_Codes[devcode].mididata.m_Val);
 }
 
 
@@ -658,7 +663,7 @@ moMidi::Update(moEventList *Events) {
 	}
 
 
-
+    ///ACTUALIZAMOS CADA DISPOSITIVO
 	for( i = 0; i < m_MidiDevices.Count(); i++ ) {
 
 		moMidiDevicePtr MidiDevPtr;
@@ -683,7 +688,11 @@ moMidi::Update(moEventList *Events) {
 		//solo nos interesan los del midi q nosotros mismos generamos, para destruirlos
 		if(actual->deviceid == MO_IODEVICE_MIDI) {
 
+		    ///actual->reservedvalue1 corresponds to CC midi code : it works as a n index in m_Codes (has to be defined in param "code" in the config file...
+		    ///actual->reservedvalue2 corresponds to VAL
+
 			moMidiDataCode pcode = m_Codes.Get( actual->reservedvalue1 );
+
 			//tempval = actual->reservedvalue2;
 			//calculamos la diferencia y modificamos el valor del evento...
 			//actual->reservedvalue2 = (tempval - pcode.mididata.m_Val) * 8;
@@ -691,6 +700,8 @@ moMidi::Update(moEventList *Events) {
 			//guardamos el valor actual para calcular la proxima
 			pcode.mididata.m_Val = actual->reservedvalue2;
 			m_Codes.Set( actual->reservedvalue1, pcode );
+			if (actual->reservedvalue2>0) SetStatus( actual->reservedvalue1, MO_ON );
+			else  SetStatus( actual->reservedvalue1, MO_OFF );
 
 			actual = actual->next;
 		} else actual = actual->next;//no es nuestro pasamos al next

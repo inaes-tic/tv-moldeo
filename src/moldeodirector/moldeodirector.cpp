@@ -49,6 +49,21 @@ bool moDirectorApp::OnInit()
 //	return wxsOK;
 
 
+
+    //** SET WORKING PATH CORRECTLY **/
+	wxStandardPaths StdPaths;
+
+	wxFileName exename(StdPaths.GetExecutablePath());
+	exename.MakeAbsolute();
+
+    wxMessageBox(wxString(exename.GetPath()));
+    wxSetWorkingDirectory( wxString(exename.GetPath()) );
+
+    //** EVERYTHING OK!!!**//
+
+
+
+
 	moDirectorCore*			m_pDirectorCore = NULL;
 	moDirectorFrame*		m_pDirectorFrame = NULL;
 
@@ -114,10 +129,8 @@ bool moDirectorApp::OnInit()
 	cout << "Director Frame UI to Core..." << endl;
 	m_pDirectorCore->SetUserInterface( m_pDirectorFrame );
 
-	wxStandardPaths StdPaths;
 
-	wxFileName exename(StdPaths.GetExecutablePath());
-	exename.MakeAbsolute();
+    //wxMessageBox(StdPaths.GetAppDir());
 
 	//wxFileName userdatadir( StdPaths.GetUserDataDir() );
 
@@ -147,7 +160,16 @@ bool moDirectorApp::OnInit()
 			--argc;
 		} else {
 			printf( "Usage: %s [-mol]\n", argv[0]);
-			exit(1);
+
+			wxMessageBox(   wxString("Error opening:") +
+                            wxString(" argc:") + wxString(IntToStr(argc)) +
+                            wxString(" argv[argc-1]:") + argv[argc-1] +
+                            wxString(" argv[0]:") + wxString(argv[0]) +
+                            wxString(" argv[1]:") + wxString(argv[1]) +
+                            wxString(" argv[2]:") + wxString(argv[2]) );
+
+
+			exit(0);
 		}
     }
 

@@ -37,6 +37,7 @@ moPreviewFrame::moPreviewFrame(wxWindow* parent,wxWindowID id,const wxPoint& pos
 	ToolBarItem3 = ToolBar1->AddTool(TOOLFULLSCREEN, _("Fullscreen"), wxBitmap(wxImage(_T("../../art/icons/onofficon32.bmp"))), wxNullBitmap, wxITEM_NORMAL, _("Fullscreen"), _("Fullscreen"));
 	ToolBar1->Realize();
 	SetToolBar(ToolBar1);
+    //SetCursor(wxCursor(wxCURSOR_BLANK));
 
 	Connect(wxID_ANY,wxEVT_CLOSE_WINDOW,(wxObjectEventFunction)&moPreviewFrame::OnClose);
 	//*)
@@ -55,8 +56,21 @@ void moPreviewFrame::Init( moIDirectorActions* pActionsHandler, wxGLContext* p_p
 
     SetNextActionHandler( pActionsHandler);
 
-    if (!m_pGLCanvas)
-        m_pGLCanvas = new moGLCanvas( this, p_pGLContext, -1, wxPoint(0,0), wxSize(1024,768), 0, wxT("moGLCanvas"));
+    if (!m_pGLCanvas) {
+        int attribList[10];
+        int n = 0;
+
+        attribList[n++] = WX_GL_RGBA;
+        attribList[n++] = WX_GL_DOUBLEBUFFER;
+        attribList[n++] = WX_GL_DEPTH_SIZE;
+        attribList[n++] = 32;
+        //attribList[n++] = WX_GL_LEVEL;
+        //attribList[n++] = 4;
+        attribList[n] = 0; // terminate the list
+
+        m_pGLCanvas = new moGLCanvas( this, p_pGLContext, -1, attribList, wxPoint(0,0), wxSize(1024,768), 0, wxT("moGLCanvas"));
+        //m_pGLCanvas = new moGLCanvas( this, p_pGLContext, -1, NULL, wxPoint(0,0), wxSize(1024,768), 0, wxT("moGLCanvas"));
+    }
 
     if (m_pGLCanvas)
         m_pGLCanvas->Init( this );

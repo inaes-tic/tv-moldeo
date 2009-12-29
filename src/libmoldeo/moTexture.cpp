@@ -104,9 +104,19 @@ MOboolean moTexture::Finish()
 
 MOboolean moTexture::BuildEmpty(MOuint p_width, MOuint p_height)
 {
+    int ii;
+	/*if ( 0 < m_glid )	{
+	    //ii = m_glid;
+		glDeleteTextures(1, &m_glid);
+		m_glid = 0;
+		//m_glid = ii;
+	}*/
+
 	if (m_glid<=0) {
-	    glGenTextures(1, &m_glid);
+        glGenTextures(1, &m_glid);
 	}
+
+
 	CalculateSize(p_width, p_height);
 	return Build();
 }
@@ -654,6 +664,9 @@ moTextureMemory::moTextureMemory() : moTexture() {
     m_BufferFormat = moText("JPG");
     Luminance = -1;
     Contrast = -1;
+
+    int i = 0;
+    for( i = 0; i<256; i++) Histogram[i] = 0;
 
 }
 

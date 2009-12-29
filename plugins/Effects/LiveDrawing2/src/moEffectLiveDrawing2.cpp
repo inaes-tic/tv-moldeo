@@ -143,13 +143,19 @@ moEffectLiveDrawing2::Init() {
 
 	tex_tab = 0;
 
-    canvasWidth = m_pResourceManager->GetRenderMan()->RenderWidth();
-    canvasHeight = m_pResourceManager->GetRenderMan()->RenderHeight();
+    canvasWidth = m_pResourceManager->GetRenderMan()->ScreenWidth();
+    canvasHeight = m_pResourceManager->GetRenderMan()->ScreenHeight();
 
     flow_velocity_bak = flow_velocity = flow_velocity0;
 
 	initShaders();
 	initScripts();
+
+	midi_red = midi_green = midi_blue = midi_line_width = midi_pressure = 1.0;
+
+	midi_dissolve_start = midi_dissolve_time = 1.0;
+
+	midi_roto_start = 1.0;
 
 	return true;
 }
@@ -196,52 +202,34 @@ void moEffectLiveDrawing2::Draw( moTempo* tempogral,moEffectState* parentstate)
 	updateFlowVelocity();
 
 
-	//DrawTracker();
-
-
-	//CODIGO PARA EL LASER!!!!
-	if (m_bTrackerInit ) {/*
-        if ( NoMotionActivity.Duration()<100 ) {
-            inInteractionMode = true;
-
-            pressure = 0.9;
-            show_pen = true;
-
-            penX = m_TrackerBarycenter.X()*canvasWidth;
-            if(penX==0.0) penX0 = penX;
-            penX = momin(penX, canvasWidth - canvas_margin);
-            penX = momax(penX, canvas_margin);
-
-            penY = m_TrackerBarycenter.Y()*canvasHeight;
-            if(penY==0.0) penY0 = penY;
-            penY = momin(penY, canvasHeight - canvas_margin);
-            penY = momax(penY, canvas_margin);
-        } else {
-            pressure = (float)min_pressure / (float)max_pressure;
-            inInteractionMode = false;
-        }*/
-	}
-
-    if (pressure <= (float)min_pressure / (float)max_pressure) drawing = false;
+	if (pressure <= (float)min_pressure / (float)max_pressure) drawing = false;
 	else
 		if (!drawing)
 		{
 			drawing = true;
 	        resumed_drawing = true;
+	        //MODebug2->Push("resumed drawing");
 		}
 		else resumed_drawing = false;
 
     if (drawing && (pentip != MO_TABLET_CURSOR_UNDEFINED))
 	{
-        if (resumed_drawing) addGesture();
+        if (resumed_drawing) {
+            //MODebug2->Push("resumed > addGesture");
+            addGesture();
+        }
 
 		float d = lastGesture->distToLast(penX, penY);
 
-		if (d > max_line_length) addGesture();
+		if (d > max_line_length) {
+		    //MODebug2->Push("max line reached > addGesture");
+		    addGesture();
+		}
         else if (d > min_line_length)
 	    {
             lastGesture->AddPoint(penX, penY, pressure, pen_color_rgb);
 			lastGesture->compile();
+			//MODebug2->Push( moText("compile last point penX:") + FloatToStr(penX) + moText(" penY:") + FloatToStr(penY)  );
         }
 		else
 		{
@@ -260,6 +248,38 @@ void moEffectLiveDrawing2::Draw( moTempo* tempogral,moEffectState* parentstate)
 	if (show_colorbx) drawPalette();
 	if (show_timerbx) drawTimer();
 
+
+DrawTracker();//este debe ejecutarse para tomar los datos de trackeo
+
+    //DrawCalibrationGrid();
+
+	//CODIGO PARA EL LASER!!!!
+
+	if (m_bTrackerInit ) {
+	    pressure = 0.0;
+       if ( FeatureActivity.Duration()>100  ) {
+            //inInteractionMode = true;
+
+            pressure = 1.0*midi_pressure;
+            show_pen = false;
+
+            penX = m_TrackerBarycenter.X()*canvasWidth;
+            //if(penX==0.0) penX0 = penX;
+            penX = momin(penX, canvasWidth - canvas_margin);
+            penX = momax(penX, canvas_margin);
+            //MODebug2->Push(moText("penX:")+IntToStr(penX));
+
+            penY = m_TrackerBarycenter.Y()*canvasHeight;
+            //if(penY==0.0) penY0 = penY;
+            penY = momin(penY, canvasHeight - canvas_margin);
+            penY = momax(penY, canvas_margin);
+        } else {
+            show_pen = true;
+            pressure = 0.0;
+            //pressure = (float)min_pressure /(float)max_pressure;
+            //inInteractionMode = false;
+        }
+	}
 
 	inInteractionMode = false;
 
@@ -572,6 +592,8 @@ void moEffectLiveDrawing2::Interaction( moIODeviceManager *IODeviceManager ) {
 		}
 	}
 
+	/*
+	//hay que comentar esto para q ande el tracker para el laser....
 	if (!tabletDetected)
 	{
 		if (leftClicked)
@@ -594,7 +616,7 @@ void moEffectLiveDrawing2::Interaction( moIODeviceManager *IODeviceManager ) {
 		}
 		else pressure = (float)min_pressure / (float)max_pressure;
 
-	}
+	}*/
 
 /*
     //  Rehacer!!!!
@@ -659,7 +681,7 @@ void moEffectLiveDrawing2::updateParameters()
 	canvas_margin = m_Config[moR(LIVEDRAW2_CANVAS_MARGIN)].GetData()->Int();
 	min_pressure = m_Config[moR(LIVEDRAW2_MIN_PRESSURE)].GetData()->Int();
 	max_pressure = m_Config[moR(LIVEDRAW2_MAX_PRESSURE)].GetData()->Int();
-	max_thickness = m_Config[moR(LIVEDRAW2_MAX_THICKNESS)].GetData()->Fun()->Eval(state.tempo.ang);
+	max_thickness = m_Config[moR(LIVEDRAW2_MAX_THICKNESS)].GetData()->Fun()->Eval(state.tempo.ang) * midi_line_width;
 	max_line_length = m_Config[moR(LIVEDRAW2_MAX_LINE_LENGTH)].GetData()->Fun()->Eval(state.tempo.ang);
 	min_line_length = m_Config[moR(LIVEDRAW2_MIN_LINE_LENGTH)].GetData()->Fun()->Eval(state.tempo.ang);
 	flow_velocity0 = m_Config[moR(LIVEDRAW2_FLOW_VELOCITY)].GetData()->Fun()->Eval(state.tempo.ang);
@@ -670,13 +692,17 @@ void moEffectLiveDrawing2::updateParameters()
 
 void moEffectLiveDrawing2::updateInteractionParameters()
 {
-	for (int i = MO_RED; i <= MO_ALPHA; i++)
-		pen_color_rgb[i] = m_Config[moR(LIVEDRAW2_PEN_COLOR)][MO_SELECTED][i].GetData()->Fun()->Eval(state.tempo.ang);
+	//for (int i = MO_RED; i <= MO_ALPHA; i++)
+    pen_color_rgb[0] = m_Config[moR(LIVEDRAW2_PEN_COLOR)][MO_SELECTED][0].GetData()->Fun()->Eval(state.tempo.ang)*midi_red;
+    pen_color_rgb[1] = m_Config[moR(LIVEDRAW2_PEN_COLOR)][MO_SELECTED][1].GetData()->Fun()->Eval(state.tempo.ang)*midi_green;
+    pen_color_rgb[2] = m_Config[moR(LIVEDRAW2_PEN_COLOR)][MO_SELECTED][2].GetData()->Fun()->Eval(state.tempo.ang)*midi_blue;
+    pen_color_rgb[3] = m_Config[moR(LIVEDRAW2_PEN_COLOR)][MO_SELECTED][3].GetData()->Fun()->Eval(state.tempo.ang);
+
 	ConvertRGBtoHSL();
 	rotosketch_duration = m_Config[moR(LIVEDRAW2_ROTOSKETCH_DURATION)].GetData()->Int();
-	rotosketch_start = m_Config[moR(LIVEDRAW2_ROTOSKETCH_START)].GetData()->Int();
-	dissolve_start = m_Config[moR(LIVEDRAW2_DISSOLVE_START)].GetData()->Int();
-	dissolve_time = m_Config[moR(LIVEDRAW2_DISSOLVE_TIME)].GetData()->Int();
+	rotosketch_start = (int)((float)(m_Config[moR(LIVEDRAW2_ROTOSKETCH_START)].GetData()->Int()) * midi_roto_start );
+	dissolve_start = (int)( (float)(m_Config[moR(LIVEDRAW2_DISSOLVE_START)].GetData()->Int()) * midi_dissolve_start );
+	dissolve_time = (int)( (float)(m_Config[moR(LIVEDRAW2_DISSOLVE_TIME)].GetData()->Int()) * midi_dissolve_time );
 
 	int back_idx = m_Config[moR(LIVEDRAW2_BACK_TEXTURES)].GetIndexValue();
 	m_Config[ moParamReference(LIVEDRAW2_BACK_TEXTURES) ].SetIndexValue(back_idx);
@@ -1174,11 +1200,13 @@ void Gesture::AddPoint(float x, float y, float p, float* color)
 	{
 		points = new Vec3f(x, y , p);
 		lastPoint = points;
+		//MODebug2->Push(moText("Creating first point: ") + FloatToStr(x) + moText(",") + FloatToStr(y) + moText(",") + FloatToStr(p) );
 	}
 	else
 	{
 	    lastPoint->next = new Vec3f(x, y , p);
 		lastPoint = lastPoint->next;
+		//MODebug2->Push("Adding point to list");
 	}
 	lastPoint->set(color[0], color[1], color[2], color[3]);
 	nPoints++;
@@ -1696,7 +1724,41 @@ void Poly2f::SetPressure(float p)
 	press = p;
 }
 
+void moEffectLiveDrawing2::DrawCalibrationGrid() {
 
+    glColor4f(1.0,1.0,1.0,1.0);
+    glDisable( GL_TEXTURE_2D );
+
+   glBegin (GL_LINES);
+      glVertex3f ( 0.0, 0.0, 0);
+      glVertex3f ( canvasWidth, canvasHeight, 0);
+   glEnd ();
+
+   glBegin (GL_LINES);
+      glVertex3f ( canvasWidth, 0.0, 0);
+      glVertex3f ( 0.0, canvasHeight, 0);
+
+   glEnd ();
+
+    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+
+    glBegin (GL_QUADS);
+      glVertex3f (0, 0, 0);
+      glVertex3f (canvasWidth, 0.0, 0);
+      glVertex3f (canvasWidth, canvasHeight, 0);
+      glVertex3f ( 0.0, canvasHeight, 0);
+    /*
+      glVertex3f (-5, 5.7 , 0);
+      glVertex3f (5.7, 5.7 , 0);
+      glVertex3f (5.7, -5 , 0);
+      glVertex3f (-5, -5, 0);
+    */
+    glEnd ();
+
+    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    glEnable( GL_TEXTURE_2D );
+
+}
 
 void moEffectLiveDrawing2::DrawTracker() {
 
@@ -1728,11 +1790,11 @@ void moEffectLiveDrawing2::DrawTracker() {
                     int th = m_pTrackerData->GetVideoFormat().m_Height;
                     //MODebug2->Push(moText("vformat:")+IntToStr(tw)+moText("th")+IntToStr(th));
 
-                    m_TrackerBarycenter = moVector2f( ( ( m_pTrackerData->GetBarycenter().X() / (float) tw )),
-                                                      ( 1.0 - ( m_pTrackerData->GetBarycenter().Y() / (float) th )) );
+                    m_TrackerBarycenter = moVector2f( m_pTrackerData->GetBarycenter().X(),
+                                                      1.0 - m_pTrackerData->GetBarycenter().Y() );
 
                     //MODebug2->Push(moText("Barycenter x:")+FloatToStr(m_TrackerBarycenter.X()) + moText(" y:")+FloatToStr(m_TrackerBarycenter.Y()) );
-/*
+
                     glBindTexture(GL_TEXTURE_2D,0);
                     glColor4f(0.7, 1.0, 0.5, 1.0);
 
@@ -1743,7 +1805,7 @@ void moEffectLiveDrawing2::DrawTracker() {
                         glVertex2f((m_TrackerBarycenter.X() + 0.002)*w, (m_TrackerBarycenter.Y() - 0.002)*h);
                     glEnd();
 
-*/
+
 
                     for (i = 0; i < m_pTrackerData->GetFeaturesCount(); i++)
                     {
@@ -1752,79 +1814,22 @@ void moEffectLiveDrawing2::DrawTracker() {
 
                         //if (pF && pF->valid) {
 
-                        float x = (pF->x / (float)tw) - 0.5;
-                        float y = -(pF->y / (float)th) + 0.5;
-                        float tr_x = (pF->tr_x / (float)tw) - 0.5;
-                        float tr_y = -(pF->tr_y / (float)th) + 0.5;
-                        float v_x = (pF->v_x / (float)tw);
-                        float v_y = -(pF->v_y / (float)th);
+                        float x = (pF->x ) - 0.5;
+                        float y = -(pF->y ) + 0.5;
+                        float tr_x = (pF->tr_x ) - 0.5;
+                        float tr_y = -(pF->tr_y ) + 0.5;
+                        float v_x = (pF->v_x );
+                        float v_y = -(pF->v_y );
                         float vel = sqrtf( v_x*v_x+v_y*v_y );
                         int v = pF->val;
 
-
-
-                        //MODebug2->Log(moText("    x:")+FloatToStr(pF->x) + moText(" y:")+FloatToStr(pF->y) );
-/*
-                        glBindTexture(GL_TEXTURE_2D,0);
-                        glColor4f(1.0, 0.0, 0.0, 1.0);
-
-                        if (v >= 0) glColor4f(0.0, 1.0, 0.0, 1.0);
-                        else if (v == -1) glColor4f(1.0, 0.0, 1.0, 1.0);
-                        else if (v == -2) glColor4f(1.0, 0.0, 1.0, 1.0);
-                        else if (v == -3) glColor4f(1.0, 0.0, 1.0, 1.0);
-                        else if (v == -4) glColor4f(1.0, 0.0, 1.0, 1.0);
-                        else if (v == -5) glColor4f(1.0, 0.0, 1.0, 1.0);
-*/
-
                         if ( pF->valid ) {
                             has_features = true;
-
-                            if (drawing_features > 1 ) {
-/*
-                                glPointSize((GLfloat)2);
-                                glLineWidth((GLfloat)2.0);
-
-
-
-                                glBegin(GL_QUADS);
-                                    glVertex2f((tr_x - 0.008)*normalf, (tr_y - 0.008)*normalf);
-                                    glVertex2f((tr_x - 0.008)*normalf, (tr_y + 0.008)*normalf);
-                                    glVertex2f((tr_x + 0.008)*normalf, (tr_y + 0.008)*normalf);
-                                    glVertex2f((tr_x + 0.008)*normalf, (tr_y - 0.008)*normalf);
-                                glEnd();
-
-                                glBegin(GL_QUADS);
-                                    glVertex2f((x - 0.008)*normalf, (y - 0.008)*normalf);
-                                    glVertex2f((x - 0.008)*normalf, (y + 0.008)*normalf);
-                                    glVertex2f((x + 0.008)*normalf, (y + 0.008)*normalf);
-                                    glVertex2f((x + 0.008)*normalf, (y - 0.008)*normalf);
-                                glEnd();
-
-                                glDisable(GL_TEXTURE_2D);
-                                glColor4f(1.0, 1.0, 1.0, 1.0);
-                                glBegin(GL_LINES);
-                                    glVertex2f( x*normalf, y*normalf);
-                                    glVertex2f( tr_x*normalf, tr_y*normalf);
-                                glEnd();
- */                           }
 
                             if ( vel > 0.01 && vel < 0.1) {
 
                                 has_motion = true;
 
-                                if (drawing_features > 0 ) {
-  /*                                  glDisable(GL_TEXTURE_2D);
-                                    glColor4f(0.0, 0.0, 1.0, 1.0);
-                                    //glPointSize((GLfloat)10);
-                                    glLineWidth((GLfloat)10.0);
-
-                                    glBegin(GL_LINES);
-                                        glVertex2f( x*normalf, y*normalf);
-                                        glVertex2f( (x+v_x)*normalf, (y+v_y)*normalf);
-                                    glEnd();
- */                               }
-
-                                ///ParticlesSimpleInfluence( x*normalf, y*normalf, (x+v_x)*normalf, (y+v_y)*normalf, vel*normalf );
                             }
 
 
@@ -1862,5 +1867,94 @@ void moEffectLiveDrawing2::DrawTracker() {
 		}
 	}
 
+
+}
+
+
+void moEffectLiveDrawing2::Update(moEventList *Events)
+{
+
+    moMoldeoObject::Update(Events);
+
+    moEvent* actual = Events->First;
+	//recorremos todos los events y parseamos el resultado
+	//borrando aquellos que ya usamos
+	MOint tempval;
+	while(actual!=NULL) {
+		//solo nos interesan los del midi q nosotros mismos generamos, para destruirlos
+		if(actual->deviceid == MO_IODEVICE_MIDI) {
+
+		    ///actual->reservedvalue1 corresponds to CC midi code : it works as a n index in m_Codes (has to be defined in param "code" in the config file...
+		    ///actual->reservedvalue2 corresponds to VAL
+
+			int CC = actual->reservedvalue1;
+			int VAL = actual->reservedvalue2;
+
+            switch (CC) {
+                case 1:
+                    midi_red = (float)VAL / (float) 127.0;
+                    break;
+                case 2:
+                    midi_green = (float)VAL / (float) 127.0;
+                    break;
+                case 3:
+                    midi_blue = (float)VAL / (float) 127.0;
+                    break;
+                case 4:
+                    midi_pressure = (float)VAL / (float) 127.0;
+                    break;
+                case 5:
+                    midi_line_width = (float)VAL / (float) 127.0;
+                    break;
+                case 6:
+                    midi_dissolve_start = (float)VAL / (float) 127.0;
+                    break;
+                case 7:
+                    midi_dissolve_time = (float)VAL / (float) 127.0;
+                    break;
+
+                case 8:
+                    midi_roto_start = (float)VAL / (float) 127.0;
+                    break;
+
+                case 65:
+                    //eliminar todos los dibujos:
+                    if (VAL==0 || VAL==127) {
+                        clearGestures();
+                    }
+                    break;
+                case 66:
+                    //eliminar todos los dibujos:
+                    if (VAL==0 || VAL==127) {
+                        delLastGesture();
+                    }
+                    break;
+
+
+                case 105:
+                    //preconfig --
+                    if (VAL==0 || VAL==127) {
+                        m_Config.PreConfPrev();
+                    }
+                    break;
+
+                case 106:
+                    //preconfig ++
+                    if (VAL==0 || VAL==127) {
+                        m_Config.PreConfNext();
+                    }
+                    break;
+
+
+                default:
+                    MODebug2->Push("device in ldraw!!!");
+                    MODebug2->Push(IntToStr(VAL));
+                    break;
+            }
+
+
+			actual = actual->next;
+		} else actual = actual->next;
+	}
 
 }

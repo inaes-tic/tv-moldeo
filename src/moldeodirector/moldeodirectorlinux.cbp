@@ -53,6 +53,7 @@
 			<Add option="-D_FILE_OFFSET_BITS=64" />
 			<Add option="-D_LARGE_FILES" />
 			<Add option="-D__WXGTK__" />
+			<Add option="-DMO_VDPAU" />
 			<Add directory="../../inc" />
 			<Add directory="../../inc/3ds" />
 			<Add directory="./vdtc" />

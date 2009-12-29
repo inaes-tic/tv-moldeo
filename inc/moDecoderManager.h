@@ -39,11 +39,19 @@
 #include "moVideoGraph.h"
 #include "moResourceManager.h"
 
-
 typedef void moDecoderDevice;
 typedef void moVideoMixer;
 typedef void moVideoDecoder;
 
+#ifdef MO_VDPAU
+  //#include "avformat.h"
+  //#include "avcodec.h"
+
+  #include "moVdpauGraph.h"
+  #include "vdpau/vdpau.h"
+  #include "vdpau/vdpau_x11.h"
+  #include "GL/glx.h"
+#endif
 
 enum moDecoderType {
 
@@ -101,6 +109,8 @@ class LIBMOLDEO_API moDecoderManager : public moResource
     moDecoderType GetDecoderType();
 
 
+    MOboolean  OpenVideo( moText filename );
+
     private:
 
 		moGLManager*            m_glmanager;
@@ -110,6 +120,42 @@ class LIBMOLDEO_API moDecoderManager : public moResource
     moVideoMixer*           m_pVideoMixer;
 
     moVideoGraph*           m_pVideoGraph;
+
+#ifdef MO_VDPAU
+    //AVFormatContext *pFormatCtx;
+
+    VdpDevice								vdp_device;
+    VdpGetProcAddress						*vdp_get_proc_address;
+    VdpDeviceDestroy						*vdp_device_destroy;
+    VdpVideoSurfaceCreate					*vdp_video_surface_create;
+    VdpVideoSurfaceDestroy					*vdp_video_surface_destroy;
+    VdpDecoderCreate						*vdp_decoder_create;
+    VdpDecoderDestroy						*vdp_decoder_destroy;
+    VdpDecoderRender						*vdp_decoder_render;
+    VdpOutputSurfaceCreate					*vdp_output_surface_create;
+    VdpOutputSurfaceDestroy					*vdp_output_surface_destroy;
+    VdpOutputSurfaceGetBitsNative			*vdp_output_surface_get_bits_native;
+    VdpVideoSurfaceGetBitsYCbCr				*vdp_video_surface_get_bits_y_cb_cr;
+    VdpVideoMixerCreate						*vdp_video_mixer_create;
+    VdpVideoMixerDestroy					*vdp_video_mixer_destroy;
+    VdpVideoMixerRender						*vdp_video_mixer_render;
+    VdpPresentationQueueCreate				*vdp_presentation_queue_create;
+    VdpPresentationQueueDestroy				*vdp_presentation_queue_destroy;
+    VdpPresentationQueueGetTime				*vdp_presentation_queue_get_time;
+    VdpPresentationQueueTargetCreateX11		*vdp_presentation_queue_target_create_x11;
+    VdpPresentationQueueQuerySurfaceStatus	*vdp_presentation_queue_query_surface_status;
+    VdpPresentationQueueDisplay				*vdp_presentation_queue_display;
+    VdpPresentationQueueBlockUntilSurfaceIdle	*vdp_presentation_queue_block_until_surface_idle;
+    VdpGetErrorString *vdp_get_error_string;
+
+    VdpDecoder						vdp_decoder;
+    VdpVideoMixer					vdp_mixer;
+    VdpPresentationQueue			vdp_presentation_queue;
+    VdpPresentationQueueTarget		vdp_presentation_queue_target;
+    int								vdp_pix_fmt;
+    int								vdp_width;
+    int								vdp_height;
+#endif
 
 };
 

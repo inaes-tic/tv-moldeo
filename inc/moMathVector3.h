@@ -58,7 +58,7 @@ public:
         m_afTuple[1] = afTuple[1];
         m_afTuple[2] = afTuple[2];
     }
-    moVector3 (const moVector3& rkV) {
+    moVector3 (const moVector3& rkV) : moAbstract(rkV) {
         m_afTuple[0] = rkV.m_afTuple[0];
         m_afTuple[1] = rkV.m_afTuple[1];
         m_afTuple[2] = rkV.m_afTuple[2];

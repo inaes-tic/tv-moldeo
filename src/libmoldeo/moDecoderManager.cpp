@@ -31,15 +31,6 @@
 #include "moDecoderManager.h"
 
 
-#ifdef MO_VDPAU
-  #include "moVdpauGraph.h"
-  #include "vdpau/vdpau.h"
-  #include "vdpau/vdpau_x11.h"
-  #include <X11/Xlib.h>
-  #include <X11/Xutil.h>
-#endif
-
-
 
 //===========================================
 //
@@ -77,17 +68,65 @@ MOboolean moDecoderManager::Init()
 		//m_glmanager = m_pResourceManager->GetGLMan();
 		#ifdef MO_VDPAU
 
-      m_pDecoderDevice = (moDecoderDevice*) new VdpDevice();
+      //m_pDecoderDevice = (moDecoderDevice*) new VdpDevice();
 
       //typedef VdpStatus VdpDeviceCreateX11(Display *display, int screen,VdpDevice *device, VdpGetProcAddress **get_proc_address)
-      void* vdp_xdisplay;
+      //VdpGetProcAddress *vdp_get_proc_add;
+      Display* vdp_xdisplay;
       vdp_xdisplay = NULL;
-
       VdpStatus vdp_st;
-      VdpGetProcAddress *vdp_get_proc_add;
-      //vdp_xdisplay =
+      int screen;
+      screen = 0;
+      //VdpDevice vdp_device;
+      VdpDecoderProfile vdp_decoder_profile;
+      //VdpGetProcAddress* vdp_get_proc_address;
+      //VdpDecoder  vdp_decoder;
 
-      //vdp_st = vdp_device_create_x11( (Display *)vdp_xdisplay, 0, (VdpDevice*) m_pDecoderDevice, (VdpGetProcAddress**)&vdp_get_proc_add );
+      vdp_device = 0;
+      vdp_get_proc_address = NULL;
+
+      int width,height;
+
+      width = 1920;
+      height = 1080;
+      vdp_decoder_profile = VDP_DECODER_PROFILE_H264_HIGH;
+
+      vdp_xdisplay = glXGetCurrentDisplay();
+      if (vdp_xdisplay) {
+        MODebug2->Message( moText("Display:") + IntToStr((long)vdp_xdisplay));
+        screen = DefaultScreen(vdp_xdisplay);
+        if (screen>=0) {
+          MODebug2->Message( moText("Screen:") + IntToStr(screen) );
+          MODebug2->Message( moText("Creating VdpDevice"));
+          vdp_st = vdp_device_create_x11( vdp_xdisplay, screen, &vdp_device, &vdp_get_proc_address );
+          if (vdp_st==VDP_STATUS_OK) {
+
+            vdp_st = vdp_get_proc_address(vdp_device, VDP_FUNC_ID_DECODER_CREATE, (void **)&vdp_decoder_create);
+            vdp_st = vdp_get_proc_address(vdp_device, VDP_FUNC_ID_GET_ERROR_STRING, (void **)&vdp_get_error_string);
+
+            MODebug2->Message( moText("VdpStatus: OK => ") + IntToStr(vdp_st) );
+            MODebug2->Message( moText("Creating VdpDecoder"));
+            vdp_st = vdp_decoder_create( vdp_device, vdp_decoder_profile, width, height, 2, &vdp_decoder );
+            if (vdp_st==VDP_STATUS_OK) {
+              MODebug2->Message( moText("VdpStatus: OK => ") + IntToStr(vdp_st) );
+            } else {
+              MODebug2->Message( moText("VdpStatus: Error:") + moText(vdp_get_error_string(vdp_st)) );
+            }
+
+          } else {
+            MODebug2->Message( moText("VdpStatus: Error:") + IntToStr(vdp_st) );
+          }
+        }
+      }
+
+
+
+
+
+
+      //MODebug2->Message( moText("Screen:") + IntToStr(screen) );
+
+      //vdp_st = vdp_device_create_x11( vdp_xdisplay, screen, &vdp_device, &vdp_get_proc_address );
       /*
       m_pVideoDecoder = (moVideoDecoder*) new VdpDecoder(  );
       m_pVideoGraph = (moVideoGraph*) new moVdpauGraph();
@@ -112,6 +151,24 @@ MOboolean moDecoderManager::Init()
 	}
 	return (m_pResourceManager!=NULL);
 }
+
+MOboolean moDecoderManager::OpenVideo( moText filename ) {
+#ifdef MO_VDPAU
+      avcodec_init();
+      avcodec_register_all();
+      av_register_all();
+
+
+      const char      *pfilename="test.avi";
+
+      // Open video file
+      if(av_open_input_file(&pFormatCtx, pfilename, NULL, 0, NULL)!=0) {
+          //handleerror();
+          MODebug2->Message("Error");
+      }
+#endif
+}
+
 
 MOboolean moDecoderManager::Finish()
 {

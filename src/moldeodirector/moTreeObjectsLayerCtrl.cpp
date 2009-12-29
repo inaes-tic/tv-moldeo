@@ -259,6 +259,7 @@ moLayersPanelCtrl::moLayersPanelCtrl( wxWindow *parent, wxWindowID id,
     m_pLayersTreeCtrl->SetForegroundColour(wxColour(120,120,120));
     m_pLayersTreeCtrl->SetBackgroundColour( wxColour(70,70,70) );
     m_pLayersTreeCtrl->ShowScrollBars( false, true);
+    //m_pLayersTreeCtrl->SetNextActionHandler( this );
 
     // 0 border in all borders, expand control, but fixed minsize
     //labels observer goes here

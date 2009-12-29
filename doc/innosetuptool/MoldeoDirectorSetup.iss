@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Moldeo Director"
-#define MyAppVerName "Moldeo Director 0.7.3"
+#define MyAppVerName "Moldeo Director 0.7.6"
 #define MyAppPublisher "Moldeo"
 #define MyAppURL "http://www.moldeo.org/"
 #define MyAppExeName "moldeodirector.exe"
@@ -22,7 +22,7 @@ DefaultDirName={pf}\Moldeo
 DefaultGroupName=Moldeo
 LicenseFile=..\..\bin\mingw\moldeo license.txt
 OutputDir=..\..\doc\installers
-OutputBaseFilename=Moldeo Director 0.7.3 Setup
+OutputBaseFilename=Moldeo Director 0.7.6 Setup
 SetupIconFile=..\..\doc\icons\Moldeo32.ico
 Compression=lzma
 SolidCompression=yes
@@ -67,9 +67,11 @@ Source: ..\..\bin\mingw\glew_shared.dll; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\libmoldeo.dll; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\libpng13.dll; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\mingwm10.dll; DestDir: {app}\bin\mingw
+Source: ..\..\bin\mingw\tips.txt; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\plugins\effects\image.dll; DestDir: {app}\bin\mingw\plugins\effects
 Source: ..\..\bin\mingw\plugins\effects\icon.dll; DestDir: {app}\bin\mingw\plugins\effects
 Source: ..\..\bin\mingw\plugins\iodevices\mouse.dll; DestDir: {app}\bin\mingw\plugins\iodevices
+Source: ..\..\bin\mingw\plugins\iodevices\serial.dll; DestDir: {app}\bin\mingw\plugins\iodevices
 Source: ..\..\bin\mingw\plugins\iodevices\keyboard.dll; DestDir: {app}\bin\mingw\plugins\iodevices
 Source: ..\..\bin\mingw\plugins\iodevices\mixer.dll; DestDir: {app}\bin\mingw\plugins\iodevices
 Source: ..\..\bin\mingw\plugins\mastereffects\presetpanel.dll; DestDir: {app}\bin\mingw\plugins\mastereffects
@@ -83,7 +85,7 @@ Source: ..\..\data\test\objetos\iconos3d\moldeologo.3ds; DestDir: {app}\data\tes
 Source: ..\..\data\test\iconos\estrellas\shine.tga; DestDir: {app}\data\test\iconos\estrellas
 Source: ..\..\data\test\iconos\estrellas\star.tga; DestDir: {app}\data\test\iconos\estrellas
 Source: ..\..\data\test\iconos\estrellas\spark.tga; DestDir: {app}\data\test\iconos\estrellas
-Source: ..\..\data\test\iconos\Moldeo_Texture_Logo.jpg;  DestDir: {app}\data\test\iconos
+Source: ..\..\data\test\iconos\Moldeo_Texture_Logo.jpg; DestDir: {app}\data\test\iconos
 Source: ..\icons\Moldeo32.ico; DestDir: {app}\doc\icons
 Source: ..\..\data\test\videomanager.cfg; DestDir: {app}\data\test
 Source: ..\..\data\test\channel0.cfg; DestDir: {app}\data\test
@@ -201,7 +203,7 @@ Source: ..\..\bin\mingw\plugins\preeffects\mirrorg.dll; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\plugins\preeffects\mirror.dll; DestDir: {app}\bin\mingw\plugins\preeffects
 Source: ..\..\bin\mingw\cgGL.dll; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\cg.dll; DestDir: {app}\bin\mingw
-Source: ..\installers\GStreamer-WinBuild-0.10.3.exe; DestDir: {app}\doc\installers; Tasks: ; Languages:
+Source: ..\installers\GStreamer-WinBuild-0.10.3.exe; DestDir: {app}\doc\installers; Tasks: ; Languages: 
 Source: ..\..\bin\mingw\glut32.dll; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\OpenAL32.dll; DestDir: {app}\bin\mingw
 Source: ..\..\data\test\brushes\brush1.tga; DestDir: {app}\data\test\brushes
@@ -425,6 +427,8 @@ Source: ..\..\data\test\shaders\kltgpu\ati\w2.cg; DestDir: {app}\bin\mingw\plugi
 Source: ..\..\data\test\camarascircular.mol; DestDir: {app}\data\test
 Source: ..\..\bin\mingw\plugins\iodevices\netoscin.dll; DestDir: {app}\bin\mingw\plugins\iodevices
 Source: ..\..\bin\mingw\plugins\iodevices\netoscout.dll; DestDir: {app}\bin\mingw\plugins\iodevices
+Source: ..\..\bin\mingw\plugins\iodevices\midi.dll; DestDir: {app}\bin\mingw\plugins\iodevices
+Source: ..\..\bin\mingw\director.gmo; DestDir: {app}\bin\mingw
 
 
 [Icons]
@@ -478,3 +482,7 @@ Name: {app}\bin\mingw\plugins\resources\kltgpu\ati
 [Registry]
 Root: HKLM; Subkey: SOFTWARE\Microsoft\Windows\CurrentVersion\Moldeo\bin\mingw\moldeodirector.exe; ValueType: string; ValueName: ; ValueData: {app}\moldeodirector.exe; Flags: uninsdeletekey
 Root: HKLM; Subkey: SYSTEM\CurrentControlSet\Control\Session Manager\Environment; ValueType: string; ValueName: WXART2D; ValueData: "C:\wxArt2D;D:\_data\programacion\wxWidgets\wxArt2d\wxArt2D"
+Root: HKCR; Subkey: .mol; ValueType: string; ValueName: ; ValueData: MoldeoProjectFile; Flags: uninsdeletevalue
+Root: HKCR; Subkey: MoldeoProjectFile; ValueType: string; ValueName: ; ValueData: Moldeo Project File; Flags: uninsdeletekey
+Root: HKCR; Subkey: MoldeoProjectFileDefaultIcon; ValueType: string; ValueName: ; ValueData: {app}\bin\mingw\{#MyAppExeName},0
+Root: HKCR; Subkey: MoldeoProjectFileshellopencommand; ValueType: string; ValueName: ; ValueData: """{app}\bin\mingw\{#MyAppExeName}"" ""-mol"" ""%1"""

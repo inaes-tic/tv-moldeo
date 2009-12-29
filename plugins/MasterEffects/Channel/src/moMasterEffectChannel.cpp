@@ -242,7 +242,38 @@ MOboolean moMasterEffectChannel::Finish()
 	consolestate = NULL;
     return PreFinish();
 }
+/*
+void moMasterEffectChannel::Update( moEventList *p_eventlist ) {
 
+    moMoldeoObject::Update( p_eventlist );
+
+    ///MIDI CONTROLS !!!!!
+    moEvent* actual = p_eventlist->First;
+	//recorremos todos los events y parseamos el resultado
+	//borrando aquellos que ya usamos
+	MOint tempval;
+	while(actual!=NULL) {
+		//solo nos interesan los del midi q nosotros mismos generamos, para destruirlos
+		if(actual->deviceid == MO_IODEVICE_MIDI) {
+		    ///actual->reservedvalue1 corresponds to CC midi code : it works as a n index in m_Codes (has to be defined in param "code" in the config file...
+		    ///actual->reservedvalue2 corresponds to VAL
+
+			int CC = actual->reservedvalue1;
+			int VAL = actual->reservedvalue2;
+
+            switch (CC) {
+                case 45:
+                    MODebug2->Push(moText("## Midi Button ##"));
+                    break;
+                default:
+                    MODebug2->Push("device in channel!!!");
+                    MODebug2->Push(IntToStr(VAL));
+                    break;
+            }
+		}
+	}
+}
+*/
 void
 moMasterEffectChannel::Interaction( moIODeviceManager *IODeviceManager ) {
 	//aqui se parsean los codisp

@@ -199,6 +199,8 @@ class LIBMOLDEO_API moTimeManager : public moResource
 
         void ClearByObjectId( long p_objectid );
         void ClearByTimerId( long p_timerid );
+        void FixByObjectId( long p_objectid );
+
 
         static moTimerAbsolute*     MoldeoTimer;
 

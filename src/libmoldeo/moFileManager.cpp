@@ -107,6 +107,7 @@ moDirectory::Open( moText p_CompletePath, moText p_Search  ) {
 
 	moText CompletePathSearch = (moText)p_CompletePath + (moText)p_Search;
 
+    /** Empty file array*/
 	for( int i=0; i<(int)m_Files.Count(); i++) {
             moFile* pFile = m_Files[i];
             if  (pFile)
@@ -116,9 +117,11 @@ moDirectory::Open( moText p_CompletePath, moText p_Search  ) {
     }
     m_Files.Empty();
 
+    /** Set by default m_bExists on false*/
     m_bExists = false;
 //    void show_files( const path & directory, bool recurse_into_subdirs = true )
 //    {
+    /** Check files*/
       if( bfs::exists( path ) )
       {
           m_bExists = true;
@@ -131,24 +134,28 @@ moDirectory::Open( moText p_CompletePath, moText p_Search  ) {
             //if( recurse_into_subdirs ) show_files(*iter) ;
           } else {
             //cout << iter->native_file_string() << " (file)\n" ;
-            moText pFileName( iter->path().file_string().c_str() );
+            //ATENCION SEGUN LA VERSION DE BOOST hya que usar filename() o leaf()
+            //moText pFileName( iter->path().leaf().c_str() );
+            moText pFileName( iter->path().filename().c_str() );
+            moText pCompletePathFilename( iter->path().file_string().c_str() );
 
-            moText pCompletePathFilename;
 
-            //pCompletePathFilename = m_CompletePath + moText("/") + moText(pFileName);
-            pCompletePathFilename = pFileName;
 
             moFile*	pFile = NULL;
-            if (m_pFileManager)
-                pFile = m_pFileManager->GetFile( pCompletePathFilename );
-            else
-                pFile = new moFile( pCompletePathFilename );
-            if (pFile) {
-                m_Files.Add(pFile);
+
+            if (pFileName!=moText("Thumbs.db")) {
+                if (m_pFileManager)
+                    pFile = m_pFileManager->GetFile( pCompletePathFilename );
+                else
+                    pFile = new moFile( pCompletePathFilename );
+                if (pFile) {
+                    m_Files.Add(pFile);
+                }
             }
 
             #ifdef _DEBUG
             MODebug2->Message( moText("moFileManager:: file:") + (moText)pCompletePathFilename);
+            MODebug2->Message( moText("moFileManager:: filesize:") + IntToStr((int) bfs::file_size( iter->path().file_string().c_str() )));
             #endif
             //printf("%-32s %s %9.ld %s",fileInfo.name, attribs, fileInfo.size , timeBuff);
 
@@ -373,7 +380,71 @@ moDirectory::Find( moText filename) {
 
 void
 moDirectory::Update() {
-	//----
+
+    char *path;
+
+	path = m_CompletePath;
+
+//    void show_files( const path & directory, bool recurse_into_subdirs = true )
+//    {
+    /** Check files*/
+      if( bfs::exists( path ) )
+      {
+          m_bExists = true;
+
+         bfs::directory_iterator end ;
+        for(  bfs::directory_iterator iter(path) ; iter != end ; ++iter )
+          if (  bfs::is_directory( *iter ) )
+          {
+            //cout << iter->native_directory_string() << " (directory)\n" ;
+            //if( recurse_into_subdirs ) show_files(*iter) ;
+          } else {
+            //cout << iter->native_file_string() << " (file)\n" ;
+
+            //ATENCION SEGUN LA VERSION DE BOOST hya que usar filename() o leaf()
+            moText pFileName( iter->path().leaf().c_str() );
+            moText pCompletePathFilename( iter->path().file_string().c_str() );
+
+
+
+            moFile*	pFile = NULL;
+
+            if (pFileName!=moText("Thumbs.db")) {
+
+                bool founded = false;
+
+                for( int i=0; i<(int)m_Files.Count(); i++) {
+                    moFile* pFile = m_Files[i];
+                    if  (pFile->GetCompletePath()==pCompletePathFilename) {
+                        founded = true;
+                    }
+                }
+                if (!founded) {
+                        if (m_pFileManager) {
+                            pFile = m_pFileManager->GetFile( pCompletePathFilename );
+                        } else {
+                            pFile = new moFile( pCompletePathFilename );
+                        }
+                        if (pFile) {
+                            MODebug2->Message( moText("moFileManager::moDirectory::Update file added:") + (moText)pCompletePathFilename);
+                            m_Files.Add(pFile);
+                        }
+                }
+
+            }
+
+
+            //#ifdef _DEBUG
+            //MODebug2->Message( moText("moFileManager:: moDirectory::Update:") + (moText)pCompletePathFilename);
+            //#endif
+            //printf("%-32s %s %9.ld %s",fileInfo.name, attribs, fileInfo.size , timeBuff);
+
+          }
+
+      }
+
+      return;
+
 }
 
 
@@ -405,6 +476,13 @@ moFile::moFile() {
 moFile::moFile( moText p_CompletePath ) {//could be: http://.... or ftp://... or c:\... or ...
 
     SetCompletePath( p_CompletePath );
+
+    char *path;
+    path = p_CompletePath;
+
+    if (Exists() && !bfs::is_directory(path)) m_FileSize = (long) bfs::file_size( path );
+    else m_FileSize = 0;
+
 }
 
 moFile::~moFile() {
@@ -458,6 +536,14 @@ moFile::GetStatus() {
 MOboolean
 moFile::IsRemote() {
 	return m_bRemote;
+}
+
+moFileDate	moFile::GetDate() {
+        return m_FileDate;
+}
+
+moFileSize	moFile::GetSize() {
+        return m_FileSize;
 }
 
 MOubyte*
@@ -630,8 +716,10 @@ moFileManager::Open( moText p_Path, MOboolean bWaitForDownload ) {
 	moDirectory* pDir =  new moDirectory( p_Path, this );
 
 	if ( pDir!=NULL ) {
-		if (pDir->GetType()==MO_FILETYPE_LOCAL && !pDir->Exists())
+		if (pDir->GetType()==MO_FILETYPE_LOCAL && !pDir->Exists()) {
+		    delete pDir;
 			return false;
+		}
 		if (bWaitForDownload && pDir->IsRemote()) {
 			while(pDir->GetStatus()!=MO_FILESTATUS_READY) {
 				pDir->Update();

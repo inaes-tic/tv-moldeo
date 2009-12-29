@@ -224,6 +224,22 @@ void moTimeManager::ClearByTimerId( long p_timerid ) {
 
     }
 
+}
 
+void moTimeManager::FixByObjectId( long p_objectid ) {
+
+    int max = m_Timers.Count();
+
+    for( int i=0; i<max; i++ ) {
+        ///aaaa
+        moTimer* pTimer = m_Timers[i];
+
+        if ( pTimer && pTimer->GetObjectId()==p_objectid ) {
+
+            pTimer->Fix();
+
+        }
+
+    }
 
 }

@@ -869,7 +869,7 @@ moGsGraph::BuildLiveWebcamGraph( moBucketsPool *pBucketsPool, moCaptureDevice &p
                }
            }
 
-            b_forcevideointerlace = true;
+            b_forcevideointerlace = false;
            if (b_forcevideointerlace) {
                m_pColorSpaceInterlace = gst_element_factory_make ("ffmpegcolorspace", "colordeinterlace");
                if (m_pColorSpaceInterlace) {

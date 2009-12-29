@@ -204,11 +204,17 @@ moMoldeoObject::Init() {
                     case MO_PARAM_OBJECT:
                         if (value.GetSubValueCount()>0) {
                             //PROBAR!!!!!
-                            /*
+
                             moValueBase& valuebase(value.GetSubValue(0));
                             mo3dModel* pModel = m_pResourceManager->GetModelMan()->Get3dModel( valuebase.Text() );
-                            if (pModel)
-                                valuebase.SetModel( pModel );*/
+                            if (pModel) {
+                                mo3DModelSceneNode *newSceneNode;
+                                newSceneNode = new mo3DModelSceneNode();
+                                if (newSceneNode) {
+                                    newSceneNode->Init(pModel);
+                                }
+                                valuebase.SetModel( newSceneNode );
+                            }
                         }
                         break;
 

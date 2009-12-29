@@ -62,7 +62,14 @@ enum moParticlesSimpleEmitterType {
   PARTICLES_EMITTERTYPE_JET = 3,
   PARTICLES_EMITTERTYPE_POINT = 4,
   PARTICLES_EMITTERTYPE_TRACKER = 5,
-  PARTICLES_EMITTERTYPE_TRACKER2 = 6
+  PARTICLES_EMITTERTYPE_TRACKER2 = 6,
+  PARTICLES_EMITTERTYPE_SPIRAL = 7
+};
+
+enum moParticlesSimpleFolderShotType {
+  PARTICLES_SHOTTYPE_FOLDER_RANDOM = 0,
+  PARTICLES_SHOTTYPE_FOLDER_SEQUENTIAL_BY_FILEDATE = 1,
+  PARTICLES_SHOTTYPE_FOLDER_SEQUENTIAL_BY_FILENAME = 2
 };
 
 enum moParticlesSimpleAttractorType {
@@ -71,7 +78,8 @@ enum moParticlesSimpleAttractorType {
   PARTICLES_ATTRACTORTYPE_SPHERE = 2, /// each particle attract perp to a face of the grid
   PARTICLES_ATTRACTORTYPE_TUBE = 3, ///  each particle attract perp to a face of the grid
   PARTICLES_ATTRACTORTYPE_JET = 4, /// each particle attract perpendicular to jet vector
-  PARTICLES_ATTRACTORTYPE_TRACKER = 5 /// each particle attract each one to a dot of the tracker
+  PARTICLES_ATTRACTORTYPE_TRACKER = 5, /// each particle attract each one to a dot of the tracker
+  PARTICLES_ATTRACTORTYPE_VERTEX = 6 /// each particle attract each one to a dot of the tracker
 };
 
 enum moParticlesSimpleAttractorMode {
@@ -91,16 +99,17 @@ enum moParticlesSimpleBehaviourMode {
 };
 
 enum moParticlesSimpleTextureMode {
-    PARTICLES_TEXTUREMODE_UNIT = 0, /// One Texture Image for each Particle
-    PARTICLES_TEXTUREMODE_PATCH = 1, /// One Texture Image divided into many Particles
-    PARTICLES_TEXTUREMODE_MANY = 2, /// Many Textures Image for each Particle
-    PARTICLES_TEXTUREMODE_MANY2PATCH = 3 /// Many textures/particle to construct a patched texture one
+    PARTICLES_TEXTUREMODE_UNIT = 0, /// One Same Texture Image for each Particle (taken from texture)
+    PARTICLES_TEXTUREMODE_PATCH = 1, /// Same Texture Image Divided In Different Fragments for each Particle (taken from texture, divided in width*height)
+    PARTICLES_TEXTUREMODE_MANY = 2, /// Many Different Textures Image for each Particle ( taken from texturefolder )
+    PARTICLES_TEXTUREMODE_MANY2PATCH = 3 /// Many textures/particle to construct a patched texture one ( taken from texturefolder, build the one defined on texture parameter, or from a folder, call to Shot(source) then ReInit to build... )
 };
 
 enum moParticlesCreationMethod {
     PARTICLES_CREATIONMETHOD_LINEAR=0, ///particles are been created along the array order
-    PARTICLES_CREATIONMETHOD_PLANAR=1, ///particles are been created randomly ober the surface of the emitter geometry
-    PARTICLES_CREATIONMETHOD_VOLUMETRIC=2 ///particles are been created randomly inside the volume defined by the emitter geometry
+    PARTICLES_CREATIONMETHOD_PLANAR=1, ///particles are been created randomly over the surface of the emitter geometry
+    PARTICLES_CREATIONMETHOD_VOLUMETRIC=2, ///particles are been created randomly inside the volume defined by the emitter geometry
+    PARTICLES_CREATIONMETHOD_CENTER=3 /// particles are created on the center of the emitter
 };
 
 enum moParticlesRandomMethod {
@@ -369,7 +378,7 @@ class moEffectParticlesSimple : public moEffect
         MOboolean Finish();
 
         void ReInit();
-        void Shot( moText source = moText("") );
+        void Shot( moText source = moText(""), int shot_type = 0, int shot_file=0  );
 
         void Interaction( moIODeviceManager * );
         void Update( moEventList * p_eventlist);
@@ -433,6 +442,12 @@ class moEffectParticlesSimple : public moEffect
 
         int GetFeature(moLuaVirtualMachine& vm);
 
+        int GetVariance(moLuaVirtualMachine& vm);
+        int GetVelocity(moLuaVirtualMachine& vm);
+        int GetAcceleration(moLuaVirtualMachine& vm);
+        int GetBarycenter(moLuaVirtualMachine& vm);
+        int GetZone(moLuaVirtualMachine& vm);
+
 
         int PushDebugString(moLuaVirtualMachine& vm);
 
@@ -486,6 +501,21 @@ class moEffectParticlesSimple : public moEffect
 
         int glidori;
         int glid;
+
+        int original_width;
+        int original_height;
+        float original_proportion;
+
+        float emiper;
+        long emiperi;
+
+        float midi_red, midi_green, midi_blue;
+        float midi_maxage; //in millis
+        float midi_emitionperiod;//in millisec
+        float midi_emitionrate; // n per emitionperiod
+        float midi_randomvelocity; //inicial vel
+        float midi_randommotion; //motion dynamic
+
 
 };
 

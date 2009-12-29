@@ -57,12 +57,8 @@
 			<Add library="liblua" />
 			<Add library="cg" />
 			<Add library="cgGL" />
-			<Add directory="..\..\..\..\..\externlibs\SDL\lib" />
-			<Add directory="..\..\..\..\..\externlibs\glew\lib" />
 			<Add directory="..\..\..\..\..\externlibs\lua\lib" />
 			<Add directory="..\..\..\..\..\externlibs\cg\lib" />
-			<Add directory="..\..\..\..\..\externlibs\openal\libs\win32" />
-			<Add directory="..\..\..\..\..\externlibs\opengl\lib" />
 			<Add directory="..\..\..\lib\mingw" />
 		</Linker>
 		<Unit filename="inc\moEffectIcon.h" />

@@ -75,9 +75,19 @@ MOboolean moCalibrationGrid::Init() {
 
 	moDefineParamIndex( CALIBRATIONGRID_ALPHA, moText("alpha") );
 	moDefineParamIndex( CALIBRATIONGRID_COLOR, moText("color") );
-
-    Tx = Ty = Tz = Rx = Ry = Rz = 0.0;
-	Sx = Sy = Sz = 1.0;
+	moDefineParamIndex( CALIBRATIONGRID_SYNC, moText("syncro") );
+	moDefineParamIndex( CALIBRATIONGRID_PHASE, moText("phase") );
+	moDefineParamIndex( CALIBRATIONGRID_TEXTURE, moText("texture") );
+	moDefineParamIndex( CALIBRATIONGRID_TRANSLATEX, moText("translatex") );
+	moDefineParamIndex( CALIBRATIONGRID_TRANSLATEY, moText("translatey") );
+	moDefineParamIndex( CALIBRATIONGRID_TRANSLATEZ, moText("translatez") );
+	moDefineParamIndex( CALIBRATIONGRID_ROTATEX, moText("rotatex") );
+	moDefineParamIndex( CALIBRATIONGRID_ROTATEY, moText("rotatey") );
+	moDefineParamIndex( CALIBRATIONGRID_ROTATEZ, moText("rotatez") );
+	moDefineParamIndex( CALIBRATIONGRID_SCALEX, moText("scalex") );
+	moDefineParamIndex( CALIBRATIONGRID_SCALEY, moText("scaley") );
+	moDefineParamIndex( CALIBRATIONGRID_SCALEZ, moText("scalez") );
+	moDefineParamIndex( CALIBRATIONGRID_SHOWGRID, moText("showgrid") );
 
 	return true;
 }
@@ -97,7 +107,15 @@ void moCalibrationGrid::Draw( moTempo* tempogral, moEffectState* parentstate )
     int w = m_pResourceManager->GetRenderMan()->ScreenWidth();
     int h = m_pResourceManager->GetRenderMan()->ScreenHeight();
 
+    int showgrid = 0;
+
+    showgrid = m_Config[moR(CALIBRATIONGRID_SHOWGRID)][MO_SELECTED][0].GetData()->Int();
+
     PreDraw( tempogral, parentstate);
+
+    glClearColor(0.0,0.0,0.0,1.0);
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
     glLoadIdentity();									// Reset The Projection Matrix
@@ -118,34 +136,86 @@ void moCalibrationGrid::Draw( moTempo* tempogral, moEffectState* parentstate )
     glPushMatrix();                                     // Store The Modelview Matrix
 	glLoadIdentity();									// Reset The View
 
-    glColor4f(1.0,1.0,1.0,1.0);
-    glDisable( GL_TEXTURE_2D );
 
-   glBegin (GL_LINES);
-      glVertex3f (-0.5, 0.5, 0);
-      glVertex3f (0.5, -0.5, 0);
 
-   glEnd ();
+	glTranslatef(   m_Config[moR(CALIBRATIONGRID_TRANSLATEX)].GetData()->Fun()->Eval(state.tempo.ang),
+					m_Config[moR(CALIBRATIONGRID_TRANSLATEY)].GetData()->Fun()->Eval(state.tempo.ang),
+					m_Config[moR(CALIBRATIONGRID_TRANSLATEZ)].GetData()->Fun()->Eval(state.tempo.ang));
 
-   glBegin (GL_LINES);
-      glVertex3f (0.5, 0.5, 0);
-      glVertex3f (-0.5, -0.5, 0);
-   glEnd ();
+	glRotatef(  m_Config[moR(CALIBRATIONGRID_ROTATEX)].GetData()->Fun()->Eval(state.tempo.ang), 1.0, 0.0, 0.0 );
+    glRotatef(  m_Config[moR(CALIBRATIONGRID_ROTATEY)].GetData()->Fun()->Eval(state.tempo.ang), 0.0, 1.0, 0.0 );
+    glRotatef(  m_Config[moR(CALIBRATIONGRID_ROTATEZ)].GetData()->Fun()->Eval(state.tempo.ang), 0.0, 0.0, 1.0 );
+	glScalef(   m_Config[moR(CALIBRATIONGRID_SCALEX)].GetData()->Fun()->Eval(state.tempo.ang),
+                m_Config[moR(CALIBRATIONGRID_SCALEY)].GetData()->Fun()->Eval(state.tempo.ang),
+                m_Config[moR(CALIBRATIONGRID_SCALEZ)].GetData()->Fun()->Eval(state.tempo.ang));
 
-    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+
+    SetColor( m_Config[moR(CALIBRATIONGRID_COLOR)][MO_SELECTED], m_Config[moR(CALIBRATIONGRID_ALPHA)][MO_SELECTED], state );
+
+    glEnable( GL_TEXTURE_2D );
+
+    moTexture* pImage = (moTexture*) m_Config[moR(CALIBRATIONGRID_TEXTURE)].GetData()->Pointer();
+
+    PosTextX0 = 0.0;
+	PosTextX1 = 1.0 * ( pImage!=NULL ? pImage->GetMaxCoordS() :  1.0 );
+    PosTextY0 = 0.0;
+    PosTextY1 = 1.0 * ( pImage!=NULL ? pImage->GetMaxCoordT() :  1.0 );
+
+    glBindTexture( GL_TEXTURE_2D, m_Config[moR(CALIBRATIONGRID_TEXTURE)].GetData()->GetGLId(&state.tempo) );
 
     glBegin (GL_QUADS);
-      glVertex3f (-7.69, 5.77, 0);
-      glVertex3f (7.69, 5.77, 0);
-      glVertex3f (7.69, -5.77, 0);
-      glVertex3f (-7.69, -5.77, 0);
-    /*
-      glVertex3f (-5, 5.7 , 0);
-      glVertex3f (5.7, 5.7 , 0);
-      glVertex3f (5.7, -5 , 0);
-      glVertex3f (-5, -5, 0);
-    */
-    glEnd ();
+          glTexCoord2f( PosTextX0, PosTextY1);
+          glVertex3f (-7.69, 5.77, 0);
+		glTexCoord2f( PosTextX1, PosTextY1);
+          glVertex3f (7.69, 5.77, 0);
+		glTexCoord2f( PosTextX1, PosTextY0);
+          glVertex3f (7.69, -5.77, 0);
+		glTexCoord2f( PosTextX0, PosTextY0);
+          glVertex3f (-7.69, -5.77, 0);
+    glEnd();
+
+    //MODebug2->Push(IntToStr(showgrid));
+
+    if (showgrid>0) {
+
+            ///DRAW THE REFERENCE GRID TO SEE THE DEFORMATION RESULT
+
+            glColor4f(1.0,1.0,1.0,1.0);
+            glDisable( GL_TEXTURE_2D );
+
+            glLineWidth( 8.0 );
+
+           glBegin (GL_LINES);
+              glVertex3f (-3.8, 3.8, 0);
+              glVertex3f (3.8, -3.8, 0);
+           glEnd ();
+
+           glBegin (GL_LINES);
+              glVertex3f (3.8, 3.8, 0);
+              glVertex3f (-3.8, -3.8, 0);
+           glEnd ();
+
+            glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+
+            glBegin (GL_QUADS);
+              glVertex3f (-7.69, 5.77, 0);
+              glVertex3f (7.69, 5.77, 0);
+              glVertex3f (7.69, -5.77, 0);
+              glVertex3f (-7.69, -5.77, 0);
+
+            glEnd ();
+            glBegin (GL_QUADS);
+              glVertex3f (-7.69*0.5, 5.77*0.5, 0);
+              glVertex3f (7.69*0.5, 5.77*0.5, 0);
+              glVertex3f (7.69*0.5, -5.77*0.5, 0);
+              glVertex3f (-7.69*0.5, -5.77*0.5, 0);
+
+            glEnd ();
+    }
+
+    glLineWidth( 1.0 );
+
+    glEnable( GL_TEXTURE_2D );
 
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
@@ -165,6 +235,17 @@ moConfigDefinition *
 moCalibrationGrid::GetDefinition( moConfigDefinition *p_configdefinition ) {
 
 	//default: alpha, color, syncro
-	p_configdefinition = moPostEffect::GetDefinition( p_configdefinition );
+	p_configdefinition = moEffect::GetDefinition( p_configdefinition );
+	p_configdefinition->Add( moText("texture"), MO_PARAM_TEXTURE, CALIBRATIONGRID_TEXTURE, moValue("Default", "TXT") );
+	p_configdefinition->Add( moText("translatex"), MO_PARAM_TRANSLATEX, CALIBRATIONGRID_TRANSLATEX, moValue("0.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("translatey"), MO_PARAM_TRANSLATEY, CALIBRATIONGRID_TRANSLATEY, moValue("0.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("translatez"), MO_PARAM_TRANSLATEZ, CALIBRATIONGRID_TRANSLATEZ, moValue("0.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("rotatex"), MO_PARAM_ROTATEX, CALIBRATIONGRID_ROTATEX, moValue("0.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("rotatey"), MO_PARAM_ROTATEY, CALIBRATIONGRID_ROTATEY, moValue("0.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("rotatez"), MO_PARAM_ROTATEZ, CALIBRATIONGRID_ROTATEZ, moValue("0.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("scalex"), MO_PARAM_SCALEX, CALIBRATIONGRID_SCALEX, moValue("1.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("scaley"), MO_PARAM_SCALEY, CALIBRATIONGRID_SCALEY, moValue("1.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("scalez"), MO_PARAM_SCALEZ, CALIBRATIONGRID_SCALEZ, moValue("1.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("showgrid"), MO_PARAM_NUMERIC, CALIBRATIONGRID_SHOWGRID, moValue("1.0", "NUM").Ref() );
 	return p_configdefinition;
 }

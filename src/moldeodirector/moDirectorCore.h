@@ -136,6 +136,8 @@ public:
 //MOB Moldeo Object
 //================================================================
 
+    moDirectorStatus ImportMob( moText p_filename );
+
 	moDirectorStatus OpenMob( moMobDescriptor p_MobDesc );
 	moDirectorStatus CloseMob( moMobDescriptor p_MobDesc );
 	moDirectorStatus ReloadMob( moMobDescriptor p_MobDesc );

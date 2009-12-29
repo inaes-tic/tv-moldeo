@@ -117,18 +117,63 @@ MOboolean moSerial::Init()
     MOuint i, n, n_dev, n_hosts;
     moText conf, dev_name;
 
+    bInited = false;
+
     // Loading config file.
 	conf = m_pResourceManager->GetDataMan()->GetDataPath() + moText("\\");
     conf += GetConfigName();
     conf += moText(".cfg");
 
 	if (m_Config.LoadConfig(conf) != MO_CONFIG_OK ) {
-		moText text = "Couldn't load netoscin config";
-		MODebug->Push(text);
+		moText text = "Couldn't load serial config";
+		MODebug2->Push(text);
 		return false;
 	}
 
+
     enumerateDevices();
+
+
+	moMoldeoObject::Init();
+
+	moDefineParamIndex( SERIAL_PORT, moText("port") );
+	moDefineParamIndex( SERIAL_BAUD, moText("baud") );
+	moDefineParamIndex( SERIAL_CODE, moText("code") );
+
+    //setup(  );
+    //trying to catch :
+    //
+    if (setup( (char*)m_Config[moText("port")][MO_SELECTED][0].Text(), m_Config[moText("baud")][MO_SELECTED][0].Int())) {
+
+        MODebug2->Message(moText("Setting up device success!!") +  moText("port: ") + m_Config[moR(SERIAL_PORT)][MO_SELECTED][0].Text() + moText(" baud: ") + IntToStr(m_Config[moR(SERIAL_BAUD)][MO_SELECTED][0].Int()) );
+
+    } else {
+        MODebug2->Error( moText("Error in moSerial!! port: ") + m_Config[moText("port")][MO_SELECTED][0].Text() + moText(" baud: ") + IntToStr(m_Config[moText("baud")][MO_SELECTED][0].Int()));
+    }
+
+
+	//levantamos los codes definidos
+	int coparam = m_Config.GetParamIndex("code");
+	m_Config.SetCurrentParamIndex(coparam);
+	int ncodes = m_Config.GetValuesCount(coparam);
+	Codes = new moSerialCode [ncodes];
+
+	for( i = 0; i < ncodes; i++) {
+		m_Config.SetCurrentValueIndex(coparam,i);
+		Codes[i].strcod = m_Config.GetParam().GetValue().GetSubValue(0).Text();
+		Codes[i].code = i;
+		//Codes[i].mousecod = getMouseCod( m_Config.GetParam().GetValue().GetSubValue(MO_MOUSE_CFG_MOUSECOD).Text() );
+		//Codes[i].type = m_Config.GetParam().GetValue().GetSubValue(MO_MOUSE_CFG_TYPE).Int();
+		Codes[i].state = MO_FALSE;//inicializamos en vacio
+        Codes[i].value = -1;
+
+		//if(Codes[i].mousecod==-1) {
+        //    text = moText("(mouse) : no se encuentra el code: ");
+        //    text += Codes[i].strcod;
+		//	MODebug2->Error(text);
+		//	return false;
+		//}
+	}
 
 	return true;
 }
@@ -140,22 +185,38 @@ MOswitch moSerial::SetStatus(MOdevcode codisp, MOswitch state)
 
 MOswitch moSerial::GetStatus(MOdevcode codisp)
 {
-    return(-1);
+    return(Codes[codisp].state);
 }
 
 MOint moSerial::GetValue(MOdevcode codisp)
 {
-    return(-1);
+    return(Codes[codisp].value);
 }
 
-MOdevcode moSerial::GetCode(moText strcod)
-{
-    return(-1);
-}
+MOdevcode
+moSerial::GetCode(moText strcod) {
 
-void moSerial::Update(moEventList *Eventos)
-{
+	MOint codi;
+	MOuint i;
+	MOint param,value;
 
+	param = m_Config.GetCurrentParamIndex();
+	value = m_Config.GetCurrentValueIndex( param );
+
+	codi = m_Config.GetParamIndex( "code" );
+	m_Config.SetCurrentParamIndex( codi );
+	m_Config.FirstValue();
+
+	for( i = 0; i < m_Config.GetValuesCount( codi ); i++) {
+		m_Config.SetCurrentValueIndex( codi, i );
+		if(!stricmp( strcod, m_Config.GetParam().GetValue().GetSubValue(0).Text() ) )
+			return i;
+	}
+
+	m_Config.SetCurrentParamIndex( param );
+	m_Config.SetCurrentValueIndex( param, value );
+
+	return(-1);//error, no encontro
 }
 
 MOboolean moSerial::Finish()
@@ -179,6 +240,11 @@ void moSerial::SendEvent(int i)
    0x11CE, 0xBF, 0xC1, 0x08, 0x00, 0x2B, 0xE1, 0x03, 0x18);
 //------------------------------------
 
+/*
+
+http://www.openframeworks.cc/forum/viewtopic.php?p=1263&sid=2236b82f0cb97a15e7e135e02576acd9
+
+*/
 
 void moSerial::enumerateWin32Ports(){
 
@@ -188,7 +254,7 @@ void moSerial::enumerateWin32Ports(){
 	SP_DEVINFO_DATA DeviceInterfaceData;
 	int i = 0;
 	DWORD dataType, actualSize = 0;
-	unsigned char dataBuf[MAX_PATH];
+	unsigned char dataBuf[MAX_PATH+1];
 
 	// Reset Port List
 	nPorts = 0;
@@ -216,19 +282,22 @@ void moSerial::enumerateWin32Ports(){
 
 				// turn blahblahblah(COM4) into COM4
 
-				char *	begin 	= NULL;
-				char *	end 	= NULL;
-				begin 			= strstr((char *)dataBuf, "COM");
-				end 			= strstr(begin, ")");
+                char *   begin    = NULL;
+                char *   end    = NULL;
+                begin          = strstr((char *)dataBuf, "COM");
 
-				if (begin){
-				if (end){
-			       	*end = 0;	// get rid of the )...
-			      	strcpy(portNamesShort[nPorts], begin);
-				}
-				}
 
-				if (nPorts++ > MAX_SERIAL_PORTS) break;
+                if (begin)
+                    {
+                    end     = strstr(begin, ")");
+                    if (end) {
+                          *end = 0;   // get rid of the )...
+                          strcpy(portNamesShort[nPorts], begin);
+                    }
+                    if (nPorts++ > MAX_SERIAL_PORTS)
+                            break;
+                }
+
 			}
             i++;
 		}
@@ -261,13 +330,13 @@ void moSerial::enumerateDevices(){
 		int deviceCount		= 0;
 
 		if (dir == NULL){
-			printf("moSerial: error listing devices in /dev\n");
+			MODebug2->Message(moText("moSerial: error listing devices in /dev\n"));
 		} else {
-			printf("moSerial: listing devices\n");
+			MODebug2->Message(moText("moSerial: listing devices\n"));
 			while ((entry = readdir(dir)) != NULL){
 				str = (char *)entry->d_name;
 				if( str.substr(0,3) == "cu." ){
-					printf("device %i - %s  \n", deviceCount, str.c_str());
+					MODebug2->Message(moText("device") + IntToStr(deviceCount) + motext("-") + moText(str.c_str()));
 					deviceCount++;
 				}
 			}
@@ -282,9 +351,9 @@ void moSerial::enumerateDevices(){
 	//---------------------------------------------
 
 		enumerateWin32Ports();
-		printf("moSerial: listing devices (%i total)\n", nPorts);
+		MODebug2->Message(moText("moSerial: listing devices (") + IntToStr(nPorts) + moText(" total)"));
 		for (int i = 0; i < nPorts; i++){
-			printf("device %i -- %s\n", i, portNamesFriendly[i]);
+			MODebug2->Message(moText("device ") + IntToStr(i) + moText("-- ") + moText(portNamesFriendly[i]) );
 		}
 
 	//---------------------------------------------
@@ -482,7 +551,7 @@ bool moSerial::setup(string portName, int baud){
 					OPEN_EXISTING,0,0);
 
 	if(hComm==INVALID_HANDLE_VALUE){
-		printf("moSerial: unable to open port\n");
+		MODebug2->Message(moText("moSerial: unable to open port"));
 		return false;
 	}
 
@@ -501,11 +570,11 @@ bool moSerial::setup(string portName, int baud){
 		// msvc doesn't like BuildCommDCB,
 		//so we need to use this version: BuildCommDCBA
 		if(!BuildCommDCBA(buf,&cfg.dcb)){
-			printf("moSerial: unable to build comm dcb; (%s) \n",buf);
+			MODebug2->Error(moText("moSerial: unable to build comm dcb; (") + moText(buf) + moText(")"));
 		}
 	#else
 		if(!BuildCommDCB(buf,&cfg.dcb)){
-			printf("moSerial: Can't build comm dcb; %s\n",buf);
+			MODebug2->Error(moText("moSerial: Can't build comm dcb; ") + moText(buf) );
 		}
 	#endif
 
@@ -514,7 +583,7 @@ bool moSerial::setup(string portName, int baud){
 	// Note that BuildCommDCB() clears XON/XOFF and hardware control by default
 
 	if(!SetCommState(hComm,&cfg.dcb)){
-		printf("moSerial: Can't set comm state\n");
+		MODebug2->Error(moText("moSerial: Can't set comm state"));
 	}
 	//printf(buf,"bps=%d, xio=%d/%d\n",cfg.dcb.BaudRate,cfg.dcb.fOutX,cfg.dcb.fInX);
 
@@ -541,7 +610,7 @@ bool moSerial::setup(string portName, int baud){
 int moSerial::writeBytes(string str){
 
 	if (!bInited){
-		printf("moSerial: serial not inited\n");
+		MODebug2->Error(moText("moSerial: serial not inited"));
 		return 0;
 	}
 
@@ -549,10 +618,10 @@ int moSerial::writeBytes(string str){
 	#if defined( TARGET_OSX ) || defined( TARGET_LINUX )
 	    int len = str.length();
 	    int numWritten = write(fd, str.c_str(), len);
-		if(numWritten == 0 && len > 0) printf("moSerial: Can't write to com port");
+		if(numWritten == 0 && len > 0) MODebug2->Error(moText("moSerial: Can't write to com port"));
 		else{
 			if (bVerbose){
-			 	printf("moSerial: numWritten %i \n", numWritten);
+			 	MODebug2->Message(moText("moSerial: numWritten ") + IntToStr(numWritten) );
 	    	}
 	    }
 
@@ -565,11 +634,11 @@ int moSerial::writeBytes(string str){
 		DWORD written;
 		int len = (int)str.length();
 		if(!WriteFile(hComm, str.c_str(), len, &written,0)){
-			 printf("moSerial: Can't write to com port");
+			 MODebug2->Error(moText("moSerial: Can't write to com port"));
 			 return 0;
 		}else{
 			if (bVerbose){
-			 	printf("moSerial: numWritten %i \n", (int)written);
+                MODebug2->Message(moText("moSerial: numWritten") + IntToStr((int)written));
 	    	}
 	    }
 		return (int)written;
@@ -582,7 +651,7 @@ int moSerial::writeBytes(string str){
 string moSerial::readBytes(int length){
 
 	if (!bInited){
-		printf("moSerial: serial not inited\n");
+		MODebug2->Error(moText("moSerial: serial not inited"));
 		return "";
 	}
 
@@ -593,7 +662,7 @@ string moSerial::readBytes(int length){
 	//---------------------------------------------
 	#if defined( TARGET_OSX ) || defined( TARGET_LINUX )
 		int nRead = read(fd, tmpBuff,length);
-		if(nRead == 0)printf("moSerial: trouble reading from port\n");
+		if(nRead == 0) MODebug2->Error(moText("moSerial: trouble reading from port"?);
 
     #endif
     //---------------------------------------------
@@ -602,7 +671,7 @@ string moSerial::readBytes(int length){
 	#ifdef TARGET_WIN32
 		DWORD nRead;
 		if (!ReadFile(hComm,tmpBuff,length,&nRead,0)){
-		printf("moSerial: trouble reading from port\n");
+		MODebug2->Error(moText("moSerial: trouble reading from port"));
 		}
 	#endif
 	//---------------------------------------------
@@ -616,7 +685,7 @@ string moSerial::readBytes(int length){
 bool moSerial::writeByte(unsigned char singleByte){
 
 	if (!bInited){
-		printf("moSerial: serial not inited\n");
+		MODebug2->Error(moText("moSerial: serial not inited"));
 		return 0;
 	}
 
@@ -629,10 +698,10 @@ bool moSerial::writeByte(unsigned char singleByte){
 	    int numWritten = 0;
 	    numWritten = write(fd, tmpByte, len);
 		if(numWritten == 0 && len > 0){
-			 printf("moSerial: Can't write to com port");
+			 MODebug2->Error(moText("moSerial: Can't write to com port"));
 		} else{
 			if (bVerbose){
-			 	printf("moSerial: written byte \n");
+			 	MODebug2->Message(moText("moSerial: written byte "));
 	    	}
 	    }
 		return (numWritten > 0 ? true : false);
@@ -644,11 +713,11 @@ bool moSerial::writeByte(unsigned char singleByte){
 		DWORD written = 0;
 		int len = 1;
 		if(!WriteFile(hComm, tmpByte, len, &written,0)){
-			 printf("moSerial: Can't write to com port");
+			 MODebug2->Error(moText("moSerial: Can't write to com port"));
 			 return 0;
 		} else{
 			if (bVerbose){
-			 	printf("moSerial: written byte \n");
+			 	MODebug2->Message(moText("moSerial: written byte "));
 	    	}
 	    }
 		return ((int)written > 0 ? true : false);
@@ -661,16 +730,18 @@ bool moSerial::writeByte(unsigned char singleByte){
 unsigned char moSerial::readByte(){
 
 	if (!bInited){
-		printf("moSerial: serial not inited\n");
+		MODebug2->Error(moText("moSerial: serial not inited"));
 		return 0;
 	}
 
 	unsigned char tmpByte[10];
 
+	memset( (void*)&tmpByte, 0, 10 );
+
 	//---------------------------------------------
 	#if defined( TARGET_OSX ) || defined( TARGET_LINUX )
 		int nRead = read(fd, tmpByte, 1);
-		if(nRead == 0)printf("moSerial: trouble reading from port\n");
+		if(nRead == 0) MODebug2->Error(moText("moSerial: trouble reading from port"));
 
     #endif
     //---------------------------------------------
@@ -679,7 +750,7 @@ unsigned char moSerial::readByte(){
 	#ifdef TARGET_WIN32
 		DWORD nRead;
 		if (!ReadFile(hComm, tmpByte, 1, &nRead, 0)){
-		printf("moSerial: trouble reading from port\n");
+		MODebug2->Error(moText("moSerial: trouble reading from port"));
 		}
 	#endif
 	//---------------------------------------------
@@ -687,4 +758,80 @@ unsigned char moSerial::readByte(){
 	return tmpByte[0];
 }
 
+void
+moSerial::Update(moEventList *Events) {
+	MOuint i;
+	moEvent *actual,*tmp;
 
+	actual = Events->First;
+	//recorremos todos los events y parseamos el resultado
+	//borrando aquellos que ya usamos
+	while(actual!=NULL) {
+		//solo nos interesan los del serial q nosotros mismos generamos, para destruirlos
+		if(actual->deviceid == this->GetId()) {
+			//ya usado lo borramos de la lista
+			tmp = actual->next;
+			Events->Delete(actual);
+			actual = tmp;
+		} else actual = actual->next;//no es nuestro pasamos al next
+	}
+
+
+
+	//m_Codes
+/*
+	actual = Events->First;
+	//recorremos todos los events y parseamos el resultado
+	//borrando aquellos que ya usamos
+	MOint tempval;
+	while(actual!=NULL) {
+		//solo nos interesan los del serial q nosotros mismos generamos, para destruirlos
+		if(actual->deviceid == this->GetId()) {
+
+			moMidiDataCode pcode = m_Codes.Get( actual->reservedvalue1 );
+            pcode.mididata.m_Val = actual->reservedvalue2;
+			m_Codes.Set( actual->reservedvalue1, pcode );
+
+			actual = actual->next;
+		} else actual = actual->next;//no es nuestro pasamos al next
+	}
+*/
+    MOuchar readchar;
+
+    if (bInited) {
+
+        int nbyte = 0;
+        int nbytes = 10;
+        bool start = true;
+
+        //reset every bytes to state false
+        for(int i=0; i<nbytes; i++) {
+            Codes[nbyte].state = MO_FALSE;
+            Codes[nbyte].value = 0;
+        }
+
+        while (nbyte<nbytes) {
+            readchar = readByte();
+            if (readchar!='\0') {
+                if (start) { MODebug2->Message( moText("readchar:")); start = false; }
+                MODebug2->Message( moText(" byte ") + IntToStr(nbyte) + moText(":") + IntToStr(readchar) );
+                Codes[nbyte].state = MO_TRUE;
+                Codes[nbyte].value = (int) readchar;
+
+            }
+            nbyte++;
+        }
+    }
+
+}
+
+moConfigDefinition *
+moSerial::GetDefinition( moConfigDefinition *p_configdefinition ) {
+
+	//default: alpha, color, syncro
+	p_configdefinition = moIODevice::GetDefinition( p_configdefinition );
+	p_configdefinition->Add( moText("port"), MO_PARAM_TEXT, SERIAL_PORT, moValue( "COM4", "TXT") );
+	p_configdefinition->Add( moText("baud"), MO_PARAM_NUMERIC, SERIAL_BAUD, moValue( "9600", "NUM") );
+	p_configdefinition->Add( moText("code"), MO_PARAM_TEXT, SERIAL_CODE );
+	return p_configdefinition;
+}

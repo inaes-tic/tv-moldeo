@@ -66,8 +66,6 @@
 			<Add alias="All" targets="debug;release;" />
 		</VirtualTargets>
 		<Compiler>
-			<Add option="-march=nocona" />
-			<Add option="-O3" />
 			<Add option="-DGST_DISABLE_LOADSAVE" />
 			<Add option="-DGST_DISABLE_REGISTRY" />
 			<Add directory="..\..\inc" />

@@ -125,6 +125,7 @@ public:
     void OnEditPreferences(wxCommandEvent& event);
 
 	void OnNewEffect( wxCommandEvent& event );
+	void OnImportMob( wxCommandEvent& event );
 
 	void OnNewProject( wxCommandEvent& event );
 	void OnOpenProject( wxCommandEvent& event );
@@ -288,6 +289,7 @@ enum
 	MODIRECTOR_CLOSEMOB = 9942,
 	MODIRECTOR_CLOSEALL = 9943,
 	MODIRECTOR_OPENMOB = 9944,
+	MODIRECTOR_IMPORTMOB = 9945,
 
     MODIRECTOR_PREFERENCES = 9960,
 

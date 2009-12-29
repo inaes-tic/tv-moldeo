@@ -191,7 +191,7 @@ public:
 	void Displace(float vel, int period);
 };
 
-class Gesture
+class Gesture : public moAbstract
 {
 public:
 	 Gesture(int iw, int ih, int it, bool imod, bool stex, bool rico, moData *pdatatexture, int t, moEffectState* s,
@@ -288,6 +288,7 @@ public:
     void Draw( moTempo*, moEffectState* parentstate = NULL);
     void Interaction( moIODeviceManager * );
 	virtual moConfigDefinition * GetDefinition( moConfigDefinition *p_configdefinition );
+	virtual void Update(moEventList *Events);
 
     // Public script functions.
 	int ScriptCalling(moLuaVirtualMachine& vm, int iFunctionNumber);
@@ -382,13 +383,19 @@ protected:
         bool                    m_bTrackerInit;
     moVector2f              m_TrackerBarycenter;
     long drawing_features; /// 0: nothing 1: motion  2: all
-        moTimer FeatureActivity;///start on first feature activity, ends on
-        moTimer MotionActivity;///start on first motion activity, ends on no motion
-        moTimer NoMotionActivity;///start on no motion, ends on first motion activity
+    moTimer FeatureActivity;///start on first feature activity, ends on
+    moTimer MotionActivity;///start on first motion activity, ends on no motion
+    moTimer NoMotionActivity;///start on no motion, ends on first motion activity
+
     void DrawTracker();
-            float normalf; ///width of full floor usually 100.0f
+    void DrawCalibrationGrid();
+    float normalf; ///width of full floor usually 100.0f
 
-
+    float midi_red, midi_green, midi_blue;
+    float midi_pressure;
+    float midi_line_width;
+    float midi_dissolve_start, midi_dissolve_time;
+    float midi_roto_start;
 
 };
 
