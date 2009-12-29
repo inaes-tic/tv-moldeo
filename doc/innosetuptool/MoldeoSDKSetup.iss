@@ -193,7 +193,7 @@ Source: ..\..\bin\mingw\plugins\preeffects\mirrorg.dll; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\plugins\preeffects\mirror.dll; DestDir: {app}\bin\mingw\plugins\preeffects
 Source: ..\..\bin\mingw\cgGL.dll; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\cg.dll; DestDir: {app}\bin\mingw
-Source: ..\installers\GStreamer-WinBuild-0.10.3.exe; DestDir: {app}\doc\installers; Tasks: ; Languages:
+Source: ..\installers\GStreamer-WinBuild-0.10.3.exe; DestDir: {app}\doc\installers; Tasks: ; Languages: 
 Source: ..\..\bin\mingw\glut32.dll; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\OpenAL32.dll; DestDir: {app}\bin\mingw
 Source: ..\..\data\test\brushes\brush1.tga; DestDir: {app}\data\test\brushes
@@ -594,6 +594,7 @@ Source: ..\..\data\test\shaders\kltgpu\ati\undistort.cg; DestDir: {app}\bin\ming
 Source: ..\..\data\test\shaders\kltgpu\ati\w1.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\ati
 Source: ..\..\data\test\shaders\kltgpu\ati\w2.cg; DestDir: {app}\bin\mingw\plugins\resources\kltgpu\ati
 Source: ..\..\data\test\camarascircular.mol; DestDir: {app}\data\test
+Source: ..\..\inc\moDecoderManager.h; DestDir: {app}\inc
 
 
 [Icons]
