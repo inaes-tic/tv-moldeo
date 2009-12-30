@@ -136,7 +136,11 @@ moDirectory::Open( moText p_CompletePath, moText p_Search  ) {
             //cout << iter->native_file_string() << " (file)\n" ;
             //ATENCION SEGUN LA VERSION DE BOOST hya que usar filename() o leaf()
             //moText pFileName( iter->path().leaf().c_str() );
+            #if BOOST_VERSION > 103500
             moText pFileName( iter->path().filename().c_str() );
+            #else
+            moText pFileName( iter->path().leaf().c_str() );
+            #endif
             moText pCompletePathFilename( iter->path().file_string().c_str() );
 
 

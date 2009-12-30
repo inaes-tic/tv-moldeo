@@ -32,7 +32,7 @@ moDirectorConsole::SetDirectorCore( moDirectorCore* p_pDirectorCore ) {
 	m_pDirectorCore = p_pDirectorCore;
 	SetNextActionHandler((moIDirectorActions*)m_pDirectorCore);
     m_timer.SetOwner( this, TICKS_ID);
-	m_timer.Start(5);
+	m_timer.Start(15);
 }
 
 moMoldeoObject*

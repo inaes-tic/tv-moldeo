@@ -62,8 +62,8 @@ void moPreviewFrame::Init( moIDirectorActions* pActionsHandler, wxGLContext* p_p
 
         attribList[n++] = WX_GL_RGBA;
         attribList[n++] = WX_GL_DOUBLEBUFFER;
-        attribList[n++] = WX_GL_DEPTH_SIZE;
-        attribList[n++] = 32;
+        //attribList[n++] = WX_GL_DEPTH_SIZE;
+        //attribList[n++] = 32;
         //attribList[n++] = WX_GL_LEVEL;
         //attribList[n++] = 4;
         attribList[n] = 0; // terminate the list

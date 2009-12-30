@@ -69,8 +69,8 @@ void moPreviewWindow::Init( moIDirectorActions* pActionsHandler, wxGLContext* p_
 
     attribList[n++] = WX_GL_RGBA;
     attribList[n++] = WX_GL_DOUBLEBUFFER;
-    attribList[n++] = WX_GL_DEPTH_SIZE;
-    attribList[n++] = 32;
+    //attribList[n++] = WX_GL_DEPTH_SIZE;
+    //attribList[n++] = 32;
     //attribList[n++] = WX_GL_SAMPLES;
     //attribList[n++] = 4;
     attribList[n] = 0; // terminate the list
