@@ -23,7 +23,7 @@
 #define INCLUDED_TUIOCURSOR_H
 
 #include <math.h>
-#include "TuioContainer.h"
+#include "tuio/TuioContainer.h"
 
 namespace TUIO {
 

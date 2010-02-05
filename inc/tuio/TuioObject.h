@@ -23,7 +23,7 @@
 #define INCLUDED_TUIOOBJECT_H
 
 #include <math.h>
-#include "TuioContainer.h"
+#include "tuio/TuioContainer.h"
 
 #define TUIO_ROTATING 5
 

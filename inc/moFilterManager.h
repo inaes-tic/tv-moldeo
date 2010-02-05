@@ -42,8 +42,8 @@
 #include "moMathVector.h"
 
 //these includes TuioPoint.h TuioTime.h and TuioContainer.h
-#include "TuioObject.h"
-#include "TuioCursor.h"
+#include "tuio/TuioObject.h"
+#include "tuio/TuioCursor.h"
 
 #define MO_TRACKER_TRACKED 0
 #define MO_TRACKER_NOT_FOUND -1

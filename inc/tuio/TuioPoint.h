@@ -21,7 +21,7 @@
 
 #ifndef INCLUDED_TUIOPOINT_H
 #define INCLUDED_TUIOPOINT_H
-#include "TuioTime.h"
+#include "tuio/TuioTime.h"
 #include <iostream>
 
 #ifndef M_PI

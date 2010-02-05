@@ -24,7 +24,7 @@
 
 #include <list>
 #include <math.h>
-#include "TuioPoint.h"
+#include "tuio/TuioPoint.h"
 #include <iostream>
 
 #define TUIO_ADDED 0
