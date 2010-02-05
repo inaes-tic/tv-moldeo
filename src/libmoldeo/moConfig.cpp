@@ -571,6 +571,24 @@ moConfig::GetValuesCount( int p_paramindex ) {
 	return m_Params.Get( p_paramindex ).GetValuesCount();
 }
 
+moValue&
+moConfig::GetValue( moText nameparam, int indexvalue ) {
+
+    moParam& param( GetParam( nameparam ));
+
+    return param.GetValue( indexvalue );
+}
+
+moValue&
+moConfig::GetValue( int indexparam, int indexvalue ) {
+
+    moParam& param( GetParam( indexparam ));
+
+    return param.GetValue( indexvalue );
+
+}
+
+
 void
 moConfig::SetCurrentValueIndex( int p_paramindex, int p_valueindex ) {
 	m_Params[p_paramindex].SetIndexValue( p_valueindex );
