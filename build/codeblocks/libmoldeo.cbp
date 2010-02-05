@@ -28,6 +28,7 @@
 					<Add library="libglut32" />
 					<Add library="libglu32" />
 					<Add library="libglaux" />
+					<Add directory="..\..\contrib\src\tinyxml\Debug" />
 				</Linker>
 				<ExtraCommands>
 					<Add after="cp.exe ../../lib/mingw/libmoldeod.dll ../../bin/mingw/" />
@@ -55,6 +56,7 @@
 					<Add library="libglut" />
 					<Add library="libglu32" />
 					<Add library="libglaux" />
+					<Add directory="..\..\contrib\src\tinyxml\Release" />
 				</Linker>
 				<ExtraCommands>
 					<Add after="cp.exe ../../lib/mingw/libmoldeo.dll ../../bin/mingw/" />
@@ -77,12 +79,10 @@
 			<Add directory="..\..\..\..\externlibs\glew\include" />
 			<Add directory="..\..\..\..\externlibs\opengl\include" />
 			<Add directory="..\..\..\..\externlibs\openal\include" />
-			<Add directory="..\..\..\..\externlibs\opentnl\include" />
 			<Add directory="..\..\..\..\externlibs\freeimage\include" />
 			<Add directory="..\..\..\..\externlibs\freetype\include" />
 			<Add directory="..\..\..\..\externlibs\lua\include" />
 			<Add directory="..\..\..\..\externlibs\muparser\include" />
-			<Add directory="..\..\..\..\externlibs\tinyxml\include" />
 			<Add directory="..\..\..\..\externlibs\SDL\include" />
 			<Add directory="..\..\..\..\externlibs\SDL_net\include" />
 			<Add directory="..\..\..\..\externlibs\SDL_image\include" />
@@ -90,6 +90,8 @@
 			<Add directory="C:\gstreamer\include\glib-2.0" />
 			<Add directory="..\..\..\..\externlibs\FTGL\include" />
 			<Add directory="C:\gstreamer\lib\glib-2.0\include" />
+			<Add directory="..\..\inc\tuio" />
+			<Add directory="..\..\contrib\src\tinyxml" />
 		</Compiler>
 		<Linker>
 			<Add library="libSDL" />
@@ -101,7 +103,7 @@
 			<Add library="OpenAL32" />
 			<Add library="EFX-Util" />
 			<Add library="FreeImage" />
-			<Add library="gstreamer-0.10" />
+			<Add library="gstreamer" />
 			<Add library="glib-2.0" />
 			<Add library="gobject-2.0" />
 			<Add library="boost_system-mt" />
@@ -121,7 +123,6 @@
 			<Add library="uuid" />
 			<Add library="muparser" />
 			<Add library="boost_thread-mt" />
-			<Add directory="..\..\..\..\externlibs\tinyxml\lib" />
 			<Add directory="..\..\..\..\externlibs\SDL\lib" />
 			<Add directory="..\..\..\..\externlibs\glew\lib" />
 			<Add directory="..\..\..\..\externlibs\lua\lib" />
@@ -135,6 +136,7 @@
 			<Add directory="C:\gstreamer\lib" />
 			<Add directory="..\..\..\..\externlibs\boost\lib\1_36_0" />
 			<Add directory="C:\gstreamer\lib\gstreamer-0.10" />
+			<Add directory="..\..\contrib\src\tinyxml" />
 		</Linker>
 		<Unit filename="..\..\inc\3ds\3ds.h" />
 		<Unit filename="..\..\inc\mo3dModelManager.h" />
@@ -379,6 +381,11 @@
 		<Unit filename="..\..\inc\openal\Framework.h" />
 		<Unit filename="..\..\inc\openal\LoadOAL.h" />
 		<Unit filename="..\..\inc\openal\aldlist.h" />
+		<Unit filename="..\..\inc\tuio\TuioContainer.h" />
+		<Unit filename="..\..\inc\tuio\TuioCursor.h" />
+		<Unit filename="..\..\inc\tuio\TuioObject.h" />
+		<Unit filename="..\..\inc\tuio\TuioPoint.h" />
+		<Unit filename="..\..\inc\tuio\TuioTime.h" />
 		<Unit filename="..\..\src\libmoldeo\3ds\3ds.cpp" />
 		<Unit filename="..\..\src\libmoldeo\mo3dModelManager.cpp" />
 		<Unit filename="..\..\src\libmoldeo\moAbstract.cpp" />
@@ -470,6 +477,7 @@
 		<Unit filename="..\..\src\libmoldeo\openal\Framework.cpp" />
 		<Unit filename="..\..\src\libmoldeo\openal\LoadOAL.cpp" />
 		<Unit filename="..\..\src\libmoldeo\openal\aldlist.cpp" />
+		<Unit filename="..\..\src\libmoldeo\tuio\TuioTime.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />
