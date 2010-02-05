@@ -613,6 +613,49 @@ moText0::Explode( char* separator ) const
     return Tarray;
 }
 
+int
+moText0::Find( const moText0& target ) {
+
+    moText0 newone;
+    int founded,i,j;
+    moText0 mLeft;
+    moText0 mRight = (*this);
+
+    i = 0;
+    founded = -1;
+
+    while( mRight.Length()>0 ) {
+
+        bool cmp = false;
+
+        founded = -1;
+
+        for(j =0; j<(int)target.Length(); j++ ) {
+
+            if ( target.text[j] == mRight.text[i+j] ) {
+                cmp = true;
+                if ((j+1)==(int)target.Length()) {
+                    founded = i;
+                }
+            } else {
+                cmp = false;
+                break;
+            }
+
+        }
+
+        i++;
+
+        //if founded first occurance
+        if (founded>-1) {
+            return founded;
+        }
+
+    }
+    return founded;
+
+}
+
 
 void
 moText0::Replace( const moText0& target, const moText0& replacement ) {

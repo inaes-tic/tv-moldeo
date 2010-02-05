@@ -136,6 +136,7 @@ public:
 
 
     moTextArray     Explode( char* ) const;
+    int             Find( const moText0& target );
     void            ReplaceChar( const char* target, const char* replacement );
     void            Replace( const moText0& target, const moText0& replacement );
 
