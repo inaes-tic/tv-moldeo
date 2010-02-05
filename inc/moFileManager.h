@@ -209,10 +209,11 @@ class LIBMOLDEO_API moDirectory : public moAbstract {
 
 moDeclareExportedDynamicArray( moDirectory*, moDirectoryArray )
 
+/// Manejador de archivos
 /**
+* Manejador de archivos
 * Recurso para el acceso a archivos
 */
-
 class LIBMOLDEO_API moFileManager : public moResource
 {
 	public:

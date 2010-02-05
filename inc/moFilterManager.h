@@ -41,12 +41,141 @@
 #include "moParam.h"
 #include "moMathVector.h"
 
+//these includes TuioPoint.h TuioTime.h and TuioContainer.h
+#include "TuioObject.h"
+#include "TuioCursor.h"
+
 #define MO_TRACKER_TRACKED 0
 #define MO_TRACKER_NOT_FOUND -1
 #define MO_TRACKER_SMALL_DET -2
 #define MO_TRACKER_MAX_ITERATIONS -3
 #define MO_TRACKER_OOB -4
 #define MO_TRACKER_LARGE_RESIDUE -5
+
+using namespace TUIO;
+
+moDeclareExportedDynamicArray( TuioCursor*, moTuioCursorArray )
+moDeclareExportedDynamicArray( TuioObject*, moTuioObjectArray )
+
+
+/**
+
+/**
+* TUIO System Data
+*   this is a class to encapsulate the cursors and objects active
+*/
+class LIBMOLDEO_API moTUIOSystemData {
+
+    public:
+
+        moTUIOSystemData();
+        virtual ~moTUIOSystemData();
+        virtual moVideoFormat& SetVideoFormat( moVideoFormat p_videoformat) { m_VideoFormat = p_videoformat; }
+        virtual moVideoFormat& GetVideoFormat() { return m_VideoFormat; }
+
+
+		virtual int GetCursorCount() { return m_Cursors.Count(); }
+		virtual int GetObjectCount()  { return m_Objects.Count(); }
+
+		virtual TuioCursor* GetCursor(int i) { return m_Cursors[i]; }
+		virtual moTuioCursorArray& GetCursors()  { return m_Cursors; }
+
+        virtual TuioObject* GetObject(int i)  { return m_Objects[i]; }
+		virtual moTuioObjectArray& GetObjects()  { return m_Objects; }
+
+
+		virtual TuioCursor* addTuioCursor(float xp, float yp);
+
+		/**
+		 * Updates the referenced TuioCursor based on the given arguments.
+		 *
+		 * @param	tcur	the TuioObject to update
+		 * @param	xp	the X coordinate to assign
+		 * @param	yp	the Y coordinate to assign
+		 */
+		virtual void updateTuioCursor(TuioCursor *tcur, float xp, float yp);
+
+		/**
+		 * Removes the referenced TuioCursor from the TuioServer's internal list of TuioCursors
+		 * and deletes the referenced TuioCursor afterwards
+		 *
+		 * @param	tcur	the TuioCursor to remove
+		 */
+		virtual void removeTuioCursor(TuioCursor *tcur);
+
+		/**
+		 * Creates a new TuioObject based on the given arguments.
+		 * The new TuioObject is added to the TuioServer's internal list of active TuioObjects
+		 * and a reference is returned to the caller.
+		 *
+		 * @param	sym	the Symbol ID  to assign
+		 * @param	xp	the X coordinate to assign
+		 * @param	yp	the Y coordinate to assign
+		 * @param	a	the angle to assign
+		 * @return	reference to the created TuioObject
+		 */
+		virtual TuioObject* addTuioObject(int sym, float xp, float yp, float a);
+
+		/**
+		 * Updates the referenced TuioObject based on the given arguments.
+		 *
+		 * @param	tobj	the TuioObject to update
+		 * @param	xp	the X coordinate to assign
+		 * @param	yp	the Y coordinate to assign
+		 * @param	a	the angle to assign
+		 */
+		virtual void updateTuioObject(TuioObject *tobj, float xp, float yp, float a);
+
+		/**
+		 * Removes the referenced TuioObject from the TuioServer's internal list of TuioObjects
+		 * and deletes the referenced TuioObject afterwards
+		 *
+		 * @param	tobj	the TuioObject to remove
+		 */
+		virtual void removeTuioObject(TuioObject *tobj);
+
+		/**
+		 * Initializes a new frame with the given TuioTime
+		 *
+		 * @param	ttime	the frame time
+		 */
+		virtual void initFrame(TuioTime ttime);
+
+		/**
+		 * Commits the current frame.
+		 * Generates and sends TUIO messages of all currently active and updated TuioObjects and TuioCursors.
+		 */
+		virtual void commitFrame();
+
+		/**
+		 * Returns the next available Session ID for external use.
+		 * @return	the next available Session ID for external use
+		 */
+		virtual long getSessionID();
+
+		/**
+		 * Returns the current frame ID for external use.
+		 * @return	the current frame ID for external use
+		 */
+		virtual long getFrameID();
+
+		/**
+		 * Returns the current frame ID for external use.
+		 * @return	the current frame ID for external use
+		 */
+		virtual TuioTime getFrameTime();
+
+
+    private:
+
+		moVideoFormat	m_VideoFormat;
+
+		moTuioCursorArray m_Cursors;
+		moTuioObjectArray m_Objects;
+
+};
+
+
 
 
 /**
@@ -59,6 +188,7 @@
 class LIBMOLDEO_API moTrackerFeature { //de GpuKLT_Feature
 
 	public:
+
 
     float					x,y;					 //!< Location
 	float					normx, normy;            //!< Normalized Feature Coordinates [ 0 - 1 ]
