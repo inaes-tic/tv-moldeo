@@ -1,0 +1,1196 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="opencv" />
+		<Option pch_mode="0" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="debug">
+				<Option output="..\..\..\bin\mingw\plugins\resources\opencv_d.dll" prefix_auto="0" extension_auto="0" />
+				<Option object_output=".wobjsd" />
+				<Option deps_output=".depsd" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Option createStaticLib="1" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+				<Linker>
+					<Add library="glew_sharedd" />
+					<Add library="libgled" />
+					<Add library="libopengl32" />
+					<Add library="libglut32" />
+					<Add library="libglut" />
+					<Add library="libglu32" />
+					<Add library="libglaux" />
+					<Add library="libmoldeod" />
+				</Linker>
+			</Target>
+			<Target title="release">
+				<Option output="..\..\..\bin\mingw\plugins\resources\opencv.dll" prefix_auto="0" extension_auto="0" />
+				<Option object_output=".wobjs" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Option createStaticLib="1" />
+				<Linker>
+					<Add library="glew_shared" />
+					<Add library="libgle" />
+					<Add library="libopengl32" />
+					<Add library="libglut32" />
+					<Add library="libglut" />
+					<Add library="libglu32" />
+					<Add library="libglaux" />
+					<Add library="libmoldeo" />
+				</Linker>
+			</Target>
+		</Build>
+		<VirtualTargets>
+			<Add alias="All" targets="debug;release;" />
+		</VirtualTargets>
+		<Compiler>
+			<Add directory=".\inc" />
+			<Add directory=".\inc\klt" />
+			<Add directory="..\..\..\inc" />
+			<Add directory="..\..\..\inc\openal" />
+			<Add directory="..\..\..\inc\3dsd" />
+			<Add directory="..\..\..\..\..\externlibs\glew\include" />
+			<Add directory="..\..\..\..\..\externlibs\opengl\include" />
+			<Add directory="..\..\..\..\..\externlibs\openal\include" />
+			<Add directory="..\..\..\..\..\externlibs\lua\include" />
+			<Add directory="..\..\..\..\..\externlibs\SDL\include" />
+			<Add directory="..\..\..\..\..\externlibs\gstreamer\include" />
+			<Add directory="..\..\..\..\..\externlibs\gstreamer\include\glib-2.0" />
+			<Add directory="..\..\..\..\..\externlibs\gstreamer\lib\glib-2.0\include" />
+			<Add directory="src\opencv\include\opencv" />
+			<Add directory="src\opencv\3rdparty" />
+			<Add directory="src\opencv\3rdparty\flann" />
+			<Add directory="src\opencv\3rdparty\flann\util" />
+			<Add directory="src\opencv\3rdparty\flann\nn" />
+			<Add directory="src\opencv\3rdparty\flann\algorithms" />
+			<Add directory="src\opencv\3rdparty\include" />
+			<Add directory="src\opencv\3rdparty\zlib" />
+			<Add directory="src\cvblob" />
+			<Add directory="..\..\..\inc\tuio" />
+		</Compiler>
+		<Linker>
+			<Add library="libSDL" />
+			<Add library="libSDLmain" />
+			<Add library="liblua" />
+			<Add library="cg" />
+			<Add library="cgGL" />
+			<Add library="OpenAL32" />
+			<Add library="EFX-Util" />
+			<Add directory="..\..\..\..\..\externlibs\SDL\lib" />
+			<Add directory="..\..\..\..\..\externlibs\glew\lib" />
+			<Add directory="..\..\..\..\..\externlibs\lua\lib" />
+			<Add directory="..\..\..\..\..\externlibs\cg\lib" />
+			<Add directory="..\..\..\..\..\externlibs\openal\libs\win32" />
+			<Add directory="..\..\..\..\..\externlibs\opengl\lib" />
+			<Add directory="..\..\..\lib\mingw" />
+		</Linker>
+		<Unit filename="inc\moOpenCV.h" />
+		<Unit filename="src\cvblob\cvaux.cpp" />
+		<Unit filename="src\cvblob\cvblob.cpp" />
+		<Unit filename="src\cvblob\cvblob.h" />
+		<Unit filename="src\cvblob\cvcontour.cpp" />
+		<Unit filename="src\cvblob\cvlabel.cpp" />
+		<Unit filename="src\cvblob\cvtrack.cpp" />
+		<Unit filename="src\cvblobslib\BlobContour.h" />
+		<Unit filename="src\cvblobslib\BlobLibraryConfiguration.h" />
+		<Unit filename="src\cvblobslib\BlobOperators.h" />
+		<Unit filename="src\cvblobslib\BlobProperties.h" />
+		<Unit filename="src\cvblobslib\BlobResult.h" />
+		<Unit filename="src\cvblobslib\ComponentLabeling.h" />
+		<Unit filename="src\cvblobslib\blob.h" />
+		<Unit filename="src\moOpenCV.cpp" />
+		<Unit filename="src\opencv\3rdparty\flann\algorithms\autotuned_index.h" />
+		<Unit filename="src\opencv\3rdparty\flann\algorithms\composite_index.h" />
+		<Unit filename="src\opencv\3rdparty\flann\algorithms\dist.cpp" />
+		<Unit filename="src\opencv\3rdparty\flann\algorithms\dist.h" />
+		<Unit filename="src\opencv\3rdparty\flann\algorithms\kdtree_index.h" />
+		<Unit filename="src\opencv\3rdparty\flann\algorithms\kmeans_index.h" />
+		<Unit filename="src\opencv\3rdparty\flann\algorithms\linear_index.h" />
+		<Unit filename="src\opencv\3rdparty\flann\algorithms\nn_index.h" />
+		<Unit filename="src\opencv\3rdparty\flann\constants.h" />
+		<Unit filename="src\opencv\3rdparty\flann\flann.cpp" />
+		<Unit filename="src\opencv\3rdparty\flann\flann.h" />
+		<Unit filename="src\opencv\3rdparty\flann\flann.hpp" />
+		<Unit filename="src\opencv\3rdparty\flann\nn\ground_truth.h" />
+		<Unit filename="src\opencv\3rdparty\flann\nn\index_testing.cpp" />
+		<Unit filename="src\opencv\3rdparty\flann\nn\index_testing.h" />
+		<Unit filename="src\opencv\3rdparty\flann\nn\simplex_downhill.h" />
+		<Unit filename="src\opencv\3rdparty\flann\util\allocator.h" />
+		<Unit filename="src\opencv\3rdparty\flann\util\common.h" />
+		<Unit filename="src\opencv\3rdparty\flann\util\heap.h" />
+		<Unit filename="src\opencv\3rdparty\flann\util\logger.cpp" />
+		<Unit filename="src\opencv\3rdparty\flann\util\logger.h" />
+		<Unit filename="src\opencv\3rdparty\flann\util\matrix.h" />
+		<Unit filename="src\opencv\3rdparty\flann\util\object_factory.h" />
+		<Unit filename="src\opencv\3rdparty\flann\util\random.cpp" />
+		<Unit filename="src\opencv\3rdparty\flann\util\random.h" />
+		<Unit filename="src\opencv\3rdparty\flann\util\result_set.h" />
+		<Unit filename="src\opencv\3rdparty\flann\util\saving.cpp" />
+		<Unit filename="src\opencv\3rdparty\flann\util\saving.h" />
+		<Unit filename="src\opencv\3rdparty\flann\util\timer.h" />
+		<Unit filename="src\opencv\3rdparty\lapack\dasum.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\daxpy.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dbdsdc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dbdsqr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dcopy.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\ddot.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dgebd2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dgebrd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dgelq2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dgelqf.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dgels.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dgelsd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dgemm.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dgemv.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dgeqr2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dgeqrf.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dger.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dgesdd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dgesv.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dgetf2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dgetrf.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dgetri.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dgetrs.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlabad.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlabrd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlacpy.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlae2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlaebz.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlaed0.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlaed1.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlaed2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlaed3.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlaed4.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlaed5.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlaed6.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlaed7.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlaed8.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlaed9.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlaeda.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlaev2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlagtf.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlagts.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlaisnan.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlals0.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlalsa.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlalsd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlamch.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlamrg.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlaneg.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlange.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlanst.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlansy.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlapy2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlar1v.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlarf.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlarfb.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlarfg.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlarft.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlarnv.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlarra.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlarrb.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlarrc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlarrd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlarre.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlarrf.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlarrj.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlarrk.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlarrr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlarrv.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlartg.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlaruv.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlas2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlascl.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlasd0.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlasd1.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlasd2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlasd3.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlasd4.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlasd5.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlasd6.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlasd7.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlasd8.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlasda.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlasdq.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlasdt.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlaset.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlasq1.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlasq2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlasq3.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlasq4.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlasq5.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlasq6.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlasr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlasrt.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlassq.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlasv2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlaswp.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlasyf.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlatrd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlauu2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlauum.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlazq3.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dlazq4.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dnrm2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dorg2r.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dorgbr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dorgl2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dorglq.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dorgqr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dorm2l.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dorm2r.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dormbr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dorml2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dormlq.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dormql.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dormqr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dormtr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dpotf2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dpotrf.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dpotri.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dpotrs.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\drot.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dscal.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dstebz.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dstein.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dstemr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dsteqr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dsterf.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dswap.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dsyevr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dsymv.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dsyr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dsyr2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dsyr2k.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dsyrk.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dsytd2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dsytf2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dsytrd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dsytrf.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dsytri.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dsytrs.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dtrmm.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dtrmv.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dtrsm.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dtrti2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dtrtri.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\dtrtrs.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\f77_aloc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\idamax.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\ieeeck.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\ilaenv.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\iparmq.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\isamax.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\pow_di.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\pow_ii.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\pow_ri.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\precomp.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\s_cat.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\s_cmp.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\s_copy.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sasum.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\saxpy.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sbdsdc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sbdsqr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\scopy.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sdot.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sgebd2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sgebrd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sgelq2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sgelqf.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sgels.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sgelsd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sgemm.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sgemv.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sgeqr2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sgeqrf.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sger.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sgesdd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sgesv.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sgetf2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sgetrf.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sgetri.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sgetrs.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slabad.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slabrd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slacpy.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slae2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slaebz.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slaed0.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slaed1.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slaed2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slaed3.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slaed4.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slaed5.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slaed6.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slaed7.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slaed8.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slaed9.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slaeda.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slaev2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slagtf.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slagts.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slaisnan.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slals0.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slalsa.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slalsd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slamch.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slamrg.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slaneg.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slange.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slanst.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slansy.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slapy2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slar1v.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slarf.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slarfb.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slarfg.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slarft.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slarnv.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slarra.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slarrb.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slarrc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slarrd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slarre.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slarrf.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slarrj.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slarrk.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slarrr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slarrv.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slartg.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slaruv.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slas2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slascl.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slasd0.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slasd1.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slasd2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slasd3.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slasd4.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slasd5.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slasd6.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slasd7.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slasd8.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slasda.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slasdq.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slasdt.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slaset.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slasq1.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slasq2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slasq3.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slasq4.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slasq5.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slasq6.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slasr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slasrt.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slassq.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slasv2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slaswp.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slatrd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slauu2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slauum.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slazq3.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\slazq4.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\snrm2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sorg2r.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sorgbr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sorgl2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sorglq.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sorgqr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sorm2l.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sorm2r.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sormbr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sorml2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sormlq.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sormql.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sormqr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sormtr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\spotf2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\spotrf.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\spotri.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\spotrs.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\srot.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sscal.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sstebz.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sstein.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sstemr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\ssteqr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\ssterf.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\sswap.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\ssyevr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\ssymv.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\ssyr2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\ssyr2k.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\ssyrk.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\ssytd2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\ssytrd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\strmm.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\strmv.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\strsm.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\strti2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\strtri.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\strtrs.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\lapack\xerbla.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\zlib\adler32.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\zlib\compress.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\zlib\crc32.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\zlib\crc32.h" />
+		<Unit filename="src\opencv\3rdparty\zlib\deflate.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\zlib\deflate.h" />
+		<Unit filename="src\opencv\3rdparty\zlib\example.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\zlib\gzio.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\zlib\infback.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\zlib\inffast.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\zlib\inffast.h" />
+		<Unit filename="src\opencv\3rdparty\zlib\inffixed.h" />
+		<Unit filename="src\opencv\3rdparty\zlib\inflate.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\zlib\inflate.h" />
+		<Unit filename="src\opencv\3rdparty\zlib\inftrees.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\zlib\inftrees.h" />
+		<Unit filename="src\opencv\3rdparty\zlib\trees.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\zlib\trees.h" />
+		<Unit filename="src\opencv\3rdparty\zlib\uncompr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\zlib\zutil.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\opencv\3rdparty\zlib\zutil.h" />
+		<Unit filename="src\opencv\src\cv\_cv.h" />
+		<Unit filename="src\opencv\src\cv\_cvfeaturetree.h" />
+		<Unit filename="src\opencv\src\cv\_cvgeom.h" />
+		<Unit filename="src\opencv\src\cv\_cvimgproc.h" />
+		<Unit filename="src\opencv\src\cv\_cvipp.h" />
+		<Unit filename="src\opencv\src\cv\_cvkdtree.hpp" />
+		<Unit filename="src\opencv\src\cv\_cvlist.h" />
+		<Unit filename="src\opencv\src\cv\_cvmatrix.h" />
+		<Unit filename="src\opencv\src\cv\_cvmodelest.h" />
+		<Unit filename="src\opencv\src\cv\cvaccum.cpp" />
+		<Unit filename="src\opencv\src\cv\cvapprox.cpp" />
+		<Unit filename="src\opencv\src\cv\cvcalccontrasthistogram.cpp" />
+		<Unit filename="src\opencv\src\cv\cvcalcimagehomography.cpp" />
+		<Unit filename="src\opencv\src\cv\cvcalibinit.cpp" />
+		<Unit filename="src\opencv\src\cv\cvcalibration.cpp" />
+		<Unit filename="src\opencv\src\cv\cvcamshift.cpp" />
+		<Unit filename="src\opencv\src\cv\cvcanny.cpp" />
+		<Unit filename="src\opencv\src\cv\cvcascadedetect.cpp" />
+		<Unit filename="src\opencv\src\cv\cvcolor.cpp" />
+		<Unit filename="src\opencv\src\cv\cvcondens.cpp" />
+		<Unit filename="src\opencv\src\cv\cvcontours.cpp" />
+		<Unit filename="src\opencv\src\cv\cvcontourtree.cpp" />
+		<Unit filename="src\opencv\src\cv\cvconvhull.cpp" />
+		<Unit filename="src\opencv\src\cv\cvcorner.cpp" />
+		<Unit filename="src\opencv\src\cv\cvcornersubpix.cpp" />
+		<Unit filename="src\opencv\src\cv\cvderiv.cpp" />
+		<Unit filename="src\opencv\src\cv\cvdistransform.cpp" />
+		<Unit filename="src\opencv\src\cv\cvdominants.cpp" />
+		<Unit filename="src\opencv\src\cv\cvemd.cpp" />
+		<Unit filename="src\opencv\src\cv\cvfeatureselect.cpp" />
+		<Unit filename="src\opencv\src\cv\cvfeaturetree.cpp" />
+		<Unit filename="src\opencv\src\cv\cvfilter.cpp" />
+		<Unit filename="src\opencv\src\cv\cvfloodfill.cpp" />
+		<Unit filename="src\opencv\src\cv\cvfundam.cpp" />
+		<Unit filename="src\opencv\src\cv\cvgeometry.cpp" />
+		<Unit filename="src\opencv\src\cv\cvhaar.cpp" />
+		<Unit filename="src\opencv\src\cv\cvhistogram.cpp" />
+		<Unit filename="src\opencv\src\cv\cvhough.cpp" />
+		<Unit filename="src\opencv\src\cv\cvimgwarp.cpp" />
+		<Unit filename="src\opencv\src\cv\cvinpaint.cpp" />
+		<Unit filename="src\opencv\src\cv\cvkalman.cpp" />
+		<Unit filename="src\opencv\src\cv\cvkdtree.cpp" />
+		<Unit filename="src\opencv\src\cv\cvlinefit.cpp" />
+		<Unit filename="src\opencv\src\cv\cvlkpyramid.cpp" />
+		<Unit filename="src\opencv\src\cv\cvlsh.cpp" />
+		<Unit filename="src\opencv\src\cv\cvmatchcontours.cpp" />
+		<Unit filename="src\opencv\src\cv\cvmodelest.cpp" />
+		<Unit filename="src\opencv\src\cv\cvmoments.cpp" />
+		<Unit filename="src\opencv\src\cv\cvmorph.cpp" />
+		<Unit filename="src\opencv\src\cv\cvmotempl.cpp" />
+		<Unit filename="src\opencv\src\cv\cvmser.cpp" />
+		<Unit filename="src\opencv\src\cv\cvoptflowbm.cpp" />
+		<Unit filename="src\opencv\src\cv\cvoptflowgf.cpp" />
+		<Unit filename="src\opencv\src\cv\cvoptflowhs.cpp" />
+		<Unit filename="src\opencv\src\cv\cvoptflowlk.cpp" />
+		<Unit filename="src\opencv\src\cv\cvpgh.cpp" />
+		<Unit filename="src\opencv\src\cv\cvposit.cpp" />
+		<Unit filename="src\opencv\src\cv\cvprecomp.cpp" />
+		<Unit filename="src\opencv\src\cv\cvpyramids.cpp" />
+		<Unit filename="src\opencv\src\cv\cvpyrsegmentation.cpp" />
+		<Unit filename="src\opencv\src\cv\cvrotcalipers.cpp" />
+		<Unit filename="src\opencv\src\cv\cvsamplers.cpp" />
+		<Unit filename="src\opencv\src\cv\cvsegmentation.cpp" />
+		<Unit filename="src\opencv\src\cv\cvshapedescr.cpp" />
+		<Unit filename="src\opencv\src\cv\cvsmooth.cpp" />
+		<Unit filename="src\opencv\src\cv\cvsnakes.cpp" />
+		<Unit filename="src\opencv\src\cv\cvspilltree.cpp" />
+		<Unit filename="src\opencv\src\cv\cvstardetector.cpp" />
+		<Unit filename="src\opencv\src\cv\cvstereobm.cpp" />
+		<Unit filename="src\opencv\src\cv\cvstereogc.cpp" />
+		<Unit filename="src\opencv\src\cv\cvsubdivision2d.cpp" />
+		<Unit filename="src\opencv\src\cv\cvsumpixels.cpp" />
+		<Unit filename="src\opencv\src\cv\cvsurf.cpp" />
+		<Unit filename="src\opencv\src\cv\cvtables.cpp" />
+		<Unit filename="src\opencv\src\cv\cvtemplmatch.cpp" />
+		<Unit filename="src\opencv\src\cv\cvthresh.cpp" />
+		<Unit filename="src\opencv\src\cv\cvtriangulate.cpp" />
+		<Unit filename="src\opencv\src\cv\cvundistort.cpp" />
+		<Unit filename="src\opencv\src\cv\cvutils.cpp" />
+		<Unit filename="src\opencv\src\cxcore\_cxcore.h" />
+		<Unit filename="src\opencv\src\cxcore\cxalloc.cpp" />
+		<Unit filename="src\opencv\src\cxcore\cxarithm.cpp" />
+		<Unit filename="src\opencv\src\cxcore\cxarray.cpp" />
+		<Unit filename="src\opencv\src\cxcore\cxconvert.cpp" />
+		<Unit filename="src\opencv\src\cxcore\cxcopy.cpp" />
+		<Unit filename="src\opencv\src\cxcore\cxdatastructs.cpp" />
+		<Unit filename="src\opencv\src\cxcore\cxdrawing.cpp" />
+		<Unit filename="src\opencv\src\cxcore\cxdxt.cpp" />
+		<Unit filename="src\opencv\src\cxcore\cxflann.cpp" />
+		<Unit filename="src\opencv\src\cxcore\cximage.cpp" />
+		<Unit filename="src\opencv\src\cxcore\cxlapack.cpp" />
+		<Unit filename="src\opencv\src\cxcore\cxmathfuncs.cpp" />
+		<Unit filename="src\opencv\src\cxcore\cxmatmul.cpp" />
+		<Unit filename="src\opencv\src\cxcore\cxmatrix.cpp" />
+		<Unit filename="src\opencv\src\cxcore\cxpersistence.cpp" />
+		<Unit filename="src\opencv\src\cxcore\cxprecomp.cpp" />
+		<Unit filename="src\opencv\src\cxcore\cxrand.cpp" />
+		<Unit filename="src\opencv\src\cxcore\cxstat.cpp" />
+		<Unit filename="src\opencv\src\cxcore\cxsystem.cpp" />
+		<Unit filename="src\opencv\src\cxcore\cxtables.cpp" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
