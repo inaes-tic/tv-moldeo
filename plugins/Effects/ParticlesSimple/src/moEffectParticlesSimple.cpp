@@ -85,6 +85,8 @@ moEffectParticlesSimple::GetDefinition( moConfigDefinition *p_configdefinition )
 
 	p_configdefinition->Add( moText("font"), MO_PARAM_FONT, PARTICLES_FONT, moValue( "Default", "TXT", "0", "NUM", "32.0", "NUM") );
 	p_configdefinition->Add( moText("text"), MO_PARAM_TEXT, PARTICLES_TEXT, moValue( "Insert text in text parameter", "TXT") );
+	p_configdefinition->Add( moText("ortho"), MO_PARAM_NUMERIC, PARTICLES_ORTHO, moValue( "0", "NUM").Ref() );
+
 
 	p_configdefinition->Add( moText("texture"), MO_PARAM_TEXTURE, PARTICLES_TEXTURE, moValue( "default", "TXT") );
 	p_configdefinition->Add( moText("folders"), MO_PARAM_TEXTUREFOLDER, PARTICLES_FOLDERS, moValue( "", "TXT") );
@@ -189,6 +191,9 @@ moEffectParticlesSimple::Init()
 	moDefineParamIndex( PARTICLES_PHASE, moText("phase") );
 	moDefineParamIndex( PARTICLES_FONT, moText("font") );
 	moDefineParamIndex( PARTICLES_TEXT, moText("text") );
+	moDefineParamIndex( PARTICLES_ORTHO, moText("ortho") );
+
+
 	moDefineParamIndex( PARTICLES_TEXTURE, moText("texture") );
 	moDefineParamIndex( PARTICLES_FOLDERS, moText("folders") );
 	moDefineParamIndex( PARTICLES_TEXTUREMODE, moText("texture_mode") );
@@ -285,6 +290,8 @@ moEffectParticlesSimple::Init()
     m_Rate = 0;
     last_tick = 0;
 
+    ortho = false;
+
     m_bTrackerInit = false;
     m_pTrackerData = NULL;
 
@@ -311,6 +318,9 @@ moEffectParticlesSimple::Init()
     midi_emitionrate = 1.0; // n per emitionperiod
     midi_randomvelocity = 1.0; //inicial vel
     midi_randommotion = 1.0; //motion dynamic
+
+    m_InletTuioSystemIndex = GetInletIndex("TUIOSYSTEM");
+    m_InletTrackerSystemIndex = GetInletIndex("TRACKERKLT");
 
 	return true;
 
@@ -673,6 +683,8 @@ void moEffectParticlesSimple::UpdateParameters() {
     time_tofull_revelation = m_Config[moR(PARTICLES_TIMETOREVELATION)][MO_SELECTED][0].Int();
     time_of_revelation = m_Config[moR(PARTICLES_TIMEOFREVELATION)][MO_SELECTED][0].Int();
 
+    ortho = (bool)m_Config[moR(PARTICLES_ORTHO)][MO_SELECTED][0].Int();
+
     if (!moTimeManager::MoldeoTimer->Started()) {
         ResetTimers();
 
@@ -831,6 +843,10 @@ void moEffectParticlesSimple::SetParticlePosition( moParticlesSimple* pParticle 
 
     pParticle->Mass = 10.0f;
     pParticle->Fixed = false;
+
+    pParticle->U = moVector3f( 1.0, 0.0, 0.0 );
+    pParticle->V = moVector3f( 0.0, 1.0, 0.0 );
+    pParticle->W = moVector3f( 0.0, 0.0, 1.0 );
 
     pParticle->dpdt = moVector3f( 0.0f, 0.0f, 0.0f );
     pParticle->dvdt = moVector3f( 0.0f, 0.0f, 0.0f );
@@ -1018,6 +1034,28 @@ void moEffectParticlesSimple::SetParticlePosition( moParticlesSimple* pParticle 
                     break;
             }
             break;
+        case PARTICLES_EMITTERTYPE_CIRCLE:
+            //CIRCLE POSITION
+            switch(m_Physics.m_CreationMethod) {
+                case PARTICLES_CREATIONMETHOD_LINEAR:
+                case  PARTICLES_CREATIONMETHOD_PLANAR:
+                case  PARTICLES_CREATIONMETHOD_VOLUMETRIC:
+                    alpha = 2 * moMathf::PI *  ( pParticle->Pos.X()*m_rows + pParticle->Pos.Y()) / ((double)m_cols*(double)m_rows );
+                    radius1 = m_Physics.m_EmitterSize.X() / 2.0;
+                    radius2 = m_Physics.m_EmitterSize.Y() / 2.0;
+                    z = 0.0;
+                    //z = m_Physics.m_EmitterSize.Z() * ( 0.5f - ( pParticle->Pos.Y() / (double)m_rows ) - (pParticle->Pos.X() / (double)(m_cols*m_rows)) );
+
+                    pParticle->Pos3d = moVector3f(  ( radius1*moMathf::Cos(alpha) + randomposx ) * m_Physics.m_EmitterVector.X(),
+                                                    ( radius1*moMathf::Sin(alpha) + randomposy ) * m_Physics.m_EmitterVector.Y(),
+                                                    ( z + randomposz ) );
+
+                    pParticle->Velocity = moVector3f( randomvelx,
+                                                      randomvely,
+                                                      randomvelz );
+                    break;
+            }
+            break;
 
         case PARTICLES_EMITTERTYPE_TRACKER:
             switch(m_Physics.m_CreationMethod) {
@@ -1128,8 +1166,9 @@ void moEffectParticlesSimple::InitParticlesSimple( int p_cols, int p_rows, bool 
     m_ParticlesSimpleArray.Init( p_cols*p_rows, NULL );
     m_ParticlesSimpleArrayTmp.Init( p_cols*p_rows, NULL );
 
-    for( i=0; i<p_cols ; i++) {
+
         for( j=0; j<p_rows ; j++) {
+                for( i=0; i<p_cols ; i++) {
             moParticlesSimple* pPar = new moParticlesSimple();
 
             pPar->Pos = moVector2f( (float) i, (float) j);
@@ -1274,6 +1313,16 @@ void moEffectParticlesSimple::Regenerate() {
             moParticlesSimple* pPar = m_ParticlesSimpleArray[i+j*m_cols];
 
             pPar->pTextureMemory = NULL;
+
+            if (pPar->Age.Duration() > moGetTicks() ) {
+                pPar->Age.Stop();
+                pPar->Visible = false;
+                if (pPar->pTextureMemory) {
+                    pPar->pTextureMemory->ReleaseReference();
+                    pPar->pTextureMemory = NULL;
+                    pPar->GLId = 0;
+                }
+            }
 
             //KILL PARTICLE
             if ( pPar->Visible && (m_Physics.m_MaxAge>0) &&  (pPar->Age.Duration() > m_Physics.m_MaxAge) ) {
@@ -1933,6 +1982,7 @@ void moEffectParticlesSimple::DrawParticlesSimple( moTempo* tempogral, moEffectS
 
             if (pPar->Visible) {
 
+
                 if (texture_mode==PARTICLES_TEXTUREMODE_MANY || texture_mode==PARTICLES_TEXTUREMODE_MANY2PATCH ) {
                     //pPar->GLId = 22;
                     if (pPar->GLId>0) {
@@ -1953,7 +2003,9 @@ void moEffectParticlesSimple::DrawParticlesSimple( moTempo* tempogral, moEffectS
                     if (ScriptHasFunction("RunParticle")) {
                         SelectScriptFunction("RunParticle");
                         AddFunctionParam( (int) ( i + j*m_cols ) );
-                        RunSelectedFunction(1);
+                        if (!RunSelectedFunction(1)) {
+                            MODebug2->Error( moText("RunParticle function not executed") );
+                        }
                     }
                 }
 
@@ -1995,6 +2047,8 @@ void moEffectParticlesSimple::DrawParticlesSimple( moTempo* tempogral, moEffectS
                 moVector3f CPU,CPW;
                 moVector3f A,B,C,D;
 
+                moVector3f CENTRO;
+
                 U = moVector3f( 0.0f, 0.0f, 1.0f );
                 V = moVector3f( 1.0f, 0.0f, 0.0f );
                 W = moVector3f( 0.0f, 1.0f, 0.0f );
@@ -2026,6 +2080,10 @@ void moEffectParticlesSimple::DrawParticlesSimple( moTempo* tempogral, moEffectS
                         case PARTICLES_ORIENTATIONMODE_MOTION:
                             U = pPar->Velocity;
                             U.Normalize();
+                            if (U.Length() < 0.5) {
+                                U = moVector3f( 0.0, 0.0, 1.0 );
+                                U.Normalize();
+                            }
                             V = moVector3f( -U.Y(), U.X(), 0.0f );
                             V.Normalize();
                             CPU = moVector3f( U.X(), U.Y(), 0.0f );
@@ -2041,7 +2099,10 @@ void moEffectParticlesSimple::DrawParticlesSimple( moTempo* tempogral, moEffectS
                 C = V *sizexd2 + W * -sizeyd2;
                 D = V * -sizexd2 + W * -sizeyd2;
 
+
                 //cuadrado centrado en Pos3d....
+
+
                 glBegin(GL_QUADS);
                     //glColor4f( 1.0, 0.5, 0.5, idxt );
 
@@ -2074,6 +2135,45 @@ void moEffectParticlesSimple::DrawParticlesSimple( moTempo* tempogral, moEffectS
                     } else glTexCoord2f( pPar->TCoord.X(), pPar->TCoord.Y()+tsizey );
                     glVertex3f( D.X(), D.Y(), 0.0);
                 glEnd();
+
+                //draw vectors associated...
+                if ( drawing_features>2 ) {
+                    CENTRO = moVector3f( 0.0 , 0.0, 0.0 );
+
+                    glDisable( GL_TEXTURE_2D );
+                    glLineWidth( 8.0 );
+                    glBegin(GL_LINES);
+                        ///draw U
+                        glColor4f( 0.0, 1.0, 1.0, 1.0);
+                        glVertex3f( CENTRO.X(), CENTRO.Y(), 0.0001);
+
+                        glColor4f( 0.0, 1.0, 1.0, 1.0);
+                        glVertex3f( CENTRO.X() + U.X(), CENTRO.Y() + U.Y(), 0.0001);
+
+                    glEnd();
+
+                    glBegin(GL_LINES);
+                        ///draw V
+                        glColor4f( 1.0, 0.0, 1.0, 1.0);
+                        glVertex3f( CENTRO.X(), CENTRO.Y(), 0.0001);
+
+                        glColor4f( 1.0, 0.0, 1.0, 1.0);
+                        glVertex3f( CENTRO.X() + V.X(), CENTRO.Y() + V.Y(), 0.0001);
+
+                    glEnd();
+
+                    glBegin(GL_LINES);
+                        ///draw W
+                        glColor4f( 0.0, 0.0, 1.0, 1.0);
+                        glVertex3f( CENTRO.X(), CENTRO.Y(), 0.0001);
+
+                        glColor4f( 0.0, 0.0, 1.0, 1.0);
+                        glVertex3f( CENTRO.X() + W.X(), CENTRO.Y() + W.Y(), 0.0001);
+
+                    glEnd();
+                    glEnable( GL_TEXTURE_2D );
+                }
+
 
                 glPopMatrix();
             }
@@ -2182,173 +2282,340 @@ void moEffectParticlesSimple::DrawParticlesSimple( moTempo* tempogral, moEffectS
 
 }
 
+using namespace TUIO;
+
 void moEffectParticlesSimple::DrawTracker() {
 
     int w = m_pResourceManager->GetRenderMan()->ScreenWidth();
     int h = m_pResourceManager->GetRenderMan()->ScreenHeight();
 
     m_pTrackerData = NULL;
-
+    m_pTUIOData = NULL;
 
     bool has_motion = false;
     bool has_features = false;
 
-	for(int i=0; i<m_Inlets.Count(); i++) {
-		moInlet* pInlet = m_Inlets[i];
-		if (pInlet->Updated() && ( pInlet->GetConnectorLabelName()==moText("TRACKERKLT") || pInlet->GetConnectorLabelName()==moText("TRACKERGPUKLT") || pInlet->GetConnectorLabelName()==moText("TRACKERGPUKLT2")) ) {
+    if (m_InletTrackerSystemIndex>-1) {
+        moInlet* pInlet = m_Inlets.Get(m_InletTrackerSystemIndex);
+        if (pInlet)
+            if (pInlet->Updated()) {
+                m_pTrackerData = (moTrackerSystemData *)pInlet->GetData()->Pointer();
+            }
+    }
 
-			m_pTrackerData = (moTrackerSystemData *)pInlet->GetData()->Pointer();
-			if (m_pTrackerData ) {
-				m_bTrackerInit = true;
+    if (m_InletTuioSystemIndex>-1) {
+        moInlet* pInlet = m_Inlets.Get(m_InletTuioSystemIndex);
+        if (pInlet)
+            if (pInlet->Updated()) {
+                m_pTUIOData = (moTUIOSystemData *)pInlet->GetData()->Pointer();
 
-				//SelectScriptFunction("Reset");
-				//RunSelectedFunction();
+                if (m_pTUIOData) {
 
-				//MODebug2->Push(IntToStr(TrackerId));
+                    TuioObject* pObject;
 
-				//MODebug2->Push(moText("Receiving:") + IntToStr(m_pTrackerData->GetFeaturesCount()) );
-				if (m_pTrackerData->GetFeaturesCount()>0) {
-                    int tw = m_pTrackerData->GetVideoFormat().m_Width;
-                    int th = m_pTrackerData->GetVideoFormat().m_Height;
-                    //MODebug2->Push(moText("vformat:")+IntToStr(tw)+moText("th")+IntToStr(th));
+                    std::list<TuioObject*> objects = m_pTUIOData->getTuioObjects();
 
-                    m_TrackerBarycenter = moVector2f( ( ( m_pTrackerData->GetBarycenter().X() ) - 0.5),
-                                                      ( -( m_pTrackerData->GetBarycenter().Y() ) + 0.5) );
+                    for (std::list<TuioObject*>::iterator iter=objects.begin(); iter != objects.end(); iter++) {
 
-                    //MODebug2->Push(moText("Barycenter x:")+FloatToStr(m_TrackerBarycenter.X()) + moText(" y:")+FloatToStr(m_TrackerBarycenter.Y()) );
+                        pObject = (*iter);
+                        if (pObject) {
+                            moVector2f position( pObject->getX(), pObject->getY() * h / w);
+
+                            glBindTexture(GL_TEXTURE_2D,0);
+                            glColor4f(0.0, 1.0, 1.0, 1.0);
+
+                            float angle = pObject->getAngle();
+
+                            //int u = pObject->getSymbolID();
+
+                            //moTrackerFeature* NF = NULL;
+                            /*
+                            if (m_pTrackerData) {
+                                NF = m_pTrackerData->GetFeature(u);
+                            }*/
+
+
+                            ///DRAW ANGLE CENTER
+                            //glRotatef(  angle*moMathf::RAD_TO_DEG , 0.0, 0.0, 1.0 );
+
+                            glBegin(GL_QUADS);
+                                glVertex2f((position.X() - 0.02)*normalf, (position.Y() - 0.02)*normalf);
+                                glVertex2f((position.X() - 0.02)*normalf, (position.Y() + 0.02)*normalf);
+                                glVertex2f((position.X() + 0.02)*normalf, (position.Y() + 0.02)*normalf);
+                                glVertex2f((position.X() + 0.02)*normalf, (position.Y() - 0.02)*normalf);
+                            glEnd();
+
+
+                            ///DRAW angle vector
+                            glColor4f( 0.0,0.0,1.0,1.0);
+                            glLineWidth(4.0);
+                            glBegin(GL_LINES);
+                                glVertex2f( position.X(), position.Y());
+                                glVertex2f( position.X() + 0.04*cos(angle), position.Y() + 0.04*sin(angle) );
+                            glEnd();
+
+                            ///speed
+
+                            glColor4f( 0.4,0.6,0.2,1.0);
+                            glLineWidth(4.0);
+                            glBegin(GL_LINES);
+                                glVertex2f( position.X(), position.Y());
+                                glVertex2f( position.X() + pObject->getXSpeed(), position.Y() + pObject->getYSpeed() );
+                            glEnd();
+
+                            /*
+
+                            if (NF) {
+                                moVector2f pu( NF->x - 0.5, (-NF->y + 0.5) * h / w);
+                                glColor4f( 0.5,0.0,0.0,1.0);
+                                glBegin(GL_QUADS);
+                                    glVertex2f( ( pu.X() - 0.01)*normalf, (pu.Y() - 0.01)*normalf);
+                                    glVertex2f((pu.X() - 0.01)*normalf, (pu.Y() + 0.01)*normalf);
+                                    glVertex2f((pu.X() + 0.01)*normalf, (pu.Y() + 0.01)*normalf);
+                                    glVertex2f((pu.X() + 0.01)*normalf, (pu.Y() - 0.01)*normalf);
+                                glEnd();
+                            }
+                            */
+
+
+                        }
+
+                    }
+
+                    TuioCursor* pCursor;
+
+                    std::list<TuioCursor*> cursors = m_pTUIOData->getTuioCursors();
+
+                    for (std::list<TuioCursor*>::iterator iter=cursors.begin(); iter != cursors.end(); iter++) {
+
+                        pCursor = (*iter);
+                        if (pCursor) {
+                            moVector2f position( pCursor->getX(), pCursor->getY() * h / w);
+
+                            glBindTexture(GL_TEXTURE_2D,0);
+                            glColor4f(0.0, 0.0, 1.0, 1.0);
+                            ///try using moP5::ellipse(x,y,w,h)
+
+                            float r = 0.02;
+                            glLineWidth(4.0);
+                            glBegin(GL_LINE_LOOP);
+                                for(float t = 0; t <= moMathf::TWO_PI; t += moMathf::TWO_PI / 12 )
+                                    glVertex2f( r* cos(t) + position.X(), r* sin(t) + position.Y());
+                            glEnd();
+                        }
+
+                    }
+
+                }
+
+            }
+    }
+
+    /*
+    if (m_pTUIOData) {
+        int nobjects = m_pTUIOData->getTuioObjects().size();
+        //MODebug2->Push( moText(" NOBJECTS: ") + IntToStr(nobjects) );
+
+            for (int f = 0; f < m_pTUIOData->getTuioObjects().size(); f++)
+            {
+
+            }
+
+    }
+    */
+
+    if (m_pTrackerData ) {
+
+        glDisable(GL_TEXTURE_2D);
+
+        m_bTrackerInit = true;
+
+        //SelectScriptFunction("Reset");
+        //RunSelectedFunction();
+
+        //MODebug2->Push(IntToStr(TrackerId));
+
+        //MODebug2->Push(moText("Receiving:") + IntToStr(m_pTrackerData->GetFeaturesCount()) );
+        if (m_pTrackerData->GetFeaturesCount()>0) {
+            int tw = m_pTrackerData->GetVideoFormat().m_Width;
+            int th = m_pTrackerData->GetVideoFormat().m_Height;
+            //MODebug2->Push(moText("vformat:")+IntToStr(tw)+moText("th")+IntToStr(th));
+
+            m_TrackerBarycenter = moVector2f( ( ( m_pTrackerData->GetBarycenter().X() ) - 0.5),
+                                              ( -( m_pTrackerData->GetBarycenter().Y() ) + 0.5) * h / w );
+
+            //MODebug2->Push(moText("Barycenter x:")+FloatToStr(m_TrackerBarycenter.X()) + moText(" y:")+FloatToStr(m_TrackerBarycenter.Y()) );
+
+            if (drawing_features > 2 ) {
+
+                glBindTexture(GL_TEXTURE_2D,0);
+                glColor4f(0.7, 1.0, 0.5, 1.0);
+
+                glBegin(GL_QUADS);
+                    glVertex2f((m_TrackerBarycenter.X() - 0.02)*normalf, (m_TrackerBarycenter.Y() - 0.02)*normalf);
+                    glVertex2f((m_TrackerBarycenter.X() - 0.02)*normalf, (m_TrackerBarycenter.Y() + 0.02)*normalf);
+                    glVertex2f((m_TrackerBarycenter.X() + 0.02)*normalf, (m_TrackerBarycenter.Y() + 0.02)*normalf);
+                    glVertex2f((m_TrackerBarycenter.X() + 0.02)*normalf, (m_TrackerBarycenter.Y() - 0.02)*normalf);
+                glEnd();
+
+            }
+
+
+            for (int f = 0; f < m_pTrackerData->GetFeaturesCount(); f++)
+            {
+
+                moTrackerFeature* pF = m_pTrackerData->GetFeature(f);
+
+            if (pF && pF->valid) {
+
+                float x = (pF->x ) - 0.5;
+                float y = ( -(pF->y ) + 0.5 ) * h / w;
+                float tr_x = (pF->tr_x ) - 0.5 ;
+                float tr_y = ( -(pF->tr_y ) + 0.5 ) * h / w;
+                float v_x = (pF->v_x );
+                float v_y = -(pF->v_y);
+                float vel = sqrtf( v_x*v_x+v_y*v_y );
+                int v = pF->val;
+
+                //MODebug2->Log(moText("    x:")+FloatToStr(pF->x) + moText(" y:")+FloatToStr(pF->y) );
+
+                glBindTexture(GL_TEXTURE_2D,0);
+                glColor4f(1.0, 0.0, 0.0, 1.0);
+
+                if (v >= 0) glColor4f(0.0, 1.0, 0.0, 1.0);
+                else if (v == -1) glColor4f(1.0, 0.0, 1.0, 1.0);
+                else if (v == -2) glColor4f(1.0, 0.0, 1.0, 1.0);
+                else if (v == -3) glColor4f(1.0, 0.0, 1.0, 1.0);
+                else if (v == -4) glColor4f(1.0, 0.0, 1.0, 1.0);
+                else if (v == -5) glColor4f(1.0, 0.0, 1.0, 1.0);
+
+
+
+
+                if ( v>=0) {
+                    has_features = true;
 
                     if (drawing_features > 0 ) {
 
-                        glBindTexture(GL_TEXTURE_2D,0);
-                        glColor4f(0.7, 1.0, 0.5, 1.0);
+                        glPointSize((GLfloat)4);
+                        glLineWidth((GLfloat)4.0);
+
+                        if ( pF->is_object) {
+                            glColor4f(1.0, 0.0, 0.0, 1.0);
+
+                            //Uplas[f] >=3 !!!!!
+                            int myuplas[3];
+                            myuplas[0] = -1;
+                            myuplas[1] = -1;
+                            myuplas[2] = -1;
+                            int k1,k2,o = 0;
+                            for( int pp=0; pp<m_pTrackerData->nPares; pp++) {
+                                k1 = m_pTrackerData->m_Pares[pp][0];
+                                k2 = m_pTrackerData->m_Pares[pp][1];
+                                if (o<3) if (k1==f) myuplas[o++] = k2;
+                                if (o<3) if (k2==f) myuplas[o++] = k1;
+                            }
+
+                            int countv = 1;
+                            moVector2f obj_v( x, y );
+                            glColor4f(1.0, 0.1, 0.1, 1.0);
+                            //glPointSiz((GLfloat)10);
+                            glLineWidth((GLfloat)2.0);
+                            for( int pp=0; pp<3; pp++ ) {
+                                int e = myuplas[pp];
+                                moTrackerFeature* NF = m_pTrackerData->GetFeature(e);
+                                if (NF) {
+                                    moVector2f av2( NF->x - 0.5, (-NF->y + 0.5 ) * h / w );
+                                    //obj_v+=av2;
+                                    glBegin(GL_LINES);
+                                        glVertex2f(obj_v.X(),obj_v.Y());
+                                        glVertex2f(av2.X(),av2.Y());
+                                    glEnd();
+                                    countv++;
+                                }
+                            }
+                        }
 
                         glBegin(GL_QUADS);
-                            glVertex2f((m_TrackerBarycenter.X() - 0.02)*normalf, (m_TrackerBarycenter.Y() - 0.02)*normalf);
-                            glVertex2f((m_TrackerBarycenter.X() - 0.02)*normalf, (m_TrackerBarycenter.Y() + 0.02)*normalf);
-                            glVertex2f((m_TrackerBarycenter.X() + 0.02)*normalf, (m_TrackerBarycenter.Y() + 0.02)*normalf);
-                            glVertex2f((m_TrackerBarycenter.X() + 0.02)*normalf, (m_TrackerBarycenter.Y() - 0.02)*normalf);
+                            glVertex2f((x - 0.008)*normalf, (y - 0.008)*normalf);
+                            glVertex2f((x - 0.008)*normalf, (y + 0.008)*normalf);
+                            glVertex2f((x + 0.008)*normalf, (y + 0.008)*normalf);
+                            glVertex2f((x + 0.008)*normalf, (y - 0.008)*normalf);
+                        glEnd();
+                    }
+
+
+                    if (drawing_features > 1 ) {
+                        glBegin(GL_QUADS);
+                            glVertex2f((tr_x - 0.008)*normalf, (tr_y - 0.008)*normalf);
+                            glVertex2f((tr_x - 0.008)*normalf, (tr_y + 0.008)*normalf);
+                            glVertex2f((tr_x + 0.008)*normalf, (tr_y + 0.008)*normalf);
+                            glVertex2f((tr_x + 0.008)*normalf, (tr_y - 0.008)*normalf);
                         glEnd();
 
+
+                        glColor4f(1.0, 1.0, 1.0, 1.0);
+                        glBegin(GL_LINES);
+                            glVertex2f( x*normalf, y*normalf);
+                            glVertex2f( tr_x*normalf, tr_y*normalf);
+                        glEnd();
                     }
 
+                    if ( vel > 0.01 && vel < 0.1) {
 
-                    for (i = 0; i < m_pTrackerData->GetFeaturesCount(); i++)
-                    {
+                        has_motion = true;
 
-                        moTrackerFeature* pF = m_pTrackerData->GetFeature(i);
+                        if (drawing_features > 1 ) {
 
-                        //if (pF && pF->valid) {
+                            glColor4f(0.0, 0.0, 1.0, 1.0);
+                            //glPointSize((GLfloat)10);
+                            glLineWidth((GLfloat)2.0);
 
-                        float x = (pF->x ) - 0.5;
-                        float y = -(pF->y ) + 0.5;
-                        float tr_x = (pF->tr_x ) - 0.5;
-                        float tr_y = -(pF->tr_y ) + 0.5;
-                        float v_x = (pF->v_x );
-                        float v_y = -(pF->v_y);
-                        float vel = sqrtf( v_x*v_x+v_y*v_y );
-                        int v = pF->val;
-
-
-
-                        //MODebug2->Log(moText("    x:")+FloatToStr(pF->x) + moText(" y:")+FloatToStr(pF->y) );
-
-                        glBindTexture(GL_TEXTURE_2D,0);
-                        glColor4f(1.0, 0.0, 0.0, 1.0);
-
-                        if (v >= 0) glColor4f(0.0, 1.0, 0.0, 1.0);
-                        else if (v == -1) glColor4f(1.0, 0.0, 1.0, 1.0);
-                        else if (v == -2) glColor4f(1.0, 0.0, 1.0, 1.0);
-                        else if (v == -3) glColor4f(1.0, 0.0, 1.0, 1.0);
-                        else if (v == -4) glColor4f(1.0, 0.0, 1.0, 1.0);
-                        else if (v == -5) glColor4f(1.0, 0.0, 1.0, 1.0);
-
-
-                        if ( pF->valid ) {
-                            has_features = true;
-
-                            if (drawing_features > 1 ) {
-
-                                glPointSize((GLfloat)2);
-                                glLineWidth((GLfloat)2.0);
-
-
-
-                                glBegin(GL_QUADS);
-                                    glVertex2f((tr_x - 0.008)*normalf, (tr_y - 0.008)*normalf);
-                                    glVertex2f((tr_x - 0.008)*normalf, (tr_y + 0.008)*normalf);
-                                    glVertex2f((tr_x + 0.008)*normalf, (tr_y + 0.008)*normalf);
-                                    glVertex2f((tr_x + 0.008)*normalf, (tr_y - 0.008)*normalf);
-                                glEnd();
-
-                                glBegin(GL_QUADS);
-                                    glVertex2f((x - 0.008)*normalf, (y - 0.008)*normalf);
-                                    glVertex2f((x - 0.008)*normalf, (y + 0.008)*normalf);
-                                    glVertex2f((x + 0.008)*normalf, (y + 0.008)*normalf);
-                                    glVertex2f((x + 0.008)*normalf, (y - 0.008)*normalf);
-                                glEnd();
-
-                                glDisable(GL_TEXTURE_2D);
-                                glColor4f(1.0, 1.0, 1.0, 1.0);
-                                glBegin(GL_LINES);
-                                    glVertex2f( x*normalf, y*normalf);
-                                    glVertex2f( tr_x*normalf, tr_y*normalf);
-                                glEnd();
-                            }
-
-                            if ( vel > 0.01 && vel < 0.1) {
-
-                                has_motion = true;
-
-                                if (drawing_features > 0 ) {
-                                    glDisable(GL_TEXTURE_2D);
-                                    glColor4f(0.0, 0.0, 1.0, 1.0);
-                                    //glPointSize((GLfloat)10);
-                                    glLineWidth((GLfloat)10.0);
-
-                                    glBegin(GL_LINES);
-                                        glVertex2f( x*normalf, y*normalf);
-                                        glVertex2f( (x+v_x)*normalf, (y+v_y)*normalf);
-                                    glEnd();
-                                }
-
-                                ///ParticlesSimpleInfluence( x*normalf, y*normalf, (x+v_x)*normalf, (y+v_y)*normalf, vel*normalf );
-                            }
-
-
+                            glBegin(GL_LINES);
+                                glVertex2f( x*normalf, y*normalf);
+                                glVertex2f( (x+v_x)*normalf, (y+v_y)*normalf);
+                            glEnd();
                         }
 
-
-                    }
-
-                    ///post process:
-                    ///add threshold??? some number of frames for really check...
-                    if (has_motion) {
-
-                        if (!MotionActivity.Started()) {
-                            MotionActivity.Start();
-                        }
-
-                    } else {
-                        MotionActivity.Stop();
-                    }
-
-                    if (has_features) {
-
-                        if (!FeatureActivity.Started()) {
-                            FeatureActivity.Start();
-                        }
-
-                    } else {
-                        FeatureActivity.Stop();
+                        ///ParticlesSimpleInfluence( x*normalf, y*normalf, (x+v_x)*normalf, (y+v_y)*normalf, vel*normalf );
                     }
 
 
                 }
 
-			}
-		}
-	}
+            }
 
+
+            }
+
+            ///post process:
+            ///add threshold??? some number of frames for really check...
+            if (has_motion) {
+
+                if (!MotionActivity.Started()) {
+                    MotionActivity.Start();
+                }
+
+            } else {
+                MotionActivity.Stop();
+            }
+
+            if (has_features) {
+
+                if (!FeatureActivity.Started()) {
+                    FeatureActivity.Start();
+                }
+
+            } else {
+                FeatureActivity.Stop();
+            }
+
+
+        }
+
+        glEnable(GL_TEXTURE_2D);
+
+    }
 
 }
 
@@ -2366,45 +2633,54 @@ void moEffectParticlesSimple::Draw( moTempo* tempogral, moEffectState* parentsta
     PreDraw( tempogral, parentstate);
 
     // Cambiar la proyeccion para una vista ortogonal //
-//	glDisable(GL_DEPTH_TEST);							// Disables Depth Testing
-    glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
-    glLoadIdentity();									// Reset The Projection Matrix
-//	glOrtho(0,w,0,h,-1,1);                              // Set Up An Ortho Screen
-    m_pResourceManager->GetGLMan()->SetPerspectiveView( w, h );
+/*
+*/
+
+    if (ortho) {
+        glDisable(GL_DEPTH_TEST);							// Disables Depth Testing
+        glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
+        glLoadIdentity();									// Reset The Projection Matrix
+        glOrtho(-0.5,0.5,-0.5*h/w,0.5*h/w,-1,1);                              // Set Up An Ortho Screen
+    } else {
+        glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
+        glLoadIdentity();									// Reset The Projection Matrix
+        m_pResourceManager->GetGLMan()->SetPerspectiveView( w, h );
+    }
 
     glMatrixMode(GL_PROJECTION);
 
-    if ( state.stereoside == MO_STEREO_NONE ) {
+    if (!ortho) {
+        if ( state.stereoside == MO_STEREO_NONE ) {
 
-        gluLookAt(		m_Physics.m_EyeVector.X(),
-                        m_Physics.m_EyeVector.Y(),
-                        m_Physics.m_EyeVector.Z(),
-                        m_Config[moR(PARTICLES_VIEWX)].GetData()->Fun()->Eval(state.tempo.ang),
-                        m_Config[moR(PARTICLES_VIEWY)].GetData()->Fun()->Eval(state.tempo.ang),
-                        m_Config[moR(PARTICLES_VIEWZ)].GetData()->Fun()->Eval(state.tempo.ang),
-                        0, 1, 0);
+            gluLookAt(		m_Physics.m_EyeVector.X(),
+                            m_Physics.m_EyeVector.Y(),
+                            m_Physics.m_EyeVector.Z(),
+                            m_Config[moR(PARTICLES_VIEWX)].GetData()->Fun()->Eval(state.tempo.ang),
+                            m_Config[moR(PARTICLES_VIEWY)].GetData()->Fun()->Eval(state.tempo.ang),
+                            m_Config[moR(PARTICLES_VIEWZ)].GetData()->Fun()->Eval(state.tempo.ang),
+                            0, 1, 0);
 
-    } else {
-        if ( state.stereoside == MO_STEREO_LEFT ) {
-           gluLookAt(	m_Physics.m_EyeVector.X()-0.1,
-                        m_Physics.m_EyeVector.Y(),
-                        m_Physics.m_EyeVector.Z(),
-                        m_Config[moR(PARTICLES_VIEWX)].GetData()->Fun()->Eval(state.tempo.ang)-0.1,
-                        m_Config[moR(PARTICLES_VIEWY)].GetData()->Fun()->Eval(state.tempo.ang),
-                        m_Config[moR(PARTICLES_VIEWZ)].GetData()->Fun()->Eval(state.tempo.ang),
-                        0, 1, 0);
-        } else if ( state.stereoside == MO_STEREO_RIGHT ) {
-            gluLookAt(	m_Physics.m_EyeVector.X()+0.1,
-                        m_Physics.m_EyeVector.Y(),
-                        m_Physics.m_EyeVector.Z(),
-                        m_Config[moR(PARTICLES_VIEWX)].GetData()->Fun()->Eval(state.tempo.ang)+0.1,
-                        m_Config[moR(PARTICLES_VIEWY)].GetData()->Fun()->Eval(state.tempo.ang),
-                        m_Config[moR(PARTICLES_VIEWZ)].GetData()->Fun()->Eval(state.tempo.ang),
-                        0, 1, 0);
+        } else {
+            if ( state.stereoside == MO_STEREO_LEFT ) {
+               gluLookAt(	m_Physics.m_EyeVector.X()-0.1,
+                            m_Physics.m_EyeVector.Y(),
+                            m_Physics.m_EyeVector.Z(),
+                            m_Config[moR(PARTICLES_VIEWX)].GetData()->Fun()->Eval(state.tempo.ang)-0.1,
+                            m_Config[moR(PARTICLES_VIEWY)].GetData()->Fun()->Eval(state.tempo.ang),
+                            m_Config[moR(PARTICLES_VIEWZ)].GetData()->Fun()->Eval(state.tempo.ang),
+                            0, 1, 0);
+            } else if ( state.stereoside == MO_STEREO_RIGHT ) {
+                gluLookAt(	m_Physics.m_EyeVector.X()+0.1,
+                            m_Physics.m_EyeVector.Y(),
+                            m_Physics.m_EyeVector.Z(),
+                            m_Config[moR(PARTICLES_VIEWX)].GetData()->Fun()->Eval(state.tempo.ang)+0.1,
+                            m_Config[moR(PARTICLES_VIEWY)].GetData()->Fun()->Eval(state.tempo.ang),
+                            m_Config[moR(PARTICLES_VIEWZ)].GetData()->Fun()->Eval(state.tempo.ang),
+                            0, 1, 0);
+            }
+
         }
-
     }
-
 
     glMatrixMode(GL_MODELVIEW);                         // Select The Modelview Matrix
 	glLoadIdentity();									// Reset The View
@@ -2420,6 +2696,16 @@ void moEffectParticlesSimple::Draw( moTempo* tempogral, moEffectState* parentsta
 
     //setUpLighting();
 
+    tx = m_Config[moR(PARTICLES_TRANSLATEX)].GetData()->Fun()->Eval(state.tempo.ang);
+    ty = m_Config[moR(PARTICLES_TRANSLATEY)].GetData()->Fun()->Eval(state.tempo.ang);
+    tz = m_Config[moR(PARTICLES_TRANSLATEZ)].GetData()->Fun()->Eval(state.tempo.ang);
+
+
+    rz = m_Config[moR(PARTICLES_ROTATEX)].GetData()->Fun()->Eval(state.tempo.ang);
+
+    sx = m_Config[moR(PARTICLES_SCALEX)].GetData()->Fun()->Eval(state.tempo.ang);
+    sy = m_Config[moR(PARTICLES_SCALEY)].GetData()->Fun()->Eval(state.tempo.ang);
+    sz = m_Config[moR(PARTICLES_SCALEZ)].GetData()->Fun()->Eval(state.tempo.ang);
 
 
     glEnable(GL_BLEND);
@@ -2454,12 +2740,10 @@ void moEffectParticlesSimple::Draw( moTempo* tempogral, moEffectState* parentsta
 	float r1;
 	r1 = 2.0 *((double)rand() /(double)(RAND_MAX+1));
 
-
-
-
     DrawParticlesSimple( tempogral, parentstate );
 
     //add conditions
+
     DrawTracker();
 
 
@@ -2666,9 +2950,14 @@ void moEffectParticlesSimple::Update( moEventList *p_eventlist ) {
                 AddFunctionParam(m_pTrackerData->GetValidFeatures());
                 //AddFunctionParam((int)m_pTrackerData->GetVideoFormat().m_Width);
                 //AddFunctionParam((int)m_pTrackerData->GetVideoFormat().m_Height);
+            } else {
+                AddFunctionParam( -1 );
+                AddFunctionParam( -1 );
             }
 
-            RunSelectedFunction(1);
+            if (!RunSelectedFunction(1)) {
+                MODebug2->Error( GetLabelName() + moText(" moEffectParticlesSimple::  script > ") + moText("Update function not executed") );
+            }
         }
     }
 
@@ -2682,9 +2971,12 @@ void moEffectParticlesSimple::Update( moEventList *p_eventlist ) {
 
 void moEffectParticlesSimple::RegisterFunctions()
 {
-    m_iMethodBase = RegisterFunction("GetParticle");
+    moMoldeoObject::RegisterFunctions();
+
+    RegisterBaseFunction("GetParticle");
     RegisterFunction("GetParticlePosition");
     RegisterFunction("GetParticleVelocity");
+    RegisterFunction("GetParticleIntersection");
 
     RegisterFunction("UpdateParticle");
     RegisterFunction("UpdateParticlePosition");
@@ -2692,21 +2984,12 @@ void moEffectParticlesSimple::RegisterFunctions()
 
 	RegisterFunction("UpdateForce");
 
-	RegisterFunction("GetFeature");
-
-	RegisterFunction("GetVariance");
-	RegisterFunction("GetVelocity");
-	RegisterFunction("GetAcceleration");
-	RegisterFunction("GetBarycenter");
-	RegisterFunction("GetZone");
-
 	RegisterFunction("Shot");
 	RegisterFunction("ReInit");
 
-	RegisterFunction("SetPreconf");
-	RegisterFunction("GetPreconf");
+    RegisterFunction("DrawPoint");
 
-	RegisterFunction("PushDebugString");
+    ResetScriptCalling();
 }
 
 int moEffectParticlesSimple::ScriptCalling(moLuaVirtualMachine& vm, int iFunctionNumber)
@@ -2714,76 +2997,71 @@ int moEffectParticlesSimple::ScriptCalling(moLuaVirtualMachine& vm, int iFunctio
     switch (iFunctionNumber - m_iMethodBase)
     {
         case 0:
-            return LGetParticle(vm);
+            ResetScriptCalling();
+            return luaGetParticle(vm);
         case 1:
-            return LGetParticlePosition(vm);
+            ResetScriptCalling();
+            return luaGetParticlePosition(vm);
         case 2:
-            return LGetParticleVelocity(vm);
+            ResetScriptCalling();
+            return luaGetParticleVelocity(vm);
         case 3:
-            return LUpdateParticle(vm);
-        case 4:
-            return LUpdateParticlePosition(vm);
-        case 5:
-            return LUpdateParticleVelocity(vm);
-        case 6:
-            return LUpdateForce(vm);
+            ResetScriptCalling();
+            return luaGetParticleIntersection(vm);
 
+
+        case 4:
+            ResetScriptCalling();
+            return luaUpdateParticle(vm);
+        case 5:
+            ResetScriptCalling();
+            return luaUpdateParticlePosition(vm);
+        case 6:
+            ResetScriptCalling();
+            return luaUpdateParticleVelocity(vm);
         case 7:
-            return GetFeature(vm);
+            ResetScriptCalling();
+            return luaUpdateForce(vm);
 
         case 8:
-            return GetVariance(vm);
+            ResetScriptCalling();
+            return luaShot(vm);
+
         case 9:
-            return GetVelocity(vm);
+            ResetScriptCalling();
+            return luaReInit(vm);
+
         case 10:
-            return GetAcceleration(vm);
-        case 11:
-            return GetBarycenter(vm);
-        case 12:
-            return GetZone(vm);
+            ResetScriptCalling();
+            return luaDrawPoint(vm);
 
-        case 13:
-            return LShot(vm);
-        case 14:
-            return LReInit(vm);
-
-        case 15:
-            return LSetPreconf(vm);
-        case 16:
-            return LGetPreconf(vm);
-
-        case 17:
-            return PushDebugString(vm);
+        default:
+            NextScriptCalling();
+            return moMoldeoObject::ScriptCalling( vm, iFunctionNumber );
 	}
-    return 0;
 }
 
-void moEffectParticlesSimple::HandleReturns(moLuaVirtualMachine& vm, const char *strFunc)
-{
-    if (strcmp (strFunc, "Run") == 0)
-    {
-        lua_State *state = (lua_State *) vm;
-        MOint script_result = (MOint) lua_tonumber (state, 1);
-		if (script_result != 0)
-			MODebug2->Error(moText("Particle script returned error code: ") + (moText)IntToStr(script_result));
-    }
-}
 
-int moEffectParticlesSimple::PushDebugString(moLuaVirtualMachine& vm)
+int moEffectParticlesSimple::luaDrawPoint(moLuaVirtualMachine& vm)
 {
     lua_State *state = (lua_State *) vm;
-	if (lua_isboolean(state,1)) {
-		bool vb = lua_toboolean(state,1);
-		vb ? MODebug2->Message(moText("true")) : MODebug2->Push(moText("false"));
-	} else {
-		char *text = (char *) lua_tostring (state, 1);
-		MODebug2->Message(moText(text));
-	}
+
+    MOfloat x = (MOfloat) lua_tonumber (state, 1);
+    MOfloat y = (MOfloat) lua_tonumber (state, 2);
+
+    glDisable(GL_TEXTURE_2D);
+
+    glColor4f( 1.0, 1.0, 1.0, 1.0);
+    glPointSize(4.0);
+
+    glBegin(GL_POINTS);
+        glVertex2f( x, y );
+    glEnd();
 
     return 0;
 }
 
-int moEffectParticlesSimple::LGetParticle(moLuaVirtualMachine& vm)
+int moEffectParticlesSimple::luaGetParticle(moLuaVirtualMachine& vm)
 {
     lua_State *state = (lua_State *) vm;
 
@@ -2804,7 +3082,7 @@ int moEffectParticlesSimple::LGetParticle(moLuaVirtualMachine& vm)
     return 3;
 }
 
-int moEffectParticlesSimple::LGetParticlePosition(moLuaVirtualMachine& vm)
+int moEffectParticlesSimple::luaGetParticlePosition(moLuaVirtualMachine& vm)
 {
     lua_State *state = (lua_State *) vm;
 
@@ -2816,20 +3094,22 @@ int moEffectParticlesSimple::LGetParticlePosition(moLuaVirtualMachine& vm)
 
     Par = m_ParticlesSimpleArray[i];
 
-    Position = Par->Pos3d;
-
     if (Par) {
-
+        Position = Par->Pos3d;
         lua_pushnumber(state, (lua_Number) Position.X() );
         lua_pushnumber(state, (lua_Number) Position.Y() );
         lua_pushnumber(state, (lua_Number) Position.Z() );
 
+    } else {
+        lua_pushnumber(state, (lua_Number) 0 );
+        lua_pushnumber(state, (lua_Number) 0 );
+        lua_pushnumber(state, (lua_Number) 0 );
     }
 
     return 3;
 }
 
-int moEffectParticlesSimple::LGetParticleVelocity(moLuaVirtualMachine& vm)
+int moEffectParticlesSimple::luaGetParticleVelocity(moLuaVirtualMachine& vm)
 {
     lua_State *state = (lua_State *) vm;
 
@@ -2850,31 +3130,75 @@ int moEffectParticlesSimple::LGetParticleVelocity(moLuaVirtualMachine& vm)
     return 3;
 }
 
-int moEffectParticlesSimple::LGetPreconf(moLuaVirtualMachine& vm)
+
+int moEffectParticlesSimple::luaGetParticleIntersection(moLuaVirtualMachine& vm)
 {
     lua_State *state = (lua_State *) vm;
 
-    if (this->GetConfig()) {
-        lua_pushnumber(state, (lua_Number) this->GetConfig()->GetCurrentPreConf() );
+    MOfloat x = (MOfloat) lua_tonumber (state, 1);
+    MOfloat y = (MOfloat) lua_tonumber (state, 2);
+
+    moParticlesSimple* Par;
+
+    moVector3f Position;
+    int index;
+    bool a = false;
+
+    float x1,x2,y1,y2;
+    float xc,yc;
+    float ux,uy;
+    float vx,vy;
+
+    float sizeu,sizev;
+
+    index = -1;
+
+    /// slow system
+    ///iterate and calculate
+
+    ///particle system in ortho mode....
+
+    for( int i=0; i<m_ParticlesSimpleArray.Count(); i++ ) {
+
+        Par = m_ParticlesSimpleArray[i];
+
+        if (Par->Visible) {
+            Position = Par->Pos3d;
+
+            ///check for each particle if it intersects with x,y on screen
+
+            xc = Par->Pos3d.X()*sx*cos(rz/180) + tx;
+            yc = Par->Pos3d.Y()*sy*sin(rz/180) + ty;
+            x1 = ( Par->Pos3d.X() - Par->Size.X()/2 ) * sx + tx;
+            x2 = ( Par->Pos3d.X() + Par->Size.X()/2 ) * sx + tx;
+            y1 = ( Par->Pos3d.Y() - Par->Size.Y()/2 ) * sy + ty;
+            y2 = ( Par->Pos3d.Y() + Par->Size.Y()/2 ) * sy + ty;
+
+            ux = ( x1 - xc );
+            uy = ( y1 - yc );
+            vx = ( x2 - xc );
+            vy = ( y2 - yc );
+            sizeu = Par->Size.X()/2 * sx;
+            sizev = Par->Size.Y()/2 * sx;
+
+            moVector2f feat( x, y );
+            moVector2f u( ux, uy );
+            moVector2f v( vx, vy );
+            moVector2f featuv;
+            featuv = moVector2f ( fabs( feat.Dot(u)), fabs( feat.Dot(v) ) );
+            if ( featuv.X() < sizeu && featuv.Y() < sizev  ) {
+                index = i;
+            }
+        }
     }
+
+    lua_pushnumber(state, (lua_Number) index );
 
     return 1;
 }
 
-int moEffectParticlesSimple::LSetPreconf(moLuaVirtualMachine& vm)
-{
-    lua_State *state = (lua_State *) vm;
 
-    MOint preconfid = (MOint) lua_tonumber (state, 1);
-
-    if (this->GetConfig()) {
-        this->GetConfig()->SetCurrentPreConf( preconfid );
-    } else MODebug2->Push("no debug");
-
-    return 0;
-}
-
-int moEffectParticlesSimple::LUpdateParticle( moLuaVirtualMachine& vm ) {
+int moEffectParticlesSimple::luaUpdateParticle( moLuaVirtualMachine& vm ) {
     lua_State *state = (lua_State *) vm;
 
     MOint i = (MOint) lua_tonumber (state, 1);
@@ -2895,7 +3219,7 @@ int moEffectParticlesSimple::LUpdateParticle( moLuaVirtualMachine& vm ) {
 
 }
 
-int moEffectParticlesSimple::LUpdateParticlePosition( moLuaVirtualMachine& vm ) {
+int moEffectParticlesSimple::luaUpdateParticlePosition( moLuaVirtualMachine& vm ) {
     lua_State *state = (lua_State *) vm;
 
     MOint i = (MOint) lua_tonumber (state, 1);
@@ -2914,7 +3238,7 @@ int moEffectParticlesSimple::LUpdateParticlePosition( moLuaVirtualMachine& vm ) 
 
 }
 
-int moEffectParticlesSimple::LUpdateParticleVelocity( moLuaVirtualMachine& vm ) {
+int moEffectParticlesSimple::luaUpdateParticleVelocity( moLuaVirtualMachine& vm ) {
     lua_State *state = (lua_State *) vm;
 
     MOint i = (MOint) lua_tonumber (state, 1);
@@ -2933,7 +3257,7 @@ int moEffectParticlesSimple::LUpdateParticleVelocity( moLuaVirtualMachine& vm ) 
 
 }
 
-int moEffectParticlesSimple::LUpdateForce( moLuaVirtualMachine& vm ) {
+int moEffectParticlesSimple::luaUpdateForce( moLuaVirtualMachine& vm ) {
 
 
     return 0;
@@ -2942,7 +3266,7 @@ int moEffectParticlesSimple::LUpdateForce( moLuaVirtualMachine& vm ) {
 
 
 
-int moEffectParticlesSimple::LShot( moLuaVirtualMachine& vm) {
+int moEffectParticlesSimple::luaShot( moLuaVirtualMachine& vm) {
 
     lua_State *state = (lua_State *) vm;
 
@@ -2961,7 +3285,7 @@ int moEffectParticlesSimple::LShot( moLuaVirtualMachine& vm) {
     return 0;
 }
 
-int moEffectParticlesSimple::LReInit(moLuaVirtualMachine& vm ) {
+int moEffectParticlesSimple::luaReInit(moLuaVirtualMachine& vm ) {
 
     lua_State *state = (lua_State *) vm;
 
@@ -2969,121 +3293,3 @@ int moEffectParticlesSimple::LReInit(moLuaVirtualMachine& vm ) {
 
     return 0;
 }
-
-int moEffectParticlesSimple::GetFeature(moLuaVirtualMachine& vm)
-{
-    lua_State *state = (lua_State *) vm;
-
-    MOint i = (MOint) lua_tonumber (state, 1);
-
-    float x, y, v;
-
-    if (m_pTrackerData) {
-		x = m_pTrackerData->GetFeature(i)->x;
-		y = m_pTrackerData->GetFeature(i)->y;
-		v = m_pTrackerData->GetFeature(i)->val;
-	}
-    /*
-	if (m_pTrackerData) {
-		x = m_pTrackerData->m_FeatureList->feature[i]->x;
-		y = m_pTrackerData->m_FeatureList->feature[i]->y;
-		v = m_pTrackerData->m_FeatureList->feature[i]->val;
-	} else if (m_pTrackerGpuData) {
-		x = m_pTrackerGpuData->m_FeatureList->_list[i]->x;
-		y = m_pTrackerGpuData->m_FeatureList->_list[i]->y;
-		v = m_pTrackerGpuData->m_FeatureList->_list[i]->valid;
-	}*/
-
-	lua_pushnumber(state, (lua_Number)x);
-	lua_pushnumber(state, (lua_Number)y);
-	lua_pushnumber(state, (lua_Number)v);
-
-    return 3;
-}
-
-int moEffectParticlesSimple::GetVariance(moLuaVirtualMachine& vm) {
-
-   lua_State *state = (lua_State *) vm;
-
-   float x, y, L;
-
-    if (m_pTrackerData) {
-		L = m_pTrackerData->GetVariance().Length();
-		x = m_pTrackerData->GetVariance().X();
-		y = m_pTrackerData->GetVariance().Y();
-	}
-
-	lua_pushnumber(state, (lua_Number)L);
-	lua_pushnumber(state, (lua_Number)x);
-	lua_pushnumber(state, (lua_Number)y);
-	return 3;
-}
-
-int moEffectParticlesSimple::GetVelocity(moLuaVirtualMachine& vm) {
-   lua_State *state = (lua_State *) vm;
-
-   float x, y, L;
-
-    if (m_pTrackerData) {
-		L = m_pTrackerData->GetBarycenterMotion().Length();
-		x = m_pTrackerData->GetBarycenterMotion().X();
-		y = m_pTrackerData->GetBarycenterMotion().Y();
-	}
-
-	lua_pushnumber(state, (lua_Number)L);
-	lua_pushnumber(state, (lua_Number)x);
-	lua_pushnumber(state, (lua_Number)y);
-
-    return 3;
-}
-
-int moEffectParticlesSimple::GetAcceleration(moLuaVirtualMachine& vm) {
-   lua_State *state = (lua_State *) vm;
-
-   float x, y, L;
-
-    if (m_pTrackerData) {
-		L = m_pTrackerData->GetBarycenterAcceleration().Length();
-		x = m_pTrackerData->GetBarycenterAcceleration().X();
-		y = m_pTrackerData->GetBarycenterAcceleration().Y();
-	}
-
-	lua_pushnumber(state, (lua_Number)L);
-	lua_pushnumber(state, (lua_Number)x);
-	lua_pushnumber(state, (lua_Number)y);
-
-    return 3;
-}
-
-int moEffectParticlesSimple::GetBarycenter(moLuaVirtualMachine& vm) {
-   lua_State *state = (lua_State *) vm;
-
-   float x, y;
-
-    if (m_pTrackerData) {
-		x = m_pTrackerData->GetBarycenter().X();
-		y = m_pTrackerData->GetBarycenter().Y();
-	}
-
-	lua_pushnumber(state, (lua_Number)x);
-	lua_pushnumber(state, (lua_Number)y);
-	return 2;
-}
-
-int moEffectParticlesSimple::GetZone(moLuaVirtualMachine& vm) {
-
-        lua_State *state = (lua_State *) vm;
-        MOint i = (MOint) lua_tonumber (state, 1);
-
-        int nitems;
-        nitems = 0;
-        if (m_pTrackerData) {
-            nitems = m_pTrackerData->GetPositionMatrix( m_pTrackerData->ZoneToPosition(i) );
-            //MODebug2->Push( moText("i:") + IntToStr(i) + moText(" nitems:") + IntToStr(nitems) );
-        }// else MODebug2->Push( moText("no tracking data"));
-
-        lua_pushnumber(state, (lua_Number)nitems);
-
-        return 1;
-}
-

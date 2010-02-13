@@ -27,7 +27,7 @@
   Fabricio Costa
 
 
-  todo:
+  TODO:
   1) ColorIn
   2) ColorOut
   3) BreakIn
@@ -42,6 +42,8 @@
 
   7) parametro desfazaje de movimiento??? que sea una opcion...
 
+  8) Improve the orientation modes... they dont work correctly
+
 *******************************************************************************/
 
 #ifndef __MO_EFFECT_PARTICLES_H__
@@ -55,6 +57,10 @@
 #define MO_PARTICLES_SCALE_X 2
 #define MO_PARTICLES_SCALE_Y 3
 
+///Emitter Type
+/**
+* simple geometry type emitters available
+*/
 enum moParticlesSimpleEmitterType {
   PARTICLES_EMITTERTYPE_GRID = 0,
   PARTICLES_EMITTERTYPE_SPHERE = 1,
@@ -63,15 +69,21 @@ enum moParticlesSimpleEmitterType {
   PARTICLES_EMITTERTYPE_POINT = 4,
   PARTICLES_EMITTERTYPE_TRACKER = 5,
   PARTICLES_EMITTERTYPE_TRACKER2 = 6,
-  PARTICLES_EMITTERTYPE_SPIRAL = 7
+  PARTICLES_EMITTERTYPE_SPIRAL = 7,
+  PARTICLES_EMITTERTYPE_CIRCLE = 8
 };
 
+///Folder Shot Type
+/**
+*   Folder
+*/
 enum moParticlesSimpleFolderShotType {
   PARTICLES_SHOTTYPE_FOLDER_RANDOM = 0,
   PARTICLES_SHOTTYPE_FOLDER_SEQUENTIAL_BY_FILEDATE = 1,
   PARTICLES_SHOTTYPE_FOLDER_SEQUENTIAL_BY_FILENAME = 2
 };
 
+///Attractor Type
 enum moParticlesSimpleAttractorType {
   PARTICLES_ATTRACTORTYPE_POINT = 0, /// each particle attract diretly to the same point
   PARTICLES_ATTRACTORTYPE_GRID = 1, /// each particle attract perp to a face of the grid
@@ -82,6 +94,7 @@ enum moParticlesSimpleAttractorType {
   PARTICLES_ATTRACTORTYPE_VERTEX = 6 /// each particle attract each one to a dot of the tracker
 };
 
+///Attractor Mode
 enum moParticlesSimpleAttractorMode {
   PARTICLES_ATTRACTORMODE_ACCELERATION = 0, ///accelerate with no stop
   PARTICLES_ATTRACTORMODE_STICK = 1, ///accelerate, reach and stop instantly
@@ -91,6 +104,7 @@ enum moParticlesSimpleAttractorMode {
   PARTICLES_ATTRACTORMODE_LINEAR = 5 ///constant speed to attractortype
 };
 
+///Behaviour Mode
 enum moParticlesSimpleBehaviourMode {
   PARTICLES_BEHAVIOUR_COHESION = 0,
   PARTICLES_BEHAVIOUR_SEPARATION = 1,
@@ -98,6 +112,8 @@ enum moParticlesSimpleBehaviourMode {
   PARTICLES_BEHAVIOUR_ALIGNEMENT = 3
 };
 
+
+///Texture Mode
 enum moParticlesSimpleTextureMode {
     PARTICLES_TEXTUREMODE_UNIT = 0, /// One Same Texture Image for each Particle (taken from texture)
     PARTICLES_TEXTUREMODE_PATCH = 1, /// Same Texture Image Divided In Different Fragments for each Particle (taken from texture, divided in width*height)
@@ -105,6 +121,7 @@ enum moParticlesSimpleTextureMode {
     PARTICLES_TEXTUREMODE_MANY2PATCH = 3 /// Many textures/particle to construct a patched texture one ( taken from texturefolder, build the one defined on texture parameter, or from a folder, call to Shot(source) then ReInit to build... )
 };
 
+///Creation Method
 enum moParticlesCreationMethod {
     PARTICLES_CREATIONMETHOD_LINEAR=0, ///particles are been created along the array order
     PARTICLES_CREATIONMETHOD_PLANAR=1, ///particles are been created randomly over the surface of the emitter geometry
@@ -112,18 +129,21 @@ enum moParticlesCreationMethod {
     PARTICLES_CREATIONMETHOD_CENTER=3 /// particles are created on the center of the emitter
 };
 
+///Random Method
 enum moParticlesRandomMethod {
     PARTICLES_RANDOMMETHOD_NOISY=0,
     PARTICLES_RANDOMMETHOD_COLINEAR=1,
     PARTICLES_RANDOMMETHOD_PERPENDICULAR=2
 };
 
+///Orientation Method
 enum moParticlesOrientationMode {
     PARTICLES_ORIENTATIONMODE_FIXED=0,
     PARTICLES_ORIENTATIONMODE_CAMERA=1,
     PARTICLES_ORIENTATIONMODE_MOTION=2,
     PARTICLES_ORIENTATIONMODE_ACCELERATION=3
 };
+
 
 enum moParticlesSimpleParamIndex {
 	PARTICLES_ALPHA,
@@ -133,6 +153,8 @@ enum moParticlesSimpleParamIndex {
 	PARTICLES_PHASE,
 	PARTICLES_FONT,
 	PARTICLES_TEXT,
+	PARTICLES_ORTHO,
+
 	PARTICLES_TEXTURE,
 	PARTICLES_FOLDERS,
 	PARTICLES_TEXTUREMODE,
@@ -297,6 +319,11 @@ class moParticlesSimple : public moAbstract {
     ///Particles Vectors
 
     ///position relative to grid...
+    /**
+        Works for indexation on a grid relative geometry ( bidimentional array )
+        X > i [0..width]
+        Y > j [0..height]
+    */
     moVector2f  Pos;//relativo a una grilla
 
     ///texture coordinate
@@ -304,11 +331,23 @@ class moParticlesSimple : public moAbstract {
     moVector2f  TCoord2;
 
     ///particle size
+    /**
+        This size is dependent on particles number and Emitter size
+        Size.X > EmitterSize.X() / m_cols
+        Size.Y > EmitterSize.Y() / m_rows
+    */
     moVector2f  Size;
 
     ///particle texture size
     moVector2f  TSize;
     moVector2f  TSize2;
+
+    ///particle orientation
+    /**
+        Dependant on Orientation Mode
+
+    */
+    moVector3f  U,V,W;
 
     ///Differentials of position (speed) and velocity (acceleration)
     moVector3f  dpdt;
@@ -385,8 +424,6 @@ class moEffectParticlesSimple : public moEffect
         moConfigDefinition * GetDefinition( moConfigDefinition *p_configdefinition );
 
         int ScriptCalling(moLuaVirtualMachine& vm, int iFunctionNumber);
-        void HandleReturns(moLuaVirtualMachine& vm, const char *strFunc);
-
 
         void TrackParticle( int partid );
 
@@ -420,37 +457,22 @@ class moEffectParticlesSimple : public moEffect
         /// Script functions.
         void RegisterFunctions();
 
-        int LGetTicks(moLuaVirtualMachine& vm);
-        int LSetTicks(moLuaVirtualMachine& vm);
+        int luaGetParticle(moLuaVirtualMachine& vm);
+        int luaGetParticlePosition(moLuaVirtualMachine& vm);
+        int luaGetParticleVelocity(moLuaVirtualMachine& vm);
+        int luaGetParticleIntersection(moLuaVirtualMachine& vm);
 
-        int LGetPreconf(moLuaVirtualMachine& vm);
-        int LSetPreconf(moLuaVirtualMachine& vm);
+        int luaUpdateParticle( moLuaVirtualMachine& vm );
+        int luaUpdateParticlePosition( moLuaVirtualMachine& vm );
+        int luaUpdateParticleVelocity( moLuaVirtualMachine& vm );
 
-        int LGetParticle(moLuaVirtualMachine& vm);
-        int LGetParticlePosition(moLuaVirtualMachine& vm);
-        int LGetParticleVelocity(moLuaVirtualMachine& vm);
-
-        int LUpdateParticle( moLuaVirtualMachine& vm );
-        int LUpdateParticlePosition( moLuaVirtualMachine& vm );
-        int LUpdateParticleVelocity( moLuaVirtualMachine& vm );
-
-        int LUpdateForce( moLuaVirtualMachine& vm );
+        int luaUpdateForce( moLuaVirtualMachine& vm );
 
 
-        int LShot(moLuaVirtualMachine& vm);
-        int LReInit(moLuaVirtualMachine& vm);
+        int luaShot(moLuaVirtualMachine& vm);
+        int luaReInit(moLuaVirtualMachine& vm);
 
-        int GetFeature(moLuaVirtualMachine& vm);
-
-        int GetVariance(moLuaVirtualMachine& vm);
-        int GetVelocity(moLuaVirtualMachine& vm);
-        int GetAcceleration(moLuaVirtualMachine& vm);
-        int GetBarycenter(moLuaVirtualMachine& vm);
-        int GetZone(moLuaVirtualMachine& vm);
-
-
-        int PushDebugString(moLuaVirtualMachine& vm);
-
+        int luaDrawPoint(moLuaVirtualMachine& vm);
 
         ///end script functions
 
@@ -460,7 +482,13 @@ class moEffectParticlesSimple : public moEffect
         moParticlesSimplePhysics    m_Physics;
 
         bool                    m_bTrackerInit;
+
         moTrackerSystemData*    m_pTrackerData;
+        moTUIOSystemData*       m_pTUIOData;
+
+        MOint                   m_InletTuioSystemIndex;
+        MOint                   m_InletTrackerSystemIndex;
+
         moVector2f              m_TrackerBarycenter;
 
 
@@ -475,6 +503,8 @@ class moEffectParticlesSimple : public moEffect
         long time_of_restoration;
         long drawing_features; /// 0: nothing 1: motion  2: all
         long texture_mode;
+
+        bool ortho;
 
     ///internal
         moTimer MotionTimer;
@@ -516,6 +546,9 @@ class moEffectParticlesSimple : public moEffect
         float midi_randomvelocity; //inicial vel
         float midi_randommotion; //motion dynamic
 
+        float tx,ty,tz;
+        float sx,sy,sz;
+        float rx,ry,rz;
 
 };
 
