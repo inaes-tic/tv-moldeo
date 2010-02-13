@@ -23,16 +23,17 @@ typedef float *_FloatWindow;
 
 /*********************************************************************
  * _interpolate
- * 
- * Given a point (x,y) in an image, computes the bilinear interpolated 
- * gray-level value of the point in the image.  
+ *
+ * Given a point (x,y) in an image, computes the bilinear interpolated
+ * gray-level value of the point in the image.
  */
 
 static float _interpolate(
-  float x, 
-  float y, 
+  float x,
+  float y,
   _KLT_FloatImage img)
 {
+  if (!img) return 0.0;
   int xt = (int) x;  /* coordinates of top-left corner */
   int yt = (int) y;
   float ax = x - xt;
@@ -61,7 +62,7 @@ static float _interpolate(
  * _computeIntensityDifference
  *
  * Given two images and the window center in both images,
- * aligns the images wrt the window and computes the difference 
+ * aligns the images wrt the window and computes the difference
  * between the two overlaid images.
  */
 
@@ -91,7 +92,7 @@ static void _computeIntensityDifference(
  * _computeGradientSum
  *
  * Given two gradients and the window center in both images,
- * aligns the gradients wrt the window and computes the sum of the two 
+ * aligns the gradients wrt the window and computes the sum of the two
  * overlaid gradients.
  */
 
@@ -126,7 +127,7 @@ static void _computeGradientSum(
  * _computeIntensityDifferenceLightingInsensitive
  *
  * Given two images and the window center in both images,
- * aligns the images wrt the window and computes the difference 
+ * aligns the images wrt the window and computes the difference
  * between the two overlaid images; normalizes for overall gain and bias.
  */
 
@@ -141,7 +142,7 @@ static void _computeIntensityDifferenceLightingInsensitive(
   register int hw = width/2, hh = height/2;
   float g1, g2, sum1_squared = 0, sum2_squared = 0;
   register int i, j;
-  
+
   float sum1 = 0, sum2 = 0;
   float mean1, mean2,alpha,belta;
   /* Compute values */
@@ -165,7 +166,7 @@ static void _computeIntensityDifferenceLightingInsensitive(
       g1 = _interpolate(x1+i, y1+j, img1);
       g2 = _interpolate(x2+i, y2+j, img2);
       *imgdiff++ = g1- g2*alpha-belta;
-    } 
+    }
 }
 
 
@@ -173,7 +174,7 @@ static void _computeIntensityDifferenceLightingInsensitive(
  * _computeGradientSumLightingInsensitive
  *
  * Given two gradients and the window center in both images,
- * aligns the gradients wrt the window and computes the sum of the two 
+ * aligns the gradients wrt the window and computes the sum of the two
  * overlaid gradients; normalizes for overall gain and bias.
  */
 
@@ -184,7 +185,7 @@ static void _computeGradientSumLightingInsensitive(
   _KLT_FloatImage grady2,
   _KLT_FloatImage img1,   /* images */
   _KLT_FloatImage img2,
- 
+
   float x1, float y1,      /* center of window in 1st img */
   float x2, float y2,      /* center of window in 2nd img */
   int width, int height,   /* size of window */
@@ -194,7 +195,7 @@ static void _computeGradientSumLightingInsensitive(
   register int hw = width/2, hh = height/2;
   float g1, g2, sum1_squared = 0, sum2_squared = 0;
   register int i, j;
-  
+
   float sum1 = 0, sum2 = 0;
   float mean1, mean2, alpha;
   for (j = -hh ; j <= hh ; j++)
@@ -206,7 +207,7 @@ static void _computeGradientSumLightingInsensitive(
   mean1 = sum1_squared/(width*height);
   mean2 = sum2_squared/(width*height);
   alpha = (float) sqrt(mean1/mean2);
-  
+
   /* Compute values */
   for (j = -hh ; j <= hh ; j++)
     for (i = -hw ; i <= hw ; i++)  {
@@ -216,7 +217,7 @@ static void _computeGradientSumLightingInsensitive(
       g1 = _interpolate(x1+i, y1+j, grady1);
       g2 = _interpolate(x2+i, y2+j, grady2);
       *grady++ = g1+ g2*alpha;
-    }  
+    }
 }
 
 /*********************************************************************
@@ -230,8 +231,8 @@ static void _compute2by2GradientMatrix(
   int width,   /* size of window */
   int height,
   float *gxx,  /* return values */
-  float *gxy, 
-  float *gyy) 
+  float *gxy,
+  float *gyy)
 
 {
   register float gx, gy;
@@ -247,8 +248,8 @@ static void _compute2by2GradientMatrix(
     *gyy += gy*gy;
   }
 }
-	
-	
+
+
 /*********************************************************************
  * _compute2by1ErrorVector
  *
@@ -267,7 +268,7 @@ static void _compute2by1ErrorVector(
   register int i;
 
   /* Compute values */
-  *ex = 0;  *ey = 0;  
+  *ex = 0;  *ey = 0;
   for (i = 0 ; i < width * height ; i++)  {
     diff = *imgdiff++;
     *ex += 2 * diff * (*gradx++);
@@ -295,7 +296,7 @@ static int _solveEquation(
 {
   float det = gxx*gyy - gxy*gxy;
 
-	
+
   if (det < small)  return KLT_SMALL_DET;
 
   *dx = (gyy*ex - gxy*ey)/det;
@@ -307,7 +308,7 @@ static int _solveEquation(
 /*********************************************************************
  * _allocateFloatWindow
  */
-	
+
 static _FloatWindow _allocateFloatWindow(
   int width,
   int height)
@@ -342,7 +343,7 @@ static void _printFloatWindow(
   }
 }
 */
-	
+
 
 /*********************************************************************
  * _sumAbsFloatWindow
@@ -380,10 +381,10 @@ static int _trackFeature(
   float y1,
   float *x2, /* starting location of search in second image */
   float *y2,
-  _KLT_FloatImage img1, 
+  _KLT_FloatImage img1,
   _KLT_FloatImage gradx1,
   _KLT_FloatImage grady1,
-  _KLT_FloatImage img2, 
+  _KLT_FloatImage img2,
   _KLT_FloatImage gradx2,
   _KLT_FloatImage grady2,
   int width,           /* size of window */
@@ -404,7 +405,7 @@ static int _trackFeature(
   int nr = img1->nrows;
   float one_plus_eps = 1.001f;   /* To prevent rounding errors */
 
-	
+
   /* Allocate memory for windows */
   imgdiff = _allocateFloatWindow(width, height);
   gradx   = _allocateFloatWindow(width, height);
@@ -424,24 +425,24 @@ static int _trackFeature(
 
     /* Compute gradient and difference windows */
     if (lighting_insensitive) {
-      _computeIntensityDifferenceLightingInsensitive(img1, img2, x1, y1, *x2, *y2, 
+      _computeIntensityDifferenceLightingInsensitive(img1, img2, x1, y1, *x2, *y2,
                                   width, height, imgdiff);
-      _computeGradientSumLightingInsensitive(gradx1, grady1, gradx2, grady2, 
+      _computeGradientSumLightingInsensitive(gradx1, grady1, gradx2, grady2,
 			  img1, img2, x1, y1, *x2, *y2, width, height, gradx, grady);
     } else {
-      _computeIntensityDifference(img1, img2, x1, y1, *x2, *y2, 
+      _computeIntensityDifference(img1, img2, x1, y1, *x2, *y2,
                                   width, height, imgdiff);
-      _computeGradientSum(gradx1, grady1, gradx2, grady2, 
+      _computeGradientSum(gradx1, grady1, gradx2, grady2,
 			  x1, y1, *x2, *y2, width, height, gradx, grady);
     }
-		
+
 
     /* Use these windows to construct matrices */
-    _compute2by2GradientMatrix(gradx, grady, width, height, 
+    _compute2by2GradientMatrix(gradx, grady, width, height,
                                &gxx, &gxy, &gyy);
     _compute2by1ErrorVector(imgdiff, gradx, grady, width, height,
                             &ex, &ey);
-				
+
     /* Using matrices, solve equation for new displacement */
     status = _solveEquation(gxx, gxy, gyy, ex, ey, small, &dx, &dy);
     if (status == KLT_SMALL_DET)  break;
@@ -453,19 +454,19 @@ static int _trackFeature(
   }  while ((fabs(dx)>=th || fabs(dy)>=th) && iteration < max_iterations);
 
   /* Check whether window is out of bounds */
-  if (*x2-hw < 0.0f || nc-(*x2+hw) < one_plus_eps || 
+  if (*x2-hw < 0.0f || nc-(*x2+hw) < one_plus_eps ||
       *y2-hh < 0.0f || nr-(*y2+hh) < one_plus_eps)
     status = KLT_OOB;
 
   /* Check whether residue is too large */
   if (status == KLT_TRACKED)  {
     if (lighting_insensitive)
-      _computeIntensityDifferenceLightingInsensitive(img1, img2, x1, y1, *x2, *y2, 
+      _computeIntensityDifferenceLightingInsensitive(img1, img2, x1, y1, *x2, *y2,
                                   width, height, imgdiff);
     else
-      _computeIntensityDifference(img1, img2, x1, y1, *x2, *y2, 
+      _computeIntensityDifference(img1, img2, x1, y1, *x2, *y2,
                                   width, height, imgdiff);
-    if (_sumAbsFloatWindow(imgdiff, width, height)/(width*height) > max_residue) 
+    if (_sumAbsFloatWindow(imgdiff, width, height)/(width*height) > max_residue)
       status = KLT_LARGE_RESIDUE;
   }
 
@@ -499,25 +500,25 @@ static KLT_BOOL _outOfBounds(
 
 
 
-/********************************************************************** 
+/**********************************************************************
 * CONSISTENCY CHECK OF FEATURES BY AFFINE MAPPING (BEGIN)
-* 
-* Created by: Thorsten Thormaehlen (University of Hannover) June 2004    
+*
+* Created by: Thorsten Thormaehlen (University of Hannover) June 2004
 * thormae@tnt.uni-hannover.de
-* 
+*
 * Permission is granted to any individual or institution to use, copy, modify,
-* and distribute this part of the software, provided that this complete authorship 
-* and permission notice is maintained, intact, in all copies. 
+* and distribute this part of the software, provided that this complete authorship
+* and permission notice is maintained, intact, in all copies.
 *
 * This software is provided  "as is" without express or implied warranty.
 *
 *
 * The following static functions are helpers for the affine mapping.
-* They all start with "_am". 
+* They all start with "_am".
 * There are also small changes in other files for the
 * affine mapping these are all marked by "for affine mapping"
-* 
-* Thanks to Kevin Koeser (koeser@mip.informatik.uni-kiel.de) for fixing a bug 
+*
+* Thanks to Kevin Koeser (koeser@mip.informatik.uni-kiel.de) for fixing a bug
 */
 
 #define SWAP_ME(X,Y) {temp=(X);(X)=(Y);(Y)=temp;}
@@ -600,7 +601,7 @@ static int _am_gauss_jordan_elimination(float **a, int n, float **b, int m)
 /*********************************************************************
  * _am_getGradientWinAffine
  *
- * aligns the gradients with the affine transformed window 
+ * aligns the gradients with the affine transformed window
  */
 
 static void _am_getGradientWinAffine(
@@ -615,7 +616,7 @@ static void _am_getGradientWinAffine(
   register int hw = width/2, hh = height/2;
   register int i, j;
   float mi, mj;
- 
+
   /* Compute values */
   for (j = -hh ; j <= hh ; j++)
     for (i = -hw ; i <= hw ; i++)  {
@@ -624,19 +625,19 @@ static void _am_getGradientWinAffine(
       *out_gradx++ = _interpolate(x+mi, y+mj, in_gradx);
       *out_grady++ = _interpolate(x+mi, y+mj, in_grady);
     }
-  
+
 }
 
 /*********************************************************************
  * _computeAffineMappedImage
  * used only for DEBUG output
- *     
+ *
 */
 
 static void _am_computeAffineMappedImage(
 					 _KLT_FloatImage img,   /* images */
 					 float x, float y,      /* center of window  */
-					 float Axx, float Ayx , float Axy, float Ayy,    /* affine mapping */   
+					 float Axx, float Ayx , float Axy, float Ayy,    /* affine mapping */
 					 int width, int height,  /* size of window */
 					 _FloatWindow imgdiff)   /* output */
 {
@@ -666,14 +667,14 @@ static void _am_getSubFloatImage(
   register int hw = window->ncols/2, hh = window->nrows/2;
   int x0 = (int) x;
   int y0 = (int) y;
-  float * windata = window->data; 
+  float * windata = window->data;
   int offset;
   register int i, j;
 
   assert(x0 - hw >= 0);
   assert(y0 - hh >= 0);
   assert(x0 + hw <= img->ncols);
-  assert(y0 + hh <= img->nrows); 
+  assert(y0 + hh <= img->nrows);
 
   /* copy values */
   for (j = -hh ; j <= hh ; j++)
@@ -687,10 +688,10 @@ static void _am_getSubFloatImage(
  * _am_computeIntensityDifferenceAffine
  *
  * Given two images and the window center in both images,
- * aligns the images with the window and computes the difference 
+ * aligns the images with the window and computes the difference
  * between the two overlaid images using the affine mapping.
  *       A =  [ Axx Axy]
- *            [ Ayx Ayy]        
+ *            [ Ayx Ayy]
 */
 
 static void _am_computeIntensityDifferenceAffine(
@@ -698,7 +699,7 @@ static void _am_computeIntensityDifferenceAffine(
 						 _KLT_FloatImage img2,
 						 float x1, float y1,     /* center of window in 1st img */
 						 float x2, float y2,      /* center of window in 2nd img */
-						 float Axx, float Ayx , float Axy, float Ayy,    /* affine mapping */   
+						 float Axx, float Ayx , float Axy, float Ayy,    /* affine mapping */
 						 int width, int height,  /* size of window */
 						 _FloatWindow imgdiff)   /* output */
 {
@@ -733,15 +734,15 @@ static void _am_compute6by6GradientMatrix(
   register int hw = width/2, hh = height/2;
   register int i, j;
   float gx, gy, gxx, gxy, gyy,  x, y, xx, xy, yy;
- 
-  
-  /* Set values to zero */ 
+
+
+  /* Set values to zero */
   for (j = 0 ; j < 6 ; j++)  {
     for (i = j ; i < 6 ; i++)  {
       T[j][i] = 0.0;
     }
   }
-  
+
   for (j = -hh ; j <= hh ; j++) {
     for (i = -hw ; i <= hw ; i++)  {
       gx = *gradx++;
@@ -749,41 +750,41 @@ static void _am_compute6by6GradientMatrix(
       gxx = gx * gx;
       gxy = gx * gy;
       gyy = gy * gy;
-      x = (float) i; 
-      y = (float) j; 
+      x = (float) i;
+      y = (float) j;
       xx = x * x;
       xy = x * y;
       yy = y * y;
-      
-      T[0][0] += xx * gxx; 
+
+      T[0][0] += xx * gxx;
       T[0][1] += xx * gxy;
       T[0][2] += xy * gxx;
       T[0][3] += xy * gxy;
       T[0][4] += x  * gxx;
       T[0][5] += x  * gxy;
-	
+
       T[1][1] += xx * gyy;
       T[1][2] += xy * gxy;
       T[1][3] += xy * gyy;
       T[1][4] += x  * gxy;
       T[1][5] += x  * gyy;
-			 
+
       T[2][2] += yy * gxx;
       T[2][3] += yy * gxy;
       T[2][4] += y  * gxx;
       T[2][5] += y  * gxy;
-	 
+
       T[3][3] += yy * gyy;
       T[3][4] += y  * gxy;
-      T[3][5] += y  * gyy; 
+      T[3][5] += y  * gyy;
 
-      T[4][4] += gxx; 
+      T[4][4] += gxx;
       T[4][5] += gxy;
-      
-      T[5][5] += gyy; 
+
+      T[5][5] += gyy;
     }
   }
-  
+
   for (j = 0 ; j < 5 ; j++)  {
     for (i = j+1 ; i < 6 ; i++)  {
       T[i][j] = T[j][i];
@@ -811,9 +812,9 @@ static void _am_compute6by1ErrorVector(
   register int i, j;
   register float diff,  diffgradx,  diffgrady;
 
-  /* Set values to zero */  
-  for(i = 0; i < 6; i++) e[i][0] = 0.0; 
-  
+  /* Set values to zero */
+  for(i = 0; i < 6; i++) e[i][0] = 0.0;
+
   /* Compute values */
   for (j = -hh ; j <= hh ; j++) {
     for (i = -hw ; i <= hw ; i++)  {
@@ -822,15 +823,15 @@ static void _am_compute6by1ErrorVector(
       diffgrady = diff * (*grady++);
       e[0][0] += diffgradx * i;
       e[1][0] += diffgrady * i;
-      e[2][0] += diffgradx * j; 
-      e[3][0] += diffgrady * j; 
+      e[2][0] += diffgradx * j;
+      e[3][0] += diffgrady * j;
       e[4][0] += diffgradx;
-      e[5][0] += diffgrady; 
+      e[5][0] += diffgrady;
     }
   }
-  
+
   for(i = 0; i < 6; i++) e[i][0] *= 0.5;
-  
+
 }
 
 
@@ -849,37 +850,37 @@ static void _am_compute4by4GradientMatrix(
   register int hw = width/2, hh = height/2;
   register int i, j;
   float gx, gy, x, y;
- 
-  
-  /* Set values to zero */ 
+
+
+  /* Set values to zero */
   for (j = 0 ; j < 4 ; j++)  {
     for (i = 0 ; i < 4 ; i++)  {
       T[j][i] = 0.0;
     }
   }
-  
+
   for (j = -hh ; j <= hh ; j++) {
     for (i = -hw ; i <= hw ; i++)  {
       gx = *gradx++;
       gy = *grady++;
-      x = (float) i; 
-      y = (float) j; 
+      x = (float) i;
+      y = (float) j;
       T[0][0] += (x*gx+y*gy) * (x*gx+y*gy);
       T[0][1] += (x*gx+y*gy)*(x*gy-y*gx);
       T[0][2] += (x*gx+y*gy)*gx;
       T[0][3] += (x*gx+y*gy)*gy;
-   
+
       T[1][1] += (x*gy-y*gx) * (x*gy-y*gx);
       T[1][2] += (x*gy-y*gx)*gx;
       T[1][3] += (x*gy-y*gx)*gy;
-     
+
       T[2][2] += gx*gx;
       T[2][3] += gx*gy;
-      
+
       T[3][3] += gy*gy;
     }
   }
-  
+
   for (j = 0 ; j < 3 ; j++)  {
     for (i = j+1 ; i < 4 ; i++)  {
       T[i][j] = T[j][i];
@@ -905,9 +906,9 @@ static void _am_compute4by1ErrorVector(
   register int i, j;
   register float diff,  diffgradx,  diffgrady;
 
-  /* Set values to zero */  
-  for(i = 0; i < 4; i++) e[i][0] = 0.0; 
-  
+  /* Set values to zero */
+  for(i = 0; i < 4; i++) e[i][0] = 0.0;
+
   /* Compute values */
   for (j = -hh ; j <= hh ; j++) {
     for (i = -hw ; i <= hw ; i++)  {
@@ -920,9 +921,9 @@ static void _am_compute4by1ErrorVector(
       e[3][0] += diffgrady;
     }
   }
-  
+
   for(i = 0; i < 4; i++) e[i][0] *= 0.5;
-  
+
 }
 
 
@@ -950,10 +951,10 @@ static int _am_trackFeatureAffine(
 				  float y1,
 				  float *x2, /* starting location of search in second image */
 				  float *y2,
-				  _KLT_FloatImage img1, 
+				  _KLT_FloatImage img1,
 				  _KLT_FloatImage gradx1,
 				  _KLT_FloatImage grady1,
-				  _KLT_FloatImage img2, 
+				  _KLT_FloatImage img2,
 				  _KLT_FloatImage gradx2,
 				  _KLT_FloatImage grady2,
 				  int width,           /* size of window */
@@ -966,7 +967,7 @@ static int _am_trackFeatureAffine(
 				  int lighting_insensitive,  /* whether to normalize for gain and bias */
 				  int affine_map,      /* whether to evaluates the consistency of features with affine mapping */
 				  float mdd,           /* difference between the displacements */
-				  float *Axx, float *Ayx, 
+				  float *Axx, float *Ayx,
 				  float *Axy, float *Ayy)        /* used affine mapping */
 {
 
@@ -982,7 +983,7 @@ static int _am_trackFeatureAffine(
   int nc2 = img2->ncols;
   int nr2 = img2->nrows;
   float **a;
-  float **T; 
+  float **T;
   float one_plus_eps = 1.001f;   /* To prevent rounding errors */
   float old_x2 = *x2;
   float old_y2 = *y2;
@@ -993,7 +994,7 @@ static int _am_trackFeatureAffine(
   _KLT_FloatImage aff_diff_win = _KLTCreateFloatImage(width,height);
   printf("starting location x2=%f y2=%f\n", *x2, *y2);
 #endif
-  
+
   /* Allocate memory for windows */
   imgdiff = _allocateFloatWindow(width, height);
   gradx   = _allocateFloatWindow(width, height);
@@ -1005,7 +1006,7 @@ static int _am_trackFeatureAffine(
   do  {
     if(!affine_map) {
       /* pure translation tracker */
-      
+
       /* If out of bounds, exit loop */
       if ( x1-hw < 0.0f || nc1-( x1+hw) < one_plus_eps ||
           *x2-hw < 0.0f || nc2-(*x2+hw) < one_plus_eps ||
@@ -1014,47 +1015,47 @@ static int _am_trackFeatureAffine(
         status = KLT_OOB;
         break;
       }
-      
+
       /* Compute gradient and difference windows */
       if (lighting_insensitive) {
-        _computeIntensityDifferenceLightingInsensitive(img1, img2, x1, y1, *x2, *y2, 
+        _computeIntensityDifferenceLightingInsensitive(img1, img2, x1, y1, *x2, *y2,
                                     width, height, imgdiff);
-        _computeGradientSumLightingInsensitive(gradx1, grady1, gradx2, grady2, 
+        _computeGradientSumLightingInsensitive(gradx1, grady1, gradx2, grady2,
 			    img1, img2, x1, y1, *x2, *y2, width, height, gradx, grady);
       } else {
-        _computeIntensityDifference(img1, img2, x1, y1, *x2, *y2, 
+        _computeIntensityDifference(img1, img2, x1, y1, *x2, *y2,
                                     width, height, imgdiff);
-        _computeGradientSum(gradx1, grady1, gradx2, grady2, 
+        _computeGradientSum(gradx1, grady1, gradx2, grady2,
 			    x1, y1, *x2, *y2, width, height, gradx, grady);
       }
-      
-#ifdef DEBUG_AFFINE_MAPPING	
+
+#ifdef DEBUG_AFFINE_MAPPING
       aff_diff_win->data = imgdiff;
       sprintf(fname, "./debug/kltimg_trans_diff_win%03d.%03d.pgm", glob_index, counter);
       printf("%s\n", fname);
       _KLTWriteAbsFloatImageToPGM(aff_diff_win, fname,256.0);
       printf("iter = %d translation tracker res: %f\n", iteration, _sumAbsFloatWindow(imgdiff, width, height)/(width*height));
 #endif
-  
+
       /* Use these windows to construct matrices */
-      _compute2by2GradientMatrix(gradx, grady, width, height, 
+      _compute2by2GradientMatrix(gradx, grady, width, height,
 				 &gxx, &gxy, &gyy);
       _compute2by1ErrorVector(imgdiff, gradx, grady, width, height,
 			      &ex, &ey);
-				
+
       /* Using matrices, solve equation for new displacement */
       status = _solveEquation(gxx, gxy, gyy, ex, ey, small, &dx, &dy);
 
       convergence = (fabs(dx) < th && fabs(dy) < th);
-      
+
       *x2 += dx;
       *y2 += dy;
-      
+
     }else{
       /* affine tracker */
-      
+
       float ul_x =  *Axx * (-hw) + *Axy *   hh  + *x2;  /* upper left corner */
-      float ul_y =  *Ayx * (-hw) + *Ayy *   hh  + *y2; 
+      float ul_y =  *Ayx * (-hw) + *Ayy *   hh  + *y2;
       float ll_x =  *Axx * (-hw) + *Axy * (-hh) + *x2;  /* lower left corner */
       float ll_y =  *Ayx * (-hw) + *Ayy * (-hh) + *y2;
       float ur_x =  *Axx *   hw  + *Axy *   hh  + *x2;  /* upper right corner */
@@ -1084,25 +1085,25 @@ static int _am_trackFeatureAffine(
       sprintf(fname, "./debug/kltimg_aff_diff_win%03d.%03d_1.pgm", glob_index, counter);
       printf("%s\n", fname);
       _KLTWriteAbsFloatImageToPGM(aff_diff_win, fname,256.0);
-      
+
       _am_computeAffineMappedImage(img2, *x2, *y2,  *Axx, *Ayx , *Axy, *Ayy, width, height, imgdiff);
       aff_diff_win->data = imgdiff;
       sprintf(fname, "./debug/kltimg_aff_diff_win%03d.%03d_2.pgm", glob_index, counter);
       printf("%s\n", fname);
       _KLTWriteAbsFloatImageToPGM(aff_diff_win, fname,256.0);
 #endif
-      
+
       _am_computeIntensityDifferenceAffine(img1, img2, x1, y1, *x2, *y2,  *Axx, *Ayx , *Axy, *Ayy,
 					   width, height, imgdiff);
-#ifdef DEBUG_AFFINE_MAPPING    
+#ifdef DEBUG_AFFINE_MAPPING
       aff_diff_win->data = imgdiff;
       sprintf(fname, "./debug/kltimg_aff_diff_win%03d.%03d_3.pgm", glob_index,counter);
       printf("%s\n", fname);
       _KLTWriteAbsFloatImageToPGM(aff_diff_win, fname,256.0);
-      
+
       printf("iter = %d affine tracker res: %f\n", iteration, _sumAbsFloatWindow(imgdiff, width, height)/(width*height));
-#endif      
-      
+#endif
+
       _am_getGradientWinAffine(gradx2, grady2, *x2, *y2, *Axx, *Ayx , *Axy, *Ayy,
 			       width, height, gradx, grady);
 
@@ -1110,24 +1111,24 @@ static int _am_trackFeatureAffine(
       case 1:
 	_am_compute4by1ErrorVector(imgdiff, gradx, grady, width, height, a);
 	_am_compute4by4GradientMatrix(gradx, grady, width, height, T);
-	
+
 	status = _am_gauss_jordan_elimination(T,4,a,1);
-	
+
 	*Axx += a[0][0];
 	*Ayx += a[1][0];
 	*Ayy = *Axx;
 	*Axy = -(*Ayx);
-	
+
 	dx = a[2][0];
 	dy = a[3][0];
-	
+
 	break;
       case 2:
 	_am_compute6by1ErrorVector(imgdiff, gradx, grady, width, height, a);
 	_am_compute6by6GradientMatrix(gradx, grady, width, height, T);
-      
+
 	status = _am_gauss_jordan_elimination(T,6,a,1);
-	
+
 	*Axx += a[0][0];
 	*Ayx += a[1][0];
 	*Axy += a[2][0];
@@ -1135,30 +1136,30 @@ static int _am_trackFeatureAffine(
 
 	dx = a[4][0];
 	dy = a[5][0];
-      
+
 	break;
       }
-      
+
       *x2 += dx;
       *y2 += dy;
-      
+
       /* old upper left corner - new upper left corner */
-      ul_x -=  *Axx * (-hw) + *Axy *   hh  + *x2;  
-      ul_y -=  *Ayx * (-hw) + *Ayy *   hh  + *y2; 
+      ul_x -=  *Axx * (-hw) + *Axy *   hh  + *x2;
+      ul_y -=  *Ayx * (-hw) + *Ayy *   hh  + *y2;
       /* old lower left corner - new lower left corner */
-      ll_x -=  *Axx * (-hw) + *Axy * (-hh) + *x2;  
+      ll_x -=  *Axx * (-hw) + *Axy * (-hh) + *x2;
       ll_y -=  *Ayx * (-hw) + *Ayy * (-hh) + *y2;
       /* old upper right corner - new upper right corner */
-      ur_x -=  *Axx *   hw  + *Axy *   hh  + *x2;  
+      ur_x -=  *Axx *   hw  + *Axy *   hh  + *x2;
       ur_y -=  *Ayx *   hw  + *Ayy *   hh  + *y2;
       /* old lower right corner - new lower right corner */
-      lr_x -=  *Axx *   hw  + *Axy * (-hh) + *x2;  
+      lr_x -=  *Axx *   hw  + *Axy * (-hh) + *x2;
       lr_y -=  *Ayx *   hw  + *Ayy * (-hh) + *y2;
 
-#ifdef DEBUG_AFFINE_MAPPING 
+#ifdef DEBUG_AFFINE_MAPPING
       printf ("iter = %d, ul_x=%f ul_y=%f ll_x=%f ll_y=%f ur_x=%f ur_y=%f lr_x=%f lr_y=%f \n",
 	      iteration, ul_x, ul_y, ll_x, ll_y, ur_x, ur_y, lr_x, lr_y);
-#endif  
+#endif
 
       convergence = (fabs(dx) < th && fabs(dy) < th  &&
 		     fabs(ul_x) < th_aff && fabs(ul_y) < th_aff &&
@@ -1166,19 +1167,19 @@ static int _am_trackFeatureAffine(
 		     fabs(ur_x) < th_aff && fabs(ur_y) < th_aff &&
 		     fabs(lr_x) < th_aff && fabs(lr_y) < th_aff);
     }
-    
+
     if (status == KLT_SMALL_DET)  break;
     iteration++;
-#ifdef DEBUG_AFFINE_MAPPING 
+#ifdef DEBUG_AFFINE_MAPPING
     printf ("iter = %d, x1=%f, y1=%f, x2=%f, y2=%f,  Axx=%f, Ayx=%f , Axy=%f, Ayy=%f \n",iteration, x1, y1, *x2, *y2,  *Axx, *Ayx , *Axy, *Ayy);
-#endif   
-    }  while ( !convergence  && iteration < max_iterations); 
+#endif
+    }  while ( !convergence  && iteration < max_iterations);
     /*}  while ( (fabs(dx)>=th || fabs(dy)>=th || (affine_map && iteration < 8) ) && iteration < max_iterations); */
   _am_free_matrix(T);
   _am_free_matrix(a);
 
   /* Check whether window is out of bounds */
-  if (*x2-hw < 0.0f || nc2-(*x2+hw) < one_plus_eps || 
+  if (*x2-hw < 0.0f || nc2-(*x2+hw) < one_plus_eps ||
       *y2-hh < 0.0f || nr2-(*y2+hh) < one_plus_eps)
     status = KLT_OOB;
 
@@ -1189,7 +1190,7 @@ static int _am_trackFeatureAffine(
   /* Check whether residue is too large */
   if (status == KLT_TRACKED)  {
     if(!affine_map){
-      _computeIntensityDifference(img1, img2, x1, y1, *x2, *y2, 
+      _computeIntensityDifference(img1, img2, x1, y1, *x2, *y2,
 				  width, height, imgdiff);
     }else{
       _am_computeIntensityDifferenceAffine(img1, img2, x1, y1, *x2, *y2,  *Axx, *Ayx , *Axy, *Ayy,
@@ -1197,8 +1198,8 @@ static int _am_trackFeatureAffine(
     }
 #ifdef DEBUG_AFFINE_MAPPING
     printf("iter = %d final_res = %f\n", iteration, _sumAbsFloatWindow(imgdiff, width, height)/(width*height));
-#endif 
-    if (_sumAbsFloatWindow(imgdiff, width, height)/(width*height) > max_residue) 
+#endif
+    if (_sumAbsFloatWindow(imgdiff, width, height)/(width*height) > max_residue)
       status = KLT_LARGE_RESIDUE;
   }
 
@@ -1208,8 +1209,8 @@ static int _am_trackFeatureAffine(
 #ifdef DEBUG_AFFINE_MAPPING
   printf("iter = %d status=%d\n", iteration, status);
   _KLTFreeFloatImage( aff_diff_win );
-#endif 
-  
+#endif
+
   /* Return appropriate value */
   return status;
 }
@@ -1297,7 +1298,7 @@ void KLTTrackFeatures(
 		pyramid1_gradx = _KLTCreatePyramid(ncols, nrows, (int) subsampling, tc->nPyramidLevels);
 		pyramid1_grady = _KLTCreatePyramid(ncols, nrows, (int) subsampling, tc->nPyramidLevels);
 		for (i = 0 ; i < tc->nPyramidLevels ; i++)
-			_KLTComputeGradients(pyramid1->img[i], tc->grad_sigma, 
+			_KLTComputeGradients(pyramid1->img[i], tc->grad_sigma,
 			pyramid1_gradx->img[i],
 			pyramid1_grady->img[i]);
 	}
@@ -1311,7 +1312,7 @@ void KLTTrackFeatures(
 	pyramid2_gradx = _KLTCreatePyramid(ncols, nrows, (int) subsampling, tc->nPyramidLevels);
 	pyramid2_grady = _KLTCreatePyramid(ncols, nrows, (int) subsampling, tc->nPyramidLevels);
 	for (i = 0 ; i < tc->nPyramidLevels ; i++)
-		_KLTComputeGradients(pyramid2->img[i], tc->grad_sigma, 
+		_KLTComputeGradients(pyramid2->img[i], tc->grad_sigma,
 		pyramid2_gradx->img[i],
 		pyramid2_grady->img[i]);
 
@@ -1356,11 +1357,11 @@ void KLTTrackFeatures(
 				xloc *= subsampling;  yloc *= subsampling;
 				xlocout *= subsampling;  ylocout *= subsampling;
 
-				val = _trackFeature(xloc, yloc, 
+				val = _trackFeature(xloc, yloc,
 					&xlocout, &ylocout,
-					pyramid1->img[r], 
-					pyramid1_gradx->img[r], pyramid1_grady->img[r], 
-					pyramid2->img[r], 
+					pyramid1->img[r],
+					pyramid1_gradx->img[r], pyramid1_grady->img[r],
+					pyramid2->img[r],
 					pyramid2_gradx->img[r], pyramid2_grady->img[r],
 					tc->window_width, tc->window_height,
 					tc->max_iterations,
@@ -1375,6 +1376,7 @@ void KLTTrackFeatures(
 
 			/* Record feature */
 			if (val == KLT_OOB) {
+			    //featurelist->feature[indx]->id = -1;
 				featurelist->feature[indx]->x   = -1.0;
 				featurelist->feature[indx]->y   = -1.0;
 				featurelist->feature[indx]->val = KLT_OOB;
@@ -1386,6 +1388,7 @@ void KLTTrackFeatures(
 				featurelist->feature[indx]->aff_img_grady = NULL;
 
 			} else if (_outOfBounds(xlocout, ylocout, ncols, nrows, tc->borderx, tc->bordery))  {
+			    //featurelist->feature[indx]->id = -1;
 				featurelist->feature[indx]->x   = -1.0;
 				featurelist->feature[indx]->y   = -1.0;
 				featurelist->feature[indx]->val = KLT_OOB;
@@ -1396,6 +1399,7 @@ void KLTTrackFeatures(
 				featurelist->feature[indx]->aff_img_gradx = NULL;
 				featurelist->feature[indx]->aff_img_grady = NULL;
 			} else if (val == KLT_SMALL_DET)  {
+			    //featurelist->feature[indx]->id = -1;
 				featurelist->feature[indx]->x   = -1.0;
 				featurelist->feature[indx]->y   = -1.0;
 				featurelist->feature[indx]->val = KLT_SMALL_DET;
@@ -1406,6 +1410,7 @@ void KLTTrackFeatures(
 				featurelist->feature[indx]->aff_img_gradx = NULL;
 				featurelist->feature[indx]->aff_img_grady = NULL;
 			} else if (val == KLT_LARGE_RESIDUE)  {
+			    //featurelist->feature[indx]->id = -1;
 				featurelist->feature[indx]->x   = -1.0;
 				featurelist->feature[indx]->y   = -1.0;
 				featurelist->feature[indx]->val = KLT_LARGE_RESIDUE;
@@ -1416,6 +1421,7 @@ void KLTTrackFeatures(
 				featurelist->feature[indx]->aff_img_gradx = NULL;
 				featurelist->feature[indx]->aff_img_grady = NULL;
 			} else if (val == KLT_MAX_ITERATIONS)  {
+			    //featurelist->feature[indx]->id = -1;
 				featurelist->feature[indx]->x   = -1.0;
 				featurelist->feature[indx]->y   = -1.0;
 				featurelist->feature[indx]->val = KLT_MAX_ITERATIONS;
@@ -1426,13 +1432,14 @@ void KLTTrackFeatures(
 				featurelist->feature[indx]->aff_img_gradx = NULL;
 				featurelist->feature[indx]->aff_img_grady = NULL;
 			} else  {
+			    //featurelist->feature[indx]->id = indx;
 				featurelist->feature[indx]->x = xlocout;
 				featurelist->feature[indx]->y = ylocout;
 				featurelist->feature[indx]->val = KLT_TRACKED;
 				if (tc->affineConsistencyCheck >= 0 && val == KLT_TRACKED)  { /*for affine mapping*/
 					int border = 2; /* add border for interpolation */
 
-#ifdef DEBUG_AFFINE_MAPPING	  
+#ifdef DEBUG_AFFINE_MAPPING
 					glob_index = indx;
 #endif
 
@@ -1450,27 +1457,28 @@ void KLTTrackFeatures(
 						/* affine tracking */
 						val = _am_trackFeatureAffine(featurelist->feature[indx]->aff_x, featurelist->feature[indx]->aff_y,
 							&xlocout, &ylocout,
-							featurelist->feature[indx]->aff_img, 
-							featurelist->feature[indx]->aff_img_gradx, 
+							featurelist->feature[indx]->aff_img,
+							featurelist->feature[indx]->aff_img_gradx,
 							featurelist->feature[indx]->aff_img_grady,
-							pyramid2->img[0], 
+							pyramid2->img[0],
 							pyramid2_gradx->img[0], pyramid2_grady->img[0],
 							tc->affine_window_width, tc->affine_window_height,
 							tc->affine_max_iterations,
 							tc->min_determinant,
 							tc->min_displacement,
 							tc->affine_min_displacement,
-							tc->affine_max_residue, 
+							tc->affine_max_residue,
 							tc->lighting_insensitive,
 							tc->affineConsistencyCheck,
 							tc->affine_max_displacement_differ,
 							&featurelist->feature[indx]->aff_Axx,
 							&featurelist->feature[indx]->aff_Ayx,
 							&featurelist->feature[indx]->aff_Axy,
-							&featurelist->feature[indx]->aff_Ayy 
+							&featurelist->feature[indx]->aff_Ayy
 							);
 						featurelist->feature[indx]->val = val;
 						if(val != KLT_TRACKED){
+						    //featurelist->feature[indx]->id = -1;
 							featurelist->feature[indx]->x   = -1.0;
 							featurelist->feature[indx]->y   = -1.0;
 							featurelist->feature[indx]->aff_x = -1.0;

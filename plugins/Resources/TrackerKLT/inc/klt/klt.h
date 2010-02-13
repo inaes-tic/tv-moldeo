@@ -92,6 +92,7 @@ typedef struct  {
   KLT_locType x;
   KLT_locType y;
   int val;
+  //int id; //added for TUIO compatibility
   /* for affine mapping */
   _KLT_FloatImage aff_img;
   _KLT_FloatImage aff_img_gradx;

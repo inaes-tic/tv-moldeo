@@ -47,7 +47,40 @@
 #define MO_TRACKERKLT_LIVE_SYSTEM	1
 #define MO_TRACKERKLT_SYSTEM_ON 2
 
+enum moTrackerKLTParamIndex {
+    TRACKERKLT_NUM_FEAT,
+    TRACKERKLT_REPLACE_LOST_FEAT,
+    TRACKERKLT_DIFF_MODE,
+    TRACKERKLT_NUM_SAMPLES,
 
+    TRACKERKLT_MIN_DIST,
+    TRACKERKLT_MIN_EIGEN,
+
+    TRACKERKLT_LIGHT_SENS,
+    TRACKERKLT_NUM_FRAMES,
+    TRACKERKLT_SAMPLE_RATE,
+
+    TRACKERKLT_BORDERX,
+    TRACKERKLT_BORDERY,
+    TRACKERKLT_NPYRAMIDLEVELS,
+    TRACKERKLT_SUBSAMPLING,
+    TRACKERKLT_MAX_ITERATIONS,
+
+    TRACKERKLT_WINDOW_WIDTH,
+    TRACKERKLT_WINDOW_HEIGHT,
+
+    TRACKERKLT_MIN_DISPLACEMENT,
+    TRACKERKLT_MIN_DETERMINANT,
+    TRACKERKLT_MAX_RESIDUE,
+
+    TRACKERKLT_MIN_SEGMENT_LEN,
+    TRACKERKLT_MAX_SEGMENT_LEN
+};
+
+using namespace TUIO;
+
+
+/*
 class moTrackerKLTSystemData : public moTrackerSystemData
 {
 	public:
@@ -57,7 +90,7 @@ class moTrackerKLTSystemData : public moTrackerSystemData
 		KLT_FeatureTable m_FeatureTable;
 
 };
-
+*/
 class moTrackerKLTSystem : public moAbstract
 {
 public:
@@ -97,14 +130,36 @@ public:
 
    void StopSequentialMode() { KLTStopSequentialMode(m_tc); m_diffMode = false; }
 
+
+    void SystemData2TUIO();
+    void IterateZone( int ww, int hh, int pp, moTrackerFeature* pFeatureA  );
+
+
 	void NewData( moVideoSample* p_pVideoSample );
-	moTrackerKLTSystemData*	GetData() {	return &m_TrackerSystemData; }
+	moTrackerSystemData*	GetData() {	return m_pTrackerSystemData; }
+    moTUIOSystemData*	GetTUIOData() {	return m_pTUIOSystemData; }
+
+    float min_segment_len,max_segment_len;
 private:
+
+
 	moText m_Name;
 	moText m_Live;
 	MOboolean m_bActive;
 	MOboolean m_init;
-	moTrackerKLTSystemData m_TrackerSystemData;
+
+	moTrackerSystemData* m_pTrackerSystemData;
+	int* Uplas;
+
+    /**
+    TUIO Support for Cursors and Objects
+    */
+	moTUIOSystemData* m_pTUIOSystemData; ///for compatibility with TUIO
+	//std::list<TuioObject*> objectList;
+	moTuioObjectArray       m_Objects;
+	moTuioCursorArray       m_Cursors;
+
+
 	MOint m_sizebuffer;
 	MOpointer m_buffer;
 
@@ -119,6 +174,7 @@ private:
     KLT_TrackingContext m_tc;
     KLT_FeatureList m_fl;
     KLT_FeatureTable m_ft;
+
 
 	void CopyBufferToImg(GLubyte *p_pBuffer, unsigned char *p_img, MOuint p_RGB_mode);
 	void CalcImgDiff0(unsigned char *m_img_new, unsigned char *m_img_ref);
@@ -151,17 +207,32 @@ public:
     MOdevcode GetCode( moText);
 
     void Update(moEventList*);
+    moConfigDefinition* GetDefinition( moConfigDefinition *p_configdefinition );
 
 	void DrawTrackerFeatures( int isystem );
 
 protected:
+    void UpdateParameters();
+
 	// Parameters.
 	MOint num_feat, replace_lost_feat, num_samples, num_frames;
 	MOint diff_mode, light_sens;
 	MOfloat min_dist, min_eigen;
 
+	MOint borderx, bordery;
+	MOint pyramid_levels, subsampling, max_iterations;
+
+	MOint window_width, window_height; /// 7
+	float min_displacement, min_determinant, max_residue;
+
+	float min_segment_len,max_segment_len;
+
 	MOint m_SampleCounter;
 	MOint m_SampleRate;
+	MOint m_OutletTuioSystemIndex;
+
+    moVector2f coordA,coordB,coordC,coordD;
+    int  icoordA,icoordB,icoordC,icoordD;
 
 	moTrackerKLTSystems		m_TrackerSystems;
 };
