@@ -193,15 +193,35 @@ public:
 	void CheckMediaType( IPin* p_Pin );
 	void ShowConfigureDialog(IBaseFilter *pFilter);
 	*/
-    static moGBoolean bus_call (moGstBus *bus, moGstMessage *msg, moGPointer user_data);
-    static moGBoolean cb_have_data (moGstPad    *pad, moGstBuffer *buffer, moGPointer   u_data);
-    static void cb_newpad (moGstElement *decodebin, moGstPad     *pad, moGBoolean    last, moGPointer    u_data);
+    static moGBoolean bus_call (moGstBus *bus,
+                                moGstMessage *msg,
+                                moGPointer user_data);
+
+    static moGBoolean cb_have_data (moGstPad    *pad,
+                                    moGstBuffer *buffer,
+                                    moGPointer   u_data);
+    long cb_have_data_handler_id;
+
+    static void cb_newpad ( moGstElement *decodebin,
+                            moGstPad     *pad,
+                            moGBoolean    last,
+                            moGPointer    u_data);
+    long signal_newpad_id;
+
+    static void cb_handoff ( moGstElement *fakesrc,
+	    moGstBuffer  *buffer,
+	    moGstPad     *pad,
+	    moGPointer    user_data);
+    long signal_handoff_id;
+
     bool CheckState( moGstStateChangeReturn state_change_result, bool waitforsync = false);
     void RetreivePads( moGstElement* FilterElement);
     void WaitForFormatDefinition( MOulong timeout );
 
     void CopyVideoFrame( void* bufferdst, int size );
+
 private:
+
 
     moBucketsPool       *m_pBucketsPool;
 
