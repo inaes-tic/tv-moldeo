@@ -134,8 +134,9 @@ static int LuaCallback (lua_State *lua)
 //
 //============================================================================
 moScript::moScript ()
- : m_initialized(false), m_nMethods (0), m_iThisRef (0), m_nArgs (0)
+ : m_initialized(false), m_nMethods (0), m_iThisRef (0), m_nArgs (0), m_iMethodBaseIterator(0), m_iMethodBaseAncestors(0), m_iMethodBase(-1)
 {
+	memset( m_MethodBases, -1, sizeof(int)*256);
 }
 
 //============================================================================
@@ -295,6 +296,20 @@ int moScript::RegisterFunction (const char *strFuncName)
 
    return iMethodIdx;
 }
+
+int moScript::RegisterBaseFunction (const char *strFuncName) {
+
+    int MethodBase = m_iMethodBase;
+
+    m_iMethodBase = RegisterFunction( strFuncName );
+
+    if (MethodBase!=m_iMethodBase && m_iMethodBase!=-1) {
+        ///Function was correctly registered so beginning new MethodBase for this derivation
+        m_MethodBases[m_iMethodBaseAncestors] = m_iMethodBase;
+        m_iMethodBaseAncestors++;
+    }
+}
+
 
 //============================================================================
 // bool moScript::SelectScriptFunction

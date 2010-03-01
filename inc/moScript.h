@@ -39,6 +39,7 @@
 
 #include "moLuaBase.h"
 
+
 /**
  * Esta clase implementa la funcionalidad necesaria para crear clases scripteables con LUA.
  * Una clase que descienda de moScript puede ser asociada a un script de LUA, y desde el mismo
@@ -92,6 +93,17 @@ public:
     int RegisterFunction(const char *strFuncName);
 
     /**
+     * Registra la primera función (método) de la clase en la máquina virtual de LUA.
+     * Se debe llamar primero esta función para registrar los métodos dentro e la instancia de una clase
+     * Además esta función guarda un registro de la cantidad de veces que se llamo a RegisterFunctions
+     * para heredar los métodos de las clases de las que se deriva el objeto
+	 * @param strFuncName nombre de la función.
+	 * @return regresa el índice de la función den la tabla de LUA, -1 si la operación no es exitosa.
+     */
+    int RegisterBaseFunction (const char *strFuncName);
+
+
+    /**
      * Selecciona una función del script LUA para ejecutar con RunSelectedFunction.
 	 * @param strFuncName nombre de la función a seleccionar.
 	 * @return el resultado de la operación: true o false.
@@ -143,7 +155,25 @@ public:
 	 * @return número valores que el método de la clase agrega a la pila de LUA. Estos valores son los que en
 	 * el script son interpretados como los valores que retorna el método. Pueden ser más de 1.
      */
-   virtual int ScriptCalling(moLuaVirtualMachine& vm, int iFunctionNumber) = 0;
+    virtual int ScriptCalling(moLuaVirtualMachine& vm, int iFunctionNumber) = 0;
+
+    /**
+     * Esta función es llamada cuando se quiere reiniciar el indice iterativo de métodos una vez encontrada la función
+     * para que de esta manera la siguiente búsqueda
+	 * @param vm referencia a la máquina virtual.
+	 * @param iFunctionNumber índice del método siendo llamado.
+	 * @return número valores que el método de la clase agrega a la pila de LUA. Estos valores son los que en
+	 * el script son interpretados como los valores que retorna el método. Pueden ser más de 1.
+     */
+    virtual int ResetScriptCalling() {
+        m_iMethodBaseIterator = m_iMethodBaseAncestors-1;
+        m_iMethodBase = m_MethodBases[m_iMethodBaseIterator--];
+    }
+
+    virtual int NextScriptCalling() {
+        if (m_iMethodBaseIterator>=0) m_iMethodBase = m_MethodBases[m_iMethodBaseIterator--];
+        return m_iMethodBase;
+     }
 
     /**
      * Esta función es llamada cuando termina la ejecución de una función del script, de manera que
@@ -168,7 +198,12 @@ protected:
    const char *m_strFunctionName;
 
    	// For indexing scripted methods.
-	int m_iMethodBase;
+	int m_iMethodBase; ///actual class index method base
+	int m_iMethodBaseIterator; ///actual class iterator index method base
+	//and manage inheritance indexed methods
+	int m_iMethodBaseAncestors; ///increment on each call to RegisterFunctions
+	int m_MethodBases[256]; /// record the iMethodBase indivually for each ancestor on RegisterFunctions
+
 };
 
 #endif
