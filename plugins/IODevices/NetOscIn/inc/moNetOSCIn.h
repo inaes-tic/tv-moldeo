@@ -48,12 +48,11 @@
 #include "moConnectors.h"
 
 enum moNetOSCInParamIndex {
-    NETOSCIN_HOST,
-	NETOSCIN_LATENCY,
-	NETOSCIN_SIZE,
-	NETOSCIN_RECONNECTTIME,
-	NETOSCIN_INLET,
-	NETOSCIN_OUTLET
+    NETOSCIN_INLET,
+    NETOSCIN_OUTLET,
+    NETOSCIN_HOSTS,
+	NETOSCIN_PORT,
+	NETOSCIN_RECEIVEEVENTS
 };
 
 
@@ -66,6 +65,8 @@ class moOscPacketListener : public osc::OscPacketListener, public moThread, publ
 
         moOscPacketListener() {
             m_pUdpRcv = NULL;
+            pEvents = NULL;
+            pTracker = NULL;
         }
 
         virtual int ThreadUserFunction() {
@@ -80,30 +81,58 @@ class moOscPacketListener : public osc::OscPacketListener, public moThread, publ
 		    m_pUdpRcv = pudprcv;
 		}
 
+        void Init( moOutlets* pOutlets ) {
+            moOutlet* pOutlet = NULL;
+            for( int i=0; i<pOutlets->Count(); i++) {
+                    pOutlet = pOutlets->Get(i);
+                    if (pOutlet) {
+                        if (pOutlet->GetConnectorLabelName() == moText("EVENTS")) {
+                            pEvents = pOutlet;
+                        }
+                        if (pOutlet->GetConnectorLabelName() == moText("TRACKERSYSTEM")) {
+                            pTracker = pOutlet;
+                        }
+                    }
+
+            }
+        }
+
         void Update( moOutlets* pOutlets ) {
             //block message
             m_Semaphore.Lock();
 
             moOutlet* poutlet = NULL;
 
-           poutlet = pOutlets->Get(0);
-
-            if (poutlet) {
-                for( int j=0; j<Messages.Count();j++) {
-
-                    moDataMessage& message( Messages.Get(j) );
-                    //sumamos a los mensajes....
-                    poutlet->AddMessage( message );
-
-                    poutlet->Update();
-
-                }
-                if (poutlet->GetType()==MO_DATA_MESSAGES)
-                    poutlet->GetData()->SetMessages( &poutlet->GetMessages() );
-                if (poutlet->GetType()==MO_DATA_MESSAGE)
-                    poutlet->GetData()->SetMessage( &poutlet->GetMessages().Get( poutlet->GetMessages().Count() - 1 ) );
+            if (pEvents==NULL) {
+                Init(pOutlets);
             }
 
+            for( int j=0; j<Messages.Count();j++) {
+
+                moDataMessage& message( Messages.Get(j) );
+                poutlet = NULL;
+
+                //sumamos a los mensajes....
+                ///primer dato debe contener el codigo interno del evento
+                moData DataCode = message.Get(0);
+
+                if ( DataCode.Text() == moText("EVENT") ) {
+                    poutlet = pEvents;
+                    poutlet->GetMessages().Add( message );
+                    //MODebug2->Push( moText("receiving event:") +  message.Get(1).ToText() );
+                } else if ( DataCode.Text() == moText("TRACKERSYSTEM") ) {
+                    poutlet = pTracker;
+                    poutlet->GetMessages().Add( message );
+                }
+                if (poutlet) {
+                    poutlet->Update();
+                    if (poutlet->GetType()==MO_DATA_MESSAGES)
+                        poutlet->GetData()->SetMessages( &poutlet->GetMessages() );
+                    if (poutlet->GetType()==MO_DATA_MESSAGE)
+                        poutlet->GetData()->SetMessage( &poutlet->GetMessages().Get( poutlet->GetMessages().Count() - 1 ) );
+                }
+
+            }
             Messages.Empty();
 
             m_Semaphore.Unlock();
@@ -115,13 +144,18 @@ class moOscPacketListener : public osc::OscPacketListener, public moThread, publ
     protected:
         moLock  m_Semaphore;
 
+        moOutlet*   pEvents;
+        moOutlet*   pTracker;
+        moOutlet*   pTuio;
+        moOutlet*   pData;
+
     virtual void ProcessMessage( const osc::ReceivedMessage& m,
 				const IpEndpointName& remoteEndpoint )
     {
         m_Semaphore.Lock();
         moDataMessage message;
         try{
-            //moAbstract::MODebug->Push(moText("N: ")+IntToStr(m.ArgumentCount()));
+            //moAbstract::MODebug2->Push(moText("N: ")+IntToStr(m.ArgumentCount()));
 
             osc::ReceivedMessage::const_iterator arg = m.ArgumentsBegin();
 
@@ -239,9 +273,13 @@ public:
     MOboolean Finish();
     moConfigDefinition *GetDefinition( moConfigDefinition *p_configdefinition );
 
+    void UpdateParameters();
+
 private:
 
     moOscPacketListeners    m_OscPacketListeners;
+
+    moOutlet*   m_pEvents;
 
     // Parameters.
     moTextArray host_name;
@@ -252,6 +290,8 @@ private:
 	float minReconnecTime;
 
     void SendEvent(int i);
+
+    int m_ReceiveEvents;
 };
 
 class moNetOSCInFactory : public moIODeviceFactory {

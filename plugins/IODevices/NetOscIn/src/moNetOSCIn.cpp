@@ -66,6 +66,7 @@ void moNetOSCInFactory::Destroy(moIODevice* fx) {
 moNetOSCIn::moNetOSCIn()
 {
     SetName("net_osc_in");
+    m_pEvents = NULL;
 }
 
 moNetOSCIn::~moNetOSCIn()
@@ -94,19 +95,49 @@ MOboolean moNetOSCIn::Init()
 		return false;
 	}
 
-    moMoldeoObject::Init();
-
-
     //==========================
     // INIT
     //==========================
 
-	moDefineParamIndex( NETOSCIN_HOST , moText("host") );
 	moDefineParamIndex( NETOSCIN_INLET, moText("inlet") );
 	moDefineParamIndex( NETOSCIN_OUTLET, moText("outlet") );
+	moDefineParamIndex( NETOSCIN_HOSTS , moText("hosts") );
+	moDefineParamIndex( NETOSCIN_PORT , moText("port") );
+	moDefineParamIndex( NETOSCIN_RECEIVEEVENTS, moText("receive_events") );
+
+    bool events_present;
+    bool trackersystem_present;
+
+    events_present = false;
+    trackersystem_present = false;
+
+    for( int i=0; i<m_Config.GetParam( moR(NETOSCIN_OUTLET) ).GetValuesCount(); i++) {
+        moValue val( m_Config.GetParam( moR(NETOSCIN_OUTLET) ).GetValue(i));
+        if ( val.GetSubValue().Text()==moText("EVENTS")) {
+            events_present = true;
+        }
+        if ( val.GetSubValue().Text()==moText("TRACKERSYSTEM")) {
+            trackersystem_present = true;
+        }
+    }
+    if (!events_present) {
+        m_Config.GetParam( moR(NETOSCIN_OUTLET) ).AddValue( moValue( "EVENTS", "TXT", "DATA", "TXT" ).Ref() );
+    }
+    if (!trackersystem_present) {
+        m_Config.GetParam( moR(NETOSCIN_OUTLET) ).AddValue( moValue( "EVENTS", "TXT", "DATA", "TXT" ).Ref() );
+    }
+
+    moMoldeoObject::Init();
+
+
+    for(int a=0; a <GetOutlets()->Count(); a++) {
+        if ( m_Outlets[a]->GetConnectorLabelName() == moText("EVENTS") ) {
+            m_pEvents = m_Outlets[a];
+        }
+    }
 
     // Reading hosts names and ports.
-    n = m_Config.GetParamIndex("host");
+    n = m_Config.GetParamIndex("hosts");
 	n_hosts = m_Config.GetValuesCount(n);
 	host_name.Init(n_hosts, moText(""));
     host_port.Init(n_hosts, 0);
@@ -122,6 +153,7 @@ MOboolean moNetOSCIn::Init()
 
 		pListener = new moOscPacketListener();
         if (pListener) {
+            /*
             if ( host_name[i] == moText("all") ) {
                 if (host_port[i]>0)
                     pListener->Set( new UdpListeningReceiveSocket( IpEndpointName( IpEndpointName::ANY_ADDRESS,
@@ -134,7 +166,7 @@ MOboolean moNetOSCIn::Init()
             } else if ( host_name[i] != moText("") ) {
                 moTextArray ipNumbers;
                 unsigned long ipaddress = 0;
-                int i1=0, i2=0, i3=0, i4=0;
+                unsigned long i1=0, i2=0, i3=0, i4=0;
                 ipNumbers = host_name[i].Explode(".");
                 if (ipNumbers.Count()==4) {
                     i1 = atoi(ipNumbers[0]);
@@ -158,8 +190,49 @@ MOboolean moNetOSCIn::Init()
                                                                 IpEndpointName::ANY_PORT ),
                                                                pListener ) );
             }
-            m_OscPacketListeners.Add( pListener );
-            pListener->CreateThread();
+*/
+            UdpListeningReceiveSocket   *socket = NULL;
+
+            try {
+                socket = new UdpListeningReceiveSocket(
+                IpEndpointName( IpEndpointName::ANY_ADDRESS, host_port[i] ),
+                pListener );
+            } catch (std::exception &e) {
+                MODebug2->Error(moText("could not bind to UDP port "));
+                socket = NULL;
+            }
+
+            if (socket!=NULL) {
+                if (!socket->IsBound()) {
+                    delete socket;
+                    socket = NULL;
+                    MODebug2->Error( moText("NETOSCIN UDP socket not connected:") +
+                                    + (moText)host_name[i]
+                                    + moText(" PORT:")
+                                    + IntToStr(host_port[i])
+                                    );
+                } else {
+                   MODebug2->Message( moText("NetOSCIn listening to OSC messages on UDP port "));
+                   pListener->Set(socket);
+                }
+            }
+            if (socket) {
+                m_OscPacketListeners.Add( pListener );
+                if (pListener->CreateThread()) {
+                    MODebug2->Message( moText(" NETOSCIN OK: HOST NAME:")
+                                            + (moText)host_name[i]
+                                            + moText(" PORT:")
+                                            + IntToStr(host_port[i])
+
+                                            );
+                } else {
+                    MODebug2->Error( moText("NETOSCIN:") +
+                                    + (moText)host_name[i]
+                                    + moText(" PORT:")
+                                    + IntToStr(host_port[i])
+                                    );
+                }
+            }
        }
 	}
 
@@ -167,13 +240,22 @@ MOboolean moNetOSCIn::Init()
 	return true;
 }
 
+void
+moNetOSCIn::UpdateParameters() {
+
+    m_ReceiveEvents = m_Config.Int( moR(NETOSCIN_RECEIVEEVENTS) );
+
+}
 
 moConfigDefinition *
 moNetOSCIn::GetDefinition( moConfigDefinition *p_configdefinition ) {
 
 	//default: alpha, color, syncro
 	p_configdefinition = moMoldeoObject::GetDefinition( p_configdefinition );
-	p_configdefinition->Add( moText("host"), MO_PARAM_TEXT, NETOSCIN_HOST );
+	p_configdefinition->Add( moText("hosts"), MO_PARAM_TEXT, NETOSCIN_HOSTS, moValue("127.0.0.1","TXT") );
+	p_configdefinition->Add( moText("port"), MO_PARAM_NUMERIC, NETOSCIN_PORT, moValue("7400","INT") );
+	p_configdefinition->Add( moText("receive_events"), MO_PARAM_NUMERIC, NETOSCIN_RECEIVEEVENTS, moValue("0","INT") );
+
 	return p_configdefinition;
 }
 
@@ -202,10 +284,14 @@ void moNetOSCIn::Update(moEventList *Eventos)
 
     MOuint i;
 
+
     bool res;
     moEvent *tmp;
     moEvent *actual;
 
+    //MODebug2->Push( moText("NETOSCIN: Update"));
+
+    UpdateParameters();
 
     //clean every outlet!!! important
     for(i=0; i<GetOutlets()->Count();i++) {
@@ -223,10 +309,48 @@ void moNetOSCIn::Update(moEventList *Eventos)
         pListener = m_OscPacketListeners[i];
 
         if (pListener) {
+            //MODebug2->Push( moText("Updating outlets "));
             pListener->Update( GetOutlets() );
         }
 
 	}
+
+    if (m_ReceiveEvents) {
+        if (m_pEvents) {
+            //MODebug2->Push( moText("Checking events "));
+            for(int i = 0; i<m_pEvents->GetMessages().Count();  i++) {
+                moDataMessage& mess(m_pEvents->GetMessages().Get(i) );
+
+                moData data;
+                ///atencion el primer dato es "EVENT"
+                int did = mess.Get(1).Int();
+                int cid = mess.Get(2).Int();
+                int val0 = mess.Get(3).Int();
+                int val1 = mess.Get(4).Int();
+                int val2 = mess.Get(5).Int();
+                int val3 = mess.Get(6).Int();
+
+
+                MODebug2->Push( moText("Receiving events: ")
+                                + moText(" did:")
+                                + IntToStr(did)
+                                + moText(" cid:")
+                                + IntToStr(cid)
+                                + moText(" val0:")
+                                + IntToStr(val0)
+                                + moText(" val1:")
+                                + IntToStr(val1)
+                                + moText(" val2:")
+                                + IntToStr(val2)
+                                + moText(" val3:")
+                                + IntToStr(val3)
+                );
+
+                Eventos->Add( did, cid, val0, val1, val2, val3 );
+
+            }
+        }
+    }
 
 	moMoldeoObject::Update(Eventos);
 
