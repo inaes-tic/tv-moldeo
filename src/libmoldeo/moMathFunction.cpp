@@ -34,6 +34,7 @@
 
 #include <cstdarg>
 
+#include "moConfig.h"
 #include "moMathFunction.h"
 
 #include "moArray.cpp"
@@ -57,6 +58,64 @@ double* AddParserVariableFunction(const char *p_pVarName, void *p_pUserData)
     return pFactory->CreateNewVariable(p_pVarName);
 }
 
+
+moMathVariable::moMathVariable() {
+
+    m_pParam = NULL;
+
+}
+
+
+moMathVariable::moMathVariable( const char* p_name, double p_value0 ) {
+
+    m_name = (char*)p_name;
+    m_value = p_value0;
+    m_pParam = NULL;
+
+}
+
+
+moMathVariable::moMathVariable( moParam* p_Param  ) {
+
+    SetParam( p_Param );
+
+}
+
+void
+moMathVariable::SetParam( moParam* p_Param ) {
+
+
+    if (p_Param!=NULL) {
+
+        m_pParam = p_Param;
+        m_name = m_pParam->GetParamDefinition().GetName();
+        GetValue();
+
+    }
+}
+
+
+
+
+double moMathVariable::GetValue()
+{
+    if (m_pParam) {
+        moData* pData = m_pParam->GetData();
+        if (pData)
+            m_value = pData->Double();
+    }
+
+    return m_value;
+}
+
+double* moMathVariable::GetValuePointer() {
+
+    GetValue();
+
+    return &m_value;
+}
+
+
 /*******************************************************************************
                       Implementación de moMathFunction
 *******************************************************************************/
@@ -65,6 +124,8 @@ moMathFunction::moMathFunction()
 {
     m_Expression = moText("");
     m_EmptyName = moText("");
+    m_pConfig = NULL;
+    m_LastEval = 0.0;
 }
 
 moMathFunction::~moMathFunction()
@@ -72,11 +133,40 @@ moMathFunction::~moMathFunction()
     Finish();
 }
 
-MOboolean moMathFunction::Init(const moText& p_Expression)
+MOboolean moMathFunction::Init( const moText& p_Expression, moConfig* p_pConfig )
 {
 	SetExpression(p_Expression);
 	BuildParamList();
 	BuildVarList();
+
+///ASSOCIATE VARIABLES WITH PARAMETERS....
+    if (p_pConfig) {
+        m_pConfig = p_pConfig;
+    }
+
+    if ( m_pConfig ) {
+        moParams& Params( m_pConfig->GetParams() );
+        for( int i=0; i < m_Variables.Count(); i++ ) {
+
+            moMathVariable* pVariable = m_Variables[i];
+
+            for( int p=0; p<Params.Count(); p++  ) {
+
+                moParam& param( Params[p] );
+                ///check for every parameters in config...
+                if ( param.GetParamDefinition().GetName() == pVariable->GetName() ) {
+
+                    ///assign pointer to variable!!!!
+                    pVariable->SetParam( param.GetPtr() );
+
+                }
+
+            }
+
+        }
+
+    }
+
 	return true;
 }
 
@@ -101,6 +191,28 @@ void moMathFunction::SetParameters(double s, ...)
 		va_end (arguments);               // Cleans up the list
 	}
 	OnParamUpdate();
+}
+
+double moMathFunction::Eval() {
+
+    int num = m_Variables.Count();
+
+    if (num>0) {
+		for (int i = 1; i < num; i++) {
+            if (m_Variables[i] != NULL) {
+                /// Values are updated from params....
+				m_Variables[i]->GetValue();
+            }
+        }
+    }
+
+
+    return OnFuncEval();
+}
+
+
+double moMathFunction::LastEval() {
+    return m_LastEval;
 }
 
 double moMathFunction::Eval(double x, ...)
@@ -413,10 +525,18 @@ void moTautInterpolant::BuildVarList()
                        Implementación de moParserFunction
 *******************************************************************************/
 
-MOboolean moParserFunction::Init(const moText& p_Expression)
+moParserFunction::moParserFunction() {
+
+    m_pConfig = NULL;
+
+}
+
+
+MOboolean moParserFunction::Init(const moText& p_Expression, moConfig* p_pConfig )
 {
     mu::Parser* pParser = new mu::Parser();
     m_pParser = (moParser*) pParser;
+    m_pConfig = p_pConfig;
 
     moMathVariableFactory* pVarFactory = new moMathVariableFactory(&m_Parameters, &m_Variables);
 
@@ -442,6 +562,31 @@ MOboolean moParserFunction::Init(const moText& p_Expression)
         }
 
         delete pVarFactory;
+
+    }
+
+    ///ASSOCIATE VARIABLES WITH PARAMETERS....
+
+    if ( m_pConfig ) {
+        moParams& Params( m_pConfig->GetParams() );
+        for( int i=0; i < m_Variables.Count(); i++ ) {
+
+            moMathVariable* pVariable = m_Variables[i];
+
+            for( int p=0; p<Params.Count(); p++  ) {
+
+                moParam& param( Params[p] );
+                ///check for every parameters in config...
+                if ( param.GetParamDefinition().GetName() == pVariable->GetName() ) {
+
+                    ///assign pointer to variable!!!!
+                    pVariable->SetParam( param.GetPtr() );
+
+                }
+
+            }
+
+        }
 
     }
 
@@ -524,8 +669,11 @@ MOboolean moParserFunction::CheckVariables()
 	nvar = npar = 0;
 
     mu::Parser* pParser = (mu::Parser*) m_pParser;
+
     if (pParser) {
+
         mu::varmap_type variables = pParser->GetVar();
+
         iNumVar = (int)variables.size();
 
         mu::varmap_type::const_iterator item = variables.begin();
@@ -561,24 +709,21 @@ MOboolean moParserFunction::CheckVariables()
 
 double moParserFunction::OnFuncEval() {
 
-
-    double evaluation  = 0.0;
-
     mu::Parser* pParser = (mu::Parser*) m_pParser;
     if (pParser) {
 
         try {
-            evaluation = pParser->Eval();
+            m_LastEval = pParser->Eval();
         }
         catch ( mu::ParserError Exc) {
             moText msgexpr = (char*)Exc.GetExpr().c_str();
             moText msgerror = (char*)Exc.GetMsg().c_str();
             MODebug2->Error( (moText)msgexpr + moText(":") + (moText)msgerror );
-            evaluation = 0.0;
+            m_LastEval = 0.0;
         }
 
     }
 
-    return evaluation;
+    return m_LastEval;
 
 }

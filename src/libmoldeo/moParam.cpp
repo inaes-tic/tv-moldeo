@@ -35,6 +35,7 @@
 
 moDefineDynamicArray(moParamDefinitions)
 moDefineDynamicArray(moParams)
+moDefineDynamicArray( moParamIndexes )
 
 //================================================================
 //	moParamDefinition
@@ -163,6 +164,9 @@ moParamDefinition::moParamDefinition( moText& p_name, moText& p_type ) {
 		if ( p_type == moText("COMPOSE") ) {
 			m_Type = MO_PARAM_COMPOSE;
 		} else
+		if ( p_type == moText("VECTOR") ) {
+			m_Type = MO_PARAM_VECTOR;
+		} else
 		if ( p_type == moText("INLET") ) {
 			m_Type = MO_PARAM_INLET;
 		} else
@@ -278,6 +282,9 @@ moParamDefinition::GetTypeStr() {
             break;
         case MO_PARAM_COMPOSE:
             return moText("COMPOSE");
+            break;
+        case MO_PARAM_VECTOR:
+            return moText("VECTOR");
             break;
         case MO_PARAM_INLET:
             return moText("INLET");
@@ -440,6 +447,12 @@ void moParam::SetDefaultValue() {
                 xvalue.AddSubValue( valuebase );
                 xvalue.AddSubValue( valuebase );
                 break;
+            case MO_PARAM_VECTOR:
+                valuebase.SetText( "0.0" );
+                valuebase.SetType( MO_VALUE_NUM_FLOAT );
+                xvalue.AddSubValue( valuebase );
+                xvalue.AddSubValue( valuebase );
+                break;
 
         }
 
@@ -462,8 +475,10 @@ moParam::GetValue( MOint i ) {
 void
 moParam::SetIndexValue( int indexvalue ) {
 
-	if (0<=indexvalue && indexvalue<(MOint)m_Values.Count() )
+	if (0<=indexvalue && indexvalue<(MOint)m_Values.Count() ) {
 		m_CurrentIndexValue = indexvalue;
+		m_bExternDataUpdated = false;
+	}
 
 }
 
@@ -478,6 +493,7 @@ moParam::GetIndexValue() {
 void
 moParam::NextValue() {
 	if ( m_Values.Count() > 0 ) {
+	    m_bExternDataUpdated = false;
 		if ( m_CurrentIndexValue < ((MOint)m_Values.Count()-1) ) {
 			m_CurrentIndexValue++;
 		}
@@ -487,6 +503,7 @@ moParam::NextValue() {
 void
 moParam::PrevValue() {
 	if ( m_Values.Count() > 0 ) {
+	    m_bExternDataUpdated = false;
 		if ( m_CurrentIndexValue > 0 ) {
 			m_CurrentIndexValue--;
 		}
@@ -496,6 +513,7 @@ moParam::PrevValue() {
 void
 moParam::FirstValue() {
 	if (m_Values.Count() > 0) {
+	    m_bExternDataUpdated = false;
 		m_CurrentIndexValue = 0;
 	} else m_CurrentIndexValue = -1;
 }
@@ -526,8 +544,11 @@ moParam::Update() {
 
 moData*
 moParam::GetData() {
+    ///dato modificado externamente
 	if (m_pExternData && m_bExternDataUpdated)
 		return (m_pExternData);
+
+	///dato original del config
 	return GetValue().GetSubValue().GetData();
 }
 

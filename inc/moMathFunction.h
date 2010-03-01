@@ -37,6 +37,9 @@
 #include "moAbstract.h"
 #include "moMath.h"
 
+class moParam;
+class moConfig;
+
 typedef void moParser;
 
 moDeclareExportedDynamicArray( MOuint, moIntArray )
@@ -57,13 +60,11 @@ public:
      * @param p_name el nombre de la variable.
      * @param p_value0 el valor inicial de la variable.
      */
-    moMathVariable() {
-    }
+    moMathVariable();
+	moMathVariable(const char* p_name, double p_value0 = 0.0);
+	moMathVariable( moParam* p_Param  );
 
-	moMathVariable(const char* p_name, double p_value0 = 0.0) {
-		m_name = (char*)p_name;
-		m_value = p_value0;
-	}
+	void SetParam( moParam* p_Param );
 
 	/**
      * Asigna el nombre de la variable.
@@ -85,14 +86,18 @@ public:
      * Devuelve el valor actual de la variable.
 	 * @return El valor de la variable.
 	 */
-	double GetValue() { return m_value; }
+	double GetValue();
+
+
+
 
 	/**
      * Devuelve el puntero a la variable privada de la clase que almacena el valor flotante actual.
 	 * @return El puntero a la variable 'm_value'.
 	 * @see m_value
 	 */
-	double* GetValuePointer() { return &m_value; }
+	double* GetValuePointer();
+
 private:
 	/**
      * Almacena el nombre de la variable.
@@ -102,6 +107,11 @@ private:
      * Almacena el valor actual de la variable.
 	 */
     double m_value;
+
+    /**
+    *   External param data retreival, name must match!!!!
+    */
+    moParam*    m_pParam;
 };
 
 typedef moMathVariable* moMathVariablePtr;
@@ -128,7 +138,7 @@ public:
 	 * @param p_Expression la expresión matemática.
 	 * @return El resultado de la operación de inicialización.
 	 */
-	virtual MOboolean Init(const moText& p_Expression);
+	virtual MOboolean Init(const moText& p_Expression, moConfig* p_pConfig = NULL );
 	/**
      * Función de finalización.
 	 * @return El resultado de la operación de finalización.
@@ -150,12 +160,26 @@ public:
 	 * @param s el primer parámetro.
 	 */
     virtual void SetParameters(double s, ...);
+
+	/**
+     * Calcula la función con las variables automaticamente evaluadas desde el config
+	 * @return El valor de la función.
+	 */
+	virtual double Eval();
+
+	/**
+     * Devuelve el último valor resultante de la última evaluación de esta función
+	 * @return El valor de la función.
+	 */
+	double LastEval();
+
 	/**
      * Calcula la función para los valores de las variables dados.
 	 * @param x el valor de la primer variable.
 	 * @return El valor de la función.
 	 */
 	virtual double Eval(double x, ...);
+
 	/**
      * Calcula la derivada n-ésima de la función para los valores de las variables dados.
 	 * @param n el orden de la derivada.
@@ -224,6 +248,8 @@ protected:
 	 */
 	moMathVariableArray m_Variables;
 
+	double m_LastEval;
+
 	/**
      * Función abstracta pura que es llamada desde la función 'SetParameters'.
 	 * Debe implementar los cálculos que actualizan la función dado un nuevo conjunto de parámetros.
@@ -257,6 +283,8 @@ protected:
 	 * @see Init
 	 */
 	virtual void BuildVarList() = 0;
+
+    moConfig*   m_pConfig;
 };
 
 typedef moMathFunction* MathFunctionPtr;
@@ -388,19 +416,24 @@ double* AddParserVariableFunction(const char *p_pVarName, void *p_pUserData);
 class LIBMOLDEO_API moParserFunction : public moMathFunction
 {
 public:
+
+    moParserFunction();
+
+
 	/**
      * Función de inicializacion en donde se asigna la expresión que caracteriza la función y se
 	 * construyen las listas de parámetros y variables.
 	 * @param p_Expression la expresión matemática.
 	 * @return El resultado de la operación de inicialización.
 	 */
-	MOboolean Init(const moText& p_Expression);
+	virtual MOboolean Init(const moText& p_Expression, moConfig* p_pConfig = NULL );
 	/**
      * Función de finalización.
 	 * @return El resultado de la operación de finalización.
 	 */
 	MOboolean Finish();
 protected:
+
 	double x;
 
 	moParser*   m_pParser;
@@ -416,5 +449,7 @@ protected:
 	void BuildParamList() {}
 	void BuildVarList() {}
 };
+
+
 
 #endif

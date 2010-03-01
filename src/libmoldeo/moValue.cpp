@@ -59,30 +59,35 @@ moData::moData() {
 }
 
 moData::moData( MOchar data ) {
+    moData::moData();
 	m_Number.m_Char = data;
 	m_DataSize = 0;
 	m_DataType = MO_DATA_NUMBER_CHAR;
 }
 
 moData::moData( MOint data) {
+    moData::moData();
 	m_Number.m_Int = data;
 	m_DataSize = 0;
 	m_DataType = MO_DATA_NUMBER_INT;
 }
 
 moData::moData( MOlonglong data) {
+    moData::moData();
 	m_Number.m_Long = data;
 	m_DataSize = 0;
 	m_DataType = MO_DATA_NUMBER_LONG;
 }
 
 moData::moData( MOdouble data) {
+    moData::moData();
 	m_Number.m_Double = data;
 	m_DataSize = 0;
 	m_DataType = MO_DATA_NUMBER_DOUBLE;
 }
 
 moData::moData( MOfloat data) {
+    moData::moData();
 	m_Number.m_Float = data;
 	m_DataSize = 0;
 	m_DataType = MO_DATA_NUMBER_FLOAT;
@@ -96,12 +101,14 @@ moData::moData( MOfloat data) {
 	MO_DATA_VIDEOSAMPLE,//pointer to a videosample pointer
 */
 moData::moData( MOpointer data , MOulong size, moDataType type ) {
+    moData::moData();
 	m_Number.m_Pointer = data;
 	m_DataSize = size;
 	m_DataType = type;
 }
 
 moData::moData( moText data ) {
+    moData::moData();
 	m_Text = data;
 	m_DataSize = 0;
 	m_Number.m_Long = 0;
@@ -109,6 +116,7 @@ moData::moData( moText data ) {
 }
 
 moData::moData( moDataType datatype ) {
+    moData::moData();
 	m_DataType = datatype;
 }
 
@@ -283,6 +291,43 @@ moData::SetTextureFilterParam( moTextFilterParam *p_filterparam ) {
 }
 
 void
+moData::SetVector( moVector2d *p_vector2d ) {
+    m_DataType = MO_DATA_VECTOR2F;
+	m_Number.m_Pointer = (MOpointer) p_vector2d;
+}
+
+void
+moData::SetVector( moVector3d *p_vector3d ) {
+    m_DataType = MO_DATA_VECTOR3F;
+	m_Number.m_Pointer = (MOpointer) p_vector3d;
+}
+
+void
+moData::SetVector( moVector4d *p_vector4d ) {
+    m_DataType = MO_DATA_VECTOR4F;
+	m_Number.m_Pointer = (MOpointer) p_vector4d;
+}
+
+void
+moData::SetVector( moVector2i *p_vector2i ) {
+    m_DataType = MO_DATA_VECTOR2I;
+	m_Number.m_Pointer = (MOpointer) p_vector2i;
+}
+
+void
+moData::SetVector( moVector3i *p_vector3i ) {
+    m_DataType = MO_DATA_VECTOR3I;
+	m_Number.m_Pointer = (MOpointer) p_vector3i;
+}
+
+void
+moData::SetVector( moVector4i *p_vector4i ) {
+    m_DataType = MO_DATA_VECTOR4I;
+	m_Number.m_Pointer = (MOpointer) p_vector4i;
+}
+
+
+void
 moData::SetMessage( moDataMessage *p_datamessage ) {
     m_DataType = MO_DATA_MESSAGE;
 	m_Number.m_Pointer = (MOpointer) p_datamessage;
@@ -302,6 +347,39 @@ moData::SetSound( moSound*	p_Sound ) {
 	m_Number.m_Pointer = (MOpointer) p_Sound;
 }
 */
+
+moVector2d *
+moData::Vector2d() {
+    return (moVector2d*) m_Number.m_Pointer;
+}
+
+moVector2i *
+moData::Vector2i() {
+    return (moVector2i*) m_Number.m_Pointer;
+}
+
+moVector3d *
+moData::Vector3d() {
+    return (moVector3d*) m_Number.m_Pointer;
+}
+
+moVector3i *
+moData::Vector3i() {
+    return (moVector3i*) m_Number.m_Pointer;
+}
+
+moVector4d *
+moData::Vector4d() {
+    return (moVector4d*) m_Number.m_Pointer;
+}
+
+moVector4i *
+moData::Vector4i() {
+    return (moVector4i*) m_Number.m_Pointer;
+}
+
+
+
 moDataMessage*
 moData::Message() {
 	return (moDataMessage*) m_Number.m_Pointer;
@@ -315,6 +393,22 @@ moData::Messages() {
 moMathFunction*
 moData::Fun() {
 	return (moMathFunction*) m_Number.m_Pointer;
+}
+
+MOdouble
+moData::Eval() {
+    moMathFunction* pFun = Fun();
+    if (pFun)
+        return pFun->Eval();
+    return 0.0;
+}
+
+MOdouble
+moData::Eval( double x ) {
+    moMathFunction* pFun = Fun();
+    if (pFun)
+        return pFun->Eval( x );
+    return 0.0;
 }
 
 moFont*
@@ -395,8 +489,23 @@ moData::TypeToText() {
         case MO_DATA_UNDEFINED:
             return moText("MO_DATA_UNDEFINED");
             break;
-        case MO_DATA_VECTOR:
-            return moText("MO_DATA_VECTOR");
+        case MO_DATA_VECTOR2I:
+            return moText("MO_DATA_VECTOR2I");
+            break;
+        case MO_DATA_VECTOR3I:
+            return moText("MO_DATA_VECTOR3I");
+            break;
+        case MO_DATA_VECTOR4I:
+            return moText("MO_DATA_VECTOR4I");
+            break;
+        case MO_DATA_VECTOR2F:
+            return moText("MO_DATA_VECTOR2F");
+            break;
+        case MO_DATA_VECTOR3F:
+            return moText("MO_DATA_VECTOR3F");
+            break;
+        case MO_DATA_VECTOR4F:
+            return moText("MO_DATA_VECTOR4F");
             break;
         case MO_DATA_MESSAGE:
             return moText("MO_DATA_MESSAGE");
@@ -455,8 +564,23 @@ moData::TextToType( moText texttype ) {
     if ( texttype ==  moText("MO_DATA_UNDEFINED") ) {
         return MO_DATA_UNDEFINED;
     } else
-    if ( texttype ==  moText("MO_DATA_VECTOR") ) {
-        return MO_DATA_VECTOR;
+    if ( texttype ==  moText("MO_DATA_VECTOR2I") ) {
+        return MO_DATA_VECTOR2I;
+    } else
+    if ( texttype ==  moText("MO_DATA_VECTOR2F") ) {
+        return MO_DATA_VECTOR2F;
+    } else
+    if ( texttype ==  moText("MO_DATA_VECTOR3I") ) {
+        return MO_DATA_VECTOR3I;
+    } else
+    if ( texttype ==  moText("MO_DATA_VECTOR3F") ) {
+        return MO_DATA_VECTOR3F;
+    } else
+    if ( texttype ==  moText("MO_DATA_VECTOR4I") ) {
+        return MO_DATA_VECTOR4I;
+    } else
+    if ( texttype ==  moText("MO_DATA_VECTOR4F") ) {
+        return MO_DATA_VECTOR4F;
     } else
     if ( texttype ==  moText("MO_DATA_MESSAGE") ) {
         return MO_DATA_MESSAGE;
@@ -491,6 +615,7 @@ moData::ToText() {
         case MO_DATA_NUMBER_FLOAT:
             return FloatToStr( Float() );
             break;
+
     }
 
     return Text();
@@ -518,6 +643,11 @@ moData::Int() {
             rndD = moRound(m_Number.m_Double);
 			return (MOint) rndD;
 			break;
+        case MO_DATA_FUNCTION:
+            if (Fun()) {
+                return (MOint) Fun()->Eval();
+            } else return (MOint) (0);
+            break;
 		default:
 			return m_Number.m_Int;
 			break;
@@ -546,6 +676,11 @@ moData::Long() {
 		    rndD = moRound( m_Number.m_Double );
 			return (MOlonglong) rndD;
 			break;
+        case MO_DATA_FUNCTION:
+            if (Fun()) {
+                return (MOlonglong) Fun()->Eval();
+            } else return (MOlonglong) (0);
+            break;
 		default:
 			return m_Number.m_Long;
 			break;
@@ -567,6 +702,11 @@ moData::Float() {
 		case MO_DATA_NUMBER_LONG:
 			return (MOfloat)m_Number.m_Long;
 			break;
+        case MO_DATA_FUNCTION:
+            if (Fun()) {
+                return (MOfloat) Fun()->Eval();
+            } else return (MOfloat) (0.0);
+            break;
 		default:
 			return m_Number.m_Float;
 			break;
@@ -588,6 +728,11 @@ moData::Double() {
 		case MO_DATA_NUMBER_LONG:
 			return (MOdouble)m_Number.m_Long;
 			break;
+        case MO_DATA_FUNCTION:
+            if (Fun()) {
+                return (MOdouble) Fun()->Eval();
+            } else return (MOdouble) (0.0);
+            break;
 		default:
 			return m_Number.m_Double;
 			break;
@@ -616,6 +761,11 @@ moData::Char() {
 		    rndD = moRound( m_Number.m_Double );
 			return (MOchar) rndD;
 			break;
+        case MO_DATA_FUNCTION:
+            if (Fun()) {
+                return (MOchar) Fun()->Eval();
+            } else return (MOchar) (0);
+            break;
 		default:
 			return m_Number.m_Char;
 			break;
@@ -861,12 +1011,18 @@ moValueDefinition::GetTypeStr() {
 			return moText("LNK");
 			break;
 		case MO_VALUE_NUM:
+            return moText("NUM");
 		case MO_VALUE_NUM_CHAR:
+            return moText("CHAR");
 		case MO_VALUE_NUM_DOUBLE:
+            return moText("DOUBLE");
 		case MO_VALUE_NUM_FLOAT:
+            return moText("FLOAT");
 		case MO_VALUE_NUM_INT:
+			return moText("INT");
+			break;
 		case MO_VALUE_NUM_LONG:
-			return moText("NUM");
+			return moText("LONG");
 			break;
 		case MO_VALUE_TXT:
 			return moText("TXT");
@@ -1105,7 +1261,7 @@ moValue::AddSubValue( const moText &strvalue, const moText &type ) {
 		MOfloat tmp2;
 		sscanf( moText(strvalue), "%f", &tmp2);
 		valuebase.SetFloat( tmp2 );
-		valuebase.SetType( MO_VALUE_NUM_LONG );
+		valuebase.SetType( MO_VALUE_NUM_FLOAT );
 
 	} else if ( (moText)type== moText("DOUBLE")) {
 

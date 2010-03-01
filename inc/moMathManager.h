@@ -86,7 +86,7 @@ public:
      * instancia de la misma en el administrador.
      * @return índice de la función agregada.
      */
-	MOint AddFunction(const moText& p_expr, MOboolean p_force_new = false);
+	MOint AddFunction(const moText& p_expr, MOboolean p_force_new = false, moConfig* p_pConfig = NULL );
 
     /**
      * Evalua la función con índice p_idx.

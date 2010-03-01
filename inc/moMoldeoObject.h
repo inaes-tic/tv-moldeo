@@ -302,10 +302,6 @@ class LIBMOLDEO_API moMoldeoObject : public moAbstract, public moScript
 		*/
 		virtual MOboolean Init( moResourceManager* p_pResources );
 
-		virtual MOboolean LoadConnectors();//try to create inlets and outlets connectors from the config file
-
-		virtual void	UnloadConnectors();
-
 
 		virtual void	Load();
 
@@ -407,14 +403,31 @@ class LIBMOLDEO_API moMoldeoObject : public moAbstract, public moScript
 		moInlets* GetInlets();
 
 		/**
+		 * función que devuelve el indice del conector Inlet del correspondiente nombre
+		 * @param p_connector_name nombre del conector (generalmente el mismo del parametro  u otro arbitrario definido por el usuario)
+		 */
+		MOint GetInletIndex( moText p_connector_name );
+
+		/**
+		 * función que devuelve el indice del conector Outlet del correspondiente nombre
+		 * @param p_connector_name nombre del conector (generalmente el mismo del parametro u otro arbitrario definido por el usuario)
+		 */
+		MOint GetOutletIndex( moText p_connector_name );
+
+		/**
+		 * función que registra las funciones para lua en particular para esta clase y las derivadas
+		 */
+        virtual void RegisterFunctions();
+
+		/**
 		 * función que define las funciones accesibles por scripting de esta clase particular.
 		 */
-		virtual int ScriptCalling(moLuaVirtualMachine& vm, int iFunctionNumber) { return 0; }
+		virtual int ScriptCalling(moLuaVirtualMachine& vm, int iFunctionNumber);
 
 		/**
 		 * función que se encarga de manipular el retorno de las funciones llamadas por el script
 		 */
-		virtual void HandleReturns(moLuaVirtualMachine& vm, const char *strFunc) {}
+		virtual void HandleReturns(moLuaVirtualMachine& vm, const char *strFunc);
 
 	protected:
 
@@ -444,6 +457,40 @@ class LIBMOLDEO_API moMoldeoObject : public moAbstract, public moScript
 		moOutlets				m_Outlets;
 		moInlets				m_Inlets;
 
+    private:
+
+        int luaPushDebugString(moLuaVirtualMachine& vm);
+
+        ///functions to access moConfig data
+        int luaSetPreconf(moLuaVirtualMachine& vm);
+        int luaGetPreconf(moLuaVirtualMachine& vm);
+
+        int luaGetParamIndex(moLuaVirtualMachine& vm);
+        int luaGetCurrentValue(moLuaVirtualMachine& vm);
+        int luaSetCurrentValue(moLuaVirtualMachine& vm);
+
+        int luaGetInletIndex(moLuaVirtualMachine& vm);
+        int luaGetInletData(moLuaVirtualMachine& vm);
+        int luaSetInletData(moLuaVirtualMachine& vm);
+
+        ///functions to access Inlets Data
+        ///TUIO
+        ///Tracker, etc...
+        int luaGetTuioSystem(moLuaVirtualMachine& vm);
+        int luaGetTuioCursorCount(moLuaVirtualMachine& vm);
+        int luaGetTuioCursor(moLuaVirtualMachine& vm);
+        int luaGetTuioObjectCount(moLuaVirtualMachine& vm);
+        int luaGetTuioObject(moLuaVirtualMachine& vm);
+
+
+        int luaGetTrackerSystemData(moLuaVirtualMachine& vm);
+        int luaGetTrackerFeaturesCount(moLuaVirtualMachine& vm);
+        int luaGetTrackerFeature(moLuaVirtualMachine& vm);
+        int luaGetTrackerVariance(moLuaVirtualMachine& vm);
+        int luaGetTrackerBarycenter(moLuaVirtualMachine& vm);
+        int luaGetTrackerAcceleration(moLuaVirtualMachine& vm);
+        int luaGetTrackerVelocity(moLuaVirtualMachine& vm);
+        int luaGetTrackerZone(moLuaVirtualMachine& vm);
 };
 
 /*

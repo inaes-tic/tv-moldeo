@@ -35,7 +35,6 @@
 
 #include "moTypes.h"
 #include "moText.h"
-
 #include "moValue.h"
 
 enum moParamType {
@@ -67,6 +66,7 @@ enum moParamType {
 	MO_PARAM_SCRIPT,		//value type: TXT or LNK
 	MO_PARAM_FILTER,        //value type: TXT or LNK
 	MO_PARAM_COMPOSE,        //any composition of types
+	MO_PARAM_VECTOR,    //vector of one type
 	MO_PARAM_INLET,			//value type: TXT or LNK
 	MO_PARAM_OUTLET,			//value type: TXT or LNK
 	MO_PARAM_UNDEFINED = -1

@@ -64,6 +64,9 @@ NOTES:
 #include "moText.h"
 #include "moArray.h"
 #include "moMathFunction.h"
+#include "moMathVector.h"
+#include "moMathVector3.h"
+#include "moMathVector4.h"
 
 
 #define moRound(x) ((x) < (LONG_MIN-0.5) || (x) > (LONG_MAX+0.5)) ?\
@@ -95,7 +98,12 @@ enum moDataType {
 	MO_DATA_NUMBER_MIDI,
 	MO_DATA_FUNCTION,
 	MO_DATA_POINTER,//may be a pointer to struct or to class
-	MO_DATA_VECTOR,//array of values
+	MO_DATA_VECTOR2I,//array of values
+	MO_DATA_VECTOR3I,//array of values
+	MO_DATA_VECTOR4I,//array of values
+	MO_DATA_VECTOR2F,//array of values
+	MO_DATA_VECTOR3F,//array of values
+	MO_DATA_VECTOR4F,//array of values
 	MO_DATA_IMAGESAMPLE,//pointer to an imagesample pointer
 	MO_DATA_IMAGESAMPLE_FILTERED,//pointer to a TextureFilter
     MO_DATA_IMAGESAMPLE_TEXTUREBUFFER,//pointer to a texturebuffer pointer
@@ -180,6 +188,13 @@ class LIBMOLDEO_API moData {
 		void        SetTextureFilterParam( moTextFilterParam *p_filterparam );
 		void        SetFont( moFont*	p_Font );
 		void        SetModel( mo3DModelSceneNode*    p_Model );
+        void        SetVector( moVector2d *p_vector2d );
+        void        SetVector( moVector3d *p_vector3d );
+        void        SetVector( moVector4d *p_vector4d );
+        void        SetVector( moVector2i *p_vector2i );
+        void        SetVector( moVector3i *p_vector3i );
+        void        SetVector( moVector4i *p_vector4i );
+
 		void        SetMessage( moDataMessage*  p_datamessage );
 		void        SetMessages( moDataMessages*  p_datamessages );
 		/**
@@ -198,9 +213,17 @@ class LIBMOLDEO_API moData {
 		moDataType	Type();
 		MOulong		Size();
 		moMathFunction*	Fun();
+		MOdouble    Eval();
+		MOdouble    Eval( double x );
 		moFont*     Font();
 		moTextureBuffer*     TextureBuffer();
 		mo3DModelSceneNode*  Model();
+		moVector2d *Vector2d();
+		moVector2i *Vector2i();
+		moVector3d *Vector3d();
+		moVector3i *Vector3i();
+		moVector4d *Vector4d();
+		moVector4i *Vector4i();
 		moDataMessage*  Message();
 		moDataMessages*  Messages();
 		/*

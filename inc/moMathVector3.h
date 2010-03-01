@@ -625,13 +625,16 @@ inline moVector3<Real> operator* (Real fScalar, const moVector3<Real>& rkV)
 }
 
 #ifndef MO_MACOSX
+template class LIBMOLDEO_API moVector3<MOlong>;
 template class LIBMOLDEO_API moVector3<MOfloat>;
 template class LIBMOLDEO_API moVector3<MOdouble>;
 #endif
 
+typedef moVector3<MOlong> moVector3i;
 typedef moVector3<MOfloat> moVector3f;
 typedef moVector3<MOdouble> moVector3d;
 
+moDeclareExportedDynamicArray( moVector3i*, moVector3iArray )
 moDeclareExportedDynamicArray( moVector3f*, moVector3fArray )
 moDeclareExportedDynamicArray( moVector3d*, moVector3dArray )
 
