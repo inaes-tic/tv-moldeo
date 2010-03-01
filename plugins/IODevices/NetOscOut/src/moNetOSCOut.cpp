@@ -69,6 +69,11 @@ moNetOSCOut::moNetOSCOut()
 	packetBuffer = NULL;
 	packetStream = NULL;
     SetName("netoscout");
+
+    m_Port = 7400;
+    m_SendEvents = 0;
+    sendInterval = 100;
+
 }
 
 moNetOSCOut::~moNetOSCOut()
@@ -94,7 +99,17 @@ MOboolean moNetOSCOut::Init()
 
 	moMoldeoObject::Init();
 
+
+    moDefineParamIndex( NETOSCOUT_HOSTS, moText("hosts") );
+    moDefineParamIndex( NETOSCOUT_PORT, moText("port") );
+    moDefineParamIndex( NETOSCOUT_DEVICES, moText("devices") );
+    moDefineParamIndex( NETOSCOUT_LATENCY, moText("latency") );
+    moDefineParamIndex( NETOSCOUT_MAXEVENTS, moText("max_events") );
+    moDefineParamIndex( NETOSCOUT_SENDEVENTS, moText("send_events") );
+    moDefineParamIndex( NETOSCOUT_DELETEEVENTS, moText("delete_events") );
+
     // Reading list of devices which will be used as source of events to send over the network.
+    /*
     for(dev = MO_IODEVICE_KEYBOARD; dev <= MO_IODEVICE_TABLET; dev++) recog_devices[dev] = false;
     n = m_Config.GetParamIndex("devices");
     n_dev = m_Config.GetValuesCount(n);
@@ -113,41 +128,37 @@ MOboolean moNetOSCOut::Init()
 
         if(-1 < dev) recog_devices[dev] = true;
     }
+    */
 
     // Reading hosts names and ports.
-    n = m_Config.GetParamIndex("host");
+    n = m_Config.GetParamIndex("hosts");
 	n_hosts = m_Config.GetValuesCount(n);
+
 	host_name.Init(n_hosts, moText(""));
+
     host_port.Init(n_hosts, 0);
+
+    transmitSockets.Init(n_hosts,NULL);
+
     for(i = 0; i < n_hosts; i++)
     {
 		host_name.Set(i, m_Config.GetParam(n).GetValue(i).GetSubValue(0).Text());
 		host_port.Set(i, m_Config.GetParam(n).GetValue(i).GetSubValue(1).Int());
 	}
 
-    n = m_Config.GetParamIndex("delete_events");
-    delete_events = m_Config.GetParam(n).GetValue(i).GetSubValue(0).Int();
+    i = 0;
 
-	transmitSockets.Init(n_hosts, NULL);
-	eventPacket.Init(n_hosts, NULL);
+    UpdateParameters();
 
-    n = m_Config.GetParamIndex("latency");
-	sendInterval = m_Config.GetParam(n).GetValue(i).GetSubValue(0).Float();
-
-	n = m_Config.GetParamIndex("size");
-	maxEventNum = m_Config.GetParam(n).GetValue(i).GetSubValue(0).Int();
-
-	n = m_Config.GetParamIndex("reconnect_time");
-	minReconnecTime = m_Config.GetParam(n).GetValue(i).GetSubValue(0).Float();
 
 	for(i = 0; i < n_hosts; i++)
 	{
 	    unsigned long ii = GetHostByName(host_name[i]);
 
-	        char buffer[100];
-            snprintf(buffer, 100, "%lu", ii); // Memory-safe version of sprintf.
+        char buffer[100];
+        snprintf(buffer, 100, "%lu", ii); // Memory-safe version of sprintf.
 
-            moText str = buffer;
+        moText str = buffer;
 
 	    //MODebug2->Message( moText("moNetOscOut:: host: ") + moText(host_name[i]) + moText(" ip int:") + (moText)str );
 
@@ -157,16 +168,31 @@ MOboolean moNetOSCOut::Init()
 
 
 		transmitSockets[i] = new UdpTransmitSocket( ipendpointname );
+		if (transmitSockets[i]) {
+            MODebug2->Message(moText("NetOSCOut UdptransmitSocket Created") );
+        }
 
 
-	    eventPacket[i] = new moEventPacket(sendInterval, maxEventNum);
+	    //eventPacket[i] = new moEventPacket(sendInterval, maxEventNum);
 	}
 
-    OUTPUT_BUFFER_SIZE = 10 * 7 * maxEventNum; // 10 = maximum length of a 32 bit int in decimal rep.
+    OUTPUT_BUFFER_SIZE = 1024; // 10 = maximum length of a 32 bit int in decimal rep.
     packetBuffer = new char[OUTPUT_BUFFER_SIZE];
     packetStream = new osc::OutboundPacketStream( packetBuffer, OUTPUT_BUFFER_SIZE );
 	return true;
 }
+
+void
+moNetOSCOut::UpdateParameters() {
+
+    sendInterval = m_Config.Double( moR( NETOSCOUT_LATENCY ) );
+    m_Port = m_Config.Int( moR( NETOSCOUT_PORT ) );
+    maxEventNum = m_Config.Int( moR( NETOSCOUT_MAXEVENTS ) );
+    m_SendEvents  = m_Config.Int( moR( NETOSCOUT_SENDEVENTS ) );
+    delete_events = m_Config.Int( moR( NETOSCOUT_DELETEEVENTS ) );
+
+}
+
 
 MOswitch moNetOSCOut::SetStatus(MOdevcode codisp, MOswitch state)
 {
@@ -188,6 +214,24 @@ MOdevcode moNetOSCOut::GetCode(moText strcod)
     return(-1);
 }
 
+moConfigDefinition *
+moNetOSCOut::GetDefinition( moConfigDefinition *p_configdefinition ) {
+
+	//default: alpha, color, syncro
+	p_configdefinition = moMoldeoObject::GetDefinition( p_configdefinition );
+	p_configdefinition->Add( moText("hosts"), MO_PARAM_TEXT, NETOSCOUT_HOSTS, moValue( "127.0.0.1", "TXT") );
+	p_configdefinition->Add( moText("port"), MO_PARAM_NUMERIC, NETOSCOUT_PORT, moValue( "7400", "INT") );
+
+    p_configdefinition->Add( moText("devices"), MO_PARAM_TEXT, NETOSCOUT_DEVICES, moValue( "keyboard", "TXT") );
+	p_configdefinition->Add( moText("latency"), MO_PARAM_NUMERIC, NETOSCOUT_LATENCY, moValue( "30", "FLOAT") );
+	p_configdefinition->Add( moText("max_events"), MO_PARAM_NUMERIC, NETOSCOUT_MAXEVENTS, moValue( "10", "INT") );
+
+	p_configdefinition->Add( moText("send_events"), MO_PARAM_NUMERIC, NETOSCOUT_SENDEVENTS, moValue( "0", "INT") );
+	p_configdefinition->Add( moText("delete_events"), MO_PARAM_NUMERIC, NETOSCOUT_DELETEEVENTS, moValue( "0", "INT") );
+
+	return p_configdefinition;
+}
+
 void moNetOSCOut::Update(moEventList *Eventos)
 {
 	MOuint i;
@@ -196,36 +240,71 @@ void moNetOSCOut::Update(moEventList *Eventos)
     moEvent *tmp;
     moEvent *actual;
 
+
+    UpdateParameters();
     // Sending over the network the events that correspond to recognized devices.
     //Eventos->Add( MO_IODEVICE_TRACKER, moGetTicks(), 112, 113, 114, 115 );
 
-/*
-    actual = Eventos->First;
-    while(actual != NULL)
-    {
-
-		if (actual->deviceid>=0 && actual->deviceid<=MO_IODEVICE_TABLET) {
-		//if(recog_devices[actual->deviceid])
-	        for (i = 0; i < host_name.Count(); i++)
-				{
-					res = eventPacket[i]->AddEvent(actual);
-                    if (eventPacket[i]->ReadyToSend())
-					{
-						SendEvent(i);
-						eventPacket[i]->ClearPacket();
-						if (!res) eventPacket[i]->AddEvent(actual);
-					}
-			    }
-		}
-
-        if (delete_events)
+    if (m_SendEvents) {
+        actual = Eventos->First;
+        while(actual != NULL)
         {
-            tmp = actual->next;
-            Eventos->Delete(actual);
-            actual = tmp;
+            if ( actual->deviceid==MO_IODEVICE_KEYBOARD ) {
+
+            //if(recog_devices[actual->deviceid])
+
+   			    moDataMessage event_data_message;
+			    moData pData;
+
+                pData.SetText( moText("EVENT") );
+                event_data_message.Add(pData);
+
+                pData.SetInt( actual->deviceid );
+                event_data_message.Add(pData);
+
+                pData.SetInt( actual->devicecode );
+                event_data_message.Add(pData);
+
+                pData.SetInt( actual->reservedvalue0 );
+                event_data_message.Add(pData);
+
+                pData.SetInt( actual->reservedvalue1 );
+                event_data_message.Add(pData);
+
+                pData.SetInt( actual->reservedvalue2 );
+                event_data_message.Add(pData);
+
+                pData.SetInt( actual->reservedvalue3 );
+                event_data_message.Add(pData);
+
+                for (i = 0; i < host_name.Count(); i++)
+                    {
+                        /*
+                        res = eventPacket[i]->AddEvent(actual);
+                        if (eventPacket[i]->ReadyToSend())
+                        {
+                            SendEvent(i);
+                            eventPacket[i]->ClearPacket();
+                            if (!res) eventPacket[i]->AddEvent(actual);
+                        }
+                        */
+                        SendDataMessage( i, event_data_message );
+                    }
+            }
+
+            if (delete_events)
+            {
+                tmp = actual->next;
+                Eventos->Delete(actual);
+                actual = tmp;
+            }
+            else actual = actual->next;
         }
-        else actual = actual->next;
+
     }
+
+/*
+
 */
 
     //inlets outlets
@@ -404,7 +483,7 @@ void moNetOSCOut::SendDataMessage( int i, moDataMessage &datamessage ) {
 	packetStream->Clear();
     (*packetStream) << osc::BeginBundleImmediate;
 
-    (*packetStream) << osc::BeginMessage( moText("") );
+    (*packetStream) << osc::BeginMessage( moText("")+ IntToStr(datamessage.Count()) );
 
     for(int j=0; j< datamessage.Count(); j++) {
         moData data = datamessage[j];
@@ -430,7 +509,10 @@ void moNetOSCOut::SendDataMessage( int i, moDataMessage &datamessage ) {
     }
     (*packetStream) << osc::EndMessage;
     (*packetStream) << osc::EndBundle;
-    if (transmitSockets[i]) transmitSockets[i]->Send( packetStream->Data(), packetStream->Size() );
+    if (transmitSockets[i]) {
+        transmitSockets[i]->Send( packetStream->Data(), packetStream->Size() );
+        //MODebug2->Push(moText("sending") + IntToStr(i));
+    }
 
     //MODebug2->Push(moText("sending"));
 

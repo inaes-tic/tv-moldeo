@@ -47,6 +47,16 @@
 //typedef moDynamicArray<UdpTransmitSocket*> moUdpTransmitSocketArray;
 moDeclareDynamicArray( UdpTransmitSocket*, moUdpTransmitSocketArray )
 
+enum moNetOSCOutParamIndex {
+    NETOSCOUT_HOSTS=2,
+    NETOSCOUT_PORT=3,
+    NETOSCOUT_DEVICES=4,
+    NETOSCOUT_LATENCY=5,
+    NETOSCOUT_MAXEVENTS=6,
+    NETOSCOUT_SENDEVENTS=7,
+    NETOSCOUT_DELETEEVENTS=8
+};
+
 
 // moNetOSCOut class **************************************************
 
@@ -63,12 +73,20 @@ public:
     MOint GetValue(MOdevcode);
     MOdevcode GetCode( moText);
     MOboolean Finish();
+
+    virtual moConfigDefinition * GetDefinition( moConfigDefinition *p_configdefinition );
+
+    void UpdateParameters();
+
 private:
 	moUdpTransmitSocketArray transmitSockets;
 	osc::OutboundPacketStream* packetStream;
 	char* packetBuffer;
 	moEventPacketArray eventPacket;
 	int OUTPUT_BUFFER_SIZE;
+
+	int m_SendEvents;
+    int m_Port;
 
     // Parameters.
     moTextArray host_name;
