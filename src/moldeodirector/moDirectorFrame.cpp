@@ -443,6 +443,9 @@ moDirectorFrame::CreateInspector() {
     m_p3dModelPanel = new mo3dModelPanel( m_pInspectorNotebook, wxID_ANY );
     m_p3dModelPanel->SetNextActionHandler( this );
 
+    m_pScriptPanel = new moScriptPanel( m_pInspectorNotebook, wxID_ANY );
+    m_pScriptPanel->SetNextActionHandler( this );
+
 	m_pInspectorNotebook->AddPage( m_pPanelTexture, wxT("Texture") );
 	m_pInspectorNotebook->AddPage( m_pColorMotion , wxT("Color") );
 	m_pInspectorNotebook->AddPage( m_pObjectMotion, wxT("Motion") );
@@ -452,7 +455,7 @@ moDirectorFrame::CreateInspector() {
 
 	m_pInspectorNotebook->AddPage( new wxPanel(m_pInspectorNotebook,wxID_ANY) , wxT("Sound") );
 	m_pInspectorNotebook->AddPage( new wxPanel(m_pInspectorNotebook,wxID_ANY) , wxT("Font") );
-	m_pInspectorNotebook->AddPage( new wxTextCtrl(m_pInspectorNotebook,wxID_ANY) , wxT("Script") );
+	m_pInspectorNotebook->AddPage( m_pScriptPanel, wxT("Script") );
 	m_pInspectorNotebook->AddPage( new wxTextCtrl(m_pInspectorNotebook,wxID_ANY) , wxT("Text") );
 
 
@@ -505,6 +508,10 @@ moDirectorFrame::Inspect( moValueDescriptor  p_ValueDescriptor, bool setselectio
                 break;
             case MO_PARAM_FILTER:
                 m_pShadersPanel->Inspect( p_ValueDescriptor );
+                if (setselection) m_pInspectorNotebook->SetSelection(0);
+                break;
+            case MO_PARAM_SCRIPT:
+                m_pScriptPanel->Inspect( p_ValueDescriptor );
                 if (setselection) m_pInspectorNotebook->SetSelection(0);
                 break;
 
@@ -1354,7 +1361,13 @@ moDirectorFrame::ProjectUpdated( moProjectDescriptor p_ProjectDescriptor ) {
 
 	FrameManager.GetPane(wxT("manager")).Caption(wxT("Project manager: ")+cMol);
 
-    wxTreeItemId preeffectsid,effectsid,posteffectsid, mastereffectsid,iodevicesid, resourcesid;
+    wxTreeItemId preeffectsid,
+    effectsid,
+    posteffectsid,
+    mastereffectsid,
+    iodevicesid,
+    resourcesid,
+    consoleid;
 
 	wxTreeItemId root = m_pDataNotebook->m_pProjectTreeCtrl->AddRoot( (wxChar*)(char*)(moText("Layer effects: ") + p_ProjectDescriptor.GetConfigName()) );
 
@@ -1362,6 +1375,7 @@ moDirectorFrame::ProjectUpdated( moProjectDescriptor p_ProjectDescriptor ) {
 
 	resourcesid = m_pDataNotebook->m_pResourcesTreeCtrl->AddRoot( (wxChar*)(char*)(moText("Resources: ") + p_ProjectDescriptor.GetConfigName()) );
 
+    consoleid = m_pDataNotebook->m_pProjectTreeCtrl->AppendItem(root, wxT("Console"), 0);
 	preeffectsid = m_pDataNotebook->m_pProjectTreeCtrl->AppendItem(root, wxT("PreEffects"), 0);
 	effectsid = m_pDataNotebook->m_pProjectTreeCtrl->AppendItem(root, wxT("Effects"), 0);
 	posteffectsid = m_pDataNotebook->m_pProjectTreeCtrl->AppendItem(root, wxT("PostEffects"), 0);
@@ -1410,6 +1424,11 @@ moDirectorFrame::ProjectUpdated( moProjectDescriptor p_ProjectDescriptor ) {
 		xitemname+= wxString( (wxChar*)(char*) pMobDescriptor.GetMobDefinition().GetConfigName() );
 
 		switch( pMobDescriptor.GetMobDefinition().GetType() ) {
+
+		    case MO_OBJECT_CONSOLE:
+                exid = m_pDataNotebook->m_pProjectTreeCtrl->AppendItem( consoleid, xitemname , 1 );
+                if (exid.IsOk()) m_pDataNotebook->m_pProjectTreeCtrl->SetItemData( exid, new moMobItemData( pMobDescriptor ));
+                break;
 
 			case MO_OBJECT_PREEFFECT:
 				exid = m_pDataNotebook->m_pProjectTreeCtrl->AppendItem( preeffectsid, xitemname , 1 );

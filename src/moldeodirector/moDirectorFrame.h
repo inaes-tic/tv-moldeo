@@ -53,6 +53,8 @@
 #include "moShadersPanel.h"
 #include "mo3dModelPanel.h"
 
+#include "moScriptPanel.h"
+
 #include "moConfigurationDialog.h"
 
 #include "moEffectLayerCtrl.h"
@@ -241,6 +243,8 @@ private:
 	moFunctionPanel*        m_pFunctionPanel;
 	moShadersPanel*         m_pShadersPanel;
 	mo3dModelPanel*         m_p3dModelPanel;
+
+	moScriptPanel*          m_pScriptPanel;
 
 	wxTextCtrl*			    m_pLogTextCtrl;
 

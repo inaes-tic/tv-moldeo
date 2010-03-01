@@ -26,7 +26,7 @@ moPreviewWindow::moPreviewWindow(wxWindow* parent,wxWindowID id,const wxPoint& p
 {
     wxInitAllImageHandlers();
 	//(*Initialize(moPreviewWindow)
-	Create(parent, id, wxDefaultPosition, wxSize(401,336), wxTAB_TRAVERSAL, _T("id"));
+	Create(parent, wxID_ANY, wxDefaultPosition, wxSize(401,336), wxTAB_TRAVERSAL, _T("wxID_ANY"));
 	SetForegroundColour(wxColour(255,255,255));
 	SetBackgroundColour(wxColour(0,0,0));
 	BitmapButtonPlay = new wxBitmapButton(this, ID_BITMAPBUTTONPLAY, wxBitmap(wxImage(_T("../../doc/icons/play32.png"))), wxPoint(0,0), wxSize(32,32), wxBU_AUTODRAW, wxDefaultValidator, _T("ID_BITMAPBUTTONPLAY"));
@@ -40,11 +40,9 @@ moPreviewWindow::moPreviewWindow(wxWindow* parent,wxWindowID id,const wxPoint& p
 	BitmapButtonSaveVideo = new wxBitmapButton(this, ID_BITMAPBUTTONSAVEVIDEO, wxBitmap(wxImage(_T("../../doc/icons/savevideo32.png"))), wxPoint(344,0), wxSize(32,32), wxBU_AUTODRAW, wxDefaultValidator, _T("ID_BITMAPBUTTONSAVEVIDEO"));
 	BitmapButtonSaveVideo->SetDefault();
 	BitmapButtonSaveSession = new wxBitmapButton(this, ID_BITMAPBUTTONSAVESESSION, wxBitmap(wxImage(_T("../../doc/icons/savesession32.png"))), wxPoint(64,0), wxSize(32,32), wxBU_AUTODRAW, wxDefaultValidator, _T("ID_BITMAPBUTTONSAVESESSION"));
-//	BitmapButtonStop = new wxBitmapButton(this, ID_BITMAPBUTTONSTOP, wxBitmap(wxImage(_T("..\\..\\art\\icons\\stop32.png"))), wxPoint(96,0), wxSize(32,32), wxBU_AUTODRAW, wxDefaultValidator, _T("ID_BITMAPBUTTONSTOP"));
-	BitmapButtonStop = new wxBitmapButton(this, ID_BITMAPBUTTONSTOP, wxBitmap(wxImage(_T("../../art/icons/stop32.png"))), wxPoint(96,0), wxSize(32,32), wxBU_AUTODRAW, wxDefaultValidator, _T("ID_BITMAPBUTTONSTOP"));
-
+	BitmapButtonStop = new wxBitmapButton(this, ID_BITMAPBUTTONSTOP, wxBitmap(wxImage(_T("..\\..\\art\\icons\\stop32.png"))), wxPoint(96,0), wxSize(32,32), wxBU_AUTODRAW, wxDefaultValidator, _T("ID_BITMAPBUTTONSTOP"));
 	BitmapButtonStop->SetDefault();
-
+	
 	Connect(ID_BITMAPBUTTONPLAY,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&moPreviewWindow::OnBitmapButtonPlayClick);
 	Connect(ID_BITMAPBUTTONPAUSE,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&moPreviewWindow::OnBitmapButtonPauseClick);
 	Connect(ID_BITMAPBUTTONFULLSCREEN,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&moPreviewWindow::OnButtonFullSCreenClick);

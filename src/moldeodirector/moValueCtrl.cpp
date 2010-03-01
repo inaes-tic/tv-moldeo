@@ -27,6 +27,7 @@ moValueCtrl::Init( moDirectorChildFrame* parent, moValueDescriptor p_valuedescri
 
 	wxString ValueStr = _("");
 	MOint  ValueInt = 0;
+	MOdouble  ValueFloat = 0.0;
 	int xpos = 0;
 
     fonttypes[MO_FONT_OUTLINE] = wxT("Outline");
@@ -94,8 +95,14 @@ moValueCtrl::Init( moDirectorChildFrame* parent, moValueDescriptor p_valuedescri
 			//Connect(
 			break;
         case MO_PARAM_NUMERIC:
-            ValueInt = pValue.GetSubValue(0).Int();
-            ValueStr = moText2Wx( IntToStr(ValueInt) );
+            if (pValue.GetSubValue(0).Type()==MO_VALUE_NUM_FLOAT || pValue.GetSubValue(0).Type()==MO_VALUE_NUM_DOUBLE ) {
+                ValueFloat = pValue.GetSubValue(0).Float();
+                ValueStr = moText2Wx( FloatToStr(ValueFloat) );
+            } else {
+                ValueInt = pValue.GetSubValue(0).Int();
+                ValueStr = moText2Wx( IntToStr(ValueInt) );
+            }
+
             //m_pSpinCtrl = new wxSpinCtrl( this, -1, (wxChar*)(char*)IntToStr(ValueInt),wxPoint(20,0),wxSize(80,20));
             m_pTextCtrl = new wxTextCtrl( this, -1, ValueStr,wxPoint(20,0),wxSize(150,20));
             xpos+=m_pTextCtrl->GetSize().x;
@@ -215,12 +222,13 @@ moValueCtrl::Set( moValueDescriptor p_valuedescriptor ) {
 
     wxString ValueStr = _("");
     int ValueInt = 0;
+    double ValueFloat = 0.0;
     int xpos = 0;
 
     m_ValueDescriptor = p_valuedescriptor;
 
     moParamType PType = m_ValueDescriptor.GetParamDescriptor().GetParamDefinition().GetType();
-    moValue pValue( m_ValueDescriptor.GetValue() );
+    moValue& pValue( m_ValueDescriptor.GetValue() );
 
     switch( PType ) {
 		case MO_PARAM_ALPHA:
@@ -242,8 +250,13 @@ moValueCtrl::Set( moValueDescriptor p_valuedescriptor ) {
 			//Connect(
 			break;
     case MO_PARAM_NUMERIC:
-        ValueInt = pValue.GetSubValue(0).Int();
-        ValueStr = moText2Wx( IntToStr(ValueInt) );
+        if (pValue.GetSubValue(0).Type()==MO_VALUE_NUM_FLOAT || pValue.GetSubValue(0).Type()==MO_VALUE_NUM_DOUBLE ) {
+            ValueFloat = pValue.GetSubValue(0).Float();
+            ValueStr = moText2Wx( FloatToStr(ValueFloat) );
+        } else {
+            ValueInt = pValue.GetSubValue(0).Int();
+            ValueStr = moText2Wx( IntToStr(ValueInt) );
+        }
         if (m_pTextCtrl) m_pTextCtrl->ChangeValue( ValueStr );
         break;
     case MO_PARAM_BLENDING:
@@ -414,7 +427,7 @@ moValueCtrl::OnSpinUpdated( wxSpinEvent& event) {
     switch( (int)m_ValueDescriptor.GetParamDescriptor().GetParamDefinition().GetType()) {
 
         case MO_PARAM_NUMERIC:
-            if (m_pSpinCtrl) rValue.GetSubValue(0).SetInt( m_pSpinCtrl->GetValue() );
+            //if (m_pSpinCtrl) rValue.GetSubValue(0).SetInt( m_pSpinCtrl->GetValue() );
             break;
 
     }
@@ -448,8 +461,15 @@ moValueCtrl::OnTextUpdated( wxCommandEvent& event) {
                 break;
             case MO_PARAM_NUMERIC:
                 if (m_pTextCtrl) {
-                    int ii = atoi( (const char*)m_pTextCtrl->GetValue().c_str() );
-                    rValue.GetSubValue(0).SetInt( ii );
+                    if ( rValue.GetSubValue(0).Type()==MO_VALUE_NUM_FLOAT ||
+                        rValue.GetSubValue(0).Type()==MO_VALUE_NUM_DOUBLE) {
+                        float ff = atof( (const char*)m_pTextCtrl->GetValue().c_str() );
+                        rValue.GetSubValue(0).SetFloat( ff );
+
+                    } else {
+                        int ii = atoi( (const char*)m_pTextCtrl->GetValue().c_str() );
+                        rValue.GetSubValue(0).SetInt( ii );
+                    }
                 }
                 break;
             case MO_PARAM_BLENDING:

@@ -44,7 +44,7 @@ moColorMotion::moColorMotion(wxWindow* parent,wxWindowID id,const wxPoint& pos,c
 {
 	//(*Initialize(moColorMotion)
 	wxFlexGridSizer* FlexGridSizer1;
-
+	
 	Create(parent, wxID_ANY, wxDefaultPosition, wxSize(352,221), wxTAB_TRAVERSAL|wxCLIP_CHILDREN, _T("wxID_ANY"));
 	SetForegroundColour(wxColour(255,255,255));
 	SetBackgroundColour(wxColour(0,0,0));
@@ -54,17 +54,17 @@ moColorMotion::moColorMotion(wxWindow* parent,wxWindowID id,const wxPoint& pos,c
 	Panel2 = new wxPanel(this, ID_PANEL2, wxPoint(192,8), wxSize(184,272), wxNO_BORDER|wxTAB_TRAVERSAL, _T("ID_PANEL2"));
 	Panel2->SetBackgroundColour(wxColour(0,0,0));
 	PanelTranslateCoords = new wxPanel(Panel2, ID_PANEL5, wxPoint(8,8), wxSize(44,62), wxTAB_TRAVERSAL, _T("ID_PANEL5"));
-	StaticBitmap1 = new wxStaticBitmap(PanelTranslateCoords, ID_STATICBITMAP1, wxBitmap(wxImage(_T("../../art/icons/colors.png"))), wxPoint(0,0), wxDefaultSize, 0, _T("ID_STATICBITMAP1"));
+	StaticBitmap1 = new wxStaticBitmap(PanelTranslateCoords, ID_STATICBITMAP1, wxBitmap(wxImage(_T("../../doc/icons/colors.png"))), wxPoint(0,0), wxDefaultSize, 0, _T("ID_STATICBITMAP1"));
 	SliderRed = new wxSlider(Panel2, ID_SLIDERRED, 0, 0, 255, wxPoint(56,8), wxSize(56,16), 0, wxDefaultValidator, _T("ID_SLIDERRED"));
 	SliderGreen = new wxSlider(Panel2, ID_SLIDERGREEN, 0, 0, 255, wxPoint(56,24), wxSize(56,16), 0, wxDefaultValidator, _T("ID_SLIDERGREEN"));
 	SliderBlue = new wxSlider(Panel2, ID_SLIDERBLUE, 0, 0, 255, wxPoint(56,40), wxSize(56,16), 0, wxDefaultValidator, _T("ID_SLIDERBLUE"));
 	SliderAlpha = new wxSlider(Panel2, ID_SLIDERALPHA, 0, 0, 255, wxPoint(56,56), wxSize(56,16), 0, wxDefaultValidator, _T("ID_SLIDERALPHA"));
-	BitmapButton1 = new wxBitmapButton(Panel2, ID_BITMAPBUTTON1, wxBitmap(wxImage(_T("../../art/icons/pickcolor.png"))), wxPoint(128,8), wxDefaultSize, wxBU_AUTODRAW, wxDefaultValidator, _T("ID_BITMAPBUTTON1"));
+	BitmapButton1 = new wxBitmapButton(Panel2, ID_BITMAPBUTTON1, wxBitmap(wxImage(_T("../../doc/icons/pickcolor.png"))), wxPoint(128,8), wxDefaultSize, wxBU_AUTODRAW, wxDefaultValidator, _T("ID_BITMAPBUTTON1"));
 	BitmapButton1->SetDefault();
 	PanelColor = new wxPanel(Panel2, ID_PANELCOLOR, wxPoint(128,40), wxSize(32,32), wxTAB_TRAVERSAL, _T("ID_PANELCOLOR"));
 	PanelColor->SetBackgroundColour(wxColour(255,255,255));
 	Panel3 = new wxPanel(Panel2, ID_PANEL3, wxPoint(8,96), wxSize(38,62), wxTAB_TRAVERSAL, _T("ID_PANEL3"));
-	StaticBitmap2 = new wxStaticBitmap(Panel3, ID_STATICBITMAP2, wxBitmap(wxImage(_T("../../art/icons/colors.png"))), wxPoint(0,0), wxDefaultSize, 0, _T("ID_STATICBITMAP2"));
+	StaticBitmap2 = new wxStaticBitmap(Panel3, ID_STATICBITMAP2, wxBitmap(wxImage(_T("../../doc/icons/colors.png"))), wxPoint(0,0), wxDefaultSize, 0, _T("ID_STATICBITMAP2"));
 	TextCtrlRed = new wxTextCtrl(Panel2, ID_TEXTCTRLRED, wxEmptyString, wxPoint(56,96), wxSize(88,16), 0, wxDefaultValidator, _T("ID_TEXTCTRLRED"));
 	TextCtrlGreen = new wxTextCtrl(Panel2, ID_TEXTCTRLGREEN, wxEmptyString, wxPoint(56,112), wxSize(88,16), 0, wxDefaultValidator, _T("ID_TEXTCTRLGREEN"));
 	TextCtrlBlue = new wxTextCtrl(Panel2, ID_TEXTCTRLBLUE, wxEmptyString, wxPoint(56,128), wxSize(88,16), 0, wxDefaultValidator, _T("ID_TEXTCTRLBLUE"));
@@ -83,7 +83,7 @@ moColorMotion::moColorMotion(wxWindow* parent,wxWindowID id,const wxPoint& pos,c
 	FlexGridSizer1->Add(Panel2, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	SetSizer(FlexGridSizer1);
 	FlexGridSizer1->SetSizeHints(this);
-
+	
 	Connect(ID_SLIDERRED,wxEVT_SCROLL_THUMBTRACK,(wxObjectEventFunction)&moColorMotion::OnSliderRedCmdScroll);
 	Connect(ID_SLIDERRED,wxEVT_SCROLL_CHANGED,(wxObjectEventFunction)&moColorMotion::OnSliderRedCmdScroll);
 	Connect(ID_SLIDERGREEN,wxEVT_SCROLL_THUMBTRACK,(wxObjectEventFunction)&moColorMotion::OnSliderGreenCmdScroll);

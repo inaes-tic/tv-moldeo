@@ -224,6 +224,8 @@
 		<Unit filename="moPreviewWindow.h" />
 		<Unit filename="moProjectTreeCtrl.cpp" />
 		<Unit filename="moProjectTreeCtrl.h" />
+		<Unit filename="moScriptPanel.cpp" />
+		<Unit filename="moScriptPanel.h" />
 		<Unit filename="moShaderCtrl.cpp" />
 		<Unit filename="moShaderCtrl.h" />
 		<Unit filename="moShadersPanel.cpp" />
@@ -291,6 +293,7 @@
 					<wxPanel wxs="wxsmith/moConfigurationGeneral.wxs" src="moConfigurationGeneral.cpp" hdr="moConfigurationGeneral.h" name="moConfigurationGeneral" language="CPP" />
 					<wxPanel wxs="wxsmith/moConfigurationOutput.wxs" src="moConfigurationOutput.cpp" hdr="moConfigurationOutput.h" name="moConfigurationOutput" language="CPP" />
 					<wxFrame wxs="wxsmith/moConfigurationAdvancedOutput.wxs" src="moConfigurationAdvancedOutput.cpp" hdr="moConfigurationAdvancedOutput.h" name="moConfigurationAdvancedOutput" language="CPP" />
+					<wxPanel wxs="wxsmith/moScriptPanel.wxs" src="moScriptPanel.cpp" hdr="moScriptPanel.h" name="moScriptPanel" language="CPP" />
 				</resources>
 			</wxsmith>
 		</Extensions>

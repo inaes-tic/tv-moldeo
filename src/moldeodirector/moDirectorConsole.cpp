@@ -65,6 +65,9 @@ moDirectorConsole::GetObject( moMobDescriptor p_MobDesc ) {
                 pMOB = (moMoldeoObject*) m_pResourceManager->GetResource(idx);
             }
             break;
+        case MO_OBJECT_CONSOLE:
+            pMOB = (moMoldeoObject*) this;
+            break;
 
     }
     if (!pMOB)
@@ -132,8 +135,8 @@ moDirectorConsole::OpenProject( moProjectDescriptor p_projectdescriptor )  {//lo
               m_pResourceManager,
               //RENDERMANAGER_MODE_FRAMEBUFFER,
               //RENDERMANAGER_MODE_FRAMEBUFFER,
-              //MO_RENDER_TO_TEXTURE_FBOBJECT,//render to texture: MO_RENDER_TO_TEXTURE_FBSCREEN
-              RENDERMANAGER_MODE_NORMAL,
+              RENDERMANAGER_MODE_FRAMEBUFFER,//render to texture: MO_RENDER_TO_TEXTURE_FBSCREEN
+              //RENDERMANAGER_MODE_NORMAL,
               400,300,400,300,
               /*MO_DEF_SCREEN_WIDTH, MO_DEF_SCREEN_HEIGHT,
               MO_DEF_RENDER_WIDTH, MO_DEF_RENDER_HEIGHT,*/
@@ -147,7 +150,7 @@ moDirectorConsole::OpenProject( moProjectDescriptor p_projectdescriptor )  {//lo
 
 
         //========================================================================
-        // $idtipodetalle ACTUALIZAMOS TODOS LOS VALORES: para aquellos objetos que lo necesiten
+        //  ACTUALIZAMOS TODOS LOS VALORES: para aquellos objetos que lo necesiten
         //========================================================================
 
 
@@ -162,7 +165,9 @@ moDirectorConsole::OpenProject( moProjectDescriptor p_projectdescriptor )  {//lo
 
             if ( (mMob.GetMobDefinition().GetType()!=MO_OBJECT_IODEVICE) &&
                  (mMob.GetMobDefinition().GetType()!=MO_OBJECT_RESOURCE) &&
-                 (mMob.GetMobDefinition().GetType()!=MO_OBJECT_MASTEREFFECT) ) {
+                 (mMob.GetMobDefinition().GetType()!=MO_OBJECT_CONSOLE )
+
+                  ) {
 
                 for( int j=0; j<(int)pParams.Count(); j++ ) {
 
@@ -277,7 +282,11 @@ moMobDescriptors moDirectorConsole::GetMobDescriptors() {
                 case MO_OBJECT_RESOURCE:
 
                     break;
-                default:
+
+                case MO_OBJECT_PREEFFECT:
+                case MO_OBJECT_EFFECT:
+                case MO_OBJECT_POSTEFFECT:
+                case MO_OBJECT_MASTEREFFECT:
                     pEffect = (moEffect*) pMOB;
                     break;
             }
@@ -863,7 +872,10 @@ moMobDescriptors moDirectorConsole::GetMobDescriptors() {
 
             switch(pMOB->GetType()) {
                 case MO_OBJECT_IODEVICE:
+                    break;
                 case MO_OBJECT_RESOURCE:
+                    break;
+                case MO_OBJECT_CONSOLE:
                     break;
                 default:
                     moEffect* pEffect = (moEffect*) pMOB;
@@ -1356,6 +1368,23 @@ moDirectorConsole::SetParameter( moParameterDescriptor  p_ParameterDesc ) {
                         Value = NewValue;
                         break;
 
+                    case MO_PARAM_SCRIPT:
+                        if ( NewValue.GetSubValue(0).Text() == moText("__compiling__.lua") ) {
+                            moText fullscript = m_pResourceManager->GetDataMan()->GetDataPath()+ moSlash + (moText)Value.GetSubValue(0).Text();
+                            if ( pObject->CompileFile(fullscript) ) {
+
+                                MODebug2->Message(moText("ParticlesSimple script compiled succesfully ") + (moText)fullscript );
+
+                                pObject->SelectScriptFunction( "Init" );
+                                //AddFunctionParam( m_FramesPerSecond );
+                                pObject->RunSelectedFunction();
+
+                            } else MODebug2->Error(moText("ParticlesSimple couldnt compile lua script ") + (moText)fullscript );
+                        } else {
+                            Value = NewValue;
+                        }
+                        break;
+
                     default:
                         Value = NewValue;
                         break;
@@ -1484,24 +1513,21 @@ moDirectorConsole::SetView( int x, int y, int w, int h ) {
 
 moDirectorStatus moDirectorConsole::Play() {
 
-    if (moTimeManager::MoldeoTimer->Paused())
-        moContinueTimer();
-    else
-        moStartTimer();
+    ConsolePlay();
 
     return MO_DIRECTOR_STATUS_OK;
 }
 
 moDirectorStatus moDirectorConsole::Pause() {
 
-    moPauseTimer();
+    ConsolePause();
 
     return MO_DIRECTOR_STATUS_OK;
 }
 
 moDirectorStatus moDirectorConsole::Stop() {
 
-    moStopTimer();
+    ConsoleStop();
 
     return MO_DIRECTOR_STATUS_OK;
 }
@@ -1548,7 +1574,15 @@ moDirectorStatus moDirectorConsole::ConsoleLoop() {
         moText plog;
         for(int i =0; i < MODebug2->Count(); i++ ) {
             plog = MODebug2->Pop();
-            if (plog.Trim()!=moText("")) Log( plog );
+            wxString mess;
+            mess = moText2Wx( plog );
+            bool iserror;
+            iserror = ( mess.Find(wxString("ERROR")) >= 0 );
+            if (iserror) {
+                if (plog.Trim()!=moText("")) LogError( plog );
+            } else {
+                if (plog.Trim()!=moText("")) Log( plog );
+            }
         }
 
         if (previewreset2 && ( moGetTicks() % 1000) == 0 ) {

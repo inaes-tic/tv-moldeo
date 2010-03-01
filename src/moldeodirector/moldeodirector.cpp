@@ -71,6 +71,7 @@ bool moDirectorApp::OnInit()
 
 // Check only one instance running
 
+/*
 	const wxString name = wxString::Format(wxT("MoldeoDirector-%s"),
             wxGetUserId().c_str());
     m_checker = new wxSingleInstanceChecker(name);
@@ -79,7 +80,7 @@ bool moDirectorApp::OnInit()
             wxLogError(_("Program already running, aborting."));
             return false;
         }
-
+*/
 
 
     // Check configuration file

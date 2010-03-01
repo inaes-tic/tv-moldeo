@@ -674,6 +674,7 @@ public:
         m_ValueDefinition = p_valuedefinition;
     }
 
+
 private:
 
     moValueDefinition       m_ValueDefinition;
