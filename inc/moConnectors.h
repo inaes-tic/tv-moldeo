@@ -104,6 +104,18 @@ class LIBMOLDEO_API moConnector : public moAbstract {
 		virtual	MOboolean Init( moText p_ConnectorLabelName, MOint ConnectorId, moParam* p_param );
 
         /**
+        * Inicializador
+        * esta función de inicialización es utilizada en todos los moMoldeoObjects
+        * sincretiza un tipo de parámetro moParamType, orientado a un archivo de configuración ( simbólico a interpretar [fórmula] ) a
+        * un tipo de dato moDataType ya resuelto ( directo interpretado [dato] )
+        * @param p_ConnectorLabelName nombre único del objeto al que pertenece este conector
+        * @param ConnectorId id único del objeto al que pertenece este conector
+        * @param p_paramtype tipo de parámetro al que estará vinculado este conector, en este caso cada tipo de parametro tendra un moData asociado específico (ver codigo)
+        */
+        virtual MOboolean Init( moText p_ConnectorLabelName, MOint ConnectorId, moParamType p_paramtype );
+
+
+        /**
         * observador de la clase, devuelve el id del conector
         * @return el id del conector
         */
@@ -222,7 +234,7 @@ class LIBMOLDEO_API moConnector : public moAbstract {
 };
 
 typedef moConnector* moConnectorPtr;
-moDeclareExportedDynamicArray( moConnectorPtr, moConnectors)
+moDeclareExportedDynamicArray( moConnector*, moConnectors)
 
 /// Conección, vínculo entre dos objetos
 /**
