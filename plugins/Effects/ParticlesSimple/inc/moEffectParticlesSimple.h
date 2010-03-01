@@ -375,6 +375,9 @@ class moParticlesSimple : public moAbstract {
     ///Scale of the particle
     double      Scale;
 
+    ///Angle of the particle
+    moVector3f      Rotation;
+
     ///Unique ID of OpenGL Texture
     MOint       GLId;///para asociar la textura al momento de la creación
     MOint       GLId2;
@@ -459,20 +462,25 @@ class moEffectParticlesSimple : public moEffect
 
         int luaGetParticle(moLuaVirtualMachine& vm);
         int luaGetParticlePosition(moLuaVirtualMachine& vm);
+        int luaGetParticleSize(moLuaVirtualMachine& vm);
+        int luaGetParticleScale(moLuaVirtualMachine& vm);
         int luaGetParticleVelocity(moLuaVirtualMachine& vm);
-        int luaGetParticleIntersection(moLuaVirtualMachine& vm);
+        int luaGetParticleRotation(moLuaVirtualMachine& vm);
 
         int luaUpdateParticle( moLuaVirtualMachine& vm );
         int luaUpdateParticlePosition( moLuaVirtualMachine& vm );
+        int luaUpdateParticleSize( moLuaVirtualMachine& vm );
+        int luaUpdateParticleScale( moLuaVirtualMachine& vm );
         int luaUpdateParticleVelocity( moLuaVirtualMachine& vm );
+        int luaUpdateParticleRotation( moLuaVirtualMachine& vm );
 
         int luaUpdateForce( moLuaVirtualMachine& vm );
-
 
         int luaShot(moLuaVirtualMachine& vm);
         int luaReInit(moLuaVirtualMachine& vm);
 
         int luaDrawPoint(moLuaVirtualMachine& vm);
+        int luaGetParticleIntersection(moLuaVirtualMachine& vm);
 
         ///end script functions
 

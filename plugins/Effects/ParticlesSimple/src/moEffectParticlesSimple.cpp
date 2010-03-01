@@ -2018,9 +2018,9 @@ void moEffectParticlesSimple::DrawParticlesSimple( moTempo* tempogral, moEffectS
 
                 glTranslatef( pPar->Pos3d.X(), pPar->Pos3d.Y(),  pPar->Pos3d.Z() );
 
-                glRotatef(  m_Config[moR(PARTICLES_ROTATEZ_PARTICLE)].GetData()->Fun()->Eval(state.tempo.ang), 0.0, 0.0, 1.0 );
-                glRotatef(  m_Config[moR(PARTICLES_ROTATEY_PARTICLE)].GetData()->Fun()->Eval(state.tempo.ang), 0.0, 1.0, 0.0 );
-                glRotatef(  m_Config[moR(PARTICLES_ROTATEX_PARTICLE)].GetData()->Fun()->Eval(state.tempo.ang), 1.0, 0.0, 0.0 );
+                glRotatef(  m_Config[moR(PARTICLES_ROTATEZ_PARTICLE)].GetData()->Fun()->Eval(state.tempo.ang)+pPar->Rotation.Z(), 0.0, 0.0, 1.0 );
+                glRotatef(  m_Config[moR(PARTICLES_ROTATEY_PARTICLE)].GetData()->Fun()->Eval(state.tempo.ang)+pPar->Rotation.Y(), 0.0, 1.0, 0.0 );
+                glRotatef(  m_Config[moR(PARTICLES_ROTATEX_PARTICLE)].GetData()->Fun()->Eval(state.tempo.ang)+pPar->Rotation.X(), 1.0, 0.0, 0.0 );
 
                 //scale
                 glScalef(   m_Config[moR(PARTICLES_SCALEX_PARTICLE)].GetData()->Fun()->Eval(state.tempo.ang)*pPar->Scale,
@@ -2313,6 +2313,8 @@ void moEffectParticlesSimple::DrawTracker() {
 
                     TuioObject* pObject;
 
+if (drawing_features > 0  ) {
+
                     std::list<TuioObject*> objects = m_pTUIOData->getTuioObjects();
 
                     for (std::list<TuioObject*>::iterator iter=objects.begin(); iter != objects.end(); iter++) {
@@ -2347,8 +2349,8 @@ void moEffectParticlesSimple::DrawTracker() {
 
 
                             ///DRAW angle vector
-                            glColor4f( 0.0,0.0,1.0,1.0);
-                            glLineWidth(4.0);
+                            glColor4f( 0.0,1.0,1.0,1.0);
+                            glLineWidth(8.0);
                             glBegin(GL_LINES);
                                 glVertex2f( position.X(), position.Y());
                                 glVertex2f( position.X() + 0.04*cos(angle), position.Y() + 0.04*sin(angle) );
@@ -2362,6 +2364,17 @@ void moEffectParticlesSimple::DrawTracker() {
                                 glVertex2f( position.X(), position.Y());
                                 glVertex2f( position.X() + pObject->getXSpeed(), position.Y() + pObject->getYSpeed() );
                             glEnd();
+
+                            ///rotation speed
+                            /*
+                            glColor4f( 1.0,0.0,0.0,1.0);
+                            glLineWidth(8.0);
+                            glBegin(GL_LINES);
+                                glVertex2f( position.X(), position.Y());
+                                glVertex2f( position.X(), position.Y() + pObject->getRotationSpeed()*0.0001 );
+                            glEnd();
+                            */
+                            //MODebug2->Push(moText("rspeed:")+IntToStr( (int)(pObject->getRotationSpeed()/10.0))  );
 
                             /*
 
@@ -2405,7 +2418,7 @@ void moEffectParticlesSimple::DrawTracker() {
                         }
 
                     }
-
+}
                 }
 
             }
@@ -2637,7 +2650,7 @@ void moEffectParticlesSimple::Draw( moTempo* tempogral, moEffectState* parentsta
 */
 
     if (ortho) {
-        glDisable(GL_DEPTH_TEST);							// Disables Depth Testing
+        glEnable(GL_DEPTH_TEST);							// Disables Depth Testing
         glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
         glLoadIdentity();									// Reset The Projection Matrix
         glOrtho(-0.5,0.5,-0.5*h/w,0.5*h/w,-1,1);                              // Set Up An Ortho Screen
@@ -2691,7 +2704,7 @@ void moEffectParticlesSimple::Draw( moTempo* tempogral, moEffectState* parentsta
 
     //esto deberia ser parametrizable...
 	//glEnable( GL_DEPTH_TEST);
-	glDisable( GL_DEPTH_TEST);
+	//glDisable( GL_DEPTH_TEST);
     glShadeModel(GL_SMOOTH);
 
     //setUpLighting();
@@ -2973,21 +2986,27 @@ void moEffectParticlesSimple::RegisterFunctions()
 {
     moMoldeoObject::RegisterFunctions();
 
-    RegisterBaseFunction("GetParticle");
-    RegisterFunction("GetParticlePosition");
-    RegisterFunction("GetParticleVelocity");
-    RegisterFunction("GetParticleIntersection");
+    RegisterBaseFunction("GetParticle"); //0
+    RegisterFunction("GetParticlePosition");//1
+    RegisterFunction("GetParticleSize");//2
+    RegisterFunction("GetParticleScale");//3
+    RegisterFunction("GetParticleVelocity");//4
+    RegisterFunction("GetParticleRotation");//5
 
-    RegisterFunction("UpdateParticle");
-    RegisterFunction("UpdateParticlePosition");
-    RegisterFunction("UpdateParticleVelocity");
+    RegisterFunction("UpdateParticle");//6
+    RegisterFunction("UpdateParticlePosition");//7
+    RegisterFunction("UpdateParticleSize");//8
+    RegisterFunction("UpdateParticleScale");//9
+    RegisterFunction("UpdateParticleVelocity");//10
+    RegisterFunction("UpdateParticleRotation");//11
 
-	RegisterFunction("UpdateForce");
+	RegisterFunction("UpdateForce");//12
 
-	RegisterFunction("Shot");
-	RegisterFunction("ReInit");
+	RegisterFunction("Shot");//13
+	RegisterFunction("ReInit");//14
 
-    RegisterFunction("DrawPoint");
+    RegisterFunction("DrawPoint");//15
+    RegisterFunction("GetParticleIntersection");//16
 
     ResetScriptCalling();
 }
@@ -3004,42 +3023,63 @@ int moEffectParticlesSimple::ScriptCalling(moLuaVirtualMachine& vm, int iFunctio
             return luaGetParticlePosition(vm);
         case 2:
             ResetScriptCalling();
-            return luaGetParticleVelocity(vm);
+            return luaGetParticleSize(vm);
         case 3:
             ResetScriptCalling();
-            return luaGetParticleIntersection(vm);
-
-
+            return luaGetParticleScale(vm);
         case 4:
             ResetScriptCalling();
-            return luaUpdateParticle(vm);
+            return luaGetParticleVelocity(vm);
         case 5:
             ResetScriptCalling();
-            return luaUpdateParticlePosition(vm);
+            return luaGetParticleRotation(vm);
+
+
         case 6:
             ResetScriptCalling();
-            return luaUpdateParticleVelocity(vm);
+            return luaUpdateParticle(vm);
         case 7:
+            ResetScriptCalling();
+            return luaUpdateParticlePosition(vm);
+        case 8:
+            ResetScriptCalling();
+            return luaUpdateParticleSize(vm);
+        case 9:
+            ResetScriptCalling();
+            return luaUpdateParticleScale(vm);
+        case 10:
+            ResetScriptCalling();
+            return luaUpdateParticleVelocity(vm);
+        case 11:
+            ResetScriptCalling();
+            return luaUpdateParticleRotation(vm);
+        case 12:
             ResetScriptCalling();
             return luaUpdateForce(vm);
 
-        case 8:
+
+        case 13:
             ResetScriptCalling();
             return luaShot(vm);
 
-        case 9:
+        case 14:
             ResetScriptCalling();
             return luaReInit(vm);
 
-        case 10:
+        case 15:
             ResetScriptCalling();
             return luaDrawPoint(vm);
+
+        case 16:
+            ResetScriptCalling();
+            return luaGetParticleIntersection(vm);
 
         default:
             NextScriptCalling();
             return moMoldeoObject::ScriptCalling( vm, iFunctionNumber );
 	}
 }
+
 
 
 int moEffectParticlesSimple::luaDrawPoint(moLuaVirtualMachine& vm)
@@ -3062,6 +3102,28 @@ int moEffectParticlesSimple::luaDrawPoint(moLuaVirtualMachine& vm)
 }
 
 int moEffectParticlesSimple::luaGetParticle(moLuaVirtualMachine& vm)
+{
+    lua_State *state = (lua_State *) vm;
+
+    MOint i = (MOint) lua_tonumber (state, 1);
+
+    moParticlesSimple* Par;
+
+    Par = m_ParticlesSimpleArray[i];
+
+    if (Par) {
+
+        lua_pushnumber(state, (lua_Number) Par->Age.Duration() );
+        lua_pushnumber(state, (lua_Number) Par->Visible );
+        lua_pushnumber(state, (lua_Number) Par->Mass );
+
+    }
+
+    return 3;
+}
+
+
+int moEffectParticlesSimple::luaGetParticleRotation(moLuaVirtualMachine& vm)
 {
     lua_State *state = (lua_State *) vm;
 
@@ -3107,6 +3169,53 @@ int moEffectParticlesSimple::luaGetParticlePosition(moLuaVirtualMachine& vm)
     }
 
     return 3;
+}
+
+int moEffectParticlesSimple::luaGetParticleSize(moLuaVirtualMachine& vm)
+{
+    lua_State *state = (lua_State *) vm;
+
+    MOint i = (MOint) lua_tonumber (state, 1);
+
+    moParticlesSimple* Par;
+
+    moVector2f Size;
+
+    Par = m_ParticlesSimpleArray[i];
+
+    if (Par) {
+        Size = Par->Size;
+        lua_pushnumber(state, (lua_Number) Size.X() );
+        lua_pushnumber(state, (lua_Number) Size.Y() );
+
+    } else {
+        lua_pushnumber(state, (lua_Number) 0 );
+        lua_pushnumber(state, (lua_Number) 0 );
+    }
+
+    return 2;
+}
+
+int moEffectParticlesSimple::luaGetParticleScale(moLuaVirtualMachine& vm)
+{
+    lua_State *state = (lua_State *) vm;
+
+    MOint i = (MOint) lua_tonumber (state, 1);
+
+    moParticlesSimple* Par;
+
+    double Scale;
+
+    Par = m_ParticlesSimpleArray[i];
+
+    if (Par) {
+        Scale = Par->Scale;
+        lua_pushnumber(state, (lua_Number) Scale );
+    } else {
+        lua_pushnumber(state, (lua_Number) 0 );
+    }
+
+    return 1;
 }
 
 int moEffectParticlesSimple::luaGetParticleVelocity(moLuaVirtualMachine& vm)
@@ -3238,6 +3347,42 @@ int moEffectParticlesSimple::luaUpdateParticlePosition( moLuaVirtualMachine& vm 
 
 }
 
+int moEffectParticlesSimple::luaUpdateParticleSize( moLuaVirtualMachine& vm ) {
+    lua_State *state = (lua_State *) vm;
+
+    MOint i = (MOint) lua_tonumber (state, 1);
+
+    MOfloat x = (MOfloat) lua_tonumber (state, 2);
+    MOfloat y = (MOfloat) lua_tonumber (state, 3);
+
+
+    moParticlesSimple* Par = m_ParticlesSimpleArray[i];
+
+    if (Par) {
+        Par->Size = moVector2f( x, y );
+    }
+
+    return 0;
+
+}
+
+int moEffectParticlesSimple::luaUpdateParticleScale( moLuaVirtualMachine& vm ) {
+    lua_State *state = (lua_State *) vm;
+
+    MOint i = (MOint) lua_tonumber (state, 1);
+
+    MOfloat scale = (MOfloat) lua_tonumber (state, 2);
+
+    moParticlesSimple* Par = m_ParticlesSimpleArray[i];
+
+    if (Par) {
+        Par->Scale = scale;
+    }
+
+    return 0;
+
+}
+
 int moEffectParticlesSimple::luaUpdateParticleVelocity( moLuaVirtualMachine& vm ) {
     lua_State *state = (lua_State *) vm;
 
@@ -3256,6 +3401,26 @@ int moEffectParticlesSimple::luaUpdateParticleVelocity( moLuaVirtualMachine& vm 
     return 0;
 
 }
+
+int moEffectParticlesSimple::luaUpdateParticleRotation( moLuaVirtualMachine& vm ) {
+    lua_State *state = (lua_State *) vm;
+
+    MOint i = (MOint) lua_tonumber (state, 1);
+
+    MOfloat rx = (MOfloat) lua_tonumber (state, 2);
+    MOfloat ry = (MOfloat) lua_tonumber (state, 3);
+    MOfloat rz = (MOfloat) lua_tonumber (state, 4);
+
+    moParticlesSimple* Par = m_ParticlesSimpleArray[i];
+
+    if (Par) {
+        Par->Rotation = moVector3f( rx, ry, rz );
+    }
+
+    return 0;
+
+}
+
 
 int moEffectParticlesSimple::luaUpdateForce( moLuaVirtualMachine& vm ) {
 
