@@ -220,6 +220,8 @@ MOboolean moTrackerKLTSystem::Init(MOint p_nFeatures, moVideoSample* p_pVideoSam
             m_pTrackerSystemData->m_Pares[i*2+1] = new int [2];
         }
 
+        TuioTime::initSession();
+
 		return true;
 	}
 	else return false;
@@ -871,33 +873,30 @@ if ( m_pTUIOSystemData ) {
                     for( int pp=0; pp<3; pp++ ) {
                         int e = myuplas[pp];
 
-                        //shape[pp] = moVector2f( 0, 0); ///en 0 para medir luego angulos rectos
+                        shape[pp] = moVector2f( 0, 0); ///en 0 para medir luego angulos rectos
 
                         moTrackerFeature* NF = m_pTrackerSystemData->GetFeature(e);
                         if (NF) {
                             moVector2f av2( NF->x - 0.5, -NF->y + 0.5 );
                             obj_v+=av2;
                             countv++;
-
-                            /*
                             ///calculamos la coneccion mas larga para tomarla como referencia
                             moVector2f vectL = moVector2f( av2 - feat_v);
                             shape[countv-2] = vectL;
+                            vectPromedio+=vectL;
                             if ( vectL.Normalize() > maxL ) {
                                  vectMasLargo = vectL;
                             }
-                            */
                         }
                     }
-                    obj_v/=(float)countv; ///promediamos, son 4 contando el origen
+                    obj_v/=(float)countv; ///promediamos, son 4 contando el origen, con este promedio
+                    vectPromedio/=(float)(countv-1);
 
 
                     ///search for rect_angles, between them too?
                     int rect_angles = 0;
                     moVector2f direction;
                     float dotp_min = 100.0;
-
-                    /*
 
                     for(int r1=0; r1<countv; r1++) {
                         for(int r2=0; r2<countv,r2<r1; r2++) {
@@ -920,64 +919,79 @@ if ( m_pTUIOSystemData ) {
                             }
                         }
                     }
-                    */
-                    /*
 
                     //vectMasLargo.Normalize();
-                    if ( vectMasLargo.Length()>0.0 ) {
+                    /*
+                    if ( vectMasLargo.Length()>0.001 ) {
                         angle = moMathf::ACos( vectMasLargo.X() );
-                    } else
+                    } else angle = 0.0;
                     */
-                    angle = 0.0;
-
-
+                    vectPromedio.Normalize();
+                    angle = moMathf::ACos( vectPromedio.X() );
 
                     /**
                     ///aqui la idea es calcular el angulo en el que esta el cuadrado...o rectangulo
+                    */
 
-                    moVector2f aver2;
-                    for(int pp=0;pp<3;pp++) {
-                        moTrackerFeature* NF = m_pTrackerSystemData->GetFeature(myuplas[pp]);
-                        if (NF) {
-                            aver2 = aver - moVector2f(  NF->x - 0.5,
-                                                        -NF->y + 0.5 );
-                        }
-                    }
-
+                    /**
                     ///calculemos la velocidad de rotacion!!!!
                     //sin necesidad del angulo....
 
-
+                    ///QUEDA POR HACER, y puede reforzar la idea del sentido del objeto
 
                     */
-                    //if (rect_angles>0) {
-                    ///usamos mejor el vector de la esquina....
-                    obj_v = feat_v;
+                    if (rect_angles>0) {
+                        ///usamos mejor el vector de la esquina....
+                        //obj_v = feat_v;
 
-                        TuioObject* pObject = NULL;
-                        float mindist = 1000.0;
+                            TuioObject* pObject = NULL;
+                            float mindist = 1000.0;
 
-                        pObject = m_pTUIOSystemData->getClosestTuioObject( obj_v.X(), obj_v.Y());
-                        if (pObject) {
-                            mindist = pObject->getDistance( obj_v.X(), obj_v.Y() );
-                            if ( mindist < 0.2 ) {
-                                m_pTUIOSystemData->updateTuioObject( pObject, obj_v.X(), obj_v.Y(), angle );
+                            pObject = m_pTUIOSystemData->getClosestTuioObject( obj_v.X(), obj_v.Y());
+                            if (pObject) {
+                                mindist = pObject->getDistance( obj_v.X(), obj_v.Y() );
+                                if ( mindist < 0.3 && pObject->getSymbolID()==u) {
+                                    float a1 = pObject->getAngle();
+                                    float a2 = angle;
+                                    //m_pTUIOSystemData->initFrame( TuioTime::getSessionTime() );
+                                    //m_pTUIOSystemData->updateTuioObject( pObject, obj_v.X(), obj_v.Y(), angle );
+                                    pObject->update( TuioTime::getSessionTime(),  obj_v.X(), obj_v.Y(), angle );
+                                   /* MODebug2->Push(
+                                            moText(" u: ") +
+                                            + IntToStr(u)
+
+                                            + moText(" x:")
+                                            + FloatToStr(obj_v.X())
+                                            + moText(" y:")
+                                            + FloatToStr(obj_v.Y())
+
+                                            + moText(" angle 1:")
+                                            + FloatToStr(a1)
+                                            + moText(" angle 2:")
+                                            + FloatToStr(a2)
+
+                                            + moText(" rspeed:")
+                                            + FloatToStr( pObject->getRotationSpeed() )
+
+                                            );
+*/
+
+                                    //pObject->rotation_speed = a2 - a1;
+
+                                    iscursor = false;
+                                }
+                            }
+                            if ( mindist > 0.4 ) {
+                                //m_pTUIOSystemData->initFrame(TuioTime::getSessionTime());
+                                pObject = m_pTUIOSystemData->addTuioObject( u , obj_v.X(), obj_v.Y(), angle );
                                 iscursor = false;
                             }
-                        }
-                        if ( mindist > 0.4 ) {
-                            pObject = m_pTUIOSystemData->addTuioObject( u , obj_v.X(), obj_v.Y(), angle );
-                            iscursor = false;
-                        }
 
 
-                    //}
+                    } else iscursor = true;
+
                 } ///FIN UPLAS DE 3
-
-                ///
-                iscursor = true;
-
-
+                else iscursor = true;
 
 
             }///fin UPLAS >= 2   ///FIN ANALISIS de UPLAS OBJETOS Y CURSORS
@@ -992,10 +1006,12 @@ if ( m_pTUIOSystemData ) {
                 if (pCursor) {
                     mindist = pCursor->getDistance( feat_v.X(), feat_v.Y() );
                     if ( mindist < 0.3 ) {
+                        //m_pTUIOSystemData->initFrame(TuioTime::getSessionTime());
                         m_pTUIOSystemData->updateTuioCursor( pCursor, feat_v.X(), feat_v.Y() );
                     }
                 }
                 if ( mindist > 0.3 ) {
+                    //m_pTUIOSystemData->initFrame(TuioTime::getSessionTime());
                     pCursor = m_pTUIOSystemData->addTuioCursor( feat_v.X(), feat_v.Y() );
                 }
             }
@@ -1007,13 +1023,16 @@ if ( m_pTUIOSystemData ) {
     ///(o sea, todo aquel cuyo time de actualizacion no corresponde al frame actual, [no confirmo posicion en este frame!!!])
 
     //MODebug2->Push( moText("upla:") + IntToStr(nupla) );
-
+    //m_pTUIOSystemData->initFrame(TuioTime::getSessionTime());
     m_pTUIOSystemData->stopUntouchedMovingCursors();
+    //m_pTUIOSystemData->initFrame(TuioTime::getSessionTime());
     m_pTUIOSystemData->stopUntouchedMovingObjects();
 
 
     ///Eliminamos aquellos objetos parados y no tocados... definitivamente!!!
+    //m_pTUIOSystemData->initFrame(TuioTime::getSessionTime());
     m_pTUIOSystemData->removeUntouchedStoppedCursors();
+    //m_pTUIOSystemData->initFrame(TuioTime::getSessionTime());
     m_pTUIOSystemData->removeUntouchedStoppedObjects();
 
 /*
