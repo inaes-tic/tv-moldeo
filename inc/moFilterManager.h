@@ -84,7 +84,16 @@ class LIBMOLDEO_API moTUIOSystemData {
 		virtual moTuioObjectArray& GetObjects()  { return m_Objects; }
 
 
-		virtual TuioCursor* addTuioCursor(float xp, float yp);
+		/**
+		 * Creates a new TuioCursor based on the given arguments.
+		 * The new TuioCursor is added to the TuioServer's internal list of active TuioCursors
+		 * and a reference is returned to the caller.
+		 *
+		 * @param	xp	the X coordinate to assign
+		 * @param	yp	the Y coordinate to assign
+		 * @return	reference to the created TuioCursor
+		 */
+		TuioCursor* addTuioCursor(float xp, float yp);
 
 		/**
 		 * Updates the referenced TuioCursor based on the given arguments.
@@ -93,7 +102,7 @@ class LIBMOLDEO_API moTUIOSystemData {
 		 * @param	xp	the X coordinate to assign
 		 * @param	yp	the Y coordinate to assign
 		 */
-		virtual void updateTuioCursor(TuioCursor *tcur, float xp, float yp);
+		void updateTuioCursor(TuioCursor *tcur, float xp, float yp);
 
 		/**
 		 * Removes the referenced TuioCursor from the TuioServer's internal list of TuioCursors
@@ -101,7 +110,33 @@ class LIBMOLDEO_API moTUIOSystemData {
 		 *
 		 * @param	tcur	the TuioCursor to remove
 		 */
-		virtual void removeTuioCursor(TuioCursor *tcur);
+		void removeTuioCursor(TuioCursor *tcur);
+
+		/**
+		 * Updates an externally managed TuioCursor
+		 *
+		 * @param	tcur	the TuioCursor to update
+		 */
+		void addExternalTuioCursor(TuioCursor *tcur);
+
+		/**
+		 * Updates an externally managed TuioCursor
+		 *
+		 * @param	tcur	the TuioCursor to update
+		 */
+		void updateExternalTuioCursor(TuioCursor *tcur);
+
+		/**
+		 * Removes an externally managed TuioCursor from the TuioServer's internal list of TuioCursor
+		 * The referenced TuioCursor is not deleted
+		 *
+		 * @param	tcur	the TuioCursor to remove
+		 */
+		void removeExternalTuioCursor(TuioCursor *tcur);
+
+
+
+
 
 		/**
 		 * Creates a new TuioObject based on the given arguments.
@@ -134,6 +169,32 @@ class LIBMOLDEO_API moTUIOSystemData {
 		 */
 		virtual void removeTuioObject(TuioObject *tobj);
 
+
+
+		/**
+		 * Adds an externally managed TuioObject to the TuioServer's internal list of active TuioObjects
+		 *
+		 * @param	tobj	the TuioObject to add
+		 */
+		void addExternalTuioObject(TuioObject *tobj);
+
+		/**
+		 * Updates an externally managed TuioObject
+		 *
+		 * @param	tobj	the TuioObject to update
+		 */
+		void updateExternalTuioObject(TuioObject *tobj);
+
+		/**
+		 * Removes an externally managed TuioObject from the TuioServer's internal list of TuioObjects
+		 * The referenced TuioObject is not deleted
+		 *
+		 * @param	tobj	the TuioObject to remove
+		 */
+		void removeExternalTuioObject(TuioObject *tobj);
+
+
+
 		/**
 		 * Initializes a new frame with the given TuioTime
 		 *
@@ -145,7 +206,14 @@ class LIBMOLDEO_API moTUIOSystemData {
 		 * Commits the current frame.
 		 * Generates and sends TUIO messages of all currently active and updated TuioObjects and TuioCursors.
 		 */
-		virtual void commitFrame();
+        virtual void commitFrame();
+
+
+		/**
+		 * Commits the current frame.
+		 * Generates and sends TUIO messages of all currently active and updated TuioObjects and TuioCursors.
+		 */
+		//virtual void commitFrame();
 
 		/**
 		 * Returns the next available Session ID for external use.
@@ -165,6 +233,87 @@ class LIBMOLDEO_API moTUIOSystemData {
 		 */
 		virtual TuioTime getFrameTime();
 
+		/**
+		 * Returns a List of all currently inactive TuioObjects
+		 *
+		 * @return  a List of all currently inactive TuioObjects
+		 */
+		std::list<TuioObject*> getUntouchedObjects();
+
+		/**
+		 * Returns a List of all currently inactive TuioCursors
+		 *
+		 * @return  a List of all currently inactive TuioCursors
+		 */
+		std::list<TuioCursor*> getUntouchedCursors();
+
+		/**
+		 * Calculates speed and acceleration values for all currently inactive TuioObjects
+		 */
+		void stopUntouchedMovingObjects();
+
+		/**
+		 * Calculates speed and acceleration values for all currently inactive TuioCursors
+		 */
+		void stopUntouchedMovingCursors();
+
+		/**
+		 * Removes all currently inactive TuioObjects from the TuioServer's internal list of TuioObjects
+		 */
+		void removeUntouchedStoppedObjects();
+
+		/**
+		 * Removes all currently inactive TuioCursors from the TuioServer's internal list of TuioCursors
+		 */
+		void removeUntouchedStoppedCursors();
+
+		/**
+		 * Returns a List of all currently active TuioObjects
+		 *
+		 * @return  a List of all currently active TuioObjects
+		 */
+		std::list<TuioObject*> getTuioObjects();
+
+
+		/**
+		 * Returns a List of all currently active TuioCursors
+		 *
+		 * @return  a List of all currently active TuioCursors
+		 */
+		std::list<TuioCursor*> getTuioCursors();
+
+		/**
+		 * Returns the TuioObject corresponding to the provided Session ID
+		 * or NULL if the Session ID does not refer to an active TuioObject
+		 *
+		 * @return  an active TuioObject corresponding to the provided Session ID or NULL
+		 */
+		TuioObject* getTuioObject(long s_id);
+
+		/**
+		 * Returns the TuioCursor corresponding to the provided Session ID
+		 * or NULL if the Session ID does not refer to an active TuioCursor
+		 *
+		 * @return  an active TuioCursor corresponding to the provided Session ID or NULL
+		 */
+		TuioCursor* getTuioCursor(long s_id);
+
+		/**
+		 * Returns the TuioObject closest to the provided coordinates
+		 * or NULL if there isn't any active TuioObject
+		 *
+		 * @return  the closest TuioObject to the provided coordinates or NULL
+		 */
+		TuioObject* getClosestTuioObject(float xp, float yp);
+
+		/**
+		 * Returns the TuioCursor closest to the provided coordinates
+		 * or NULL if there isn't any active TuioCursor
+		 *
+		 * @return  the closest TuioCursor corresponding to the provided coordinates or NULL
+		 */
+		TuioCursor* getClosestTuioCursor(float xp, float yp);
+
 
     private:
 
@@ -172,10 +321,36 @@ class LIBMOLDEO_API moTUIOSystemData {
 
 		moTuioCursorArray m_Cursors;
 		moTuioObjectArray m_Objects;
+		std::list<TuioObject*> objectList;
+		std::list<TuioCursor*> cursorList;
+
+		int maxCursorID;
+		//moTuioCursorArray m_freeCursorList;
+		//moTuioObjectArray m_freeCursorBuffer;
+		std::list<TuioCursor*> freeCursorList;
+		std::list<TuioCursor*> freeCursorBuffer;
+
+		bool full_update;
+		int update_interval;
+		bool periodic_update;
+
+		long currentFrame;
+		TuioTime currentFrameTime;
+		bool updateObject, updateCursor;
+		long lastCursorUpdate, lastObjectUpdate;
+
+		long sessionID;
+		bool verbose;
 
 };
 
 
+class moTrackerFeature;
+/*
+template class LIBMOLDEO_API moDynamicArray<moTrackerFeature>;
+typedef moDynamicArray<moTrackerFeature> moTrackerFeatureArray;
+*/
+moDeclareExportedDynamicArray( moTrackerFeature*, moTrackerFeatureArray )
 
 
 /**
@@ -189,6 +364,16 @@ class LIBMOLDEO_API moTrackerFeature { //de GpuKLT_Feature
 
 	public:
 
+    bool                    is_object;              //!< once recognized
+    bool                    is_parent;              //!< once recognized
+    bool                    is_cursor;              //!< once recognized
+    long                    stime;              //!< once recognized
+    long                    sframe;              //!< once recognized
+    long                    utime;              //!< once recognized
+    long                    uframe;              //!< once recognized
+
+    moTrackerFeatureArray   FeaturesCaptured;
+    moTrackerFeature*       Parent;
 
     float					x,y;					 //!< Location
 	float					normx, normy;            //!< Normalized Feature Coordinates [ 0 - 1 ]
@@ -216,11 +401,7 @@ class LIBMOLDEO_API moTrackerFeature { //de GpuKLT_Feature
 	int updatePos(float kltConvergeThreshold, float kltSSDthresh, int kltborder, float delta, float res, float d1, float d2, float w, float h);
 };
 
-/*
-template class LIBMOLDEO_API moDynamicArray<moTrackerFeature>;
-typedef moDynamicArray<moTrackerFeature> moTrackerFeatureArray;
-*/
-moDeclareExportedDynamicArray( moTrackerFeature*, moTrackerFeatureArray )
+
 
 
 /**
@@ -232,7 +413,9 @@ moDeclareExportedDynamicArray( moTrackerFeature*, moTrackerFeatureArray )
 */
 class LIBMOLDEO_API moTrackerSystemData {
 	public:
+
         moTrackerSystemData();
+        moTrackerSystemData( int ZoneW, int ZoneH );
         virtual ~moTrackerSystemData();
 		virtual int GetFeaturesCount();
 		virtual moVector2f GetBarycenter();
@@ -296,11 +479,25 @@ class LIBMOLDEO_API moTrackerSystemData {
         virtual int GetMotionMatrixC( int zone );
 
         virtual void ResetMatrix();
+        virtual void DrawFeatures( int w, int h, float offsetx, float offsety );
 
+        virtual void SetMaxFeatures( int p_nFeatures ) { m_nFeatures = p_nFeatures; }
+        virtual int GetMaxFeatures() { return m_nFeatures; }
+
+		int             m_ZoneW;
+		int             m_ZoneH;
+		int             m_Zones;
+        float**         m_Distancias;
+        int**           m_Pares;
+        int             nPares;
 
 	protected:
+		float           _zonewf;
+		float           _zonehf;
+
 		moVideoFormat	m_VideoFormat;
 		moTrackerFeatureArray m_Features;
+
 
 		moVector2f      m_Barycenter;
 		moVector2f      m_BarycenterMotion;
@@ -308,6 +505,7 @@ class LIBMOLDEO_API moTrackerSystemData {
 
 		moVector2f      m_Variance;
 		int             m_ValidFeatures;
+		int             m_nFeatures;
 
 		moVector2f      m_Max;
 		moVector2f      m_Min;
@@ -320,29 +518,6 @@ class LIBMOLDEO_API moTrackerSystemData {
 		int             *m_CircularMotionMatrix; ///12 semitones, 3 levels
 
 };
-
-/*
-class LIBMOLDEO_API moTrackerKLTSystemData
-{
-	public:
-		MOint m_NFeatures;
-
-		KLT_FeatureList	m_FeatureList;
-		KLT_FeatureTable m_FeatureTable;
-
-		moVideoFormat	m_VideoFormat;
-};
-
-class LIBMOLDEO_API moTrackerGpuKLTSystemData
-{
-	public:
-		MOint m_NFeatures;
-
-		GpuKLT_FeatureList*	m_FeatureList;
-
-		moVideoFormat	m_VideoFormat;
-};
-*/
 
 
 /**
