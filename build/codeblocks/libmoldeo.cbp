@@ -103,7 +103,7 @@
 			<Add library="OpenAL32" />
 			<Add library="EFX-Util" />
 			<Add library="FreeImage" />
-			<Add library="gstreamer-0.10" />
+			<Add library="gstreamer" />
 			<Add library="glib-2.0" />
 			<Add library="gobject-2.0" />
 			<Add library="boost_system-mt" />
