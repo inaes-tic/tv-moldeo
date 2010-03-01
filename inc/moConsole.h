@@ -83,16 +83,17 @@
 #define MO_SCREEN_DEPTH	32
 
 class LIBMOLDEO_API moPresetParamDefinition {
-    MOint           m_ObjectId;
-	MOint           m_ParamIndex;
-	MOint           m_ValueIndex;
-	moEffectState   m_State;
+        MOint           m_ObjectId;
+        MOint           m_ParamIndex;
+        MOint           m_ValueIndex;
+        moEffectState   m_State;
 };
+
 moDeclareExportedDynamicArray( moPresetParamDefinition, moPresetParams )
 
 
 enum moConsoleParamIndex {
-	CONSOLE_DEVICES,
+	CONSOLE_DEVICES=0,
 	CONSOLE_PREEFFECT,
 	CONSOLE_EFFECT,
 	CONSOLE_POSTEFFECT,
@@ -253,6 +254,12 @@ class LIBMOLDEO_API moConsole : public moMoldeoObject {
 
         moEffectManager& GetEffectManager();
 
+        void ConsolePlay();
+        void ConsolePause();
+        void ConsoleStop();
+        moTimerState ConsoleState();
+
+
         int GetPreset();
         void SetPreset( int presetid );
 
@@ -264,40 +271,48 @@ class LIBMOLDEO_API moConsole : public moMoldeoObject {
 
         int GetDirectoryFileCount( moText p_path );
 
+        ///============================
+        ///SCRIPTED in LUA
+        ///============================
+
         int ScriptCalling(moLuaVirtualMachine& vm, int iFunctionNumber);
-        void HandleReturns(moLuaVirtualMachine& vm, const char *strFunc);
         void RegisterFunctions();
 
-        int PushDebugString(moLuaVirtualMachine& vm);
+        int luaPlay( moLuaVirtualMachine& vm );
+        int luaPause( moLuaVirtualMachine& vm );
+        int luaStop( moLuaVirtualMachine& vm );
+        int luaState( moLuaVirtualMachine& vm );
 
-        int LGetObjectId( moLuaVirtualMachine& vm );
-        int LGetPreset(moLuaVirtualMachine& vm);
-        int LSetPreset(moLuaVirtualMachine& vm);
+        int luaGetObjectId( moLuaVirtualMachine& vm );
+        int luaGetPreset(moLuaVirtualMachine& vm);
+        int luaSetPreset(moLuaVirtualMachine& vm);
+        int luaGetTicks(moLuaVirtualMachine& vm);
+        int luaSetTicks(moLuaVirtualMachine& vm);
 
-        int LGetPreconf(moLuaVirtualMachine& vm);
-        int LSetPreconf(moLuaVirtualMachine& vm);
+        int luaGetObjectPreconf(moLuaVirtualMachine& vm);
+        int luaSetObjectPreconf(moLuaVirtualMachine& vm);
 
-        int LGetTicks(moLuaVirtualMachine& vm);
-        int LSetTicks(moLuaVirtualMachine& vm);
+        int luaGetObjectParamIndex(moLuaVirtualMachine& vm);
+        int luaSetObjectCurrentValue(moLuaVirtualMachine& vm);
+        int luaGetObjectCurrentValue(moLuaVirtualMachine& vm);
 
-        int LDisable(moLuaVirtualMachine& vm);
-        int LEnable(moLuaVirtualMachine& vm);
+        int luaGetObjectDataIndex(moLuaVirtualMachine& vm);
+        int luaGetObjectData(moLuaVirtualMachine& vm);
+        int luaSetObjectData(moLuaVirtualMachine& vm);
 
-        int LSetParam(moLuaVirtualMachine& vm);
-        int LGetParam(moLuaVirtualMachine& vm);
-
-        int LSetValue(moLuaVirtualMachine& vm);
-        int LGetValue(moLuaVirtualMachine& vm);
-
-        int LSetState(moLuaVirtualMachine& vm);
-        int LGetState(moLuaVirtualMachine& vm);
-
-        int LGetDeviceCode(moLuaVirtualMachine& vm);
-        int LGetDeviceCodeId(moLuaVirtualMachine& vm);
-
-        int LGetDirectoryFileCount(moLuaVirtualMachine& vm);
+        int luaObjectDisable(moLuaVirtualMachine& vm);
+        int luaObjectEnable(moLuaVirtualMachine& vm);
 
 
+        int luaSetEffectState(moLuaVirtualMachine& vm);
+        int luaGetEffectState(moLuaVirtualMachine& vm);
+
+        int luaGetDeviceCode(moLuaVirtualMachine& vm);
+        int luaGetDeviceCodeId(moLuaVirtualMachine& vm);
+        int luaAddEvent(moLuaVirtualMachine& vm);
+
+
+        int luaGetDirectoryFileCount(moLuaVirtualMachine& vm);
 
 
     protected:
