@@ -1,0 +1,274 @@
+{\rtf1\ansi\ansicpg1252\cocoartf949
+{\fonttbl\f0\fswiss\fcharset0 ArialMT;\f1\fmodern\fcharset0 Courier;\f2\fnil\fcharset0 LucidaGrande;
+\f3\froman\fcharset0 Times-Roman;\f4\fmodern\fcharset0 Courier-Bold;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue128;}
+{\info
+{\author f c}}\paperw11900\paperh16840\margl1134\margr1134\margb1134\margt1134\vieww19980\viewh13260\viewkind0
+\deftab709
+\pard\pardeftab709
+
+\f0\fs20 \cf0 \
+\pard\pardeftab709\qc
+
+\b \cf0 Instructions for compiling Moldeo in Mac OSX\
+\pard\pardeftab709
+
+\b0 \cf0 \
+\pard\pardeftab709\qc
+\cf0 You must know your admin password.\
+\pard\pardeftab709
+\cf0 \
+\pard\pardeftab709\qc
+
+\b \cf0 10.5\
+Leopard\
+\pard\pardeftab709
+
+\b0 \cf0 \
+\pard\pardeftab709\li720\fi-360\ri-5
+
+\b \cf0 1.	
+\b0 From OSX CD installation install 
+\b XCode
+\b0  package, if you don't have it, sign in and download it from: {\field{\*\fldinst{HYPERLINK "http://developer.apple.com/technology/xcode.html"}}{\fldrslt 
+\fs24 \cf2 \ul \ulc0 http://developer.apple.com/technology/xcode.html}} , after registration.
+\f1 \
+\pard\pardeftab709\li1080\fi-360\ri-5
+\cf0 1.	
+\f0 Install all SDKs!!!!! including 10.3.9 (important for FreeImage)\uc0\u8232 \
+\pard\pardeftab709\li720\fi-360\ri-5
+
+\b \cf0 2.	
+\b0 Install 
+\b Fink
+\b0  ,  from {\field{\*\fldinst{HYPERLINK "http://www.finkproject.org/download/index.php"}}{\fldrslt 
+\fs24 \cf2 \ul \ulc0 http://www.finkproject.org/download/index.php
+\f2 \uc0\u8232 
+\f3 http://www.finkproject.org/download/index.php}}for OSX 10.5: {\field{\*\fldinst{HYPERLINK "http://prdownloads.sourceforge.net/fink/Fink-0.9.0-Intel-Installer.dmg?download"}}{\fldrslt 
+\fs24 \cf2 \ul \ulc0 http://prdownloads.sourceforge.net/fink/Fink-0.9.0-Intel-Installer.dmg?download
+\f2 \uc0\u8232 
+\f3 http://prdownloads.sourceforge.net/fink/Fink-0.9.0-Intel-Installer.dmg?download}}for OSX 10.4: {\field{\*\fldinst{HYPERLINK "http://prdownloads.sourceforge.net/fink/Fink-0.8.1-Intel-Installer.dmg?download"}}{\fldrslt 
+\fs24 \cf2 \ul \ulc0 http://prdownloads.sourceforge.net/fink/Fink-0.8.1-Intel-Installer.dmg?download
+\f2 \uc0\u8232 
+\f3 http://prdownloads.sourceforge.net/fink/Fink-0.8.1-Intel-Installer.dmg?download}}
+\f1 \
+
+\f0\b 3.	Autoupdate: \uc0\u8232 
+\i\b0 fink
+\b  
+\b0 selfupdate
+\i0 \
+\pard\pardeftab709
+\cf0 \
+\pard\pardeftab709\li720\fi-360\ri-5
+
+\b \cf0 4.	Update files
+\b0 : Open a terminal window and run: \uc0\u8232  
+\i fink update-all
+\i0 \
+\pard\pardeftab709
+\cf0 \
+\pard\pardeftab709\li720\fi-360\ri-5
+
+\b \cf0 5.	Install SVN: Open the Fink Packages and run Fink Commander (the GUI to access Fink)\uc0\u8232  Search for \'93svn-client\'94 and boton right \'93Binaries>Install\'94\
+\pard\pardeftab709
+\cf0 \
+\pard\pardeftab709\li720\fi-360\ri-5
+\cf0 6.	Install Neon 26 sources :\uc0\u8232 With Finder go to /sw/src/ and double click the source file Neon 26.tar.gz...\u8232 Then o a terminal window type:\u8232 	
+\i cd /Users/yourname/Desktop/Neon-26XXXX\uc0\u8232 	../configure \'96with-ssl\u8232  	make\u8232  	sudo make install
+\i0 \
+7.	now you can download Moldeo from SVN\uc0\u8232 in a terminal run:\u8232  	
+\i\b0\fs24 svn co https://moldeo.svn.sourceforge.net/svnroot/moldeo/trunk moldeo/trunk
+\f1\i0\fs20 \
+\pard\pardeftab709
+
+\f0 \cf0 \
+\pard\pardeftab709\li720\fi-360\ri-5
+
+\b \cf0 8.	Install wxMac from {\field{\*\fldinst{HYPERLINK "http://www.wxWidgets.org/"}}{\fldrslt 
+\fs24 \cf2 \ul \ulc0 www.wxWidgets.org}}
+\f1\b0 \
+\pard\pardeftab709
+
+\f0\fs24 \cf0 Download source code and uncompress
+\f1\fs20 \
+\pard\pardeftab709
+
+\f0 \cf0 In source folder, run\uc0\u8232 	
+\i\fs24 mkdir buidmonostatic
+\f1\i0\fs20 \
+\pard\pardeftab709
+
+\f0\i\fs24 \cf0 cd buidmonostatic\uc0\u8232 ./configure \'96-with-opengl \'96-disable-shared \'96-enable-monolithic \'96-disable-debug\u8232 make\u8232 sudo make install
+\f1\i0\fs20 \
+\pard\pardeftab709
+
+\f0 \cf0 \
+\pard\pardeftab709\li720\fi-360\ri-5
+
+\b \cf0 9.	Download from CVS: wxArt2D\uc0\u8232 \u8232 sudo 
+\b0\fs24 cvs -d:server:anonymous@wxart2d.cvs.sourceforge.net:/cvsroot/wxart2d login
+\f1\fs20 \
+\pard\pardeftab709
+
+\f0\b \cf0 	
+\b0\fs24 <enter your root pass : return>
+\f1\fs20 \
+
+\f0\b 	
+\b0\fs24 <return a second time>
+\f1\fs20 \
+
+\f0\b 	
+\f1\b0 \
+\
+   9b.  Install macports form www.macports.org\
+\
+   9c. Install Porticus. \
+\
+\pard\pardeftab709\li720\fi-360\ri-5
+
+\f0\b \cf0 10.	Compiling LIBMOLDEO\
+\pard\pardeftab709
+\cf0 	with Porticus install:\
+\pard\pardeftab709
+
+\b0 \cf0 	\
+		\
+		sdl		\
+		glew\
+		lua51\
+		lua51-dev\
+		freeimage\
+		\
+\
+		cvs\
+		boost\
+\
+\
+     10a FTGL\
+	   	important: package is broken and must be fixed:\
+		from terminal:\
+			/op/local/bin/port -v install ftgl\
+		begin installation of FTGL and stop when the building started\
+			apply path to FTVectoriser.cpp and FTGLdemo.cpp\
+			export LDFLAGS=\
+\
+\
+\pard\pardeftab709\li720\fi-360\ri-5
+
+\b \cf0 11.	Download BOOST from svn\
+\pard\pardeftab709
+\cf0 		svn co {\field{\*\fldinst{HYPERLINK "http://svn.boost.org/svn/boost/trunk"}}{\fldrslt 
+\f3\fs24 \cf2 \ul \ulc0 http://svn.boost.org/svn/boost/trunk}} boost-trunk
+\f1\b0 \
+
+\f0\b 		mkdir boost-build-osx\
+		bjam \'96build-dir=boost-build-osx --target=gcc\
+\pard\pardeftab709
+
+\f1\b0 \cf0 \
+\pard\pardeftab709
+
+\f0\b \cf0 		o\
+		./configure \'96with-libraries=filesystem,regex,system,thread,date_time		\
+\pard\pardeftab709
+
+\f1\b0 \cf0 \
+\pard\pardeftab709\li720\fi-360\ri-5
+
+\f0\b \cf0 12.	In terminal run: \
+\pard\pardeftab709
+\cf0 fink install gstreamer-0.10\
+\pard\pardeftab709\ql\qnatural
+\cf0 fink install gstreamer-0.10-dev
+\f1\b0 \
+\pard\pardeftab709
+
+\f4\b \cf0 \
+\pard\pardeftab709\li720\fi-360\ri-5
+
+\f0 \cf0 13.	Download muparser from sourceforge\
+\pard\pardeftab709
+\cf0 untar\
+\pard\pardeftab709\ql\qnatural
+\cf0 mkdir build-osx\uc0\u8232 cd build-osx
+\f1\b0 \
+
+\f0\b ../configure --prefix=/sw
+\f1\b0 \
+
+\f0\b make\uc0\u8232 sudo make install\u8232 
+\f1\b0 \
+\pard\pardeftab709\li720\fi-360\ri-5
+
+\f0\b \cf0 14.	Download ftgl from sourceforge\
+\pard\pardeftab709
+\cf0 untar\
+\pard\pardeftab709\ql\qnatural
+\cf0 mkdir build-osx\uc0\u8232 cd build-osx
+\f1\b0 \
+
+\f0\b ../configure --prefix=/sw
+\f1\b0 \
+
+\f0\b make\uc0\u8232 sudo make install
+\f1\b0 \
+\pard\pardeftab709
+
+\f4\b \cf0 \
+\pard\pardeftab709
+
+\f0 \cf0 exporting pkg-config PATH to find freetype2 version\
+export PKG_CONFIG_PATH=/sw/libs/freetype219/libs/pkgconfig\uc0\u8232 \u8232 \u8232 \
+\pard\pardeftab709\li720\fi-360\ri-5
+\cf0 15.	ODE download src\
+\pard\pardeftab709
+\cf0 ./configure\uc0\u8232 make\u8232 sudo make install\u8232 \u8232 \u8232 \
+\pard\pardeftab709\li720\fi-360\ri-5
+\cf0 16.	Download Nviida CG toolkit from nvidia site for MACOSX\uc0\u8232 Install package\u8232 \
+17.	Download FreeImage from sourceforge\uc0\u8232 \u8232 make -f Makefile.osx\u8232 make install\u8232 \
+18.	
+\f4 \
+
+\f0 19.	
+\f4 \
+
+\f0 20.	
+\f4 \
+
+\f0 21.	
+\f4 \
+
+\f0 22.	
+\f4 \
+
+\f0 23.	
+\f4 \
+
+\f0 24.	
+\f4 \
+
+\f0 25.	
+\f4 \
+
+\f0 26.	
+\f4 \
+
+\f0 27.	Updating and Commiting with SVN in OSX\
+\pard\pardeftab709
+\cf0 \uc0\u8232 svn update\u8232 export SVN_EDITOR=vi\
+\pard\pardeftab709\ql\qnatural
+\cf0 svn commit \'96-encoding UTF-8 \uc0\u8232 \u8232 
+\f1\b0 \
+\pard\pardeftab709\li720\fi-360\ri-5
+
+\f0\b \cf0 28.	
+\f4 \
+
+\f0 29.	
+\f4 \
+
+\f0 30.	
+\b0 \
+}
