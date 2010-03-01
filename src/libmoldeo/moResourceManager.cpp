@@ -138,9 +138,19 @@ moResourceManager::AddResource( moResource* m_pResource ) {
 MOboolean
 moResourceManager::RemoveResource( MOint p_ID ) {
 
-	m_Resources.Remove(p_ID);
-
-	return true;
+    moResource* pResource;
+    pResource = m_Resources.Get(p_ID);
+    ///Tratamos de borrarlo de los recursos de plugins
+    if (pResource) {
+        if (moDeleteResource( pResource, m_Plugins )) {
+                ///si no es parte de un plugin lo eliminamos a mano
+                ///no hacemos nada! esto deberia hacer el Finish()
+                ///ya que este se encargo de crearlos
+                m_Resources.Remove(p_ID);
+                return true;
+        }
+    }
+    return false;
 }
 
 moResources&
@@ -272,7 +282,7 @@ moResourceManager::Init( const moText& p_datapath,
 	if ( GetResourceByType( MO_RESOURCETYPE_SCRIPT )==NULL )
 		AddResource( new moScriptManager() );
 
-	//Asigna configname, y labelname a los recursos en caso de encontrarse en el config
+	///Asigna configname, y labelname a los recursos en caso de encontrarse en el config
 	moText resname;
 	moText cfname;
 	moText lblname;
