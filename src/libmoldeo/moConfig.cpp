@@ -31,10 +31,6 @@
 
 #include "moConfig.h"
 
-#include "moArray.cpp"
-moDefineDynamicArray( moParamIndexes )
-
-
 #include <tinyxml.h>
 #include "moFileManager.h"
 
@@ -586,6 +582,39 @@ moConfig::GetValue( int indexparam, int indexvalue ) {
 
     return param.GetValue( indexvalue );
 
+}
+
+
+MOint
+moConfig::Int( moParamReference p_paramreference ) {
+    moParam& param( GetParam( m_ConfigDefinition.ParamIndexes().Get(p_paramreference.reference) ));
+    return param.GetValue().GetSubValue().Int();
+}
+
+MOdouble
+moConfig::Double( moParamReference p_paramreference ) {
+    moParam& param( GetParam( m_ConfigDefinition.ParamIndexes().Get(p_paramreference.reference) ));
+    return param.GetValue().GetSubValue().Double();
+}
+
+moText
+moConfig::Text( moParamReference p_paramreference ) {
+    moParam& param( GetParam( m_ConfigDefinition.ParamIndexes().Get(p_paramreference.reference) ));
+    return param.GetValue().GetSubValue().Text();
+}
+
+MOdouble
+moConfig::Eval( moParamReference p_paramreference, double x, ... ) {
+
+    moParam& param( GetParam( m_ConfigDefinition.ParamIndexes().Get(p_paramreference.reference) ));
+    return param.GetData()->Eval( x );
+}
+
+MOdouble
+moConfig::Eval( moParamReference p_paramreference ) {
+
+    moParam& param( GetParam( m_ConfigDefinition.ParamIndexes().Get(p_paramreference.reference) ));
+    return param.GetData()->Eval();
 }
 
 
