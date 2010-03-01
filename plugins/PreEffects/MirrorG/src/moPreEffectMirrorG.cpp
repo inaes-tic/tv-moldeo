@@ -419,8 +419,8 @@ void moPreEffectMirrorG::Draw( moTempo* tempogral,moEffectState* parentstate)
   float ft = 1024.0f / h;
 
   //solo dibujo los quads ya calculados
+  glBindTexture(GL_TEXTURE_2D, m_pResourceManager->GetRenderMan()->RenderTexGLId(MO_EFFECTS_TEX));
   for(j=0; j<(hpoint2-1); j++) {
-			glBindTexture(GL_TEXTURE_2D, m_pResourceManager->GetRenderMan()->RenderTexGLId(MO_EFFECTS_TEX));
 			glBegin(GL_QUAD_STRIP);
 			for(i=0; i<wpoint2; i++) {
 				glTexCoord2f(TPoint2[j * wpoint2 * 2  + i * 2] * fs,TPoint2[j * wpoint2 * 2  + i * 2+1] * ft);
