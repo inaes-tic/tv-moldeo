@@ -64,7 +64,7 @@ public:
     void Load(moText plugin_file);
     void Unload();
     moMasterEffect* Create();
-    void Destroy(moMasterEffect *mastereffect);
+    bool Destroy(moMasterEffect *mastereffect);
     moText GetName() { return name; }
 private:
     moText name;
@@ -78,6 +78,6 @@ typedef moDynamicArray<moMasterPlugin*> moMasterPluginsArray;
 moDeclareExportedDynamicArray( moMasterPlugin*, moMasterPluginsArray )
 
 LIBMOLDEO_API moMasterEffect* moNewMasterEffect(moText effect_name, moMasterPluginsArray &plugins);
-LIBMOLDEO_API void moDeleteMasterEffect(moMasterEffect* effect, moMasterPluginsArray &plugins);
+LIBMOLDEO_API bool moDeleteMasterEffect(moMasterEffect* effect, moMasterPluginsArray &plugins);
 
 #endif

@@ -65,7 +65,7 @@ public:
     void Load(moText plugin_file);
     void Unload();
     moPreEffect* Create();
-    void Destroy(moPreEffect *preeffect);
+    bool Destroy(moPreEffect *preeffect);
     moText GetName() { return name; }
 private:
     moText name;
@@ -79,6 +79,6 @@ typedef moDynamicArray<moPrePlugin*> moPrePluginsArray;
 moDeclareExportedDynamicArray( moPrePlugin*, moPrePluginsArray )
 
 LIBMOLDEO_API moPreEffect* moNewPreEffect(moText effect_name, moPrePluginsArray &plugins);
-LIBMOLDEO_API void moDeletePreEffect(moPreEffect* effect, moPrePluginsArray &plugins);
+LIBMOLDEO_API bool moDeletePreEffect(moPreEffect* effect, moPrePluginsArray &plugins);
 
 #endif

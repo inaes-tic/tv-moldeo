@@ -65,7 +65,7 @@ public:
     void Load(moText plugin_file);
     void Unload();
     moPostEffect* Create();
-    void Destroy(moPostEffect *posteffect);
+    bool Destroy(moPostEffect *posteffect);
     moText GetName() { return name; }
 private:
     moText name;
@@ -79,6 +79,6 @@ typedef moDynamicArray<moPostPlugin*> moPostPluginsArray;
 moDeclareExportedDynamicArray( moPostPlugin*, moPostPluginsArray )
 
 LIBMOLDEO_API moPostEffect* moNewPostEffect(moText effect_name, moPostPluginsArray &plugins);
-LIBMOLDEO_API void moDeletePostEffect(moPostEffect* effect, moPostPluginsArray &plugins);
+LIBMOLDEO_API bool moDeletePostEffect(moPostEffect* effect, moPostPluginsArray &plugins);
 
 #endif

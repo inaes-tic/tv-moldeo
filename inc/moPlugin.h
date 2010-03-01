@@ -142,7 +142,7 @@ class LIBMOLDEO_API moPlugin
         void Load(moText plugin_file);
         void Unload();
         moEffect* Create();
-        void Destroy(moEffect *effect);
+        bool Destroy(moEffect *effect);
         moText GetName() { return name; }
 
     private:
@@ -157,6 +157,6 @@ typedef moDynamicArray<moPlugin*> moPluginsArray;
 moDeclareExportedDynamicArray( moPlugin*, moPluginsArray )
 
 LIBMOLDEO_API moEffect* moNewEffect(moText effect_name, moPluginsArray &plugins);
-LIBMOLDEO_API void moDeleteEffect(moEffect* effect, moPluginsArray &plugins);
+LIBMOLDEO_API bool moDeleteEffect(moEffect* effect, moPluginsArray &plugins);
 
 #endif

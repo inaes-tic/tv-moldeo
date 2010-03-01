@@ -65,7 +65,7 @@ public:
     void Load(moText plugin_file);
     void Unload();
     moResource* Create();
-    void Destroy(moResource *Resource);
+    bool Destroy(moResource *Resource);
     moText GetName() { return name; }
 private:
     moText name;
@@ -77,7 +77,7 @@ typedef moDynamicArray<moResourcePlugin*> moResourcePluginsArray;
 */
 moDeclareExportedDynamicArray(moResourcePlugin*, moResourcePluginsArray)
 
-LIBMOLDEO_API moResource* moNewResource(moText effect_name, moResourcePluginsArray &plugins);
-LIBMOLDEO_API void moDeleteResource(moResource* effect, moResourcePluginsArray &plugins);
+LIBMOLDEO_API moResource* moNewResource(moText resource_name, moResourcePluginsArray &plugins);
+LIBMOLDEO_API bool moDeleteResource(moResource* Resource, moResourcePluginsArray &plugins);
 
 #endif

@@ -77,7 +77,7 @@ public:
     void Load(moText plugin_file);
     void Unload();
     moIODevice* Create();
-    void Destroy(moIODevice *iodevice);
+    bool Destroy(moIODevice *iodevice);
     moText GetName() { return name; }
 
 private:
@@ -91,7 +91,7 @@ typedef moDynamicArray<moIODevicePlugin*> moIODevicePluginsArray;
 */
 moDeclareExportedDynamicArray( moIODevicePlugin*, moIODevicePluginsArray )
 
-LIBMOLDEO_API moIODevice* moNewIODevice(moText effect_name, moIODevicePluginsArray &plugins);
-LIBMOLDEO_API void moDeleteIODevice(moIODevice* effect, moIODevicePluginsArray &plugins);
+LIBMOLDEO_API moIODevice* moNewIODevice(moText iodevice_name, moIODevicePluginsArray &plugins);
+LIBMOLDEO_API bool moDeleteIODevice(moIODevice* iodevice, moIODevicePluginsArray &plugins);
 
 #endif

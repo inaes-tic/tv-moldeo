@@ -122,7 +122,7 @@ moMasterEffect* moMasterPlugin::Create() {
 	return NULL;
 }
 
-void moMasterPlugin::Destroy(moMasterEffect *EfectoMaestro) {
+bool moMasterPlugin::Destroy(moMasterEffect *EfectoMaestro) {
 
 	moMasterEffect **narray;
 	int i,j;
@@ -130,23 +130,24 @@ void moMasterPlugin::Destroy(moMasterEffect *EfectoMaestro) {
 	if(m_factory!=NULL) {
 
 		for(j=0;j<n;j++)
-			if(array[j]==EfectoMaestro) break;
+			if(array[j]==EfectoMaestro) {
 
-		m_factory->Destroy(EfectoMaestro);
+                m_factory->Destroy(EfectoMaestro);
 
-		if(n==1) {//muere
-			delete [] array;
-		} else if(n>1) {//array dinamico
-			narray = new moMasterEffect* [n-1];//generamos el nuevo vacio
-			for(i=0;i<j;i++) narray[i] = array[i];//copiamos el array hasta el j(destruido)
-			for(i=j;i<(n-1);i++) narray[i] = array[i+1];//copiamos el array desde el j
-			delete [] array;
-			array = narray;
-		}
-		n--;
-		return;
+                if(n==1) {//muere
+                    delete [] array;
+                } else if(n>1) {//array dinamico
+                    narray = new moMasterEffect* [n-1];//generamos el nuevo vacio
+                    for(i=0;i<j;i++) narray[i] = array[i];//copiamos el array hasta el j(destruido)
+                    for(i=j;i<(n-1);i++) narray[i] = array[i+1];//copiamos el array desde el j
+                    delete [] array;
+                    array = narray;
+                }
+                n--;
+                return true;
+			}
 	}
-	return;
+	return false;
 }
 
 //===========================================
@@ -238,13 +239,13 @@ LIBMOLDEO_API moMasterEffect* moNewMasterEffect(moText effect_name, moMasterPlug
 }
 
 
-LIBMOLDEO_API void moDeleteMasterEffect(moMasterEffect *mastereffect, moMasterPluginsArray &plugins)
+LIBMOLDEO_API bool moDeleteMasterEffect(moMasterEffect *mastereffect, moMasterPluginsArray &plugins)
 {
     // Creando el nombre complete del plugin(incluyendo ruta por defecto)
     // a partir del nombre del efecto.
     moText complete_name;
 
-    if(!stricmp(mastereffect->GetName(), "")) return;
+    if(!stricmp(mastereffect->GetName(), "")) return false;
 
     #if defined(_WIN32)
     complete_name = moText("plugins/mastereffects/") + moText(mastereffect->GetName());
@@ -273,8 +274,18 @@ LIBMOLDEO_API void moDeleteMasterEffect(moMasterEffect *mastereffect, moMasterPl
 
     if(plg_index == -1)
     {
-        return;
+        return false;
     }
 
-    plugins[plg_index]->Destroy(mastereffect);
+    bool res = plugins[plg_index]->Destroy(mastereffect);
+
+    ///unload plugin if all instances were delete
+    if (res && plugins[plg_index]->n == 0) {
+        plugins[plg_index]->Unload();
+        plugins.Remove(plg_index);
+
+    }
+
+    return res;
+
 }
