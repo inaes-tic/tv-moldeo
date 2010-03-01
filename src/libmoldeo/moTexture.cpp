@@ -172,9 +172,25 @@ MOboolean moTexture::BuildFromFile(moText p_filename)
 	{
 	    MOuint p_width;
 	    MOuint p_height;
+	    FIBITMAP* pImageScaled = NULL;
 
 	    p_width = FreeImage_GetWidth(m_pImage);
         p_height = FreeImage_GetHeight(m_pImage);
+
+        if ( ( FreeImage_GetWidth(m_pImage) % 4 ) != 0 || ( FreeImage_GetHeight(m_pImage) % 4) == 0 ) {
+
+            p_width= FreeImage_GetWidth(m_pImage) / 4;
+            p_width=p_width * 4;
+
+            p_height = FreeImage_GetHeight(m_pImage) / 4;
+            p_height = p_height* 4;
+
+            pImageScaled = FreeImage_Rescale( m_pImage, p_width, p_height, FILTER_BICUBIC );
+            if (pImageScaled) {
+                FreeImage_Unload(m_pImage);
+                m_pImage = pImageScaled;
+            }
+        }
 
 		MOuint p_format;
 
@@ -189,7 +205,7 @@ MOboolean moTexture::BuildFromFile(moText p_filename)
 				break;
 			case 24: // 24 bits
 				m_param.internal_format = GL_RGB;
-				if (FreeImage_GetRedMask(m_pImage) == 0x0000FF) p_format = GL_BGR;
+				if (FreeImage_GetRedMask(m_pImage) == 0xFF0000) p_format = GL_BGR;
 				else p_format = GL_RGB;
 				break;
 			case 32: // 32 bits
