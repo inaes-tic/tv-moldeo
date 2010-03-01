@@ -68,6 +68,13 @@ public:
 protected:
 };*/
 
+enum moTimerState {
+  MO_TIMERSTATE_STOPPED,
+  MO_TIMERSTATE_PLAYING,
+  MO_TIMERSTATE_PAUSED
+};
+
+
 LIBMOLDEO_API void moStartTimer();
 LIBMOLDEO_API void moSetDuration( MOulong p_timecode );
 LIBMOLDEO_API void moContinueTimer();

@@ -40,7 +40,7 @@ public:
    MOfloat      Scale;
 };
 
-moDeclareExportedDynamicArray( moCoord, moCoords )
+//moDeclareExportedDynamicArray( moCoord, moCoords )
 
 //===========  3D  ================//
 class LIBMOLDEO_API CVector3

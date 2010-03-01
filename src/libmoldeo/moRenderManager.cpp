@@ -185,6 +185,7 @@ MOboolean moRenderManager::Init( moRenderManagerMode p_render_to_texture_mode,
 			m_pFBManager->GetFBO(m_fbo_idx)->AddTexture(m_render_width, m_render_height,
 								m_pTextureManager->GetTexParam(m_render_tex_moid[i]),
 								m_pTextureManager->GetGLId(m_render_tex_moid[i]), attach_point);
+
 			moTexture* pRenderTex = m_pTextureManager->GetTexture(m_render_tex_moid[i]);
 			if (pRenderTex) {
 			    pRenderTex->SetFBO(m_pFBManager->GetFBO(m_fbo_idx));

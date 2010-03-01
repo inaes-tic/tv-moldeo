@@ -34,7 +34,7 @@
 #ifdef MO_WIN32
   #include "boost/thread/mutex.hpp"
   #include "boost/thread/locks.hpp"
-  //#include "SDL_thread.h"
+  #include "SDL_thread.h"
   using namespace boost;
 #endif
 
@@ -49,10 +49,10 @@
 
 moLock::moLock() {
 
-#ifdef MO_LINUX
+//#ifdef MO_LINUX
 	m_lock = (void*) SDL_CreateMutex();
-#endif
-
+//#endif
+/*
 #ifdef MO_WIN32
 	timed_mutex *pMutex;
 	pMutex = new timed_mutex();
@@ -65,28 +65,28 @@ moLock::moLock() {
         if (pLock) pLock->unlock();
 	}
 #endif
-
+*/
 
 }
 
 moLock::~moLock() {
-	#ifdef MO_LINUX
+	//#ifdef MO_LINUX
     SDL_DestroyMutex((SDL_mutex*)m_lock);
-  #endif
+ // #endif
 
-	#ifdef MO_WIN32
+	//#ifdef MO_WIN32
 
     ///todo arreglar!!! pierde memoria!
     //ATENCION!!!! CORREGIR aqui puede estar el problema de memoria q teniamos!!!!
 
     //mutex *pMutex = (mutex*) m_lock;
     //delete pMutex;
-  #endif
+ // #endif
 }
 
 bool
 moLock::Lock() {
-
+/*
   #ifdef MO_WIN32
     timed_mutex *pMutex = (timed_mutex*) m_mutex;
     timed_mutex::scoped_timed_lock *pLock = (timed_mutex::scoped_timed_lock *) m_lock;
@@ -99,15 +99,16 @@ moLock::Lock() {
         return false;
     }
   #endif
-
-	#ifdef MO_LINUX
+*/
+	//#ifdef MO_LINUX
     return(SDL_mutexP( (SDL_mutex*)m_lock )!=-1);
-  #endif
-	return true;
+  //#endif
+	//return true;
 }
 
 bool
 moLock::Unlock() {
+    /*
   #ifdef MO_WIN32
     timed_mutex *pMutex = (timed_mutex*) m_mutex;
     timed_mutex::scoped_timed_lock *pLock = (timed_mutex::scoped_timed_lock *) m_lock;
@@ -120,8 +121,8 @@ moLock::Unlock() {
     }
     return( true );
 #endif
-
-    #ifdef MO_LINUX
+*/
+    //#ifdef MO_LINUX
     return(SDL_mutexV( (SDL_mutex*)m_lock )!=-1);
-    #endif
+    //#endif
 }
