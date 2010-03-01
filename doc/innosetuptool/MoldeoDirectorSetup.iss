@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Moldeo Director"
-#define MyAppVerName "Moldeo Director 0.7.6"
+#define MyAppVerName "Moldeo Director 0.7.7"
 #define MyAppPublisher "Moldeo"
 #define MyAppURL "http://www.moldeo.org/"
 #define MyAppExeName "moldeodirector.exe"
@@ -22,7 +22,7 @@ DefaultDirName={pf}\Moldeo
 DefaultGroupName=Moldeo
 LicenseFile=..\..\bin\mingw\moldeo license.txt
 OutputDir=..\..\doc\installers
-OutputBaseFilename=Moldeo Director 0.7.6 Setup
+OutputBaseFilename=Moldeo Director 0.7.7 Setup
 SetupIconFile=..\..\doc\icons\Moldeo32.ico
 Compression=lzma
 SolidCompression=yes
@@ -203,7 +203,7 @@ Source: ..\..\bin\mingw\plugins\preeffects\mirrorg.dll; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\plugins\preeffects\mirror.dll; DestDir: {app}\bin\mingw\plugins\preeffects
 Source: ..\..\bin\mingw\cgGL.dll; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\cg.dll; DestDir: {app}\bin\mingw
-Source: ..\installers\GStreamer-WinBuild-0.10.3.exe; DestDir: {app}\doc\installers; Tasks: ; Languages: 
+Source: ..\installers\GStreamer-WinBuild-0.10.4.exe; DestDir: {app}\doc\installers; Tasks: ; Languages:
 Source: ..\..\bin\mingw\glut32.dll; DestDir: {app}\bin\mingw
 Source: ..\..\bin\mingw\OpenAL32.dll; DestDir: {app}\bin\mingw
 Source: ..\..\data\test\brushes\brush1.tga; DestDir: {app}\data\test\brushes
@@ -440,7 +440,7 @@ Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}; Filen
 
 [Run]
 Filename: {app}\bin\mingw\globals.bat; WorkingDir: {app}\bin\mingw
-Filename: {app}\doc\installers\GStreamer-WinBuild-0.10.3.exe; Flags: postinstall
+Filename: {app}\doc\installers\GStreamer-WinBuild-0.10.4.exe; Flags: postinstall
 Filename: {app}\bin\mingw\{#MyAppExeName}; Description: {cm:LaunchProgram,{#MyAppName}}; Flags: nowait postinstall skipifsilent; Tasks: ; Languages: 
 
 [Dirs]
