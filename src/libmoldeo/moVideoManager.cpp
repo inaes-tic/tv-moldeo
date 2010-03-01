@@ -93,9 +93,21 @@ moVideoFrame::Init( moText bufferformat, moBitmap* pImageResult ) {
 		} else if ( bufferformat == moText("TGA") ) {
 			fif = FIF_TARGA;
 			options = 0;
-		}
+		} else if ( bufferformat == moText("PNG") ) {
+			fif = FIF_PNG;
+			options = 0;
+		} else {
+		    MODebug2->Error( moText("moVideoFrame::Init")
+                        + moText(" bufferformat unsupported!!") );
+            return false;
+        }
 		FreeImage_SaveToMemory( (FREE_IMAGE_FORMAT)fif, _pImageResult, (FIMEMORY*)hmem, options );
 		m_FrameSize = FreeImage_TellMemory((FIMEMORY*)hmem);
+		if (m_FrameSize==0) {
+            MODebug2->Error( moText("moVideoFrame::Init")
+                        + moText(" Couldn't save image to memory, format may be unsupported") );
+            return false;
+		}
 	}
 	return Init();
 }
@@ -259,29 +271,34 @@ void moVideoBuffer::GetFrame( MOuint p_i ) {
 			// load an image from the memory stream
 			pImage = FreeImage_LoadFromMemory( (FREE_IMAGE_FORMAT)pVideoFrame->fif, (FIMEMORY*)pVideoFrame->hmem, 0);
 
-			switch (FreeImage_GetBPP(pImage))
-			{
-				case 8: // 8 bit, indexed or grayscale
-					m_param.internal_format = GL_RGB;
-					p_format = GL_LUMINANCE;
-					break;
-				case 16: // 16 bits
-					break;
-				case 24: // 24 bits
-					m_param.internal_format = GL_RGB;
-					if (FreeImage_GetBlueMask(pImage) == 0x000000FF) p_format = GL_BGR;
-					else p_format = GL_RGB;
-					break;
-				case 32: // 32 bits
-					m_param.internal_format = GL_RGBA;
-					if (FreeImage_GetBlueMask(pImage) == 0x000000FF) p_format = GL_BGRA_EXT;
-					else p_format = GL_RGBA;
-					break;
-				default:
-					break;
-			}
-			SetBuffer( m_width, m_height, FreeImage_GetBits(pImage), p_format);
-			FreeImage_Unload( pImage );
+			if (pImage) {
+                switch (FreeImage_GetBPP(pImage))
+                {
+                    case 8: // 8 bit, indexed or grayscale
+                        m_param.internal_format = GL_RGB;
+                        p_format = GL_LUMINANCE;
+                        break;
+                    case 16: // 16 bits
+                        break;
+                    case 24: // 24 bits
+                        m_param.internal_format = GL_RGB;
+                        if (FreeImage_GetBlueMask(pImage) == 0x000000FF) p_format = GL_BGR;
+                        else p_format = GL_RGB;
+                        break;
+                    case 32: // 32 bits
+                        m_param.internal_format = GL_RGBA;
+                        if (FreeImage_GetBlueMask(pImage) == 0x000000FF) p_format = GL_BGRA_EXT;
+                        else p_format = GL_RGBA;
+                        break;
+                    default:
+                        break;
+                }
+                SetBuffer( m_width, m_height, FreeImage_GetBits(pImage), p_format);
+                FreeImage_Unload( pImage );
+			} else MODebug2->Error( moText("moVideoBuffer::GetFrame") +
+                                    moText("Couldn't load image from memory, texture name: ") +
+                                    moText(this->GetName())
+                                    );
 		}
 	}
 
@@ -744,6 +761,7 @@ MO_LIVE_BITCOUNT	4
 
 	//try to connect to all
 	m_pLiveSystems = new moLiveSystems();
+	m_pLiveSystems->Init(0, NULL);
 
     MODebug2->Message(moText("Finally load live systems grabber for each device...."));
 	if ( m_pLiveSystems->LoadLiveSystems( pPreferredDevices ) ) {
@@ -1039,7 +1057,7 @@ void moVideoManager::Update(moEventList *Events)
 		moVideoBufferPath*	pVideoBufferPath = m_VideoBufferPaths[k];
 
 		if (pVideoBufferPath && !pVideoBufferPath->LoadCompleted()) {
-			pVideoBufferPath->UpdateImages( 10 );
+			pVideoBufferPath->UpdateImages( 1 );
 			MODebug2->Push( pVideoBufferPath->m_VideoBufferPath + moText(":") + IntToStr(pVideoBufferPath->m_ImagesProcessed));
 		}
 
@@ -1149,7 +1167,7 @@ moLiveSystem::Init() {
 
 	if ( m_pBucketsPool!=NULL ) Finish();
 
-	m_pBucketsPool = new moBucketsPool;
+	m_pBucketsPool = new moBucketsPool();
 
 	#ifdef MO_WIN32
         #ifdef MO_DIRECTSHOW

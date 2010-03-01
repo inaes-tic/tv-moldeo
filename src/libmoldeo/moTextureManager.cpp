@@ -264,7 +264,26 @@ moTextureBuffer::LoadImage( moText p_ImageName, moBitmap* pImage, int indeximage
 
 	} else
 	*/
+
 	pImageResult = _pImage;
+
+    int w, h;
+	if ( ( FreeImage_GetWidth(_pImage) % 4 ) != 0 || ( FreeImage_GetHeight(_pImage) % 4) == 0 ) {
+
+        w = FreeImage_GetWidth(_pImage) / 4;
+        w = w * 4;
+
+        h = FreeImage_GetHeight(_pImage) / 4;
+        h = h * 4;
+
+        pImageScaled = FreeImage_Rescale( pImageResult, w, h, FILTER_BICUBIC );
+		if (pImageScaled) {
+			//FreeImage_Unload(pImageResult);
+			pImageResult = pImageScaled;
+		}
+	}
+
+
 	FreeImage_AdjustContrast( pImageResult, 0 );
 	FreeImage_AdjustBrightness( pImageResult, 0 );
 

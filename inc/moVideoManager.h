@@ -200,7 +200,7 @@ class LIBMOLDEO_API moLiveSystems : public moLiveSystemPtrs {
 	public:
 
 		moLiveSystems();
-		~moLiveSystems();
+		virtual ~moLiveSystems();
 		bool LoadLiveSystems( moCaptureDevices* p_pPreferredDevices );
 		bool UpdateLiveSystems();
 		bool UnloadLiveSystems();
