@@ -44,7 +44,6 @@
 #define MO_CONFIG_OK 0
 #define MO_SELECTED -1
 
-
 /// definición de todos los parámetros a encontrar o a crear dentro del moConfig
 /**
  *  Cumple la función de describir detalladamente que nombres de parámetros y de que tipo
@@ -252,6 +251,28 @@ class LIBMOLDEO_API moConfig
         * @return referencia al valor moValue*/
 		moValue&				GetValue( int indexparam, int indexvalue = -1 );//el valor seleccionado del parametro
 
+
+        /// Acceso rápido a un valor entero
+        /**  @param indexparam índice del parámetro
+        * @return el entero*/
+        MOint                   Int( moParamReference p_paramreference );
+
+        /// Acceso rápido a un valor double
+        /**  @param indexparam índice del parámetro
+        * @return el entero*/
+        MOdouble                   Double( moParamReference p_paramreference );
+
+        /// Acceso rápido a un valor de texto
+        /**  @param indexparam índice del parámetro
+        * @return el entero*/
+        moText                   Text( moParamReference p_paramreference );
+
+        /// Acceso rápido a evaluar la función
+        /**  @param indexparam índice del parámetro
+        * @return el entero*/
+        MOdouble                   Eval( moParamReference p_paramreference, double x, ... );
+        MOdouble                   Eval( moParamReference p_paramreference);
+
         /// Operador de acceso directo a un parámetro por índice
         /**  @param p_paramindex índice del parámetro
         * @return referencia al parámetro moParam*/
@@ -413,6 +434,7 @@ class LIBMOLDEO_API moConfig
 
         /// Borra una pre-configuración
         void                    DeletePreconfig( int valueindex );
+
 
 	private:
 
