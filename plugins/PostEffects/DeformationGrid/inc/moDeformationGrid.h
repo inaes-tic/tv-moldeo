@@ -101,6 +101,7 @@ enum moCodesDeformationGrid {
     DEFORMATIONGRID_CURSOR_DER,
     DEFORMATIONGRID_CURSOR_ARR,
     DEFORMATIONGRID_CURSOR_ABA,
+    DEFORMATIONGRID_GUARDAR,
     DEFORMATIONGRID_RESET
 
 };
@@ -118,10 +119,12 @@ public:
     void Draw( moTempo* tempogral, moEffectState* parentstate = NULL);
     MOboolean Finish();
     void Interaction( moIODeviceManager *IODeviceManager );
+    void Update( moEventList *Events );
 	moConfigDefinition * GetDefinition( moConfigDefinition *p_configdefinition );
 
     void ResetPuntos();
     void UpdateParameters();
+
 
 
     private:
@@ -136,11 +139,19 @@ public:
 
         int m_Selector_I;
         int m_Selector_J;
+
         MOdouble PosTextX0, PosTextX1, PosTextY0, PosTextY1;
+        moTexture* pImage;
 
         moDeformationGridMode m_Modo;
 
         void EscalarPuntos( bool horizontal, float escala );
+        void SavePoint( int i, int j );
+
+
+        int keyboard_id;
+
+        int m_PointsActualIndex;
 
 
 };

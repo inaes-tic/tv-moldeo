@@ -104,9 +104,15 @@ MOboolean moDeformationGrid::Init() {
 
     m_Width = 0;
     m_Height = 0;
+    pImage = NULL;
+    m_Points = NULL;
+    m_TPoints = NULL;
 
     UpdateParameters();
 
+    m_Selector_I = 0;
+    m_Selector_J = 0;
+    m_Modo = (moDeformationGridMode)m_Config.Int( moR(DEFORMATIONGRID_MODE) );
 
 	return true;
 }
@@ -121,23 +127,107 @@ void moDeformationGrid::UpdateParameters() {
 
     m_Width = m_Config.Int( moR(DEFORMATIONGRID_WIDTH) );
     m_Height = m_Config.Int( moR(DEFORMATIONGRID_HEIGHT) );
-    m_Modo = (moDeformationGridMode)m_Config.Int( moR(DEFORMATIONGRID_MODE) );
+
     m_Precision =  m_Config.Double( moR(DEFORMATIONGRID_PRECISION) );
     showgrid = m_Config.Int(moR(DEFORMATIONGRID_SHOWGRID));
     clear = m_Config.Int( moR(DEFORMATIONGRID_CLEAR) );
 
+    pImage = (moTexture*) m_Config[moR(DEFORMATIONGRID_TEXTURE)].GetData()->Pointer();
+    PosTextX0 = m_Config[moR(DEFORMATIONGRID_TEXCOORD_X1)].GetData()->Fun()->Eval(state.tempo.ang);
+    PosTextX1 = m_Config[moR(DEFORMATIONGRID_TEXCOORD_X2)].GetData()->Fun()->Eval(state.tempo.ang) * ( pImage!=NULL ? pImage->GetMaxCoordS() :  1.0 );
+    PosTextY0 = m_Config[moR(DEFORMATIONGRID_TEXCOORD_Y1)].GetData()->Fun()->Eval(state.tempo.ang);
+    PosTextY1 = m_Config[moR(DEFORMATIONGRID_TEXCOORD_Y2)].GetData()->Fun()->Eval(state.tempo.ang) * ( pImage!=NULL ? pImage->GetMaxCoordT() :  1.0 );
+
+
+    moParam& PointParam = m_Config[moR(DEFORMATIONGRID_POINTS)];
+    int nsaved = PointParam.GetValue().GetSubValueCount();
+
     if (m_Width!=p_Width || m_Height!=p_Height) {
 
-        ///creamos el nuevo array pero ojo!!!!!
-        ///si ya existen datos y qrmos generar mas puntos , deberiamos interpolar aquellos nuevos a los viejos!!!!
+        if ( nsaved == 0 || nsaved!=m_Width*m_Height*4 ) {
 
-        delete [] m_Points;
-        m_Points = new moVector2f [ m_Width * m_Height ];
-        delete [] m_TPoints;
-        m_TPoints = new moVector2f [ m_Width * m_Height ];
+            MODebug2->Log(moText("moDeformationGrid::UpdateParameters ") + moText(" craeting new set of points") + IntToStr(m_Width*m_Height) );
 
-        ResetPuntos();
+            ///Es una nueva configuracion , generamos los puntos que modificaremos....
 
+            ///creamos el nuevo array pero ojo!!!!!
+            ///si ya existen datos y qrmos generar mas puntos , deberiamos interpolar aquellos nuevos a los viejos!!!!
+            if (m_Points) {
+                delete [] m_Points;
+            }
+            m_Points = new moVector2f [ m_Width * m_Height ];
+            if (m_TPoints) {
+                delete [] m_TPoints;
+            }
+            m_TPoints = new moVector2f [ m_Width * m_Height ];
+
+            if ( nsaved>0 && nsaved!=m_Width*m_Height*4 ) {
+                ///copy points????
+                ///interpolating?!!?! ugggglyyyy
+
+                ///reset for now or Duplicate.... i like duplicate!!! or divide!!!!
+                ResetPuntos();
+            } else {
+                ResetPuntos();
+            }
+
+            ///saving to a new value in the config file!!!!
+            moValue myPoints;
+            moValueBase mBase;
+            mBase.SetType( MO_VALUE_NUM_FLOAT );
+
+            for(int j =0 ; j< m_Height; j++) {
+                for(int i =0 ; i< m_Width; i++) {
+                    mBase.SetFloat(  m_Points[i+j*m_Width].X() );
+                    myPoints.AddSubValue( mBase );
+
+                    mBase.SetFloat( m_Points[i+j*m_Width].Y() );
+                    myPoints.AddSubValue( mBase );
+
+                    mBase.SetFloat( m_TPoints[i+j*m_Width].X() );
+                    myPoints.AddSubValue( mBase );
+
+                    mBase.SetFloat( m_TPoints[i+j*m_Width].Y() );
+                    myPoints.AddSubValue( mBase );
+
+                }
+            }
+            ///Finally we add the points
+            PointParam.AddValue( myPoints );
+            m_PointsActualIndex = PointParam.GetValuesCount() - 1;
+            PointParam.SetIndexValue( m_PointsActualIndex );
+
+            ///And save!!! or not ?!
+
+        } else if ( nsaved==m_Width*m_Height*4 ) {
+
+            MODebug2->Log(moText("moDeformationGrid::UpdateParameters ") + moText(" loading points from config file: ") + IntToStr(m_Width*m_Height) );
+
+            if (m_Points) {
+                delete [] m_Points;
+            }
+            m_Points = new moVector2f [ m_Width * m_Height ];
+            if (m_TPoints) {
+                delete [] m_TPoints;
+            }
+            m_TPoints = new moVector2f [ m_Width * m_Height ];
+
+            moValue& myPoints = PointParam.GetValue();
+            m_PointsActualIndex = PointParam.GetIndexValue();
+
+            ///LOAD from config file!!!!! surely from first time, it could be that we didnt match te correcte param value with our width and height too
+            ///if you have a width and height, and you choose a correct config value, it will works???
+            for(int j =0 ; j< m_Height; j++) {
+                for(int i =0 ; i< m_Width; i++) {
+                    m_Points[i+j*m_Width].X()= myPoints.GetSubValue( (i + j*m_Width)*4 ).Float();
+                    m_Points[i+j*m_Width].Y()= myPoints.GetSubValue( (i + j*m_Width)*4 + 1 ).Float();
+                    m_TPoints[i+j*m_Width].X()= myPoints.GetSubValue( (i + j*m_Width)*4 + 2 ).Float();
+                    m_TPoints[i+j*m_Width].Y()= myPoints.GetSubValue( (i + j*m_Width)*4 + 3 ).Float();
+                }
+            }
+
+
+        }
     }
 
 
@@ -170,6 +260,13 @@ void moDeformationGrid::Draw( moTempo* tempogral, moEffectState* parentstate )
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
+    glDisable(GL_DEPTH_TEST);							// Disables Depth Testing
+	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
+	glLoadIdentity();									// Reset The Projection Matrix
+	glOrtho(-0.5,0.5,-0.5*h/w,0.5*h/w,-1,1);            // Set Up An Ortho Screen
+
+
+/*
     glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
     glLoadIdentity();									// Reset The Projection Matrix
 //	glOrtho(0,w,0,h,-1,1);                              // Set Up An Ortho Screen
@@ -184,7 +281,7 @@ void moDeformationGrid::Draw( moTempo* tempogral, moEffectState* parentstate )
 					0,
 					0, 1, 0);
 
-
+*/
     glMatrixMode(GL_MODELVIEW);                         // Select The Modelview Matrix
     glPushMatrix();                                     // Store The Modelview Matrix
 	glLoadIdentity();									// Reset The View
@@ -208,33 +305,52 @@ void moDeformationGrid::Draw( moTempo* tempogral, moEffectState* parentstate )
 
     glEnable( GL_TEXTURE_2D );
 
-    moTexture* pImage = (moTexture*) m_Config[moR(DEFORMATIONGRID_TEXTURE)].GetData()->Pointer();
+    glBindTexture( GL_TEXTURE_2D,m_Config[moR(DEFORMATIONGRID_TEXTURE)].GetData()->GetGLId(&state.tempo) );
 
-    ///change this!!!
-
-/*
-    PosTextX0 = 0.0;
-	PosTextX1 = 1.0 * ( pImage!=NULL ? pImage->GetMaxCoordS() :  1.0 );
-    PosTextY0 = 0.0;
-    PosTextY1 = 1.0 * ( pImage!=NULL ? pImage->GetMaxCoordT() :  1.0 );
-*/
-    PosTextX0 = m_Config[moR(DEFORMATIONGRID_TEXCOORD_X1)].GetData()->Fun()->Eval(state.tempo.ang);
-    PosTextX1 = m_Config[moR(DEFORMATIONGRID_TEXCOORD_X2)].GetData()->Fun()->Eval(state.tempo.ang) * ( pImage!=NULL ? pImage->GetMaxCoordS() :  1.0 );
-    PosTextY0 = m_Config[moR(DEFORMATIONGRID_TEXCOORD_Y1)].GetData()->Fun()->Eval(state.tempo.ang);
-    PosTextY1 = m_Config[moR(DEFORMATIONGRID_TEXCOORD_Y2)].GetData()->Fun()->Eval(state.tempo.ang) * ( pImage!=NULL ? pImage->GetMaxCoordT() :  1.0 );
-
-    for(int j=0; j<m_Height; j++) {
+    if (m_Points && m_TPoints)
+    for(int j=0; j< (m_Height-1); j++) {
 			glBegin(GL_QUAD_STRIP);
 			for( int i=0; i < m_Width; i++ ) {
 
 				glTexCoord2f( m_TPoints[i + j * m_Width].X(), m_TPoints[i + j * m_Width].Y() );
 				glVertex2f( m_Points[i + j * m_Width].X(), m_Points[i + j * m_Width].Y() );
 
-				glTexCoord2f( m_TPoints[i + j * m_Width].X(), m_TPoints[i + j * m_Width].Y() );
-				glVertex2f( m_Points[i + j * m_Width].X(), m_Points[i + j * m_Width].Y() );
+				glTexCoord2f( m_TPoints[i + (j+1) * m_Width].X(), m_TPoints[i + (j+1) * m_Width].Y() );
+				glVertex2f( m_Points[i + (j+1) * m_Width].X(), m_Points[i + (j+1) * m_Width].Y() );
 			}
 			glEnd();
 	}
+
+			if (showgrid>0) {
+			    glDisable( GL_TEXTURE_2D );
+			    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+                for(int j=0; j< m_Height; j++) {
+                    for( int i=0; i < m_Width; i++ ) {
+
+                        glColor4f( 0.0, 1.0, 0.0, 1.0);
+                        glBegin(GL_QUADS);
+                            glVertex2f( m_Points[i + j * m_Width].X() -0.002, m_Points[i + j * m_Width].Y() +0.002);
+                            glVertex2f( m_Points[i + j * m_Width].X()+0.002, m_Points[i + j * m_Width].Y() +0.002);
+                            glVertex2f( m_Points[i + j * m_Width].X()+0.002, m_Points[i + j * m_Width].Y()  -0.002 );
+                            glVertex2f( m_Points[i + j * m_Width].X() -0.002, m_Points[i + j * m_Width].Y()  -0.002 );
+                        glEnd();
+
+
+                        if ( m_Selector_I == i && m_Selector_J  == j ) {
+                            glColor4f( 1.0, 1.0, 0.0, 1.0);
+                            glBegin(GL_QUADS);
+                                glVertex2f( m_Points[i + j * m_Width].X() -0.01, m_Points[i + j * m_Width].Y() +0.01);
+                                glVertex2f( m_Points[i + j * m_Width].X()+0.01, m_Points[i + j * m_Width].Y() +0.01);
+                                glVertex2f( m_Points[i + j * m_Width].X()+0.01, m_Points[i + j * m_Width].Y()  -0.01 );
+                                glVertex2f( m_Points[i + j * m_Width].X() -0.01, m_Points[i + j * m_Width].Y()  -0.01 );
+                            glEnd();
+                        }
+
+                    }
+                }
+                glEnable( GL_TEXTURE_2D );
+			}
+
 /*
     glBegin (GL_QUADS);
           glTexCoord2f( PosTextX0, PosTextY1);
@@ -262,32 +378,33 @@ void moDeformationGrid::Draw( moTempo* tempogral, moEffectState* parentstate )
             glColor4f(1.0,1.0,1.0,1.0);
             glDisable( GL_TEXTURE_2D );
 
-            glLineWidth( 8.0 );
+            glLineWidth( 1.0 );
 
            glBegin (GL_LINES);
-              glVertex3f (-3.8, 3.8, 0);
-              glVertex3f (3.8, -3.8, 0);
+              glVertex3f (-0.25, h/w / 4, 0);
+              glVertex3f (0.25, -h/w / 4, 0);
            glEnd ();
 
            glBegin (GL_LINES);
-              glVertex3f (3.8, 3.8, 0);
-              glVertex3f (-3.8, -3.8, 0);
+              glVertex3f (h/w / 4, h/w / 4, 0);
+              glVertex3f (-h/w / 4, -h/w / 4, 0);
            glEnd ();
 
             glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
             glBegin (GL_QUADS);
-              glVertex3f (-7.69, 5.77, 0);
-              glVertex3f (7.69, 5.77, 0);
-              glVertex3f (7.69, -5.77, 0);
-              glVertex3f (-7.69, -5.77, 0);
+              glVertex3f (-0.5, h/w / 2, 0);
+              glVertex3f (0.5, h/w / 2, 0);
+              glVertex3f (0.5, -h/w / 2, 0);
+              glVertex3f (-0.5, -h/w / 2, 0);
 
             glEnd ();
+            glScalef(1.2,1.2,0);
             glBegin (GL_QUADS);
-              glVertex3f (-7.69*0.5, 5.77*0.5, 0);
-              glVertex3f (7.69*0.5, 5.77*0.5, 0);
-              glVertex3f (7.69*0.5, -5.77*0.5, 0);
-              glVertex3f (-7.69*0.5, -5.77*0.5, 0);
+              glVertex3f (-0.5, h/w / 2, 0);
+              glVertex3f (0.5, h/w / 2, 0);
+              glVertex3f (0.5, -h/w / 2, 0);
+              glVertex3f (-0.5, -h/w / 2, 0);
 
             glEnd ();
     }
@@ -319,11 +436,7 @@ moDeformationGrid::GetDefinition( moConfigDefinition *p_configdefinition ) {
 
     p_configdefinition->Add( moText("width"), MO_PARAM_NUMERIC, DEFORMATIONGRID_WIDTH, moValue("5", "INT").Ref() );
     p_configdefinition->Add( moText("height"), MO_PARAM_NUMERIC, DEFORMATIONGRID_HEIGHT, moValue("5", "INT").Ref() );
-	p_configdefinition->Add( moText("points"), MO_PARAM_TEXTURE, DEFORMATIONGRID_POINTS, moValue(
-                                "0.0", "FUNCTION",
-                                "0.0", "FUNCTION",
-                                "0.0", "FUNCTION",
-                                "0.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("points"), MO_PARAM_NUMERIC, DEFORMATIONGRID_POINTS);
 
 	p_configdefinition->Add( moText("texcoord_x1"), MO_PARAM_FUNCTION, DEFORMATIONGRID_TEXCOORD_X1, moValue("0.0", "FUNCTION").Ref() );
 	p_configdefinition->Add( moText("texcoord_y1"), MO_PARAM_FUNCTION, DEFORMATIONGRID_TEXCOORD_X2, moValue("0.0", "FUNCTION").Ref() );
@@ -341,7 +454,7 @@ moDeformationGrid::GetDefinition( moConfigDefinition *p_configdefinition ) {
 	p_configdefinition->Add( moText("scalez"), MO_PARAM_SCALEZ, DEFORMATIONGRID_SCALEZ, moValue("1.0", "FUNCTION").Ref() );
 	p_configdefinition->Add( moText("showgrid"), MO_PARAM_NUMERIC, DEFORMATIONGRID_SHOWGRID, moValue("1.0", "NUM").Ref() );
 	p_configdefinition->Add( moText("clear"), MO_PARAM_NUMERIC, DEFORMATIONGRID_CLEAR, moValue("1", "NUM").Ref() );
-	p_configdefinition->Add( moText("precision"), MO_PARAM_NUMERIC, DEFORMATIONGRID_PRECISION, moValue("0.1", "FLOAT").Ref() );
+	p_configdefinition->Add( moText("precision"), MO_PARAM_NUMERIC, DEFORMATIONGRID_PRECISION, moValue("0.01", "FLOAT").Ref() );
 	p_configdefinition->Add( moText("mode"), MO_PARAM_NUMERIC, DEFORMATIONGRID_MODE, moValue("0", "NUM").Ref() );
 
 	return p_configdefinition;
@@ -370,7 +483,8 @@ void moDeformationGrid::EscalarPuntos( bool horizontal, float escala ) {
 
                 ///escalamos
                 newX = ( x - sumaX ) * escala;
-                m_Points[ i + m_Width * m_Selector_J ] = moVector2f( sumaY + newY, y );
+                m_Points[ i + m_Width * m_Selector_J ] = moVector2f( sumaX + newX, y );
+                SavePoint( i, m_Selector_J );
 
             }
         } else {
@@ -390,6 +504,7 @@ void moDeformationGrid::EscalarPuntos( bool horizontal, float escala ) {
                 ///escalamos
                 newY = ( y - sumaY ) * escala;
                 m_Points[ index ] = moVector2f( x,  sumaY + newY );
+                SavePoint( m_Selector_I, j );
 
             }
 
@@ -404,43 +519,61 @@ void moDeformationGrid::ResetPuntos() {
     float cy,incy;
 
     float inctx,incty;
+    int w = m_pResourceManager->GetRenderMan()->ScreenWidth();
+    int h = m_pResourceManager->GetRenderMan()->ScreenHeight();
 
-    inctx = (PosTextX1 - PosTextX0) / (float)m_Width;
-    incty = (PosTextY1 - PosTextY0) / (float)m_Height;
+    bool saveto = false;
 
-    cx = -m_Width*1.0 / 2;
-    incx =  7.69 / (float)m_Width;
+    inctx = (PosTextX1 - PosTextX0) / (float)(m_Width-1);
+    incty = (PosTextY1 - PosTextY0) / (float)(m_Height-1);
 
-    cy = -m_Height*1.0 / 2;
-    incy =  5.77 / (float)m_Height;
+    cx = -1.0 / 2;
+    incx =  1.0 / (float)( m_Width - 1);
+
+    cy = -(1.0 * h / w ) / 2;
+    incy =  (1.0 * h / w) / (float)(m_Height - 1);
+
+    if (m_Config[moR(DEFORMATIONGRID_POINTS)].GetValue().GetSubValueCount()>0) saveto = true;
 
     for(int j=0; j < m_Height; j++)
         for(int i=0; i < m_Width; i++) {
 
             m_Points[ i + j*m_Width ] = moVector2f( cx + i*incx, cy + j*incy );
-
             m_TPoints[ i + j*m_Width ] = moVector2f( PosTextX0 + inctx*i, PosTextY0 + incty*j );
+
+            if (saveto) SavePoint( i, j );
 
         }
 
 }
 
 
+void moDeformationGrid::SavePoint( int i, int j ) {
+
+    moValue& myPoints = m_Config[moR(DEFORMATIONGRID_POINTS)].GetValue();
+    int index = (i + j*m_Width)*4;
+    int index2 = i + j*m_Width;
+
+    myPoints.GetSubValue( index).SetFloat(m_Points[index2].X());
+    myPoints.GetSubValue( index+ 1 ).SetFloat(m_Points[index2].Y());
+    myPoints.GetSubValue( index + 2).SetFloat(m_TPoints[index2].X());
+    myPoints.GetSubValue( index + 3).SetFloat(m_TPoints[index2].Y());
+
+}
+
 void moDeformationGrid::Interaction( moIODeviceManager *IODeviceManager ) {
 
 	moDeviceCode *temp;
 	MOint did,cid,state,valor;
 
-
-
 	moVector2f promedio(0.0,0.0);
     float sumax = 0.0;
-    float newx;
+    moVector2f New;
     float x;
 
 
-
-	moEffect::Interaction( IODeviceManager );
+	///este lo comentamos, sino llama nuevamente a Update(Events*) ....
+	///moEffect::Interaction( IODeviceManager );
 
 	if (devicecode!=NULL)
 	for(int i=0; i<ncodes; i++) {
@@ -456,9 +589,11 @@ void moDeformationGrid::Interaction( moIODeviceManager *IODeviceManager ) {
 			switch(i) {
 
 				case DEFORMATIONGRID_MODO_1:
+                    m_Modo = PUNTO;
 					MODebug2->Push(moText("DEFORMATIONGRID MODO 1"));
 					break;
 				case DEFORMATIONGRID_MODO_2:
+                    m_Modo = LINEA;
 					MODebug2->Push(moText("DEFORMATIONGRID MODO 2"));
 					break;
 				case DEFORMATIONGRID_MODO_3:
@@ -467,21 +602,20 @@ void moDeformationGrid::Interaction( moIODeviceManager *IODeviceManager ) {
 
 				case DEFORMATIONGRID_SEL_IZQ: /// A
 					( m_Selector_I >0 ) ? m_Selector_I-- : m_Selector_I = m_Selector_I;
-					MODebug2->Push( moText("Selector Izquierda: ") + IntToStr(m_Selector_I));
+					MODebug2->Push( moText("Selector Izquierda I: ") + IntToStr(m_Selector_I));
 					break;
 				case DEFORMATIONGRID_SEL_DER: /// D
-					( m_Selector_I < m_Width ) ? m_Selector_I++ : m_Selector_I = m_Selector_I;
-					MODebug2->Push( moText("Selector Derecha: ") + IntToStr(m_Selector_I));
+					( m_Selector_I < (m_Width-1) ) ? m_Selector_I++ : m_Selector_I = m_Selector_I;
+					MODebug2->Push( moText("Selector Derecha I: ") + IntToStr(m_Selector_I));
 					break;
 				case DEFORMATIONGRID_SEL_ARR: /// W
-					( m_Selector_J >0  ) ? m_Selector_J-- : m_Selector_J = m_Selector_J;
-					MODebug2->Push( moText("Selector Arriba: ") + IntToStr(m_Selector_J));
+					( m_Selector_J < (m_Height-1)  ) ? m_Selector_J++ : m_Selector_J = m_Selector_J;
+					MODebug2->Push( moText("Selector Arriba J: ") + IntToStr(m_Selector_J));
 					break;
 				case DEFORMATIONGRID_SEL_ABA: /// S
-					( m_Selector_J < m_Height  ) ? m_Selector_J++ : m_Selector_J = m_Selector_J;
-					MODebug2->Push( moText("Selector Abajo: ") + IntToStr(m_Selector_J));
+					( m_Selector_J >0  ) ? m_Selector_J-- : m_Selector_J = m_Selector_J;
+					MODebug2->Push( moText("Selector Abajo J: ") + IntToStr(m_Selector_J));
 					break;
-
 
 
 
@@ -489,50 +623,67 @@ void moDeformationGrid::Interaction( moIODeviceManager *IODeviceManager ) {
                     switch( m_Modo ) {
                         case PUNTO:
                             m_Points[ m_Selector_I + m_Width * m_Selector_J ].X()-= m_Precision;
+                            SavePoint( m_Selector_I, m_Selector_J );
                             break;
                         ///proporcional
                         case LINEA:
                             EscalarPuntos( true, 1.0 - m_Precision );
                             break;
                     }
-					MODebug2->Push( moText("Cursor Izquierda: ") + IntToStr(newx) );
+                    New = m_Points[ m_Selector_I + m_Width * m_Selector_J ];
+					MODebug2->Push( moText("Cursor Izquierda: ") + FloatToStr(New.X()) );
 					break;
 				case DEFORMATIONGRID_CURSOR_DER: /// ->
                     switch( m_Modo ) {
                         case PUNTO:
                             m_Points[ m_Selector_I + m_Width * m_Selector_J ].X()+= m_Precision;
+                            SavePoint( m_Selector_I, m_Selector_J );
                             break;
                         ///proporcional
                         case LINEA:
                             EscalarPuntos( true, 1.0 + m_Precision );
                             break;
                     }
-					MODebug2->Push( moText("Cursor Derecha: ") + IntToStr(m_Selector_I));
+					New = m_Points[ m_Selector_I + m_Width * m_Selector_J ];
+					MODebug2->Push( moText("Cursor Derecha: ") + FloatToStr(New.X()) );
 					break;
 				case DEFORMATIONGRID_CURSOR_ARR: /// up arrow
                     switch( m_Modo ) {
                         case PUNTO:
-                            m_Points[ m_Selector_I + m_Width * m_Selector_J ].Y()-= m_Precision;
+                            m_Points[ m_Selector_I + m_Width * m_Selector_J ].Y()+= m_Precision;
+                            SavePoint( m_Selector_I, m_Selector_J );
                             break;
                         ///proporcional
                         case LINEA:
                             EscalarPuntos( false, 1.0 - m_Precision );
                             break;
                     }
-					MODebug2->Push( moText("Cursor Arriba: ") + IntToStr(m_Selector_J));
+                    New = m_Points[ m_Selector_I + m_Width * m_Selector_J ];
+					MODebug2->Push( moText("Cursor Arriba: ") + FloatToStr(New.Y()) );
 					break;
 				case DEFORMATIONGRID_CURSOR_ABA: /// down arrow
                     switch( m_Modo ) {
                         case PUNTO:
-                            m_Points[ m_Selector_I + m_Width * m_Selector_J ].Y()+= m_Precision;
+                            m_Points[ m_Selector_I + m_Width * m_Selector_J ].Y()-= m_Precision;
+                            SavePoint( m_Selector_I, m_Selector_J );
                             break;
                         ///proporcional
                         case LINEA:
                             EscalarPuntos( false, 1.0 + m_Precision );
                             break;
                     }
-					MODebug2->Push( moText("Cursor Abajo: ") + IntToStr(m_Selector_J));
+					New = m_Points[ m_Selector_I + m_Width * m_Selector_J ];
+					MODebug2->Push( moText("Cursor Abajo: ") + FloatToStr(New.Y()) );
 					break;
+
+                case DEFORMATIONGRID_GUARDAR:
+                    if (m_Config.SaveConfig()==MO_CONFIG_OK) {
+                        MODebug2->Push( moText("Guardose exitosamente la configuracion"));
+                    } else {
+                        MODebug2->Error( moText("Hubo un problema al cargar el salvar el config"));
+                    }
+                    //salvar
+                    break;
 
                 case DEFORMATIONGRID_RESET:
                     ResetPuntos();
@@ -544,3 +695,14 @@ void moDeformationGrid::Interaction( moIODeviceManager *IODeviceManager ) {
 	}
 
 }
+
+
+void
+moDeformationGrid::Update( moEventList *Events ) {
+
+	//get the pointer from the Moldeo Object sending it...
+	moMoldeoObject::Update(Events);
+
+
+}
+
