@@ -66,7 +66,7 @@ moEffect::PreInit() {
 	if (!m_pResourceManager) return false;
 
 	confignamecompleto = m_pResourceManager->GetDataMan()->GetDataPath();
-	confignamecompleto +=  moText("/") + moText( GetConfigName() );
+	confignamecompleto +=  moSlash + moText( GetConfigName() );
     confignamecompleto +=  moText(".cfg");
 
 	//MODebug2->Push("*****Inicializando efecto*****");//debug
@@ -86,8 +86,6 @@ moEffect::PreInit() {
 		MODebug2->Error(moText("Config file invalid or not found: ")+ (moText)confignamecompleto);
 		return false;//bad
 	}
-
-	LoadDefinition();//loads config definitions
 
     isyncro = m_Config.GetParamIndex("syncro");
 	iphase = m_Config.GetParamIndex("phase");
