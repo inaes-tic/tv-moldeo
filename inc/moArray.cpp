@@ -163,9 +163,10 @@ void name::Add( const T& value ) {\
 \
 	arrayaux = new T [n+1];\
 \
-	for( i=0 ; i < n ; i++ ) {		\
-		arrayaux[i] = array[i];\
-	}\
+    if (array!=NULL)\
+        for( i=0 ; i < n ; i++ ) {		\
+            arrayaux[i] = array[i];\
+        }\
 	arrayaux[n] = value;\
 	n++;\
 \
@@ -177,23 +178,29 @@ void name::Remove(int x) {\
 \
 	MOuint i,j;\
 	T* arrayaux;\
+	bool founded = false;\
 \
 	if ( (MOint)0<=x && x<(MOint)n && array!=NULL) {\
 	\
 		if ( n > 1 ) {\
 			arrayaux = new T [n-1];\
-		} else arrayaux = NULL;\
-\
-		for( i=0, j=0; j < (n-1); i++, j++) {\
-			if ( x == (MOint)i ) i++;\
-			arrayaux[j] = array[i];\
+            for( i=0, j=0; j < (n-1); i++, j++) {\
+                if ( x == (MOint)i ) {\
+                    i++;\
+                }\
+                arrayaux[j] = array[i];\
+            }\
+            n--;\
+		} else {\
+		    arrayaux = NULL;\
+		    n = 0;\
 		}\
-		n--;\
 \
 		delete[] array;\
 		array = arrayaux;\
 	}\
 }\
+\
 \
 void name::Copy( const name &A) {\
 	Empty();\

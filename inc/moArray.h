@@ -254,7 +254,7 @@ public:                                                                  \
 	void Set(int x, const T &value);									 \
 	void Insert(int x, const T &value);									 \
 	T& Get(int x);														 \
-	T& operator[] (int x) { return Get(x); }						 \
+	T& operator[] (int x) { return Get(x); }						     \
 	MOuint Count();														 \
 	void Add( const T &value );											 \
 	void Remove(int x);													 \
@@ -267,6 +267,7 @@ private:																 \
 	T m_NULL;															 \
 																		 \
 };
+
 
 
 #define moDeclareDynamicArray(T, name)									\
