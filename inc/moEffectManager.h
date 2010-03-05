@@ -44,8 +44,9 @@
 #ifndef __MOEFFECTMANAGER_H
 #define __MOEFFECTMANAGER_H
 
+/// Administrador de efectos
 /**
- * clase administradora de instancias de objetos moEffect
+ * clase administradora de instancias de objetos derivados de moEffect
  * a través de esta clase se tiene acceso a los efectos que han sido creados y pueden ser accedidos, modificados y controlados
  * @see moMoldeoObject
  * @see moPreEffect

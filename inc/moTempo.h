@@ -37,15 +37,16 @@
 
 /// Tempo, beat, ritmo.
 /**
-*   Esta clase implementa las funciones de fijamiento de ritmo o tempo.
+*   Esta clase implementa las funciones de control de tempo
 *   @see moTimeManager
 *   @see moConsole
 *   @see moEffect
 */
-
 class LIBMOLDEO_API moTempo {
+
 private:
 	moTempo* m_pFromTempo;
+
 public:
 	MOulong ticks;      //getticks() milisegundos del clock
 	MOulong ticks_0;    //primer beat

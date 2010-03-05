@@ -47,10 +47,10 @@
 
 class moTextureFilterIndex;
 
+/// Clase que implementa un administrador de shaders.
 /**
  * Clase que implementa un administrador de shaders.
  */
-
 class LIBMOLDEO_API moShaderManager : public moResource
 {
 public:
@@ -58,7 +58,7 @@ public:
      * El constructor por defecto de la clase.
      */
 	moShaderManager();
-    
+
 	/**
      * El destructor por defecto de la clase.
      */

@@ -86,8 +86,11 @@ void moSetDuration( MOulong p_timecode ) {
     moTimeManager::MoldeoTimer->SetDuration( test );
 }
 
-MOulong moGetTicks() {
+MOulong moGetDuration() {
+    return moTimeManager::MoldeoTimer->Duration();
+}
 
+MOulong moGetTicks() {
     return moTimeManager::MoldeoTimer->Duration();
 }
 

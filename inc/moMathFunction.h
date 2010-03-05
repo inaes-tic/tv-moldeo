@@ -42,9 +42,9 @@ class moConfig;
 
 typedef void moParser;
 
-moDeclareExportedDynamicArray( MOuint, moIntArray )
-moDeclareExportedDynamicArray( bool, moBoolArray )
-moDeclareExportedDynamicArray( float, moFloatArray )
+moDeclareExportedDynamicArray( MOuint, moIntArray );
+moDeclareExportedDynamicArray( bool, moBoolArray );
+moDeclareExportedDynamicArray( float, moFloatArray );
 
 /**
  * Clase que encapsula una variable flotante de precisión doble. Esta clase almacena
@@ -115,7 +115,7 @@ private:
 };
 
 typedef moMathVariable* moMathVariablePtr;
-moDeclareExportedDynamicArray( moMathVariablePtr, moMathVariableArray )
+moDeclareExportedDynamicArray( moMathVariablePtr, moMathVariableArray );
 
 /**
  * Clase base para definir funciones matemáticas.
@@ -288,7 +288,7 @@ protected:
 };
 
 typedef moMathFunction* MathFunctionPtr;
-moDeclareExportedDynamicArray( MathFunctionPtr, moMathFunctionArray )
+moDeclareExportedDynamicArray( MathFunctionPtr, moMathFunctionArray );
 
 /*******************************************************************************
                      Algunas funciones matemáticas pre-defindas

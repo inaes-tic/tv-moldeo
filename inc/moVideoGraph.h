@@ -381,7 +381,7 @@ class LIBMOLDEO_API moCaptureDevice {
 };
 
 
-moDeclareExportedDynamicArray(moCaptureDevice, moCaptureDevices)
+moDeclareExportedDynamicArray(moCaptureDevice, moCaptureDevices);
 
 /// Plataforma de reproducción de video, actualmente GStreamer para todas las plataformas
 /**

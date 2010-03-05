@@ -107,7 +107,7 @@ class LIBMOLDEO_API moNetConnection : public moAbstract {
 
 };
 
-moDeclareExportedDynamicArray( moNetConnection*, moNetConnections )
+moDeclareExportedDynamicArray( moNetConnection*, moNetConnections );
 
 class LIBMOLDEO_API moNetConnectionManager : public moAbstract {
 
@@ -159,7 +159,7 @@ class LIBMOLDEO_API moNetServer : public moAbstract {
 
 
 
-moDeclareExportedDynamicArray( moNetObject*, moNetObjects )
+moDeclareExportedDynamicArray( moNetObject*, moNetObjects );
 
 class LIBMOLDEO_API moNetManager : public moResource
 {

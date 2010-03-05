@@ -132,17 +132,20 @@ class LIBMOLDEO_API moGsFramework : public moVideoFramework {
 
 };
 
-/***
-  GStreamer Graph Class for video filters and video reproduction: you don't have to link to gstreamer
-  This is C++ wrapper to some GStreamer basic functions...
-
+/// GStreamer Graph Class
+/**
+*  GStreamer Graph Class for video filters and video reproduction: you don't have to link to gstreamer
+* This is C++ wrapper to some GStreamer basic functions...
+*
 */
-
 class LIBMOLDEO_API moGsGraph : public moVideoGraph {
 
 public:
 
+    /// Constructor
 	moGsGraph();
+
+	/// Destructor
 	virtual ~moGsGraph();
 
 //================================================

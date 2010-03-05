@@ -72,11 +72,7 @@ private:
     MOpluginHandle handle;
 };
 
-/*
-template class LIBMOLDEO_API moDynamicArray<moPrePlugin*>;
-typedef moDynamicArray<moPrePlugin*> moPrePluginsArray;
-*/
-moDeclareExportedDynamicArray( moPrePlugin*, moPrePluginsArray )
+moDeclareExportedDynamicArray( moPrePlugin*, moPrePluginsArray );
 
 LIBMOLDEO_API moPreEffect* moNewPreEffect(moText effect_name, moPrePluginsArray &plugins);
 LIBMOLDEO_API bool moDeletePreEffect(moPreEffect* effect, moPrePluginsArray &plugins);

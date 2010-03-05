@@ -99,7 +99,7 @@ class LIBMOLDEO_API moPluginDefinition {
 
 };
 
-moDeclareExportedDynamicArray( moPluginDefinition, moPluginDefinitions )
+moDeclareExportedDynamicArray( moPluginDefinition, moPluginDefinitions );
 
 
 /// Fábrica de efectos, clase abstracta pura a implementar para un plugin derivado de moEffect
@@ -150,11 +150,8 @@ class LIBMOLDEO_API moPlugin
         MOpluginHandle handle;
 
 };
-/*
-template class LIBMOLDEO_API moDynamicArray<moPlugin*>;
-typedef moDynamicArray<moPlugin*> moPluginsArray;
-*/
-moDeclareExportedDynamicArray( moPlugin*, moPluginsArray )
+
+moDeclareExportedDynamicArray( moPlugin*, moPluginsArray );
 
 LIBMOLDEO_API moEffect* moNewEffect(moText effect_name, moPluginsArray &plugins);
 LIBMOLDEO_API bool moDeleteEffect(moEffect* effect, moPluginsArray &plugins);

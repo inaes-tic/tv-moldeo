@@ -63,6 +63,7 @@
 #include "moPlugin.h"
 #include "moMasterEffect.h"
 
+/// Efecto Secuencia
 /**
  * moSequenceEffect
  * el efecto secuencia permite generar una secuencia de distintos efectos, que será tratado como un solo efecto con su ciclo de tiempo
@@ -71,7 +72,6 @@
  * @see moSceneEffect
  * @see moEffect
  */
-
 class LIBMOLDEO_API moSequenceEffect : public moMasterEffect
 {
 public:
@@ -84,12 +84,46 @@ public:
     moEffectsArray effects;
     moPluginsArray plugins;
 
+    /// Constructor
+    /**
+    * Constructor
+    */
     moSequenceEffect();
+
+    /// Constructor
+    /**
+    * Constructor
+    */
     moSequenceEffect(char*);
+
+    /// Destructor
+    /**
+    * Destructor
+    */
     virtual ~moSequenceEffect();
+
+    /// Inicialización
+    /**
+    * Inicialización
+    */
     MOboolean Init();
+
+    /// Dibujar
+    /**
+    * Dibujar
+    */
     void Draw(moTempo*,moEffectState* parentstate=NULL);
+
+    /// Finalización
+    /**
+    * Finalización
+    */
     MOboolean Finish();
+
+    /// Interacción
+    /**
+    * Interacción
+    */
     void Interaction(moIODeviceManager *);
     void LoadCodes(moIODeviceManager *);
 };

@@ -2,14 +2,14 @@
 <CodeBlocks_workspace_file>
 	<Workspace title="Moldeo">
 		<Project filename="..\..\contrib\src\tinyxml\tinyxml_lib_mingw.cbp" />
-		<Project filename="libmoldeo.cbp">
+		<Project filename="libmoldeo.cbp" active="1">
 			<Depends filename="..\..\contrib\src\tinyxml\tinyxml_lib_mingw.cbp" />
 		</Project>
 		<Project filename="..\..\contrib\src\wxMoldeoControls\wxMoldeoControls.cbp" />
 		<Project filename="..\..\contrib\src\wxMoldeoControls\wxMoldeoControlsTest.cbp">
 			<Depends filename="..\..\contrib\src\wxMoldeoControls\wxMoldeoControls.cbp" />
 		</Project>
-		<Project filename="..\..\src\moldeodirector\moldeodirector.cbp" active="1">
+		<Project filename="..\..\src\moldeodirector\moldeodirector.cbp">
 			<Depends filename="libmoldeo.cbp" />
 			<Depends filename="..\..\contrib\src\wxMoldeoControls\wxMoldeoControls.cbp" />
 		</Project>

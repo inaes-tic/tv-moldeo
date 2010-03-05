@@ -152,11 +152,7 @@ class LIBMOLDEO_API moIODevice : public moMoldeoObject {
 
 };
 
-/*
-template class LIBMOLDEO_API moDynamicArray<moIODevice*>;
-typedef moDynamicArray<moIODevice*> moIODevicesArray;
-*/
-moDeclareExportedDynamicArray(moIODevice*, moIODevicesArray)
+moDeclareExportedDynamicArray(moIODevice*, moIODevicesArray);
 
 #include "moIODevicePlugin.h"
 

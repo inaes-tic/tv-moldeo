@@ -364,26 +364,43 @@ using namespace std;
 #define MO_ALPHA    3
 #endif
 
+/// Modos de combinación
+/**
+*   Modos de combinación predeterminados
+*   Estos valores son referencias para los modos de combinación de colores que suelen usarse y están ya implementados
+*   bajo OpenGL a través de la función glBlend()
+*/
 enum moBlendingModes {
-   MO_BLENDING_TRANSPARENCY = 0,
-   MO_BLENDING_ADDITIVEALPHA = 1,
-   MO_BLENDING_MIXING = 2,
-   MO_BLENDING_MULTIPLY = 3,
-   MO_BLENDING_EXCLUSION = 4,
-   MO_BLENDING_ADDITIVE = 5,
-   MO_BLENDING_OVERLAY = 6,
-   MO_BLENDING_SUBSTRACTIVE = 7,
-   MO_BLENDING_SATURATE = 8,
-   MO_BLENDINGS = 9
+   MO_BLENDING_TRANSPARENCY = 0, /// transparencia
+   MO_BLENDING_ADDITIVEALPHA = 1, /// aditivo según transparencia
+   MO_BLENDING_MIXING = 2, /// mezcla
+   MO_BLENDING_MULTIPLY = 3, /// multipliación
+   MO_BLENDING_EXCLUSION = 4, /// exclusión
+   MO_BLENDING_ADDITIVE = 5, /// aditivo por color
+   MO_BLENDING_OVERLAY = 6, /// sobrecarga
+   MO_BLENDING_SUBSTRACTIVE = 7, /// sustracción
+   MO_BLENDING_SATURATE = 8, /// saturación
+   MO_BLENDINGS = 9 /// cantidad de modos
 };
 
+/// Modos de dibujado de polígonos
+/**
+*   Modos de dibujado de polígonos
+*   Estos modos son aquellos predeterminados bajo OpenGL
+*
+*/
 enum moPolygonModes {
-   MO_POLYGONMODE_FILL = 0,
-   MO_POLYGONMODE_LINE = 1,
-   MO_POLYGONMODE_POINT = 2,
-   MO_POLYGONMODES = 3
+   MO_POLYGONMODE_FILL = 0, /// relleno
+   MO_POLYGONMODE_LINE = 1, /// sólo líneas
+   MO_POLYGONMODE_POINT = 2, /// sólo puntos
+   MO_POLYGONMODES = 3 /// cantidad de modos
 };
 
+/// Modo estereoscópico
+/**
+*   Modo estereoscópico
+*   Para la estereoscopía se fijan estos modos
+*/
 enum moStereoSides {
   MO_STEREO_NONE = 0,
   MO_STEREO_LEFT = 1,
@@ -416,22 +433,28 @@ LIBMOLDEO_API MOfloat morand();
 LIBMOLDEO_API MOint moRand(MOint);
 LIBMOLDEO_API void HSVtoRGB(short,short,short,float*,float*,float*);
 
-enum moMoldeoObjectType {
-	MO_OBJECT_UNDEFINED = -1,
-	MO_OBJECT_EFFECT = 0,
-	MO_OBJECT_PREEFFECT = 1,
-	MO_OBJECT_POSTEFFECT = 2,
-	MO_OBJECT_MASTEREFFECT = 3,
-	MO_OBJECT_IODEVICE = 4,
-	MO_OBJECT_RESOURCE = 5,
-	MO_OBJECT_CONSOLE = 6,
-	MO_OBJECT_TYPES = 7
-};
-
+/// Tipos de objetos en Moldeo
 /**
- * moTexParam
+ * Definición y enumeración de tipos de objetos en Moldeo
  *
  */
+enum moMoldeoObjectType {
+	MO_OBJECT_UNDEFINED = -1, /// Objeto indefinido
+	MO_OBJECT_EFFECT = 0, /// Objeto dibujable, efecto ( efectos en el orden de dibujado )
+	MO_OBJECT_PREEFFECT = 1,/// Objeto dibujable, pre-efecto ( primeros efectos en el orden de dibujado )
+	MO_OBJECT_POSTEFFECT = 2,/// Objeto dibujable, post-efecto ( últímos efectos en el orden de dibujado )
+	MO_OBJECT_MASTEREFFECT = 3,/// Objeto dibujable, efecto-maestro ( puede controlar otros efectos )
+	MO_OBJECT_IODEVICE = 4,/// Dispositivo de entrada/salida, típicamente, interfaces humanas de IO y datos ( teclado, mouse, tableta, tcp, udp, serial )
+	MO_OBJECT_RESOURCE = 5,/// Recursos de datos, objetos, imágenes, videos y funcionalidades múltiples
+	MO_OBJECT_CONSOLE = 6,/// Objeto principal de administración y dibujado de objetos de Moldeo
+	MO_OBJECT_TYPES = 7 /// referencia para la cantidad de tipos de objetos
+};
+
+/// Parámetros internos de una textura
+/**
+ * moTexParam
+ *  estructura que representa la parametrización de una textura en OPENGL
+  */
 
 struct LIBMOLDEO_API moTexParam {
     public:
@@ -444,27 +467,32 @@ struct LIBMOLDEO_API moTexParam {
 };
 
 
+/// Parámetros internos predeterminados de una textura
 /**
- * MODefTex2DParams
- *
- */
+* MODefTex2DParams
+*  Parámetros internos predeterminados de una textura
+*
+*
+*/
 
 const moTexParam MODefTex2DParams =
 {
-    GL_TEXTURE_2D,
-    GL_RGBA,
-	GL_LINEAR,
-	GL_LINEAR,
-	GL_REPEAT,
-	GL_REPEAT
+    GL_TEXTURE_2D, /// textura 2d
+    GL_RGBA, /// 32 bits, rojo, verde, azul, opacidad
+	GL_LINEAR, /// interpolación de filtro lineal para el achicamiento
+	GL_LINEAR, /// interpolación de filtro lineal para el agrandamiento
+	GL_REPEAT, /// modo de repetición en el orden horizontal
+	GL_REPEAT /// modo de repetición en el orden vertical
 };
 
 
+/// Parámetros internos predeterminados de una textura no identificados
 /**
- * MOUndefinedTex
- *
- */
-
+* MOUndefinedTex
+*  Parámetros internos predeterminados de una textura no identificados
+*
+*
+*/
 const moTexParam MOUndefinedTex =
 {
     MO_UNDEFINED,
@@ -475,10 +503,29 @@ const moTexParam MOUndefinedTex =
 	MO_UNDEFINED
 };
 
-
+///Devuelve en milisegundos el valor del reloj de Moldeo
+/**
+*   Función global que devuelve en milisegundos el valor del reloj de Moldeo
+*   Esta función devuelve un valor relativo al inicio de la línea de tiempo de Moldeo
+*   Si se detiene este reloj, el valor devuelto será 0
+*   Si se pausa el reloj el valor siempre será el mismo
+*   El valor siempre es en milisegundos
+*/
 LIBMOLDEO_API MOulong moGetTicks();
+
+///Devuelve en milisegundos el valor del reloj de Moldeo
+/**
+*   Función global que devuelve en milisegundos el valor del reloj absoluto
+*   Esta función devuelve un valor absoluto del reloj de la máquina
+*   Este valor dependerá de la implementación según el sistema operativo y la librería utilizada,
+*   y afectará el comportamiento de los otros temporizadores
+*/
 LIBMOLDEO_API MOulong moGetTicksAbsolute();
 
+///macros para máximos y mínimos
+/**
+*   macros para máximos y mínimos
+*/
 #ifndef momax
 #define momax(a,b) (((a) > (b)) ? (a) : (b))
 #define momin(a,b) (((a) < (b)) ? (a) : (b))

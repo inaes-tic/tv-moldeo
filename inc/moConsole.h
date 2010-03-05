@@ -89,7 +89,7 @@ class LIBMOLDEO_API moPresetParamDefinition {
         moEffectState   m_State;
 };
 
-moDeclareExportedDynamicArray( moPresetParamDefinition, moPresetParams )
+moDeclareExportedDynamicArray( moPresetParamDefinition, moPresetParams );
 
 
 enum moConsoleParamIndex {
@@ -111,7 +111,7 @@ enum moConsoleParamIndex {
 	CONSOLE_CLIP3
 };
 
-/// Objeto consola
+/// Objeto Consola
 /**
  * <b>Consola Moldeo</b><br>
  * Este objeto implementa las funciones de inicialización necesarias para la comunicación
@@ -125,7 +125,6 @@ enum moConsoleParamIndex {
  * @see moResource
  * @see moMoldeoObjectType
  */
-
 class LIBMOLDEO_API moConsole : public moMoldeoObject {
 
     public:
@@ -278,6 +277,16 @@ class LIBMOLDEO_API moConsole : public moMoldeoObject {
         int ScriptCalling(moLuaVirtualMachine& vm, int iFunctionNumber);
         void RegisterFunctions();
 
+
+    protected:
+
+        /** \defgroup luascript_console Funciones específicas de scripting de moConsole
+        \ingroup luascript
+        */
+        /** @{ */
+
+        //@{
+        /** Same documentation for both members. Details */
         int luaPlay( moLuaVirtualMachine& vm );
         int luaPause( moLuaVirtualMachine& vm );
         int luaStop( moLuaVirtualMachine& vm );
@@ -313,9 +322,9 @@ class LIBMOLDEO_API moConsole : public moMoldeoObject {
 
 
         int luaGetDirectoryFileCount(moLuaVirtualMachine& vm);
+        //@}
 
-
-    protected:
+        /** @} */
 
         virtual MOulong GetTicks();
         virtual void GLSwapBuffers();

@@ -72,11 +72,7 @@ private:
     MOpluginHandle handle;
 };
 
-/*
-template class LIBMOLDEO_API moDynamicArray<moPostPlugin*>;
-typedef moDynamicArray<moPostPlugin*> moPostPluginsArray;
-*/
-moDeclareExportedDynamicArray( moPostPlugin*, moPostPluginsArray )
+moDeclareExportedDynamicArray( moPostPlugin*, moPostPluginsArray );
 
 LIBMOLDEO_API moPostEffect* moNewPostEffect(moText effect_name, moPostPluginsArray &plugins);
 LIBMOLDEO_API bool moDeletePostEffect(moPostEffect* effect, moPostPluginsArray &plugins);

@@ -81,7 +81,7 @@ class LIBMOLDEO_API moRenderClip {
 
 };
 
-moDeclareExportedDynamicArray( moRenderClip*, moRenderClips)
+moDeclareExportedDynamicArray( moRenderClip*, moRenderClips);
 
 
 class LIBMOLDEO_API moDisplayOutput {
@@ -92,7 +92,7 @@ class LIBMOLDEO_API moDisplayOutput {
 
 };
 
-moDeclareExportedDynamicArray( moDisplayOutput*, moDisplayOutputs)
+moDeclareExportedDynamicArray( moDisplayOutput*, moDisplayOutputs);
 
 
 class LIBMOLDEO_API moRenderOutputConfiguration {

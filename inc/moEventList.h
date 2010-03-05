@@ -37,6 +37,10 @@
 #ifndef __MOEVENTO_H
 #define __MOEVENTO_H
 
+/// Estructura base de un evento
+/**
+* Estructura base de un evento
+*/
 struct LIBMOLDEO_API moEventStruct
 {
 	MOint valid;
@@ -48,7 +52,10 @@ struct LIBMOLDEO_API moEventStruct
 	MOint reservedvalue3;
 };
 
-
+/// Clase Evento
+/**
+* Clase Evento
+*/
 class LIBMOLDEO_API moEvent {
 public:
 
@@ -63,15 +70,25 @@ public:
 	MOint reservedvalue3;
 	MOpointer pointer;
 
+    /// Constructor
 	moEvent();
+	/// Constructor
 	moEvent(MOint did, MOint cod, MOint val0 /**/= 0, MOint val1 /**/= 0, MOint val2 /**/= 0, MOint val3 /**/= 0, MOpointer ptr/**/=0);
+	/// Constructor
 	moEvent(MOint did, MOint cod, MOint val0, MOpointer ptr );
+	/// Destructor
 	virtual ~moEvent();
 
 };
 
 #define MO_MESSAGE 0xFABC05
-
+/// Clase Mensaje
+/**
+* Clase Mensaje
+* Esta clase deriva de un Evento adquiriendo además tanto un emisor como un receptor
+* identificados ambos en el contexto de el administrador general de objetos moConsole y los identificadores
+* individuales únicos de los objetos creados
+*/
 class LIBMOLDEO_API moMessage : public moEvent {
 
 	public:
@@ -97,6 +114,14 @@ class LIBMOLDEO_API moMessage : public moEvent {
 
 };
 
+/// Lista de eventos
+/**
+* Lista de eventos
+* Esta lista es creada por el moIODeviceManager, el administrador de dispositivos de entrada/salida de Moldeo
+* se crea un único moIODeviceManager por cada instancia de moConsole creado
+* Esta lista de eventos funciona de forma sincrónica con el ciclo de dibujado y está protegida de todas maneras para ser utilizada de forma asinc´ronica
+* a través de semáforos
+*/
 class LIBMOLDEO_API moEventList : public moAbstract {
 
 public:
@@ -122,7 +147,13 @@ public:
 };
 
 // moEventPacket class **************************************************
-
+/// Paquete de eventos
+/**
+* Paquete de eventos
+*   creado para poder empaquetar una cantidad de eventos determinada, y ser enviados o procesados simultaneamente,
+*   se implementa para la conección via TCP/UDP entre dos estaciones y agiliazar/acelerar la comunicación entre estas.
+*
+*/
 class LIBMOLDEO_API moEventPacket : public moAbstract
 {
 public:
@@ -149,10 +180,8 @@ private:
 	int num_events;
 	bool packet_full;
 };
-/*
-template class LIBMOLDEO_API moDynamicArray<moEventPacket*>;
-typedef moDynamicArray<moEventPacket*> moEventPacketArray;
-*/
-moDeclareExportedDynamicArray( moEventPacket*, moEventPacketArray )
+
+moDeclareExportedDynamicArray( moEventPacket*, moEventPacketArray );
+
 #endif
 

@@ -68,9 +68,7 @@ class moTextArray;
 /**
  * Operaciones y funciones para la manipulación de cadenas de caracteres.
  */
-
 #ifdef USE_MOTEXT0
-
 class LIBMOLDEO_API moText0
 {
 public:
@@ -285,7 +283,6 @@ typedef moText0 moText;
 /**
  * lista tipo FIFO para textos.
  */
-
 class LIBMOLDEO_API moTextHeap {
 public:
 	moText *array;
@@ -301,11 +298,8 @@ public:
 	moText Get( int x );
 	void Set(int,moText);
 };
-/*
-template class LIBMOLDEO_API moDynamicArray<moText>;
-typedef moDynamicArray<moText> moTextArray;
-*/
-moDeclareExportedDynamicArray( moText, moTextArray )
+
+moDeclareExportedDynamicArray( moText, moTextArray );
 
 //===========================================
 //

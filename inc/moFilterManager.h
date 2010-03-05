@@ -54,15 +54,14 @@
 
 using namespace TUIO;
 
-moDeclareExportedDynamicArray( TuioCursor*, moTuioCursorArray )
-moDeclareExportedDynamicArray( TuioObject*, moTuioObjectArray )
+moDeclareExportedDynamicArray( TuioCursor*, moTuioCursorArray );
+moDeclareExportedDynamicArray( TuioObject*, moTuioObjectArray );
 
 
+/// sistema de datos TUIO
 /**
-
-/**
-* TUIO System Data
-*   this is a class to encapsulate the cursors and objects active
+* sistema de datos tangibles, TUIO ( Tangible Universal Input/Output )
+*   esta clase encapsula los objetos TUIO creados
 */
 class LIBMOLDEO_API moTUIOSystemData {
 
@@ -346,14 +345,12 @@ class LIBMOLDEO_API moTUIOSystemData {
 
 
 class moTrackerFeature;
-/*
-template class LIBMOLDEO_API moDynamicArray<moTrackerFeature>;
-typedef moDynamicArray<moTrackerFeature> moTrackerFeatureArray;
-*/
-moDeclareExportedDynamicArray( moTrackerFeature*, moTrackerFeatureArray )
 
+moDeclareExportedDynamicArray( moTrackerFeature*, moTrackerFeatureArray );
 
+/// Característica de seguimiento ( sensado )
 /**
+*   Característica de seguimiento ( sensado )
 *	Punto reconocido y sensado en un espacio bidimensional,
 *	esta clase es abstracta y debe ser implementada en cada dispositivo de sensado y seguimiento
 *	@see moTrackerSystemData
@@ -403,7 +400,7 @@ class LIBMOLDEO_API moTrackerFeature { //de GpuKLT_Feature
 
 
 
-
+/// Sistema de características
 /**
 *	Clase abstracta, interfaz de acceso a conjunto de datos de seguimiento [tracking]
 *	esta clase es abstracta y debe ser implementada en cada dispositivo de seguimiento

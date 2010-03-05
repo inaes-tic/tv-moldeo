@@ -37,6 +37,7 @@
 
 #include "moEffect.h"
 
+/// clase base para definir Pre-Efectos.
 /**
  * clase base para definir Pre-Efectos.
  * los efectos son los objetos basicos y define cada uno una capa que será dibujada
@@ -65,10 +66,7 @@ public:
     virtual void Draw(moTempo*, moEffectState* = NULL) = 0;
     virtual MOboolean Finish() = 0;
 };
-/*
-template class LIBMOLDEO_API moDynamicArray<moPreEffect*>;
-typedef moDynamicArray<moPreEffect*> moPreEffectsArray;
-*/
-moDeclareExportedDynamicArray( moPreEffect*, moPreEffectsArray)
+
+moDeclareExportedDynamicArray( moPreEffect*, moPreEffectsArray);
 
 #endif

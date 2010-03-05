@@ -263,9 +263,9 @@ class LIBMOLDEO_API moData {
 
 
 
-moDeclareExportedDynamicArray( moData, moDatas )
+moDeclareExportedDynamicArray( moData, moDatas );
 
-moDeclareExportedDynamicArray( moDataMessage, moDataMessages )
+moDeclareExportedDynamicArray( moDataMessage, moDataMessages );
 
 
 /**
@@ -303,7 +303,7 @@ struct moValueIndex {
 };
 
 
-moDeclareExportedDynamicArray( moValueIndex, moValueIndexes )
+moDeclareExportedDynamicArray( moValueIndex, moValueIndexes );
 
 
 /**
@@ -442,7 +442,7 @@ class LIBMOLDEO_API moValueBase : public moData
 };
 
 
-moDeclareExportedDynamicArray( moValueBase, moValueBases )
+moDeclareExportedDynamicArray( moValueBase, moValueBases );
 
 
     /**

@@ -45,14 +45,19 @@ typedef void moBitmap;
 typedef int moBitmapFormat;
 typedef void moMemory;
 
+/// Tipos de texturas
+/**
+* Tipos de texturas
+*/
 typedef enum  {
-        MO_TYPE_TEXTURE,
-        MO_TYPE_TEXTURE_MULTIPLE,
-        MO_TYPE_MOVIE,
-        MO_TYPE_VIDEOBUFFER,
-        MO_TYPE_TEXTUREMEMORY,
-        MO_TYPE_TEXTUREBUFFER,
-        MO_TYPE_CIRCULARVIDEOBUFFER} moTextureType;
+        MO_TYPE_TEXTURE, /// TEXTURA BASE
+        MO_TYPE_TEXTURE_MULTIPLE, /// textura múltiple
+        MO_TYPE_MOVIE,/// película
+        MO_TYPE_VIDEOBUFFER,/// buffer de video
+        MO_TYPE_TEXTUREMEMORY,/// textura en memoria
+        MO_TYPE_TEXTUREBUFFER,/// buffer de texturas
+        MO_TYPE_CIRCULARVIDEOBUFFER /// buffer circular de video
+} moTextureType;
 
 class moFBO;
 class moTexture;

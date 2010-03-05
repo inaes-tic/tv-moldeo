@@ -147,11 +147,7 @@ class LIBMOLDEO_API moFile : public moAbstract {
 
 };
 
-/*
-template class LIBMOLDEO_API moDynamicArray<moFile*>;
-typedef moDynamicArray<moFile*> moFileArray;
-*/
-moDeclareExportedDynamicArray( moFile*, moFileArray )
+moDeclareExportedDynamicArray( moFile*, moFileArray );
 
 /**
 * clase para el manejo de un directorio

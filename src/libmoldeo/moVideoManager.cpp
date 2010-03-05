@@ -955,7 +955,7 @@ MOdevcode moVideoManager::GetCode(moText strcod)
 //al menos que Ligia...o algun device especial(nada mas el hecho de que se haya
 //enchufado la camara por ejemplo
 //podriamos poner una funcion aqui de reconocimiento de DV....
-void moVideoManager::Update(moEventList *Events)
+void moVideoManager::Update(moEventList * p_EventList)
 {
 	moBucket *pbucket = NULL;
 	moEvent *actual,*tmp;
@@ -970,7 +970,7 @@ void moVideoManager::Update(moEventList *Events)
 		m_pLiveSystems->UpdateLiveSystems();
 	}
 
-	actual = Events->First;
+	actual = p_EventList->First;
 	//recorremos todos los events y parseamos el resultado
 	//borrando aquellos que ya usamos
 	while(actual!=NULL) {
@@ -986,7 +986,7 @@ void moVideoManager::Update(moEventList *Events)
 				pSample = NULL;
 			}
 			tmp = actual->next;
-			Events->Delete(actual);
+			p_EventList->Delete(actual);
 			actual = tmp;
 		} else actual = actual->next;//no es el que necesitamos...
 	}
@@ -1039,7 +1039,7 @@ void moVideoManager::Update(moEventList *Events)
 						}
 
 						//post to other moldeo objects
-						Events->Add( GetId(), i, -1, (unsigned char*)pSample);
+						p_EventList->Add( GetId(), i, -1, (unsigned char*)pSample);
 						//MODebug2->Push( moText("moVideoManager::Update Video Sample") );
 
 					}

@@ -43,7 +43,7 @@ class LIBMOLDEO_API moPreconfigParamIndex {
         MOint	m_ValueIndex;
 };
 
-moDeclareExportedDynamicArray( moPreconfigParamIndex, moPreconfigIndexes )
+moDeclareExportedDynamicArray( moPreconfigParamIndex, moPreconfigIndexes );
 
 class LIBMOLDEO_API moPreConfig {
 
@@ -63,6 +63,6 @@ class LIBMOLDEO_API moPreConfig {
 
 };
 
-moDeclareExportedDynamicArray( moPreConfig, moPreConfigs )
+moDeclareExportedDynamicArray( moPreConfig, moPreConfigs );
 
 #endif

@@ -58,10 +58,8 @@ public:
     virtual void Draw(moTempo*,moEffectState * parentstate = NULL) = 0;
     virtual MOboolean Finish() = 0;
 };
-/*
-template class LIBMOLDEO_API moDynamicArray<moPostEffect*>;
-typedef moDynamicArray<moPostEffect*> moPostEffectsArray;
-*/
-moDeclareExportedDynamicArray( moPostEffect*, moPostEffectsArray)
+
+
+moDeclareExportedDynamicArray( moPostEffect*, moPostEffectsArray);
 
 #endif

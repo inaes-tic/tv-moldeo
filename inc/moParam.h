@@ -103,7 +103,7 @@ class LIBMOLDEO_API moParamIndex {
 typedef moParamReference moR;
 typedef moParamIndex moP;
 
-moDeclareExportedDynamicArray( moParamIndex, moParamIndexes )
+moDeclareExportedDynamicArray( moParamIndex, moParamIndexes );
 
 //==========================================================
 //				CONFIG DEFINITION
@@ -154,7 +154,7 @@ class LIBMOLDEO_API moParamDefinition
 
 };
 
-moDeclareExportedDynamicArray( moParamDefinition, moParamDefinitions)
+moDeclareExportedDynamicArray( moParamDefinition, moParamDefinitions);
 
 class LIBMOLDEO_API moParam
 {
@@ -203,7 +203,7 @@ class LIBMOLDEO_API moParam
 
 };
 
-moDeclareExportedDynamicArray( moParam, moParams)
+moDeclareExportedDynamicArray( moParam, moParams);
 
 
 #endif

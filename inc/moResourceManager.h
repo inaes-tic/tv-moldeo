@@ -161,7 +161,7 @@ class LIBMOLDEO_API moResource : public moMoldeoObject {
 
 typedef moResource* moResourcePtr;
 
-moDeclareExportedDynamicArray(moResourcePtr, moResources)
+moDeclareExportedDynamicArray(moResourcePtr, moResources);
 
 class	moDebugManager;
 class	moNetManager;

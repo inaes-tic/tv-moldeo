@@ -125,7 +125,20 @@ enum moLiveSystemType {
 	LST_UNKNOWN
 };
 
-//custom
+
+/// Sistema de tratamiento de una señal en vivo de video
+/**
+* Sistema de tratamiento de una señal en vivo de video
+*   Por cada cámara se crea una instancia de esta clase,
+*   a la cual se define el dispositivo moCaptureDevice a asociar y capturar.
+*
+* @see moVideoSample
+* @see moVideoFormat
+* @see moVideoGraph
+* @see moGsGraph
+* @see moVideoFramework
+* @see moBucketsPool
+*/
 class LIBMOLDEO_API moLiveSystem {
 
 	public:
@@ -189,12 +202,15 @@ class LIBMOLDEO_API moLiveSystem {
 };
 
 typedef moLiveSystem* moLiveSystemPtr;
-/*
-template class LIBMOLDEO_API moDynamicArray<moLiveSystemPtr>;
-typedef  moDynamicArray<moLiveSystemPtr> moLiveSystemPtrs;
-*/
-moDeclareExportedDynamicArray(moLiveSystemPtr,moLiveSystemPtrs)
 
+moDeclareExportedDynamicArray(moLiveSystemPtr,moLiveSystemPtrs);
+
+
+/// Sistema de tratamiento de señales en vivo de video
+/**
+* Sistema de tratamiento de señales en vivo de video
+*   Administra varias instancias de señales en vivo
+*/
 class LIBMOLDEO_API moLiveSystems : public moLiveSystemPtrs {
 
 	public:
@@ -213,6 +229,11 @@ class LIBMOLDEO_API moLiveSystems : public moLiveSystemPtrs {
 
 };
 
+/// Clase de manipulación para el cuadro de un video en memoria
+/**
+* Clase de manipulación para el cuadro de un video en memoria
+*
+*/
 class LIBMOLDEO_API moVideoFrame : public moAbstract {
 
 	public:
@@ -420,7 +441,7 @@ class LIBMOLDEO_API moVideoManager : public moResource
 		virtual MOboolean Init();
 		virtual MOboolean Finish();
 
-	    void Update(moEventList*);
+	    virtual void Update(moEventList* p_EventList);
 
 		MOswitch GetStatus(MOdevcode);
 		MOswitch SetStatus( MOdevcode,MOswitch);

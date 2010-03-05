@@ -35,6 +35,11 @@
 #include "moTypes.h"
 #include "moAbstract.h"
 
+/// Estado de la consola
+/**
+* Estado de la consola
+*   tempo interno
+*/
 class LIBMOLDEO_API moConsoleState : public moAbstract
 {
 	public:

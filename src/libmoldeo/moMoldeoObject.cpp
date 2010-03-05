@@ -49,7 +49,7 @@ moMoldeoObject::moMoldeoObject() {
 	SetConfigName("");
 
 	m_Description = moText("");
-	m_bLoading = false;
+
 	m_pResourceManager = NULL;
 	m_Inlets.Init( 0 , NULL );
 	m_Outlets.Init( 0 , NULL );
@@ -301,13 +301,6 @@ moMoldeoObject::Init( moResourceManager* p_pResources ) {
 	return (m_pResourceManager == NULL);
 }
 
-void
-moMoldeoObject::Load() {
-	if (m_bLoading) {
-		//something
-	}
-	return;
-}
 
 
 moMoldeoObjectType

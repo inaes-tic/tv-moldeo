@@ -422,9 +422,9 @@ typedef moVector2<MOlong> moVector2i;
 typedef moVector2<MOfloat> moVector2f;
 typedef moVector2<MOdouble> moVector2d;
 
-moDeclareExportedDynamicArray( moVector2i*, moVector2iArray )
-moDeclareExportedDynamicArray( moVector2f*, moVector2fArray )
-moDeclareExportedDynamicArray( moVector2d*, moVector2dArray )
+moDeclareExportedDynamicArray( moVector2i*, moVector2iArray );
+moDeclareExportedDynamicArray( moVector2f*, moVector2fArray );
+moDeclareExportedDynamicArray( moVector2d*, moVector2dArray );
 
 
 

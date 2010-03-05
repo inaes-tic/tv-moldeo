@@ -37,7 +37,7 @@
 
 typedef moTextureMemory* moTextureFramePtr;
 
-moDeclareExportedDynamicArray(moTextureFramePtr,moTextureFrames)
+moDeclareExportedDynamicArray(moTextureFramePtr,moTextureFrames);
 
 /// Buffer de imágenes
 /**
@@ -111,7 +111,7 @@ class LIBMOLDEO_API moTextureBuffer : public moAbstract {
 
 typedef moTextureBuffer* moTextureBufferPtr;
 
-moDeclareExportedDynamicArray(moTextureBufferPtr,moTextureBuffers)
+moDeclareExportedDynamicArray(moTextureBufferPtr,moTextureBuffers);
 
 
 

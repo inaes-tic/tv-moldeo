@@ -69,6 +69,7 @@
 
 class moResourceManager;
 
+/// Indice referente a la descripción del objeto en un archivo de configuración
 /**
  * indice de un objeto dentro del archivo de configuración del proyecto .MOL (no confundir con el archivo de configuración de cada efecto)
  * contiene dos valores:
@@ -114,9 +115,10 @@ class LIBMOLDEO_API moMobIndex : public moAbstract {
 
 };
 
+/// Clase Base Descriptiva de un Objeto Moldeo
 /**
  * clase que define las caracteristicas basicas de un objeto Moldeo
- * los datos basicos dentro de esta definición son suficientes para poder crear un objeto moldeo
+ * los datos básicos dentro de esta definición son suficientes para poder crear un objeto moldeo
  * como son: el nombre del objeto, el nombre del archivo de la configuración del objeto, el tipo de objeto
  * @see moEffect
  * @see moPreEffect
@@ -129,6 +131,7 @@ class LIBMOLDEO_API moMobIndex : public moAbstract {
 class LIBMOLDEO_API moMobDefinition
 {
 	public:
+        /// Constructor
 		moMobDefinition() {
 		    m_Name = moText("");
 		    m_ConfigName = moText("");
@@ -136,6 +139,17 @@ class LIBMOLDEO_API moMobDefinition
 		    m_MoldeoId = -1;
 		    m_Type = MO_OBJECT_UNDEFINED;
         }
+
+        /// Constructor
+        /**
+        *   Los datos de base son
+        * @param p_name nombre del objeto
+        * @param p_configname nombre del archivo de configuración
+        * @param p_type tipo de objeto
+        * @param p_labelname etiqueta del objeto
+        * @param p_moldeoid identificador único para este objeto
+        * @param p_MobIndex índice referente a un archivo de configuración
+        */
 		moMobDefinition( moText p_name, moText p_configname, moMoldeoObjectType p_type, moText p_labelname = moText(""), MOint p_moldeoid = -1, moMobIndex p_MobIndex = moMobIndex(-1,-1) ) {
 		    m_Name = p_name;
 		    m_ConfigName = p_configname;
@@ -144,8 +158,11 @@ class LIBMOLDEO_API moMobDefinition
 		    m_MoldeoId = p_moldeoid;
 		    m_MobIndex = p_MobIndex;
         }
+
+        /// Destructor
         virtual ~moMobDefinition() {}
 
+        /// Operador de asignación
         moMobDefinition& operator = ( const moMobDefinition& mb) {
 		    m_Name = mb.m_Name;
 		    m_ConfigName = mb.m_ConfigName;
@@ -156,26 +173,37 @@ class LIBMOLDEO_API moMobDefinition
 		    return(*this);
         }
 
+        /// Objeto válido
         bool    IsValid() {
             return ( m_Type != MO_OBJECT_UNDEFINED);
         }
 
+        /// Nombre del objeto
         moText GetName() {
             return m_Name;
         }
+
+        /// Fijar el nombre del objeto
         void SetName( moText p_name ) {
             m_Name = p_name;
         }
+
+        /// Nombre del archivo de configuración
         moText GetConfigName() {
             return m_ConfigName;
         }
+
+        /// Fijar el nombre del archivo de configuración
         void SetConfigName( moText p_configname ) {
             m_ConfigName = p_configname;
         }
+
+        /// Nombre del archivo de configuración
         moMoldeoObjectType GetType() {
             return m_Type;
         }
 
+        /// Transforma una cadena de caracteres en su correspondiente moMoldeoObjectType
         static moMoldeoObjectType GetStrType( moText p_Str = moText("default") ) {
 
             if (p_Str == moText("effect")) {
@@ -190,12 +218,15 @@ class LIBMOLDEO_API moMobDefinition
                 return MO_OBJECT_IODEVICE;
             } else if (p_Str == moText("resource")) {
                 return MO_OBJECT_RESOURCE;
+            } else if (p_Str == moText("console")) {
+                return MO_OBJECT_CONSOLE;
             }
 
             return MO_OBJECT_UNDEFINED;
 
         }
 
+        /// Transforma un moMoldeoObjectType en el nombre de su correspondiente clase base
         moText GetTypeStr( moMoldeoObjectType p_Type = MO_OBJECT_UNDEFINED ) {
             if ( ! ( p_Type == MO_OBJECT_UNDEFINED ) ) {
                 return moText("MOB undefined");
@@ -219,6 +250,9 @@ class LIBMOLDEO_API moMobDefinition
                 case MO_OBJECT_RESOURCE:
                     return moText("moResource");
                     break;
+                case MO_OBJECT_CONSOLE:
+                    return moText("moConsole");
+                    break;
                 case MO_OBJECT_UNDEFINED:
                     return moText("MOB undefined");
                     break;
@@ -227,46 +261,68 @@ class LIBMOLDEO_API moMobDefinition
                     break;
             }
         }
+
+        /// Fija el tipo de moMoldeoObject o moMoldeoObjectType
         void SetType( moMoldeoObjectType p_type ) {
             m_Type = p_type;
         }
+
+        /// Devuelve la dupla de índices para el archivo de configuración
         moMobIndex& GetMobIndex() {
             return m_MobIndex;
         }
 
 
-        ///este nombre es definido por el usuario
+        /// Fija la etiqueta de este objeto
         void SetLabelName( moText p_labelname ) {
             m_MoldeoLabelName = p_labelname;
         }
+
+        /// Devuelve la etiqueta de este objeto
         moText GetLabelName() {
             return m_MoldeoLabelName;
         }
 
-        ///este id es definido internamente por Moldeo
+        /// Fija el identificador de este objeto
+        /**
+        *   Este identificador debe ser único
+        */
         void SetMoldeoId( MOint p_moldeoid ) {
             m_MoldeoId  = p_moldeoid;
         }
+
+        /// Devuelve el identificador de este objeto
+        /**
+        *   Este identificador debe ser único
+        */
         MOint GetMoldeoId() {
             return m_MoldeoId;
         }
 
     protected:
 
-		MOint					m_MoldeoId;//integer unique identifier
-		moText					m_MoldeoLabelName;//text unique identifier
+		MOint					m_MoldeoId; /// Identificador de objeto Moldeo
+		moText					m_MoldeoLabelName; /// Etiqueta o Identificador de texto de este objeto
 
-		moMoldeoObjectType		m_Type;
-		moText					m_Name;
-		moText					m_ConfigName;
+		moMoldeoObjectType		m_Type; /// Tipo de Objeto
+		moText					m_Name; /// Nombre del objeto (relativo a la clase)
+		moText					m_ConfigName; /// Nombre del archivo de configuración
 
-        moMobIndex              m_MobIndex;
+        moMobIndex              m_MobIndex; /// Índice referente al archivo de configuración que describe a este objeto
 };
 
 
-
+/// Clase Base para Objetos Moldeo ( moEffect, moIODevice, moResource, moConsole )
 /**
  * clase base para definir Objetos Moldeo.
+ * Esta tiene como miembros principales:
+ *
+ * una definición de objeto moMobDefinition
+ * un archivo de configuración moConfig
+ * un conjunto de inlets moInlet's
+ * un conjunto de outlets moOutlet's
+ * una referencia a los recursos del sistema moResourceManager
+ *
  * Los Objetos Moldeo son de 6 tipos posibles.
  * @see moEffect
  * @see moPreEffect
@@ -274,6 +330,9 @@ class LIBMOLDEO_API moMobDefinition
  * @see moMasterEffect
  * @see moIODevice
  * @see moResource
+ * @see moConsole
+ * @see moConfig
+ * @see moMobDefinition
  * @see moMoldeoObjectType
  */
 class LIBMOLDEO_API moMoldeoObject : public moAbstract, public moScript
@@ -301,9 +360,6 @@ class LIBMOLDEO_API moMoldeoObject : public moAbstract, public moScript
 		* Inicializador de la clase con especificación del Administrador de Recursos.
 		*/
 		virtual MOboolean Init( moResourceManager* p_pResources );
-
-
-		virtual void	Load();
 
 		/**
 		 * método de actualización de datos del objeto.
@@ -431,41 +487,43 @@ class LIBMOLDEO_API moMoldeoObject : public moAbstract, public moScript
 
 	protected:
 
-		MOboolean				m_bLoading;
+        /// \if spanish Carga las definiciones de parámetros del archivo de configuración \endif \if english Loads parameter's config definitions \endif
+		virtual void LoadDefinition();
 
-		virtual void LoadDefinition();//loads the list of parameter's definitions of the MOOB MOldeo OBject
-
-        //
+        /// \if spanish Definición del objeto \endif \if english Object definition \endif
         moMobDefinition         m_MobDefinition;
 
-		//MoldeoObject data
-		/*
-		MOint					m_MoldeoId;//integer unique identifier
-		moText					m_MoldeoLabelName;//text unique identifier
-
-		moMoldeoObjectType		m_Type;
-		moText					m_Name;
-		moText					m_ConfigName;
-		*/
-
+        /// Descripción
 		moText					m_Description;
 
+        /// Configuración de parámetros del objeto
 		moConfig				m_Config;
+
+		/// Puntero al administrador de recursos
 		moResourceManager*		m_pResourceManager;
 
-		//Events/messages connectors
+		/// Conectores de salida, Arreglo de moOutlet's
 		moOutlets				m_Outlets;
+
+		/// Conectores de entrada, Arreglo de moInlet's
 		moInlets				m_Inlets;
 
     private:
 
+        /** \defgroup luascript Funciones accesibles por scripting de LUA */
+        /** @{ */
+
+        /// Función de impresión de cadena de carácteres cómoda para la depuración
         int luaPushDebugString(moLuaVirtualMachine& vm);
 
-        ///functions to access moConfig data
+        /// \if spanish Fija la preconfiguración de este objeto \endif \if english Set the preconfiguration value of this object \endif
         int luaSetPreconf(moLuaVirtualMachine& vm);
+        /// \if spanish Devuelve la preconfiguración de este objeto \endif \if english Get the preconfiguration value of this object \endif
         int luaGetPreconf(moLuaVirtualMachine& vm);
 
+        /// \if spanish Devuelve el índice del parámetro \endif \if english Get the parameter index \endif
         int luaGetParamIndex(moLuaVirtualMachine& vm);
+        /// \if spanish Devuelve el índice del valor \endif \if english Get the value index \endif
         int luaGetCurrentValue(moLuaVirtualMachine& vm);
         int luaSetCurrentValue(moLuaVirtualMachine& vm);
 
@@ -491,13 +549,12 @@ class LIBMOLDEO_API moMoldeoObject : public moAbstract, public moScript
         int luaGetTrackerAcceleration(moLuaVirtualMachine& vm);
         int luaGetTrackerVelocity(moLuaVirtualMachine& vm);
         int luaGetTrackerZone(moLuaVirtualMachine& vm);
+
+        /** @} */
+
 };
 
-/*
-template class LIBMOLDEO_API moDynamicArray<moMoldeoObject*>;
-typedef moDynamicArray<moMoldeoObject*> moMoldeoObjects;
-*/
-moDeclareExportedDynamicArray( moMoldeoObject*, moMoldeoObjects)
+moDeclareExportedDynamicArray( moMoldeoObject*, moMoldeoObjects);
 
 #include "moResourceManager.h"
 

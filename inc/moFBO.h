@@ -251,11 +251,7 @@ class LIBMOLDEO_API moFBO : public moAbstract
         void InitAttachPointsArray();
 };
 
-/*
-template class LIBMOLDEO_API moDynamicArray<moFBO*>;
-typedef moDynamicArray<moFBO*> moFBOArray;
-*/
-moDeclareExportedDynamicArray( moFBO*, moFBOArray)
+moDeclareExportedDynamicArray( moFBO*, moFBOArray);
 
 #include "moGLManager.h"
 

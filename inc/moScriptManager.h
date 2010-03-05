@@ -41,6 +41,7 @@
 
 #include "moResourceManager.h"
 
+/// Administrador de scripts (LUA)
 /**
  * Esta clase implementa el administrador de scripts LUA. Inicializa la máquina virtual de LUA y el debugger
  * y registra las clases de Moldeo que serán accessibles desde los scripts de LUA.

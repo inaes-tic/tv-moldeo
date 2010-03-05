@@ -71,11 +71,8 @@ private:
     moText name;
     MOpluginHandle handle;
 };
-/*
-template class LIBMOLDEO_API moDynamicArray<moResourcePlugin*>;
-typedef moDynamicArray<moResourcePlugin*> moResourcePluginsArray;
-*/
-moDeclareExportedDynamicArray(moResourcePlugin*, moResourcePluginsArray)
+
+moDeclareExportedDynamicArray(moResourcePlugin*, moResourcePluginsArray);
 
 LIBMOLDEO_API moResource* moNewResource(moText resource_name, moResourcePluginsArray &plugins);
 LIBMOLDEO_API bool moDeleteResource(moResource* Resource, moResourcePluginsArray &plugins);

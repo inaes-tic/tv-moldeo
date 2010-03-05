@@ -43,6 +43,10 @@
 #define	SERVICE_UPDATE_PERIOD	(20)
 #define MO_SOUNDERROR 65535
 
+/// Tipo de sonido
+/**
+* Tipo de sonido
+*/
 enum moSoundType {
 	MO_SOUNDTYPE_UNDEFINED,
 	MO_SOUNDTYPE_MP3,
@@ -50,6 +54,10 @@ enum moSoundType {
 	MO_SOUNDTYPE_OGG
 };
 
+/// Parámetros de sonido
+/**
+* Parámetros de sonido
+*/
 struct LIBMOLDEO_API moSoundParam {
 		moWord    wFormatTag;
 		moWord    nChannels;
@@ -82,6 +90,10 @@ const moSoundParam MOUndefinedSound =
     MO_UNDEFINED
 };
 
+/// Efecto de sonido
+/**
+* Efecto de sonido
+*/
 struct LIBMOLDEO_API moSoundEffect : public moAbstract {
 
 	public:
@@ -95,12 +107,13 @@ struct LIBMOLDEO_API moSoundEffect : public moAbstract {
 
 };
 
-/*
-template class LIBMOLDEO_API moDynamicArray<moSoundEffect*>;
-typedef moDynamicArray<moSoundEffect*> moSoundEffectArray;
-*/
-moDeclareExportedDynamicArray( moSoundEffect*, moSoundEffectArray)
 
+moDeclareExportedDynamicArray( moSoundEffect*, moSoundEffectArray);
+
+/// Buffer de sonido
+/**
+* Buffer de sonido
+*/
 class LIBMOLDEO_API moSoundBuffer : public moAbstract {
 
 	public:
@@ -109,13 +122,13 @@ class LIBMOLDEO_API moSoundBuffer : public moAbstract {
 
 
 };
-/*
-template class LIBMOLDEO_API moDynamicArray<moSoundBuffer*>;
-typedef moDynamicArray<moSoundBuffer*> moSoundBufferArray;
+
+moDeclareExportedDynamicArray( moSoundBuffer*, moSoundBufferArray);
+
+/// Clase base de sonido
+/**
+* Clase base de sonido
 */
-moDeclareExportedDynamicArray( moSoundBuffer*, moSoundBufferArray)
-
-
 class LIBMOLDEO_API moSound : public  moAbstract {
     public:
 		moSound();
@@ -213,12 +226,14 @@ AL_REFERENCE_DISTANCE*/
 
 };
 
-/*
-template class LIBMOLDEO_API moDynamicArray<moSound*>;
-typedef moDynamicArray<moSound*> moSoundArray;
-*/
-moDeclareExportedDynamicArray( moSound*, moSoundArray)
 
+moDeclareExportedDynamicArray( moSound*, moSoundArray);
+
+
+/// Administrador de sonidos
+/**
+* Administrador de sonidos
+*/
 class LIBMOLDEO_API moSoundManager : public moResource {
 	public:
 

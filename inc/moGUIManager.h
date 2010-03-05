@@ -50,11 +50,8 @@ class LIBMOLDEO_API moGuiObject : public moAbstract {
 		moResourceManager*	m_pResourceManager;
 
 };
-/*
-template class LIBMOLDEO_API moDynamicArray<moGuiObject*>;
-typedef moDynamicArray<moGuiObject*> moGuiObjectArray;
-*/
-moDeclareExportedDynamicArray( moGuiObject*, moGuiObjectArray)
+
+moDeclareExportedDynamicArray( moGuiObject*, moGuiObjectArray);
 
 /// Objeto de interface de usuario dibujable
 /**

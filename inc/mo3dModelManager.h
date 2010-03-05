@@ -196,7 +196,11 @@ class LIBMOLDEO_API mo3DModelSceneNode : public moSceneNode {
 };
 
 
-
+/// Escena 3D
+/**
+* Escena 3D
+*
+*/
 class LIBMOLDEO_API moScene : public moAbstract {
 
     public:
@@ -217,6 +221,15 @@ class LIBMOLDEO_API moScene : public moAbstract {
 
 };
 
+/// Administrador de escenas 3D
+/**
+* Administrador de escenas 3D
+*   esta clase contiene el logo Moldeo
+*   falta implementar importacion de .obj, y collada
+*   Los objetos importados se asocian a los otros administradores de recursos implicados como por ejemplo
+*   moTextureManager
+*
+*/
 class LIBMOLDEO_API mo3dModelManager :  public moResource {
 
 public:

@@ -58,7 +58,6 @@ typedef void(MO_PLG_ENTRY *DestroyIODeviceFactoryFunction)();
 /**
  * Comentar.
  */
-
 class LIBMOLDEO_API moIODevicePlugin
 {
 public:
@@ -85,11 +84,7 @@ private:
     MOpluginHandle handle;
 
 };
-/*
-template class LIBMOLDEO_API moDynamicArray<moIODevicePlugin*>;
-typedef moDynamicArray<moIODevicePlugin*> moIODevicePluginsArray;
-*/
-moDeclareExportedDynamicArray( moIODevicePlugin*, moIODevicePluginsArray )
+moDeclareExportedDynamicArray( moIODevicePlugin*, moIODevicePluginsArray );
 
 LIBMOLDEO_API moIODevice* moNewIODevice(moText iodevice_name, moIODevicePluginsArray &plugins);
 LIBMOLDEO_API bool moDeleteIODevice(moIODevice* iodevice, moIODevicePluginsArray &plugins);

@@ -57,11 +57,10 @@
 #include "moGUIManager.h"
 
 
-/// base class for drawing objects
 /// clase base para objetos dibujables
 /** \if spanish
  * clase base para definir Efectos.
- * un efecto es el objeto dibujabl en la consola (simil de una capa)
+ * un efecto es el objeto dibujable en la consola (simil de una capa)
  * en función del orden en el que ha sido cargado en la consola de efectos
  * Es importante implementar las funciones de Init, Draw, Update e Interaction que son
  * necesarias para las operaciones de Inicialización, Dibujado, Actualización e Interacción.
