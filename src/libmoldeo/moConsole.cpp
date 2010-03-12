@@ -63,6 +63,12 @@ moConsole::~moConsole()
     Finish();
 }
 
+moEffectManager& moConsole::GetEffectManager() {
+
+    return m_EffectManager;
+
+}
+
 void moConsole::SetIODeviceManager( moIODeviceManager*	p_IODeviceManager ) {
 
 	if (p_IODeviceManager!=NULL)
