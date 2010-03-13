@@ -61,8 +61,9 @@
 			<Add directory="../../contrib/src/tinyxml/" />
 			<Add directory="/opt/local/include" />
 			<Add directory="/usr/local/include" />
-			<Add directory="/Developer/SDKs/MacOSX10.5.sdk/System/Library/Frameworks/OpenAL.framework/Versions/A/Headers" />
 			<Add directory="/Library/Frameworks/Cg.framework/Versions/1.0/Headers" />
+			<Add directory="../../inc/tuio" />
+			<Add directory="/opt/local/var/macports/software/openal/1.0_0/opt/local/include/openal" />
 		</Compiler>
 		<Linker>
 			<Add option="`/opt/local/bin/freetype-config --libs`" />
@@ -73,7 +74,7 @@
 			<Add option="-dynamiclib" />
 			<Add option="-framework Cg" />
 			<Add option="-framework OpenGL" />
-			<Add option="-framework OpenAL" />
+			<Add option="-framework SDL" />
 			<Add option="-lSystem" />
 			<Add option="-compatibility_version 0.7" />
 			<Add option="-current_version 0.7.1" />
@@ -82,6 +83,7 @@
 			<Add library="libboost_filesystem-mt.a" />
 			<Add library="libboost_system-mt.a" />
 			<Add library="GLEW" />
+			<Add library="/opt/local/var/macports/software/openal/1.0_0/opt/local/lib/libopenal1.0.0.dylib" />
 		</Linker>
 		<Unit filename="../../inc/3ds/3ds.h" />
 		<Unit filename="../../inc/mo3dModelManager.h" />
@@ -185,6 +187,7 @@
 		<Unit filename="../../src/libmoldeo/moConsoleState.cpp" />
 		<Unit filename="../../src/libmoldeo/moDataManager.cpp" />
 		<Unit filename="../../src/libmoldeo/moDebugManager.cpp" />
+		<Unit filename="../../src/libmoldeo/moDecoderManager.cpp" />
 		<Unit filename="../../src/libmoldeo/moDeviceCode.cpp" />
 		<Unit filename="../../src/libmoldeo/moDsGraph.cpp" />
 		<Unit filename="../../src/libmoldeo/moEffect.cpp" />
@@ -260,6 +263,7 @@
 		<Unit filename="../../src/libmoldeo/moVideoGraph.cpp" />
 		<Unit filename="../../src/libmoldeo/moVideoManager.cpp" />
 		<Unit filename="../../src/libmoldeo/moXmlConfig.cpp" />
+		<Unit filename="../../src/libmoldeo/tuio/TuioTime.cpp" />
 		<Extensions>
 			<envvars />
 			<code_completion />
