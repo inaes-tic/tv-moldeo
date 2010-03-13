@@ -1577,7 +1577,7 @@ moDirectorStatus moDirectorConsole::ConsoleLoop() {
             wxString mess;
             mess = moText2Wx( plog );
             bool iserror;
-            iserror = ( mess.Find(wxString("ERROR")) >= 0 );
+            iserror = ( mess.Find(wxString(_("ERROR"))) >= 0 );
             if (iserror) {
                 if (plog.Trim()!=moText("")) LogError( plog );
             } else {

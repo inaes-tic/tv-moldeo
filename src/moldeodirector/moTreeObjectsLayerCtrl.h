@@ -105,7 +105,7 @@ class moLayersPanelCtrl : public wxPanel {
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
                         long style = wxNO_BORDER,
-                        const wxString& name = "LayersPanel" );
+                        const wxString& name = _("LayersPanel") );
         virtual ~moLayersPanelCtrl() {
         }
 

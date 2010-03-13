@@ -47,13 +47,11 @@
 			<Add directory="../../../inc/3ds" />
 			<Add directory="./inc" />
 			<Add directory="/opt/local/include" />
-			<Add directory="/Developer/SDKs/MacOSX10.5.sdk/System/Library/Frameworks/OpenAL.framework/Versions/A/Headers" />
 		</Compiler>
 		<Linker>
 			<Add option="-dynamiclib" />
 			<Add option="-framework Cg" />
 			<Add option="-framework OpenGL" />
-			<Add option="-framework OpenAL" />
 			<Add library="GLEW" />
 			<Add directory="/opt/local/lib" />
 			<Add directory="../../../lib/osx" />

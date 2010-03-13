@@ -92,9 +92,9 @@ moText0::~moText0()
 // a la posicion [pos] de moText0 sobreescribiendo y siempre agregando
 // un null al final.
 
-void moText0::txtcopy( const char* txt, uint pos, uint com, uint fin)
+void moText0::txtcopy( const char* txt, MOuint pos, MOuint com, MOuint fin)
 {
-    uint i;
+    MOuint i;
     char *finaltxt;
 
 	if (txt==NULL) txt = ""; //cadena vacia
@@ -140,9 +140,9 @@ void moText0::txtcopy( const char* txt, uint pos, uint com, uint fin)
 }
 
 
-void moText0::txtcopy( const short* txt, uint pos, uint com, uint fin)
+void moText0::txtcopy( const short* txt, MOuint pos, MOuint com, MOuint fin)
 {
-    uint i;
+    MOuint i;
     char *finaltxt;
 
     if(pos >= length)               // si pide copyr mas all�al final concatena
@@ -188,9 +188,9 @@ void moText0::txtcopy( const short* txt, uint pos, uint com, uint fin)
 // txtcomp compara caracter a caracter [text] con [txt] a partir de las posiciones
 // [com1] y [com2] respectivamente.  Es CASE-SENSITIVE.
 
-txtcval moText0::txtcomp( const char* txt, uint com1, uint com2)
+txtcval moText0::txtcomp( const char* txt, MOuint com1, MOuint com2)
 {
-    uint i1, i2;
+    MOuint i1, i2;
 
     if(com1 > length)           // si el comienzo supera el length del text empieza
         com1 = length - 1;       // por el last caracter.
@@ -226,9 +226,9 @@ txtcval moText0::txtcomp( const char* txt, uint com1, uint com2)
 // [text] perteneciente a [cjto], si es NOT_BELONG la posicion del primer caracter
 // de [text] no perteneciente a [cjto]. La busqueda se realiza en la direccion [dir].
 
-uint moText0::txtfind( const char* cjto, txtpert pert, uint com, int dir)
+MOuint moText0::txtfind( const char* cjto, txtpert pert, MOuint com, int dir)
 {
-    uint i, j, found;
+    MOuint i, j, found;
 
     if(dir > 1)                // si la direccion es distinta de 1 o -1 es corregida.
         dir = 1;
@@ -283,7 +283,7 @@ uint moText0::txtfind( const char* cjto, txtpert pert, uint com, int dir)
 // Metodos publicos
 //////////////////////////////////////////////////////////////////////
 
-uint moText0::Length() const
+MOuint moText0::Length() const
 {
     return length;
 }
@@ -404,7 +404,7 @@ int moText0::operator !=( char* txt)
 unsigned short* moText0::Short() {
 
 	unsigned short *txtshort;
-	uint i = 0;
+	MOuint i = 0;
 
 	txtshort = new unsigned short [length+1];
 
@@ -418,34 +418,34 @@ unsigned short* moText0::Short() {
 	return txtshort;
 }
 
-moText0& moText0::Left( uint cant)
+moText0& moText0::Left( MOuint cant)
 {
     if (cant<length)
       txtcopy( text, 0, 0, cant);
     return *this;
 }
 
-moText0& moText0::Right( uint cant)
+moText0& moText0::Right( MOuint cant)
 {
     if ((length-cant)>0)
       txtcopy( text, 0, length-cant, MO_TXT_COMPLETE);
     return *this;
 }
 
-moText0& moText0::Mid( uint com, uint cant)
+moText0& moText0::Mid( MOuint com, MOuint cant)
 {
     txtcopy( text, 0, com, com+cant-1);
     return *this;
 }
 
-moText0& moText0::SubText( uint com, uint fin)
+moText0& moText0::SubText( MOuint com, MOuint fin)
 {
     txtcopy( text, 0, com, fin);
     return *this;
 }
 
 
-moText0& moText0::Insert( char* txt, uint pos)
+moText0& moText0::Insert( char* txt, MOuint pos)
 {
     moText0 tmp( text+pos);
     txtcopy( txt, pos);
@@ -453,7 +453,7 @@ moText0& moText0::Insert( char* txt, uint pos)
     return *this;
 }
 
-moText0& moText0::Delete( uint pos, uint cant)
+moText0& moText0::Delete( MOuint pos, MOuint cant)
 {
     txtcopy( text, pos, pos+cant, MO_TXT_COMPLETE);
     return *this;
@@ -467,8 +467,8 @@ moText0& moText0::Delete( uint pos, uint cant)
 moText0 moText0::Scan( char* cjto)
 {
     moText0 newtxt;
-    uint pos1 = txtfind( cjto, MO_TXT_NOT_BELONG);
-    uint pos2 = txtfind( cjto, MO_TXT_BELONG, pos1);
+    MOuint pos1 = txtfind( cjto, MO_TXT_NOT_BELONG);
+    MOuint pos2 = txtfind( cjto, MO_TXT_BELONG, pos1);
     if(pos1 == MO_TXT_NOT_FOUND)  pos1 = 0;
     if(pos2 == MO_TXT_NOT_FOUND)  pos2 = length;
     newtxt.txtcopy( text, 0, pos1, pos2-1);
@@ -479,8 +479,8 @@ moText0 moText0::Scan( char* cjto)
 moText0 moText0::ScanEx( char* cjto)
 {
     moText0 newtxt;
-	uint pos2;
-	uint pos1;
+	MOuint pos2;
+	MOuint pos1;
 
 	pos1 = txtfind( cjto, MO_TXT_NOT_BELONG);
 
@@ -517,7 +517,7 @@ moText0 moText0::ScanEx( char* cjto)
 
 moText0& moText0::LTrim()
 {
-    uint pos = txtfind( " \t\n", MO_TXT_NOT_BELONG);
+    MOuint pos = txtfind( " \t\n", MO_TXT_NOT_BELONG);
     if(pos != MO_TXT_NOT_FOUND)
         Right( length-pos);
     else if(txtfind( " \t\n", MO_TXT_BELONG) != MO_TXT_NOT_FOUND)
@@ -527,7 +527,7 @@ moText0& moText0::LTrim()
 
 moText0& moText0::RTrim()
 {
-    uint pos = txtfind( " \t\n", MO_TXT_NOT_BELONG, length, -1);
+    MOuint pos = txtfind( " \t\n", MO_TXT_NOT_BELONG, length, -1);
     if(pos != MO_TXT_NOT_FOUND)
         Left( pos);
     else if(txtfind( " \t\n", MO_TXT_BELONG, length, -1) != MO_TXT_NOT_FOUND)
@@ -549,7 +549,7 @@ void moText0::ToUpper()
     moText0 interchar2(" ");
 
     char tmp[2] = " ";
-    uint i, pos;
+    MOuint i, pos;
 
     for( i=0; i<length; i++)
         if(text[i] >= 'a' && text[i] <= 'z')
@@ -570,7 +570,7 @@ void moText0::ToLower()
     moText0 interchar2(" ");
 
     char tmp[2] = " ";
-    uint i, pos;
+    MOuint i, pos;
 
     for( i=0; i<length; i++)
         if(text[i] >= 'A' && text[i] <= 'Z')
@@ -595,7 +595,7 @@ moText0::Explode( char* separator ) const
     //std::string txtstr = text;
     Rtext = (*this);
 
-    uint posa, posb;
+    MOuint posa, posb;
     posa = 0;
     posb = 0;
 
@@ -728,38 +728,38 @@ moText0::ReplaceChar( const char* target, const char* replacement ) {
 //
 //===========================================
 
-moString& moString::Left(uint nchar)
+moString& moString::Left(MOuint nchar)
 {
 	erase(nchar, length() - 1);
 	return *this;
 }
 
-moString& moString::Right(uint nchar)
+moString& moString::Right(MOuint nchar)
 {
 	erase(0, length() - 1 - nchar);
 	return *this;
 }
 
-moString& moString::Mid(uint first, uint nchar)
+moString& moString::Mid(MOuint first, MOuint nchar)
 {
-	uint last = first + nchar - 1;
+	MOuint last = first + nchar - 1;
 	return SubText(first, last);
 }
 
-moString& moString::SubText(uint first, uint last)
+moString& moString::SubText(MOuint first, MOuint last)
 {
 	erase(last + 1, length() - 1);
 	erase(0, first - 1);
 	return *this;
 }
 
-moString& moString::Insert(char *str, uint pos)
+moString& moString::Insert(char *str, MOuint pos)
 {
 	insert(pos, str);
 	return *this;
 }
 
-moString& moString::Delete(uint first, uint nchar)
+moString& moString::Delete(MOuint first, MOuint nchar)
 {
 	erase(first, first + nchar - 1);
 	return *this;
@@ -849,7 +849,7 @@ unsigned short* moString::Short()
 	unsigned short *str_short;
 	str_short = new unsigned short [length() +1];
 
-	for (uint i = 0; i < length(); i++) str_short[i] = (unsigned short)(*this)[i];
+	for (MOuint i = 0; i < length(); i++) str_short[i] = (unsigned short)(*this)[i];
 	str_short[length()] = '\0';
 
 	return str_short;
@@ -858,7 +858,7 @@ unsigned short* moString::Short()
 void moString::ToUpper()
 {
 	char c;
-	for (uint i = 0; i < length(); i++)
+	for (MOuint i = 0; i < length(); i++)
 	{
 		c = (*this)[i];
 		if (c >= 'A' && c <= 'Z') (*this)[i] = c - ('a' - 'A');
@@ -868,7 +868,7 @@ void moString::ToUpper()
 void moString::ToLower()
 {
 	char c;
-	for (uint i = 0; i < length(); i++)
+	for (MOuint i = 0; i < length(); i++)
 	{
 		c = (*this)[i];
 		if (c >= 'A' && c <= 'Z') (*this)[i] = c + ('a' - 'A');

@@ -96,8 +96,8 @@ moDirectorFrame::moDirectorFrame(const wxString& title)
     wxString clientareastr;
     wxString clientareastr2;
 
-    clientareastr.Printf(" area: %d,%d,%d,%d", client.GetLeft(), client.GetTop(), client.GetWidth(), client.GetHeight() );
-    clientareastr2.Printf(" area: %d,%d,%d,%d", client2.GetLeft(), client2.GetTop(), client2.GetWidth(), client2.GetHeight() );
+    clientareastr.Printf(_(" area: %d,%d,%d,%d"), client.GetLeft(), client.GetTop(), client.GetWidth(), client.GetHeight() );
+    clientareastr2.Printf(_(" area: %d,%d,%d,%d"), client2.GetLeft(), client2.GetTop(), client2.GetWidth(), client2.GetHeight() );
 
    //wxMessageBox(thisDisplay.GetName() + clientareastr);
    //wxMessageBox(theOtherDisplay.GetName() + clientareastr2 );
@@ -730,7 +730,7 @@ moDirectorFrame::OnOpenProject(wxCommandEvent& event) {
                 ProjectDescriptor.Set( moText((char*)cfilepath), moText((char*)cfilename) );
 
                 mStatus = OpenProject( ProjectDescriptor );
-                SetTitle(wxT(name)+wxT(" - Moldeo Director"));
+                SetTitle(wxString(name)+wxString(_(" - Moldeo Director")));
 
             }
 
@@ -755,7 +755,7 @@ moDirectorFrame::OnOpenProject(wxCommandEvent& event) {
         ProjectDescriptor.Set( moText((char*)cfilepath), moText((char*)cfilename) );
 
         mStatus = OpenProject( ProjectDescriptor );
-        SetTitle(wxT(name)+wxT(" - Moldeo Director"));
+        SetTitle(wxString(name)+wxString(_(" - Moldeo Director")));
 
 
     }
@@ -1115,9 +1115,9 @@ moDirectorFrame::FocusOutput() {
         wxString clientareastr2;
         wxString clientareastr3;
 
-        clientareastr.Printf(" area: %d,%d,%d,%d", client.GetLeft(), client.GetTop(), client.GetWidth(), client.GetHeight() );
-        clientareastr2.Printf(" area: %d,%d,%d,%d", client2.GetLeft(), client2.GetTop(), client2.GetWidth(), client2.GetHeight() );
-        clientareastr3.Printf(" area: %d,%d,%d,%d", client3.GetLeft(), client3.GetTop(), client3.GetWidth(), client3.GetHeight() );
+        clientareastr.Printf(_(" area: %d,%d,%d,%d"), client.GetLeft(), client.GetTop(), client.GetWidth(), client.GetHeight() );
+        clientareastr2.Printf(_(" area: %d,%d,%d,%d"), client2.GetLeft(), client2.GetTop(), client2.GetWidth(), client2.GetHeight() );
+        clientareastr3.Printf(_(" area: %d,%d,%d,%d"), client3.GetLeft(), client3.GetTop(), client3.GetWidth(), client3.GetHeight() );
 
        //wxMessageBox(thisDisplay.GetName() + clientareastr);
        //wxMessageBox(theOtherDisplay.GetName() + clientareastr2 );
@@ -1660,7 +1660,7 @@ void moDirectorFrame::OnExampleSimple(wxCommandEvent& event) {
 	moProjectDescriptor ProjectDescriptor;
 	moDirectorStatus	mStatus;
 
-	wxString text = "../../data/test/test.mol";
+	wxString text = _("../../data/test/test.mol");
 	wxMessageBox(text);
     ProjectDescriptor.Set( moText("../../data/test/"), moText("test.mol") );
     mStatus = OpenProject( ProjectDescriptor );
@@ -1672,7 +1672,7 @@ void moDirectorFrame::OnExampleCamera(wxCommandEvent& event) {
 	moProjectDescriptor ProjectDescriptor;
 	moDirectorStatus	mStatus;
 
-	wxString text = "../../data/test/camaras.mol";
+	wxString text = _("../../data/test/camaras.mol");
 	wxMessageBox(text);
     ProjectDescriptor.Set( moText("../../data/test/"), moText("camaras.mol") );
     mStatus = OpenProject( ProjectDescriptor );
@@ -1684,7 +1684,7 @@ void moDirectorFrame::OnExampleInteractiveCamera(wxCommandEvent& event) {
 	moProjectDescriptor ProjectDescriptor;
 	moDirectorStatus	mStatus;
 
-	wxString text = "../../data/test/camarasinteractivas.mol";
+	wxString text = _("../../data/test/camarasinteractivas.mol");
 	wxMessageBox(text);
     ProjectDescriptor.Set( moText("../../data/test/"), moText("camarasinteractivas.mol") );
     mStatus = OpenProject( ProjectDescriptor );
@@ -1696,7 +1696,7 @@ void moDirectorFrame::OnExampleInteractiveCameraGPU(wxCommandEvent& event) {
 	moProjectDescriptor ProjectDescriptor;
 	moDirectorStatus	mStatus;
 
-	wxString text = "../../data/test/camarasinteractivasgpu.mol";
+	wxString text = _("../../data/test/camarasinteractivasgpu.mol");
 	wxMessageBox(text);
     ProjectDescriptor.Set( moText("../../data/test/"), moText("camarasinteractivasgpu.mol") );
     mStatus = OpenProject( ProjectDescriptor );
@@ -1708,7 +1708,7 @@ void moDirectorFrame::OnExampleInteractiveCameraGPUKLT2(wxCommandEvent& event) {
 	moProjectDescriptor ProjectDescriptor;
 	moDirectorStatus	mStatus;
 
-	wxString text = "../../data/test/camarasinteractivasgpuklt2.mol";
+	wxString text = _("../../data/test/camarasinteractivasgpuklt2.mol");
 	wxMessageBox(text);
     ProjectDescriptor.Set( moText("../../data/test/"), moText("camarasinteractivasgpuklt2.mol") );
     mStatus = OpenProject( ProjectDescriptor );
@@ -1720,7 +1720,7 @@ void moDirectorFrame::OnExampleCameraCircularBuffer(wxCommandEvent& event) {
 	moProjectDescriptor ProjectDescriptor;
 	moDirectorStatus	mStatus;
 
-	wxString text = "../../data/test/camarascircular.mol";
+	wxString text = _("../../data/test/camarascircular.mol");
 	wxMessageBox(text);
     ProjectDescriptor.Set( moText("../../data/test/"), moText("camarascircular.mol") );
     mStatus = OpenProject( ProjectDescriptor );

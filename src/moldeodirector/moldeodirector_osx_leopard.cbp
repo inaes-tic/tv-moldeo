@@ -17,8 +17,7 @@
 					<Add option="-g" />
 				</Compiler>
 				<ExtraCommands>
-					<Add after="/Developer/Tools/Rez -d __DARWIN__ -t APPL -i ../../include -i ../../src/moldeodirector -i ../../build/codeblocksosx -o $(TARGET_OUTPUT_FILE) Carbon.r sample.r" />
-					<Add after="SetFile -a C $(TARGET_OUTPUT_FILE)" />
+					<Add after="/Developer/Tools/Rez -d __DARWIN__ -t APPL -i ../../include -i ../../src/moldeodirector -i ../../build/codeblocksosx -o $(TARGET_OUTPUT_FILE) Carbon.r" />
 					<Add after="mkdir -p $(TARGET_OUTPUT_FILE).app/Contents" />
 					<Add after="mkdir -p $(TARGET_OUTPUT_FILE).app/Contents/MacOS" />
 					<Add after="mkdir -p $(TARGET_OUTPUT_FILE).app/Contents/Resources" />
@@ -46,7 +45,7 @@
 					<Add option="-s" />
 				</Linker>
 				<ExtraCommands>
-					<Add after="/Developer/Tools/Rez -d __DARWIN__ -t APPL -i ../../include -i ../../src/moldeodirector -i ../../build/codeblocksosx -o $(TARGET_OUTPUT_FILE) Carbon.r sample.r" />
+					<Add after="/Developer/Tools/Rez -d __DARWIN__ -t APPL -i ../../include -i ../../src/moldeodirector -i ../../build/codeblocksosx -o $(TARGET_OUTPUT_FILE) Carbon.r" />
 					<Add after="SetFile -a C $(TARGET_OUTPUT_FILE)" />
 					<Add after="mkdir -p $(TARGET_OUTPUT_FILE).app/Contents" />
 					<Add after="mkdir -p $(TARGET_OUTPUT_FILE).app/Contents/MacOS" />
@@ -67,23 +66,29 @@
 		</VirtualTargets>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add option="`/Users/Shared/extern/wxMac-2.8.9/build-osx/wx-config --cflags`" />
+			<Add option="`/opt/local/bin/wx-config --cflags`" />
 			<Add option="-fno-strict-aliasing" />
 			<Add option="-fno-common" />
 			<Add option="-msse2" />
 			<Add directory="../../inc" />
 			<Add directory="/opt/local/include" />
-			<Add directory="/Developer/SDKs/MacOSX10.5.sdk/System/Library/Frameworks/OpenAL.framework/Versions/A/Headers" />
 			<Add directory="../moldeodirector" />
 			<Add directory="vdtc" />
 			<Add directory="treemultictrl" />
+			<Add directory="../../contrib/src/wxMoldeoControls" />
 		</Compiler>
+		<ResourceCompiler>
+			<Add directory="/opt/local/var/macports/software/wxWidgets/2.8.9_1/opt/local/include/wx-2.8" />
+			<Add directory="../../art/" />
+		</ResourceCompiler>
 		<Linker>
-			<Add option="`/Users/Shared/extern/wxMac-2.8.9/build-osx/wx-config --libs`" />
 			<Add option="-framework Cg" />
+			<Add option="`/opt/local/bin/wx-config --libs`" />
 			<Add library="libmoldeo" />
-			<Add library="wx_mac_gl-2.8" />
+			<Add library="moldeocontrols" />
+			<Add library="wx_macu_gl-2.8" />
 			<Add directory="../../lib/osx" />
+			<Add directory="../../contrib/src/wxMoldeoControls/Releaseosx" />
 		</Linker>
 		<Unit filename="HtmlPanel.cpp" />
 		<Unit filename="HtmlPanel.h" />
@@ -91,6 +96,14 @@
 		<Unit filename="mo3dModelPanel.h" />
 		<Unit filename="moColorMotion.cpp" />
 		<Unit filename="moColorMotion.h" />
+		<Unit filename="moConfigurationAdvancedOutput.cpp" />
+		<Unit filename="moConfigurationAdvancedOutput.h" />
+		<Unit filename="moConfigurationDialog.cpp" />
+		<Unit filename="moConfigurationDialog.h" />
+		<Unit filename="moConfigurationGeneral.cpp" />
+		<Unit filename="moConfigurationGeneral.h" />
+		<Unit filename="moConfigurationOutput.cpp" />
+		<Unit filename="moConfigurationOutput.h" />
 		<Unit filename="moConnectionsWindow.cpp" />
 		<Unit filename="moConnectionsWindow.h" />
 		<Unit filename="moDirectorChildFrame.cpp" />
@@ -132,6 +145,10 @@
 		<Unit filename="moPreviewWindow.h" />
 		<Unit filename="moProjectTreeCtrl.cpp" />
 		<Unit filename="moProjectTreeCtrl.h" />
+		<Unit filename="moResourcesTreeCtrl.cpp" />
+		<Unit filename="moResourcesTreeCtrl.h" />
+		<Unit filename="moScriptPanel.cpp" />
+		<Unit filename="moScriptPanel.h" />
 		<Unit filename="moShaderCtrl.cpp" />
 		<Unit filename="moShaderCtrl.h" />
 		<Unit filename="moShadersPanel.cpp" />
@@ -144,8 +161,6 @@
 		<Unit filename="moTreeObjectsLayerCtrl.h" />
 		<Unit filename="moValueCtrl.cpp" />
 		<Unit filename="moValueCtrl.h" />
-		<Unit filename="moWxLevelCtrl.cpp" />
-		<Unit filename="moWxLevelCtrl.h" />
 		<Unit filename="moldeodirectorApp.cpp" />
 		<Unit filename="moldeodirectorApp.h" />
 		<Unit filename="moldeodirectorMain.cpp" />

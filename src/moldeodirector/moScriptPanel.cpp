@@ -27,7 +27,7 @@ moScriptPanel::moScriptPanel(wxWindow* parent,wxWindowID id)
 	ScriptFileTextCtrl = new wxTextCtrl(this, ID_FILETEXTCTRL, _("file..."), wxPoint(200,0), wxSize(216,21), 0, wxDefaultValidator, _T("ID_FILETEXTCTRL"));
 	BrowseScript = new wxButton(this, ID_BROWSESCRIPT, _("..."), wxPoint(416,0), wxSize(24,23), 0, wxDefaultValidator, _T("ID_BROWSESCRIPT"));
 	SaveButton = new wxButton(this, ID_SAVEBUTTON, _("Save"), wxPoint(0,0), wxDefaultSize, 0, wxDefaultValidator, _T("ID_SAVEBUTTON"));
-	
+
 	Connect(ID_COMPILEANDRUN,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&moScriptPanel::OnCompileButtonClick);
 	Connect(ID_FILETEXTCTRL,wxEVT_COMMAND_TEXT_UPDATED,(wxObjectEventFunction)&moScriptPanel::OnScriptFileTextCtrlText);
 	Connect(ID_BROWSESCRIPT,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&moScriptPanel::OnBrowseScriptClick);
@@ -85,7 +85,7 @@ void moScriptPanel::Inspect( moValueDescriptor p_ValueDescriptor ) {
 
         moValue& pValue( m_ValueDescriptor.GetValue() );
 
-        ScriptTextCtrl->LoadFile( absolutepath + "/" + scriptname );
+        ScriptTextCtrl->LoadFile( absolutepath + _("/") + scriptname );
 
     }
 
@@ -119,7 +119,7 @@ void moScriptPanel::OnSaveButtonClick(wxCommandEvent& event)
     absname.MakeAbsolute();
     wxString absolutepath = absname.GetPath();
 
-    ScriptTextCtrl->SaveFile( absolutepath + "/" + ScriptFileTextCtrl->GetValue() );
+    ScriptTextCtrl->SaveFile( absolutepath + _("/") + ScriptFileTextCtrl->GetValue() );
 
 
 }

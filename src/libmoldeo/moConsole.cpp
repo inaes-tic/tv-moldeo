@@ -39,6 +39,10 @@
     #include <SDL/SDL.h>
 #endif
 
+#ifdef MO_MACOSX
+    #include <SDL/SDL.h>
+#endif
+
 #include "moArray.cpp"
 moDefineDynamicArray( moPresetParams )
 

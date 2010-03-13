@@ -38,10 +38,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#ifndef uint
-#define uint    unsigned int
-#endif
-
 #ifdef WIN32
 #define snprintf _snprintf
 #endif
@@ -79,7 +75,7 @@ public:
 
 	virtual ~moText0();
 
-    uint Length() const;               // devuelve el length del text sin contar el null del final.
+    MOuint Length() const;               // devuelve el length del text sin contar el null del final.
 
     // operadores que usan solo objetos de la clase //
     moText0& operator = (const moText0& txt);
@@ -107,19 +103,19 @@ public:
     int operator ==( char* txt);
     int operator !=( char* txt);
 
-    //char operator [](uint pos)            { return text[pos]; }
+    //char operator [](MOuint pos)            { return text[pos]; }
 
     // operadores de conversion para poder usar c-strings //
     virtual operator char*()                { return text; }
 
     // metodos comunes en una clase string//
-    moText0& Left( uint);            // devuelve el comienzo de un text.
-    moText0& Right( uint);           // devuelve el final de un text.
-    moText0& Mid( uint, uint);       // devuelve un fragmento intermedio del text.(comienzo, cant de carac)
-    moText0& SubText( uint, uint);   // devuelve un fragmento intermedio del text.(comienzo, final)
+    moText0& Left( MOuint);            // devuelve el comienzo de un text.
+    moText0& Right( MOuint);           // devuelve el final de un text.
+    moText0& Mid( MOuint, MOuint);       // devuelve un fragmento intermedio del text.(comienzo, cant de carac)
+    moText0& SubText( MOuint, MOuint);   // devuelve un fragmento intermedio del text.(comienzo, final)
 
-    moText0& Insert( char*, uint);        // inserta un text dentro de otro.
-    moText0& Delete( uint, uint);           // borra una parte del text.
+    moText0& Insert( char*, MOuint);        // inserta un text dentro de otro.
+    moText0& Delete( MOuint, MOuint);           // borra una parte del text.
 
     moText0  Scan( char*);                  // saca y devuelve el primer fragmento de text que este separado por alguno de los caracteres de un cjto.
 	moText0  ScanEx( char*);                // saca y devuelve el primer fragmento de text que este separado por alguno de los caracteres de un cjto, y entre comillas.
@@ -140,16 +136,16 @@ public:
 
 private:
     char*   text;
-    uint    length;
+    MOuint    length;
 
     // Estos metodos son el motor de la clase. Contienen toda la logica
     // de como se maneja moText0. Todos los metodos publicos las usan.
 public:
-    void    txtcopy( const char* txt, uint pos = 0, uint com = 0, uint fin = MO_TXT_COMPLETE);        // copy c-strings(reserva la memoria y pone los nulls al final)
-	void    txtcopy( const short* txt, uint pos = 0, uint com = 0, uint fin = MO_TXT_COMPLETE);        // copy c-strings(reserva la memoria y pone los nulls al final)
+    void    txtcopy( const char* txt, MOuint pos = 0, MOuint com = 0, MOuint fin = MO_TXT_COMPLETE);        // copy c-strings(reserva la memoria y pone los nulls al final)
+	void    txtcopy( const short* txt, MOuint pos = 0, MOuint com = 0, MOuint fin = MO_TXT_COMPLETE);        // copy c-strings(reserva la memoria y pone los nulls al final)
 private:
-    txtcval txtcomp( const char* txt, uint com1 = 0, uint com2 = 0);
-    uint    txtfind( const char* txt, txtpert pert = MO_TXT_BELONG, uint com = 0, int dir = 1);
+    txtcval txtcomp( const char* txt, MOuint com1 = 0, MOuint com2 = 0);
+    MOuint    txtfind( const char* txt, txtpert pert = MO_TXT_BELONG, MOuint com = 0, int dir = 1);
 };
 #endif
 
@@ -167,22 +163,22 @@ class LIBMOLDEO_API moString : public std::string
 public:
 	// Constructors.
 	moString() : std::string() {}
-	moString(uint length, const char& ch) : std::string(length, ch) {}
+	moString(MOuint length, const char& ch) : std::string(length, ch) {}
 	moString(const char* str) : std::string(str) {}
-	moString(const char* str, uint length) : std::string(str, length) {}
+	moString(const char* str, MOuint length) : std::string(str, length) {}
 	moString(const std::string& s) : std::string(s) {}
 	moString(const moString& s) : std::string((std::string)s) {}
-	moString(const std::string& str, uint index, uint length) : std::string(str, index, length) {}
-	moString(const moString& str, uint index, uint length) : std::string((std::string)str, index, length) {}
+	moString(const std::string& str, MOuint index, MOuint length) : std::string(str, index, length) {}
+	moString(const moString& str, MOuint index, MOuint length) : std::string((std::string)str, index, length) {}
 
 	// Moldeo functions.
-    moString& Left(uint nchar);					// Sets the string to the first nchar characters in the string.
-    moString& Right(uint nchar);				// Sets the string to the last nchar characters in the string.
-    moString& Mid(uint first, uint nchar);		// Sets the string to an intermediate substring.
-    moString& SubText(uint first, uint last);	// Sets the string to an intermediate substring.
+    moString& Left(MOuint nchar);					// Sets the string to the first nchar characters in the string.
+    moString& Right(MOuint nchar);				// Sets the string to the last nchar characters in the string.
+    moString& Mid(MOuint first, MOuint nchar);		// Sets the string to an intermediate substring.
+    moString& SubText(MOuint first, MOuint last);	// Sets the string to an intermediate substring.
 
-    moString& Insert(char *str, uint pos);      // Inserts s at position pos.
-    moString& Delete(uint first, uint nchar);   // Deletes a part of the string.
+    moString& Insert(char *str, MOuint pos);      // Inserts s at position pos.
+    moString& Delete(MOuint first, MOuint nchar);   // Deletes a part of the string.
 
     moString Scan(char *set);					// Returns the first substring separated by some of the characters in the set.
 	moString ScanEx(char *set);					// Returns the first substring separated by some of the characters in the set and between commas.
@@ -195,50 +191,50 @@ public:
     void ToUpper();								// Converts the string to uppercase.
     void ToLower();								// Converts the string to lowercase.
 
-	uint Length() { return uint(length()); }
+	MOuint Length() { return MOuint(length()); }
 
 	// String functions.
 	moString& assign(const moString& str) { std::string::assign((std::string)str); return *this; }
 	moString& assign(const char* str) { std::string::assign(str); return *this; }
-	moString& assign(const char* str, uint num) { std::string::assign(str, num); return *this; }
-	moString& assign(const moString& str, uint index, uint len) { std::string::assign(str, index, len); return *this; }
-	moString& assign(uint num, const char& ch) { std::string::assign(num, ch); return *this; }
+	moString& assign(const char* str, MOuint num) { std::string::assign(str, num); return *this; }
+	moString& assign(const moString& str, MOuint index, MOuint len) { std::string::assign(str, index, len); return *this; }
+	moString& assign(MOuint num, const char& ch) { std::string::assign(num, ch); return *this; }
 
 	moString& append(const moString& str) { std::string::append((std::string)str); return *this; }
 	moString& append(const char* str) { std::string::append(str); return *this; }
-	moString& append(const moString& str, uint index, uint len) { std::string::append(str, index, len); return *this; }
-	moString& append(const char* str, uint num) { std::string::append(str, num); return *this; }
-	moString& append(uint num, char ch) { std::string::append(num, ch); return *this; }
+	moString& append(const moString& str, MOuint index, MOuint len) { std::string::append(str, index, len); return *this; }
+	moString& append(const char* str, MOuint num) { std::string::append(str, num); return *this; }
+	moString& append(MOuint num, char ch) { std::string::append(num, ch); return *this; }
 
-	moString substr(uint index, uint num = npos) { return std::string::substr(index, num); }
-	moString& erase(uint index = 0, uint num = npos) { std::string::erase(index, num); return *this; }
+	moString substr(MOuint index, MOuint num = npos) { return std::string::substr(index, num); }
+	moString& erase(MOuint index = 0, MOuint num = npos) { std::string::erase(index, num); return *this; }
 
-	uint find(const moString& str, uint index) { return std::string::find((std::string)str, index); }
-	uint find(const char* str, uint index) { return std::string::find(str, index); }
-	uint find(const char* str, uint index, uint length) { return std::string::find(str, index, length); }
-	uint find(char ch, uint index) { return std::string::find(ch, index); }
+	MOuint find(const moString& str, MOuint index) { return std::string::find((std::string)str, index); }
+	MOuint find(const char* str, MOuint index) { return std::string::find(str, index); }
+	MOuint find(const char* str, MOuint index, MOuint length) { return std::string::find(str, index, length); }
+	MOuint find(char ch, MOuint index) { return std::string::find(ch, index); }
 
-	uint rfind(const moString& str, uint index) { return std::string::rfind((std::string)str, index); }
-	uint rfind(const char* str, uint index) { return std::string::rfind(str, index); }
-	uint rfind(const char* str, uint index, uint length) { return std::string::rfind(str, index, length); }
-	uint rfind(char ch, uint index) { return std::string::rfind(ch, index); }
+	MOuint rfind(const moString& str, MOuint index) { return std::string::rfind((std::string)str, index); }
+	MOuint rfind(const char* str, MOuint index) { return std::string::rfind(str, index); }
+	MOuint rfind(const char* str, MOuint index, MOuint length) { return std::string::rfind(str, index, length); }
+	MOuint rfind(char ch, MOuint index) { return std::string::rfind(ch, index); }
 
 	int compare(const moString& str) { return std::string::compare((std::string)str); }
 	int compare(const char* str) { return std::string::compare(str); }
-	int compare(uint index, uint length, const moString& str) { return std::string::compare(index, length, (std::string)str); }
-	int compare(uint index, uint length, const moString& str, uint index2, uint length2) { return std::string::compare(index, length, (std::string)str, index2, length2); }
+	int compare(MOuint index, MOuint length, const moString& str) { return std::string::compare(index, length, (std::string)str); }
+	int compare(MOuint index, MOuint length, const moString& str, MOuint index2, MOuint length2) { return std::string::compare(index, length, (std::string)str, index2, length2); }
 
-	moString& insert(uint index, const moString& str) { std::string::insert(index, (std::string)str); return *this; }
-	moString& insert(uint index, const char* str) { std::string::insert(index, str); return *this; }
-	moString& insert(uint index1, const moString& str, uint index2, uint num) { std::string::insert(index1, (std::string)str, index2, num); return *this; }
-	moString& insert(uint index, const char* str, uint num) { std::string::insert(index, str, num); return *this; }
-	moString& insert(uint index, uint num, char ch) { std::string::insert(index, num, ch); return *this; }
+	moString& insert(MOuint index, const moString& str) { std::string::insert(index, (std::string)str); return *this; }
+	moString& insert(MOuint index, const char* str) { std::string::insert(index, str); return *this; }
+	moString& insert(MOuint index1, const moString& str, MOuint index2, MOuint num) { std::string::insert(index1, (std::string)str, index2, num); return *this; }
+	moString& insert(MOuint index, const char* str, MOuint num) { std::string::insert(index, str, num); return *this; }
+	moString& insert(MOuint index, MOuint num, char ch) { std::string::insert(index, num, ch); return *this; }
 
-	moString& replace(uint index, uint num, const moString& str) { std::string::replace(index, num, (std::string)str); return *this; }
-	moString& replace(uint index1, uint num1, const moString& str, uint index2, uint num2) { std::string::replace(index1, num1, (std::string)str, index2, num2); return *this; }
-	moString& replace(uint index, uint num, const char* str) { std::string::replace(index, num, str); return *this; }
-	moString& replace(uint index, uint num1, const char* str, uint num2) { std::string::replace(index, num1, str, num2); return *this; }
-	moString& replace(uint index, uint num1, uint num2, char ch) { std::string::replace(index, num1, num2, ch); return *this; }
+	moString& replace(MOuint index, MOuint num, const moString& str) { std::string::replace(index, num, (std::string)str); return *this; }
+	moString& replace(MOuint index1, MOuint num1, const moString& str, MOuint index2, MOuint num2) { std::string::replace(index1, num1, (std::string)str, index2, num2); return *this; }
+	moString& replace(MOuint index, MOuint num, const char* str) { std::string::replace(index, num, str); return *this; }
+	moString& replace(MOuint index, MOuint num1, const char* str, MOuint num2) { std::string::replace(index, num1, str, num2); return *this; }
+	moString& replace(MOuint index, MOuint num1, MOuint num2, char ch) { std::string::replace(index, num1, num2, ch); return *this; }
 
 	// Operators.
 	friend LIBMOLDEO_API bool operator == (const moString& c1, const moString& c2) { return (std::string)c1 == (std::string)c2; }

@@ -94,7 +94,7 @@ testwxFrame::testwxFrame(wxWindow* parent,wxWindowID id)
     if (TestConsole)
         fxcount = TestConsole->GetEffectManager().Effects().Count();
 
-    wxMessageBox("Console created: effects:" + IntToStr(fxcount));
+    wxMessageBox(wxString(_("Console created: effects:")) + wxString( moText2Wx( IntToStr(fxcount))) );
 }
 
 testwxFrame::~testwxFrame()

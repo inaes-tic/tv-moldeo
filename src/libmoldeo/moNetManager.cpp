@@ -27,8 +27,7 @@
   Fabricio Costa
   Andrés Colubri
 
-*******************************************************************************/
-#include <asio.hpp>
+******************************************************************************/
 
 #include "moNetManager.h"
 
@@ -38,7 +37,11 @@ moDefineDynamicArray( moNetConnections )
 
 #include <boost/bind.hpp>
 
+#ifndef MO_MACOSX
 #include "asio.hpp"
+#else
+#include <boost/asio.hpp>
+#endif
 
 #include <boost/shared_ptr.hpp>
 
@@ -46,8 +49,15 @@ moDefineDynamicArray( moNetConnections )
   using namespace boost;
   using namespace boost::asio;
   using namespace boost::asio::ip;
-#else
+#endif
 
+#ifdef MO_MACOSX
+  using namespace boost;
+  using namespace asio;
+  using namespace asio::ip;
+#endif
+
+#ifdef MO_LINUX
   using namespace boost;
   using namespace asio;
   using namespace asio::ip;

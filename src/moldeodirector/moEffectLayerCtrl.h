@@ -147,7 +147,7 @@ class moItemLayerWindow: public moItemLayerCtrl, public wxSplitterWindow
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
                         long style = wxNO_BORDER,
-                        const wxString& name = "LayerPanel" );
+                        const wxString& name = _("LayerPanel") );
 		virtual ~moItemLayerWindow() {
         }
 

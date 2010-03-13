@@ -320,7 +320,7 @@ void moLayersPanelCtrl::SashChanged( wxSplitterEvent& event ) {
 
 
 void moLayersPanelCtrl::SashDClick( wxSplitterEvent& event ) {
-    wxMessageBox("stop doing that!");
+    wxMessageBox(wxString(_("stop doing that!")));
 }
 
 void moLayersPanelCtrl::ScrollTimeline( wxScrollEvent& event ) {
