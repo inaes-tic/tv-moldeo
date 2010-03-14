@@ -1,0 +1,46 @@
+<pkmkdoc spec="1.12"><properties><title>Moldeo Director for Mac OSX Leopard</title><build>/Users/julietajiterman/Desktop/moldeo/packages/Moldeo Director for Mac OSX Leopard.pkg</build><organization>org.wxwindows</organization><userSees ui="easy"/><min-target os="3"/><domain anywhere="true" user="true"/></properties><distribution><versions min-spec="1.000000"/><scripts></scripts></distribution><description>Moldeo Director is an opens source software interface for multimedia manipulation and interactive installations </description><contents><choice title="moldeodirector" id="choice34" starts_selected="true" starts_enabled="true" starts_hidden="false"><pkgref id="org.wxwindows.moldeoDirectorForMacOsxLeopard.moldeodirector.pkg"/></choice></contents><resources bg-scale="none" bg-align="center"><locale lang="en"><resource relative="true" mod="true" type="background">imageempty.png</resource><resource relative="true" mod="true" type="license">gpl-3.0.txt</resource><resource mime-type="text/rtf" kind="embedded" type="welcome"><![CDATA[{\rtf1\ansi\ansicpg1252\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fnil\fcharset0 LucidaGrande;}
+{\colortbl;\red255\green255\blue255;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs26 \cf0 \
+\
+\
+Welcome to the first release of the Moldeo Director installer for Mac OSX Leopard.\
+\
+Please visit-us to www.moldeo.org and check our tutorials and demos.\
+\
+Have Fun!}]]></resource></locale><locale lang="es"><resource mod="true" type="background">/Users/julietajiterman/Desktop/moldeo/packages/imageempty.png</resource><resource relative="true" mod="true" type="license">gpl-3.0.txt</resource><resource mime-type="text/rtf" kind="embedded" type="welcome"><![CDATA[{\rtf1\ansi\ansicpg1252\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fnil\fcharset0 LucidaGrande;}
+{\colortbl;\red255\green255\blue255;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs26 \cf0 \
+\
+Welcome to the first release of the Moldeo Director installer for Mac OSX Leopard.\
+\
+Please visit-us to www.moldeo.org and check our tutorials and demos.\
+\
+Have Fun!}]]></resource></locale><locale lang="fr"><resource relative="true" mod="true" type="background">imageempty.png</resource><resource relative="true" mod="true" type="license">gpl-3.0.txt</resource><resource mime-type="text/rtf" kind="embedded" type="welcome"><![CDATA[{\rtf1\ansi\ansicpg1252\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fnil\fcharset0 LucidaGrande;}
+{\colortbl;\red255\green255\blue255;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs26 \cf0 \
+\
+Welcome to the first release of the Moldeo Director installer for Mac OSX Leopard.\
+\
+Please visit-us to www.moldeo.org and check our tutorials and demos.\
+\
+Have Fun!}]]></resource></locale><locale lang="po"><resource relative="true" mod="true" type="background">imageempty.png</resource><resource relative="true" mod="true" type="license">gpl-3.0.txt</resource><resource mime-type="text/rtf" kind="embedded" type="welcome"><![CDATA[{\rtf1\ansi\ansicpg1252\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fnil\fcharset0 LucidaGrande;}
+{\colortbl;\red255\green255\blue255;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs26 \cf0 \
+\
+Welcome to the first release of the Moldeo Director installer for Mac OSX Leopard.\
+\
+Please visit-us to www.moldeo.org and check our tutorials and demos.\
+\
+Have Fun!}]]></resource></locale></resources><flags/><postinstall><action id="com.apple.packagemaker.actions.showfile"><value>org.wxwindows.MoldeoDirectorRelease</value><type>component</type></action></postinstall><item type="file">01moldeodirector.xml</item><mod>postinstallActions.actions</mod><mod>properties.userDomain</mod><mod>properties.title</mod><mod>description</mod><mod>properties.anywhereDomain</mod><mod>properties.systemDomain</mod></pkmkdoc>
