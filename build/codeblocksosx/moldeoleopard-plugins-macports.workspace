@@ -1,19 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_workspace_file>
 	<Workspace title="Workspace">
-		<Project filename="../../contrib/src/tinyxml/tinyxml_lib_osx.cbp" />
-		<Project filename="../../contrib/src/wxMoldeoControls/wxMoldeoControls mac.cbp" />
-		<Project filename="../../contrib/src/wxMoldeoControls/wxMoldeoControlsTest mac.cbp">
-			<Depends filename="../../contrib/src/wxMoldeoControls/wxMoldeoControls mac.cbp" />
-		</Project>
-		<Project filename="libmoldeo.macports.cbp">
-			<Depends filename="../../contrib/src/tinyxml/tinyxml_lib_osx.cbp" />
-		</Project>
-		<Project filename="../../src/moldeodirector/moldeodirector_osx_leopard.cbp" active="1">
-			<Depends filename="../../contrib/src/tinyxml/tinyxml_lib_osx.cbp" />
-			<Depends filename="../../contrib/src/wxMoldeoControls/wxMoldeoControls mac.cbp" />
-			<Depends filename="libmoldeo.macports.cbp" />
-		</Project>
 		<Project filename="../../plugins/PreEffects/Erase/eraseosxleopard.cbp" />
 		<Project filename="../../plugins/Effects/Icon/iconosxleopard.cbp" />
 		<Project filename="../../plugins/Effects/CubeMap/cubemaposxleopard.cbp" />
@@ -22,6 +9,11 @@
 		<Project filename="../../plugins/Effects/ParticlesSimple/particlessimpleosxleopard.cbp" />
 		<Project filename="../../plugins/Effects/Image/imageosxleopard.cbp" />
 		<Project filename="../../plugins/Effects/Plane/planeosxleopard.cbp" />
+		<Project filename="../../plugins/Effects/Democube/democubeosxleopard.cbp" />
+		<Project filename="../../plugins/Effects/Draw/drawosxleopard.cbp" />
 		<Project filename="../../plugins/Resources/TrackerKLT/trackerkltosxleopard.cbp" />
+		<Project filename="../../plugins/Resources/OpenCV/opencvosxleopard.cbp" />
+		<Project filename="../../plugins/Effects/Grid/grid_osxleopard.cbp" />
+		<Project filename="../../plugins/Effects/ImageFlow/imageflow_osxleopard.cbp" active="1" />
 	</Workspace>
 </CodeBlocks_workspace_file>
