@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="grid" />
+		<Option platforms="Mac;" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="debug">
+				<Option platforms="Mac;" />
+				<Option output="../../../bin/osx/plugins/effects/libgrid_d" prefix_auto="0" extension_auto="1" />
+				<Option object_output=".objsOSXd" />
+				<Option deps_output=".depsd" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Option createStaticLib="1" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+				<Linker>
+					<Add library="libmoldeod" />
+				</Linker>
+			</Target>
+			<Target title="release">
+				<Option platforms="Mac;" />
+				<Option output="../../../bin/osx/plugins/effects/libgrid" prefix_auto="0" extension_auto="1" />
+				<Option object_output=".objsOSX" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Option createStaticLib="1" />
+				<Linker>
+					<Add library="libmoldeo" />
+				</Linker>
+			</Target>
+		</Build>
+		<VirtualTargets>
+			<Add alias="All" targets="debug;release;" />
+		</VirtualTargets>
+		<Compiler>
+			<Add option="`/sw/bin/pkg-config sdl --cflags`" />
+			<Add option="`/sw/bin/pkg-config lua --cflags`" />
+			<Add option="-dynamic" />
+			<Add directory="../../../inc" />
+			<Add directory="../../../inc/3ds" />
+			<Add directory="./inc" />
+			<Add directory="/opt/local/include" />
+		</Compiler>
+		<Linker>
+			<Add option="-dynamiclib" />
+			<Add option="-framework Cg" />
+			<Add option="-framework OpenGL" />
+			<Add library="GLEW" />
+			<Add directory="/opt/local/lib" />
+			<Add directory="../../../lib/osx" />
+			<Add directory="/Developer/SDKs/MacOSX10.5.sdk/usr/X11R6/lib" />
+		</Linker>
+		<Unit filename="inc/moEffectGrid.h" />
+		<Unit filename="inc/supereg/pcx.h" />
+		<Unit filename="inc/supereg/sup3d.h" />
+		<Unit filename="inc/supereg/supereg.h" />
+		<Unit filename="inc/supereg/suppal.h" />
+		<Unit filename="inc/supereg/suprand.h" />
+		<Unit filename="inc/supereg/tgrdutil.h" />
+		<Unit filename="inc/supereg/tgrid.h" />
+		<Unit filename="inc/supereg/tipos.h" />
+		<Unit filename="inc/supereg/tmapa.h" />
+		<Unit filename="inc/supereg/tmotor.h" />
+		<Unit filename="inc/supereg/trdrmap.h" />
+		<Unit filename="src/moEffectGrid.cpp" />
+		<Unit filename="src/supereg/pcx.cpp" />
+		<Unit filename="src/supereg/sup3d.cpp" />
+		<Unit filename="src/supereg/suppal.cpp" />
+		<Unit filename="src/supereg/suprand.cpp" />
+		<Unit filename="src/supereg/tgrdutil.cpp" />
+		<Unit filename="src/supereg/tgrid.cpp" />
+		<Unit filename="src/supereg/tipos.cpp" />
+		<Unit filename="src/supereg/tmapa.cpp" />
+		<Unit filename="src/supereg/tmotor.cpp" />
+		<Unit filename="src/supereg/trdrmap.cpp" />
+		<Extensions>
+			<envvars />
+			<code_completion />
+			<debugger />
+			<lib_finder>
+				<lib name="lua5.1" />
+				<lib name="muparser" />
+				<lib name="sdl" />
+				<lib name="gstreamer-0.10" />
+				<lib name="gstreamer-base-0.10" />
+				<lib name="freetype2" />
+			</lib_finder>
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
