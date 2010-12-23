@@ -333,7 +333,7 @@ void moTrackerGpuKLT2System::NewData( moVideoSample* p_pVideoSample )
 
 	if (m_buffer == NULL) return;
 
-	Track(m_buffer, GL_RGB);
+	Track( (MOubyte*)m_buffer, GL_RGB);
 
 
 	for(int i=0; i<m_TrackerSystemData.GetFeatures().Count(); i++ ) {

@@ -219,6 +219,7 @@ MOboolean moPreEffectMirrorG::Init()
 
 	moDefineParamIndex( MIRRORG_BLENDING, moText("blending") );
 	moDefineParamIndex( MIRRORG_ABERRATION, moText("aberration") );
+	moDefineParamIndex( MIRRORG_POLYGONMODE, moText("polygonmode") );
 	moDefineParamIndex( MIRRORG_GENERALX, moText("generalx") );
 	moDefineParamIndex( MIRRORG_GENERALY, moText("generaly") );
 	moDefineParamIndex( MIRRORG_DOTS, moText("dots") );
@@ -258,10 +259,11 @@ moConfigDefinition *
 moPreEffectMirrorG::GetDefinition( moConfigDefinition *p_configdefinition ) {
 	//default: alpha, color, syncro
 	p_configdefinition = moEffect::GetDefinition( p_configdefinition );
-	p_configdefinition->Add( moText("blending"), MO_PARAM_BLENDING, MIRRORG_BLENDING, moValue( "0", "NUM").Ref() );
-	p_configdefinition->Add( moText("aberration"), MO_PARAM_FUNCTION, MIRRORG_ABERRATION, moValue( "0.85", "FUNCTION").Ref());
-	p_configdefinition->Add( moText("generalx"), MO_PARAM_FUNCTION, MIRRORG_GENERALX, moValue( "0.0", "FUNCTION").Ref() );
-	p_configdefinition->Add( moText("generaly"), MO_PARAM_FUNCTION, MIRRORG_GENERALY, moValue( "0.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("blending"), MO_PARAM_BLENDING, MIRRORG_BLENDING, moValue( "0", MO_VALUE_NUM ).Ref() );
+	p_configdefinition->Add( moText("aberration"), MO_PARAM_FUNCTION, MIRRORG_ABERRATION, moValue( "1.02", MO_VALUE_FUNCTION).Ref());
+	p_configdefinition->Add( moText("polygonmode"), MO_PARAM_POLYGONMODE, MIRRORG_POLYGONMODE, moValue( "0", MO_VALUE_NUM ).Ref() );
+	p_configdefinition->Add( moText("generalx"), MO_PARAM_FUNCTION, MIRRORG_GENERALX, moValue( "0.0", MO_VALUE_FUNCTION).Ref() );
+	p_configdefinition->Add( moText("generaly"), MO_PARAM_FUNCTION, MIRRORG_GENERALY, moValue( "0.0", MO_VALUE_FUNCTION).Ref() );
 	p_configdefinition->Add( moText("dots"), MO_PARAM_COMPOSE, MIRRORG_DOTS, moValue( "0", "TXT") );
 	p_configdefinition->Add( moText("lines"), MO_PARAM_COMPOSE, MIRRORG_LINES, moValue( "0", "TXT") );
 	return p_configdefinition;
@@ -340,12 +342,28 @@ void moPreEffectMirrorG::Draw( moTempo* tempogral,moEffectState* parentstate)
     PreDraw( tempogral, parentstate);
 
     float w,h;
+    float prop;
 
     w = m_pResourceManager->GetRenderMan()->ScreenWidth();
     h = m_pResourceManager->GetRenderMan()->ScreenHeight();
+    if ( w == 0 || h == 0 ) { w  = 1; h = 1; prop = 1.0; }
+    else {
+      prop = (float) h / (float) w;
+    }
 
-    glMatrixMode( GL_MODELVIEW );
+    glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+
+    glDisable(GL_DEPTH_TEST);
+
+    glAlphaFunc(GL_GREATER,0.0f);
+    glEnable(GL_ALPHA_TEST);
+
+
+    glMatrixMode(GL_PROJECTION);    // Select The Projection Matrix
+    glLoadIdentity();               // Reset The Projection Matrix
+    //glOrtho( -0.5, 0.5, -0.5*prop, 0.5*prop, -1, 1);          // Set Up An Ortho Screen
+    gluOrtho2D( -0.5, 0.5, -0.5*prop, 0.5*prop );
 
 	SetColor( m_Config[moR(MIRRORG_COLOR)][MO_SELECTED], m_Config[moR(MIRRORG_ALPHA)][MO_SELECTED], state );
 
@@ -357,30 +375,31 @@ void moPreEffectMirrorG::Draw( moTempo* tempogral,moEffectState* parentstate)
 
     // Aca van los comandos OpenGL del efecto.
 
-	glDisable(GL_DEPTH_TEST);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glMatrixMode( GL_MODELVIEW );
 	glLoadIdentity( );
 
 
-	glEnable(GL_BLEND);
-    SetBlending( (moBlendingModes) bl );
+  SetBlending( (moBlendingModes) bl );
 
 
 	glFrontFace(GL_CCW);
+	glDisable(GL_CULL_FACE);
 	//glEnable(GL_DEPTH_TEST);
 
 	GLfloat deltai,deltaj,tdeltai,tdeltaj;
 	GLfloat minora,minorb,majora,majorb;
 
-	minora = -0.4*1.0;//(w/1024.0f);//0.8 800 pix
-	minorb = 0.4*1.0;//*(w/1024.0f);
-	majora = -0.3;//0.6 600pix
-	majorb = 0.3;
+	minora = -0.5;//(w/1024.0f);//0.8 800 pix
+	minorb = 0.5;//*(w/1024.0f);
+	majora = -0.5*prop;//0.6 600pix
+	majorb = 0.5*prop;
 	deltai =(minorb-minora) /(float)(wpoint2-1);
 	deltaj =(majorb-majora) /(float)(hpoint2-1);
-	tdeltai = (w/1024.0f)/(float)(wpoint2-1);
-	tdeltaj = (h/1024.0f)/(float)(hpoint2-1);
+	//tdeltai = (w/1024.0f)/(float)(wpoint2-1);
+	//tdeltaj = (h/1024.0f)/(float)(hpoint2-1);
+	tdeltai = 1.0 / (float)(wpoint2-1);
+	tdeltaj = 1.0 / (float)(hpoint2-1);
 
 	//Valores iniciales por defecto
 	//DPoint //coordenadas del punto
@@ -389,8 +408,8 @@ void moPreEffectMirrorG::Draw( moTempo* tempogral,moEffectState* parentstate)
 	for(j=0; j<hpoint2; j++) {
 			for(i=0; i<wpoint2; i++) {
 
-				DPoint2[j * wpoint2 * 4  + i * 4]		= minora+((float)i)*(deltai);	//X
-				DPoint2[j * wpoint2 * 4 + 1  + i * 4]	= majora+((float)j)*(deltaj);	//Y
+				DPoint2[j * wpoint2 * 4  + i * 4]		= ( minora+((float)i)*(deltai) ) * ab;	//X
+				DPoint2[j * wpoint2 * 4 + 1  + i * 4]	= ( majora+((float)j)*(deltaj) ) * ab;	//Y
 				DPoint2[j * wpoint2 * 4 + 2 + i * 4]	= -0.5185f*ab;						//Z
 				DPoint2[j * wpoint2 * 4 + 3 + i * 4]	= 1.0f;							//Normal
 
@@ -404,34 +423,81 @@ void moPreEffectMirrorG::Draw( moTempo* tempogral,moEffectState* parentstate)
 			}
 	}
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	//glPolygonMode( GL_FRONT_AND_BACK, GL_LINE);
-	//glLineWidth( 3.0 );
-    glEnable(GL_TEXTURE_2D);
-
   glShadeModel(GL_SMOOTH);
 
   Calculate();
 
   // Estos factores de correccion se agregaron para tener el cuenta el cambio entre el viejo y el nuevo modo
   // de texturas.
-  float fs = 1024.0f / w;
-  float ft = 1024.0f / h;
+
+
+  //float fs = 1024.0f / w;
+  //float ft = 1024.0f / h;
+  float fs = 1.0;
+  float ft = 1.0;
+
 
   //solo dibujo los quads ya calculados
-  glBindTexture(GL_TEXTURE_2D, m_pResourceManager->GetRenderMan()->RenderTexGLId(MO_EFFECTS_TEX));
-  for(j=0; j<(hpoint2-1); j++) {
-			glBegin(GL_QUAD_STRIP);
-			for(i=0; i<wpoint2; i++) {
-				glTexCoord2f(TPoint2[j * wpoint2 * 2  + i * 2] * fs,TPoint2[j * wpoint2 * 2  + i * 2+1] * ft);
-				glVertex3fv(&DPoint2[j * wpoint2 * 4  + i * 4]);
-				glTexCoord2f(TPoint2[(j+1) * wpoint2 * 2  + i * 2] * fs,TPoint2[(j+1) * wpoint2 * 2  + i * 2+1] * ft);
-				glVertex3fv(&DPoint2[(j+1) * wpoint2 * 4  + i * 4]);
-			}
-			glEnd();
-	}
+  int pmode = m_Config.Int( moR(MIRRORG_POLYGONMODE) );
 
-	glClear(GL_DEPTH_BUFFER_BIT);
+  for(int mode=0; mode<2; mode++) {
+
+    if (mode==0) {
+      glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+      glLineWidth( 1.0 );
+      glEnable(GL_TEXTURE_2D);
+      glBindTexture(GL_TEXTURE_2D, m_pResourceManager->GetRenderMan()->RenderTexGLId(MO_EFFECTS_TEX));
+    } else if (mode==1) {
+        ///si hay puntos o rayas a agregar
+        if (pmode==MO_POLYGONMODE_LINE) {
+          ///line version
+          glPolygonMode( GL_FRONT_AND_BACK, GL_LINE);
+          glLineWidth( 0.5 );
+          glDisable(GL_TEXTURE_2D);
+        } else if (pmode==MO_POLYGONMODE_POINT) {
+          ///points version
+          glPolygonMode( GL_FRONT_AND_BACK, GL_POINT );
+          glPointSize( 2.0 );
+          glDisable(GL_TEXTURE_2D);
+        } else {
+            break;
+        }
+    }
+
+    for(j=0; j<(hpoint2-1); j++) {
+        glBegin(GL_QUAD_STRIP);
+        for(i=0; i<wpoint2; i++) {
+          glTexCoord2f(TPoint2[j * wpoint2 * 2  + i * 2] * fs,TPoint2[j * wpoint2 * 2  + i * 2+1] * ft);
+          glVertex2fv(&DPoint2[j * wpoint2 * 4  + i * 4]);
+          //glVertex3fv(&DPoint2[j * wpoint2 * 4  + i * 4]);
+          glTexCoord2f(TPoint2[(j+1) * wpoint2 * 2  + i * 2] * fs,TPoint2[(j+1) * wpoint2 * 2  + i * 2+1] * ft);
+          glVertex2fv(&DPoint2[(j+1) * wpoint2 * 4  + i * 4]);
+          //glVertex3fv(&DPoint2[(j+1) * wpoint2 * 4  + i * 4]);
+        }
+        glEnd();
+    }
+  }
+
+/*
+    glBindTexture(GL_TEXTURE_2D, m_pResourceManager->GetRenderMan()->RenderTexGLId(MO_EFFECTS_TEX));
+
+
+    glBegin(GL_QUADS);
+      glTexCoord2f( 0.0, 1.0 );
+      glVertex2f( minora, majorb);
+
+      glTexCoord2f( 1.0, 1.0 );
+      glVertex2f(  minorb, majorb);
+
+      glTexCoord2f( 1.0, 0.0 );
+      glVertex2f(  minorb,  majora);
+
+      glTexCoord2f( 0.0, 0.0 );
+      glVertex2f( minora,  majora);
+    glEnd();
+    */
+
+	//glClear(GL_DEPTH_BUFFER_BIT);
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);//volvemos al modo por default
 

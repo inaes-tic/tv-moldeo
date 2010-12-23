@@ -100,6 +100,10 @@ void KLTExtractFeatureHistory(
 {
   int frame;
 
+
+  if (!fh) return;
+  if (!ft) return;
+
   if (feat < 0 || feat >= ft->nFeatures)
     KLTError("(KLTExtractFeatureHistory) Feature number %d is not between 0 and %d",
              feat, ft->nFeatures - 1);

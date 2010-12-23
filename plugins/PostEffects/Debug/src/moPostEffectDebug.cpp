@@ -278,6 +278,7 @@ moPostEffectDebug::Update( moEventList* p_EventList ) {
 		actual = tmp;
 	}
 	textevents.Set(0,moText("Events List:")+IntToStr(evtscount));
+
 }
 
 

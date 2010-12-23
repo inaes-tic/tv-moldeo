@@ -21,10 +21,10 @@
   *                                                                          *
   ****************************************************************************
 
-  Copyright(C) 2007 Andr√©s Colubri
+  Copyright(C) 2007 AndrÈs Colubri
 
   Authors:
-  Andr√©s Colubri
+  AndrÈs Colubri
   Fabricio Costa
 
 *******************************************************************************/
@@ -39,7 +39,7 @@ using namespace TUIO;
 
   NOTAS:
 
-  el tracker podr√° funcionar como un thread que vaya calculando en funcion de q va llegando la info,
+  el tracker podr· funcionar como un thread que vaya calculando en funcion de q va llegando la info,
   o mejor aun, que trate de calcular, y cuando llega a un resultado el efecto en cuestion tome ese valor.
 
   //para que el tracker funcione sin shaders, debemos hacer el calculo antes de que se pase la informacion a la textura,
@@ -86,7 +86,14 @@ void moTrackerKLTFactory::Destroy(moResource* fx) {
 moTrackerKLTSystem::moTrackerKLTSystem()
 {
     m_pTrackerSystemData = NULL;
-    m_pTrackerSystemData = new moTrackerSystemData(2,2);
+    m_pTrackerSystemData = new moTrackerSystemData(12,3);
+
+    m_LiveOut = "";
+    m_pTextureOut = NULL;
+    m_pTextureIn = NULL;
+    m_pFBO = NULL;
+    tracker_input_id = -1;
+    attach_point = -1;
 
     m_pTUIOSystemData = NULL;
     m_pTUIOSystemData = new moTUIOSystemData();
@@ -152,7 +159,16 @@ MOboolean moTrackerKLTSystem::Init(
 	m_img_sum = (float *) malloc(m_nCols * m_nRows *sizeof(float));
 	for (int i = 0; i < m_nCols * m_nRows; i++) *(m_img_sum + i) = 0.0;
 
+
+  /** TRACKING CONTEXT */
+
 	m_tc = KLTCreateTrackingContext();
+
+	if (!m_tc) {
+	  MODebug2->Error("moTrackerKLTSystem::Init - Couldn't create Tracking Context");
+	  return false;
+	}
+
 	m_tc->sequentialMode = p_sequentialMode;
     m_tc->mindist = p_mindist;
 	m_tc->min_eigenvalue = p_mineigen;
@@ -171,19 +187,34 @@ MOboolean moTrackerKLTSystem::Init(
     m_tc->min_determinant = 0.0099999978;//0.0099999978
     m_tc->max_residue = 10;
 
+  /** FEATURE LIST */
 
 	m_fl = KLTCreateFeatureList(p_nFeatures);
+
+	if (!m_fl) {
+	  MODebug2->Error("moTrackerKLTSystem::Init - Couldn't create Feature List");
+	  return false;
+	}
+
 	m_nFrames = p_nFrames;
+
+  /** FEATURE TABLE */
+
 	if (0 < p_nFrames) m_ft = KLTCreateFeatureTable(p_nFrames, p_nFeatures);
 
-    m_diffMode = p_diffMode && m_tc->sequentialMode;
+	if (!m_ft) {
+	  MODebug2->Error("moTrackerKLTSystem::Init - Couldn't create Feature Table");
+	  return false;
+	}
+
+  m_diffMode = p_diffMode && m_tc->sequentialMode;
 	m_replaceLostFeatures = p_replaceLostFeatures;
 
 	m_init = true;
 
 	m_num_samples = p_num_samples;
 
-    KLTPrintTrackingContext(m_tc);
+  KLTPrintTrackingContext(m_tc);
 
 	return true;
 }
@@ -206,8 +237,10 @@ MOboolean moTrackerKLTSystem::Init(MOint p_nFeatures, moVideoSample* p_pVideoSam
 	if (res)
 	{
         m_pTrackerSystemData->SetMaxFeatures(p_nFeatures);
+/*
         m_pTrackerSystemData->m_Distancias = new float* [m_pTrackerSystemData->GetMaxFeatures()];
         m_pTrackerSystemData->m_Pares = new int* [m_pTrackerSystemData->GetMaxFeatures()*2];
+
 
         Uplas = new int [m_pTrackerSystemData->GetMaxFeatures()];
         for( int up=0; up<m_pTrackerSystemData->GetMaxFeatures(); up++) {
@@ -221,32 +254,186 @@ MOboolean moTrackerKLTSystem::Init(MOint p_nFeatures, moVideoSample* p_pVideoSam
         }
 
         TuioTime::initSession();
+*/
 
 		return true;
 	}
 	else return false;
 }
 
+void
+moTrackerKLTSystem::DrawFeatures( moResourceManager* pResourceManager ) {
+
+  if ( m_pFBO && m_pTextureOut && pResourceManager) {
+
+    moResourceManager* m_pResourceManager = pResourceManager;
+    int w,h;
+
+    w = m_pTextureOut->GetWidth();
+    h = m_pTextureOut->GetHeight();
+
+    m_pResourceManager->GetGLMan()->SetOrthographicView( w, h );
+
+    float prop ;
+
+    if ( m_pTextureOut->GetWidth() == 0 || m_pTextureOut->GetHeight()  == 0 ) {
+      prop = 1.0;
+
+    }
+    else {
+      prop = (float) m_pTextureOut->GetHeight() / (float) m_pTextureOut->GetWidth();
+    }
+
+    float bord = 0.2;
+
+    m_pFBO->Bind();
+
+    glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
+
+
+    glDisable(GL_DEPTH_TEST);       // Disables Depth Testing
+    glEnable( GL_BLEND );
+    glBlendFunc ( GL_SRC_ALPHA, GL_ONE );
+
+    if (m_pTextureIn) {
+      glEnable(GL_TEXTURE_2D);
+      glBindTexture( GL_TEXTURE_2D, m_pTextureIn->GetGLId() );
+    } else {
+      //glDisable(GL_TEXTURE_2D);
+      /*
+      glEnable( GL_BLEND );
+      glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+      glBindTexture( GL_TEXTURE_2D, 0 );
+      */
+    }
+
+    //glAlphaFunc();
+
+    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+
+    glBegin(GL_QUADS);
+
+      glTexCoord2f( 0.0, 0.0 );
+      //glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+     // glColor4f( 1.0f, 1.0f, 1.0f, 0.9f );
+      glVertex2f( 0.0, 0.0 );
+
+      glTexCoord2f( 1.0, 0.0 );
+      //glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+      //glColor4f( 1.0f, 1.0f, 1.0f, 0.9f );
+      glVertex2f(  1.0*w, 0.0 );
+
+      glTexCoord2f( 1.0, 1.0 );
+      //glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+      //glColor4f( 1.0f, 1.0f, 1.0f, 0.9f );
+      glVertex2f(  1.0*w,  1.0*h);
+
+      glTexCoord2f( 0.0, 1.0 );
+      //glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+      //glColor4f( 1.0f, 1.0f, 1.0f, 0.9f );
+      glVertex2f( 0.0,  1.0*h);
+    glEnd();
+
+
+    glDisable(GL_TEXTURE_2D);
+    glColor4f( 0.0f, 1.0f, 0.0f, 0.1f );
+    glBegin(GL_QUADS);
+      //glTexCoord2f( 0.0, 1.0 );
+      glVertex2f( (0.0+bord)*w, (0.0+bord)*h);
+      //glTexCoord2f( 1.0, 1.0 );
+      glVertex2f(  (1.0-bord)*w, (0.0+bord)*h );
+
+      //glTexCoord2f( 1.0, 0.0 );
+      glVertex2f(  (1.0-bord)*w,  (1.0-bord)*h);
+
+      //glTexCoord2f( 0.0, 0.0 );
+      glVertex2f( (0.0+bord)*w,  (1.0-bord)*h);
+    glEnd();
+
+    moTrackerSystemData* pData = GetData();
+
+    if (pData)
+      pData->DrawFeatures( w , h , 0.0 , 0.0 );
+
+
+    m_pFBO->Unbind();
+
+
+  }
+
+}
+
+MOboolean moTrackerKLTSystem::InitTextureOutput( moResourceManager* pResourceManager ) {
+
+        moResourceManager* m_pResourceManager = pResourceManager;
+
+        MODebug2->Message( moText("moTrackerKLT::Update > initializing trackerklt") + GetName() );
+
+        moTexture* TInput = GetTextureOut();
+        if (TInput) {
+
+            TInput->BuildEmpty(
+              m_pTrackerSystemData->GetVideoFormat().m_Width,
+              m_pTrackerSystemData->GetVideoFormat().m_Height
+              );
+
+            int tin =  m_pResourceManager->GetTextureMan()->GetTextureMOId( GetLive(), false );
+            m_pTextureIn = m_pResourceManager->GetTextureMan()->GetTexture( tin );
+
+            m_fbo_idx = m_pResourceManager->GetFBMan()->CreateFBO();
+
+            m_pFBO = m_pResourceManager->GetFBMan()->GetFBO(m_fbo_idx);
+
+            if (m_pFBO) {
+
+                TInput->SetFBO(m_pFBO);
+                m_pFBO->AddTexture(   TInput->GetWidth(),
+                                    TInput->GetHeight(),
+                                    TInput->GetTexParam(),
+                                    TInput->GetGLId(),
+                                    attach_point );
+                TInput->SetFBOAttachPoint( attach_point);
+                //m_pFBO->AddDepthStencilBuffer();
+
+                return true;
+            } else MODebug2->Error( moText("moTrackerKLT::Update >  no texture defined for output "));
+      }
+
+      return false;
+
+}
+
 MOboolean moTrackerKLTSystem::Finish()
 {
     if (m_pTrackerSystemData) {
+/*
+      if ( m_pTrackerSystemData->m_Distancias && m_pTrackerSystemData->m_Pares) {
+
         for(int i=0; i<m_pTrackerSystemData->GetMaxFeatures(); i++) {
-            delete [] m_pTrackerSystemData->m_Distancias[i];
-            delete [] m_pTrackerSystemData->m_Pares[i*2];
-            delete [] m_pTrackerSystemData->m_Pares[i*2+1];
+            if (m_pTrackerSystemData->m_Distancias[i])
+              delete [] m_pTrackerSystemData->m_Distancias[i];
+            if (m_pTrackerSystemData->m_Pares[i*2])
+              delete [] m_pTrackerSystemData->m_Pares[i*2];
+            if (m_pTrackerSystemData->m_Pares[i*2+1])
+              delete [] m_pTrackerSystemData->m_Pares[i*2+1];
         }
 
         delete [] m_pTrackerSystemData->m_Distancias;
         delete [] m_pTrackerSystemData->m_Pares;
-
+      }
+*/
         delete m_pTrackerSystemData;
-    }
-    m_pTrackerSystemData = NULL;
+        m_pTrackerSystemData = NULL;
 
+    }
+
+/*
     if (Uplas) {
         delete [] Uplas;
         Uplas = NULL;
     }
+*/
 
 	if (m_tc != NULL)
 	{
@@ -442,7 +629,8 @@ moVector2f AverageSystem( moTrackerFeature* pFeature ) {
         Average+= moVector2f(   pFeature->FeaturesCaptured[i]->x,
                                 pFeature->FeaturesCaptured[i]->y );
     }
-    Average/=(pFeature->FeaturesCaptured.Count()+1);
+    if (pFeature->FeaturesCaptured.Count()>0)
+      Average/=(pFeature->FeaturesCaptured.Count()+1);
     return Average;
 }
 
@@ -568,10 +756,11 @@ void moTrackerKLTSystem::NewData( moVideoSample* p_pVideoSample )
 {
 	if (p_pVideoSample)
 	{
-		moBucket* pBucket = (moBucket*)p_pVideoSample->m_pSampleBuffer;
+
+		moBucket* pBucket = static_cast<moBucket*>(p_pVideoSample->m_pSampleBuffer);
 		if (pBucket && m_pTrackerSystemData )
 		{
-            m_pTrackerSystemData->GetVideoFormat() = p_pVideoSample->m_VideoFormat;
+      m_pTrackerSystemData->GetVideoFormat() = p_pVideoSample->m_VideoFormat;
 			m_sizebuffer = pBucket->GetSize();
 			m_buffer = pBucket->GetBuffer();
 		}
@@ -581,13 +770,13 @@ void moTrackerKLTSystem::NewData( moVideoSample* p_pVideoSample )
 
 	if (m_buffer == NULL) return;
 
-	Track(m_buffer, GL_RGB);
+	Track( (GLubyte*)m_buffer, GL_RGB);
 
 	//trasnform data:
 
-
 	for(int i=0; i<m_pTrackerSystemData->GetFeatures().Count(); i++ ) {
-	    delete m_pTrackerSystemData->GetFeatures().Get(i);
+	    if (m_pTrackerSystemData->GetFeatures().Get(i)!=NULL)
+        delete m_pTrackerSystemData->GetFeatures().Get(i);
 	}
 
 
@@ -599,13 +788,17 @@ void moTrackerKLTSystem::NewData( moVideoSample* p_pVideoSample )
 	moTrackerFeature* TF = NULL;
 
 	int tw = m_pTrackerSystemData->GetVideoFormat().m_Width;
-    int th = m_pTrackerSystemData->GetVideoFormat().m_Height;
+  int th = m_pTrackerSystemData->GetVideoFormat().m_Height;
 
+  if ( tw==0 || th==0 ) {
+    MODebug2->Error( moText("moTrackerKLTSystem::NewData  > video format invalid, width or height are null"));
+    return;
+  }
 
 	float sumX = 0.0f,sumY = 0.0f;
 	float sumN = 0.0f;
 	float varX = 0.0f, varY = 0.0f;
-    float minX = 1.0f, minY = 1.0;
+  float minX = 1.0f, minY = 1.0;
 	float maxX = 0.0f, maxY = 0.0;
 
     float vel,acc;
@@ -614,7 +807,7 @@ void moTrackerKLTSystem::NewData( moVideoSample* p_pVideoSample )
 	for(int i=0; i<m_fl->nFeatures; i++ ) {
 
 	    TF = new moTrackerFeature();
-        if (TF) {
+        if (TF && m_fl  && m_fl->feature[i]) {
 
            ///NUEVA VERSION
             TF->x = m_fl->feature[i]->x / (float)tw;
@@ -631,7 +824,8 @@ void moTrackerKLTSystem::NewData( moVideoSample* p_pVideoSample )
             ///TAIL
             /// from 4th frame
             if (TF->val>=0) {
-               if (m_nCurrentFrame>4 && 4<m_nFrames) {
+               if (m_nCurrentFrame>4 && 5<m_nFrames && m_nCurrentFrame<m_nFrames ) {
+
                    for(int j=0; j<4; j++) {
                        if (m_ft) {
                            if ( m_ft->feature[i][m_nCurrentFrame-j] && m_ft->feature[i][m_nCurrentFrame-j]->val>=KLT_TRACKED ) {
@@ -640,11 +834,12 @@ void moTrackerKLTSystem::NewData( moVideoSample* p_pVideoSample )
                            } else break;
                        }
                    }
+
                }
 
 
             /**=============================================
-            ///CALCULATE DISTANCIAS!!!!
+            ///CALCULATE DISTANCIAS!!!! <desactivado por ahora>
             =============================================*/
 
                float distancia = 0.0f;
@@ -660,7 +855,9 @@ void moTrackerKLTSystem::NewData( moVideoSample* p_pVideoSample )
                float dis = 0.0;
 
                ///ponemos en 0 el set de Uplas....
-               Uplas[i] = 0;
+              //:-( Uplas[i] = 0;
+
+              /*:-(
 
                if (m_pTrackerSystemData->m_Pares!=NULL || m_pTrackerSystemData->m_Distancias!=NULL) {
                for(int k=0; k<m_fl->nFeatures; k++ ) {
@@ -711,7 +908,7 @@ void moTrackerKLTSystem::NewData( moVideoSample* p_pVideoSample )
 
             ///=================================================
 
-/*
+*/
                 ///CALCULATE AVERAGE FOR BARYCENTER AND VARIANCE
                sumX+= TF->x;
                sumY+= TF->y;
@@ -730,7 +927,7 @@ void moTrackerKLTSystem::NewData( moVideoSample* p_pVideoSample )
                m_pTrackerSystemData->SetPositionMatrix( TF->x, TF->y, 1 );
                ///genera la matrix de referencia rapida por zonas
                ///m_pTrackerSystemData->SetPositionMatrix( TF );
-*/
+
 
             }
 
@@ -750,8 +947,8 @@ void moTrackerKLTSystem::NewData( moVideoSample* p_pVideoSample )
             vel = moVector2f( TF->v_x, TF->v_y ).Length();
             acc = moVector2f( TF->a_x, TF->a_y ).Length();
 
-            //if ( vel >= 0.01 ) m_pTrackerSystemData->SetMotionMatrix( TF->x, TF->y, 1 );
-            //if ( acc >= 0.01 ) m_pTrackerSystemData->SetAccelerationMatrix( TF->x, TF->y, 1 );
+            if ( vel >= 0.01 ) m_pTrackerSystemData->SetMotionMatrix( TF->x, TF->y, 1 );
+            if ( acc >= 0.01 ) m_pTrackerSystemData->SetAccelerationMatrix( TF->x, TF->y, 1 );
 
             m_pTrackerSystemData->GetFeatures().Add(TF);
         }
@@ -777,6 +974,9 @@ void SimpleSimulator::run() {
 	}
 }
 */
+
+///ATENCION DESACTIVAMOS EL TUIO!!!! OJO, aun en desarrollo.
+m_pTUIOSystemData = NULL;
 
 if ( m_pTUIOSystemData ) {
 
@@ -890,7 +1090,7 @@ if ( m_pTUIOSystemData ) {
                         }
                     }
                     obj_v/=(float)countv; ///promediamos, son 4 contando el origen, con este promedio
-                    vectPromedio/=(float)(countv-1);
+                    if ( countv > 1 ) vectPromedio/=(float)(countv-1);
 
 
                     ///search for rect_angles, between them too?
@@ -1062,7 +1262,7 @@ if ( m_pTUIOSystemData ) {
 }///FIN DE TUIO!!!!
 
 
-/*
+
     moVector2f previous_B = m_pTrackerSystemData->GetBarycenter();
     moVector2f previous_BM = m_pTrackerSystemData->GetBarycenterMotion();
 
@@ -1070,47 +1270,65 @@ if ( m_pTUIOSystemData ) {
     moVector2f BarMot;
     moVector2f BarAcc;
 
-    BarPos = moVector2f( sumX/sumN, sumY/sumN);
+    m_pTrackerSystemData->SetBarycenter( 0, 0 );
+    m_pTrackerSystemData->SetBarycenterMotion( 0, 0);
+    m_pTrackerSystemData->SetBarycenterAcceleration( 0, 0 );
 
-    BarMot = BarPos - previous_B;
-    BarAcc = BarMot - previous_BM;
+    m_pTrackerSystemData->SetMax( 0, 0 );
+    m_pTrackerSystemData->SetMin( 0, 0 );
+    m_pTrackerSystemData->SetValidFeatures( 0 );
 
-    m_pTrackerSystemData->SetBarycenter( BarPos.X(), BarPos.Y() );
-    m_pTrackerSystemData->SetBarycenterMotion( BarMot.X(), BarMot.Y() );
-    m_pTrackerSystemData->SetBarycenterAcceleration( BarAcc.X(), BarAcc.Y() );
+    if (sumN>=1.0f) {
 
-    m_pTrackerSystemData->SetMax( maxX, maxY );
-    m_pTrackerSystemData->SetMin( minX, minY );
-    m_pTrackerSystemData->SetValidFeatures( (int)sumN );
+        BarPos = moVector2f( sumX/sumN, sumY/sumN);
 
-    ///CALCULATE VARIANCE FOR EACH COMPONENT
+        BarMot = BarPos - previous_B;
+        BarAcc = BarMot - previous_BM;
 
-    moVector2f Bar = m_pTrackerSystemData->GetBarycenter();
-    for(int i=0; i<m_pTrackerSystemData->GetFeatures().Count(); i++ ) {
-        TF = m_pTrackerSystemData->GetFeatures().Get(i);
-        if (TF) {
-            if (TF->val>=0) {
-                varX+= moMathf::Sqr( TF->x - Bar.X() );
-                varY+= moMathf::Sqr( TF->y - Bar.Y() );
+        m_pTrackerSystemData->SetBarycenter( BarPos.X(), BarPos.Y() );
+        m_pTrackerSystemData->SetBarycenterMotion( BarMot.X(), BarMot.Y() );
+        m_pTrackerSystemData->SetBarycenterAcceleration( BarAcc.X(), BarAcc.Y() );
+
+        m_pTrackerSystemData->SetMax( maxX, maxY );
+        m_pTrackerSystemData->SetMin( minX, minY );
+        m_pTrackerSystemData->SetValidFeatures( (int)sumN );
+
+        ///CALCULATE VARIANCE FOR EACH COMPONENT
+
+        moVector2f Bar = m_pTrackerSystemData->GetBarycenter();
+        for(int i=0; i<m_pTrackerSystemData->GetFeatures().Count(); i++ ) {
+            TF = m_pTrackerSystemData->GetFeatures().Get(i);
+            if (TF) {
+                if (TF->val>=0) {
+                    varX+= moMathf::Sqr( TF->x - Bar.X() );
+                    varY+= moMathf::Sqr( TF->y - Bar.Y() );
+                }
             }
         }
-    }
-    m_pTrackerSystemData->SetVariance( varX/sumN, varY/sumN );
+        m_pTrackerSystemData->SetVariance( varX/sumN, varY/sumN );
 
 
-    ///CALCULATE CIRCULAR MATRIX
-    for(int i=0; i<m_pTrackerSystemData->GetFeatures().Count(); i++ ) {
-        TF = m_pTrackerSystemData->GetFeatures().Get(i);
-        if (TF) {
-            if (TF->val>=0) {
-                m_pTrackerSystemData->SetPositionMatrixC( TF->x, TF->y, 1 );
-                vel = moVector2f( TF->v_x, TF->v_y ).Length();
-                //acc = moVector2f( TF->a_x, TF->a_y ).Length();
-                if (vel>=0.01) m_pTrackerSystemData->SetMotionMatrixC( TF->x, TF->y, 1 );
+        ///CALCULATE CIRCULAR MATRIX
+        for(int i=0; i<m_pTrackerSystemData->GetFeatures().Count(); i++ ) {
+            TF = m_pTrackerSystemData->GetFeatures().Get(i);
+            if (TF) {
+                if (TF->val>=0) {
+                    m_pTrackerSystemData->SetPositionMatrixC( TF->x, TF->y, 1 );
+                    vel = moVector2f( TF->v_x, TF->v_y ).Length();
+                    //acc = moVector2f( TF->a_x, TF->a_y ).Length();
+                    if (vel>=0.01) m_pTrackerSystemData->SetMotionMatrixC( TF->x, TF->y, 1 );
+                }
             }
         }
+
     }
-    */
+
+    if ( (m_nCurrentFrame % 100) == 0 ) MODebug2->Message(
+      moText(" baryc x: ") + FloatToStr(m_pTrackerSystemData->GetBarycenter().X())
+      + moText(" baryc y: ") + FloatToStr(m_pTrackerSystemData->GetBarycenter().Y())
+      + moText(" n features: ") + IntToStr(m_pTrackerSystemData->GetValidFeatures())
+
+      );
 
 }
 
@@ -1180,8 +1398,11 @@ void moTrackerKLTSystem::AddBufferToImg(GLubyte *p_pBuffer, MOuint p_RGB_mode)
 
 void moTrackerKLTSystem::CalcImg1Average()
 {
-    for (int i = 0; i < m_nCols * m_nRows; i++)
-        *(m_img1 + i) = (unsigned char) *(m_img_sum + i) / m_num_samples;
+    if (m_num_samples>0) {
+      for (int i = 0; i < m_nCols * m_nRows; i++) {
+          *(m_img1 + i) = (unsigned char) *(m_img_sum + i) / m_num_samples;
+      }
+    }
 }
 
 //===========================================
@@ -1231,6 +1452,7 @@ MOboolean moTrackerKLT::Init()
     moDefineParamIndex( TRACKERKLT_NUM_FRAMES,moText("num_frames") );
     moDefineParamIndex( TRACKERKLT_SAMPLE_RATE,moText("sample_rate") );
 
+/*
     moDefineParamIndex( TRACKERKLT_BORDERX,moText("borderx") );
     moDefineParamIndex( TRACKERKLT_BORDERY,moText("bordery") );
     moDefineParamIndex( TRACKERKLT_NPYRAMIDLEVELS,moText("npyramidlevels") );
@@ -1246,7 +1468,7 @@ MOboolean moTrackerKLT::Init()
 
     moDefineParamIndex( TRACKERKLT_MIN_SEGMENT_LEN,moText("min_segment_len") );
     moDefineParamIndex( TRACKERKLT_MAX_SEGMENT_LEN,moText("max_segment_len") );
-
+*/
 
     m_SampleCounter = 0;
 	trackersystems = m_Config.GetParamIndex("trackersystems");
@@ -1292,6 +1514,23 @@ MO_TRACKER1D_SYSTEM_ON 2
 			pTSystem->SetName( m_Config.GetParam().GetValue().GetSubValue(MO_TRACKERKLT_SYTEM_LABELNAME).Text() );
 			pTSystem->SetLive( m_Config.GetParam().GetValue().GetSubValue(MO_TRACKERKLT_LIVE_SYSTEM).Text() );
 			pTSystem->SetActive( m_Config.GetParam().GetValue().GetSubValue(MO_TRACKERKLT_SYSTEM_ON).Int() );
+
+			moText liveout;
+
+			liveout = m_Config.GetParam().GetValue().GetSubValue(MO_TRACKERKLT_LIVE_OUT).Text();
+
+			if (liveout.Length()) {
+			  moTexture* pOut = NULL;
+
+        int tracker_out_id = m_pResourceManager->GetTextureMan()->AddTexture( MO_TYPE_TEXTURE, liveout );
+
+        if (tracker_out_id>-1) {
+          pOut = m_pResourceManager->GetTextureMan()->GetTexture(tracker_out_id);
+        }
+
+        pTSystem->SetLiveOut( liveout, pOut );
+			}
+
 		}
 
 		m_TrackerSystems.Add( pTSystem );
@@ -1314,6 +1553,7 @@ void moTrackerKLT::UpdateParameters() {
 	num_frames = m_Config.GetParam(m_Config.GetParamIndex("num_frames")).GetValue().GetSubValue(0).Int();
 	m_SampleRate = m_Config.GetParam(m_Config.GetParamIndex("sample_rate")).GetValue().GetSubValue().Int();
 
+/*
 	borderx = m_Config.GetParam(m_Config.GetParamIndex("borderx")).GetValue().GetSubValue().Int();
 	bordery = m_Config.GetParam(m_Config.GetParamIndex("bordery")).GetValue().GetSubValue().Int();
 
@@ -1330,7 +1570,7 @@ void moTrackerKLT::UpdateParameters() {
 
     min_segment_len = m_Config.GetParam(m_Config.GetParamIndex("min_segment_len")).GetValue().GetSubValue().Float();
     max_segment_len = m_Config.GetParam(m_Config.GetParamIndex("max_segment_len")).GetValue().GetSubValue().Float();
-
+*/
 }
 
 moConfigDefinition* moTrackerKLT::GetDefinition(moConfigDefinition *p_configdefinition) {
@@ -1347,7 +1587,7 @@ moConfigDefinition* moTrackerKLT::GetDefinition(moConfigDefinition *p_configdefi
     p_configdefinition->Add( moText("light_sens"), MO_PARAM_NUMERIC, TRACKERKLT_LIGHT_SENS, moValue( "1", "INT").Ref() );
     p_configdefinition->Add( moText("num_frames"), MO_PARAM_NUMERIC, TRACKERKLT_NUM_FRAMES, moValue( "50", "INT").Ref() );
     p_configdefinition->Add( moText("sample_rate"), MO_PARAM_NUMERIC, TRACKERKLT_SAMPLE_RATE, moValue( "1", "INT").Ref() );
-
+/*
     p_configdefinition->Add( moText("borderx"), MO_PARAM_NUMERIC, TRACKERKLT_BORDERX, moValue( "2", "INT").Ref() );
     p_configdefinition->Add( moText("bordery"), MO_PARAM_NUMERIC, TRACKERKLT_BORDERY, moValue( "2", "INT").Ref() );
     p_configdefinition->Add( moText("nPyramidLevels"), MO_PARAM_NUMERIC, TRACKERKLT_NPYRAMIDLEVELS, moValue( "2", "INT").Ref() );
@@ -1363,7 +1603,7 @@ moConfigDefinition* moTrackerKLT::GetDefinition(moConfigDefinition *p_configdefi
 
     p_configdefinition->Add( moText("min_segment_len"), MO_PARAM_NUMERIC, TRACKERKLT_MIN_SEGMENT_LEN, moValue( "0.0", "FLOAT").Ref() );
     p_configdefinition->Add( moText("max_segment_len"), MO_PARAM_NUMERIC, TRACKERKLT_MAX_SEGMENT_LEN, moValue( "0.4", "FLOAT").Ref() );
-
+*/
 }
 
 MOboolean moTrackerKLT::Finish()
@@ -1548,12 +1788,22 @@ void moTrackerKLT::Update(moEventList *Events)
                         /// glEnd()
 
 						if (!pTS->IsInit()) {
-							pTS->Init(  num_feat,
+
+
+						///===============
+
+
+
+							if ( pTS->Init(  num_feat,
                                         pSample,
                                         replace_lost_feat, true, diff_mode,
                                         num_frames, num_samples, min_dist,
                                         min_eigen,
-                                        !light_sens);
+                                        !light_sens) ) {
+
+                  pTS->InitTextureOutput( m_pResourceManager );
+
+              }
 
 
 						}
@@ -1561,28 +1811,32 @@ void moTrackerKLT::Update(moEventList *Events)
 
                         KLT_TrackingContext TC = pTS->GetTrackingContext();
 
-                        TC->min_eigenvalue = min_eigen;
-                        TC->mindist = min_dist;
-                        //TC->lighting_insensitive = light_sens;
-                        //TC->sequentialMode = (int)diff_mode;
-/*
-                        TC->borderx = borderx;//24
-                        TC->bordery = bordery;//24
-                        TC->nPyramidLevels = pyramid_levels;//2
-                        TC->subsampling = subsampling;//4
-                        TC->max_iterations = max_iterations;
 
-                        TC->window_width = window_width;//7
-                        TC->window_height = window_height;//7
-                        TC->min_displacement = min_displacement;//0.10000001
-                        TC->min_determinant = min_determinant;//0.0099999978
-                        TC->max_residue = max_residue;
-                        */
+                        if (TC) {
+                          TC->min_eigenvalue = min_eigen;
+                          TC->mindist = min_dist;
+                          //TC->lighting_insensitive = light_sens;
+                          //TC->sequentialMode = (int)diff_mode;
+  /*
+                          TC->borderx = borderx;//24
+                          TC->bordery = bordery;//24
+                          TC->nPyramidLevels = pyramid_levels;//2
+                          TC->subsampling = subsampling;//4
+                          TC->max_iterations = max_iterations;
+
+                          TC->window_width = window_width;//7
+                          TC->window_height = window_height;//7
+                          TC->min_displacement = min_displacement;//0.10000001
+                          TC->min_determinant = min_determinant;//0.0099999978
+                          TC->max_residue = max_residue;
+                          */
+                        } else MODebug2->Error( moText("error TC (tracking context) is void") );
 
                         pTS->min_segment_len = min_segment_len;
                         pTS->max_segment_len = max_segment_len;
 
 						pTS->NewData( pSample );
+						//pTS->DrawFeatures( m_pResourceManager );
 
 /*
 						//calcular pesos y otras yerbas
@@ -1634,11 +1888,26 @@ void moTrackerKLT::Update(moEventList *Events)
 */
                         ///aqui el Outlet que se toma es el mismo en el orden del indice, lo cual no es muy elegante
                         ///el indice del outlet deberiamos preguntarlo antes
-						m_Outlets[actual->devicecode]->GetData()->SetPointer( (MOpointer)pTS->GetData(), sizeof(moTrackerSystemData) );
-						m_Outlets[actual->devicecode]->Update();
+
+            //MODebug2->Message( moText("outlet: ") + IntToStr( actual->devicecode ) + moText("n outlets:") + IntToStr( m_Outlets.Count() ) );
+
+						if ( actual->devicecode<m_Outlets.Count() && m_Outlets[actual->devicecode] ) {
+						  if ( m_Outlets[actual->devicecode]->GetData() && pTS->GetData()) {
+
+						    //MODebug2->Message( moText("TrackerKLT > Updating outlet: ") + IntToStr( actual->devicecode ) + moText("    n outlets:") + IntToStr( m_Outlets.Count() ) );
+
+                m_Outlets[actual->devicecode]->GetData()->SetPointer( (MOpointer)pTS->GetData(), sizeof(moTrackerSystemData) );
+                m_Outlets[actual->devicecode]->Update(); ///to notify Inlets!!
+              } else {
+                MODebug2->Error( moText("TrackerKLT::Update > Outlet unitiliazed i:")+IntToStr( actual->devicecode ) );
+              }
+            }
+
+
 
 						///ahora agregamos ademas un dato adicional un Outlet de TUIO
 						///en cambio este lo buscamos anteriormente!!! por el nombre "TUIO"
+						/*
 						if (m_OutletTuioSystemIndex>-1) {
 
 						    moOutlet* pOutletTUIO = m_Outlets[ m_OutletTuioSystemIndex ];
@@ -1646,6 +1915,9 @@ void moTrackerKLT::Update(moEventList *Events)
                             pOutletTUIO->GetData()->SetPointer( (MOpointer)pTS->GetTUIOData(), sizeof(moTUIOSystemData) );
                             pOutletTUIO->Update();
 						}
+						*/
+
+
 
 					}
 			}
@@ -1654,51 +1926,8 @@ void moTrackerKLT::Update(moEventList *Events)
 		} else actual = actual->next;//no es el que necesitamos...
 	}
 
-
+  ///Genera los mensajes necesarios para pasar los datos a otros objetos
 	moMoldeoObject::Update(Events);
 
 }
 
-void moTrackerKLT::DrawTrackerFeatures( int isystem )
-{
-	int i, tw, th, v;
-    float x, y;
-    int w,h;
-
-    w = m_pResourceManager->GetRenderMan()->RenderWidth();
-    h = m_pResourceManager->GetRenderMan()->RenderHeight();
-
-	moTrackerSystemData*	m_pTrackerData;
-
-	moTrackerKLTSystemPtr pTS=NULL;
-	pTS = m_TrackerSystems.Get( isystem );
-	if ( pTS )
-		if (pTS->IsActive() ) {
-
-			m_pTrackerData = pTS->GetData();
-
-			tw = m_pTrackerData->GetVideoFormat().m_Width;
-			th = m_pTrackerData->GetVideoFormat().m_Height;
-
-			for (i = 0; i < m_pTrackerData->GetFeaturesCount(); i++)
-			{
-				x = w * m_pTrackerData->GetFeature(i)->x / tw;
-				y = h * m_pTrackerData->GetFeature(i)->y / th;
-				v = m_pTrackerData->GetFeature(i)->val;
-
-				if (v == KLT_TRACKED) glColor4f(0.5, 1.0, 0.5, 1.0);
-				else if (v == KLT_NOT_FOUND) glColor4f(0.0, 0.0, 0.0, 1.0);
-				else if (v == KLT_SMALL_DET) glColor4f(1.0, 0.0, 0.0, 1.0);
-				else if (v == KLT_MAX_ITERATIONS) glColor4f(0.0, 1.0, 0.0, 1.0);
-				else if (v == KLT_OOB) glColor4f(0.0, 0.0, 1.0, 1.0);
-				else if (v == KLT_LARGE_RESIDUE) glColor4f(1.0, 1.0, 0.0, 1.0);
-				glBegin(GL_QUADS);
-					glVertex2f(x - 5, y - 5);
-					glVertex2f(x - 5, y + 5);
-					glVertex2f(x + 5, y + 5);
-					glVertex2f(x + 5, y - 5);
-				glEnd();
-			}
-		}
-
-}

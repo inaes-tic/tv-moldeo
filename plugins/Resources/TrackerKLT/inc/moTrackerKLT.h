@@ -46,6 +46,7 @@
 #define MO_TRACKERKLT_SYTEM_LABELNAME	0
 #define MO_TRACKERKLT_LIVE_SYSTEM	1
 #define MO_TRACKERKLT_SYSTEM_ON 2
+#define MO_TRACKERKLT_LIVE_OUT 3
 
 enum moTrackerKLTParamIndex {
     TRACKERKLT_NUM_FEAT,
@@ -99,9 +100,21 @@ public:
 
 	void SetName(moText p_name) { m_Name = p_name; }
 	void SetLive( moText p_livecodestr) { m_Live = p_livecodestr; }
+	void SetLiveOut( moText p_livecodestr_out, moTexture* pTexture ) {
+	  m_LiveOut = p_livecodestr_out;
+	  if ( pTexture && ( pTexture->GetName()==p_livecodestr_out) ) {
+      m_pTextureOut = pTexture;
+	  } else MODebug2->Error( moText("moTrackerKLTSystem:: texture assigned no matching with:") + (moText)p_livecodestr_out );
+  }
 	void SetActive( MOboolean p_active) { m_bActive = p_active; }
+
+	moTexture* GetTextureOut() { return m_pTextureOut; }
+
+
+
 	moText GetName() { return m_Name; }
 	moText GetLive() { return m_Live; }
+	moText GetLiveOut() { return m_LiveOut; }
 	MOboolean IsActive() { return m_bActive; }
 	MOboolean IsInit() { return m_init; }
 
@@ -135,9 +148,12 @@ public:
     void IterateZone( int ww, int hh, int pp, moTrackerFeature* pFeatureA  );
 
 
-	void NewData( moVideoSample* p_pVideoSample );
-	moTrackerSystemData*	GetData() {	return m_pTrackerSystemData; }
+    void NewData( moVideoSample* p_pVideoSample );
+    moTrackerSystemData*	GetData() {	return m_pTrackerSystemData; }
     moTUIOSystemData*	GetTUIOData() {	return m_pTUIOSystemData; }
+
+    MOboolean InitTextureOutput( moResourceManager* pResourceManager );
+    void DrawFeatures( moResourceManager* pResourceManager );
 
     float min_segment_len,max_segment_len;
 private:
@@ -146,6 +162,17 @@ private:
 	moText m_Name;
 	moText m_Live;
 	MOboolean m_bActive;
+	moText m_LiveOut;
+
+  moTexture* m_pTextureIn;
+  moTexture* m_pTextureOut;
+
+  moFBO*     m_pFBO;
+  int         m_fbo_idx;
+  int tracker_input_id;
+  MOuint attach_point;
+
+
 	MOboolean m_init;
 
 	moTrackerSystemData* m_pTrackerSystemData;
@@ -182,6 +209,8 @@ private:
 	void CopyImg2To1();
 	void AddBufferToImg(GLubyte *p_pBuffer, MOuint p_RGB_mode);
 	void CalcImg1Average();
+
+
 };
 
 typedef moTrackerKLTSystem* moTrackerKLTSystemPtr;
@@ -209,7 +238,6 @@ public:
     void Update(moEventList*);
     moConfigDefinition* GetDefinition( moConfigDefinition *p_configdefinition );
 
-	void DrawTrackerFeatures( int isystem );
 
 protected:
     void UpdateParameters();

@@ -254,7 +254,7 @@ void moTrackerGpuKLTSystem::NewData( moVideoSample* p_pVideoSample )
 	if (m_buffer == NULL) return;
 
 
-	Track(m_buffer, GL_RGB);
+	Track( (MOubyte*)m_buffer, GL_RGB);
 
 
 /*

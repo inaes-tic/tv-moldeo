@@ -415,7 +415,7 @@ void moNetOSCOut::Update(moEventList *Eventos)
                     pData.SetFloat( m_pTrackerData->GetBarycenterAcceleration().Y() );
                     tracker_data_message.Add(pData);
 
-                    //MODebug2->Message( moText("netoscout: receiving tracker data: bx:") + (moText)FloatToStr(m_pTrackerData->GetBarycenter().X()) );
+                    MODebug2->Message( moText("netoscout: receiving tracker data: bx:") + (moText)FloatToStr(m_pTrackerData->GetBarycenter().X()) );
                     //MODebug2->Push( moText("N:") + (moText)IntToStr( m_pTrackerData->GetValidFeatures() ) );
                     for (i = 0; i < host_name.Count(); i++)
                     {
@@ -511,7 +511,7 @@ void moNetOSCOut::SendDataMessage( int i, moDataMessage &datamessage ) {
     (*packetStream) << osc::EndBundle;
     if (transmitSockets[i]) {
         transmitSockets[i]->Send( packetStream->Data(), packetStream->Size() );
-        //MODebug2->Push(moText("sending") + IntToStr(i));
+        MODebug2->Push(moText("sending") + IntToStr(i));
     }
 
     //MODebug2->Push(moText("sending"));
