@@ -25,7 +25,6 @@
 
   Authors:
   Fabricio Costa
-  Andrés Colubri
 
 *******************************************************************************/
 
@@ -294,10 +293,14 @@ moConnector::SetData( moData*	p_data ) {
 
 moData*
 moConnector::GetData() {
-	if (m_bUpdated && m_pData)
+
+	if (m_pData)
 		return m_pData;
+
 	if (m_pParam)
 		return m_pParam->GetData();
+
+  return NULL;
 }
 
 void

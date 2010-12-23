@@ -127,7 +127,7 @@ class moParamTreeItem {
         wxTreeMultiItem item;
 };
 
-moDeclareDynamicArray( moParamTreeItem, moParamTreeItemList )
+moDeclareDynamicArray( moParamTreeItem, moParamTreeItemList );
 
 
 // Define a new frame type: this is going to be our main frame
@@ -149,10 +149,12 @@ public:
     void Inspect( moValueDescriptor p_ValueDescriptor, bool setselection = false );
     void Save();
     bool Close();
+    void InspectAll();
 
 public:
 
 	bool	IsMob( moMobDescriptor p_MobDescriptor );
+	moMobDescriptor GetMob();
 	moText	GetConfigName() { return m_ConfigFullName; }
 
 	moDirectorStatus ParameterUpdated( moParameterDescriptor p_ParameterDesc );
@@ -160,13 +162,15 @@ public:
 
 	moDirectorStatus EditValue( moValueDescriptor p_ValueDesc );
 	moDirectorStatus DeleteValue( moValueDescriptor p_ValueDesc );
-    moDirectorStatus ValueUpdated( moValueDescriptor p_ValueDesc );
+  moDirectorStatus ValueUpdated( moValueDescriptor p_ValueDesc );
+  moDirectorStatus MobUpdated( moMobDescriptor p_MobDesc );
 
 
 //interface controls
 private:
 
 	moMobDescriptor				m_MobDescriptor;
+	moValueDescriptor			m_ValueDescriptor;
 
 	moConfigNotebook*			m_pConfigNotebook;
 	moConfigTextCodeCtrl*		m_pConfigTextCodeCtrl;

@@ -33,7 +33,11 @@
 
 #include "boost/thread/thread.hpp"
 
-#include "SDL_thread.h"
+#ifdef MO_WIN32
+    #include "SDL_thread.h"
+#else
+    #include "SDL/SDL_thread.h"
+#endif
 
 using namespace boost;
 

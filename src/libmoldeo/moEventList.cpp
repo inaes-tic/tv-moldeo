@@ -200,6 +200,7 @@ void moEventList::Add( moMessage* p_Message ) {
 void moEventList::Add( moEvent* p_Event ) {
 
 	m_lock.Lock();
+	//MODebug2->Message( " Event List :: added event " );
 	if(First==NULL) {//lista vacia
 		First = p_Event;
 		Last = First;

@@ -57,7 +57,11 @@ MOlong moBucket::GetSize() {
 
 
 MOubyte *moBucket::GetBuffer() {
-	return m_pBuffer;
+  MOubyte *toreturn  = NULL;
+  Lock();
+  toreturn = m_pBuffer;
+  Unlock();
+	return toreturn;
 }
 
 void moBucket::EmptyBucket() {
@@ -65,6 +69,7 @@ void moBucket::EmptyBucket() {
 	if(m_lBufferSize!=0 && m_pBuffer!=NULL) {
 		delete [] m_pBuffer;
 		m_lBufferSize = 0;
+		m_pBuffer = NULL;
 	}
 	m_bEmpty = true;
 	Unlock();

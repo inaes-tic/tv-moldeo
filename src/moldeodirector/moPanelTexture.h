@@ -9,14 +9,9 @@
 #include "moTextureItemCtrl.h"
 
 //(*Headers(moPanelTexture)
-#include <wx/treectrl.h>
 #include <wx/sizer.h>
-#include <wx/stattext.h>
 #include <wx/textctrl.h>
-#include <wx/statbox.h>
 #include <wx/panel.h>
-#include <wx/bmpbuttn.h>
-#include <wx/statbmp.h>
 #include <wx/button.h>
 //*)
 
@@ -31,43 +26,19 @@ class moPanelTexture: public wxPanel, public moIDirectorActions
         void    InitTexturesTree();
 
 		//(*Declarations(moPanelTexture)
-		wxStaticText* StaticTextType;
-		wxPanel* Panel5;
-		wxTreeCtrl* TreeCtrlImages;
-		wxStaticText* StaticText2;
-		wxPanel* Panel4;
+		wxMoColourPanel* ImagePanel;
 		wxTextCtrl* TextCtrlMedia;
-		wxStaticText* StaticTextFiltered;
-		wxStaticBitmap* StaticBitmapThumbnail;
 		wxButton* ButtonImport;
-		wxStaticText* StaticText1;
-		wxPanel* PanelPreview;
-		wxStaticText* StaticText3;
-		wxStaticBox* StaticBox1;
-		wxBitmapButton* BitmapButton1;
-		wxStaticText* StaticTextSize;
-		wxPanel* PanelFilter;
+		wxPanel* ImportPanel;
 		//*)
 
 	protected:
 
 		//(*Identifiers(moPanelTexture)
-		static const long ID_STATICBOX1;
-		static const long ID_PANELFILTER;
-		static const long ID_STATICTEXT6;
-		static const long ID_STATICTEXT7;
-		static const long ID_STATICTEXT1;
 		static const long ID_TEXTCTRLMEDIA;
 		static const long ID_BUTTONIMPORT;
-		static const long ID_STATICTEXT3;
-		static const long ID_PANEL4;
-		static const long ID_STATICBITMAPTHUMB;
-		static const long ID_PANELPreview;
-		static const long ID_STATICTEXT2;
-		static const long ID_STATICTEXTSIZE;
-		static const long ID_BITMAPBUTTON1;
-		static const long ID_PANEL5;
-		static const long ID_TREECTRL1;
+		static const long ID_IMPORTPANEL;
+		static const long ID_IMAGEPANEL;
 		//*)
 		static const long ID_SHADERCTRL;
 		static const long ID_TEXTURESTREECTRL;
@@ -89,6 +60,7 @@ class moPanelTexture: public wxPanel, public moIDirectorActions
 		void OnPaint(wxPaintEvent& event);
 		void OnPanel4Paint(wxPaintEvent& event);
 		void OnBitmapButton1Click(wxCommandEvent& event);
+		void OnPanelDetailsPaint(wxPaintEvent& event);
 		//*)
 
         moShaderCtrl*       m_pShaderCtrl;
@@ -96,6 +68,10 @@ class moPanelTexture: public wxPanel, public moIDirectorActions
 
         void LoadImage();
 
+    wxTreeMultiCtrl*  m_pTreeMultiCtrl;
+
+    //wxPanel* m_pDetails;
+    wxStaticText* m_pTextDetails;
 
 		DECLARE_EVENT_TABLE()
 };

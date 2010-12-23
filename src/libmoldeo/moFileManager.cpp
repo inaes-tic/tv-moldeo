@@ -102,8 +102,21 @@ moDirectory::Open( moText p_CompletePath, moText p_Search  ) {
 
 	char *path;
 
-    m_CompletePath = p_CompletePath;
+  m_CompletePath = p_CompletePath;
 	path = m_CompletePath;
+
+  //m_CompletePath = "\\\\\\";
+
+	m_DirNameArray = m_CompletePath.Explode(moText("\\/"));
+
+	if (m_DirNameArray.Count()>0) {
+
+    m_DirName = m_DirNameArray[ m_DirNameArray.Count() - 1 ];
+
+	} else {
+    m_DirName = m_CompletePath;
+	}
+
 
 	moText CompletePathSearch = (moText)p_CompletePath + (moText)p_Search;
 
@@ -116,6 +129,16 @@ moDirectory::Open( moText p_CompletePath, moText p_Search  ) {
 
     }
     m_Files.Empty();
+
+    /** Empty subdirs array*/
+	for( int i=0; i<(int)m_SubDirs.Count(); i++) {
+            moDirectory* pDir = m_SubDirs[i];
+            if  (pDir)
+                delete pDir;
+            m_SubDirs[i] = NULL;
+
+    }
+    m_SubDirs.Empty();
 
     /** Set by default m_bExists on false*/
     m_bExists = false;
@@ -132,6 +155,20 @@ moDirectory::Open( moText p_CompletePath, moText p_Search  ) {
           {
             //cout << iter->native_directory_string() << " (directory)\n" ;
             //if( recurse_into_subdirs ) show_files(*iter) ;
+            #if BOOST_VERSION > 103500
+            moText pSubDirName( iter->path().filename().c_str() );
+            #else
+            moText pSubDirName( iter->path().leaf().c_str() );
+            #endif
+
+            moText pCompletePathSubdirName( iter->path().file_string().c_str() );
+
+            if (pSubDirName.Left(1) != "." ) {
+              moDirectory* pSubdir = new moDirectory( pCompletePathSubdirName );
+              if (pSubdir)
+                m_SubDirs.Add( pSubdir );
+            }
+
           } else {
             //cout << iter->native_file_string() << " (file)\n" ;
             //ATENCION SEGUN LA VERSION DE BOOST hya que usar filename() o leaf()
@@ -142,8 +179,6 @@ moDirectory::Open( moText p_CompletePath, moText p_Search  ) {
             moText pFileName( iter->path().leaf().c_str() );
             #endif
             moText pCompletePathFilename( iter->path().file_string().c_str() );
-
-
 
             moFile*	pFile = NULL;
 
@@ -158,8 +193,8 @@ moDirectory::Open( moText p_CompletePath, moText p_Search  ) {
             }
 
             #ifdef _DEBUG
-            MODebug2->Message( moText("moFileManager:: file:") + (moText)pCompletePathFilename);
-            MODebug2->Message( moText("moFileManager:: filesize:") + IntToStr((int) bfs::file_size( iter->path().file_string().c_str() )));
+            //MODebug2->Message( moText("moFileManager:: file:") + (moText)pCompletePathFilename);
+            //MODebug2->Message( moText("moFileManager:: filesize:") + IntToStr((int) bfs::file_size( iter->path().file_string().c_str() )));
             #endif
             //printf("%-32s %s %9.ld %s",fileInfo.name, attribs, fileInfo.size , timeBuff);
 
@@ -286,6 +321,17 @@ moDirectory::Finish() {
 
     }
     m_Files.Empty();
+
+    /** Empty subdirs array*/
+	for( int i=0; i<(int)m_SubDirs.Count(); i++) {
+            moDirectory* pDir = m_SubDirs[i];
+            if  (pDir)
+                delete pDir;
+            m_SubDirs[i] = NULL;
+
+    }
+    m_SubDirs.Empty();
+
 	return true;
 }
 
@@ -293,6 +339,11 @@ MOboolean
 moDirectory::Exists() {
     m_bExists = bfs::exists((char*)m_CompletePath);
 	return m_bExists;
+}
+
+MOboolean
+moDirectory::HasSubdirs() {
+  return m_SubDirs.Count();
 }
 
 MOboolean
@@ -304,6 +355,11 @@ moText
 moDirectory::GetCompletePath() {
 	return m_CompletePath;
 
+}
+
+moText
+moDirectory::GetDirName() {
+  return m_DirName;
 }
 
 moFileType
@@ -458,6 +514,11 @@ moDirectory::GetFiles() {
 	return m_Files;
 }
 
+moDirectoryArray&
+moDirectory::GetSubDirs() {
+  return m_SubDirs;
+}
+
 //===========================================
 //
 //				moFile
@@ -569,6 +630,11 @@ moFile::GetFileName() {
 	return m_FileName;
 }
 
+moText
+moFile::GetFullName() {
+	return ( m_FileName + m_Extension );
+}
+
 void
 moFile::SetCompletePath( moText p_completepath ) {
 
@@ -598,17 +664,30 @@ moFile::SetCompletePath( moText p_completepath ) {
 		//moText m_Drive = m_CompletePath.Scan(":");
 
 		std::string str;
+
 		str = bfs::extension( (char*)m_CompletePath );
+
 
 		m_Extension = str.c_str();
 
         m_Dirs = m_CompletePath.Explode(moText("\\/"));
+        #ifdef MO_WIN32
+        m_Path = "";
+        #else
+        m_Path = moSlash;
+        #endif
 
         if ( m_Dirs.Count() > 0 ) {
             m_Drive = m_Dirs[0];
             m_FileName = m_Dirs[m_Dirs.Count()-1];
             FileNameA = m_FileName.Explode(moText("."));
             m_FileName = FileNameA[0];
+            m_Dirs.Remove(m_Dirs.Count()-1);
+        }
+
+        for(int d=0; d < m_Dirs.Count(); d++ ) {
+          if (m_Dirs[d]!="" && m_Dirs[d]!="/" && m_Dirs[d]!="." && m_Dirs[d]!="..")
+            m_Path+= m_Dirs[d] + "/";
         }
 
 		m_FileType = MO_FILETYPE_LOCAL;
@@ -633,6 +712,14 @@ moFile::GetCompletePath() {
 moText
 moFile::GetExtension() {
 	return m_Extension;
+}
+
+moText
+moFile::GetFolderName() {
+  if (m_Dirs.Count()>0) {
+    return m_Dirs[m_Dirs.Count()-1];
+  }
+  return moText("");
 }
 
 void

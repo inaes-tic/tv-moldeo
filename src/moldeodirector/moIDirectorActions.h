@@ -84,7 +84,18 @@ class moDirectorStatus {
 };
 */
 
-class   moApplicationDescriptor {
+class moDescriptor {
+
+  public:
+
+      moDescriptor() {}
+      virtual ~moDescriptor() {}
+
+      virtual bool IsValid() = 0;
+
+};
+
+class   moApplicationDescriptor : public moDescriptor {
 
     public:
 
@@ -118,6 +129,8 @@ class   moApplicationDescriptor {
                 return m_PluginsFullPath;
         }
 
+        bool IsValid();
+
     protected:
 
         moPluginDefinitions         m_PluginDefinitions;///lista de definiciones de plugins existentes
@@ -127,63 +140,103 @@ class   moApplicationDescriptor {
 
 };
 
-class  moProjectDescriptor {
+
+
+class  moProjectDescriptor : public moDescriptor {
 
 public:
 
-	moProjectDescriptor() {
-		m_configname = moText("");
-		m_configpath = moText("");
-		m_fullconfigname = moText("");
-	}
+      /**
+      *
+      * Estado de apertura del proyecto
+      *
+      *
+      *
+      *
+      */
+      enum moProjectState {
+        STATE_UNDEFINED=-1, ///Indefinido
+        STATE_OPENED=0, ///Abierto
+        STATE_CLOSED=1, ///Cerrado
+        STATE_OPENING=2, ///Abriendo
+        STATE_CLOSING=3, ///Cerrando
+        STATE_RENAMING=4, ///Renombrando
+        STATE_SAVING=5 ///Salvando
+      };
 
-	moProjectDescriptor( moText p_fullconfigname ) {
-		//atencion falta sacar el p_configname y el p_configpath del p_fullconfigname
-		const char *aux = p_fullconfigname;
-		wxString fcname((wxChar*)aux);
-		wxFileName FileName(fcname);
-		wxString name = FileName.GetFullName();
-		wxString path = FileName.GetPath() + wxT("\\");
-		const char *cfilepath = (char*)path.c_str();
-		const char *cfilename = (char*)name.c_str();
-		m_configname = moText((char*)cfilename);
-		m_configpath = moText((char*)cfilepath);
-		m_fullconfigname = p_fullconfigname;
-	}
+      moProjectDescriptor() {
+        m_configname = moText("");
+        m_configpath = moText("");
+        m_fullconfigname = moText("");
+        m_state = STATE_UNDEFINED;
+      }
 
-    moProjectDescriptor& operator = ( const moProjectDescriptor& mpd) {
+      moProjectDescriptor( const moText& p_fullconfigname ) {
+        //atencion falta sacar el p_configname y el p_configpath del p_fullconfigname
+        /*
+        const char *aux = p_fullconfigname;
+        wxString fcname((wxChar*)aux);
+        wxFileName FileName(fcname);
+        wxString name = FileName.GetFullName();
+        wxString path = FileName.GetPath() + wxT("\\");
+        const char *cfilepath = (char*)path.c_str();
+        const char *cfilename = (char*)name.c_str();
+        m_configname = moText((char*)cfilename);
+        m_configpath = moText((char*)cfilepath);
+        */
+        moFile FileName(p_fullconfigname);
+        m_configname = FileName.GetFileName();
+        m_configpath = FileName.GetPath();
+        m_fullconfigname = p_fullconfigname;
+        m_state = STATE_UNDEFINED;
+      }
 
-        m_configname = mpd.m_configname;
-        m_configpath = mpd.m_configpath;
-        m_fullconfigname = mpd.m_fullconfigname;
+      moProjectDescriptor& operator = ( const moProjectDescriptor& mpd) {
 
-        return(*this);
-    }
+          m_configname = mpd.m_configname;
+          m_configpath = mpd.m_configpath;
+          m_fullconfigname = mpd.m_fullconfigname;
+          m_state = mpd.m_state;
 
-	moProjectDescriptor( moText p_configname, moText p_configpath) {
-		m_configname = p_configname;
-		m_configpath = p_configpath;
-		m_fullconfigname = (moText)p_configpath + (moText)p_configname;
-	}
+          return(*this);
+      }
 
-	void Set( moText p_configpath, moText p_configname ) {
-		m_configname = p_configname;
-		m_configpath = p_configpath;
-		m_fullconfigname = (moText)p_configpath + (moText)p_configname;
-	}
+      moProjectDescriptor( const moText& p_configname, const moText& p_configpath) {
+        m_configname = p_configname;
+        m_configpath = p_configpath;
+        m_fullconfigname = (moText)p_configpath + (moText)p_configname;
+        m_state = STATE_UNDEFINED;
+      }
 
-	moText GetConfigName() { return m_configname; }
-	moText GetConfigPath() { return m_configpath; }
-	moText GetFullConfigName() { return m_fullconfigname; }
+      void Set( const moText& p_configpath, const moText& p_configname ) {
+        m_configname = p_configname;
+        m_configpath = p_configpath;
+        m_fullconfigname = (moText)p_configpath + (moText)p_configname;
+        m_state = STATE_UNDEFINED;
+      }
+
+      const moText& GetConfigName() const { return m_configname; }
+      const moText& GetConfigPath() const { return m_configpath; }
+      const moText& GetFullConfigName() const { return m_fullconfigname; }
+
+      void SetState( moProjectState p_state ) { m_state = p_state; }
+      moProjectState GetState() const  { return m_state; }
+
+      virtual bool IsValid();
 
 //REQUIRED MEMBERS TO GetProject
 public:
-	//config name
-	moText m_configname;
-	//description
-	moText m_configpath;
-	//config full name
-	moText m_fullconfigname;
+      ///config name
+      moText m_configname;
+
+      ///description
+      moText m_configpath;
+
+      ///config full name
+      moText m_fullconfigname;
+
+      ///project state
+      moProjectState  m_state;
 
 };
 
@@ -196,13 +249,15 @@ class moMobState {
         moMobState( const moMobState& pstate) {
             (*this) = pstate;
         }
-        moMobState( moEffectState& p_EffectState ) {
+        moMobState( const moEffectState& p_EffectState ) {
             m_EffectState = p_EffectState;
         }
-        moMobState( moMobState& p_State ) {
-            m_EffectState = p_State.m_EffectState;
-        }
         virtual ~moMobState() {}
+
+        moMobState& operator= (const moMobState& pMobState) {
+            m_EffectState = pMobState.m_EffectState;
+            return (*this);
+        }
 
         moEffectState&  GetEffectState() {
             return m_EffectState;
@@ -238,11 +293,11 @@ class moResourceDefinition {
         }
 
         moResourceDefinition( moResourceType p_ResourceType,
-                              moText        p_ResourceName,
-                              moText        p_FileName,
+                              const moText&        p_ResourceName,
+                              const moText&        p_FileName,
                               MOint        p_Size,
                               MOint        p_ResourceReservedType,
-                              moText        p_ResourceReservedName
+                              const moText&        p_ResourceReservedName
                               ) :
         m_ResourceType(p_ResourceType),
         m_ResourceName(p_ResourceName),
@@ -271,27 +326,27 @@ class moResourceDefinition {
                 return m_Datas;
         }
 
-        moText GetName() {
+        const moText& GetName() const {
             return m_ResourceName;
         }
 
-        moResourceType GetType() {
+        moResourceType GetType() const {
             return m_ResourceType;
         }
 
-        moText GetFileName() {
+        const moText& GetFileName() const {
             return m_ResourceFileName;
         }
 
-        MOint GetSize() {
+        MOint GetSize() const {
             return m_ResourceSize;
         }
 
-        MOint GetReservedType() {
+        MOint GetReservedType() const {
             return m_ResourceReservedType;
         }
 
-        moText GetReservedName() {
+        const moText& GetReservedName() const {
             return m_ResourceReservedName;
         }
 
@@ -312,7 +367,7 @@ class moResourceDefinition {
         friend class moShaderDescriptor;
 };
 
-class moResourceDescriptor {
+class moResourceDescriptor : public moDescriptor {
 
     public:
 
@@ -351,7 +406,7 @@ class moResourceDescriptor {
             m_ItemIndex = p_itemindex;
         }
 
-        MOint GetItemIndex() {
+        MOint GetItemIndex() const {
             return m_ItemIndex;
         }
 
@@ -359,7 +414,7 @@ class moResourceDescriptor {
             m_ParentItemIndex = p_parentitemindex;
         }
 
-        MOint GetParentItemIndex() {
+        MOint GetParentItemIndex() const {
             return m_ParentItemIndex;
         }
 
@@ -375,7 +430,7 @@ class moResourceDescriptor {
             m_bCreateThumbnail = createthumbnail;
         }
 
-        bool IsCreateThumbnail() {
+        bool IsCreateThumbnail() const {
             return m_bCreateThumbnail;
         }
 
@@ -386,6 +441,8 @@ class moResourceDescriptor {
         void* GetThumbnail() {
             return m_pThumbnail;
         }
+
+        virtual bool IsValid();
 
     private:
 
@@ -410,12 +467,20 @@ class moResourceDescriptor {
 
 };
 
-moDeclareDynamicArray( moResourceDescriptor, moResourceDescriptors )
+moDeclareDynamicArray( moResourceDescriptor, moResourceDescriptors );
 
 
 class moTextureDescriptor : public moResourceDescriptor {
 
     public:
+        moTextureDescriptor() : moResourceDescriptor() {
+          m_ResourceDefinition = moResourceDefinition( MO_RESOURCETYPE_TEXTURE,
+                              "",
+                              "",
+                              0,
+                              MO_TYPE_TEXTURE,
+                              "" );
+        }
         moTextureDescriptor( moText p_Name, moText p_TexFileName = "", MOint p_TexSize=0, moTextureType p_TexType=MO_TYPE_TEXTURE, moText p_TexExtensionName="") {
 
             m_ResourceDefinition = moResourceDefinition( MO_RESOURCETYPE_TEXTURE,
@@ -450,13 +515,14 @@ class moTextureDescriptor : public moResourceDescriptor {
         MOuint GetComponents();
         MOint GetIndex();
         MOuint GetGLIndex();
-        moTexParam& GetTexParam();
+        moTexParam GetTexParam();
         bool    IsBuildedFromFile();
 
         moTextureType   GetType() {
             return (moTextureType) m_ResourceDefinition.m_ResourceReservedType;
         }
 
+        virtual bool IsValid();
 
 
 };
@@ -488,7 +554,9 @@ class mo3dModelDescriptor : public moResourceDescriptor {
         MOfloat GetSizeY();
         MOfloat GetSizeZ();
         MOint   GetIndex();
-        mo3dModelParam&  Get3dModelParam();
+        mo3dModelParam  Get3dModelParam();
+
+        virtual bool IsValid();
 };
 
 class moShaderDescriptor : public moResourceDescriptor {
@@ -513,10 +581,11 @@ class moShaderDescriptor : public moResourceDescriptor {
                                 moText p_FragmentShader
                                  );
 
+    virtual bool IsValid();
 };
 
 
-class  moMobDescriptor {
+class  moMobDescriptor : public moDescriptor {
 
 public:
 
@@ -527,7 +596,7 @@ public:
 	moMobDescriptor( const moMobDefinition &p_mobdefinition ) {
 	    m_MobDefinition = p_mobdefinition;
     }
-	moMobDescriptor( moProjectDescriptor p_ProjectDescriptor, const moMobDefinition &p_mobdefinition) {
+	moMobDescriptor( const moProjectDescriptor& p_ProjectDescriptor, const moMobDefinition &p_mobdefinition) {
         m_MobDefinition = p_mobdefinition;
 	    m_ProjectDescriptor = p_ProjectDescriptor;
     }
@@ -541,17 +610,17 @@ public:
         return(*this);
     }
 
-    void SetProjectDescriptor( moProjectDescriptor p_ProjectDescriptor ) {
+    void SetProjectDescriptor( const moProjectDescriptor& p_ProjectDescriptor ) {
         m_ProjectDescriptor = p_ProjectDescriptor;
     }
-    void SetState( moMobState p_MobState ) {
+    void SetState( const moMobState& p_MobState ) {
         m_MobState = p_MobState;
     }
-    moMobState GetState( ) {
+    moMobState& GetState( ) {
         return m_MobState;
     }
 
-    moProjectDescriptor GetProjectDescriptor() {
+    const moProjectDescriptor& GetProjectDescriptor() {
         return m_ProjectDescriptor;
     }
 
@@ -563,25 +632,26 @@ public:
 		m_MobDefinition = p_mobdefinition;
 	}
 
-	void Set( moProjectDescriptor p_ProjectDescriptor, const moMobDefinition &p_mobdefinition ) {
+	void Set( const moProjectDescriptor& p_ProjectDescriptor, const moMobDefinition &p_mobdefinition ) {
 	    m_ProjectDescriptor = p_ProjectDescriptor;
-		m_MobDefinition = p_mobdefinition;
+      m_MobDefinition = p_mobdefinition;
 	}
 
+  virtual bool IsValid();
 
 private:
 
     moMobDefinition m_MobDefinition;
 
-	moProjectDescriptor m_ProjectDescriptor;
+    moProjectDescriptor m_ProjectDescriptor;
 
-	moMobState  m_MobState;
+    moMobState  m_MobState;
 
 };
 
-moDeclareDynamicArray( moMobDescriptor, moMobDescriptors )
+moDeclareDynamicArray( moMobDescriptor, moMobDescriptors );
 
-class  moParameterDescriptor {
+class  moParameterDescriptor : public moDescriptor {
 
 public:
 
@@ -599,15 +669,15 @@ public:
 
 	    m_ParamDefinition.SetIndex(p_index);
     }
-    moMobDescriptor         GetMobDescriptor() {
+    moMobDescriptor& GetMobDescriptor() {
             return m_MobDescriptor;
     }
 
-	moParamDefinition GetParamDefinition() {
+    moParamDefinition& GetParamDefinition() {
 	    return m_ParamDefinition;
     }
 
-	void SetParamDefinition( moParamDefinition paramdefinition ) {
+    void SetParamDefinition( moParamDefinition paramdefinition ) {
 	    m_ParamDefinition = paramdefinition;
     }
 
@@ -626,6 +696,8 @@ public:
         return m_indexvalue;
     }
 
+    virtual bool IsValid();
+
 private:
 
 	int m_indexvalue;
@@ -636,9 +708,9 @@ private:
 
 };
 
-moDeclareDynamicArray( moParameterDescriptor, moParameterDescriptors )
+moDeclareDynamicArray( moParameterDescriptor, moParameterDescriptors );
 
-class  moValueDescriptor {
+class  moValueDescriptor : public moDescriptor {
 
 public:
 
@@ -654,7 +726,7 @@ public:
 	    return m_ValueIndex;
     }
 
-	moValue& GetValue() {
+    moValue& GetValue() {
 	    return m_Value;
     }
 
@@ -670,9 +742,11 @@ public:
         return m_ValueDefinition;
     }
 
-    void SetValueDefinition( moValueDefinition p_valuedefinition) {
+    void SetValueDefinition( const moValueDefinition& p_valuedefinition) {
         m_ValueDefinition = p_valuedefinition;
     }
+
+    virtual bool IsValid();
 
 
 private:
@@ -680,16 +754,16 @@ private:
     moValueDefinition       m_ValueDefinition;
 
     moValueIndex            m_ValueIndex;
-	moValue                 m_Value;
+    moValue                 m_Value;
 
-	moParameterDescriptor   m_ParamDescriptor;
+    moParameterDescriptor   m_ParamDescriptor;
 
 };
 
 
-moDeclareDynamicArray( moValueDescriptor, moValueDescriptors )
+moDeclareDynamicArray( moValueDescriptor, moValueDescriptors );
 
-class  moPreconfigDescriptor {
+class  moPreconfigDescriptor : public moDescriptor {
 
 public:
 
@@ -722,6 +796,8 @@ public:
             m_PreconfigIndexes.Empty();
     }
 
+    virtual bool IsValid();
+
 private:
 
     moPreconfigIndexes       m_PreconfigIndexes;
@@ -730,7 +806,7 @@ private:
 };
 
 
-class moPresetDescriptor {
+class moPresetDescriptor : public moDescriptor {
 
 public:
 
@@ -754,6 +830,8 @@ public:
             m_PresetParams.Empty();
     }
 
+    virtual bool IsValid();
+
 private:
 
     moProjectDescriptor     m_ProjectDescriptor;
@@ -763,19 +841,19 @@ private:
 
 
 #define MO_ACTIONHANDLER(F)  m_pNextActionHandler == NULL ? MO_DIRECTOR_STATUS_NO_HANDLER : m_pNextActionHandler->F;
-#define MO_ACTIONHANDLER_APPLICATION(F)  m_pNextActionHandler == NULL ? moApplicationDescriptor() : m_pNextActionHandler->F;
-#define MO_ACTIONHANDLER_PROJECT(F)  m_pNextActionHandler == NULL ? moProjectDescriptor() : m_pNextActionHandler->F;
+#define MO_ACTIONHANDLER_APPLICATION(F)  m_pNextActionHandler == NULL ? m_AppDesDummy : m_pNextActionHandler->F;
+#define MO_ACTIONHANDLER_PROJECT(F)  m_pNextActionHandler == NULL ? m_ProjectDesDummy : m_pNextActionHandler->F;
 
-#define MO_ACTIONHANDLER_MOB(F)  m_pNextActionHandler == NULL ? moMobDescriptor() : m_pNextActionHandler->F;
-#define MO_ACTIONHANDLER_MOBS(F)  m_pNextActionHandler == NULL ? moMobDescriptors() : m_pNextActionHandler->F;
+#define MO_ACTIONHANDLER_MOB(F)  m_pNextActionHandler == NULL ? m_MobDesDummy : m_pNextActionHandler->F;
+#define MO_ACTIONHANDLER_MOBS(F)  m_pNextActionHandler == NULL ? m_MobsDesDummy : m_pNextActionHandler->F;
 
-#define MO_ACTIONHANDLER_RESOURCE(F)  m_pNextActionHandler == NULL ? moResourceDescriptor() : m_pNextActionHandler->F;
-#define MO_ACTIONHANDLER_RESOURCES(F)  m_pNextActionHandler == NULL ? moResourceDescriptors() : m_pNextActionHandler->F;
+#define MO_ACTIONHANDLER_RESOURCE(F)  m_pNextActionHandler == NULL ? m_ResourceDesDummy : m_pNextActionHandler->F;
+#define MO_ACTIONHANDLER_RESOURCES(F)  m_pNextActionHandler == NULL ? m_ResourcesDesDummy : m_pNextActionHandler->F;
 
-#define MO_ACTIONHANDLER_PARAM(F)  m_pNextActionHandler == NULL ? moParameterDescriptor() : m_pNextActionHandler->F;
-#define MO_ACTIONHANDLER_PARAMS(F)  m_pNextActionHandler == NULL ? moParameterDescriptors() : m_pNextActionHandler->F;
-#define MO_ACTIONHANDLER_VALUE(F)  m_pNextActionHandler == NULL ? moValueDescriptor() : m_pNextActionHandler->F;
-#define MO_ACTIONHANDLER_VALUES(F)  m_pNextActionHandler == NULL ? moValueDescriptors() : m_pNextActionHandler->F;
+#define MO_ACTIONHANDLER_PARAM(F)  m_pNextActionHandler == NULL ? m_ParamDesDummy : m_pNextActionHandler->F;
+#define MO_ACTIONHANDLER_PARAMS(F)  m_pNextActionHandler == NULL ? m_ParamsDesDummy : m_pNextActionHandler->F;
+#define MO_ACTIONHANDLER_VALUE(F)  m_pNextActionHandler == NULL ? m_ValueDesDummy : m_pNextActionHandler->F;
+#define MO_ACTIONHANDLER_VALUES(F)  m_pNextActionHandler == NULL ? m_ValuesDesDummy : m_pNextActionHandler->F;
 
 #define MO_ACTIONHANDLER_POINTER(F)  m_pNextActionHandler == NULL ? NULL : m_pNextActionHandler->F;
 
@@ -788,18 +866,18 @@ class moIDirectorActions {
 
 public:
 
-	moIDirectorActions() { m_pNextActionHandler = NULL; }
+	moIDirectorActions();
 	virtual ~moIDirectorActions() {}
 
-	void SetNextActionHandler( moIDirectorActions* p_pNextActionHandler ) { m_pNextActionHandler = p_pNextActionHandler; }
+	void SetNextActionHandler( moIDirectorActions* p_pNextActionHandler );
 
 public:
 
 
 
-//=========================================================================================================================
-//NEW IDIRECTORACTIONS
-//=========================================================================================================================
+///=========================================================================================================================
+///NEW IDIRECTORACTIONS
+///=========================================================================================================================
 
 	//virtual moResourceManager*			GetCore() { return MO_ACTIONHANDLER_POINTER(GetResourceManager()); }
 
@@ -859,36 +937,39 @@ public:
 
     virtual moApplicationDescriptor GetApplicationDescriptor() { return MO_ACTIONHANDLER_APPLICATION(GetApplicationDescriptor()); }
 
-//================================================================
-//Project
-//================================================================
-	virtual moDirectorStatus NewProject( moProjectDescriptor p_projectdescriptor ) { return MO_ACTIONHANDLER(NewProject(p_projectdescriptor)); }
-	virtual moDirectorStatus OpenProject( moProjectDescriptor p_projectdescriptor ) { return MO_ACTIONHANDLER(OpenProject(p_projectdescriptor)); } //load a console.mol file with their effects.cfg
+///================================================================
+///Project
+///================================================================
+	virtual moDirectorStatus NewProject( const moProjectDescriptor& p_ProjectDes ) { return MO_ACTIONHANDLER(NewProject(p_ProjectDes)); }
+	virtual moDirectorStatus OpenProject( const moProjectDescriptor& p_ProjectDes ) { return MO_ACTIONHANDLER(OpenProject(p_ProjectDes)); } //load a console.mol file with their effects.cfg
 	virtual moDirectorStatus CloseProject() { return MO_ACTIONHANDLER(CloseProject()); } //load a console.mol file with their effects.cfg
 	virtual moDirectorStatus SaveProject() { return MO_ACTIONHANDLER(SaveProject()); } //save a console.mol file with their effects.cfg
 	virtual moDirectorStatus SaveAsProject( moText p_configname, moText p_configpath ) { return MO_ACTIONHANDLER(SaveAsProject(p_configname,p_configpath)); } //save a console.mol file with their effects.cfg
-	virtual moDirectorStatus ProjectUpdated( moProjectDescriptor p_projectdescriptor ) { return MO_ACTIONHANDLER(ProjectUpdated(p_projectdescriptor)); }
+	virtual moDirectorStatus ProjectUpdated( const moProjectDescriptor& p_ProjectDes ) { return MO_ACTIONHANDLER(ProjectUpdated(p_ProjectDes)); }
 
-	virtual moDirectorStatus SetProject( moProjectDescriptor p_projectdescriptor ) { return MO_ACTIONHANDLER(SetProject(p_projectdescriptor)); } //
-	virtual moProjectDescriptor GetProject() { return MO_ACTIONHANDLER_PROJECT(GetProject()); } //
+	virtual moDirectorStatus SetProject( const moProjectDescriptor& p_ProjectDes ) { return MO_ACTIONHANDLER(SetProject(p_ProjectDes)); } //
+	/**
+	* Devuelve el proyecto actual...
+	*/
+	virtual const moProjectDescriptor& GetProject() { return MO_ACTIONHANDLER_PROJECT(GetProject()); } //
 	virtual moDirectorStatus ReloadProject() { return MO_ACTIONHANDLER(ReloadProject()); } //
 
 	virtual moDirectorStatus ProjectPreview( ) { return MO_ACTIONHANDLER(ProjectPreview()); }
 	virtual moDirectorStatus EffectPreview( MOint p_n ) { return MO_ACTIONHANDLER(EffectPreview(p_n)); }
 
-    virtual moMobDescriptors GetMobDescriptors() { return MO_ACTIONHANDLER_MOBS(GetMobDescriptors()); }
+  virtual moMobDescriptors GetMobDescriptors() { return MO_ACTIONHANDLER_MOBS(GetMobDescriptors()); }
 
-//================================================================
-// Resources...
-//================================================================
+///================================================================
+/// Resources...
+///================================================================
 
     virtual moResourceDescriptor GetResourceDescriptor( moResourceDescriptor p_ResourceDescriptor ) { return MO_ACTIONHANDLER_RESOURCE( GetResourceDescriptor( p_ResourceDescriptor ) ); }
     virtual moResourceDescriptors GetResourceDescriptors(  moResourceType p_ResourceType  ) { return MO_ACTIONHANDLER_RESOURCES(GetResourceDescriptors(p_ResourceType)); }
 
 
-//================================================================
-//MOB Moldeo Object
-//================================================================
+///================================================================
+///MOB Moldeo Object
+///================================================================
     virtual moDirectorStatus ImportMob( moText p_filename ) { return MO_ACTIONHANDLER(ImportMob(p_filename)); }
 
     /// Abre un MOB ya existente desde un archivo de configuración
@@ -910,28 +991,30 @@ public:
 	virtual moDirectorStatus SaveMob( moMobDescriptor p_MobDesc ) { return MO_ACTIONHANDLER(SaveMob(p_MobDesc)); }
 
 	virtual moDirectorStatus DeleteMob( moMobDescriptor p_MobDesc ) { return MO_ACTIONHANDLER(DeleteMob(p_MobDesc)); }
+	virtual moDirectorStatus DuplicateMob( moMobDescriptor p_MobDesc ) { return MO_ACTIONHANDLER(DuplicateMob(p_MobDesc)); }
+	virtual moDirectorStatus MoveMob( moMobDescriptor p_MobDesc, int position ) { return MO_ACTIONHANDLER(MoveMob(p_MobDesc,position)); }
+	virtual moDirectorStatus InstanceMob( moMobDescriptor p_MobDesc ) { return MO_ACTIONHANDLER(InstanceMob(p_MobDesc)); }
 	virtual moMobDescriptor GetMob( moMobDescriptor p_MobDesc ) { return MO_ACTIONHANDLER_MOB(GetMob(p_MobDesc)); }
-	virtual moDirectorStatus SetMob( moMobDescriptor p_MobDesc ) { return MO_ACTIONHANDLER(SetMob(p_MobDesc)); }
+	virtual moDirectorStatus SetMob( moMobDescriptor p_MobDesc ) {
+	  return MO_ACTIONHANDLER(SetMob(p_MobDesc));
+  }
 
-/*indica al Core que el Mob especificado ha sido modificado y sus datos deberán ser actualizados en el DirectorFrame:
+/**indica al Core que el Mob especificado ha sido modificado y sus datos deberán ser actualizados en el DirectorFrame:
 este metodo se usa principalmente desde el SessionProject, que debería verificar que cada archivo al ser modificado exteriormente el usuario sea notificado
 ATENCION: este metodo obligar a recargar completamente el config del efecto....
 tanto en la interface como en los DirectorConsole's principal y childs...
 */
 	virtual moDirectorStatus MobUpdated( moMobDescriptor p_MobDesc ) { return MO_ACTIONHANDLER(MobUpdated(p_MobDesc)); }
-/*Add a Mob to the Mol Project*/
-	virtual moDirectorStatus AddMobToProject( moMobDescriptor p_MobDesc ) { return MO_ACTIONHANDLER(AddMobToProject(p_MobDesc)); }
-/*Remove a Mob from the Mol Project*/
-	virtual moDirectorStatus RemoveMobToProject( moMobDescriptor p_MobDesc ) {return MO_ACTIONHANDLER(RemoveMobToProject(p_MobDesc)); }
-/*Move a Mob from the Mol Project to a different index on Mol Console */
-	virtual moDirectorStatus MoveMobInProject( moMobDescriptor p_MobDesc ) { return MO_ACTIONHANDLER(MoveMobInProject(p_MobDesc)); }
 
-    virtual moParameterDescriptors GetParameterDescriptors( moMobDescriptor p_MobDesc ) { return MO_ACTIONHANDLER_PARAMS(GetParameterDescriptors(p_MobDesc)); }
+  virtual moParameterDescriptors GetParameterDescriptors( moMobDescriptor p_MobDesc ) { return MO_ACTIONHANDLER_PARAMS(GetParameterDescriptors(p_MobDesc)); }
 
-//================================================================
-//PARAMETERS
-//================================================================
-    ///estas funciones son obsoletas...??
+///================================================================
+///PARAMETERS
+///================================================================
+    ///estas funciones son obsoletas para la interface??
+    /// ya que los parametros no se agregan ni se modifican desde la interface...
+    /// al menos que el dia de mañana el usuario pueda agregar parametros arbitrariamente al config de cada efecto
+    /// por ejemplo para ser utilizado por el script
 	virtual moDirectorStatus NewParameter( moParameterDescriptor p_ParameterDesc ) { return MO_ACTIONHANDLER(NewParameter(p_ParameterDesc)); }
 	virtual moDirectorStatus InsertParameter( moParameterDescriptor p_ParameterDesc ) { return MO_ACTIONHANDLER(InsertParameter(p_ParameterDesc)); }
 	virtual moDirectorStatus MoveParameter( moParameterDescriptor p_ParameterDesc ) { return MO_ACTIONHANDLER(MoveParameter(p_ParameterDesc)); }
@@ -940,15 +1023,15 @@ tanto en la interface como en los DirectorConsole's principal y childs...
 	virtual moDirectorStatus SetParameter( moParameterDescriptor p_ParameterDesc ) { return MO_ACTIONHANDLER(SetParameter(p_ParameterDesc)); }
 	virtual moParameterDescriptor GetParameter( moParameterDescriptor p_ParameterDesc ) { return MO_ACTIONHANDLER_PARAM(GetParameter(p_ParameterDesc)); }
 	virtual moDirectorStatus DeleteParameter( moParameterDescriptor p_ParameterDesc ) { return MO_ACTIONHANDLER(DeleteParameter(p_ParameterDesc)); }
-/*este metodo es usado principalmente por el SessionProject para notificar cualquier cambio de parametro al Core
+/**este metodo es usado principalmente por el SessionProject para notificar cualquier cambio de parametro al Core
 y que este pueda notificar ese cambio directamente a los DirectorConsole's principal y childs, para que modifiquen unicamente
 	ese parametro y no los otros, generalmente un cambio de nombre*/
 	virtual moDirectorStatus ParameterUpdated( moParameterDescriptor p_ParameterDesc ) { return MO_ACTIONHANDLER(ParameterUpdated(p_ParameterDesc)); }
 	virtual moDirectorStatus ReloadParameter( moParameterDescriptor p_ParameterDesc ) { return MO_ACTIONHANDLER(ReloadParameter(p_ParameterDesc)); }
 
-//================================================================
-// VALUES
-//================================================================
+///================================================================
+/// VALUES
+///================================================================
     ///crea un nuevo valor dentro de un parámetro dentro de un config
 	virtual moDirectorStatus NewValue( moValueDescriptor p_ValueDesc ) { return MO_ACTIONHANDLER(NewValue(p_ValueDesc)); }
 	virtual moDirectorStatus InsertValue( moValueDescriptor p_ValueDesc ) { return MO_ACTIONHANDLER(InsertValue(p_ValueDesc)); }
@@ -956,9 +1039,9 @@ y que este pueda notificar ese cambio directamente a los DirectorConsole's princ
 	virtual moDirectorStatus SaveValue( moValueDescriptor p_ValueDesc ) { return MO_ACTIONHANDLER(SaveValue(p_ValueDesc)); }
 	virtual moValueDescriptor GetValue( moValueDescriptor p_ValueDesc ) { return MO_ACTIONHANDLER_VALUE(GetValue(p_ValueDesc)); }
 	virtual moDirectorStatus SetValue( moValueDescriptor p_ValueDesc ) { return MO_ACTIONHANDLER(SetValue(p_ValueDesc)); }
-/*borra un valor de la lista de un parametro, notifica al Core para actualizar los configs correspondientes*/
+/**borra un valor de la lista de un parametro, notifica al Core para actualizar los configs correspondientes*/
 	virtual moDirectorStatus DeleteValue( moValueDescriptor p_ValueDesc ) { return MO_ACTIONHANDLER(DeleteValue(p_ValueDesc)); }
-/*este metodo es usado principalmente por el SessionProject para notificar cualquier cambio de valores de parametros al Core
+/**este metodo es usado principalmente por el SessionProject para notificar cualquier cambio de valores de parametros al Core
 y que este pueda notificar ese cambio directamente a los DirectorConsole's principal y childs, para que modifiquen sus
 configuraciones. Será modificado unicamente ese valor, generalmente un cambio de valor...*/
 	virtual moDirectorStatus ValueUpdated( moValueDescriptor p_ValueDesc ) { return MO_ACTIONHANDLER(ValueUpdated(p_ValueDesc)); }
@@ -967,9 +1050,9 @@ configuraciones. Será modificado unicamente ese valor, generalmente un cambio de
     virtual moValueDescriptors GetValueDescriptors( moParameterDescriptor p_ParamDesc ) { return MO_ACTIONHANDLER_VALUES(GetValueDescriptors(p_ParamDesc)); }
 
 
-//================================================================
-// Effects states
-//================================================================
+///================================================================
+/// Effects states
+///================================================================
 
     virtual moDirectorStatus AddPreconfig( moMobDescriptor p_MobDesc, moPreconfigDescriptor p_PreConfDesc ) { return MO_ACTIONHANDLER(AddPreconfig( p_MobDesc, p_PreConfDesc)); }
     virtual moDirectorStatus DeletePreconfig( moMobDescriptor p_MobDesc, moPreconfigDescriptor p_PreConfDesc ) { return MO_ACTIONHANDLER(DeletePreconfig( p_MobDesc, p_PreConfDesc)); }
@@ -984,25 +1067,46 @@ configuraciones. Será modificado unicamente ese valor, generalmente un cambio de
     //virtual moDirectorStatus SetMobState( moMobState   m_MobState ) { return MO_ACTIONHANDLER(SetMobState(m_MobState)); }
     //virtual moDirectorStatus SetMobState( moMobState   m_MobState ) { return MO_ACTIONHANDLER(SetMobState(m_MobState)); }
 
-//===============================================================
-// LOGS
-//===============================================================
+///===============================================================
+/// LOGS
+///===============================================================
 
-	/*Log internal: print on log window on UI, on stdout or file on Core...*/
+	/**Log internal: print on log window on UI, on stdout or file on Core...*/
 	virtual void Log( moText p_message ) { MO_ACTIONHANDLER_VOID(Log( p_message )) }
-	/*Same but specifically an error*/
+	/**Same but specifically an error*/
 	virtual void LogError( moText p_message ) { MO_ACTIONHANDLER_VOID(LogError( p_message )) }
-	/*Show a message window popup: implemented on UI*/
+	/**Show a message window popup: implemented on UI*/
 	virtual void ShowMessage( moText p_message ) { MO_ACTIONHANDLER_VOID(ShowMessage( p_message )) }
-	/*Same as ShowMessage but with ok/cancel buttons and bool value return*/
+	/**Same as ShowMessage but with ok/cancel buttons and bool value return*/
 	virtual bool ConfirmMessage( moText p_message ) { return false;}
-	/*Same just as popup message for warnings*/
+	/**Same just as popup message for warnings*/
 	virtual void AlertMessage( moText p_message ) { MO_ACTIONHANDLER_VOID(AlertMessage( p_message )) }
-	/*Same just as popup message for errors*/
+	/**Same just as popup message for errors*/
 	virtual void ErrorMessage( moText p_message ) { MO_ACTIONHANDLER_VOID(ErrorMessage( p_message )) }
 
-private:
+protected:
 	moIDirectorActions*		m_pNextActionHandler;
+
+  moApplicationDescriptor     m_AppDesDummy;
+  moProjectDescriptor         m_ProjectDesDummy;
+
+  moMobDefinition             m_MobDefDummy;
+  moMobDescriptor             m_MobDesDummy;
+  moMobDescriptors            m_MobsDesDummy;
+
+  moParamDefinition           m_ParamDefDummy;
+  moParameterDescriptor       m_ParamDesDummy;
+  moParameterDescriptors      m_ParamsDesDummy;
+
+  moValueDefinition           m_ValueDefDummy;
+  moValueDescriptor           m_ValueDesDummy;
+  moValueDescriptors          m_ValuesDesDummy;
+
+  moResourceDefinition        m_ResourceDefDummy;
+  moResourceDescriptor       m_ResourceDesDummy;
+  moResourceDescriptors       m_ResourcesDesDummy;
+
+  moValue                     m_ValueDummy;
 
 };
 

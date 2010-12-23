@@ -145,8 +145,8 @@ int main(int argc, char *argv[])
 	moText data;
 	moText config;
 
-	data = moText("../../data/test");
-	config = moText("../../data/test/test.mol");
+	data = moText("../../data/samples/Simple Project");
+	config = moText("../../data/samples/Simple Project/simple_project.mol");
 
 
 
@@ -224,10 +224,19 @@ typedef enum {
     SDL_GL_MULTISAMPLESAMPLES
 } SDL_GLattr;
 */
-	if( SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK ) < 0 ) {
-		fprintf(stderr, "Couldn't initialize SDL: %s\n",SDL_GetError());
-		exit(1);
-	}
+
+    if( SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK ) < 0 ) {
+        fprintf(stderr, "Couldn't initialize SDL: %s\n",SDL_GetError());
+        exit(1);
+    }
+
+
+   SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 8 );
+   SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 8 );
+   SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE,8 );
+   SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 24 );
+   SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
+
 
 	/* Set a video mode */
 	if ( SDL_SetVideoMode( screen_width, screen_height, bpp, videoflags ) == 0 ) {
@@ -241,6 +250,8 @@ typedef enum {
         exit(2);
     }
 
+    glEnable( GL_TEXTURE_2D );
+
 	printf("%i joysticks were found.\n\n", SDL_NumJoysticks() );
         if (0 < SDL_NumJoysticks())
         {
@@ -250,7 +261,7 @@ typedef enum {
 
 	/*Empieza la Lola!!*/
 	SDL_ShowCursor(0);
-	SDL_WM_GrabInput(SDL_GRAB_ON);
+	//SDL_WM_GrabInput(SDL_GRAB_ON);
 
     #ifdef MO_DIRECTSHOW
 	    CoInitialize(NULL);
@@ -290,17 +301,24 @@ typedef enum {
 
     }
 
-	MoldeoSession = new moConsole();
+	//moAbstract::MODebug2->SetStdout();
 
-	if ( MoldeoSession->Init( data, config, NULL, NULL,
+	MoldeoSession = new moConsole();
+	int frame = 0;
+
+
+	if ( MoldeoSession->Init( moText(""), data, config, NULL, NULL,
 		                (moRenderManagerMode)render_to_fbo,
 		                screen_width, screen_height,
 						render_width, render_height,
 						(MO_HANDLE)g_hwnd , (MO_DISPLAY)g_hdisp )) {
 
-		while(!MoldeoSession->Interaction()) {
+        MoldeoSession->ConsolePlay();
+
+		while(!MoldeoSession->Interaction() && frame<2000) {
 			MoldeoSession->Update();
 			MoldeoSession->Draw();
+			frame++;
 		}
 	}
 

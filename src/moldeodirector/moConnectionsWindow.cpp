@@ -1193,9 +1193,9 @@ END_EVENT_TABLE()
 moConnectionsWindow::moConnectionsWindow(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size) : m_pCanvas(NULL)
 {
 	//(*Initialize(moConnectionsWindow)
-	Create(parent, id, wxDefaultPosition, wxSize(200,100), wxTAB_TRAVERSAL | wxNO_FULL_REPAINT_ON_RESIZE, _T("id"));
-	SetBackgroundColour(wxColour(255,0,0));
-
+	Create(parent, id, wxDefaultPosition, wxSize(503,317), wxTAB_TRAVERSAL, _T("id"));
+	SetBackgroundColour(wxColour(210,253,255));
+	
 	Connect(wxID_ANY,wxEVT_PAINT,(wxObjectEventFunction)&moConnectionsWindow::OnPaint);
 	Connect(wxID_ANY,wxEVT_ERASE_BACKGROUND,(wxObjectEventFunction)&moConnectionsWindow::OnEraseBackground);
 	//*)

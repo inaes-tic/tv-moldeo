@@ -100,7 +100,9 @@ moMoldeoObject::Init() {
             for( MOuint ivb=0; ivb<value.GetSubValueCount(); ivb++) {
                 moValueBase& VB( value.GetSubValue( ivb ) );
                 if (VB.GetType() == MO_VALUE_FUNCTION ) {
-                    idx = m_pResourceManager->GetMathMan()->AddFunction( VB.Text(), (MOboolean)true, GetConfig() );
+                    idx = -1;
+                    if (m_pResourceManager->GetMathMan())
+                      idx = m_pResourceManager->GetMathMan()->AddFunction( VB.Text(), (MOboolean)true, this );
                     if (idx>-1) {
                         VB.SetFun( m_pResourceManager->GetMathMan()->GetFunction(idx) );
                         //MODebug2->Message( moText("function defined: ") + VB.Text() );
@@ -260,6 +262,10 @@ moMoldeoObject::Init() {
 		}
 	}
 
+    /** VERIFICAR ESTO!!!!*/
+    /**
+    Solo se crean los outlets declarados en el xml.
+    */
 
     ///Levanta Outlets definidos en el config
 	moParam& poutlets = m_Config[moText("outlet")];
@@ -271,9 +277,14 @@ moMoldeoObject::Init() {
 			///Buscamos el parametro asociado al outlet
 			///para asociar un parametro a un outlet debe simplemente tener el mismo nombre...
 			moText OutletName = poutlets[i][MO_OUTLET_NAME].Text();
+
 			if ( m_Config.GetParamIndex(OutletName)>-1 ) {
+			  ///CREAMOS UN OUTLET nuevo para este parametro....
+			  MODebug2->Message( this->GetLabelName() + moText(" Init > creating Outlet automatic to param.") + OutletName  );
 				Outlet->Init( OutletName, i, m_Config.GetParam(OutletName).GetPtr());
 			} else {
+			  ///CREAMOS UN OUTLET desde el .cfg, teniendo en cuenta los tipos...
+			  MODebug2->Message( this->GetLabelName() + moText(" Init > creating outlet not as param.") + OutletName  );
 				Outlet->Init( OutletName, i, poutlets[i][MO_OUTLET_TYPE].Text() );
 			}
 			m_Outlets.Add( Outlet );
@@ -354,6 +365,7 @@ moMoldeoObject::GetDefinition( moConfigDefinition *p_configdefinition ) {
     p_configdefinition->GetParamDefinitions()->Empty();
     p_configdefinition->ParamIndexes().Empty();
 
+  p_configdefinition->Set( GetName(), m_MobDefinition.GetTypeStr() );
 	p_configdefinition->Add( moText("inlet"), MO_PARAM_INLET );
 	p_configdefinition->Add( moText("outlet"), MO_PARAM_OUTLET );
 	return p_configdefinition;
@@ -363,6 +375,8 @@ void
 moMoldeoObject::LoadDefinition() {
 
 	GetDefinition();
+
+	//m_Config.Check();
 
 	moParamDefinitions *pdefinitions = m_Config.GetConfigDefinition()->GetParamDefinitions();
 
@@ -388,7 +402,7 @@ moMoldeoObject::GetInletIndex( moText p_connector_name ) {
 
 	for( MOuint i=0; i< m_Inlets.Count(); i++ ) {
 	    moInlet* pInlet = m_Inlets[i];
-		if ( pInlet )
+      if ( pInlet )
             if ( pInlet->GetConnectorLabelName() == p_connector_name )
                 return i;
 	}
@@ -418,50 +432,55 @@ moMoldeoObject::Update( moEventList* p_EventList ) {
 
 	actual = p_EventList->First;
 
-	//Procesamos los eventos recibidos de los MoldeoObject Outlets
+	///Procesamos los eventos recibidos de los MoldeoObject Outlets
 	while(actual!=NULL) {
 		tmp = actual->next;
-		//procesamos aquellos Outlet q estan dirigidos a este objeto
+		///procesamos aquellos Outlet q estan dirigidos a este objeto
 
 		if (actual->deviceid == GetId() && actual->reservedvalue3 == MO_MESSAGE) {
 
-			//pSample = (moVideoSample*)actual->pointer;
+			///pSample = (moVideoSample*)actual->pointer;
 			pmessage = (moMessage*)actual;
 
-			//process message:
+			///process message:
 			MOint inletid = pmessage->m_InletIdDest;
 			moData pdata = pmessage->m_Data;
 
-			//buscar el inlet...
+			///buscar el inlet...
 			if (inletid>=0 && inletid<(int)m_Inlets.Count() ) {
 				moInlet* pinlet = m_Inlets[inletid];
 				if (pinlet->GetData()==NULL) pinlet->NewData();
 				pinlet->GetData()->Copy(pdata);
-				pinlet->Update();//notifica al inlet que ya esta actualizado...
+				pinlet->Update();///notifica al inlet que ya esta actualizado...
 			}
 
 		} else if (actual->reservedvalue3 == MO_MESSAGE) {
-		    //Broadcasting: borra su propio mensaje....
+		    ///Broadcasting: borra su propio mensaje....
 
 			pmessage = (moMessage*)actual;
 
-			//se fija si es un mensaje generado por este objeto
+			///se fija si es un mensaje generado por este objeto
 			if (pmessage->m_MoldeoIdSrc == GetId() ) {
 				p_EventList->Delete(pmessage);
 			}
 
 		}
-		//pasamos al siguiente
+		///pasamos al siguiente
 		actual = tmp;
 	}
 
 
-	//generamos los mensajes emergentes de los Outlets
+	///generamos los mensajes emergentes de los Outlets
 	for( MOuint i=0; i<m_Outlets.Count() ; i++) {
 		moOutlet* poutlet = m_Outlets[i];
 
         if (poutlet)
 		if (poutlet->Updated()) {
+		  ///solo notificamos a los inlets si los outlets estan Updated() importante revisar esto...
+		  ///puede  deba ser algo condicional
+
+		  //MODebug2->Message( poutlet->GetConnectorLabelName() + moText(" outlet updated. MOB : ") + this->GetLabelName() );
+
 			moData pdata = (*(poutlet->GetData()));
 			moConnections* pconnections = poutlet->GetConnections();
 			for(MOuint j=0; j<pconnections->Count(); j++) {

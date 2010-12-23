@@ -17,8 +17,7 @@
 					<Add option="-g" />
 				</Compiler>
 				<Linker>
-					<Add library="libmoldeod" />
-					<Add library="tinyxmld" />
+					<Add library="libmoldeocbd" />
 					<Add directory="../../contrib/src/tinyxml/Debug/" />
 				</Linker>
 			</Target>
@@ -35,8 +34,7 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add library="libmoldeo" />
-					<Add library="tinyxml" />
+					<Add library="libmoldeocb" />
 					<Add directory="../../contrib/src/tinyxml/Release/" />
 				</Linker>
 			</Target>
@@ -47,38 +45,23 @@
 		<Compiler>
 			<Add option="-W" />
 			<Add option="`pkg-config lua5.1 --cflags`" />
+			<Add option="`/usr/local/bin/wx-config --cflags`" />
 			<Add option="-I/usr/local/lib/wx/include/gtk2-ansi-release-2.8" />
-			<Add option="-I/usr/local/include/wx-2.8" />
-			<Add option="-pthread" />
-			<Add option="-D_FILE_OFFSET_BITS=64" />
-			<Add option="-D_LARGE_FILES" />
-			<Add option="-D__WXGTK__" />
-			<Add option="-DMO_VDPAU" />
+			<Add option="-DMO_VDPAU_NO" />
 			<Add directory="../../inc" />
 			<Add directory="../../inc/3ds" />
 			<Add directory="./vdtc" />
 			<Add directory="./treemultictrl" />
 			<Add directory="../moldeodirector" />
 			<Add directory="../../contrib/src/wxMoldeoControls" />
+			<Add directory="../../inc/tuio" />
 		</Compiler>
 		<Linker>
 			<Add option="`pkg-config sdl --libs`" />
 			<Add option="`pkg-config ftgl --libs`" />
-			<Add option="-L/usr/local/lib" />
-			<Add option="-pthread" />
-			<Add option="-lwx_gtk2_richtext-2.8" />
-			<Add option="-lwx_gtk2_aui-2.8" />
-			<Add option="-lwx_gtk2_xrc-2.8" />
-			<Add option="-lwx_gtk2_qa-2.8" />
-			<Add option="-lwx_gtk2_html-2.8" />
-			<Add option="-lwx_gtk2_adv-2.8" />
-			<Add option="-lwx_gtk2_core-2.8" />
-			<Add option="-lwx_base_xml-2.8" />
-			<Add option="-lwx_base_net-2.8" />
-			<Add option="-lwx_gtk2_gl-2.8" />
-			<Add option="-lwx_base-2.8" />
+			<Add option="`pkg-config tinyxml --libs`" />
+			<Add option="`/usr/local/bin/wx-config --libs`" />
 			<Add library="glut" />
-			<Add library="GLEW" />
 			<Add library="GLU" />
 			<Add library="gle" />
 			<Add library="freetype" />
@@ -88,8 +71,12 @@
 			<Add library="Cg" />
 			<Add library="CgGL" />
 			<Add library="../../contrib/src/wxMoldeoControls/Releaselinux/libmoldeocontrols.a" />
+			<Add library="wx_gtk2_gl-2.8" />
 			<Add directory="../../lib/" />
+			<Add directory="/usr/lib" />
 		</Linker>
+		<Unit filename="PreviewWindowSystemMem.cpp" />
+		<Unit filename="PreviewWindowSystemMem.h" />
 		<Unit filename="mo3dModelPanel.cpp" />
 		<Unit filename="mo3dModelPanel.h" />
 		<Unit filename="moColorMotion.cpp" />
@@ -117,17 +104,26 @@
 		<Unit filename="moDirectorStartFrame.cpp" />
 		<Unit filename="moDirectorStartFrame.h" />
 		<Unit filename="moDirectorTypes.h" />
-		<Unit filename="moEffectLayerCtrl.cpp" />
-		<Unit filename="moEffectLayerCtrl.h" />
+		<Unit filename="moEffectsPaletteCtrl.cpp" />
+		<Unit filename="moEffectsPaletteCtrl.h" />
+		<Unit filename="moExplorerNotebook.cpp" />
+		<Unit filename="moExplorerNotebook.h" />
 		<Unit filename="moFilesbook.cpp" />
 		<Unit filename="moFilesbook.h" />
-		<Unit filename="moFilesbookPage.h" />
 		<Unit filename="moFunctionPanel.cpp" />
 		<Unit filename="moFunctionPanel.h" />
 		<Unit filename="moGLCanvas.cpp" />
 		<Unit filename="moGLCanvas.h" />
 		<Unit filename="moIDirectorActions.cpp" />
 		<Unit filename="moIDirectorActions.h" />
+		<Unit filename="moLayerEffectCtrl.cpp" />
+		<Unit filename="moLayerEffectCtrl.h" />
+		<Unit filename="moLayersPanel.cpp" />
+		<Unit filename="moLayersPanel.h" />
+		<Unit filename="moLayersTreeCtrl.cpp" />
+		<Unit filename="moLayersTreeCtrl.h" />
+		<Unit filename="moLogNotebook.cpp" />
+		<Unit filename="moLogNotebook.h" />
 		<Unit filename="moMobConfig.cpp" />
 		<Unit filename="moMobConfig.h" />
 		<Unit filename="moNewEffectDialog.cpp" />
@@ -144,6 +140,8 @@
 		<Unit filename="moPreviewWindow.h" />
 		<Unit filename="moProjectTreeCtrl.cpp" />
 		<Unit filename="moProjectTreeCtrl.h" />
+		<Unit filename="moScriptPanel.cpp" />
+		<Unit filename="moScriptPanel.h" />
 		<Unit filename="moShaderCtrl.cpp" />
 		<Unit filename="moShaderCtrl.h" />
 		<Unit filename="moShadersPanel.cpp" />
@@ -152,10 +150,10 @@
 		<Unit filename="moTextureItemCtrl.h" />
 		<Unit filename="moTimelineRuler.cpp" />
 		<Unit filename="moTimelineRuler.h" />
-		<Unit filename="moTreeObjectsLayerCtrl.cpp" />
-		<Unit filename="moTreeObjectsLayerCtrl.h" />
 		<Unit filename="moValueCtrl.cpp" />
 		<Unit filename="moValueCtrl.h" />
+		<Unit filename="moVisualsPaletteCtrl.cpp" />
+		<Unit filename="moVisualsPaletteCtrl.h" />
 		<Unit filename="moldeodirector.cpp" />
 		<Unit filename="treemultictrl/TreeMultiItemBase.cpp" />
 		<Unit filename="treemultictrl/TreeMultiItemBase.h" />

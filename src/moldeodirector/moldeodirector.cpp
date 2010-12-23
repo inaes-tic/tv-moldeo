@@ -16,7 +16,6 @@
 #include "moldeodirector.h"
 
 
-
 // Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution(it's better than using a
 // static object for many reasons) and also implements the accessor function
@@ -44,6 +43,15 @@ bool moDirectorApp::OnInit()
 	//(*AppInitialize
 	bool wxsOK = true;
 	//*)
+
+#if wxUSE_GLCANVAS==0
+	cout << "Error wxUSE_GLCANVAS = 0" << endl;
+	cerr << "Error wxUSE_GLCANVAS = 0" << endl;
+	exit(0);
+#else
+	cout << "OK wxUSE_GLCANVAS = " << wxUSE_GLCANVAS << endl;
+#endif
+
 	wxInitAllImageHandlers();
 //  Check next line: Gustavo 05/20/2009
 //	return wxsOK;
@@ -56,7 +64,8 @@ bool moDirectorApp::OnInit()
 	wxFileName exename(StdPaths.GetExecutablePath());
 	exename.MakeAbsolute();
 
-    wxMessageBox(wxString(exename.GetPath()));
+    //wxMessageBox(wxString(exename.GetPath()));
+    cout << "Exe Path : " << exename.GetPath() << endl;
     wxSetWorkingDirectory( wxString(exename.GetPath()) );
 
     //** EVERYTHING OK!!!**//
@@ -67,14 +76,15 @@ bool moDirectorApp::OnInit()
 	moDirectorCore*			m_pDirectorCore = NULL;
 	moDirectorFrame*		m_pDirectorFrame = NULL;
 
+	cout << "Setting App Name..." << endl;
 	SetAppName("Moldeo Director");
 
 // Check only one instance running
-
-/*
 	const wxString name = wxString::Format(wxT("MoldeoDirector-%s"),
             wxGetUserId().c_str());
     m_checker = new wxSingleInstanceChecker(name);
+/*
+
     if (m_checker->IsAnotherRunning())
         {
             wxLogError(_("Program already running, aborting."));
@@ -114,28 +124,34 @@ bool moDirectorApp::OnInit()
    if (!hndTGA)
     cout << "Warning: TGA Image handler not loaded..." << endl;
 
-    // create the main application window
+
+    /// create the main application window
 
     cout << "Director Frame..." << endl;
     m_pDirectorFrame = new moDirectorFrame(_T("Moldeo Director"));
+
+    cout << "Setting Icon..." << endl;
     m_pDirectorFrame->SetIcon( wxIcon( wxIconLocation(wxT("../../art/icons/Moldeo32.ico")) ) );
+    cout << "Setting FG Colour..." << endl;
     m_pDirectorFrame->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
+    cout << "Setting BG Colour..." << endl;
     m_pDirectorFrame->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
     cout << "m_pDirectorFrame:" << (m_pDirectorFrame!=NULL) << endl;
 
     cout << "Director Core..." << endl;
-	m_pDirectorCore = new moDirectorCore();
-	cout << "m_pDirectorCore:" << (m_pDirectorCore!=NULL) << endl;
+    m_pDirectorCore = new moDirectorCore();
+    cout << "m_pDirectorCore:" << (m_pDirectorCore!=NULL) << endl;
 
-	cout << "Director Frame UI to Core..." << endl;
-	m_pDirectorCore->SetUserInterface( m_pDirectorFrame );
+    cout << "Director Frame UI to Core..." << endl;
+    m_pDirectorCore->SetUserInterface( m_pDirectorFrame );
 
 
     //wxMessageBox(StdPaths.GetAppDir());
 
 	//wxFileName userdatadir( StdPaths.GetUserDataDir() );
-
+    cout << "Set Paths..." << exename.GetPath() << endl;
 	m_pDirectorCore->SetPaths( moWx2Text(exename.GetPath()) );
+	cout << "Initializing CORE ..." << endl;
 	m_pDirectorCore->Init();
 
 
@@ -148,16 +164,19 @@ bool moDirectorApp::OnInit()
    cout << "Setting Top Window..." << endl;
    SetTopWindow(m_pDirectorFrame);
 
+    cout << "Director Frame Maximize..." << endl;
 	m_pDirectorFrame->Maximize();
+	cout << "Director Frame Init..." << endl;
 	m_pDirectorFrame->Init();
     cout << "Success!!! rock and roll!!" << endl;
 
     moText config;
-
+    cout << "Now checking command line arguments..." << endl;
    	while( argc > 1 ) {
 		--argc;
 		if( argv[argc-1] &&(strcmp(argv[argc-1], "-mol") == 0) ) {
 			config = argv[argc];
+			cout << " -mol founded !! "<< config << endl;
 			--argc;
 		} else {
 			printf( "Usage: %s [-mol]\n", argv[0]);
@@ -176,6 +195,9 @@ bool moDirectorApp::OnInit()
 
 
     if (config!=moText("")) {
+
+        cout << " Project ready to open : "<< config << endl;
+
         moProjectDescriptor ProjectDescriptor;
 
         wxFileName	FileName( moText2Wx(config) );
@@ -190,10 +212,12 @@ bool moDirectorApp::OnInit()
         const char *cfilepath = (char*)path.c_str();
         const char *cfilename = (char*)name.c_str();
 
+        cout << " file path : " << cfilepath << " file name : " << cfilename  << endl;
         ProjectDescriptor.Set( moText((char*)cfilepath), moText((char*)cfilename) );
 
+        cout << " Opening Project..." << endl;
         moDirectorStatus mStatus = m_pDirectorFrame->OpenProject( ProjectDescriptor );
-
+        cout << " Status : " << mStatus << endl;
 
     }
 
@@ -206,6 +230,6 @@ bool moDirectorApp::OnInit()
 }
 
 int moDirectorApp::OnExit() {
-    delete m_checker;
+    if (m_checker) delete m_checker;
     return 0;
 }

@@ -31,8 +31,8 @@
 
 #include "mo3dModelManager.h"
 
-//#include "moArray.cpp"
-//moDefineDynamicArray( moCoords )
+#include "moArray.cpp"
+moDefineDynamicArray( moCoords );
 
 
 moSceneNode::moSceneNode() {

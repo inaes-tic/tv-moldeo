@@ -214,7 +214,9 @@ moResourceManager::GetResourceByType( moResourceType p_type )
 
 
 MOboolean
-moResourceManager::Init( const moText& p_datapath,
+moResourceManager::Init(
+                        const moText& p_apppath,
+                        const moText& p_datapath,
 						moConfig&  p_consoleconfig,
 						MOint p_render_to_texture_mode,
 						MOint p_screen_width,
@@ -342,7 +344,7 @@ moResourceManager::Init( const moText& p_datapath,
 	MODataMan = (moDataManager*) GetResourceByType( MO_RESOURCETYPE_DATA );
 	if (MODataMan)  {
         if (MODebug2) MODebug2->Message(moText("moResourceManager:: Initializing Data Man Resource."));
-	    if (!MODataMan->Init( p_datapath, p_consoleconfig.GetName()))
+	    if (!MODataMan->Init( p_apppath, p_datapath, p_consoleconfig.GetName()))
             MODebug2->Error(moText("moResourceManager:: Data Man Initialization Error."));
 	} else {
 	    MODebug2->Error(moText("moResourceManager:: Data Man Creation Error."));

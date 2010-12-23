@@ -188,7 +188,7 @@ void moText0::txtcopy( const short* txt, MOuint pos, MOuint com, MOuint fin)
 // txtcomp compara caracter a caracter [text] con [txt] a partir de las posiciones
 // [com1] y [com2] respectivamente.  Es CASE-SENSITIVE.
 
-txtcval moText0::txtcomp( const char* txt, MOuint com1, MOuint com2)
+txtcval moText0::txtcomp( const char* txt, MOuint com1, MOuint com2) const
 {
     MOuint i1, i2;
 
@@ -226,7 +226,7 @@ txtcval moText0::txtcomp( const char* txt, MOuint com1, MOuint com2)
 // [text] perteneciente a [cjto], si es NOT_BELONG la posicion del primer caracter
 // de [text] no perteneciente a [cjto]. La busqueda se realiza en la direccion [dir].
 
-MOuint moText0::txtfind( const char* cjto, txtpert pert, MOuint com, int dir)
+MOuint moText0::txtfind( const char* cjto, txtpert pert, MOuint com, int dir) const
 {
     MOuint i, j, found;
 
@@ -300,103 +300,105 @@ moText0& moText0::operator +=(const moText0& txt)
     return *this;
 }
 
-moText0 moText0::operator +(const moText0& txt)
-{
-    moText0 txtres(text);
-    txtres.txtcopy(txt.text, MO_TXT_COMPLETE, 0, txt.length);
-    return txtres;
-}
 
-int moText0::operator <( moText0& txt)
+int moText0::operator <( const moText0& txt) const
 {
     return( txtcomp(txt.text) == MO_TXT_LESSER);
 }
 
-int moText0::operator >( moText0& txt)
+int moText0::operator >( const moText0& txt) const
 {
     return( txtcomp(txt.text) == MO_TXT_GREATER);
 }
 
-int moText0::operator <=( moText0& txt)
+int moText0::operator <=( const moText0& txt) const
 {
     return( txtcomp(txt.text)==MO_TXT_LESSER || txtcomp(txt.text)==MO_TXT_EQUAL);
 }
 
-int moText0::operator >=( moText0& txt)
+int moText0::operator >=( const moText0& txt) const
 {
     return( txtcomp(txt.text)==MO_TXT_GREATER || txtcomp(txt.text)==MO_TXT_EQUAL);
 }
 
-int moText0::operator ==( moText0& txt)
+int moText0::operator ==( const moText0& txt) const
 {
     return( txtcomp(txt.text) == MO_TXT_EQUAL);
 }
 
-int moText0::operator !=( moText0& txt)
+int moText0::operator !=( const moText0& txt) const
 {
     return( txtcomp(txt.text) != MO_TXT_EQUAL);
 }
 
 
-moText0& moText0::operator =( char* txt)
+moText0& moText0::operator =( const char* txt)
 {
     txtcopy(txt);
     return *this;
 }
 
-moText0& moText0::operator =( short* txt)
+moText0& moText0::operator =( const short* txt)
 {
     txtcopy(txt);
     return *this;
 }
 
-moText0& moText0::operator +=( char* txt)
+moText0& moText0::operator +=( const char* txt)
 {
     txtcopy(txt,MO_TXT_COMPLETE);
     return *this;
 }
 
-LIBMOLDEO_API moText0 operator +( moText0& txt1, char* txt2)
+
+LIBMOLDEO_API moText0 operator +( const moText0& txt1, const moText0& txt2 )
+{
+    moText0 txtres(txt1);
+    txtres+= txt2;
+    return txtres;
+}
+
+LIBMOLDEO_API moText0 operator +( const moText0& txt1, const char* txt2)
 {
     moText0 txtres(txt1);
     txtres.txtcopy( txt2, MO_TXT_COMPLETE);
     return txtres;
 }
 
-LIBMOLDEO_API moText0 operator +( char* txt1, moText0& txt2)
+LIBMOLDEO_API moText0 operator +( const char* txt1, const moText0& txt2)
 {
     moText0 txtres(txt1);
-    txtres.txtcopy( txt2, MO_TXT_COMPLETE, 0, txt2.Length());
+    txtres+= txt2;
     return txtres;
 }
 
 
-int moText0::operator < ( char* txt)
+int moText0::operator < ( const char* txt) const
 {
     return( txtcomp(txt) == MO_TXT_LESSER);
 }
 
-int moText0::operator > ( char* txt)
+int moText0::operator > ( const char* txt) const
 {
     return( txtcomp(txt) == MO_TXT_GREATER);
 }
 
-int moText0::operator <=( char* txt)
+int moText0::operator <=( const char* txt) const
 {
     return( txtcomp(txt)==MO_TXT_LESSER || txtcomp(txt)==MO_TXT_EQUAL);
 }
 
-int moText0::operator >=( char* txt)
+int moText0::operator >=( const char* txt) const
 {
     return( txtcomp(txt)==MO_TXT_GREATER || txtcomp(txt)==MO_TXT_EQUAL);
 }
 
-int moText0::operator ==( char* txt)
+int moText0::operator ==( const char* txt) const
 {
     return( txtcomp(txt) == MO_TXT_EQUAL);
 }
 
-int moText0::operator !=( char* txt)
+int moText0::operator !=( const char* txt) const
 {
     return( txtcomp(txt) != MO_TXT_EQUAL);
 }
@@ -427,7 +429,7 @@ moText0& moText0::Left( MOuint cant)
 
 moText0& moText0::Right( MOuint cant)
 {
-    if ((length-cant)>0)
+    if ( length > cant)
       txtcopy( text, 0, length-cant, MO_TXT_COMPLETE);
     return *this;
 }
@@ -471,7 +473,8 @@ moText0 moText0::Scan( char* cjto)
     MOuint pos2 = txtfind( cjto, MO_TXT_BELONG, pos1);
     if(pos1 == MO_TXT_NOT_FOUND)  pos1 = 0;
     if(pos2 == MO_TXT_NOT_FOUND)  pos2 = length;
-    newtxt.txtcopy( text, 0, pos1, pos2-1);
+    if ( (pos1+1) < pos2 ) newtxt.txtcopy( text, 0, pos1, pos2-1);
+    else newtxt = "";
     txtcopy( text, 0, pos2);
     return newtxt;
 }
@@ -499,7 +502,8 @@ moText0 moText0::ScanEx( char* cjto)
 			//texto entre comillas
 			pos1 = pos1+1;
 			pos2 = pos2;
-			newtxt.txtcopy( text, 0, pos1, pos2-1);
+			if ( (pos1+1) < pos2 ) newtxt.txtcopy( text, 0, pos1, pos2-1);
+			else newtxt = "";
 			txtcopy( text, 0, pos2+1);
 			return newtxt;
 		}
@@ -510,7 +514,8 @@ moText0 moText0::ScanEx( char* cjto)
 
     if(pos2 == MO_TXT_NOT_FOUND)  pos2 = length;
 
-	newtxt.txtcopy( text, 0, pos1, pos2-1);
+    if ( (pos1+1) < pos2 ) newtxt.txtcopy( text, 0, pos1, pos2-1);
+    else newtxt = "";
     txtcopy( text, 0, pos2);
     return newtxt;
 }

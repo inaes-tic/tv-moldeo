@@ -17,6 +17,7 @@ moDirectorChildConsole::~moDirectorChildConsole() {
 
 MOboolean moDirectorChildConsole::Init( moText p_effectname,
 		moText p_effectconfigname,
+        moText p_apppath,
 		moText p_datapath,
 		moText p_consoleconfig,
 		moIODeviceManager* p_pIODeviceManager,
@@ -25,7 +26,7 @@ MOboolean moDirectorChildConsole::Init( moText p_effectname,
 		MOint p_screen_width, MOint p_screen_height,
 		MOint p_render_width, MOint p_render_height ) {
 
-	wxFileName xfname( wxString((wxChar*)(char*) p_effectconfigname ) );
+	wxFileName xfname( wxString(moText2Wx( p_effectconfigname )) );
 	wxString xstring;
 	xstring = xfname.GetName();
 	const char *cfilename =(const char *) xstring.c_str();
@@ -33,7 +34,8 @@ MOboolean moDirectorChildConsole::Init( moText p_effectname,
 	m_EffectConfigName =(char*)cfilename;
 	m_EffectName = p_effectname;
 
-	return Init( p_datapath,
+	return Init( p_apppath,
+        p_datapath,
 		p_consoleconfig,
 		p_pIODeviceManager,
 		p_pResourceManager,
@@ -43,7 +45,9 @@ MOboolean moDirectorChildConsole::Init( moText p_effectname,
 }
 
 MOboolean
-moDirectorChildConsole::Init( moText p_datapath,
+moDirectorChildConsole::Init(
+                        moText p_apppath,
+                        moText p_datapath,
 						moText p_consoleconfig,
 						moIODeviceManager* p_pIODeviceManager,
 						moResourceManager *p_pResourceManager,
@@ -87,6 +91,7 @@ moDirectorChildConsole::Init( moText p_datapath,
 	} else SetConfigName(p_consoleconfig);
 
 	InitResources(  p_pResourceManager,
+					p_apppath,
 					p_datapath,
 					m_Config,
 					p_render_to_texture_mode,

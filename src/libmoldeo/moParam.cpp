@@ -47,11 +47,11 @@ moParamDefinition::moParamDefinition() {
     m_Type = MO_PARAM_UNDEFINED;
 }
 
-moParamDefinition::moParamDefinition(const moParamDefinition &src) {
+moParamDefinition::moParamDefinition( const moParamDefinition &src) {
 	*this = src;
 }
 
-moParamDefinition::moParamDefinition( moText& p_name, moParamType& p_type ) {
+moParamDefinition::moParamDefinition( const moText& p_name, moParamType p_type ) {
 		m_Name = p_name;
 		m_Type = p_type;
 		m_Index = -1;
@@ -78,7 +78,7 @@ MO_PARAM_ALPHA,			//value type: NUM or FUNCTION
 	MO_PARAM_INLET,			//value type: TXT or LNK
 	MO_PARAM_OUTLET			//value type: TXT or LNK
 */
-moParamDefinition::moParamDefinition( moText& p_name, moText& p_type ) {
+moParamDefinition::moParamDefinition( const moText& p_name, const moText& p_type ) {
 		m_Name = p_name;
 		if ( p_type == moText("ALPHA") ) {
 			m_Type = MO_PARAM_ALPHA;
