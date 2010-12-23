@@ -66,6 +66,9 @@ typedef void moGstMessage;
 typedef void* moGPointer;
 typedef bool moGBoolean;
 typedef int moGstStateChangeReturn;
+typedef void moGMainLoop;
+typedef void moGMainContext;
+
 
 typedef enum {
   GST_VIDEO_TEST_SRC_SMPTE,
@@ -196,20 +199,32 @@ public:
 	void CheckMediaType( IPin* p_Pin );
 	void ShowConfigureDialog(IBaseFilter *pFilter);
 	*/
-    static moGBoolean bus_call (moGstBus *bus,
+    /*static moGBoolean bus_call (moGstBus *bus,
                                 moGstMessage *msg,
                                 moGPointer user_data);
+                                */
 
     static moGBoolean cb_have_data (moGstPad    *pad,
                                     moGstBuffer *buffer,
                                     moGPointer   u_data);
+
+    static moGBoolean cb_buffer_disconnected (
+                                    moGPointer   u_data
+                                    );
+
     long cb_have_data_handler_id;
+
+    static void on_rtsppadd_added(  moGstElement *rtspsrc,
+                                    moGstPad *pad,
+                                    moGPointer u_data );
+    long signal_rtsppad_added_id;
 
     static void cb_newpad ( moGstElement *decodebin,
                             moGstPad     *pad,
                             moGBoolean    last,
                             moGPointer    u_data);
     long signal_newpad_id;
+    long m_BusWatchId;
 
     static void cb_handoff ( moGstElement *fakesrc,
 	    moGstBuffer  *buffer,
@@ -237,6 +252,9 @@ private:
 
     /** Elements (filters) */
     moGstElement          *m_pFileSource;/** "filesrc" */
+    moGstElement          *m_pRTSPSource;/** "rtsp depay" */
+    moGstElement          *m_pRTSPDepay;/** "rtsp depay" */
+    moGstElement          *m_pFinalSource;/** "finalsource" */
     moGstElement          *m_pColorSpace;/** "ffmpegcolorspace" */
     moGstElement          *m_pCapsFilter; /** "capsfilter" */
     moGstElement          *m_pTypeFind; /** "typefind" */
@@ -258,18 +276,23 @@ private:
     moGstElement          *m_pAudioSink;/** "filesink" */
 
     /**audio elements*/
-    moGstElement   *m_pAudioConverter;
+    moGstElement          *m_pAudioConverter;
     //GstElement  *m_pAudioConverter;
 
-    /**Pad's o Pines */
+    /**Pad's o Pines para el DecoderBin*/
     moGstPad              *m_pVideoPad;/** audio pad last out */
     moGstPad              *m_pAudioPad;/** video pad last out*/
 
-
+    /**Pad's o Pines para el DecoderBin*/
+    moGstPad             *m_pRTSPDepaySink;
+    moGstPad             *m_pRTSPSrcVideo;
+    moGstPad             *m_pRTSPSrcAudio;
 
     /** Control Bus */
     moGstBus              *m_pGstBus;/** bus, analogo a IMediaControl...*/
 
+    moGMainLoop         *m_pGMainLoop;
+    moGMainContext         *m_pGMainContext;
 
     MOulong             m_Duration;
     MOulong             m_FramesLength;

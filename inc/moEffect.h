@@ -25,7 +25,7 @@
 
   Authors:
   Fabricio Costa
-  Andr√©s Colubri
+  AndrÈs Colubri
 
 *******************************************************************************/
 
@@ -61,9 +61,9 @@
 /** \if spanish
  * clase base para definir Efectos.
  * un efecto es el objeto dibujable en la consola (simil de una capa)
- * en funci√≥n del orden en el que ha sido cargado en la consola de efectos
+ * en funciÛn del orden en el que ha sido cargado en la consola de efectos
  * Es importante implementar las funciones de Init, Draw, Update e Interaction que son
- * necesarias para las operaciones de Inicializaci√≥n, Dibujado, Actualizaci√≥n e Interacci√≥n.
+ * necesarias para las operaciones de InicializaciÛn, Dibujado, ActualizaciÛn e InteracciÛn.
  * \endif
  * \if english
  * Base class to derive an effect object
@@ -84,42 +84,42 @@ class LIBMOLDEO_API moEffect : public moMoldeoObject
 public:
 
         /**
-         * constructor gen√©rico de la clase.
+         * constructor genÈrico de la clase.
          */
         moEffect();
 
         /**
-         * destructor gen√©rico de la clase.
+         * destructor genÈrico de la clase.
          */
         virtual ~moEffect();
 
 		/**
-		* Inicializador gen√©rico derivado de moAbstract.
+		* Inicializador genÈrico derivado de moAbstract.
 		* @see moAbstract
 		*/
         virtual MOboolean Init() = 0;
 
 		/**
-		* Funci√≥n de dibujado del efecto
+		* FunciÛn de dibujado del efecto
 		*/
 		virtual void Draw( moTempo*,moEffectState* parentstate=NULL) = 0;
 
 		/**
-		* Finalizador gen√©rico derivado de moAbstract. Es importante que esta funci√≥n libere los recursos que han sido creados en la funci√≥n Init().
+		* Finalizador genÈrico derivado de moAbstract. Es importante que esta funciÛn libere los recursos que han sido creados en la funciÛn Init().
 		* @see moAbstract
 		*/
         virtual MOboolean Finish() = 0;
 
 		/**
-		* Este inicializador se ejecuta en primer lugar dentro de la funci√≥n Init, y efectua las inicializaciones esp√©c√≠ficas de cualquier derivado de moEffect¬¥.
-		* a) carga del archivo de configuraci√≥n
-		* b) verifica que existan par√°metros necesarios espec√≠ficos de los efectos como ser SYNCRO y PHASE
-		* c) llamar a MoldeoObject::Init() para la inclusi√≥n y parseo de todos los par√°metros...
+		* Este inicializador se ejecuta en primer lugar dentro de la funciÛn Init, y efectua las inicializaciones espÈcÌficas de cualquier derivado de moEffect¥.
+		* a) carga del archivo de configuraciÛn
+		* b) verifica que existan par·metros necesarios especÌficos de los efectos como ser SYNCRO y PHASE
+		* c) llamar a MoldeoObject::Init() para la inclusiÛn y parseo de todos los par·metros...
 		*/
         virtual MOboolean PreInit();
 
 		/**
-		* PreDraw debe ejecutarse en la funci√≥n Draw, antes de cualquier operaci√≥n de dibujo.
+		* PreDraw debe ejecutarse en la funciÛn Draw, antes de cualquier operaciÛn de dibujo.
 		* a) toma el nuevo Syncro establecido del config o
 		* b) Sincroniza el beat
 		*/

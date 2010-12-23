@@ -97,7 +97,9 @@ class LIBMOLDEO_API moDataSessionConfig {
 
 		moDataSessionConfig();
 
-		moDataSessionConfig( moText p_datapath,
+		moDataSessionConfig(
+                            moText p_apppath,
+                            moText p_datapath,
                             moText p_consoleconfig,
                             moText p_SessionFileName=moText("sesion.sml"),
                             moText p_VideoFileName=moText("sesion.mpg"),
@@ -109,6 +111,7 @@ class LIBMOLDEO_API moDataSessionConfig {
 		virtual ~moDataSessionConfig();
 
 		moText GetDataPath();
+		moText GetAppPath();
 		moText GetConsoleConfigName();
 		moText GetVideoFileName();
 		moText GetSessionFileName();
@@ -127,6 +130,7 @@ class LIBMOLDEO_API moDataSessionConfig {
 
 	private:
 
+        moText m_AppPath;/// Directorio de ejecución de la aplicación
 		moText m_DataPath;/// Directorio de datos de la sesión
 		moText m_ConsoleConfigName;///archivo de definición de la consola (*.mol)
 
@@ -193,8 +197,8 @@ class LIBMOLDEO_API moDataSessionEventKey {
 
 };
 
-moDeclareExportedDynamicArray( moDataSessionKey*, moDataSessionKeys)
-moDeclareExportedDynamicArray( moDataSessionEventKey*, moDataSessionEventKeys )
+moDeclareExportedDynamicArray( moDataSessionKey*, moDataSessionKeys);
+moDeclareExportedDynamicArray( moDataSessionEventKey*, moDataSessionEventKeys );
 
 class LIBMOLDEO_API moDataSession : public moAbstract {
 
@@ -239,7 +243,7 @@ class LIBMOLDEO_API moDataSession : public moAbstract {
 };
 
 
-moDeclareExportedDynamicArray( moDataSession*, moDataSessions )
+moDeclareExportedDynamicArray( moDataSession*, moDataSessions );
 
 
 class LIBMOLDEO_API moDataManager : public moResource
@@ -250,11 +254,12 @@ class LIBMOLDEO_API moDataManager : public moResource
 		virtual ~moDataManager();
 
 		virtual MOboolean Init();
-		virtual MOboolean Init( moText p_datapath, moText p_consoleconfig );
+		virtual MOboolean Init( moText p_apppath, moText p_datapath, moText p_consoleconfig );
 		virtual MOboolean Finish();
 
 		moText GetDataPath();
 		moText GetConsoleConfigName();
+		moText GetAppPath();
 
         void StartRecordingSession(  );
         void StartPlayinbackSession(  );

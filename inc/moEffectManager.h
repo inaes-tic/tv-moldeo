@@ -110,6 +110,11 @@ class LIBMOLDEO_API moEffectManager : public moAbstract {
 		moText					GetEffectLabelName( MOint p_ID );
 		moMoldeoObjectType		GetType( MOint p_ID );
 
+		moEffect*     GetEffectByLabel( moText p_label_name, moMoldeoObjectType p_mob_type=MO_OBJECT_UNDEFINED );
+
+
+    bool        Set( int fx_index, moMoldeoObject*  p_pMOB );
+
 		moEffectsArray&			AllEffects();
 		moPreEffectsArray&		PreEffects();
 		moEffectsArray&			Effects();

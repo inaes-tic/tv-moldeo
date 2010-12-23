@@ -162,7 +162,9 @@ class LIBMOLDEO_API moConsole : public moMoldeoObject {
          * @param p_render_height (opcional MO_DEF_RENDER_HEIGHT) alto de la textura de salida
          */
 
-        virtual MOboolean Init( moText p_datapath,
+        virtual MOboolean Init(
+                        moText p_apppath,
+                        moText p_datapath,
 						moText p_consoleconfig,
 						moIODeviceManager* p_pIODeviceManager = NULL,
 						moResourceManager *p_pResourceManager = NULL,
@@ -220,6 +222,7 @@ class LIBMOLDEO_API moConsole : public moMoldeoObject {
          */
 
          virtual void InitResources(moResourceManager *pResourceManager,
+                        moText p_apppath,
 						moText p_datapath,
 						moConfig& p_consoleconfig,
 		               MOint p_render_to_texture_mode = MO_RENDER_TO_TEXTURE_FBSCREEN,
@@ -251,24 +254,106 @@ class LIBMOLDEO_API moConsole : public moMoldeoObject {
 
         moConfigDefinition* GetDefinition( moConfigDefinition *p_configdefinition = NULL );
 
+        /// existe ya esta etiqueta dentro de los MOBs de esta consola
+        /**
+        *
+        * Esta función devuelve verdadero o falso si existe o no la etiqueta en el
+        * arreglo dinámico de m_MoldeoObjects
+        *
+        * @param labelname la etiqueta del objeto
+        * @return verdadero si existe, falso si no
+        */
+        bool LabelNameExists( moText labelname );
+
+        moMoldeoObjects& GetMoldeoObjects();
         moEffectManager& GetEffectManager();
 
+        int RelativeToGeneralIndex( int relativeindex, moMoldeoObjectType p_type );
+
+        /// enciende el reloj de la consola
+        /**
+        * El reloj interno de la consola arranca con este comando. Puede ser parado y pausado a su vez con
+        * las funciones de ConsoleStop y ConsolePause
+        */
         void ConsolePlay();
+
+        /// pausa el reloj de la consola
+        /**
+        * El reloj interno de la consola es pausado con este comando. Puede ser parado y arrancado a su vez con
+        * las funciones de ConsoleStop y ConsolePlay
+        */
         void ConsolePause();
+
+        /// para el reloj de la consola
+        /**
+        * El reloj interno de la consola es detenido con este comando. Puede ser pausado y arrancado a su vez con
+        * las funciones de ConsolePause y ConsolePlay
+        */
         void ConsoleStop();
+
+        /// devuelve el estado del reloj de la consola
+        /**
+        * EL reloj de la consola puede estar en diferentes estados, definidos por moTimerState. Estos son:
+        * MO_TIMERSTATE_STOPPED : detenido
+        * MO_TIMERSTATE_PAUSED : en pausa
+        * MO_TIMERSTATE_STARTED : arrancado
+        * @return moTimerState el estado del reloj
+        */
         moTimerState ConsoleState();
 
-
+        /// devuelve el preset actualmente seleccionado
+        /**
+        *
+        * Los presets son aquellas configuraciones del estado completo de los efectos de una consola.
+        * Los presets se guardan en objetos independientes y cada uno contiene un estado completo, de efectos
+        * activados, apagados, con sus respectivas configuraciones seleccionadas.
+        * Estos presets pueden crearse en tiempo de ejecución, funcionando como memoria de un estado general
+        * correspondiente a la composición actual.
+        *
+        * @return int el indice del preset seleccionado
+        */
         int GetPreset();
+
+        /// fija el preset seleccionado
+        /**
+        *
+        * Los presets son aquellas configuraciones del estado completo de los efectos de una consola.
+        * Los presets se guardan en objetos independientes y cada uno contiene un estado completo, de efectos
+        * activados, apagados, con sus respectivas configuraciones seleccionadas.
+        * Estos presets pueden crearse en tiempo de ejecución, funcionando como memoria de un estado general
+        * correspondiente a la composición actual.
+        *
+        * @param presetid el indice del preset seleccionado
+        */
         void SetPreset( int presetid );
 
+        /// devuelve la configuración actualmente seleccionada de un objeto de la consola
+        /**
+        *
+        * Cada moMoldeoObject tiene su espacio de configuraciones pre-fijadas. Estas están definidas al final
+        * del config de cada objeto, ver moConfig, moPreConfig.
+        *
+        * @param objectid el id único del objeto
+        * @return int el indice del preconf seleccionado del objeto
+        */
         int GetPreconf( int objectid );
+
+        /// fija la configuración actualmente seleccionada de un objeto de la consola
+        /**
+        *
+        * Cada moMoldeoObject tiene su espacio de configuraciones pre-fijadas. Estas están definidas al final
+        * del config de cada objeto, ver moConfig, moPreConfig.
+        *
+        * @param objectid el id único del objeto
+        * @param preconfid el indice único del preconf a seleccionar
+        */
         void SetPreconf( int objectid, int preconfid );
 
         void SetTicks( int ticksid );
+
         int GetObjectId( moText p_objectlabelname );
 
-        int GetDirectoryFileCount( moText p_path );
+        const int GetDirectoryFileCount( moText p_path );
 
         ///============================
         ///SCRIPTED in LUA
@@ -276,6 +361,9 @@ class LIBMOLDEO_API moConsole : public moMoldeoObject {
 
         int ScriptCalling(moLuaVirtualMachine& vm, int iFunctionNumber);
         void RegisterFunctions();
+
+
+
 
 
     protected:
@@ -328,6 +416,7 @@ class LIBMOLDEO_API moConsole : public moMoldeoObject {
 
         virtual MOulong GetTicks();
         virtual void GLSwapBuffers();
+        virtual void GUIYield();
 
         moConsoleState			state;
 

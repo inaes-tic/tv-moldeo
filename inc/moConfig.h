@@ -55,7 +55,7 @@
  *  @see    moConfig
  */
 
-class LIBMOLDEO_API moConfigDefinition
+class LIBMOLDEO_API moConfigDefinition : public moAbstract
 {
 	public:
         /// constructor
@@ -130,6 +130,29 @@ class LIBMOLDEO_API moConfigDefinition
             return m_ObjectClass;
         }
 
+        /// Fija el indice del array con el indice del parametro...
+        /**
+        *
+        *   Asocia en el array m_ParamIndexes, un entero (para el acceso rapido) al indice de un parametro...
+        *   esta funcion es solo para facilitar el acceso a un parametro, sin necesidad de generar una busqueda a cada vez
+        *   permitiendo tener configs de muchos parametros con acceso de orden 1. (no N)
+        *
+        *   @param defined_array_index el entero con el que se asocia el parametro
+        *   @param paramindex es el indice que corresponde a la posicion del parámetro dentro del xml del archivo de configuracion
+        *   @return verdadero si pudo asociarlo correctamente...
+        */
+        bool SetParamIndex( int defined_array_index, moParamIndex paramindex );
+
+        /// Verifica si el parametro no existe ya
+        /**
+        *
+        *   Permite verificar si un parametro se encuentra definido
+        *
+        *   @param p_name el nombre del parametro
+        *   @return verdadero si ya existe
+        */
+        bool Exists( moText p_name );
+
 	private:
 		moParamDefinitions	m_ParamDefinitions;
 		moParamIndexes		m_ParamIndexes;
@@ -139,8 +162,15 @@ class LIBMOLDEO_API moConfigDefinition
 
 };
 
-#define moDefineParamIndex(X,Y) if ( m_Config.GetConfigDefinition()!=NULL && (MOuint)X<m_Config.GetConfigDefinition()->ParamIndexes().Count() )\
-                                    m_Config.GetConfigDefinition()->ParamIndexes().Set( (int)X, moParamIndex((MOint)m_Config.GetParamIndex(Y)))
+
+#define moDefineParamIndex(X,Y) if ( m_Config.GetConfigDefinition()!=NULL) {\
+                                    int pidx = (MOint)m_Config.GetParamIndex(Y);\
+                                    if (pidx>-1) {\
+                                      if (!m_Config.GetConfigDefinition()->SetParamIndex( (int)X, moParamIndex(pidx))) {\
+                                        MODebug2->Error(moText(Y) + moText("  warning. Bad indexation could cause errors."));\
+                                      }\
+                                    } else MODebug2->Error(moText(Y) + moText("  not found."));\
+                                }
 
 
 /// almacena la configuración de los parámetros de un objeto en un archivo XML
@@ -213,7 +243,7 @@ class LIBMOLDEO_API moConfig
         * @param
         * @return true si fue exitoso, false si no lo fue
         */
-		MOboolean               CreateDefault( moText p_fullconfigfilename );
+        MOboolean               CreateDefault( const moText &p_fullconfigfilename );
 
         /// Elimina todos los parámetros anteriormente cargados
         /**
@@ -256,29 +286,62 @@ class LIBMOLDEO_API moConfig
         /**  @param indexparam índice del parámetro
         * @return el entero*/
         MOint                   Int( moParamReference p_paramreference );
+        MOint                   Int( moText p_param_name );
 
         /// Acceso rápido a un valor double
         /**  @param indexparam índice del parámetro
         * @return el entero*/
         MOdouble                   Double( moParamReference p_paramreference );
+        MOdouble                   Double( moText p_param_name );
 
         /// Acceso rápido a un valor de texto
         /**  @param indexparam índice del parámetro
         * @return el entero*/
         moText                   Text( moParamReference p_paramreference );
+        moText                   Text( moText p_param_name );
 
         /// Acceso rápido a evaluar la función
         /**  @param indexparam índice del parámetro
         * @return el entero*/
         MOdouble                   Eval( moParamReference p_paramreference, double x, ... );
         MOdouble                   Eval( moParamReference p_paramreference);
+        MOdouble                   Eval( moText p_param_name, double x, ... );
+        MOdouble                   Eval( moText p_param_name );
+
+        moVector4d                 EvalColor( moParamReference p_paramreference );
+        moVector4d                 EvalColor( moParamReference p_paramreference, double x, ... );
+
+        /// Acceso rápido a los datos de una textura
+        /**  @param indexparam índice del parámetro
+        * @return el id de la textura*/
+        GLint       GetGLId( moParamReference p_paramreference, MOfloat p_cycle, MOfloat p_fade=1.0, moTextFilterParam *p_filterparam = NULL );
+        GLint       GetGLId( moParamReference p_paramreference, moTempo *p_tempo, MOfloat p_fade=1.0, moTextFilterParam *p_filterparam = NULL );
+        GLint       GetGLId( moParamReference p_paramreference, MOuint p_i, MOfloat p_fade=1.0, moTextFilterParam *p_filterparam = NULL );
+        GLint       GetGLId( moParamReference p_paramreference, MOfloat p_fade=1.0, moTextFilterParam *p_filterparam = NULL );
+
+        ///referencias a clases
+        moMathFunction&               Fun(  moParamReference p_paramreference );
+        const moFont&                 Font( moParamReference p_paramreference );
+        const moTextureBuffer&        TextureBuffer(  moParamReference p_paramreference );
+        const mo3DModelSceneNode&     Model(  moParamReference p_paramreference );
+        const moVector2d&             Vector2d( moParamReference p_paramreference );
+        const moVector2i&             Vector2i( moParamReference p_paramreference );
+        const moVector3d&             Vector3d( moParamReference p_paramreference );
+        const moVector3i&             Vector3i( moParamReference p_paramreference );
+        const moVector4d&             Vector4d( moParamReference p_paramreference );
+        const moVector4i&             Vector4i( moParamReference p_paramreference );
+        const moDataMessage&          Message(  moParamReference p_paramreference );
+        const moDataMessages&         Messages( moParamReference p_paramreference );
+        const moSound&                Sound(  moParamReference p_paramreference );
+        const moTexture&              Texture(  moParamReference p_paramreference );
+
 
         /// Operador de acceso directo a un parámetro por índice
         /**  @param p_paramindex índice del parámetro
         * @return referencia al parámetro moParam*/
-		moParam&				operator [] ( MOint p_paramindex ) {
-			return GetParam( p_paramindex );
-		}
+        moParam&				operator [] ( MOint p_paramindex ) {
+          return GetParam( p_paramindex );
+        }
 
         /// Operador de acceso directo a un parámetro por nombre
         /**  @param p_paramname nombre del parámetro
@@ -451,7 +514,24 @@ class LIBMOLDEO_API moConfig
 		MOint					m_PreconfParamNum;
 		MOint					m_PreconfActual;
 
-};
+    ///solo para poder devolver una referencia
+    static moFont*         m_pFont;
+		static moMathFunction* m_pFun;
+		static moTextureBuffer* m_pTextureBuffer;
+		static mo3DModelSceneNode*     m_pModel;
+		static moVector2d*             m_pVector2d;
+		static moVector2i*             m_pVector2i;
+		static moVector3d*             m_pVector3d;
+		static moVector3i*            m_pVector3i;
+		static moVector4d*             m_pVector4d;
+		static moVector4i*            m_pVector4i;
+		static moDataMessage*          m_pMessage;
+		static moDataMessages*         m_pMessages;
+		static moSound*                m_pSound;
+		static moTexture*              m_pTexture;
 
+
+
+};
 
 #endif

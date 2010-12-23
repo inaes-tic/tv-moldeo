@@ -216,7 +216,7 @@ class LIBMOLDEO_API moTexture : public moAbstract {
          * Devuelve el tipo de píxel de la textura.
          * @return tipo de píxel (GL_UNSIGNED_BYTE, GL_FLOAT, etc.).
          */
-		MOuint GetType() { return m_type; }
+		moTextureType GetType() { return m_type; }
         /**
          * Devuelve el identificador OpenGL de la textura.
          * @return OpenGL ID de la textura.
@@ -388,9 +388,9 @@ protected:
 		moFBO* m_fbo;
 		MOuint m_fbo_attach_point;
 
-		MOuint m_type;
-        MOint m_moid;
-        MOuint m_glid;
+		moTextureType m_type;
+    MOint m_moid;
+    MOuint m_glid;
 		moText m_name;
 
 		moTexParam m_param;
@@ -411,7 +411,7 @@ protected:
 };
 
 
-moDeclareExportedDynamicArray( moTexture*, moTextureArray)
+moDeclareExportedDynamicArray( moTexture*, moTextureArray);
 
 
 

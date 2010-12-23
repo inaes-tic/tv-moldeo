@@ -58,7 +58,7 @@ public:
 
 	MOdouble syncro;    //factor de sincronizacion
 
-	MOdouble ang;
+	MOdouble ang;  //angulo en radianes entre 0 y 2*pi
 
 	MOulong beat_0,beat_1, beatpulsecount;
 

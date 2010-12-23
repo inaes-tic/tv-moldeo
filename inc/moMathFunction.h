@@ -39,6 +39,8 @@
 
 class moParam;
 class moConfig;
+class moMoldeoObject;
+class moInlet;
 
 typedef void moParser;
 
@@ -63,8 +65,10 @@ public:
     moMathVariable();
 	moMathVariable(const char* p_name, double p_value0 = 0.0);
 	moMathVariable( moParam* p_Param  );
+	moMathVariable( moInlet* p_Inlet  );
 
 	void SetParam( moParam* p_Param );
+	void SetInlet( moInlet* p_Inlet );
 
 	/**
      * Asigna el nombre de la variable.
@@ -112,6 +116,11 @@ private:
     *   External param data retreival, name must match!!!!
     */
     moParam*    m_pParam;
+
+    /**
+    *   External inlet data retreival, name must match!!!!
+    */
+    moInlet*    m_pInlet;
 };
 
 typedef moMathVariable* moMathVariablePtr;
@@ -138,7 +147,7 @@ public:
 	 * @param p_Expression la expresión matemática.
 	 * @return El resultado de la operación de inicialización.
 	 */
-	virtual MOboolean Init(const moText& p_Expression, moConfig* p_pConfig = NULL );
+	virtual MOboolean Init(const moText& p_Expression, moMoldeoObject* p_pMOB = NULL );
 	/**
      * Función de finalización.
 	 * @return El resultado de la operación de finalización.
@@ -285,6 +294,7 @@ protected:
 	virtual void BuildVarList() = 0;
 
     moConfig*   m_pConfig;
+    moMoldeoObject* m_pMOB;
 };
 
 typedef moMathFunction* MathFunctionPtr;
@@ -426,7 +436,7 @@ public:
 	 * @param p_Expression la expresión matemática.
 	 * @return El resultado de la operación de inicialización.
 	 */
-	virtual MOboolean Init(const moText& p_Expression, moConfig* p_pConfig = NULL );
+	virtual MOboolean Init(const moText& p_Expression, moMoldeoObject* p_pMOB = NULL );
 	/**
      * Función de finalización.
 	 * @return El resultado de la operación de finalización.

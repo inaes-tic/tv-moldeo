@@ -207,7 +207,8 @@ class LIBMOLDEO_API moResourceManager : public moAbstract {
          * se especifican los parámetros generales para el acceso a los datos
          *
          */
-		virtual MOboolean	Init(	const moText& p_datapath,
+		virtual MOboolean	Init(	const moText& p_apppath,
+                                    const moText& p_datapath,
 									moConfig& p_consoleconfig,
 									MOint p_render_to_texture_mode,
 									MOint p_screen_width,

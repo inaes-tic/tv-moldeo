@@ -152,7 +152,7 @@ T& name::Get(int x) {\
 	} else return m_NULL;\
 }\
 \
-MOuint name::Count() {\
+MOuint name::Count() const {\
 	return n;\
 }\
 \

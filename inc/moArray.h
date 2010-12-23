@@ -255,7 +255,7 @@ public:                                                                  \
 	void Insert(int x, const T &value);									 \
 	T& Get(int x);														 \
 	T& operator[] (int x) { return Get(x); }						     \
-	MOuint Count();														 \
+	MOuint Count() const;														 \
 	void Add( const T &value );											 \
 	void Remove(int x);													 \
 	void Copy( const name &A);											 \

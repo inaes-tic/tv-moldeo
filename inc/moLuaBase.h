@@ -208,7 +208,8 @@ public:
        m_pState = (lua_State *) vm;
        if (vm.Ok ())
        {
-          m_iTop = lua_gettop (m_pState);
+          if (m_pState)
+            m_iTop = lua_gettop (m_pState);
        }
     }
 
@@ -217,7 +218,8 @@ public:
      */
     virtual ~moLuaRestoreStack (void)
     {
-       lua_settop (m_pState, m_iTop);
+       if (m_pState)
+            lua_settop (m_pState, m_iTop);
     }
 protected:
    lua_State *m_pState;

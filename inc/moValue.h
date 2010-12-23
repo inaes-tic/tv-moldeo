@@ -79,6 +79,7 @@ class moTextureFilter;
 class moTextureBuffer;
 class moVideoBuffer;
 class moTextFilterParam;
+class moSound;
 
 /**
 *   moDataType
@@ -106,7 +107,7 @@ enum moDataType {
 	MO_DATA_VECTOR4F,//array of values
 	MO_DATA_IMAGESAMPLE,//pointer to an imagesample pointer
 	MO_DATA_IMAGESAMPLE_FILTERED,//pointer to a TextureFilter
-    MO_DATA_IMAGESAMPLE_TEXTUREBUFFER,//pointer to a texturebuffer pointer
+  MO_DATA_IMAGESAMPLE_TEXTUREBUFFER,//pointer to a texturebuffer pointer
 	MO_DATA_SOUNDSAMPLE,//pointer to a soundsample pointer
 	MO_DATA_VIDEOSAMPLE,//pointer to a videosample pointer: video buffer
 	MO_DATA_FONTPOINTER,
@@ -179,7 +180,7 @@ class LIBMOLDEO_API moData {
 		*   Estas funciones asignan la referencia al objeto definido por el valor, a través del puntero a su objeto
 		*   @{
 		*/
-		void		SetFun( moMathFunction*	p_Function );
+		void        SetFun( moMathFunction*	p_Function );
 		void        SetTexture( moTexture*	p_Texture );
 		void        SetTextureBuffer( moTextureBuffer*	p_TextureBuffer );
 		void        SetVideoBuffer( moVideoBuffer*	p_VideoBuffer );
@@ -188,55 +189,56 @@ class LIBMOLDEO_API moData {
 		void        SetTextureFilterParam( moTextFilterParam *p_filterparam );
 		void        SetFont( moFont*	p_Font );
 		void        SetModel( mo3DModelSceneNode*    p_Model );
-        void        SetVector( moVector2d *p_vector2d );
-        void        SetVector( moVector3d *p_vector3d );
-        void        SetVector( moVector4d *p_vector4d );
-        void        SetVector( moVector2i *p_vector2i );
-        void        SetVector( moVector3i *p_vector3i );
-        void        SetVector( moVector4i *p_vector4i );
+		void        SetSound( moSound*	p_Sound );
+    void        SetVector( moVector2d *p_vector2d );
+    void        SetVector( moVector3d *p_vector3d );
+    void        SetVector( moVector4d *p_vector4d );
+    void        SetVector( moVector2i *p_vector2i );
+    void        SetVector( moVector3i *p_vector3i );
+    void        SetVector( moVector4i *p_vector4i );
 
 		void        SetMessage( moDataMessage*  p_datamessage );
 		void        SetMessages( moDataMessages*  p_datamessages );
 		/**
 		*   @}
 		*/
-		//void		SetSound( moSound*	p_Sound );
 
-		moText		Text();
-		MOint		Int();
-		MOlonglong	Long();
-		MOfloat		Float();
-		MOdouble	Double();
-		MOchar		Char();
-		moNumber	Number();
-		MOpointer	Pointer();
-		moDataType	Type();
-		MOulong		Size();
-		moMathFunction*	Fun();
-		MOdouble    Eval();
-		MOdouble    Eval( double x );
-		moFont*     Font();
-		moTextureBuffer*     TextureBuffer();
-		mo3DModelSceneNode*  Model();
-		moVector2d *Vector2d();
-		moVector2i *Vector2i();
-		moVector3d *Vector3d();
-		moVector3i *Vector3i();
-		moVector4d *Vector4d();
-		moVector4i *Vector4i();
-		moDataMessage*  Message();
-		moDataMessages*  Messages();
-		/*
-		moTexture*	Texture();
-		moSound*	Sound();
-*/
 
-		moData*		GetData();
+		moText                  Text();
+		MOint                   Int();
+		MOlonglong              Long();
+		MOfloat                 Float();
+		MOdouble                Double();
+		MOchar                  Char();
+		moNumber                Number();
+		MOpointer               Pointer();
+		moDataType              Type();
+		MOulong                 Size();
+		MOdouble                Eval();
+		MOdouble                Eval( double x );
+
+    ///referencias a clases
+		moMathFunction*         Fun();
+		moFont*                 Font();
+		moTextureBuffer*        TextureBuffer();
+		mo3DModelSceneNode*     Model();
+		moVector2d*             Vector2d();
+		moVector2i*             Vector2i();
+		moVector3d*             Vector3d();
+		moVector3i*             Vector3i();
+		moVector4d*             Vector4d();
+		moVector4i*             Vector4i();
+		moDataMessage*          Message();
+		moDataMessages*         Messages();
+		moSound*                Sound();
+		moTexture*              Texture();
+
+		moData*                 GetData();
 
 		//conversion
-		moText		ToText();
-		moText      TypeToText();
-		moDataType  TextToType( moText texttype );
+		moText                  ToText();
+		moText                  TypeToText();
+		moDataType              TextToType( moText texttype );
 
 		GLint       GetGLId( MOfloat p_cycle, MOfloat p_fade=1.0, moTextFilterParam *p_filterparam = NULL );
 		GLint       GetGLId( moTempo *p_tempo, MOfloat p_fade=1.0, moTextFilterParam *p_filterparam = NULL );
@@ -252,8 +254,8 @@ class LIBMOLDEO_API moData {
 		bool            m_bFilteredAlpha;
 		bool            m_bFilteredParams;
 		MOfloat         m_AlphaFilter;
-        moTextFilterParam*  m_pFilterParam;
-        moData*         m_pAlphaFilter;
+    moTextFilterParam*  m_pFilterParam;
+    moData*         m_pAlphaFilter;
 /*
 		MOint			m_IndexValueInterpolating;//Indice del valor desde el cual se interpola;
 		MOboolean		m_bInterpolated;//Marcado cuando el modo de interpolación está activado
@@ -445,27 +447,44 @@ class LIBMOLDEO_API moValueBase : public moData
 moDeclareExportedDynamicArray( moValueBase, moValueBases );
 
 
-    /**
-     * moValue
-     * clase de manejo de una entrada de datos
-     * moValue puede contener varios datos encapsulados a los que se acceden a través de las funciones:
-     * GetSubValue, GetSubValueCount, y el operador []
-     *
-     */
+/// Valor de un Parámetro
+/**
+ * moValue es la clase para manejar el valor de un parámetro
+ * el valor de un parámetro puede ser uno mas datos
+ *
+ * moValue puede contener varios datos encapsulados a los que se acceden a través de las funciones:
+ * GetSubValue, GetSubValueCount, y el operador []
+ *
+ */
 
 class LIBMOLDEO_API moValue
 {
 	public:
 		moValue();
 		moValue( const moValue &src);
+		moValue( const moText &strvalue, moValueType p_valuetype );
+		moValue( const moText &strvalue );
+		moValue( MOchar p_char );
+		moValue( MOint p_int );
+		moValue( MOlong p_long );
+		moValue( MOfloat p_float );
+		moValue( MOdouble p_double );
+
 		moValue( const moText &strvalue, const moText &type );
 		moValue( const moText &strvalue, const moText &type, const moText &strvalue2, const moText &type2 );
 		moValue( const moText &strvalue, const moText &type, const moText &strvalue2, const moText &type2, const moText &strvalue3, const moText &type3 );
 		moValue( const moText &strvalue, const moText &type, const moText &strvalue2, const moText &type2, const moText &strvalue3, const moText &type3, const moText &strvalue4, const moText &type4 );
+
+    void AddSubValue(const  moText &strvalue,  moValueType p_valuetype );
+
 		void AddSubValue(const  moText &strvalue, const moText &type );
+
 		void AddSubValue(const  moValueBase &valuebase);
+
 		void RemoveSubValue( MOint p_indexsubvalue );
+
 		void RemoveSubValues( bool leavefirstone = true );
+
 		virtual ~moValue();
 
 		moValue &operator = (const moValue &src);
@@ -495,11 +514,6 @@ class LIBMOLDEO_API moValue
 };
 
 
-/*
-template class LIBMOLDEO_API moDynamicArray<moValue>;
-typedef  moDynamicArray<moValue> moValues;
-*/
-
-moDeclareExportedDynamicArray( moValue, moValues )
+moDeclareExportedDynamicArray( moValue, moValues );
 
 #endif

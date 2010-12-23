@@ -34,6 +34,7 @@
 
 #include "moTypes.h"
 #include "moText.h"
+#include "moLock.h"
 
 /// Lista de mensajes para la depuración de errores y anuncio de errores y mensajes
 /** Clase que implementa una lista de mensajes de texto para poder visualizar y depurar más sencillamente errores
@@ -47,27 +48,48 @@ class LIBMOLDEO_API moDebug
 {
 public:
 
-	moDebug() {
-	    moErr.open ("moldeoerrors.txt");
-	    moLog.open ("moldeolog.txt");
-	}
+    moDebug();
 
-	virtual ~moDebug() {
-	    moErr.close();
-	    moLog.close();
-	}
+    virtual ~moDebug();
 
 
-    /// Anuncia un error
+    /// Fija el archivo de salida del flujo estandar de c y c++ (stdout y cout)
     /**
-    *   Anuncia un error apilandolo en la lista de mensajes y escribiéndolo
+    *   Permite especificar el archivo donde se escribe la salida estandar de la consola.
+    *   Si se quiere volver al sistema estandar se llama a esta función con el parámetro vacío.
+    *   @param filename nombre del archivo para la salida
+    */
+    void SetStdout( const moText& filename = moText("") );
+
+
+    /// Paraliza el acceso a las funciones de escritura
+    /**
+    *   Utiliza un moLock para proteger los datos para el acceso asincrónico
+    *   @see moLock
+    *   @return verdadero si fue exitoso o falso si no
+    */
+		bool Lock() { return m_Lock.Lock(); }
+
+    /// Libera el acceso a las funciones de escritura
+    /**
+    *   Utiliza un moLock para proteger los datos para el acceso asincrónico.
+    *   @see moLock
+    *   @return verdadero si fue exitoso o falso si no
+    */
+		bool Unlock() { return m_Lock.Unlock(); }
+
+    /// Anuncia y registra un error
+    /**
+    *   Anuncia un error apilándolo en la lista de mensajes y escribiéndolo
     *   al archivo de mensajes de errores y al de mensajes registrados...
     */
     void Error( moText p_text ) {
+        Lock();
         cout << moText("MOL ERROR: ") << p_text << endl;
         moErr << moText("MOL ERROR: ") << p_text << endl;
         moLog << moText("MOL ERROR: ") << p_text << endl;
         m_Debug.Push( moText("MOL ERROR: ") + (moText)p_text );
+        Unlock();
     }
 
     /// Anuncia un mensaje al usuario además de guardarlo en el log de texto
@@ -76,9 +98,11 @@ public:
     *
     */
     void Message( moText p_text ) {
+        Lock();
         cout << p_text << endl;
         moLog << p_text << endl;
         m_Debug.Push( p_text );
+        Unlock();
     }
 
     /// Escribe un mensaje en el archivo de registro (log)
@@ -88,51 +112,80 @@ public:
     *
     */
     void Log( moText p_text ) {
+        Lock();
         moLog << p_text << endl;
+        Unlock();
     }
 
+    /// Apila el mensaje dentro de la pila de mensajes
     /**
     *   Apila el mensaje dentro de la pila de mensajes
     *   @param p_text el mensaje
     */
-	void Push( moText p_text ) {
-		m_Debug.Push( p_text );
-	}
+    void Push( moText p_text ) {
+      Lock();
+      m_Debug.Push( p_text );
+      Unlock();
+    }
 
+    /// Saca y devuelve el primer texto ingresado a la lista
     /**
     *   Saca y devuelve el primer texto ingresado a la lista
     *   @return un mensaje de texto
     */
-	moText Pop() {
-		return m_Debug.Pop();
-	}
+    moText Pop() {
+      moText poped;
+      Lock();
+      poped = m_Debug.Pop();
+      Unlock();
+      return poped;
+    }
 
+
+    /// Devuelve la cantidad de mensajes almacenados
     MOint       Count() {
         return m_Debug.count;
     }
 
+    /// Devuelve una referencia a la pila de mensajes
+    /**
+    * El uso correcto para evitar errores en caso de acceso asyncronico
+    * es hacer una llamada primero a la función de Lock() y luego al terminar de operar
+    * con la referencia de la pila llamar a Unlock() para liberarla.
+    * @return moTextHeap referencia a la pila de mensajes
+    * @see moTextHeap
+    * @see moText
+    */
     moTextHeap&     GetMessages() {
         return m_Debug;
     }
+
 private:
 
-    /// Lista de mensajes
     /**
     * para depurar
     */
-    moTextHeap m_Debug;
+    moTextHeap m_Debug;///< Pila de mensajes
 
-    /// Cadena de salida de los mensajes de error
     /**
     * la función Error dirige sus mensajes a esta salida
     */
-    ofstream moErr;
+    ofstream moErr;///< Cadena de salida de los mensajes de error
 
-    /// Cadena de salida de los mensajes registrados
     /**
     * la función Message y Log dirigen sus mensajes a esta salida
     */
-    ofstream moLog;
+    ofstream moLog;///< Cadena de salida de los mensajes registrados
+
+    /**
+    * cuando hacemos un printf o un cout << redirigimos la salida a este stream
+    */
+    ofstream moStdOut;///< Cadena de salida cout y stdout
+
+    streambuf *psbuf, *backup; ///< Cadena de backup
+
+
+    moLock	m_Lock;///< semáforo para el acceso asincrónico
 
 };
 
@@ -160,27 +213,27 @@ public:
     *   Todos los recursos manejados exclusivamente por este objeto son generados aquí.
     *   @return verdadero si fue exitosa o falso en otro caso
     */
-	virtual MOboolean Init();/*!< Inicializa el objeto */
+	virtual MOboolean Init();///< Inicializa el objeto
 
     /**
     *  Función de finalización.
     *  Libera los recursos generados en la función de inicialización.
     *   @return verdadero si fue exitosa o falso en otro caso
     */
-	virtual MOboolean Finish();/*!< Finaliza el objeto, libera recursos */
+	virtual MOboolean Finish();///< Finaliza el objeto, libera recursos
 
     /**
     *  Ccomprueba si el objeto ha sido inicializado
     *  Devuelve true si está inicializado el objeto o false en caso contrario.
     *   @return verdadero si fue exitosa o falso en otro caso
     */
-	MOboolean		Initialized();/*!< Pregunta si está inicializado */
+	MOboolean		Initialized();///< Pregunta si está inicializado
 
 
-	MOboolean		m_bInitialized;/**< Valor de inicialización*/
+	MOboolean		m_bInitialized;///< Valor de inicialización
 
-    static moDebug *MODebug2;/**< Clase de impresión de errores para depuración*/
-	static moTextHeap *MODebug;/**< Lista de textos*/
+    static moDebug *MODebug2;///< Clase de impresión de errores para depuración
+	static moTextHeap *MODebug;///< Lista de textos
 };
 
 

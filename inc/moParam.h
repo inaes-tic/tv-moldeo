@@ -77,12 +77,22 @@ class LIBMOLDEO_API moParamReference {
 	moParamReference() {
 		reference=-1;
 	}
+
 	moParamReference(MOint i) {
 		reference= i;
 	}
 	moParamReference(MOuint i) {
 		reference = (MOlong)i;
 	}
+
+	moParamReference( const moParamReference& src) {
+	  (*this) = src;
+	}
+	moParamReference& operator=( const moParamReference& src) {
+	  reference = src.reference;
+	  return (*this);
+	}
+
 	MOlong reference;
 };
 
@@ -97,6 +107,16 @@ class LIBMOLDEO_API moParamIndex {
 	moParamIndex(MOuint i) {
 		index = (MOlong)i;
 	}
+
+	moParamIndex( const moParamIndex& src) {
+	  (*this) = src;
+	}
+	moParamIndex& operator=( const moParamIndex& src) {
+	  index = src.index;
+	  return (*this);
+	}
+
+
 	MOlong index;
 };
 
@@ -114,9 +134,9 @@ class LIBMOLDEO_API moParamDefinition
 {
 	public:
 		moParamDefinition();
-		moParamDefinition(const moParamDefinition &src);
-		moParamDefinition( moText& p_name, moParamType& p_type );
-		moParamDefinition( moText& p_name, moText& p_type );
+		moParamDefinition( const moParamDefinition &src);
+		moParamDefinition( const  moText& p_name, moParamType p_type );
+		moParamDefinition( const  moText& p_name, const moText& p_type );
 		virtual ~moParamDefinition();
 
 		moParamDefinition &operator = (const moParamDefinition &src);

@@ -78,30 +78,32 @@ public:
     MOuint Length() const;               // devuelve el length del text sin contar el null del final.
 
     // operadores que usan solo objetos de la clase //
-    moText0& operator = (const moText0& txt);
+    moText0& operator = ( const moText0& txt);
     moText0& operator +=( const moText0& txt);
-    moText0 operator + ( const moText0& txt);
+    //friend moText0 operator + ( const moText0& txt, );
 
-    int operator < ( moText0& txt);
-    int operator > ( moText0& txt);
-    int operator <=( moText0& txt);
-    int operator >=( moText0& txt);
-    int operator ==( moText0& txt);
-    int operator !=( moText0& txt);
+    int operator < ( const moText0& txt) const;
+    int operator > ( const moText0& txt) const;
+    int operator <=( const moText0& txt) const;
+    int operator >=( const moText0& txt) const;
+    int operator ==( const moText0& txt) const;
+    int operator !=( const moText0& txt) const;
 
     // operadores que usan c-strings //
-    moText0& operator = ( char* txt);
-	moText0& operator = ( short* txt);
-    moText0& operator +=( char* txt);
-    friend LIBMOLDEO_API moText0 operator +( moText0& txt1, char* txt2);
-    friend LIBMOLDEO_API moText0 operator +( char* txt1,    moText0& txt2);
+    moText0& operator = ( const char* txt);
+    moText0& operator = ( const short* txt);
+    moText0& operator +=( const char* txt);
 
-    int operator < ( char* txt);
-    int operator > ( char* txt);
-    int operator <=( char* txt);
-    int operator >=( char* txt);
-    int operator ==( char* txt);
-    int operator !=( char* txt);
+    friend LIBMOLDEO_API moText0 operator +( const moText0& txt1, const moText0& txt2);
+    friend LIBMOLDEO_API moText0 operator +( const moText0& txt1, const char* txt2);
+    friend LIBMOLDEO_API moText0 operator +( const char* txt1,    const moText0& txt2);
+
+    int operator < ( const char* txt) const;
+    int operator > ( const char* txt) const;
+    int operator <=( const char* txt) const;
+    int operator >=( const char* txt) const;
+    int operator ==( const char* txt) const;
+    int operator !=( const char* txt) const;
 
     //char operator [](MOuint pos)            { return text[pos]; }
 
@@ -129,7 +131,7 @@ public:
     void ToLower();                  // convierte el text a minusculas.
 
 
-    moTextArray     Explode( char* ) const;
+    moTextArray     Explode( char* separator ) const; ///divide el texto separado por el caracter especificado
     int             Find( const moText0& target );
     void            ReplaceChar( const char* target, const char* replacement );
     void            Replace( const moText0& target, const moText0& replacement );
@@ -142,10 +144,10 @@ private:
     // de como se maneja moText0. Todos los metodos publicos las usan.
 public:
     void    txtcopy( const char* txt, MOuint pos = 0, MOuint com = 0, MOuint fin = MO_TXT_COMPLETE);        // copy c-strings(reserva la memoria y pone los nulls al final)
-	void    txtcopy( const short* txt, MOuint pos = 0, MOuint com = 0, MOuint fin = MO_TXT_COMPLETE);        // copy c-strings(reserva la memoria y pone los nulls al final)
+    void    txtcopy( const short* txt, MOuint pos = 0, MOuint com = 0, MOuint fin = MO_TXT_COMPLETE);        // copy c-strings(reserva la memoria y pone los nulls al final)
 private:
-    txtcval txtcomp( const char* txt, MOuint com1 = 0, MOuint com2 = 0);
-    MOuint    txtfind( const char* txt, txtpert pert = MO_TXT_BELONG, MOuint com = 0, int dir = 1);
+    txtcval txtcomp( const char* txt, MOuint com1 = 0, MOuint com2 = 0) const;
+    MOuint    txtfind( const char* txt, txtpert pert = MO_TXT_BELONG, MOuint com = 0, int dir = 1) const;
 };
 #endif
 

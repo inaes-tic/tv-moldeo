@@ -281,8 +281,6 @@ using namespace std;
 
 
 /*CONSTANTS DEFINITIONS*/
-
-
 #define MO_PI           3.1415926535897932384626433832795f
 #define MO_ON			1
 #define MO_OFF			-1
@@ -300,7 +298,7 @@ using namespace std;
 #define MO_FAIL			65535
 #define MO_UNDEFINED    -1
 
-#define MO_MAX_DEBUG	256
+#define MO_MAX_DEBUG	4096
 #define MO_MAX_TEXTURAS	512
 #define MO_MAX_MODELOS	256
 
@@ -326,7 +324,7 @@ using namespace std;
 #define MOefectoid		GLuint
 
 
-#define MOpointer		MOubyte*
+#define MOpointer		void*
 
 #define MOaccion int
 #define MOdevcode int
@@ -521,6 +519,14 @@ LIBMOLDEO_API MOulong moGetTicks();
 *   y afectará el comportamiento de los otros temporizadores
 */
 LIBMOLDEO_API MOulong moGetTicksAbsolute();
+
+
+///Devuelve la versión de libmoldeo
+/**
+*   Función global que devuelve en formato texto la versión utilizada de libmoldeo, el ´núcleo de Moldeo.
+*/
+#include "moText.h"
+LIBMOLDEO_API moText moGetVersionStr();
 
 ///macros para máximos y mínimos
 /**

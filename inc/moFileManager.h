@@ -59,18 +59,21 @@ typedef long moFileSize;
 
 #ifdef MO_WIN32
     #include "io.h"
-    #define moSlash moText("/")
+    #define moSlash moText("\\")
     #define moThm moText("/.thm")
+    #define moSlashChar '\\'
 #endif
 
 #ifdef MO_LINUX
     #define moSlash moText("/")
     #define moThm moText("/.thm")
+    #define moSlashChar '/'
 #endif
 
 #ifdef MO_MACOSX
     #define moSlash moText("/")
     #define moThm moText("/.thm")
+    #define moSlashChar '/'
 #endif
 
 
@@ -106,7 +109,9 @@ class LIBMOLDEO_API moFile : public moAbstract {
 		void	SetCompletePath( moText p_completepath );
 
 		moText	GetFileName();
+		moText  GetFullName();
 		moText	GetPath();
+    moText  GetFolderName();
 		moText	GetCompletePath();
 		moText	GetExtension();
 		moText	GetProtocol();
@@ -152,6 +157,9 @@ moDeclareExportedDynamicArray( moFile*, moFileArray );
 /**
 * clase para el manejo de un directorio
 */
+class moDirectory;
+
+moDeclareExportedDynamicArray( moDirectory*, moDirectoryArray );
 
 class LIBMOLDEO_API moDirectory : public moAbstract {
 
@@ -168,12 +176,14 @@ class LIBMOLDEO_API moDirectory : public moAbstract {
 
 		MOboolean Exists();
 		MOboolean IsRemote();
+		MOboolean HasSubdirs();
 		void	SetType( moFileType p_filetype );
 		void	SetCompletePath( moText p_completepath );
 
 		moFileType GetType();
 		moFileStatus GetStatus();
 		moText	GetCompletePath();
+		moText	GetDirName();
 		moText	GetProtocol();
 
 		moFile* FindFirst(  );
@@ -185,6 +195,7 @@ class LIBMOLDEO_API moDirectory : public moAbstract {
 		void Update();
 
 		moFileArray& GetFiles();
+		moDirectoryArray& GetSubDirs();
 
 	protected:
 
@@ -192,6 +203,8 @@ class LIBMOLDEO_API moDirectory : public moAbstract {
 		moFileStatus	m_DirStatus;
 		MOint			m_FileIndex;
 
+		moText		m_DirName;
+		moTextArray		m_DirNameArray;
 		moText		m_CompletePath;
 		moText		m_Protocol;
 
@@ -201,9 +214,10 @@ class LIBMOLDEO_API moDirectory : public moAbstract {
 		moFileManager*	m_pFileManager;
 
 		moFileArray	m_Files;
+		moDirectoryArray m_SubDirs;
 };
 
-moDeclareExportedDynamicArray( moDirectory*, moDirectoryArray )
+typedef moDirectoryArray moDirectories;
 
 /// Manejador de archivos
 /**

@@ -234,7 +234,7 @@ class LIBMOLDEO_API moConnector : public moAbstract {
 };
 
 typedef moConnector* moConnectorPtr;
-moDeclareExportedDynamicArray( moConnector*, moConnectors)
+moDeclareExportedDynamicArray( moConnector*, moConnectors);
 
 /// Conección, vínculo entre dos objetos
 /**
@@ -323,7 +323,7 @@ class LIBMOLDEO_API moConnection : public moAbstract  {
 };
 
 typedef moConnection* moConnectionPtr;
-moDeclareExportedDynamicArray( moConnectionPtr, moConnections)
+moDeclareExportedDynamicArray( moConnectionPtr, moConnections);
 
 
 /// Conector Inlet, conector que recibe datos
@@ -349,7 +349,7 @@ class LIBMOLDEO_API moInlet : public moConnector {
 
 };
 
-moDeclareExportedDynamicArray( moInlet*, moInlets)
+moDeclareExportedDynamicArray( moInlet*, moInlets);
 
 
 /// Conector Outlet, conector que envía datos
@@ -408,6 +408,6 @@ class LIBMOLDEO_API moOutlet : public moConnector {
 };
 
 
-moDeclareExportedDynamicArray( moOutlet*, moOutlets)
+moDeclareExportedDynamicArray( moOutlet*, moOutlets);
 
 #endif

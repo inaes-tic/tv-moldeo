@@ -330,7 +330,7 @@ class LIBMOLDEO_API moRenderManager : public moResource
 
 		void    SetOutputConfiguration( moRenderOutputConfiguration p_output_configuration );
 
-		moRenderOutputConfiguration GetOutputConfiguration();
+		moRenderOutputConfiguration& GetOutputConfiguration();
 
 		moBucketsPool*  GetFramesPool() {
                 return m_pFramesPool;

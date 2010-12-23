@@ -590,7 +590,7 @@ class LIBMOLDEO_API moVideoGraph : public moAbstract {
 
     virtual moStreamState    GetState();
 
-    moText          StateToText( moStreamState state );
+    static moText          StateToText( moStreamState state );
 
 	protected:
 

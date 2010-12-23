@@ -86,12 +86,22 @@ class LIBMOLDEO_API moMobIndex : public moAbstract {
          */
 		moMobIndex() { m_paramindex = -1; m_valueindex = -1; }
 
+    moMobIndex( const moMobIndex &src) {
+      (*this) = src;
+    }
+
         /**
          * constructor con los dos parámetros necesarios
          * @param p_paramindex
          * @param p_valueindex
          */
 		moMobIndex( MOint p_paramindex, MOint p_valueindex ) { m_paramindex = p_paramindex; m_valueindex = p_valueindex; }
+
+    moMobIndex& operator = ( const moMobIndex &src) {
+       m_paramindex = src.m_paramindex;
+       m_valueindex = src.m_valueindex;
+       return(*this);
+    }
 
         void SetParamIndex( MOint p_paramindex) { m_paramindex = p_paramindex;}
 
@@ -140,6 +150,11 @@ class LIBMOLDEO_API moMobDefinition
 		    m_Type = MO_OBJECT_UNDEFINED;
         }
 
+    moMobDefinition(const moMobDefinition& mb) {
+      (*this) = mb;
+    }
+
+
         /// Constructor
         /**
         *   Los datos de base son
@@ -175,7 +190,7 @@ class LIBMOLDEO_API moMobDefinition
 
         /// Objeto válido
         bool    IsValid() {
-            return ( m_Type != MO_OBJECT_UNDEFINED);
+            return ( m_Type != MO_OBJECT_UNDEFINED && m_MoldeoId!=-1 && m_MobIndex.GetParamIndex()!=-1 && m_MobIndex.GetValueIndex()!=-1 );
         }
 
         /// Nombre del objeto
@@ -206,19 +221,19 @@ class LIBMOLDEO_API moMobDefinition
         /// Transforma una cadena de caracteres en su correspondiente moMoldeoObjectType
         static moMoldeoObjectType GetStrType( moText p_Str = moText("default") ) {
 
-            if (p_Str == moText("effect")) {
+            if (p_Str == moText("effect") || p_Str == moText("moEffect")) {
                 return MO_OBJECT_EFFECT;
-            } else if (p_Str == moText("mastereffect")) {
+            } else if (p_Str == moText("mastereffect") || p_Str == moText("moMasterEffect")) {
                 return MO_OBJECT_MASTEREFFECT;
-            } else if (p_Str == moText("posteffect")) {
+            } else if (p_Str == moText("posteffect") || p_Str == moText("moPostEffect")) {
                 return MO_OBJECT_POSTEFFECT;
-            } else if (p_Str == moText("preeffect")) {
+            } else if (p_Str == moText("preeffect") || p_Str == moText("moPreEffect")) {
                 return MO_OBJECT_PREEFFECT;
-            } else if (p_Str == moText("iodevice")) {
+            } else if (p_Str == moText("iodevice") || p_Str == moText("moIODevice")) {
                 return MO_OBJECT_IODEVICE;
-            } else if (p_Str == moText("resource")) {
+            } else if (p_Str == moText("resource") || p_Str == moText("moResource")) {
                 return MO_OBJECT_RESOURCE;
-            } else if (p_Str == moText("console")) {
+            } else if (p_Str == moText("console") || p_Str == moText("moConsole")) {
                 return MO_OBJECT_CONSOLE;
             }
 
@@ -229,7 +244,7 @@ class LIBMOLDEO_API moMobDefinition
         /// Transforma un moMoldeoObjectType en el nombre de su correspondiente clase base
         moText GetTypeStr( moMoldeoObjectType p_Type = MO_OBJECT_UNDEFINED ) {
             if ( ! ( p_Type == MO_OBJECT_UNDEFINED ) ) {
-                return moText("MOB undefined");
+                return moText("MOB class undefined");
             }
             switch(m_Type) {
                 case MO_OBJECT_EFFECT:
@@ -254,10 +269,10 @@ class LIBMOLDEO_API moMobDefinition
                     return moText("moConsole");
                     break;
                 case MO_OBJECT_UNDEFINED:
-                    return moText("MOB undefined");
+                    return moText("MOB class undefined");
                     break;
                 default:
-                    return moText("MOB undefined");
+                    return moText("MOB class undefined");
                     break;
             }
         }
