@@ -71,8 +71,8 @@ wxMoRotaryCtrl::OnPaint(wxPaintEvent& event) {
     dc.DrawRectangle( 0, 0, GetSize().x, GetSize().y );
 
     float ra = wxMin(GetSize().x / 2,GetSize().y / 2) / 1;
-    float ra2 = wxMin(GetSize().x / 2,GetSize().y / 2) / 1.8;
-    float ra3 = wxMin(GetSize().x / 2,GetSize().y / 2) / 4;
+    float ra2 = wxMin(GetSize().x / 2,GetSize().y / 2) / 1.2;
+    float ra3 = wxMin(GetSize().x / 2,GetSize().y / 2) / 2;
 
     float xc = GetSize().x / 2.0;
     float yc = GetSize().y / 2.0;
@@ -101,7 +101,7 @@ wxMoRotaryCtrl::OnPaint(wxPaintEvent& event) {
 
     ///ARCO GAUGE
     dc.SetBrush( wxBrush( wxColour(0,200,0), wxSOLID ) );
-    dc.SetPen( wxPen( wxColour(255,255,255), 0, wxTRANSPARENT ) );
+    //dc.SetPen( wxPen( wxColour(255,255,255), 0, wxTRANSPARENT ) );
     dc.DrawArc( xc-(ra-1)*sin(angposition), yc+(ra-1)*cos(angposition), xc-(ra-1)*sin(m_angmin), yc+(ra-1)*cos(m_angmin) , xc, yc );
     //dc.DrawArc( xc-ra*sin(angmax), yc+ra*cos(angmax) , xc-ra*sin(angposition), yc+ra*cos(angposition), xc, yc );
 

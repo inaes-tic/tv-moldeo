@@ -39,13 +39,22 @@
 			<Add option="-W" />
 			<Add option="-I/usr/local/lib/wx/include/gtk2-ansi-release-2.8" />
 			<Add option="-I/usr/local/include/wx-2.8" />
+			<Add option="-pthread" />
+			<Add option="`pkg-config gtk+-x11-2.0 --cflags`" />
 			<Add option="-D_FILE_OFFSET_BITS=64" />
 			<Add option="-D_LARGE_FILES" />
 			<Add option="-D__WXGTK__" />
-			<Add option="-pthread" />
 			<Add directory="." />
 			<Add directory=".." />
 		</Compiler>
+		<Unit filename="wxMoAuiTabArt.cpp" />
+		<Unit filename="wxMoAuiTabArt.h" />
+		<Unit filename="wxMoColour.cpp" />
+		<Unit filename="wxMoColour.h" />
+		<Unit filename="wxMoColourLevelCtrl.cpp" />
+		<Unit filename="wxMoColourLevelCtrl.h" />
+		<Unit filename="wxMoColourPanel.cpp" />
+		<Unit filename="wxMoColourPanel.h" />
 		<Unit filename="wxMoLevelCtrl.cpp" />
 		<Unit filename="wxMoLevelCtrl.h" />
 		<Unit filename="wxMoRotaryCtrl.cpp" />

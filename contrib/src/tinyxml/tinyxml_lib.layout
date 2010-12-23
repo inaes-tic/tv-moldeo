@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="All" />
+	<File name="tinyxml.h" open="0" top="0" tabpos="0">
+		<Cursor position="50638" topLine="1399" />
+	</File>
 </CodeBlocks_layout_file>

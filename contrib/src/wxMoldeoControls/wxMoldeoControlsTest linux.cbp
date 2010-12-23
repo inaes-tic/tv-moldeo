@@ -59,7 +59,10 @@
 			<Add option="-lwx_gtk2_gl-2.8" />
 			<Add option="-lwx_base-2.8" />
 			<Add library="Releaselinux/libmoldeocontrols.a" />
+			<Add library="GLEW" />
 		</Linker>
+		<Unit filename="WxMoGLCanvas.cpp" />
+		<Unit filename="WxMoGLCanvas.h" />
 		<Unit filename="resource.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>

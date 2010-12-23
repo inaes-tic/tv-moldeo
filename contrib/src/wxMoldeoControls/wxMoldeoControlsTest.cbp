@@ -18,6 +18,9 @@
 				<ResourceCompiler>
 					<Add directory="$(#wx)\lib\gcc_lib\mswd" />
 				</ResourceCompiler>
+				<Linker>
+					<Add library="Debug\libmoldeocontrolsd.a" />
+				</Linker>
 			</Target>
 			<Target title="Release">
 				<Option output="bin\Release\wxMoldeoControlsTest" prefix_auto="1" extension_auto="1" />
@@ -34,6 +37,7 @@
 				</ResourceCompiler>
 				<Linker>
 					<Add option="-s" />
+					<Add library="Release\libmoldeocontrols.a" />
 				</Linker>
 			</Target>
 		</Build>
@@ -47,15 +51,20 @@
 			<Add option='[[if (PLATFORM == PLATFORM_MSW &amp;&amp; (GetCompilerFactory().GetCompilerVersionString(_T(&quot;gcc&quot;)) &gt;= _T(&quot;4.0.0&quot;))) print(_T(&quot;-Wno-attributes&quot;));]]' />
 			<Add option="-D__GNUWIN32__" />
 			<Add option="-D__WXMSW__" />
+			<Add option="-DwxUSE_SYSTEM_OPTIONS" />
+			<Add option="-DWIN32" />
+			<Add option="-D_WINDOWS" />
+			<Add option="-DNOPCH" />
+			<Add option="-D_CRT_NONSTDC_NO_DEPRECATE" />
 			<Add directory="..\..\..\..\..\externlibs\wxWidgets\include" />
 			<Add directory="..\..\..\..\..\externlibs\wxWidgets\lib\mingw_lib\wx\include\msw-ansi-release-static-2.8" />
 			<Add directory="..\wxMoldeoControls" />
+			<Add directory="..\..\..\..\..\externlibs\glew\include" />
 		</Compiler>
 		<ResourceCompiler>
 			<Add directory="$(#wx)\include" />
 		</ResourceCompiler>
 		<Linker>
-			<Add library="Release\libmoldeocontrols.a" />
 			<Add library="wx_msw_core-2.8" />
 			<Add library="wx_base-2.8" />
 			<Add library="wx_msw-2.8" />
@@ -78,8 +87,16 @@
 			<Add library="libcomctl32.a" />
 			<Add library="libwsock32.a" />
 			<Add library="libodbc32.a" />
+			<Add library="glew_shared" />
+			<Add library="..\..\..\..\..\externlibs\wxWidgets\lib\mingw_lib\libwx_msw_gl-2.8.a" />
+			<Add library="opengl32" />
+			<Add library="glut32" />
+			<Add library="glut" />
 			<Add directory="..\..\..\..\..\externlibs\wxWidgets\lib\mingw_lib" />
+			<Add directory="..\..\..\..\..\externlibs\glew\lib" />
 		</Linker>
+		<Unit filename="WxMoGLCanvas.cpp" />
+		<Unit filename="WxMoGLCanvas.h" />
 		<Unit filename="resource.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>

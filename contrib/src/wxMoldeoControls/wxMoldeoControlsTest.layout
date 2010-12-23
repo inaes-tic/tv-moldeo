@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="All" />
+	<File name="WxMoGLCanvas.h" open="0" top="0" tabpos="0">
+		<Cursor position="47" topLine="0" />
+	</File>
 	<File name="resource.rc" open="0" top="0" tabpos="1">
 		<Cursor position="30" topLine="0" />
 	</File>
-	<File name="wxMoldeoControlsTestApp.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="851" topLine="0" />
+	<File name="wxMoldeoControlsTestApp.cpp" open="0" top="0" tabpos="1">
+		<Cursor position="620" topLine="6" />
 	</File>
-	<File name="wxMoldeoControlsTestApp.h" open="0" top="0" tabpos="0">
-		<Cursor position="617" topLine="0" />
+	<File name="wxMoldeoControlsTestApp.h" open="0" top="0" tabpos="2">
+		<Cursor position="479" topLine="0" />
 	</File>
 	<File name="wxMoldeoControlsTestDialog.cpp" open="0" top="0" tabpos="1">
-		<Cursor position="2494" topLine="30" />
+		<Cursor position="14047" topLine="197" />
 	</File>
 	<File name="wxMoldeoControlsTestDialog.h" open="0" top="0" tabpos="2">
-		<Cursor position="550" topLine="0" />
+		<Cursor position="410" topLine="0" />
 	</File>
 </CodeBlocks_layout_file>

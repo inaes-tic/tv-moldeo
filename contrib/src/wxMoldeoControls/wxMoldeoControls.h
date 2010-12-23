@@ -3,8 +3,16 @@
 
 ///GENERAL CONTROLS
 
+  /**
+  *   Moldeo Tab Art for wxAui interfaces
+  */
+  #include "wxMoAuiTabArt.h"
+
 ///SLIDER CONTROLS
+    #include "wxMoColour.h"
+    #include "wxMoColourPanel.h"
     #include "wxMoLevelCtrl.h"
+    #include "wxMoColourLevelCtrl.h"
     #include "wxMoRotaryCtrl.h"
 
     ///TODO LIST

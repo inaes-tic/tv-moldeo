@@ -74,6 +74,14 @@
 			<Add library="glaux" />
 			<Add library="gdi32" />
 		</Linker>
+		<Unit filename="wxMoAuiTabArt.cpp" />
+		<Unit filename="wxMoAuiTabArt.h" />
+		<Unit filename="wxMoColour.cpp" />
+		<Unit filename="wxMoColour.h" />
+		<Unit filename="wxMoColourLevelCtrl.cpp" />
+		<Unit filename="wxMoColourLevelCtrl.h" />
+		<Unit filename="wxMoColourPanel.cpp" />
+		<Unit filename="wxMoColourPanel.h" />
 		<Unit filename="wxMoLevelCtrl.cpp" />
 		<Unit filename="wxMoLevelCtrl.h" />
 		<Unit filename="wxMoRotaryCtrl.cpp" />
@@ -96,6 +104,9 @@
 			<code_completion />
 			<lib_finder disable_auto="0" />
 			<debugger />
+			<wxsmith version="1">
+				<gui name="wxWidgets" src="" main="" init_handlers="necessary" language="CPP" />
+			</wxsmith>
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>
