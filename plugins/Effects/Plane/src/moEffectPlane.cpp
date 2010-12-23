@@ -77,6 +77,7 @@ MOboolean moEffectPlane::Init() {
 	moDefineParamIndex( PLANE_SYNC, moText("syncro") );
 	moDefineParamIndex( PLANE_PHASE, moText("phase") );
 	moDefineParamIndex( PLANE_TEXTURE, moText("texture") );
+	moDefineParamIndex( PLANE_BLENDING, moText("blending") );
 	moDefineParamIndex( PLANE_WIDTH, moText("width") );
 	moDefineParamIndex( PLANE_HEIGHT, moText("height") );
 	moDefineParamIndex( PLANE_TRANSLATEX, moText("translatex") );
@@ -94,14 +95,42 @@ MOboolean moEffectPlane::Init() {
 	return true;
 }
 
+moConfigDefinition *
+moEffectPlane::GetDefinition( moConfigDefinition *p_configdefinition ) {
+
+	//default: alpha, color, syncro
+	p_configdefinition = moEffect::GetDefinition( p_configdefinition );
+	p_configdefinition->Add( moText("texture"), MO_PARAM_TEXTURE, PLANE_TEXTURE, moValue("Default", MO_VALUE_TXT) );
+	p_configdefinition->Add( moText("blending"), MO_PARAM_BLENDING, PLANE_BLENDING, moValue( "0", MO_VALUE_NUM ).Ref() );
+	p_configdefinition->Add( moText("width"), MO_PARAM_FUNCTION, PLANE_WIDTH, moValue("1.0", MO_VALUE_FUNCTION).Ref() );
+	p_configdefinition->Add( moText("height"), MO_PARAM_FUNCTION, PLANE_HEIGHT, moValue("1.0", MO_VALUE_FUNCTION).Ref() );
+	p_configdefinition->Add( moText("translatex"), MO_PARAM_TRANSLATEX, PLANE_TRANSLATEX, moValue("0.0", MO_VALUE_FUNCTION).Ref() );
+	p_configdefinition->Add( moText("translatey"), MO_PARAM_TRANSLATEY, PLANE_TRANSLATEY, moValue("0.0", MO_VALUE_FUNCTION).Ref() );
+	p_configdefinition->Add( moText("translatez"), MO_PARAM_TRANSLATEZ, PLANE_TRANSLATEZ, moValue("-2.0", MO_VALUE_FUNCTION).Ref() );
+	p_configdefinition->Add( moText("rotatex"), MO_PARAM_ROTATEX, PLANE_ROTATEX, moValue("-45", MO_VALUE_FUNCTION).Ref() );
+	p_configdefinition->Add( moText("rotatey"), MO_PARAM_ROTATEY, PLANE_ROTATEY, moValue("0.0", MO_VALUE_FUNCTION).Ref() );
+	p_configdefinition->Add( moText("rotatez"), MO_PARAM_ROTATEZ, PLANE_ROTATEZ, moValue("0.0", MO_VALUE_FUNCTION).Ref() );
+	p_configdefinition->Add( moText("scalex"), MO_PARAM_SCALEX, PLANE_SCALEX, moValue("1.0", MO_VALUE_FUNCTION).Ref() );
+	p_configdefinition->Add( moText("scaley"), MO_PARAM_SCALEY, PLANE_SCALEY, moValue("1.0", MO_VALUE_FUNCTION).Ref() );
+	p_configdefinition->Add( moText("scalez"), MO_PARAM_SCALEZ, PLANE_SCALEZ, moValue("1.0", MO_VALUE_FUNCTION).Ref() );
+	return p_configdefinition;
+}
+
 void moEffectPlane::Draw( moTempo* tempogral,moEffectState* parentstate)
 {
-	MOint indeximage;
+    MOint indeximage;
     MOdouble PosTextX0, PosTextX1, PosTextY0, PosTextY1;
     MOdouble alto, ancho;
+    float prop;
 
     PreDraw( tempogral, parentstate);
 
+    int w = m_pResourceManager->GetRenderMan()->ScreenWidth();
+    int h = m_pResourceManager->GetRenderMan()->ScreenHeight();
+    if ( w == 0 || h == 0 ) { w  = 1; h = 1; prop = 1.0; }
+    else {
+      prop = (float) h / (float) w;
+    }
 
     // Guardar y resetar la matriz de vista del modelo //
     glMatrixMode(GL_MODELVIEW);                         // Select The Modelview Matrix
@@ -113,65 +142,53 @@ void moEffectPlane::Draw( moTempo* tempogral,moEffectState* parentstate)
 	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
 	glPushMatrix();										// Store The Projection Matrix
 	glLoadIdentity();									// Reset The Projection Matrix
-	gluPerspective(45.0f,(GLfloat)800/(GLfloat)600, 0.1f ,4000.0f);
+	gluPerspective(45.0f, 1/prop, 0.1f ,4000.0f);
 
     // Funcion de blending y de alpha channel //
     glEnable(GL_BLEND);
 
 	glDisable(GL_ALPHA);
 
-	glTranslatef(   m_Config[moR(PLANE_TRANSLATEX)].GetData()->Fun()->Eval(state.tempo.ang),
-					m_Config[moR(PLANE_TRANSLATEY)].GetData()->Fun()->Eval(state.tempo.ang),
-					m_Config[moR(PLANE_TRANSLATEZ)].GetData()->Fun()->Eval(state.tempo.ang));
+	glTranslatef(   m_Config.Eval( moR(PLANE_TRANSLATEX) ),
+                  m_Config.Eval( moR(PLANE_TRANSLATEY)),
+                  m_Config.Eval( moR(PLANE_TRANSLATEZ))
+              );
 
-	glRotatef(  m_Config[moR(PLANE_ROTATEX)].GetData()->Fun()->Eval(state.tempo.ang), 1.0, 0.0, 0.0 );
-    glRotatef(  m_Config[moR(PLANE_ROTATEY)].GetData()->Fun()->Eval(state.tempo.ang), 0.0, 1.0, 0.0 );
-    glRotatef(  m_Config[moR(PLANE_ROTATEZ)].GetData()->Fun()->Eval(state.tempo.ang), 0.0, 0.0, 1.0 );
-	glScalef(   m_Config[moR(PLANE_SCALEX)].GetData()->Fun()->Eval(state.tempo.ang),
-                m_Config[moR(PLANE_SCALEY)].GetData()->Fun()->Eval(state.tempo.ang),
-                m_Config[moR(PLANE_SCALEZ)].GetData()->Fun()->Eval(state.tempo.ang));
+	glRotatef(  m_Config.Eval( moR(PLANE_ROTATEX) ), 1.0, 0.0, 0.0 );
+  glRotatef(  m_Config.Eval( moR(PLANE_ROTATEY) ), 0.0, 1.0, 0.0 );
+  glRotatef(  m_Config.Eval( moR(PLANE_ROTATEZ) ), 0.0, 0.0, 1.0 );
 
-	glColor4f(  m_Config[moR(PLANE_COLOR)][MO_SELECTED][MO_RED].Fun()->Eval(state.tempo.ang) * state.tintr,
-                m_Config[moR(PLANE_COLOR)][MO_SELECTED][MO_GREEN].Fun()->Eval(state.tempo.ang) * state.tintg,
-                m_Config[moR(PLANE_COLOR)][MO_SELECTED][MO_BLUE].Fun()->Eval(state.tempo.ang) * state.tintb,
-				m_Config[moR(PLANE_COLOR)][MO_SELECTED][MO_ALPHA].Fun()->Eval(state.tempo.ang) *
-				m_Config[moR(PLANE_ALPHA)].GetData()->Fun()->Eval(state.tempo.ang) * state.alpha);
+	glScalef(   m_Config.Eval( moR(PLANE_SCALEX)),
+              m_Config.Eval( moR(PLANE_SCALEX)),
+              m_Config.Eval( moR(PLANE_SCALEZ))
+            );
 
-    //glBindTexture( GL_TEXTURE_2D, Images.GetGLId(indeximage,&state.tempo) );
-    moTexture* pImage = (moTexture*) m_Config[moR(PLANE_TEXTURE)].GetData()->Pointer();
-    if (pImage!=NULL) {
-        if (pImage->GetType()==MO_TYPE_MOVIE) {
-            glBlendFunc(GL_SRC_COLOR,GL_ONE_MINUS_SRC_COLOR);
-        } else {
-            glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-        }
-    }
+  moVector4d color = m_Config.EvalColor(moR(PLANE_COLOR));
 
-    glBindTexture( GL_TEXTURE_2D, m_Config[moR(PLANE_TEXTURE)].GetData()->GetGLId(&state.tempo, 1, NULL ) );
+	glColor4f(  color.X() * state.tintr,
+              color.Y() * state.tintg,
+              color.Z() * state.tintb,
+              color.W() *
+              m_Config.Eval( moR(PLANE_ALPHA) ) * state.alpha );
 
+  glBindTexture( GL_TEXTURE_2D, m_Config.GetGLId( moR(PLANE_TEXTURE), &state.tempo ) );
 
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  SetBlending( (moBlendingModes) m_Config.Int( moR(PLANE_BLENDING) ) );
 
-    PosTextX0 = 0.0;
-	PosTextX1 = 1.0 * ( pImage!=NULL ? pImage->GetMaxCoordS() :  1.0 );
-    PosTextY0 = 0.0;
-    PosTextY1 = 1.0 * ( pImage!=NULL ? pImage->GetMaxCoordT() :  1.0 );
-
-	ancho = (int)m_Config[ moR(PLANE_WIDTH) ].GetData()->Fun()->Eval(state.tempo.ang);
-	alto = (int)m_Config[ moR(PLANE_HEIGHT) ].GetData()->Fun()->Eval(state.tempo.ang);
+	ancho = (int)m_Config.Eval( moR(PLANE_WIDTH) );
+	alto = (int)m_Config.Eval( moR(PLANE_HEIGHT) );
 
 	glBegin(GL_QUADS);
-		glTexCoord2f( PosTextX0, PosTextY1);
+		glTexCoord2f( 0.0, 0.0);
 		glVertex2i( -ancho, -alto);
 
-		glTexCoord2f( PosTextX1, PosTextY1);
+		glTexCoord2f( 1.0, 0.0);
 		glVertex2i(  ancho, -alto);
 
-		glTexCoord2f( PosTextX1, PosTextY0);
+		glTexCoord2f( 1.0, 1.0);
 		glVertex2i(  ancho,  alto);
 
-		glTexCoord2f( PosTextX0, PosTextY0);
+		glTexCoord2f( 0.0, 1.0);
 		glVertex2i( -ancho,  alto);
 	glEnd();
 
@@ -188,22 +205,4 @@ MOboolean moEffectPlane::Finish()
     return PreFinish();
 }
 
-moConfigDefinition *
-moEffectPlane::GetDefinition( moConfigDefinition *p_configdefinition ) {
 
-	//default: alpha, color, syncro
-	p_configdefinition = moEffect::GetDefinition( p_configdefinition );
-	p_configdefinition->Add( moText("texture"), MO_PARAM_TEXTURE, PLANE_TEXTURE, moValue("Default", "TXT") );
-	p_configdefinition->Add( moText("width"), MO_PARAM_FUNCTION, PLANE_WIDTH, moValue("1.0", "FUNCTION").Ref() );
-	p_configdefinition->Add( moText("height"), MO_PARAM_FUNCTION, PLANE_HEIGHT, moValue("1.0", "FUNCTION").Ref() );
-	p_configdefinition->Add( moText("translatex"), MO_PARAM_TRANSLATEX, PLANE_TRANSLATEX, moValue("0.0", "FUNCTION").Ref() );
-	p_configdefinition->Add( moText("translatey"), MO_PARAM_TRANSLATEY, PLANE_TRANSLATEY, moValue("0.0", "FUNCTION").Ref() );
-	p_configdefinition->Add( moText("translatez"), MO_PARAM_TRANSLATEZ, PLANE_TRANSLATEZ, moValue("0.0", "FUNCTION").Ref() );
-	p_configdefinition->Add( moText("rotatex"), MO_PARAM_ROTATEX, PLANE_ROTATEX, moValue("0.0", "FUNCTION").Ref() );
-	p_configdefinition->Add( moText("rotatey"), MO_PARAM_ROTATEY, PLANE_ROTATEY, moValue("0.0", "FUNCTION").Ref() );
-	p_configdefinition->Add( moText("rotatez"), MO_PARAM_ROTATEZ, PLANE_ROTATEZ, moValue("0.0", "FUNCTION").Ref() );
-	p_configdefinition->Add( moText("scalex"), MO_PARAM_SCALEX, PLANE_SCALEX, moValue("1.0", "FUNCTION").Ref() );
-	p_configdefinition->Add( moText("scaley"), MO_PARAM_SCALEY, PLANE_SCALEY, moValue("1.0", "FUNCTION").Ref() );
-	p_configdefinition->Add( moText("scalez"), MO_PARAM_SCALEZ, PLANE_SCALEZ, moValue("1.0", "FUNCTION").Ref() );
-	return p_configdefinition;
-}
