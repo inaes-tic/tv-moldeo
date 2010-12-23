@@ -69,6 +69,23 @@ moEffectIcon::~moEffectIcon() {
 	Finish();
 }
 
+moConfigDefinition *
+moEffectIcon::GetDefinition( moConfigDefinition *p_configdefinition ) {
+
+	//default: alpha, color, syncro
+	p_configdefinition = moEffect::GetDefinition( p_configdefinition );
+	p_configdefinition->Add( moText("texture"), MO_PARAM_TEXTURE, ICON_TEXTURE, moValue( "default", MO_VALUE_TXT) );
+	p_configdefinition->Add( moText("blending"), MO_PARAM_BLENDING, ICON_BLENDING, moValue( "0", MO_VALUE_NUM ).Ref() );
+	p_configdefinition->Add( moText("width"), MO_PARAM_FUNCTION, ICON_WIDTH, moValue( "1.0", MO_VALUE_FUNCTION).Ref() );
+	p_configdefinition->Add( moText("height"), MO_PARAM_FUNCTION, ICON_HEIGHT, moValue( "1.0", MO_VALUE_FUNCTION ).Ref() );
+	p_configdefinition->Add( moText("translatex"), MO_PARAM_TRANSLATEX, ICON_TRANSLATEX, moValue( "0.0", MO_VALUE_FUNCTION ).Ref() );
+	p_configdefinition->Add( moText("translatey"), MO_PARAM_TRANSLATEY, ICON_TRANSLATEY, moValue( "0.0", MO_VALUE_FUNCTION ).Ref() );
+	p_configdefinition->Add( moText("rotate"), MO_PARAM_ROTATEZ, ICON_ROTATE );
+	p_configdefinition->Add( moText("scalex"), MO_PARAM_SCALEX, ICON_SCALEX );
+	p_configdefinition->Add( moText("scaley"), MO_PARAM_SCALEY, ICON_SCALEY );
+	return p_configdefinition;
+}
+
 MOboolean moEffectIcon::Init() {
 
     if (!PreInit()) return false;
@@ -83,18 +100,11 @@ MOboolean moEffectIcon::Init() {
 	moDefineParamIndex( ICON_HEIGHT, moText("height") );
 	moDefineParamIndex( ICON_TRANSLATEX, moText("translatex") );
 	moDefineParamIndex( ICON_TRANSLATEY, moText("translatey") );
-	moDefineParamIndex( ICON_TRANSLATEZ, moText("translatez") );
-	moDefineParamIndex( ICON_ROTATEX, moText("rotatex") );
-	moDefineParamIndex( ICON_ROTATEY, moText("rotatey") );
-	moDefineParamIndex( ICON_ROTATEZ, moText("rotatez") );
+	moDefineParamIndex( ICON_ROTATE, moText("rotate") );
 	moDefineParamIndex( ICON_SCALEX, moText("scalex") );
 	moDefineParamIndex( ICON_SCALEY, moText("scaley") );
-	moDefineParamIndex( ICON_SCALEZ, moText("scalez") );
 	moDefineParamIndex( ICON_INLET, moText("inlet") );
 	moDefineParamIndex( ICON_OUTLET, moText("outlet") );
-
-    Tx = Ty = Tz = Rx = Ry = Rz = 0.0;
-	Sx = Sy = Sz = 1.0;
 
 	return true;
 }
@@ -102,72 +112,83 @@ MOboolean moEffectIcon::Init() {
 
 void moEffectIcon::Draw( moTempo* tempogral, moEffectState* parentstate )
 {
-    MOint indeximage;
-	MOdouble PosTextX0, PosTextX1, PosTextY0, PosTextY1;
-    int ancho,alto;
+
+    float ancho, alto;
+    float prop;
+
     int w = m_pResourceManager->GetRenderMan()->ScreenWidth();
     int h = m_pResourceManager->GetRenderMan()->ScreenHeight();
+    if ( w == 0 || h == 0 ) { w  = 1; h = 1; prop = 1.0; }
+    else {
+      prop = (float) h / (float) w;
+    }
 
     PreDraw( tempogral, parentstate);
 
 
     // Guardar y resetar la matriz de vista del modelo //
     glMatrixMode(GL_MODELVIEW);                         // Select The Modelview Matrix
-	glLoadIdentity();									// Reset The View
+    glLoadIdentity();									// Reset The View
 
     // Cambiar la proyeccion para una vista ortogonal //
-	glDisable(GL_DEPTH_TEST);							// Disables Depth Testing
-	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
-	glLoadIdentity();									// Reset The Projection Matrix
-	glOrtho(0,w,0,h,-1,1);                              // Set Up An Ortho Screen
+    glDisable(GL_DEPTH_TEST);       // Disables Depth Testing
+    glMatrixMode(GL_PROJECTION);    // Select The Projection Matrix
+    glLoadIdentity();               // Reset The Projection Matrix
+    glOrtho( -0.5, 0.5, -0.5*prop, 0.5*prop, -1, 1);          // Set Up An Ortho Screen
 
 
-    // Funcion de blending y de alpha channel //
-    glEnable(GL_BLEND);
+    glEnable(GL_ALPHA);
 
-	glDisable(GL_ALPHA);
+    ancho = m_Config.Eval( moR(ICON_WIDTH));
+    alto = m_Config.Eval( moR(ICON_HEIGHT));
 
-    // Draw //
-	glTranslatef(  ( m_Config.Eval( moR(ICON_TRANSLATEX), state.tempo.ang) + Tx )*w,
-                   ( m_Config.Eval( moR(ICON_TRANSLATEY), state.tempo.ang)+Ty )*h,
-					m_Config.Eval( moR(ICON_TRANSLATEZ), state.tempo.ang)+Tz);
+    /// Draw //
+    glTranslatef(  m_Config.Eval( moR(ICON_TRANSLATEX)),
+                   m_Config.Eval( moR(ICON_TRANSLATEY)),
+                   0.0);
 
-	glRotatef(  m_Config[moR(ICON_ROTATEX)].GetData()->Fun()->Eval(state.tempo.ang), 1.0, 0.0, 0.0 );
-    glRotatef(  m_Config[moR(ICON_ROTATEY)].GetData()->Fun()->Eval(state.tempo.ang), 0.0, 1.0, 0.0 );
-    glRotatef(  m_Config[moR(ICON_ROTATEZ)].GetData()->Fun()->Eval(state.tempo.ang), 0.0, 0.0, 1.0 );
-	glScalef(   m_Config[moR(ICON_SCALEX)].GetData()->Fun()->Eval(state.tempo.ang)*Sx,
-                m_Config[moR(ICON_SCALEY)].GetData()->Fun()->Eval(state.tempo.ang)*Sy,
-                m_Config[moR(ICON_SCALEZ)].GetData()->Fun()->Eval(state.tempo.ang)*Sz);
+    ///solo rotamos en el eje Z (0,0,1) ya que siempre estaremos perpedicular al plano (X,Y)
+    glRotatef(  m_Config.Eval( moR(ICON_ROTATE)), 0.0, 0.0, 1.0 );
+
+    glScalef(   m_Config.Eval( moR(ICON_SCALEX)),
+                m_Config.Eval( moR(ICON_SCALEY)),
+                  1.0);
 
     SetColor( m_Config[moR(ICON_COLOR)][MO_SELECTED], m_Config[moR(ICON_ALPHA)][MO_SELECTED], state );
 
-    SetBlending( (moBlendingModes) m_Config[moR(ICON_BLENDING)][MO_SELECTED][0].Int() );
+    SetBlending( (moBlendingModes) m_Config.Int( moR(ICON_BLENDING) ) );
 
-    moTexture* pImage = (moTexture*) m_Config[moR(ICON_TEXTURE)].GetData()->Pointer();
+    glBindTexture( GL_TEXTURE_2D, m_Config.GetGLId( moR(ICON_TEXTURE), &state.tempo) );
 
-    glBindTexture( GL_TEXTURE_2D, m_Config[moR(ICON_TEXTURE)].GetData()->GetGLId(&state.tempo) );
 
-    PosTextX0 = 0.0;
-	PosTextX1 = 1.0 * ( pImage!=NULL ? pImage->GetMaxCoordS() :  1.0 );
-    PosTextY0 = 0.0;
-    PosTextY1 = 1.0 * ( pImage!=NULL ? pImage->GetMaxCoordT() :  1.0 );
+    glBegin(GL_QUADS);
+      glTexCoord2f( 0.0, 1.0 );
+      glVertex2f( -0.5*ancho, -0.5*alto);
 
-	//ancho = (int)m_Config[ moR(ICON_WIDTH) ].GetData()->Fun()->Eval(state.tempo.ang)* (float)(w/800.0);
-	//alto = (int)m_Config[ moR(ICON_HEIGHT) ].GetData()->Fun()->Eval(state.tempo.ang)* (float)(h/600.0);
+      glTexCoord2f( 1.0, 1.0 );
+      glVertex2f(  0.5*ancho, -0.5*alto);
 
-	glBegin(GL_QUADS);
-		glTexCoord2f( PosTextX0, PosTextY1);
-		glVertex2f( -0.5*w, -0.5*h);
+      glTexCoord2f( 1.0, 0.0 );
+      glVertex2f(  0.5*ancho,  0.5*alto);
 
-		glTexCoord2f( PosTextX1, PosTextY1);
-		glVertex2f(  0.5*w, -0.5*h);
+      glTexCoord2f( 0.0, 0.0 );
+      glVertex2f( -0.5*ancho,  0.5*alto);
+    glEnd();
 
-		glTexCoord2f( PosTextX1, PosTextY0);
-		glVertex2f(  0.5*w,  0.5*h);
+    int Tracker = GetInletIndex("TRACKERKLT" );
+    if (Tracker > -1) {
+      moInlet* pInlet = GetInlets()->Get(Tracker);
+      if (pInlet ) {
+          if (pInlet->Updated()) {
 
-		glTexCoord2f( PosTextX0, PosTextY0);
-		glVertex2f( -0.5*w,  0.5*h);
-	glEnd();
+            moTrackerSystemData* pData = (moTrackerSystemData*) pInlet->GetData()->Pointer();
+            if (pData) {
+                //MODebug2->Message("Icon > Draw > Drawing Features");
+                pData->DrawFeatures( 1.0, -1.0, 0.5, 0.5 );
+            }
+          }
+      }
+    }
 
 }
 
@@ -175,70 +196,6 @@ MOboolean moEffectIcon::Finish()
 {
     return PreFinish();
 }
-
-void moEffectIcon::Interaction( moIODeviceManager *IODeviceManager ) {
-
-	moDeviceCode *temp;
-	MOint did,cid,state,valor;
-
-	moEffect::Interaction( IODeviceManager );
-
-	if (devicecode!=NULL)
-	for(int i=0; i<ncodes; i++) {
-
-		temp = devicecode[i].First;
-
-		while(temp!=NULL) {
-			did = temp->device;
-			cid = temp->devicecode;
-			state = IODeviceManager->IODevices().Get(did)->GetStatus(cid);
-			valor = IODeviceManager->IODevices().Get(did)->GetValue(cid);
-			if (state)
-			switch(i) {
-				case MO_ICON_TRANSLATE_X:
-					//Tx = valor;
-					MODebug2->Push(IntToStr(valor));
-					break;
-				case MO_ICON_TRANSLATE_Y:
-					//Ty = m_pResourceManager->GetRenderMan()->RenderHeight() - valor;
-					MODebug2->Push(IntToStr(valor));
-					break;
-				case MO_ICON_SCALE_X:
-					//Sx+=((float) valor / (float) 256.0);
-					MODebug2->Push(IntToStr(valor));
-					break;
-				case MO_ICON_SCALE_Y:
-					//Sy+=((float) valor / (float) 256.0);
-					MODebug2->Push(IntToStr(valor));
-					break;
-			}
-		temp = temp->next;
-		}
-	}
-
-}
-
-moConfigDefinition *
-moEffectIcon::GetDefinition( moConfigDefinition *p_configdefinition ) {
-
-	//default: alpha, color, syncro
-	p_configdefinition = moEffect::GetDefinition( p_configdefinition );
-	p_configdefinition->Add( moText("texture"), MO_PARAM_TEXTURE, ICON_TEXTURE, moValue( "default", "TXT") );
-	p_configdefinition->Add( moText("blending"), MO_PARAM_BLENDING, ICON_BLENDING, moValue( "0", "NUM").Ref() );
-	p_configdefinition->Add( moText("width"), MO_PARAM_FUNCTION, ICON_WIDTH, moValue( "256", "FUNCTION").Ref() );
-	p_configdefinition->Add( moText("height"), MO_PARAM_FUNCTION, ICON_HEIGHT, moValue( "256", "FUNCTION").Ref() );
-	p_configdefinition->Add( moText("translatex"), MO_PARAM_TRANSLATEX, ICON_TRANSLATEX, moValue( "0.5", "FUNCTION").Ref() );
-	p_configdefinition->Add( moText("translatey"), MO_PARAM_TRANSLATEY, ICON_TRANSLATEY, moValue( "0.5", "FUNCTION").Ref() );
-	p_configdefinition->Add( moText("translatez"), MO_PARAM_TRANSLATEZ, ICON_TRANSLATEZ );
-	p_configdefinition->Add( moText("rotatex"), MO_PARAM_ROTATEX, ICON_ROTATEX );
-	p_configdefinition->Add( moText("rotatey"), MO_PARAM_ROTATEY, ICON_ROTATEY );
-	p_configdefinition->Add( moText("rotatez"), MO_PARAM_ROTATEZ, ICON_ROTATEZ );
-	p_configdefinition->Add( moText("scalex"), MO_PARAM_SCALEX, ICON_SCALEX );
-	p_configdefinition->Add( moText("scaley"), MO_PARAM_SCALEY, ICON_SCALEY );
-	p_configdefinition->Add( moText("scalez"), MO_PARAM_SCALEZ, ICON_SCALEZ );
-	return p_configdefinition;
-}
-
 
 
 void

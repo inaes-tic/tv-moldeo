@@ -50,13 +50,9 @@ enum moIconParamIndex {
 	ICON_HEIGHT,
 	ICON_TRANSLATEX,
 	ICON_TRANSLATEY,
-	ICON_TRANSLATEZ,
-	ICON_ROTATEX,
-	ICON_ROTATEY,
-	ICON_ROTATEZ,
+	ICON_ROTATE,
 	ICON_SCALEX,
 	ICON_SCALEY,
-	ICON_SCALEZ,
 	ICON_INLET,
 	ICON_OUTLET
 };
@@ -70,15 +66,10 @@ public:
     MOboolean Init();
     void Draw( moTempo* tempogral, moEffectState* parentstate = NULL);
     MOboolean Finish();
-	void Interaction( moIODeviceManager * );
-	moConfigDefinition * GetDefinition( moConfigDefinition *p_configdefinition );
+
+    moConfigDefinition * GetDefinition( moConfigDefinition *p_configdefinition );
+
     void Update( moEventList *Events );
-
-private:
-
-	MOint Tx, Ty, Tz;
-	MOfloat Sx, Sy, Sz;
-	MOint Rx, Ry, Rz;
 
 };
 
