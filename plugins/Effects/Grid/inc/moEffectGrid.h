@@ -33,6 +33,7 @@
 #define __MO_EFFECT_GRID_H__
 
 #include "moPlugin.h"
+#include "moldeo.h"
 #include "supereg/tmotor.h"
 
 #define MO_GRID_UP 		0
@@ -68,7 +69,7 @@ private:
     PFNGLACTIVETEXTUREARBPROC    glActiveTextureARB;
 };
 
-class moEffectGridFactory : public moEffectFactory 
+class moEffectGridFactory : public moEffectFactory
 {
 public:
     moEffectGridFactory() {}

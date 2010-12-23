@@ -181,8 +181,9 @@ protected:
 
 	moTextHeap	m_tScriptDebug;
 
-    //movies
-    moTextureIndex Images;
+  //movies
+  moTexture* m_pTexture;
+
 	moTextureAnimated* m_TAnim;
 	moSound*	Sound;
 
@@ -236,6 +237,8 @@ protected:
 	void DrawTrackerFeatures();
 
 	//CUSTOM FUNCTIONS
+	MOuint MovieGLId();
+
 	void SpeedRegulation( MOfloat p_fMinSpeed, MOfloat p_fMaxSpeed );
 	void VCRCommand( moEffectMovieVCRCommand p_Command, MOint p_iValue=0, MOfloat p_fValue = 0.0 );
 	void VCRPlaySpeed();

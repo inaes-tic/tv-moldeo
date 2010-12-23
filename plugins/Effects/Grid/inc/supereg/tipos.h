@@ -4,20 +4,12 @@
 #include<stdio.h>
 #include<string.h>
 
-#ifndef WIN32
-#include "../../../../../inc/port/getc.h"
-#include "../../../../../inc/port/itoa.h"
-#endif
-
+#include "moldeo.h"
 #include "supereg/pcx.h"
 #include "supereg/sup3d.h"
 
 /*agregado para OPENGL*/
 // Full path for openGL(by Andres). Deberia ser path relativo!!!
-//#include "glut.h"
-//#include "glu.h"
-//#include "gl.h"
-//#include "glext.h"
 /*LISTO OPENGL*/
 
 #if !defined(__TIPOS_H__)

@@ -31,8 +31,8 @@ class TGrid
 
 {  public:
 
-	PFNGLMULTITEXCOORD2FARBPROC		glMultiTexCoord2fARB;
-	PFNGLACTIVETEXTUREARBPROC		glActiveTextureARB;
+	//PFNGLMULTITEXCOORD2FARBPROC		glMultiTexCoord2fARB;
+	//PFNGLACTIVETEXTUREARBPROC		glActiveTextureARB;
 
      TGrid *Padre,*Hijo;
      TGrid *Self;

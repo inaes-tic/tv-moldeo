@@ -2,12 +2,12 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="cubemap" />
+		<Option title="grid" />
 		<Option pch_mode="0" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="debug">
-				<Option output="..\..\..\bin\mingw\plugins\effects\cubemap_d.dll" prefix_auto="0" extension_auto="0" />
+				<Option output="..\..\..\bin\mingw\plugins\effects\grid_d.dll" prefix_auto="0" extension_auto="0" />
 				<Option object_output=".wobjsd" />
 				<Option deps_output=".depsd" />
 				<Option type="3" />
@@ -18,10 +18,7 @@
 					<Add option="-g" />
 				</Compiler>
 				<Linker>
-					<Add library="libtinyxmld" />
 					<Add library="glew_sharedd" />
-					<Add library="libfreetype235MT_D" />
-					<Add library="libmuparserd" />
 					<Add library="libgled" />
 					<Add library="libopengl32" />
 					<Add library="libglut32" />
@@ -32,17 +29,14 @@
 				</Linker>
 			</Target>
 			<Target title="release">
-				<Option output="..\..\..\bin\mingw\plugins\effects\cubemap.dll" prefix_auto="0" extension_auto="0" />
+				<Option output="..\..\..\bin\mingw\plugins\effects\grid.dll" prefix_auto="0" extension_auto="0" />
 				<Option object_output=".wobjs" />
 				<Option type="3" />
 				<Option compiler="gcc" />
 				<Option createDefFile="1" />
 				<Option createStaticLib="1" />
 				<Linker>
-					<Add library="libtinyxml" />
 					<Add library="glew_shared" />
-					<Add library="libfreetype235MT" />
-					<Add library="libmuparser" />
 					<Add library="libgle" />
 					<Add library="libopengl32" />
 					<Add library="libglut32" />
@@ -73,9 +67,9 @@
 			<Add directory="..\..\..\..\..\externlibs\SDL_image\include" />
 			<Add directory="..\..\..\..\..\externlibs\SDL_net\include" />
 			<Add directory="..\..\..\..\..\externlibs\gstreamer\include" />
-
 			<Add directory="..\..\..\..\..\externlibs\gstreamer\include\glib-2.0" />
 			<Add directory="..\..\..\..\..\externlibs\gstreamer\lib\glib-2.0\include" />
+			<Add directory=".\inc\supereg" />
 		</Compiler>
 		<Linker>
 			<Add library="libSDL" />
@@ -98,8 +92,29 @@
 			<Add directory="..\..\..\..\..\externlibs\freeimage\lib" />
 			<Add directory="..\..\..\lib\mingw" />
 		</Linker>
-		<Unit filename="inc\moEffectCubemap.h" />
-		<Unit filename="src\moEffectCubemap.cpp" />
+		<Unit filename="inc\moEffectGrid.h" />
+		<Unit filename="inc\supereg\pcx.h" />
+		<Unit filename="inc\supereg\sup3d.h" />
+		<Unit filename="inc\supereg\supereg.h" />
+		<Unit filename="inc\supereg\suppal.h" />
+		<Unit filename="inc\supereg\suprand.h" />
+		<Unit filename="inc\supereg\tgrdutil.h" />
+		<Unit filename="inc\supereg\tgrid.h" />
+		<Unit filename="inc\supereg\tipos.h" />
+		<Unit filename="inc\supereg\tmapa.h" />
+		<Unit filename="inc\supereg\tmotor.h" />
+		<Unit filename="inc\supereg\trdrmap.h" />
+		<Unit filename="src\moEffectGrid.cpp" />
+		<Unit filename="src\supereg\pcx.cpp" />
+		<Unit filename="src\supereg\sup3d.cpp" />
+		<Unit filename="src\supereg\suppal.cpp" />
+		<Unit filename="src\supereg\suprand.cpp" />
+		<Unit filename="src\supereg\tgrdutil.cpp" />
+		<Unit filename="src\supereg\tgrid.cpp" />
+		<Unit filename="src\supereg\tipos.cpp" />
+		<Unit filename="src\supereg\tmapa.cpp" />
+		<Unit filename="src\supereg\tmotor.cpp" />
+		<Unit filename="src\supereg\trdrmap.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />

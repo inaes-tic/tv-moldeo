@@ -104,8 +104,8 @@ moEffectMovie::Init() {
 	m_bInterpolation = m_Config[moParamReference(MOVIE_INTERPOLATION)][MO_SELECTED][0].Int();
 
 	// Seteos de Texturas.
-	Images.MODebug = MODebug;
-	Images.Init(GetConfig(), moParamReference(MOVIE_MOVIES), m_pResourceManager->GetTextureMan());
+	//Images.MODebug = MODebug;
+	//Images.Init(GetConfig(), moParamReference(MOVIE_MOVIES), m_pResourceManager->GetTextureMan());
 
     if (m_Config.GetPreConfCount() > 0)
         m_Config.PreConfFirst();
@@ -126,6 +126,7 @@ moEffectMovie::Init() {
 	m_FramePositionInc = 0.0;
 	m_TAnim = NULL;
 
+/*
 	MOint imov = m_Config[moParamReference(MOVIE_MOVIES)].GetIndexValue();
 	if (Images.ValidIndex(imov)) {
 		if (Images[imov]->GetType() == MO_TYPE_MOVIE ||
@@ -135,6 +136,7 @@ moEffectMovie::Init() {
 			m_FramesPerSecond = m_TAnim->GetFramesPerSecond();
 		}
 	}
+	*/
 /*
 	Sound = m_pResourceManager->GetSoundMan()->GetSound(m_Config[moParamReference(MOVIE_SOUNDS)][MO_SELECTED][0].Text());
 	if (Sound) {
@@ -175,7 +177,7 @@ moEffectMovie::Init() {
             RunSelectedFunction();
 
         } else {
-
+            MODebug2->Error("couldnt compile script");
         }
 	}
 
@@ -245,7 +247,7 @@ void moEffectMovie::Draw( moTempo* tempogral, moEffectState* parentstate )
 	m_TicksAux = m_Ticks;
 	m_Ticks = state.tempo.ticks;
 
-
+/*
 	if (Images[Image])
 	if (Images[Image]->GetType() == MO_TYPE_MOVIE || Images[Image]->GetType() == MO_TYPE_VIDEOBUFFER) {
 		m_TAnim = (moTextureAnimated*)Images[Image];
@@ -254,6 +256,18 @@ void moEffectMovie::Draw( moTempo* tempogral, moEffectState* parentstate )
 			m_FramesPerSecond = m_TAnim->GetFramesPerSecond();
 		}
 	}
+	*/
+	m_pTexture = m_Config[moR(MOVIE_MOVIES)].GetData()->Texture();
+
+	if (m_pTexture->GetType()!=MO_TYPE_TEXTURE && m_pTexture->GetType()!=MO_TYPE_TEXTUREMEMORY ) {
+	  m_TAnim = (moTextureAnimated*)m_pTexture;
+	  if (m_TAnim) {
+			m_FramesLength = m_TAnim->GetNumberFrames();
+			m_FramesPerSecond = m_TAnim->GetFramesPerSecond();
+		}
+  } else {
+    m_TAnim = NULL;
+  }
 
 	//aquí debemos modificar Images.Get(Image,&state.tempo) para los distintos modos de reproduccion
 	//0: PLAY NORMAL 1X [25 fps o 29.97]
@@ -285,7 +299,10 @@ void moEffectMovie::Draw( moTempo* tempogral, moEffectState* parentstate )
 					m_FramePositionAux = 0;
 					m_FramePositionF = 0.0;
 					m_FramePositionFAux = 0.0;
-					FrameGLid = Images.GetGLId(Image, 1);
+					//FrameGLid = Images.GetGLId(Image, 1);
+
+					m_FramePosition = 1;
+					FrameGLid = MovieGLId();
 					break;
 
 				case MO_MOVIE_PLAYSTATE_PLAYING:
@@ -307,17 +324,20 @@ void moEffectMovie::Draw( moTempo* tempogral, moEffectState* parentstate )
 			//Frame in funcion of m_FramePosition
 			//MODebug->Push(IntToStr(m_FramePosition));
 			if ( m_FramePosition <  m_FramesLength ) {
-				FrameGLid = Images.GetGLId( (int)Image, (int)m_FramePosition );
+				//FrameGLid = Images.GetGLId( (int)Image, (int)m_FramePosition );
+				FrameGLid = MovieGLId();
 			}
 			if ( m_FramePosition >= (m_FramesLength-1) ) {
 				if (m_bLoop) {
 					m_FramePosition = 0;
 					m_FramePositionAux = 0;
 					m_FramePositionF = 0.0;
-					FrameGLid = Images.GetGLId( (int)Image, (int)m_FramePosition );
+					//FrameGLid = Images.GetGLId( (int)Image, (int)m_FramePosition );
+					FrameGLid = MovieGLId();
 				} else {
 					VCRCommand(MO_MOVIE_VCR_STOP);
-					FrameGLid = Images.GetGLId( (int)Image, (int)m_FramePosition );
+					//FrameGLid = Images.GetGLId( (int)Image, (int)m_FramePosition );
+					FrameGLid = MovieGLId();
 				}
 			}
 			break;
@@ -348,19 +368,24 @@ void moEffectMovie::Draw( moTempo* tempogral, moEffectState* parentstate )
 
 			if (m_FramePosition < m_FramesLength)
 			{
-				FrameGLid = Images.GetGLId((int)Image, (int)m_FramePosition );
+				//FrameGLid = Images.GetGLId((int)Image, (int)m_FramePosition );
 				//MODebug->Push(IntToStr(m_FramePosition));
+				FrameGLid = MovieGLId();
 			}
 			else
 			{
 				MODebug->Push("Error: script generating invalid frame positions.");
-			    FrameGLid = Images.GetGLId(Image, 1);
+			    //FrameGLid = Images.GetGLId(Image, 1);
+			    m_FramePosition = 1;
+			    FrameGLid = MovieGLId();
 			}
 
 			break;
 
 		case MO_MOVIE_MODE_CYCLE:
-			 FrameGLid = Images.GetGLId(Image, &state.tempo);
+			 //FrameGLid = Images.GetGLId(Image, &state.tempo);
+			 //FrameGLid = m_Config[moR(MOVIE_MOVIE)].GetData()->GetGLId(&state.tempo);
+			 FrameGLid = MovieGLId();
 			break;
 
 		default:
@@ -386,10 +411,10 @@ void moEffectMovie::Draw( moTempo* tempogral, moEffectState* parentstate )
 	PosCuadY = m_Config[moR(MOVIE_POSCUADY)].GetData()->Fun()->Eval(state.tempo.ang);
     AltCuadY = m_Config[moR(MOVIE_ALTCUADY)].GetData()->Fun()->Eval(state.tempo.ang);
 
-	PosTextX0 = PosTextX*Images[Image]->GetMaxCoordS();
-	PosTextX1 =(PosTextX + AncTextX)*Images[Image]->GetMaxCoordS();
-	PosTextY0 =(1 - PosTextY)*Images[Image]->GetMaxCoordT();
-	PosTextY1 =(1 - PosTextY - AltTextY)*Images[Image]->GetMaxCoordT();
+	PosTextX0 = PosTextX*m_pTexture->GetMaxCoordS();
+	PosTextX1 =(PosTextX + AncTextX)*m_pTexture->GetMaxCoordS();
+	PosTextY0 =(1 - PosTextY)*m_pTexture->GetMaxCoordT();
+	PosTextY1 =(1 - PosTextY - AltTextY)*m_pTexture->GetMaxCoordT();
 
 	PosCuadX0 = PosCuadX;
 	PosCuadX1 = PosCuadX + AncCuadX;
@@ -434,6 +459,34 @@ void moEffectMovie::Draw( moTempo* tempogral, moEffectState* parentstate )
 	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
 	glPopMatrix();
 }
+
+MOuint moEffectMovie::MovieGLId() {
+
+  MOuint glid = 0;
+
+  switch(moviemode) {
+
+		case MO_MOVIE_MODE_VCR:
+    case MO_MOVIE_MODE_SCRIPT:
+      if (m_TAnim) {
+        glid = m_TAnim->GetGLId( (MOuint)m_FramePosition );
+      }
+      break;
+
+    case MO_MOVIE_MODE_CYCLE:
+      if (m_TAnim) {
+        glid = m_TAnim->GetGLId( &state.tempo );
+      }
+      break;
+  }
+
+  if ( glid==0 && m_pTexture) {
+    glid == m_pTexture->GetGLId();
+  }
+
+}
+
+
 
 void
 moEffectMovie::DrawDisplayInfo( MOfloat x, MOfloat y ) {
@@ -488,13 +541,16 @@ moEffectMovie::DrawDisplayInfo( MOfloat x, MOfloat y ) {
 
 MOboolean moEffectMovie::Finish()
 {
-    SelectScriptFunction("Finish");
-    RunSelectedFunction();
 
-	m_pTrackerData = NULL;
+    if ((moText)m_MovieScriptFN!=moText("")) {
+      SelectScriptFunction("Finish");
+      RunSelectedFunction();
+      moScript::FinishScript();
+    }
 
-	moScript::FinishScript();
-	Images.Finish();
+    m_pTrackerData = NULL;
+
+    //Images.Finish();
     PreFinish();
 	return true;
 }

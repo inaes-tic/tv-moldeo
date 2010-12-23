@@ -39,16 +39,16 @@
 
 moEffectLightPercussionFactory *m_EffectLightPercussionFactory = NULL;
 
-MO_PLG_API moEffectFactory* CreateEffectFactory(){ 
+MO_PLG_API moEffectFactory* CreateEffectFactory(){
 	if(m_EffectLightPercussionFactory==NULL)
 		m_EffectLightPercussionFactory = new moEffectLightPercussionFactory();
 	return(moEffectFactory*) m_EffectLightPercussionFactory;
-} 
+}
 
-MO_PLG_API void DestroyEffectFactory(){ 
+MO_PLG_API void DestroyEffectFactory(){
 	delete m_EffectLightPercussionFactory;
 	m_EffectLightPercussionFactory = NULL;
-} 
+}
 
 moEffect*  moEffectLightPercussionFactory::Create() {
 	return new moEffectLightPercussion();
@@ -67,7 +67,7 @@ moLightPercussionPoint::moLightPercussionPoint() {
 	for(j=0;j<3;j++)
 		for(i=0;i<3;i++)
 			neighbors[i][j] = NULL;
-	
+
 	E_stable = 50;
 	E_excited = 100;
 	E_explosion = 400;
@@ -83,7 +83,7 @@ moLightPercussionPoint::~moLightPercussionPoint() {
 
 void
 moLightPercussionPoint::EnergyPulse() {
-	Increase(64.0);	
+	Increase(64.0);
         moText energia_str("Energia: ");
 	MODebug->Push(energia_str+IntToStr(Energy));
 }
@@ -93,7 +93,7 @@ moLightPercussionPoint::Increase(MOfloat inc) {
 	Energy+=inc;
 	//ENERGIA > ENERGIA EXPLOSION ->todo mal
 	if(Energy>E_explosion) {
-		Decay();//no lo hagamos esperar		
+		Decay();//no lo hagamos esperar
 	} else if(Energy<0.0) {
 		Energy = 0.0;
 	}
@@ -103,12 +103,12 @@ void
 moLightPercussionPoint::Decay() {
 
 	int t;
-	t = SDL_GetTicks();
+	t = moGetTicks();
 
 	if((Energy>=E_stable) &&(Energy<E_excited)) {
 	//ESTADO ESTABLE(entre E_stable y E_excitado)
 	//no pasa nada, solo aumenta su inestabilidad(mas propenso a recibir descargas y a entablarlas)
-		Time = t;	
+		Time = t;
 	} else if((Energy>=E_excited) &&(Energy<E_explosion)) {
 	//ESTADO EXCITADO(entre E_excitado y E_explosion)
 	//debe volver al state mas estable, a E_excitado, se produce una radiacion sistematica
@@ -119,11 +119,11 @@ moLightPercussionPoint::Decay() {
 	} else if(Energy>=E_explosion) {
 	//ESTADO EXPLOSIVO!!!
 	//explota y libera una considerable carga de energia pasando al state deprimido
-		Irradiate(Energy-E_excited);//si no la puede liberar,,,,,		
+		Irradiate(Energy-E_excited);//si no la puede liberar,,,,,
 	} else if((Energy<E_stable) &&(Energy>E_depressed)) {
 	//ESTADO DEPRIMIDO(entre E_deprimido y E_stable)
 	//recupera de a poco la energia(en forma inversa, de la nada)
-		Time = t;//por ahora nada	
+		Time = t;//por ahora nada
 	}
 
 }
@@ -174,7 +174,7 @@ moLightPercussionPoint::Irradiate(float ir) {
 moEffectLightPercussion::moEffectLightPercussion() {
 	devicecode = NULL;
 	ncodes = 0;
-	m_Name = "percussionlights";
+	SetName("percussionlights");
 }
 
 moEffectLightPercussion::~moEffectLightPercussion() {
@@ -188,7 +188,7 @@ moEffectLightPercussion::Init() {
     if (!PreInit()) return false;
 
     // Hacer la inicializacion de este efecto en particular.
-    color = m_Config.GetParamIndex("color");	
+    color = m_Config.GetParamIndex("color");
     images = m_Config.GetParamIndex("textura");
     rotatx = m_Config.GetParamIndex("rotatex");
     rotaty = m_Config.GetParamIndex("rotatey");
@@ -207,28 +207,24 @@ moEffectLightPercussion::Init() {
 	MESHALIGHTS = new moLightPercussionPoint* [Mwidth];
 	for(i=0;i<Mwidth;i++) MESHALIGHTS[i] = new moLightPercussionPoint [Mheight];
 
-	for(i=0;i<Mwidth;i++) 
+	for(i=0;i<Mwidth;i++)
 	for(j=0;j<Mheight;j++) {
 		MESHALIGHTS[i][j].MODebug = MODebug;
 		MESHALIGHTS[i][j].Pressed = MO_RELEASED;
 		MESHALIGHTS[i][j].I = i;
-		MESHALIGHTS[i][j].J = j;		
+		MESHALIGHTS[i][j].J = j;
 		MESHALIGHTS[i][j].P0X =(float)(i-(Mwidth/2))*0.25;
 		MESHALIGHTS[i][j].P0Y =(float)((Mheight/2)-j)*0.3;
 		MESHALIGHTS[i][j].P0Z =(float) -3.5;
 		MESHALIGHTS[i][j].Energy =(float) morand()*40.0;
-		
+
 		for(v=0;v<3;v++)
-			for(u=0;u<3;u++) 
+			for(u=0;u<3;u++)
 				if(!((u==1) &&(v==1)) &&
 					((i+(u-1))>=0) &&((i+(u-1))<Mwidth) &&
 					((j+(v-1))>=0) &&((j+(v-1))<Mheight))
-						MESHALIGHTS[i][j].neighbors[u][v] = &MESHALIGHTS[i+(u-1)][j+(v-1)];	
+						MESHALIGHTS[i][j].neighbors[u][v] = &MESHALIGHTS[i+(u-1)][j+(v-1)];
 	}
-
-	//Image = Images[0];
-    if(preconfig.GetPreConfNum() > 0)
-        preconfig.PreConfFirst( GetConfig());
 
 	return true;
 }
@@ -237,7 +233,7 @@ void moEffectLightPercussion::Draw( moTempo* tempogral,moEffectState* parentstat
 {
 	MOint i, j;
 	//MOfloat r;//random
-    
+
 	PreDraw( tempogral, parentstate);
 
     glMatrixMode( GL_PROJECTION );
@@ -252,33 +248,33 @@ void moEffectLightPercussion::Draw( moTempo* tempogral,moEffectState* parentstat
 				m_Config.GetParam(color).GetValue().GetSubValue(MO_GREEN).Float()*state.tintg,
                 m_Config.GetParam(color).GetValue().GetSubValue(MO_BLUE).Float()*state.tintb,
                 m_Config.GetParam(color).GetValue().GetSubValue(MO_ALPHA).Float()*state.alpha);
-	
-	glDisable(GL_DEPTH_TEST);	
+
+	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_ALPHA);
-	glDisable(GL_CULL_FACE);	
-	glEnable(GL_BLEND);		
+	glDisable(GL_CULL_FACE);
+	glEnable(GL_BLEND);
 	//glBlendFunc(GL_SRC_ALPHA,GL_ONE);
 	glBlendFunc(GL_SRC_ALPHA, GL_DST_ALPHA);
 
 	glBindTexture(GL_TEXTURE_2D, Images.GetGLId(m_Config.GetCurrentValueIndex(images)));
-  
+
 	//recorre todas las lights y enciende las que estaban apagadas
 	float al;
 
 	for(j=0;j<Mheight;j++) {
 	for(i=0;i<Mwidth;i++) {
-		
+
 		//decaen!!
 		MESHALIGHTS[i][j].Decay();
 
 		//carga energia!!!
 		if(MESHALIGHTS[i][j].Pressed!=MO_RELEASED) MESHALIGHTS[i][j].EnergyPulse();
-		
+
 
 		if(MESHALIGHTS[i][j].Energy>=MESHALIGHTS[i][j].E_excited) {
 			glLoadIdentity();
 			al = 1.0;
-			if(MESHALIGHTS[i][j].Energy<MESHALIGHTS[i][j].E_explosion) 
+			if(MESHALIGHTS[i][j].Energy<MESHALIGHTS[i][j].E_explosion)
 					al =(MESHALIGHTS[i][j].Energy -  MESHALIGHTS[i][j].E_excited)/(MESHALIGHTS[i][j].E_explosion -  MESHALIGHTS[i][j].E_excited);
 			//glScalef(1.0*state.amplitude*cos(state.tempo.ang),1.0*state.amplitude*cos(state.tempo.ang),1.0*state.amplitude);
 		    glColor4f(  m_Config.GetParam(color).GetValue().GetSubValue(MO_RED).Float()*state.tintr,
@@ -322,7 +318,7 @@ void moEffectLightPercussion::Draw( moTempo* tempogral,moEffectState* parentstat
 
 	}
 	}
-	
+
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glPopMatrix();
 	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
@@ -344,18 +340,18 @@ moEffectLightPercussion::Interaction(moIODeviceManager *IODeviceManager) {
 		while(temp!=NULL) {
 			did = temp->device;
 			cid = temp->devicecode;
-			state = IODeviceManager->array[did]->GetStatus(cid);
-			valor = IODeviceManager->array[did]->GetValue(cid);
+			state = IODeviceManager->IODevices().Get(did)->GetStatus(cid);
+			valor = IODeviceManager->IODevices().Get(did)->GetValue(cid);
 			if(state) {
 				//switch(i) {
 				//	default:
 						d = i / 10;
 						i2 = i - d*10;
 						MESHALIGHTS[i2*(Mwidth/(10))][d*(Mheight/(4))].Pressed = MO_PRESSED;
-						MODebug->Push(moText("tecla presionada")); //(by Andres)
+						MODebug2->Push(moText("tecla presionada")); //(by Andres)
 				//		break;
 				//}
-						
+
 			}
 		temp = temp->next;
 		}

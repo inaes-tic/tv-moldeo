@@ -435,7 +435,7 @@ void moEffectLiveDrawing2::Interaction( moIODeviceManager *IODeviceManager ) {
 				}
 				else if (i == MO_MOVE_MOUSE_X)
 				{
-					if (!tabletDetected)
+					//if (!tabletDetected)
 					{
 						penX0 = penX;
 						penX = valor;
@@ -445,7 +445,7 @@ void moEffectLiveDrawing2::Interaction( moIODeviceManager *IODeviceManager ) {
 				}
 				else if (i == MO_MOVE_MOUSE_Y)
 				{
-					if (!tabletDetected)
+					//if (!tabletDetected)
 					{
 						penY0 = penY;
 						penY = m_pResourceManager->GetRenderMan()->RenderHeight() - valor;
@@ -592,9 +592,9 @@ void moEffectLiveDrawing2::Interaction( moIODeviceManager *IODeviceManager ) {
 		}
 	}
 
-	/*
+
 	//hay que comentar esto para q ande el tracker para el laser....
-	if (!tabletDetected)
+	//if (!tabletDetected)
 	{
 		if (leftClicked)
 		{
@@ -616,7 +616,7 @@ void moEffectLiveDrawing2::Interaction( moIODeviceManager *IODeviceManager ) {
 		}
 		else pressure = (float)min_pressure / (float)max_pressure;
 
-	}*/
+	}
 
 /*
     //  Rehacer!!!!

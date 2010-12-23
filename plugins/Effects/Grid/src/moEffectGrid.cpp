@@ -71,11 +71,11 @@ moEffectGrid::moEffectGrid()
 	//Funciones de multitexture
         // wglGetProcAddress reemplazado por glutGetProcAddress(by Andres)
 	#ifdef _WIN32
-	glActiveTextureARB		=(PFNGLACTIVETEXTUREARBPROC) wglGetProcAddress("glActiveTextureARB");
-	glMultiTexCoord2fARB	=(PFNGLMULTITEXCOORD2FARBPROC) wglGetProcAddress("glMultiTexCoord2fARB");
+	//glActiveTextureARB		=(PFNGLACTIVETEXTUREARBPROC) wglGetProcAddress("glActiveTextureARB");
+	//glMultiTexCoord2fARB	=(PFNGLMULTITEXCOORD2FARBPROC) wglGetProcAddress("glMultiTexCoord2fARB");
 	#else
-	glActiveTextureARB		=(PFNGLACTIVETEXTUREARBPROC) glutGetProcAddress("glActiveTextureARB");
-	glMultiTexCoord2fARB	=(PFNGLMULTITEXCOORD2FARBPROC) glutGetProcAddress("glMultiTexCoord2fARB");
+	//glActiveTextureARB		=(PFNGLACTIVETEXTUREARBPROC) glutGetProcAddress("glActiveTextureARB");
+	//glMultiTexCoord2fARB	=(PFNGLMULTITEXCOORD2FARBPROC) glutGetProcAddress("glMultiTexCoord2fARB");
 	#endif
 	Grid = new TEngine_Utility();
 }
@@ -119,6 +119,12 @@ MOboolean moEffectGrid::Init()
 	//Draw
 	Grid->Start_Engine();
 
+
+    // Seteos generales
+    /*
+    if(preconfig.GetPreConfNum() > 0)
+        preconfig.PreConfFirst( GetConfig());
+        */
 
 	return true;
 }
@@ -198,7 +204,7 @@ moEffectGrid::Interaction(moIODeviceManager *IODeviceManager) {
 			switch(i) {
 				case MO_GRID_PITCH:
 					Grid->Pitch(valor);
-					MODebug2->Push(IntToStr(valor));
+					MODebug->Push(IntToStr(valor));
 					break;
 				case MO_GRID_TRIM:
 					Grid->Trim(valor);

@@ -28,7 +28,7 @@ class TRadarMapa
 
   void Zoomeado(TMapa *,char);
 
-  void MostrarContador(BITMAP *);
+ /* void MostrarContador( BITMAP *);
 
   void MostrarObservador(TMapa *,BITMAP *);
 
@@ -39,7 +39,7 @@ class TRadarMapa
   void MostrarRadarBitMapaPantallaCompleta(BITMAP *);
 
   void Activo(TMapa *,BITMAP *);
-
+*/
   void Activar(int);
 };
 #endif

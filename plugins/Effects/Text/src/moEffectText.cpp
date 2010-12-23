@@ -86,7 +86,7 @@ moEffectText::Init()
 	moDefineParamIndex( TEXT_TRANSLATEY, moText("translatey") );
 	moDefineParamIndex( TEXT_SCALEX, moText("scalex") );
 	moDefineParamIndex( TEXT_SCALEY, moText("scaley") );
-	moDefineParamIndex( TEXT_ROTATEZ, moText("rotatez") );
+	moDefineParamIndex( TEXT_ROTATE, moText("rotate") );
 	moDefineParamIndex( TEXT_INLET, moText("inlet") );
 	moDefineParamIndex( TEXT_OUTLET, moText("outlet") );
 
@@ -106,53 +106,48 @@ void moEffectText::Draw( moTempo* tempogral, moEffectState* parentstate)
     PreDraw( tempogral, parentstate);
 
     // Cambiar la proyeccion para una vista ortogonal //
-	glDisable(GL_DEPTH_TEST);							// Disables Depth Testing
-	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
-	glLoadIdentity();									// Reset The Projection Matrix
-	glOrtho(0,w,0,h,-1,1);                              // Set Up An Ortho Screen
+    glDisable(GL_DEPTH_TEST);							// Disables Depth Testing
+    glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
+    glLoadIdentity();									// Reset The Projection Matrix
+    glOrtho( -0.5, 0.5, -0.5*(h/w), 0.5*(h/w), -1, 1);          // Set Up An Ortho Screen
     glMatrixMode(GL_MODELVIEW);                         // Select The Modelview Matrix
-	glLoadIdentity();									// Reset The View
+    glLoadIdentity();									// Reset The View
 
 
     glEnable(GL_BLEND);
 
-	glTranslatef(  ( m_Config[moR(TEXT_TRANSLATEX)].GetData()->Fun()->Eval(state.tempo.ang))*w/800,
-                   ( m_Config[moR(TEXT_TRANSLATEY)].GetData()->Fun()->Eval(state.tempo.ang))*h/600,
-					0.0);
 
-    //rotation
-    glRotatef(  m_Config[moR(TEXT_ROTATEZ)].GetData()->Fun()->Eval(state.tempo.ang), 0.0, 0.0, 1.0 );
+    /// Draw //
+    glTranslatef(  m_Config.Eval( moR(TEXT_TRANSLATEX), state.tempo.ang),
+                   m_Config.Eval( moR(TEXT_TRANSLATEY), state.tempo.ang),
+                   0.0);
 
-	//scale
-	glScalef(   m_Config[moR(TEXT_SCALEX)].GetData()->Fun()->Eval(state.tempo.ang)*w/800,
-                m_Config[moR(TEXT_SCALEY)].GetData()->Fun()->Eval(state.tempo.ang)*h/600,
-               1.0);
+    ///solo rotamos en el eje Z (0,0,1) ya que siempre estaremos perpedicular al plano (X,Y)
+    glRotatef(  m_Config.Eval( moR(TEXT_ROTATE), state.tempo.ang), 0.0, 0.0, 1.0 );
 
+    glScalef(   m_Config.Eval( moR(TEXT_SCALEX), state.tempo.ang ),
+                m_Config.Eval( moR(TEXT_SCALEY), state.tempo.ang ),
+                  1.0);
 
-    //blending
-    SetBlending( (moBlendingModes) m_Config[moR(TEXT_BLENDING)][MO_SELECTED][0].Int() );
-/*
-    //set image
-    moTexture* pImage = (moTexture*) m_Config[moR(TEXT_TEXTURE)].GetData()->Pointer();
-*/
-    //color
     SetColor( m_Config[moR(TEXT_COLOR)][MO_SELECTED], m_Config[moR(TEXT_ALPHA)][MO_SELECTED], state );
 
-	moText Texto = m_Config[moR(TEXT_TEXT)][MO_SELECTED][0].Text();
+    SetBlending( (moBlendingModes) m_Config.Int( moR(TEXT_BLENDING) ) );
 
-	float r1;
-	r1 = 2.0 *((double)rand() /(double)(RAND_MAX+1));
+    moText Texto = m_Config.Text( moR(TEXT_TEXT) );
+
+    float r1;
+    r1 = 2.0 *((double)rand() /(double)(RAND_MAX+1));
 
 
     if (pFont) {
         pFont->Draw(    0.0,
                         0.0,
                         Texto,
-                        m_Config[moR(TEXT_FONT)][MO_SELECTED][2].Int(),
+                        m_Config[moR(TEXT_FONT)][MO_SELECTED][2].Int(), ///inner font size
                         0,
-                        m_Config[moR(TEXT_SCALEX)].GetData()->Fun()->Eval(state.tempo.ang),
-                        m_Config[moR(TEXT_SCALEY)].GetData()->Fun()->Eval(state.tempo.ang),
-                        m_Config[moR(TEXT_ROTATEZ)].GetData()->Fun()->Eval(state.tempo.ang) );
+                        m_Config.Eval( moR(TEXT_SCALEX), state.tempo.ang ),
+                        m_Config.Eval( moR(TEXT_SCALEY), state.tempo.ang ),
+                        m_Config.Eval( moR(TEXT_ROTATE), state.tempo.ang ) );
 
         //moText infod = moText("screen width:")+IntToStr(w)+moText(" screen height:")+IntToStr(h);
         //pFont->Draw( 0, 0, infod, m_Config[moR(TEXT_FONT)][MO_SELECTED][2].Int(), 0, 2.0, 2.0, 0.0);
@@ -183,14 +178,14 @@ moEffectText::GetDefinition( moConfigDefinition *p_configdefinition ) {
 	//default: alpha, color, syncro
 	p_configdefinition = moEffect::GetDefinition( p_configdefinition );
 	p_configdefinition->Add( moText("font"), MO_PARAM_FONT, TEXT_FONT, moValue( "Default", "TXT", "0", "NUM", "32.0", "NUM") );
-	p_configdefinition->Add( moText("text"), MO_PARAM_TEXT, TEXT_TEXT, moValue( "Insert text in text parameter", "TXT") );
-	p_configdefinition->Add( moText("blending"), MO_PARAM_BLENDING, TEXT_BLENDING, moValue( "0", "NUM").Ref() );
-	p_configdefinition->Add( moText("width"), MO_PARAM_FUNCTION, TEXT_WIDTH, moValue( "256", "FUNCTION").Ref() );
-	p_configdefinition->Add( moText("height"), MO_PARAM_FUNCTION, TEXT_HEIGHT, moValue( "256", "FUNCTION").Ref() );
-	p_configdefinition->Add( moText("translatex"), MO_PARAM_TRANSLATEX, TEXT_TRANSLATEX, moValue( "0.0", "FUNCTION").Ref() );
-	p_configdefinition->Add( moText("translatey"), MO_PARAM_TRANSLATEY, TEXT_TRANSLATEY, moValue( "0.0", "FUNCTION").Ref() );
-	p_configdefinition->Add( moText("rotatez"), MO_PARAM_ROTATEZ, TEXT_ROTATEZ, moValue( "0.0", "FUNCTION").Ref() );
-	p_configdefinition->Add( moText("scalex"), MO_PARAM_SCALEX, TEXT_SCALEX, moValue( "1.0", "FUNCTION").Ref() );
-	p_configdefinition->Add( moText("scaley"), MO_PARAM_SCALEY, TEXT_SCALEY, moValue( "1.0", "FUNCTION").Ref() );
+	p_configdefinition->Add( moText("text"), MO_PARAM_TEXT, TEXT_TEXT, moValue( "Insert text in text parameter", MO_VALUE_TXT ) );
+	p_configdefinition->Add( moText("blending"), MO_PARAM_BLENDING, TEXT_BLENDING, moValue( "0", MO_VALUE_NUM ).Ref() );
+	p_configdefinition->Add( moText("width"), MO_PARAM_FUNCTION, TEXT_WIDTH, moValue( "1.0", MO_VALUE_FUNCTION ).Ref() );
+	p_configdefinition->Add( moText("height"), MO_PARAM_FUNCTION, TEXT_HEIGHT, moValue( "1.0", MO_VALUE_FUNCTION).Ref() );
+	p_configdefinition->Add( moText("translatex"), MO_PARAM_TRANSLATEX, TEXT_TRANSLATEX, moValue( "0.0", MO_VALUE_FUNCTION ).Ref() );
+	p_configdefinition->Add( moText("translatey"), MO_PARAM_TRANSLATEY, TEXT_TRANSLATEY, moValue( "0.0", MO_VALUE_FUNCTION ).Ref() );
+	p_configdefinition->Add( moText("rotate"), MO_PARAM_ROTATEZ, TEXT_ROTATE, moValue( "0.0", MO_VALUE_FUNCTION ).Ref() );
+	p_configdefinition->Add( moText("scalex"), MO_PARAM_SCALEX, TEXT_SCALEX, moValue( "1.0", MO_VALUE_FUNCTION).Ref() );
+	p_configdefinition->Add( moText("scaley"), MO_PARAM_SCALEY, TEXT_SCALEY, moValue( "1.0", MO_VALUE_FUNCTION).Ref() );
 	return p_configdefinition;
 }

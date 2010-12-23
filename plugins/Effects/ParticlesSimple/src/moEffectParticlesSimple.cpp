@@ -289,6 +289,7 @@ moEffectParticlesSimple::Init()
 
     m_Rate = 0;
     last_tick = 0;
+    frame = 0;
 
     ortho = false;
 
@@ -299,7 +300,8 @@ moEffectParticlesSimple::Init()
 
     ResetTimers();
 
-    InitParticlesSimple(m_Config[moR(PARTICLES_WIDTH)][MO_SELECTED][0].Int(),m_Config[moR(PARTICLES_HEIGHT)][MO_SELECTED][0].Int());
+    InitParticlesSimple(  m_Config.Int( moR(PARTICLES_WIDTH) ),
+                          m_Config.Int( moR(PARTICLES_HEIGHT)) );
 
 
     pTextureDest = NULL;
@@ -342,8 +344,10 @@ void moEffectParticlesSimple::ResetTimers() {
       for ( int i=0; i < m_ParticlesSimpleArray.Count(); i++ ) {
             moParticlesSimple* pPar = m_ParticlesSimpleArray[i];
             pPar->Age.Stop();
+            pPar->Visible = false;
       }
 
+  m_Physics.m_pLastBordParticle = NULL;
 }
 
 void moEffectParticlesSimple::Shot( moText source, int shot_type, int shot_file ) {
@@ -687,7 +691,7 @@ void moEffectParticlesSimple::UpdateParameters() {
 
     if (!moTimeManager::MoldeoTimer->Started()) {
         ResetTimers();
-
+        //MODebug2->Message("moEffectParticlesSimple::UpdateParameters  > ResetTimers!!!");
     }
 
     //if script is modified... recompile
@@ -840,6 +844,12 @@ void moEffectParticlesSimple::SetParticlePosition( moParticlesSimple* pParticle 
     randomvely = (m_Physics.m_RandomVelocity>0.0)? (0.5-moMathf::UnitRandom())*m_Physics.m_RandomVelocity*m_Physics.m_VelocityVector.Y() : m_Physics.m_VelocityVector.Y();
     randomvelz = (m_Physics.m_RandomVelocity>0.0)? (0.5-moMathf::UnitRandom())*m_Physics.m_RandomVelocity*m_Physics.m_VelocityVector.Z() : m_Physics.m_VelocityVector.Z();
 
+    moVector4d fullcolor;
+    fullcolor = m_Config.EvalColor( moR(PARTICLES_PARTICLECOLOR) , state.tempo.ang);
+    pParticle->Color = moVector3f(
+                              fullcolor.X(),
+                              fullcolor.Y(),
+                              fullcolor.Z() );
 
     pParticle->Mass = 10.0f;
     pParticle->Fixed = false;
@@ -852,7 +862,7 @@ void moEffectParticlesSimple::SetParticlePosition( moParticlesSimple* pParticle 
     pParticle->dvdt = moVector3f( 0.0f, 0.0f, 0.0f );
 
     if (m_Physics.m_FadeIn>0.0) pParticle->Alpha = 0.0;///fade in ? to middle age?
-    else pParticle->Alpha = 1.0;
+    else pParticle->Alpha = fullcolor.W();
 
     if (m_Physics.m_SizeIn>0.0) pParticle->Scale = 0.0;///fade in ? to middle age?
     else pParticle->Scale = 1.0;
@@ -1169,11 +1179,18 @@ void moEffectParticlesSimple::InitParticlesSimple( int p_cols, int p_rows, bool 
 
         for( j=0; j<p_rows ; j++) {
                 for( i=0; i<p_cols ; i++) {
+
             moParticlesSimple* pPar = new moParticlesSimple();
 
             pPar->Pos = moVector2f( (float) i, (float) j);
             pPar->ImageProportion = 1.0;
-            pPar->Color = moVector3f(1.0,1.0,1.0);
+            //pPar->Color = moVector3f(1.0,1.0,1.0);
+            moVector4d fullcolor;
+            fullcolor = m_Config.EvalColor( moR(PARTICLES_PARTICLECOLOR) , state.tempo.ang);
+            pPar->Color = moVector3f(
+                                      fullcolor.X(),
+                                      fullcolor.Y(),
+                                      fullcolor.Z() );
             pPar->GLId2 = 0;
 
             if (texture_mode==PARTICLES_TEXTUREMODE_UNIT) {
@@ -1269,6 +1286,13 @@ void moEffectParticlesSimple::InitParticlesSimple( int p_cols, int p_rows, bool 
 
             SetParticlePosition( pPar );
 
+            /*
+            MODebug2->Message("i:"+IntToStr(i) );
+            MODebug2->Message("j:"+IntToStr(j) );
+            MODebug2->Message("px:"+FloatToStr(pPar->Pos3d.X()) );
+            MODebug2->Message("py:"+FloatToStr(pPar->Pos3d.Y()) );
+            */
+
             if (m_Physics.m_EmitionPeriod>0) {
                 pPar->Age.Stop();
                 pPar->Visible = false;
@@ -1305,10 +1329,12 @@ void moEffectParticlesSimple::Regenerate() {
     int i,j;
     float randommotionx,randommotiony,randommotionz;
 
+    //long emitiontimer_duration = m_Physics.EmitionTimer.Duration();
+    //MODebug2->Message("dur:"+IntToStr(emitiontimer_duration));
 
+    for( j=0; j<m_rows ; j++) {
+      for( i=0; i<m_cols ; i++) {
 
-    for( i=0; i<m_cols ; i++) {
-        for( j=0; j<m_rows ; j++) {
 
             moParticlesSimple* pPar = m_ParticlesSimpleArray[i+j*m_cols];
 
@@ -1324,11 +1350,17 @@ void moEffectParticlesSimple::Regenerate() {
                 }
             }
 
+
             //KILL PARTICLE
-            if ( pPar->Visible && (m_Physics.m_MaxAge>0) &&  (pPar->Age.Duration() > m_Physics.m_MaxAge) ) {
+            //if (i==3 && j==3)
+              //MODebug2->Message("visible: " + IntToStr((int)pPar->Visible) + "on:" + IntToStr((int)pPar->Age.Started()) + " agedur:" + IntToStr(pPar->Age.Duration()));
+            if ( pPar->Visible &&
+                (m_Physics.m_MaxAge>0) &&
+                (pPar->Age.Duration() > m_Physics.m_MaxAge) ) {
 
                 pPar->Age.Stop();
                 pPar->Visible = false;
+                if (m_Rate>0) m_Rate--;
                 if (pPar->pTextureMemory) {
                     pPar->pTextureMemory->ReleaseReference();
                     pPar->pTextureMemory = NULL;
@@ -1338,64 +1370,105 @@ void moEffectParticlesSimple::Regenerate() {
             }
 
             //REBORN PARTICLE
-            if ( m_Rate<m_Physics.m_EmitionRate && m_Physics.EmitionTimer.Duration() > m_Physics.m_EmitionPeriod && pPar->Visible==false ) {
+            //m_Physics.EmitionTimer.Duration()
+            //MODebug2->Message("dur:"+IntToStr(emitiontimer_duration)+" vs:"+IntToStr(m_Physics.m_EmitionPeriod) );
+            if ( m_Rate<m_Physics.m_EmitionRate &&
+                (m_Physics.EmitionTimer.Duration() > m_Physics.m_EmitionPeriod)
+                && pPar->Visible==false ) {
+
+                bool letsborn = true;
+                int id_last_particle = 0;
+                int this_id_particle = 0;
+
+                if (m_Physics.m_CreationMethod==PARTICLES_CREATIONMETHOD_LINEAR ) {
+                  if (m_Physics.m_pLastBordParticle!=NULL)
+                    id_last_particle = m_Physics.m_pLastBordParticle->Pos.X() + m_Physics.m_pLastBordParticle->Pos.Y()*m_cols;
+                  else id_last_particle = -1;
+
+                  this_id_particle = i+j*m_cols;
+
+                  if (id_last_particle==(m_rows*m_cols -1) && this_id_particle == 0 ) {
+                      ///OK
+                      letsborn = true;
+                  } else if ( this_id_particle == (id_last_particle+1) ) {
+                      ///OK
+                      letsborn = true;
+                  } else {
+                    ///wait for the other cycle
+                    letsborn = false;
+                  }
+
+                }
 
                 //m_Physics.EmitionTimer.Start();
-                pPar->Visible = true;
-                pPar->Age.Start();
+                if (letsborn) {
+                  pPar->Visible = true;
+                  pPar->Age.Start();
 
-                m_Rate++;
+                  //guardamos la referencia a esta particula, que servira para la proxima
+                  m_Physics.m_pLastBordParticle = pPar;
 
-                SetParticlePosition( pPar );
-                /*
-                if ((i+j*m_cols)%1000 == 0) {
-                    MODebug2->Push(moText("partícula en proceso - regenerando GLID ")+IntToStr(pPar->GLId)
-                    + moText(" GLID2: ") + IntToStr(pPar->GLId2) );
-                }*/
+                  m_Rate++;
 
-                //pPar->Pos3d = moVector3f( 0, 0, 0);
+                  SetParticlePosition( pPar );
+                  /*
+                  MODebug2->Message("frame:"+IntToStr(frame) );
+                  MODebug2->Message("i:"+IntToStr(i) );
+                  MODebug2->Message("j:"+IntToStr(j) );
+                  MODebug2->Message("px:"+FloatToStr(pPar->Pos3d.X()) );
+                  MODebug2->Message("py:"+FloatToStr(pPar->Pos3d.Y()) );
+                  */
 
-                //regenerate
+                  /*
+                  if ((i+j*m_cols)%1000 == 0) {
+                      MODebug2->Push(moText("partícula en proceso - regenerando GLID ")+IntToStr(pPar->GLId)
+                      + moText(" GLID2: ") + IntToStr(pPar->GLId2) );
+                  }*/
 
-                 //moTexture* pTex = ; //m_pResourceManager->GetTextureMan()->GetTexture();
-                 ///asigna un id al azar!!!! de todos los que componen ell moTextureBuffer
-                 ///hay q pedir el moTextureBuffer
-                 if ( texture_mode==PARTICLES_TEXTUREMODE_MANY ) {
-                     moTextureBuffer* pTexBuf = m_Config[moR(PARTICLES_FOLDERS)].GetData()->TextureBuffer();
-                     //m_Config[moR(PARTICLES_TEXTURE)].GetData()->GetGLId(&state.tempo, 1, NULL );
-                     if (pTexBuf) {
-                         int nim = pTexBuf->GetImagesProcessed();
+                  //pPar->Pos3d = moVector3f( 0, 0, 0);
 
-                         pPar->ImageProportion = 1.0;
+                  //regenerate
 
-                         if (nim>0) {
+                   //moTexture* pTex = ; //m_pResourceManager->GetTextureMan()->GetTexture();
+                   ///asigna un id al azar!!!! de todos los que componen ell moTextureBuffer
+                   ///hay q pedir el moTextureBuffer
+                   if ( texture_mode==PARTICLES_TEXTUREMODE_MANY ) {
+                       moTextureBuffer* pTexBuf = m_Config[moR(PARTICLES_FOLDERS)].GetData()->TextureBuffer();
+                       //m_Config[moR(PARTICLES_TEXTURE)].GetData()->GetGLId(&state.tempo, 1, NULL );
+                       if (pTexBuf) {
+                           int nim = pTexBuf->GetImagesProcessed();
 
-                             //float frandom = moMathf::UnitRandom( (float) 2.0 ) * nim;
-                             //srand(2);
-                             int irandom = ( ::rand() * nim )/ RAND_MAX;
+                           pPar->ImageProportion = 1.0;
 
-                             if (irandom>=nim) irandom = nim - 1;
+                           if (nim>0) {
 
-                             pPar->GLId = pTexBuf->GetFrame( irandom );
+                               //float frandom = moMathf::UnitRandom( (float) 2.0 ) * nim;
+                               //srand(2);
+                               int irandom = ( ::rand() * nim )/ RAND_MAX;
 
-                             moTextureMemory* pTexMem = pTexBuf->GetTexture( irandom );
-                             if (pTexMem) {
-                                pPar->pTextureMemory = pTexMem;
-                                if (pTexMem->GetHeight()>0) pPar->ImageProportion = (float) pTexMem->GetWidth() / (float) pTexMem->GetHeight();
-                              }
+                               if (irandom>=nim) irandom = nim - 1;
 
-                             ///MODebug2->Push( moText("creating particle: irandom:") + IntToStr(irandom) + moText(" count:") + IntToStr(pTexBuf->GetImagesProcessed()) + moText(" glid:") + IntToStr(pPar->GLId) );
+                               pPar->GLId = pTexBuf->GetFrame( irandom );
+
+                               moTextureMemory* pTexMem = pTexBuf->GetTexture( irandom );
+                               if (pTexMem) {
+                                  pPar->pTextureMemory = pTexMem;
+                                  if (pTexMem->GetHeight()>0) pPar->ImageProportion = (float) pTexMem->GetWidth() / (float) pTexMem->GetHeight();
+                                }
+
+                               ///MODebug2->Push( moText("creating particle: irandom:") + IntToStr(irandom) + moText(" count:") + IntToStr(pTexBuf->GetImagesProcessed()) + moText(" glid:") + IntToStr(pPar->GLId) );
 
 
-                         } else {
-                             ///pPar->GLId = 0;
-                         }
-                         pPar->TCoord = moVector2f( 0.0, 0.0 );
-                         pPar->TSize = moVector2f( 1.0f, 1.0f );
+                           } else {
+                               ///pPar->GLId = 0;
+                           }
+                           pPar->TCoord = moVector2f( 0.0, 0.0 );
+                           pPar->TSize = moVector2f( 1.0f, 1.0f );
 
-                     } else MODebug2->Error( moText("PARTICLES_TEXTUREMODE_MANY particles error creating texture") );
-                 }
+                       } else MODebug2->Error( moText("PARTICLES_TEXTUREMODE_MANY particles error creating texture") );
+                   }
 
+                } ///fin letsborn
 
             }
 
@@ -1943,13 +2016,13 @@ void moEffectParticlesSimple::DrawParticlesSimple( moTempo* tempogral, moEffectS
         m_Physics.EmitionTimer.Start();
     }
 
-    last_tick = tempogral->ticks;
+
 
     //glBindTexture( GL_TEXTURE_2D, 0 );
     if ( texture_mode!=PARTICLES_TEXTUREMODE_MANY && texture_mode!=PARTICLES_TEXTUREMODE_MANY2PATCH ) {
-
-        glBindTexture( GL_TEXTURE_2D, m_Config[moR(PARTICLES_TEXTURE)].GetData()->GetGLId(&state.tempo, 1, NULL ) );
-
+        //glBindTexture( GL_TEXTURE_2D, /*m_Config[moR(PARTICLES_TEXTURE)].GetData()->GetGLId(&state.tempo, 1, NULL )*/0 );
+        if (glid>=0) glBindTexture( GL_TEXTURE_2D, glid );
+        else glBindTexture( GL_TEXTURE_2D, 0);
     }
     //glColor4f(1.0,1.0,1.0,1.0);
     //glDisable( GL_CULL_FACE);
@@ -1966,15 +2039,31 @@ void moEffectParticlesSimple::DrawParticlesSimple( moTempo* tempogral, moEffectS
     moFont* pFont = m_Config[moR(PARTICLES_FONT)].GetData()->Font();
     moText Texto;
 
-    double dt = (double)(state.tempo.delta) /  (double)100.0;
+    ///CONSTANTE
+    ///version dt = constante por cuadro
+    //double dt = m_Config.Eval( moR(PARTICLES_SYNC),state.tempo.ang) * (double)(state.tempo.delta) /  (double)100.0;
+
+
+    ///VARIABLE
+    ///relativo al timecode...
+    ///dt relativo al tempo (variable)
+    /// entre 0 y inf.
+    /// 0 significa que casi no hubo lapso de tiempo medible entre el cuadro anterior y este, por lo tanto no hay animacion
+    /// 1 significa que el lapso de tiempo entre el evento anterior y el actual coincide con 1 cuadro cada 16.6 ms ( 60 fps )
+    /// > 1 significa que el tiempo entre 2 cuadros supero el correspondiente a 60 fps
+    /// > 4 significa que estamos por debajo de los 15 fps, pasada esta brecha deberiamos iterar N veces para obtener resultados correctos.
+    double dtrel = (double) ( tempogral->ticks - last_tick ) / (double)16.666666;
+    if ( ( (last_tick/100) % 50 ) == 0 ) MODebug2->Push("dtrel:"+FloatToStr(dtrel));
+    double dt = m_Config.Eval( moR(PARTICLES_SYNC),state.tempo.ang) * dtrel * (double)(state.tempo.delta) /  (double)100.0;
 
     UpdateParticles( dt, 0 );
     ParticlesSimpleAnimation( tempogral, parentstate );
 
     float idxt = 0.0;
 
-    for( i = 0; i<m_cols ; i++) {
-        for( j = 0; j<m_rows ; j++) {
+    for( j = 0; j<m_rows ; j++) {
+      for( i = 0; i<m_cols ; i++) {
+
 
             idxt = 0.5 + (float)( i + j * m_cols ) / (float)( m_cols * m_rows * 2 );
 
@@ -2028,18 +2117,13 @@ void moEffectParticlesSimple::DrawParticlesSimple( moTempo* tempogral, moEffectS
                             m_Config[moR(PARTICLES_SCALEZ_PARTICLE)].GetData()->Fun()->Eval(state.tempo.ang)*pPar->Scale);
 
 
-                glColor4f(  m_Config[moR(PARTICLES_COLOR)][MO_SELECTED][MO_RED].Fun()->Eval(state.tempo.ang) * pPar->Color.X() *
-                            m_Config[moR(PARTICLES_PARTICLECOLOR)][MO_SELECTED][MO_RED].Fun()->Eval(state.tempo.ang) * state.tintr,
+                glColor4f(  m_Config[moR(PARTICLES_COLOR)][MO_SELECTED][MO_RED].Fun()->Eval(state.tempo.ang) * pPar->Color.X() * state.tintr,
 
-                            m_Config[moR(PARTICLES_COLOR)][MO_SELECTED][MO_GREEN].Fun()->Eval(state.tempo.ang) * pPar->Color.Y() *
-                            m_Config[moR(PARTICLES_PARTICLECOLOR)][MO_SELECTED][MO_GREEN].Fun()->Eval(state.tempo.ang) * state.tintg,
+                            m_Config[moR(PARTICLES_COLOR)][MO_SELECTED][MO_GREEN].Fun()->Eval(state.tempo.ang) * pPar->Color.Y() * state.tintg,
 
-                            m_Config[moR(PARTICLES_COLOR)][MO_SELECTED][MO_BLUE].Fun()->Eval(state.tempo.ang) * pPar->Color.Z() *
-                            m_Config[moR(PARTICLES_PARTICLECOLOR)][MO_SELECTED][MO_BLUE].Fun()->Eval(state.tempo.ang) * state.tintb,
+                            m_Config[moR(PARTICLES_COLOR)][MO_SELECTED][MO_BLUE].Fun()->Eval(state.tempo.ang) * pPar->Color.Z() * state.tintb,
 
-                            m_Config[moR(PARTICLES_COLOR)][MO_SELECTED][MO_ALPHA].Fun()->Eval(state.tempo.ang) *
-                            m_Config[moR(PARTICLES_PARTICLECOLOR)][MO_SELECTED][MO_ALPHA].Fun()->Eval(state.tempo.ang) *
-                            m_Config[moR(PARTICLES_ALPHA)].GetData()->Fun()->Eval(state.tempo.ang) * state.alpha * pPar->Alpha );
+                            m_Config[moR(PARTICLES_COLOR)][MO_SELECTED][MO_ALPHA].Fun()->Eval(state.tempo.ang) * m_Config[moR(PARTICLES_ALPHA)].GetData()->Fun()->Eval(state.tempo.ang) * state.alpha * pPar->Alpha );
 
 
                 moVector3f CO(m_Physics.m_EyeVector - pPar->Pos3d);
@@ -2279,6 +2363,7 @@ void moEffectParticlesSimple::DrawParticlesSimple( moTempo* tempogral, moEffectS
                              Texto );
     }
 
+    last_tick = tempogral->ticks;
 
 }
 
@@ -2462,7 +2547,7 @@ if (drawing_features > 0  ) {
             if (drawing_features > 2 ) {
 
                 glBindTexture(GL_TEXTURE_2D,0);
-                glColor4f(0.7, 1.0, 0.5, 1.0);
+                glColor4f(0.3, 1.0, 1.0, 1.0);
 
                 glBegin(GL_QUADS);
                     glVertex2f((m_TrackerBarycenter.X() - 0.02)*normalf, (m_TrackerBarycenter.Y() - 0.02)*normalf);
@@ -2638,7 +2723,7 @@ void moEffectParticlesSimple::Draw( moTempo* tempogral, moEffectState* parentsta
     int ancho,alto;
     int w = m_pResourceManager->GetRenderMan()->ScreenWidth();
     int h = m_pResourceManager->GetRenderMan()->ScreenHeight();
-
+    frame++;
     moFont* pFont = m_Config[moR(PARTICLES_FONT)].GetData()->Font();
 
     UpdateParameters();
@@ -2649,12 +2734,14 @@ void moEffectParticlesSimple::Draw( moTempo* tempogral, moEffectState* parentsta
 /*
 */
 
+
     if (ortho) {
-        glEnable(GL_DEPTH_TEST);							// Disables Depth Testing
+        glDisable(GL_DEPTH_TEST);							// Disables Depth Testing
         glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
         glLoadIdentity();									// Reset The Projection Matrix
         glOrtho(-0.5,0.5,-0.5*h/w,0.5*h/w,-1,1);                              // Set Up An Ortho Screen
     } else {
+        glDisable(GL_DEPTH_TEST);
         glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
         glLoadIdentity();									// Reset The Projection Matrix
         m_pResourceManager->GetGLMan()->SetPerspectiveView( w, h );
@@ -2668,9 +2755,12 @@ void moEffectParticlesSimple::Draw( moTempo* tempogral, moEffectState* parentsta
             gluLookAt(		m_Physics.m_EyeVector.X(),
                             m_Physics.m_EyeVector.Y(),
                             m_Physics.m_EyeVector.Z(),
-                            m_Config[moR(PARTICLES_VIEWX)].GetData()->Fun()->Eval(state.tempo.ang),
-                            m_Config[moR(PARTICLES_VIEWY)].GetData()->Fun()->Eval(state.tempo.ang),
-                            m_Config[moR(PARTICLES_VIEWZ)].GetData()->Fun()->Eval(state.tempo.ang),
+                            //m_Config[moR(PARTICLES_VIEWX)].GetData()->Fun()->Eval(state.tempo.ang)
+                            m_Config.Eval( moR(PARTICLES_VIEWX), state.tempo.ang),
+                            //m_Config[moR(PARTICLES_VIEWY)].GetData()->Fun()->Eval(state.tempo.ang)
+                            m_Config.Eval( moR(PARTICLES_VIEWY), state.tempo.ang),
+                            //m_Config[moR(PARTICLES_VIEWZ)].GetData()->Fun()->Eval(state.tempo.ang)
+                            m_Config.Eval( moR(PARTICLES_VIEWZ), state.tempo.ang),
                             0, 1, 0);
 
         } else {
@@ -2695,12 +2785,22 @@ void moEffectParticlesSimple::Draw( moTempo* tempogral, moEffectState* parentsta
         }
     }
 
+    if (texture_mode==PARTICLES_TEXTUREMODE_UNIT) {
+      glid = m_Config.GetGLId( moR(PARTICLES_TEXTURE), &state.tempo);
+    }
+
     glMatrixMode(GL_MODELVIEW);                         // Select The Modelview Matrix
-	glLoadIdentity();									// Reset The View
+    glLoadIdentity();									// Reset The View
+
+    //glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
+    //glClear( GL_DEPTH_BUFFER_BIT );
+    //glEnable(GL_ALPHA_TEST);
 
 
-    glDisable( GL_CULL_FACE);
-	glFrontFace( GL_CCW);
+    //glDisable( GL_CULL_FACE);
+    //glFrontFace( GL_CCW);
+
+    //glDepthMask(true);
 
     //esto deberia ser parametrizable...
 	//glEnable( GL_DEPTH_TEST);
@@ -2709,38 +2809,33 @@ void moEffectParticlesSimple::Draw( moTempo* tempogral, moEffectState* parentsta
 
     //setUpLighting();
 
-    tx = m_Config[moR(PARTICLES_TRANSLATEX)].GetData()->Fun()->Eval(state.tempo.ang);
-    ty = m_Config[moR(PARTICLES_TRANSLATEY)].GetData()->Fun()->Eval(state.tempo.ang);
-    tz = m_Config[moR(PARTICLES_TRANSLATEZ)].GetData()->Fun()->Eval(state.tempo.ang);
+    tx = m_Config.Eval( moR(PARTICLES_TRANSLATEX), state.tempo.ang);
+    ty = m_Config.Eval( moR(PARTICLES_TRANSLATEY), state.tempo.ang);
+    tz = m_Config.Eval( moR(PARTICLES_TRANSLATEZ), state.tempo.ang);
 
 
-    rz = m_Config[moR(PARTICLES_ROTATEX)].GetData()->Fun()->Eval(state.tempo.ang);
+    rz = m_Config.Eval( moR(PARTICLES_ROTATEZ), state.tempo.ang);
 
-    sx = m_Config[moR(PARTICLES_SCALEX)].GetData()->Fun()->Eval(state.tempo.ang);
-    sy = m_Config[moR(PARTICLES_SCALEY)].GetData()->Fun()->Eval(state.tempo.ang);
-    sz = m_Config[moR(PARTICLES_SCALEZ)].GetData()->Fun()->Eval(state.tempo.ang);
+    sx = m_Config.Eval( moR(PARTICLES_SCALEX), state.tempo.ang);
+    sy = m_Config.Eval( moR(PARTICLES_SCALEY), state.tempo.ang);
+    sz = m_Config.Eval( moR(PARTICLES_SCALEZ), state.tempo.ang);
 
-
-    glEnable(GL_BLEND);
-
-	glTranslatef(   m_Config[moR(PARTICLES_TRANSLATEX)].GetData()->Fun()->Eval(state.tempo.ang),
-                    m_Config[moR(PARTICLES_TRANSLATEY)].GetData()->Fun()->Eval(state.tempo.ang),
-                    m_Config[moR(PARTICLES_TRANSLATEZ)].GetData()->Fun()->Eval(state.tempo.ang));
+    glTranslatef(   tx,
+                    ty,
+                    tz );
 
     //rotation
-    glRotatef(  m_Config[moR(PARTICLES_ROTATEZ)].GetData()->Fun()->Eval(state.tempo.ang), 0.0, 0.0, 1.0 );
-    glRotatef(  m_Config[moR(PARTICLES_ROTATEY)].GetData()->Fun()->Eval(state.tempo.ang), 0.0, 1.0, 0.0 );
-    glRotatef(  m_Config[moR(PARTICLES_ROTATEX)].GetData()->Fun()->Eval(state.tempo.ang), 1.0, 0.0, 0.0 );
+    glRotatef(  rz, 0.0, 0.0, 1.0 );
+    glRotatef(  m_Config.Eval( moR(PARTICLES_ROTATEY), state.tempo.ang), 0.0, 1.0, 0.0 );
+    glRotatef(  m_Config.Eval( moR(PARTICLES_ROTATEX), state.tempo.ang), 1.0, 0.0, 0.0 );
 
 	//scale
-	glScalef(   m_Config[moR(PARTICLES_SCALEX)].GetData()->Fun()->Eval(state.tempo.ang),
-                m_Config[moR(PARTICLES_SCALEY)].GetData()->Fun()->Eval(state.tempo.ang),
-                m_Config[moR(PARTICLES_SCALEZ)].GetData()->Fun()->Eval(state.tempo.ang));
-
-    glScalef( 1.0, 1.0, 1.0 );
+	glScalef(   sx,
+              sy,
+              sz);
 
     //blending
-    SetBlending( (moBlendingModes) m_Config[moR(PARTICLES_BLENDING)][MO_SELECTED][0].Int() );
+    SetBlending( (moBlendingModes) m_Config.Int( moR(PARTICLES_BLENDING) ) );
 /*
     //set image
     moTexture* pImage = (moTexture*) m_Config[moR(PARTICLES_TEXTURE)].GetData()->Pointer();
@@ -2748,10 +2843,12 @@ void moEffectParticlesSimple::Draw( moTempo* tempogral, moEffectState* parentsta
     //color
     SetColor( m_Config[moR(PARTICLES_COLOR)][MO_SELECTED], m_Config[moR(PARTICLES_ALPHA)][MO_SELECTED], state );
 
-	moText Texto = m_Config[moR(PARTICLES_TEXT)][MO_SELECTED][0].Text();
+	moText Texto = m_Config.Text( moR(PARTICLES_TEXT) );
 
 	float r1;
 	r1 = 2.0 *((double)rand() /(double)(RAND_MAX+1));
+
+
 
     DrawParticlesSimple( tempogral, parentstate );
 

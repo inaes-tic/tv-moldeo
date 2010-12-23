@@ -148,9 +148,9 @@ enum moParticlesOrientationMode {
 enum moParticlesSimpleParamIndex {
 	PARTICLES_ALPHA,
 	PARTICLES_COLOR,
-	PARTICLES_PARTICLECOLOR,
 	PARTICLES_SYNC,
 	PARTICLES_PHASE,
+	PARTICLES_PARTICLECOLOR,
 	PARTICLES_FONT,
 	PARTICLES_TEXT,
 	PARTICLES_ORTHO,
@@ -236,73 +236,57 @@ enum moParticlesSimpleParamIndex {
 	PARTICLES_VIEWX,
 	PARTICLES_VIEWY,
 	PARTICLES_VIEWZ,
+  PARTICLES_INLET,
+	PARTICLES_OUTLET,
+
 	PARTICLES_LIGHTX,
 	PARTICLES_LIGHTY,
-	PARTICLES_LIGHTZ,
-    PARTICLES_INLET,
-	PARTICLES_OUTLET
-};
-
-class moParticlesSimplePhysics : public moAbstract {
-
-  public:
-
-    moVector3f      m_GravityCenter;//x,y,z,intensity
-    moVector3f      m_GravityVector;//x,y,z,intensity
-    moVector3f      m_GravityDisc;//normal x, normal y, normal z,intensity
-
-    moVector3f      m_Plane;
-
-    long            m_MaxAge;
-    long            m_EmitionPeriod;
-    long            m_EmitionRate;
-    long            m_DeathPeriod;
-
-    moParticlesCreationMethod   m_CreationMethod;
-    moParticlesRandomMethod     m_RandomMethod;
-    moParticlesOrientationMode  m_OrientationMode;
-
-
-    double          m_FadeIn;
-    double            m_FadeOut;
-    double            m_SizeIn;
-    double            m_SizeOut;
-
-    moParticlesSimpleEmitterType    m_EmitterType;
-    moVector3f      m_EmitterSize;
-
-    moParticlesSimpleAttractorType    m_AttractorType;
-    moParticlesSimpleAttractorMode    m_AttractorMode;
-
-    moVector3f      m_EyeVector;
-
-    moVector3f      m_EmitterVector;
-    moVector3f      m_AttractorVector;
-
-    double          m_RandomVelocity;
-    moVector3f      m_VelocityVector;
-
-    double           m_RandomPosition;
-    moVector3f      m_PositionVector;
-
-    double          m_RandomMotion;
-    moVector3f      m_MotionVector;
-
-    double gravitational;
-    double viscousdrag;
-
-    moTimer EmitionTimer;
-
-    moText  m_ParticleScript;
-
-
-
-
+	PARTICLES_LIGHTZ
 };
 
 class moParticlesSimple : public moAbstract {
 
   public:
+
+    moParticlesSimple() {
+
+      Pos3d = moVector3f(0.0,0.0,0.0);
+      Destination = moVector3f(0.0,0.0,0.0);
+      Velocity = moVector3f(0.0,0.0,0.0);
+      Force = moVector3f(0.0,0.0,0.0);
+      U = moVector3f(0.0,0.0,0.0);
+      V = moVector3f(0.0,0.0,0.0);
+      W = moVector3f(0.0,0.0,0.0);
+      dpdt = moVector3f(0.0,0.0,0.0);
+      dvdt = moVector3f(0.0,0.0,0.0);
+      Rotation = moVector3f(0.0,0.0,0.0);
+
+
+      Pos = moVector2f(0.0,0.0);
+      TCoord = moVector2f(0.0,0.0);
+      TCoord2 = moVector2f(0.0,0.0);
+      Size = moVector2f(0.0,0.0);
+      TSize = moVector2f(0.0,0.0);
+      TSize2 = moVector2f(0.0,0.0);
+      Color = moVector3f(1.0,1.0,1.0);
+
+      Mass = 1.0;
+      Alpha = 1.0;
+      Scale = 1.0;
+      ImageProportion = 1.0;
+
+      Fixed = false;
+      Visible = false;
+      Captured = false;
+
+      GLId = -1;
+      GLId2 = -1;
+      pTextureMemory = NULL;
+
+      Age.Stop();
+
+    }
+    virtual ~moParticlesSimple() {}
 
     ///Position absolute
     moVector3f  Pos3d;
@@ -390,6 +374,118 @@ class moParticlesSimple : public moAbstract {
 
     ///Age of the particle
     moTimer     Age;
+};
+
+class moParticlesSimplePhysics : public moAbstract {
+
+  public:
+
+    moParticlesSimplePhysics() {
+      m_GravityCenter = moVector3f(0.0,0.0,0.0);
+      m_GravityVector = moVector3f(0.0,0.0,0.0);
+      m_GravityDisc = moVector3f(0.0,0.0,0.0);
+
+      m_Plane = moVector3f(0.0,0.0,0.0);
+
+      m_MaxAge = 0;
+      m_EmitionPeriod = 0;
+      m_EmitionRate = 0;
+      m_DeathPeriod = 0;
+
+      m_CreationMethod = PARTICLES_CREATIONMETHOD_LINEAR;
+      m_RandomMethod = PARTICLES_RANDOMMETHOD_NOISY;
+      m_OrientationMode = PARTICLES_ORIENTATIONMODE_FIXED;
+
+      m_FadeIn = 0.0;
+      m_FadeOut = 0.0;
+      m_SizeIn = 0.0;
+      m_SizeOut = 0.0;
+
+      m_EmitterType = PARTICLES_EMITTERTYPE_GRID;
+      m_EmitterSize = moVector3f( 0.0, 0.0, 0.0 );
+      m_EmitterVector = moVector3f( 0.0, 0.0, 0.0 );
+
+      m_AttractorType = PARTICLES_ATTRACTORTYPE_POINT;
+      m_AttractorMode = PARTICLES_ATTRACTORMODE_ACCELERATION;
+      m_AttractorVector = moVector3f( 0.0, 0.0, 0.0 );
+
+      m_EyeVector = moVector3f( 0.0, 0.0, 0.0 );
+
+      m_RandomVelocity = 0.0;
+      m_VelocityVector = moVector3f( 0.0, 0.0, 0.0 );
+
+      m_RandomPosition = 0.0;
+      m_PositionVector = moVector3f( 0.0, 0.0, 0.0 );
+
+      m_RandomMotion = 0.0;
+      m_MotionVector = moVector3f( 0.0, 0.0, 0.0 );
+
+      gravitational = 0.0;
+      viscousdrag = 0.0;
+
+      EmitionTimer.Stop();
+
+      m_ParticleScript = moText("");
+
+      m_pLastBordParticle = NULL;
+
+
+    }
+    virtual ~moParticlesSimplePhysics() {}
+
+
+    moVector3f      m_GravityCenter;//x,y,z,intensity
+    moVector3f      m_GravityVector;//x,y,z,intensity
+    moVector3f      m_GravityDisc;//normal x, normal y, normal z,intensity
+
+    moVector3f      m_Plane;
+
+    long            m_MaxAge;
+    long            m_EmitionPeriod;
+    long            m_EmitionRate;
+    long            m_DeathPeriod;
+
+    moParticlesCreationMethod   m_CreationMethod;
+    moParticlesRandomMethod     m_RandomMethod;
+    moParticlesOrientationMode  m_OrientationMode;
+
+
+    double          m_FadeIn;
+    double            m_FadeOut;
+    double            m_SizeIn;
+    double            m_SizeOut;
+
+    moParticlesSimpleEmitterType    m_EmitterType;
+    moVector3f      m_EmitterVector;
+    moVector3f      m_EmitterSize;
+
+    moParticlesSimpleAttractorType    m_AttractorType;
+    moParticlesSimpleAttractorMode    m_AttractorMode;
+    moVector3f      m_AttractorVector;
+
+    moVector3f      m_EyeVector;
+
+    double          m_RandomVelocity;
+    moVector3f      m_VelocityVector;
+
+    double           m_RandomPosition;
+    moVector3f      m_PositionVector;
+
+    double          m_RandomMotion;
+    moVector3f      m_MotionVector;
+
+    double gravitational;
+    double viscousdrag;
+
+    moTimer EmitionTimer;
+
+    moText  m_ParticleScript;
+
+    moParticlesSimple*  m_pLastBordParticle;
+
+
+
+
 };
 
 
@@ -539,6 +635,7 @@ class moEffectParticlesSimple : public moEffect
 
         int glidori;
         int glid;
+        int frame;
 
         int original_width;
         int original_height;
