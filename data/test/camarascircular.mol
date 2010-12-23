@@ -112,8 +112,8 @@
         <PARAM name="resources" type="TEXT">
             <VAL>
                 <D type="TXT">videomanager</D>
-                <D type="TXT">videomanager2</D>
-                <D type="TXT">videomanager</D>
+                <D type="TXT">videomanager_circular</D>
+                <D type="TXT">videomanager_circular</D>
                 <D type="NUM">0</D>
                 <D type="NUM">1</D>
             </VAL>
@@ -139,7 +139,7 @@
                 <D type="TXT"></D>
                 <D type="TXT"></D>
             </VAL>
-        </PARAM>		
+        </PARAM>
     </CONFIGPARAMS>
     <PRECONFIGS>
         <PRE>
