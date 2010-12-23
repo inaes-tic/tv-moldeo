@@ -2,7 +2,8 @@
 
 TRadarMapa::TRadarMapa(TMapa *M,int x,int y, int ancho, int alto)
 {
- set_color_depth(FORMATOCOLOR);
+/*
+set_color_depth(FORMATOCOLOR);
 
  RadarBitMapa = create_bitmap(ancho,alto);
  RadarBitMapaPantallaCompleta = create_bitmap(SCREEN_W,SCREEN_H);
@@ -16,12 +17,15 @@ TRadarMapa::TRadarMapa(TMapa *M,int x,int y, int ancho, int alto)
  contador_de_ciclos = 0;
  Inicializar(M);
  Activar(1);
+ */
 }
 
 TRadarMapa::~TRadarMapa()
 {
- destroy_bitmap(RadarBitMapa);
+/*
+destroy_bitmap(RadarBitMapa);
  destroy_bitmap(RadarBitMapaPantallaCompleta);
+ */
 // delete(cursorpal);
 }
 
@@ -45,7 +49,7 @@ void
 TRadarMapa::Actualizado(TMapa *M)
 {
  M->CalcularBitMapa();
-
+/*
  stretch_blit(M->BitMapa,RadarBitMapaPantallaCompleta,
               0,0,M->BitMapa->w,M->BitMapa->h,
               0,0,RadarBitMapaPantallaCompleta->w,RadarBitMapaPantallaCompleta->h);
@@ -53,6 +57,7 @@ TRadarMapa::Actualizado(TMapa *M)
  stretch_blit(M->BitMapa,RadarBitMapa,
               0,0,M->BitMapa->w,M->BitMapa->h,
               0,0,RadarBitMapa->w,RadarBitMapa->h);
+              */
 }
 
 
@@ -60,7 +65,7 @@ TRadarMapa::Actualizado(TMapa *M)
 void
 TRadarMapa::Zoomeado(TMapa *M,char mas)
 {
- int X_Start,Y_Start,ancho,alto;
+/*int X_Start,Y_Start,ancho,alto;
  int w = M->MapaAncho;
  int h = M->MapaAlto;
 
@@ -80,9 +85,9 @@ TRadarMapa::Zoomeado(TMapa *M,char mas)
 
  stretch_blit(M->BitMapa,RadarBitMapa,
               X_Start,Y_Start,ancho,alto,
-              0,0,RadarBitMapa->w,RadarBitMapa->h);
+              0,0,RadarBitMapa->w,RadarBitMapa->h);*/
 }
-
+/*
 
 void
 TRadarMapa::MostrarRadarBitMapa(BITMAP *pagina)
@@ -96,11 +101,13 @@ void
 TRadarMapa::MostrarRadarBitMapaPantallaCompleta(BITMAP *pagina)
 {
  blit(RadarBitMapaPantallaCompleta,pagina,0,0,0,0,RadarBitMapaPantallaCompleta->w,RadarBitMapaPantallaCompleta->h);
+
 }
 
 void
 TRadarMapa::Activo(TMapa *M,BITMAP *pagina)
 {
+
  contador_de_ciclos++;
 
  MostrarContador(pagina);
@@ -133,6 +140,7 @@ TRadarMapa::Activo(TMapa *M,BITMAP *pagina)
 void
 TRadarMapa::MostrarObservador(TMapa *M,BITMAP *pagina)
 {
+
  float coefx,coefy;
  int x,y,xGo,yGo;
  coefx =(float) RadarBitMapa->w / M->MapaAncho;
@@ -143,6 +151,7 @@ TRadarMapa::MostrarObservador(TMapa *M,BITMAP *pagina)
  yGo =(int)(y -(float)(20*u.y));
  circle(pagina,x,y,20,(char)(contador_de_ciclos % 256));
  line(pagina,x,y,xGo,yGo,(char)(contador_de_ciclos % 256));
+
 }
 
 
@@ -153,6 +162,7 @@ TRadarMapa::MostrarContador(BITMAP *pagina)
  textprintf(pagina,font,0,0,200,"frames: %i",contador_de_ciclos);
  textprintf(pagina,font,0,10,200,"Poligonos: %i",Poligonos);
  Poligonos = 0;
+
 
 }
 
@@ -171,7 +181,7 @@ TRadarMapa::MostrarObservadorPantallaCompleta(TMapa *M,BITMAP *pagina)
  circle(pagina,x,y,50,(char)(rand()));
  line(pagina,x,y,xGo,yGo,(char)(rand()));
 }
-
+*/
 
 
 

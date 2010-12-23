@@ -1,6 +1,6 @@
 #include"supereg/tgrid.h"
 
-void 
+void
 TGrid::ImprimirTodaLaInfo(void)
 {
 //nada
@@ -10,7 +10,7 @@ TGrid::ImprimirTodaLaInfo(void)
 //===========
 //  x 0 0
 //  0 0 0
-//  0 0 0 
+//  0 0 0
 //===========
 #define ACTUALIZACION_1 {adr=indix+(i/2)+(indiy+(j/2))*(Padre->dvs+1);G[j][i]= Padre->G[0][adr];G[j][i].anim=0;\
                          GP[i+j*dvspp].cuarto = 1;\
@@ -111,7 +111,7 @@ TGrid::TGrid(int dim, int valor,char N,  int altitud)
 
    //====================================
    // nodos dela grilla: puntos 3d proyectados
-   //====================================   
+   //====================================
    PROY = new TProy [Tamanio];
    L_PROY = new TProy * [dvspp];
    for(j=0;j<dvspp; j++) L_PROY[j] = &PROY[j*dvspp];
@@ -148,11 +148,11 @@ TGrid::TGrid(int dim, int valor,char N,  int altitud)
 	glMultiTexCoord2fARB = NULL;
 
 	#ifdef _WIN32
-	glActiveTextureARB		=(PFNGLACTIVETEXTUREARBPROC) wglGetProcAddress("glActiveTextureARB");
-	glMultiTexCoord2fARB	=(PFNGLMULTITEXCOORD2FARBPROC) wglGetProcAddress("glMultiTexCoord2fARB");
+//	glActiveTextureARB		=(PFNGLACTIVETEXTUREARBPROC) wglGetProcAddress("glActiveTextureARB");
+	//glMultiTexCoord2fARB	=(PFNGLMULTITEXCOORD2FARBPROC) wglGetProcAddress("glMultiTexCoord2fARB");
 	#else
-	glActiveTextureARB		=(PFNGLACTIVETEXTUREARBPROC) glutGetProcAddress("glActiveTextureARB");
-	glMultiTexCoord2fARB	=(PFNGLMULTITEXCOORD2FARBPROC) glutGetProcAddress("glMultiTexCoord2fARB");
+	//glActiveTextureARB		=(PFNGLACTIVETEXTUREARBPROC) glutGetProcAddress("glActiveTextureARB");
+	//glMultiTexCoord2fARB	=(PFNGLMULTITEXCOORD2FARBPROC) glutGetProcAddress("glMultiTexCoord2fARB");
 	#endif
 
 }
@@ -233,7 +233,7 @@ TGrid::Actualizar(int SUMX, int SUMY)
 // int adri,adrj;
  int adr;
  int act_ax,act_bx,act_ay,act_by;
- int rand_act_ax,rand_act_bx,rand_act_ay,rand_act_by;    
+ int rand_act_ax,rand_act_bx,rand_act_ay,rand_act_by;
  int repx,repy;
  int indix,indiy,brda;
 
@@ -252,7 +252,7 @@ TGrid::Actualizar(int SUMX, int SUMY)
 
   if(repx == 0) {act_ax = 0; act_bx = 0;
                   rand_act_ax = 4; rand_act_bx = 4;}
-  else      
+  else
   if(repx < 0) {act_ax = 0; act_bx = - repx - 1;
                  rand_act_ax = 4; rand_act_bx = - repx - 1 + 4;}
   else          {act_ax = dvs - repx + 1; act_bx = dvs;
@@ -260,13 +260,13 @@ TGrid::Actualizar(int SUMX, int SUMY)
 
   if(repy == 0) {act_ay = 0; act_by = 0;
                   rand_act_ay = 4; rand_act_by = 4;}
-  else      
+  else
   if(repy > 0) {act_ay = 0; act_by = repy - 1;
                  rand_act_ay = 4; rand_act_by = repy - 1 + 4;}
   else          {act_ay = dvs + repy + 1; act_by = dvs;
                  rand_act_ay = dvs - 4 + repy + 1; rand_act_by = dvs - 4;}
 
-     
+
   if(repy< -(dvs+1) || repy >dvs+1) { act_ay = 0; act_by = dvs; repx = 0;}
   if(repx< -(dvs+1) || repx >dvs+1) { act_ay = 0; act_by = dvs; repx = 0; repy = dvs+1; }
 
@@ -321,7 +321,7 @@ if(repy!=0)
   //indix es con respecto al padre a partir de donde se
   //tomaran los puntos del Padre que coinciden con el Hijo
   //depende de difx(posicion relativa, una de tres)
-  //analogo indiy      
+  //analogo indiy
   indix=brda+((difx+1)/2); indiy=brda+((dify+1)/2);
   jstart=abs(dify); istart=abs(difx);
   if(repy<0) for(j=dvs-jstart; j>=act_ay; j-=2)
@@ -334,42 +334,42 @@ if(repy!=0)
   else {istart=abs(difx);jstart=1-abs(dify);}
   if(repy<0) {for(j=dvs-jstart; j>=act_ay; j-=2)
                for(i=istart; i<=dvs; i+=2) ACTUALIZACION_2
-               for(j=3-(1-jstart); j>=(act_ay-(dvs-3)) && j>=0; j-=2) 
+               for(j=3-(1-jstart); j>=(act_ay-(dvs-3)) && j>=0; j-=2)
                for(i=istart; i<=dvs; i+=2) ACTUALIZACION_2
-               }  
+               }
     else  {for(j=jstart; j<=act_by; j+=2)
            for(i=istart; i<=dvs; i+=2) ACTUALIZACION_2
-           for(j=(1-jstart) + dvs - 3; j<=(act_by + dvs - 3)  && j<=dvs; j+=2) 
-           for(i=istart; i<=dvs; i+=2) ACTUALIZACION_2     
-          }  
+           for(j=(1-jstart) + dvs - 3; j<=(act_by + dvs - 3)  && j<=dvs; j+=2)
+           for(i=istart; i<=dvs; i+=2) ACTUALIZACION_2
+          }
 
   indix=brda-((1-difx)/2); indiy=brda+((dify+1)/2);
   if(abs(dify)==abs(difx) && difx!=0) {istart=0;jstart=1;}
   else {istart=1-abs(difx);jstart=abs(dify);}
   if(repy<0) {for(j=dvs-jstart; j>=act_ay; j-=2)
                for(i=istart; i<=dvs; i+=2) ACTUALIZACION_3
-               for(j=3-(1-jstart); j>=(act_ay-(dvs-3)) && j>=0; j-=2) 
+               for(j=3-(1-jstart); j>=(act_ay-(dvs-3)) && j>=0; j-=2)
                for(i=istart; i<=dvs; i+=2) ACTUALIZACION_3
-               }  
+               }
     else  {for(j=jstart; j<=act_by; j+=2)
            for(i=istart; i<=dvs; i+=2) ACTUALIZACION_3
-           for(j=(1-jstart) + dvs - 3; j<=(act_by + dvs - 3)  && j<=dvs; j+=2) 
-           for(i=istart; i<=dvs; i+=2) ACTUALIZACION_3     
-          }  
+           for(j=(1-jstart) + dvs - 3; j<=(act_by + dvs - 3)  && j<=dvs; j+=2)
+           for(i=istart; i<=dvs; i+=2) ACTUALIZACION_3
+          }
 
   indix=brda-((1-difx)/2); indiy=brda-((1-dify)/2);
   if(abs(dify)==abs(difx) && difx!=0) {istart=0;jstart=0;}
   else {istart=1-abs(difx);jstart=1-abs(dify);}
   if(repy<0) {for(j=dvs-jstart; j>=act_ay; j-=2)
                for(i=istart; i<=dvs; i+=2) ACTUALIZACION_4
-               for(j=3-(1-jstart); j>=(act_ay-(dvs-3)) && j>=0; j-=2) 
+               for(j=3-(1-jstart); j>=(act_ay-(dvs-3)) && j>=0; j-=2)
                for(i=istart; i<=dvs; i+=2) ACTUALIZACION_4
-               }  
+               }
     else  {for(j=jstart; j<=act_by; j+=2)
            for(i=istart; i<=dvs; i+=2) ACTUALIZACION_4
-           for(j=(1-jstart) + dvs - 3; j<=(act_by + dvs - 3)  && j<=dvs; j+=2) 
-           for(i=istart; i<=dvs; i+=2) ACTUALIZACION_4      
-          }  
+           for(j=(1-jstart) + dvs - 3; j<=(act_by + dvs - 3)  && j<=dvs; j+=2)
+           for(i=istart; i<=dvs; i+=2) ACTUALIZACION_4
+          }
 
 }
 
@@ -386,7 +386,7 @@ if(repx!=0)
               for(j = a_Y ; j <=  b_Y ; j+=2 ) ACTUALIZACION_1
          else for(i=dvs-istart; i>=act_ax; i-=2)
               for(j = a_Y ; j <= b_Y ; j+=2 ) ACTUALIZACION_1
-          
+
 
           indix=brda+((difx+1)/2); indiy=brda-((1-dify)/2);
   if(abs(dify)==abs(difx) && difx!=0) {istart=1;jstart=0;}
@@ -408,7 +408,7 @@ if(repx!=0)
   if(abs(dify)==abs(difx) && difx!=0) {istart=0;jstart=1;}
   else {istart=1-abs(difx);jstart=abs(dify);}
   if(act_ay != 0) { a_Y = jstart; b_Y = act_ay;}
-  else { a_Y = jstart +((act_by-jstart)/2)*2; b_Y = dvs;}     
+  else { a_Y = jstart +((act_by-jstart)/2)*2; b_Y = dvs;}
   if(repx<0) {for(i = istart ;  i <= act_bx ; i += 2)
                for(j = a_Y ; j <=  b_Y ; j+=2 ) ACTUALIZACION_3
                for(i =(1-istart) + dvs - 3 ; i <=(act_bx + dvs - 3) && i<=dvs ; i+= 2)
@@ -468,7 +468,7 @@ if(repy!=0)
           for(i=istart+4; i<=dvs-4; i+=2) {GP[i+j*dvspp].altaux=G[j][i].alt; Ruido(&G[j][i]);}
     else  for(j=jstart+4; j<=rand_act_by; j+=2)
           for(i=istart+4; i<=dvs-4; i+=2) {GP[i+j*dvspp].altaux=G[j][i].alt; Ruido(&G[j][i]);}
-  
+
 }
 
 
@@ -1352,7 +1352,7 @@ TGrid::CalcularNormalesBorde(void)
 
     for(j=1; j<=dvs-1; j++)
     for(i=1; i<=dvs-1; i++)
-    {    
+    {
      if(L_PROY[j][i].SeDibuja==1)
      {
        I = Normales[2*(i+j*dvs)].norma + Normales[2*(i+j*dvs)+1].norma +
@@ -1368,7 +1368,7 @@ TGrid::CalcularNormalesBorde(void)
        Normales[2*(i-1+(j-1)*dvs)].z + Normales[2*(i-1+(j-1)*dvs)+1].z +
        Normales[2*(i-1+j*dvs)+1].z + Normales[2*(i+(j-1)*dvs)].z)/6.0f;
 
-	   
+
 	   I = I / 6.0;
 
      L_PROY[j][i].Intensidad =(unsigned char) I;
@@ -1483,7 +1483,7 @@ TGrid::CalcularNormalesTodo(void)
 
     for(j=1; j<=dvs-1; j++)
     for(i=1; i<=dvs-1; i++)
-    {    
+    {
      if(L_PROY[j][i].SeDibuja==1)
      {
        I = Normales[2*(i+j*dvs)].norma + Normales[2*(i+j*dvs)+1].norma +
@@ -1542,7 +1542,7 @@ TGrid::DibujarAlturaBorde(int area,TBITMAP *pagina)
     int FactColAltInf;
     int i,j,k,l,in;
     int brdax,brdbx,brday,brdby;
-    int indax,indbx,inday,indby;    
+    int indax,indbx,inday,indby;
     int brd1,brd2;
     point3d A;
 //    punto L1,L2;
@@ -1930,7 +1930,7 @@ TGrid::DibujarAlturaTodo(int area,TBITMAP *pagina)
 					v4.cf =((float) altitud/(float) MAXALT);
 					v4.C = PaletaAlturas(v4.cf,altitud,ALPAL);
 
-          
+
 //textura = GT[iutil+jutil*dvspp];
 /*
 if(Nesima<=6 && Nesima>2) textura = texturas[GP[iutil+jutil*dvspp].NP];
@@ -2035,7 +2035,7 @@ TGrid::glDibujarAlturaBorde(int area,TBITMAP *pagina,TCAMARA3D* CAM)
     int FactColAltInf;
     int i,j,k,l,in;
     int brdax,brdbx,brday,brdby;
-    int indax,indbx,inday,indby;    
+    int indax,indbx,inday,indby;
     int brd1,brd2;
     point3d A;
 //    punto L1,L2;
@@ -2472,7 +2472,7 @@ TGrid::glDibujarAlturaTodo(int area,TBITMAP *pagina,TCAMARA3D* CAM)
 					v4.C.b = v4.C.b*L_PROY[jutil+1][iutil+1].If;
 					}
 					v4.N = L_PROY[jutil+1][iutil+1].N;
-          
+
 //textura = GT[iutil+jutil*dvspp];
 /*
 if(Nesima<=6 && Nesima>2) textura = texturas[GP[iutil+jutil*dvspp].NP];
