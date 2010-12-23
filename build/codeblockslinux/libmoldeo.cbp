@@ -7,7 +7,7 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="../../lib/libmoldeod" prefix_auto="0" extension_auto="1" />
+				<Option output="../../lib/libmoldeocbd" prefix_auto="0" extension_auto="1" />
 				<Option object_output="objd/Debug/" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -17,12 +17,12 @@
 					<Add option="-g" />
 				</Compiler>
 				<Linker>
-					<Add library="tinyxmld" />
+					<Add library="tinyxml" />
 					<Add directory="../../contrib/src/tinyxml/Debug" />
 				</Linker>
 			</Target>
 			<Target title="Release">
-				<Option output="../../lib/libmoldeo" prefix_auto="0" extension_auto="1" />
+				<Option output="../../lib/libmoldeocb" prefix_auto="0" extension_auto="1" />
 				<Option object_output="obj/Release/" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -52,7 +52,7 @@
 			<Add option="-DMO_VDPAU_NO" />
 			<Add directory="../../inc" />
 			<Add directory="../../inc/3ds" />
-			<Add directory="../../contrib/src/tinyxml/" />
+			<Add directory="../../inc/tuio" />
 			<Add directory="/usr/include/muParser" />
 			<Add directory="/usr/include" />
 			<Add directory="/home/fabri/instalar/mplayer-vdpau-3532130/mplayer-vdpau" />
@@ -64,8 +64,7 @@
 			<Add option="`pkg-config muparser --libs`" />
 			<Add library="freeimage" />
 			<Add library="libboost_filesystem-mt" />
-			<Add library="vdpau" />
-			<Add library="avcodec" />
+			<Add library="GLEW" />
 			<Add directory="/home/fabri/instalar/mplayer-vdpau-3532130/mplayer-vdpau" />
 		</Linker>
 		<Unit filename="../../inc/3ds/3ds.h" />
@@ -249,6 +248,7 @@
 		<Unit filename="../../src/libmoldeo/moVideoGraph.cpp" />
 		<Unit filename="../../src/libmoldeo/moVideoManager.cpp" />
 		<Unit filename="../../src/libmoldeo/moXmlConfig.cpp" />
+		<Unit filename="../../src/libmoldeo/tuio/TuioTime.cpp" />
 		<Extensions>
 			<envvars />
 			<code_completion />
