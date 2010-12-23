@@ -1,5 +1,6 @@
 #!/bin/sh
 
-sudo cp "../../lib/libmoldeod.so" "/usr/lib/libmoldeod.so"
-sudo cp "../../lib/libmoldeo.so" "/usr/lib/libmoldeo.so"
+sudo cp "../../lib/libmoldeocbd.so" "/usr/lib/libmoldeocbd.so"
+sudo cp "../../lib/libmoldeocb.so" "/usr/lib/libmoldeocb.so"
 sudo ldconfig
+
