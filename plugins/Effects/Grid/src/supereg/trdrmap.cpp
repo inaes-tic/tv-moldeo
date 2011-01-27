@@ -1,4 +1,4 @@
-#include "../../inc/supereg/trdrmap.h"
+#include "supereg/trdrmap.h"
 
 TRadarMapa::TRadarMapa(TMapa *M,int x,int y, int ancho, int alto)
 {

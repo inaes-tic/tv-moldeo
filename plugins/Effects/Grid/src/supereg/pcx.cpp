@@ -51,7 +51,7 @@ char *Read_PCX(char *filename, char PcxPal[768],char EcoData)
   if(f==NULL)
   {
   printf("\n no se encontro el archivo!! %s\n",filename);
-  getch();
+  //getch();
   exit(0);
   }
 
@@ -68,7 +68,7 @@ char *Read_PCX(char *filename, char PcxPal[768],char EcoData)
   if(pcx->bitmap == NULL)
   {
   printf("\n no hay suficiente memoria!! \n");
-  getch();
+  //getch();
   exit(0);
   }
 
@@ -129,7 +129,7 @@ char *Read_PCX(char *filename, char PcxPal[768],char EcoData)
    printf("pcx->hdr.hscreensize:%i\n",pcx->hdr.hscreensize);
    printf("pcx->hdr.vscreensize:%i\n",pcx->hdr.vscreensize);
 
-   getch();
+   //getch();
   }
 
   return(pcx->bitmap);
